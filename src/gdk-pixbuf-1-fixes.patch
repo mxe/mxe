@@ -2,17 +2,17 @@ This file is part of MXE. See LICENSE.md for licensing information.
 
 Contains ad hoc patches for cross building.
 
-From 38f4e914e458de6963a3fddbb57dbf8cd0fb83b4 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Fri, 24 Sep 2010 23:31:24 +0200
 Subject: [PATCH 1/3] s,DllMain,static _disabled_DllMain,
 
 
 diff --git a/gdk-pixbuf/gdk-pixbuf-io.c b/gdk-pixbuf/gdk-pixbuf-io.c
-index 411ceb6..64db155 100644
+index 1111111..2222222 100644
 --- a/gdk-pixbuf/gdk-pixbuf-io.c
 +++ b/gdk-pixbuf/gdk-pixbuf-io.c
-@@ -230,12 +230,12 @@ get_file_formats (void)
+@@ -193,12 +193,12 @@ get_file_formats (void)
  
  #ifdef G_OS_WIN32
  
@@ -27,18 +27,15 @@ index 411ceb6..64db155 100644
           DWORD     fdwReason,
           LPVOID    lpvReserved)
  {
--- 
-1.7.10.4
 
-
-From 0903d316c228bf2a6ba9fe11188851a357cde43e Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Fri, 12 Oct 2012 12:24:51 +0200
 Subject: [PATCH 2/3] add libtiff to required.private in .pc
 
 
 diff --git a/gdk-pixbuf-2.0.pc.in b/gdk-pixbuf-2.0.pc.in
-index 7addefc..a07a46f 100644
+index 1111111..2222222 100644
 --- a/gdk-pixbuf-2.0.pc.in
 +++ b/gdk-pixbuf-2.0.pc.in
 @@ -12,7 +12,7 @@ Name: GdkPixbuf
@@ -50,21 +47,18 @@ index 7addefc..a07a46f 100644
  Libs: -L${libdir} -lgdk_pixbuf-@GDK_PIXBUF_API_VERSION@
  Libs.private: @GDK_PIXBUF_EXTRA_LIBS@
  Cflags: -I${includedir}/gdk-pixbuf-@GDK_PIXBUF_API_VERSION@ @GDK_PIXBUF_EXTRA_CFLAGS@
--- 
-1.7.10.4
 
-
-From 1e76ff73dcd6f191584bb05c8ccc9b0a16394a0d Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Fri, 12 Oct 2012 12:25:27 +0200
 Subject: [PATCH 3/3] allow static
 
 
 diff --git a/configure.ac b/configure.ac
-index a5224f8..a1fc2d0 100644
+index 1111111..2222222 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -131,16 +131,16 @@ case $host in
+@@ -136,16 +136,16 @@ case $host in
      ;;
  esac
  
@@ -91,6 +85,3 @@ index a5224f8..a1fc2d0 100644
  
  dnl Initialize libtool
  LT_PREREQ([2.2.6])
--- 
-1.7.10.4
-

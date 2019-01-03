@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 9947fc705b0b841b5938c48b22dc33e9647ec0752bae66e50278df4f23f64
 $(PKG)_SUBDIR   := go
 $(PKG)_FILE     := go$($(PKG)_VERSION).src.tar.gz
 $(PKG)_URL      := https://storage.googleapis.com/golang/$($(PKG)_FILE)
-$(PKG)_DEPS_$(BUILD) :=
+$(PKG)_DEPS     :=
 $(PKG)_TARGETS  := $(BUILD)
 
 define $(PKG)_UPDATE

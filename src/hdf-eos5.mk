@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 119588067abf139c1c600a4519b880d04a3933049576c88acdc8ff6fc7180
 $(PKG)_SUBDIR   := hdfeos5
 $(PKG)_FILE     := HDF-EOS5.$($(PKG)_VERSION).tar.Z
 $(PKG)_URL      := ftp://edhs1.gsfc.nasa.gov/edhs/hdfeos5/latest_release/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc hdf5
+$(PKG)_DEPS     := cc hdf5
 
 define $(PKG)_UPDATE
     echo 'TODO: write update script for hdf-eos5.' >&2;

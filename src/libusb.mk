@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := f3faf094c9b3415ede42eeb5032feda2e71945f13f0ca3da58ca10dcb439b
 $(PKG)_SUBDIR   := $(PKG)-win32-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-win32-src-$($(PKG)_VERSION).zip
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)-win32/$(PKG)-win32-releases/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 $(PKG)_MESSAGE  :=*** libusb is deprecated - please use libusb1 ***
 

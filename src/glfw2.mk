@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := glfw2
-$(PKG)_WEBSITE  := http://www.glfw.org/
+$(PKG)_WEBSITE  := https://www.glfw.org/
 $(PKG)_DESCR    := GLFW 2.x
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.7.9
@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := b7276dcadc85a07077834d1043f11ffd6a3a379647bb94361b4abc3ffca75
 $(PKG)_SUBDIR   := glfw-$($(PKG)_VERSION)
 $(PKG)_FILE     := glfw-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/glfw/glfw/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://sourceforge.net/projects/glfw/files/glfw/' | \

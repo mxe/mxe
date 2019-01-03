@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := c2a3c62d05d1e322afa6afae086cf96df82a3a13b839e9bf1cedcb014d921
 $(PKG)_SUBDIR   := CImg-$($(PKG)_VERSION)
 $(PKG)_FILE     := CImg_$($(PKG)_VERSION).zip
 $(PKG)_URL      := http://cimg.eu/files/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc fftw imagemagick jpeg libpng opencv openexr tiff zlib
+$(PKG)_DEPS     := cc fftw imagemagick jpeg libpng opencv openexr tiff zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://cimg.eu/files/' | \
@@ -45,8 +45,8 @@ define $(PKG)_BUILD
         'CIMG_EXR_LIBS=`$(TARGET)-pkg-config --libs OpenEXR`' \
         'CIMG_PNG_INCDIR=`$(TARGET)-pkg-config --cflags libpng`' \
         'CIMG_PNG_LIBS=`$(TARGET)-pkg-config --libs libpng`' \
-        'CIMG_JPEG_INCDIR=`$(TARGET)-pkg-config --cflags jpeg`' \
-        'CIMG_JPEG_LIBS=`$(TARGET)-pkg-config --libs jpeg`' \
+        'CIMG_JPEG_INCDIR=`$(TARGET)-pkg-config --cflags libjpeg`' \
+        'CIMG_JPEG_LIBS=`$(TARGET)-pkg-config --libs libjpeg`' \
         'CIMG_ZLIB_INCDIR=`$(TARGET)-pkg-config --cflags zlib`' \
         'CIMG_ZLIB_LIBS=`$(TARGET)-pkg-config --libs zlib`' \
         'CIMG_OPENCV_INCDIR=`$(TARGET)-pkg-config --cflags opencv`' \

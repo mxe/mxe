@@ -9,7 +9,7 @@ $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tgz
 $(PKG)_URL      := https://www.ics.forth.gr/~lourakis/$(PKG)/$($(PKG)_FILE)
 $(PKG)_UA       := MXE
-$(PKG)_DEPS     := gcc blas lapack libf2c
+$(PKG)_DEPS     := cc openblas
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- "https://www.ics.forth.gr/~lourakis/levmar/"  | \
@@ -18,12 +18,31 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(MAKE) -C '$(1)' -j '$(JOBS)' liblevmar.a \
+    $(MAKE) -C '$(SOURCE_DIR)' -j '$(JOBS)' liblevmar.a \
         CC=$(TARGET)-gcc \
         AR=$(TARGET)-ar \
-        RANLIB=$(TARGET)-ranlib
-    $(INSTALL) -m644 '$(1)/levmar.h'    '$(PREFIX)/$(TARGET)/include/'
-    $(INSTALL) -m644 '$(1)/liblevmar.a' '$(PREFIX)/$(TARGET)/lib/'
-endef
+        RANLIB=$(TARGET)-ranlib \
+        LAPACKLIBS="`'$(TARGET)-pkg-config' --libs openblas`"
+    $(INSTALL) -m644 '$(SOURCE_DIR)/levmar.h'    '$(PREFIX)/$(TARGET)/include/'
+    $(if $(BUILD_STATIC),\
+        $(INSTALL) -m644 '$(SOURCE_DIR)/liblevmar.a'  '$(PREFIX)/$(TARGET)/lib/' \
+    $(else), \
+        $(MAKE_SHARED_FROM_STATIC) '$(SOURCE_DIR)/liblevmar.a' \
+        `$(TARGET)-pkg-config --libs openblas`)
 
-$(PKG)_BUILD_SHARED =
+    # create pkg-config file
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
+    (echo 'Name: $(PKG)'; \
+     echo 'Version: $($(PKG)_VERSION)'; \
+     echo 'Description: $($(PKG)_DESCR)'; \
+     echo 'Requires: openblas'; \
+     echo 'Libs: -llevmar'; \
+    ) > '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG).pc'
+
+    # compile test
+    '$(TARGET)-gcc' \
+        -W -Wall \
+        '$(SOURCE_DIR)/expfit.c' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
+        `'$(TARGET)-pkg-config' $(PKG) --cflags --libs` \
+        -Dsrandom=srand -Drandom=rand
+endef

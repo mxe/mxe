@@ -8,13 +8,13 @@ $(PKG)_CHECKSUM := 15bdfdcec58a7da30adc87ac2b078e4417dbe5392f3afb719f9ba6d062645
 $(PKG)_SUBDIR   := $(PKG)
 $(PKG)_FILE     := $(PKG)_$(subst .,_,$($(PKG)_VERSION)).tar.gz
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 $(PKG)_MESSAGE  :=*** tinyxml is deprecated - please use tinyxml2 ***
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://sourceforge.net/projects/tinyxml/files/tinyxml/' | \
-    $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
+    $(SED) -n 's,.*/projects/.*/\([0-9][^"]*\)/".*,\1,p' | \
     head -1
 endef
 

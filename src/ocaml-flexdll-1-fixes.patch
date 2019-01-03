@@ -2,16 +2,16 @@ This file is part of MXE. See LICENSE.md for licensing information.
 
 Contains ad hoc patches for cross building.
 
-From 78c4c5447fb711713ac56774f0751485b25df4bd Mon Sep 17 00:00:00 2001
-From: MXE
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "fix@me" <fix@me>
 Date: Sat, 23 Jun 2012 22:25:50 +0200
-Subject: [PATCH] modifications for cross-compilation
+Subject: [PATCH 1/1] modifications for cross-compilation
 
 part of this patch is taken from
 http://code.google.com/p/flexdll/issues/detail?id=2
 
 diff --git a/Makefile b/Makefile
-index 81b2214..7a15574 100644
+index 1111111..2222222 100644
 --- a/Makefile
 +++ b/Makefile
 @@ -43,12 +43,12 @@ MSVCC64 = $(MSVCC_ROOT)/amd64/cl.exe /nologo /MD -D_CRT_SECURE_NO_DEPRECATE /GS-
@@ -39,7 +39,7 @@ index 81b2214..7a15574 100644
  	rm -f flexlink.exe
  	$(OCAMLOPT) -w -105 -o flexlink.exe $(LINKFLAGS) $(OBJS)
 diff --git a/reloc.ml b/reloc.ml
-index 1ac7e38..1187f39 100644
+index 1111111..2222222 100644
 --- a/reloc.ml
 +++ b/reloc.ml
 @@ -977,7 +977,7 @@ let setup_toolchain () =
@@ -51,6 +51,3 @@ index 1ac7e38..1187f39 100644
        ];
      default_libs :=
        ["-lmingw32"; "-lgcc"; "-lmoldname"; "-lmingwex"; "-lmsvcrt";
--- 
-1.7.9.5
-

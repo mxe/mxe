@@ -111,7 +111,7 @@ This type of package will also work with normal MXE features such as updates
 and patches.
 
 The customisation style (override/overlay) can be trickier since any arbitrary
-`make` statements can be used. Most normal variables should be overriden with
+`make` statements can be used. Most normal variables should be overridden with
 [simply expanded variables](https://www.gnu.org/software/make/manual/html_node/Flavors.html#Flavors)
 i.e. using `:=` instead of `=`. For example, to change a package version:
 
@@ -141,7 +141,7 @@ foo_PATCHES :=
 To alter dependencies and components:
 
 ```make
-qt_DEPS := gcc dbus jpeg libmng libpng openssl tiff zlib
+qt_DEPS := cc dbus jpeg libmng libpng openssl tiff zlib
 
 qt_BUILD := \
     $(subst -accessibility ,-no-accessibility ,\

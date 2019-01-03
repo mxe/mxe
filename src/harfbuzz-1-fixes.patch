@@ -1,13 +1,15 @@
 This file is part of MXE. See LICENSE.md for licensing information.
 
-From c26e8bf6eeba0d7ed230dbc659e7abd8ed8277a1 Mon Sep 17 00:00:00 2001
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Niels Kristian Bech Jensen <nkbj1970@hotmail.com>
 Date: Sat, 22 Aug 2015 11:25:36 +0200
-Subject: [PATCH] fix *.pc file for harfbuzz-icu
+Subject: [PATCH 1/1] fix *.pc file for harfbuzz-icu
 
 
 diff --git a/src/harfbuzz-icu.pc.in b/src/harfbuzz-icu.pc.in
-index 949869a..59d8cbc 100644
+index 1111111..2222222 100644
 --- a/src/harfbuzz-icu.pc.in
 +++ b/src/harfbuzz-icu.pc.in
 @@ -8,6 +8,7 @@ Description: HarfBuzz text shaping library ICU integration
@@ -20,7 +22,7 @@ index 949869a..59d8cbc 100644
 +Libs.private: -lusp10 -lgdi32
  Cflags: -I${includedir}/harfbuzz
 diff --git a/src/harfbuzz.pc.in b/src/harfbuzz.pc.in
-index b3e124a..e74633a 100644
+index 1111111..2222222 100644
 --- a/src/harfbuzz.pc.in
 +++ b/src/harfbuzz.pc.in
 @@ -7,7 +7,8 @@ Name: harfbuzz
@@ -29,10 +31,7 @@ index b3e124a..e74633a 100644
  
 +Requires.private: cairo-ft glib-2.0
  Libs: -L${libdir} -lharfbuzz
--Libs.private: %libs_private%
-+Libs.private: %libs_private% -lusp10 -lgdi32
+-Libs.private: -lm %libs_private%
++Libs.private: -lm %libs_private% -lusp10 -lgdi32
  Requires.private: %requires_private%
  Cflags: -I${includedir}/harfbuzz
--- 
-2.1.4
-

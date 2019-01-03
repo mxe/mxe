@@ -1,0 +1,32 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sun, 9 Dec 2018 16:04:13 +1100
+Subject: [PATCH 1/1] fix shared build and install
+
+
+diff --git a/cmake/modules/AddLLVM.cmake b/cmake/modules/AddLLVM.cmake
+index 1111111..2222222 100644
+--- a/cmake/modules/AddLLVM.cmake
++++ b/cmake/modules/AddLLVM.cmake
+@@ -656,7 +656,7 @@ macro(add_llvm_library name)
+ 
+       install(TARGETS ${name}
+               ${export_to_llvmexports}
+-              ${install_type} DESTINATION ${install_dir}
++              DESTINATION lib RUNTIME DESTINATION bin
+               COMPONENT ${name})
+ 
+       if (NOT CMAKE_CONFIGURATION_TYPES)
+diff --git a/lib/Testing/CMakeLists.txt b/lib/Testing/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/lib/Testing/CMakeLists.txt
++++ b/lib/Testing/CMakeLists.txt
+@@ -1 +1,3 @@
+-add_subdirectory(Support)
++if( LLVM_INCLUDE_TESTS )
++  add_subdirectory(Support)
++endif()

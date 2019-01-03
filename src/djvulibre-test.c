@@ -6,11 +6,11 @@
 
 int main(int argc, char *argv[])
 {
-	ddjvu_context_t *djvu_test;
-	(void)argc;
+    ddjvu_context_t *djvu_test;
+    (void)argc;
 
-	djvu_test = ddjvu_context_create(argv[0]);
-	ddjvu_context_release(djvu_test);
+    djvu_test = ddjvu_context_create(argv[0]);
+    ddjvu_context_release(djvu_test);
 
-	return 0;
+    return 0;
 }

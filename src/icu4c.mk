@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := icu4c
-$(PKG)_WEBSITE  := http://site.icu-project.org/
+$(PKG)_WEBSITE  := https://ssl.icu-project.org/
 $(PKG)_DESCR    := ICU4C
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 57.1
@@ -9,8 +9,8 @@ $(PKG)_MAJOR    := $(word 1,$(subst ., ,$($(PKG)_VERSION)))
 $(PKG)_CHECKSUM := ff8c67cb65949b1e7808f2359f2b80f722697048e90e7cfc382ec1fe229e9581
 $(PKG)_SUBDIR   := icu
 $(PKG)_FILE     := $(PKG)-$(subst .,_,$($(PKG)_VERSION))-src.tgz
-$(PKG)_URL      := http://download.icu-project.org/files/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_URL      := https://ssl.icu-project.org/files/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://bugs.icu-project.org/trac/browser/icu/tags' | \

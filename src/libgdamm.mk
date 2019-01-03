@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 9e7c04544fb580d8b00216ca191ab863dff73abec0e569159f4aa640f6319
 $(PKG)_SUBDIR   := libgdamm-$($(PKG)_VERSION)
 $(PKG)_FILE     := libgdamm-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.gnome.org/sources/libgdamm/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc glibmm libgda
+$(PKG)_DEPS     := cc glibmm libgda
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://git.gnome.org/browse/libgdamm/refs/tags' | \

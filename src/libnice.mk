@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 61112d9f3be933a827c8365f20551563953af6718057928f51f487bfe8841
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_URL      := https://nice.freedesktop.org/releases/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc glib
+$(PKG)_DEPS     := cc glib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://cgit.freedesktop.org/libnice/libnice/refs/tags' | \

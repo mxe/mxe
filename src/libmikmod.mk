@@ -8,8 +8,9 @@ $(PKG)_VERSION  := 3.3.11.1
 $(PKG)_CHECKSUM := ad9d64dfc8f83684876419ea7cd4ff4a41d8bcd8c23ef37ecb3a200a16b46d19
 $(PKG)_SUBDIR   := libmikmod-$($(PKG)_VERSION)
 $(PKG)_FILE     := libmikmod-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/mikmod/libmikmod/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/mikmod/outdated_versions/libmikmod/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL_2    := https://$(SOURCEFORGE_MIRROR)/project/mikmod/outdated_versions/libmikmod/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://sourceforge.net/projects/mikmod/files/libmikmod/' | \

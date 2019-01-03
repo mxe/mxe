@@ -3,12 +3,12 @@
 PKG             := gst-plugins-ugly
 $(PKG)_WEBSITE  := https://gstreamer.freedesktop.org/modules/gst-plugins-ugly.html
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.12.2
-$(PKG)_CHECKSUM := 1cc3942bbf3ea87da3e35437d4e014e991b103db22a6174f62a98c89c3f5f466
+$(PKG)_VERSION  := 1.14.4
+$(PKG)_CHECKSUM := ac02d837f166c35ff6ce0738e281680d0b90052cfb1f0255dcf6aaca5f0f6d23
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://gstreamer.freedesktop.org/src/$(PKG)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc a52dec gst-plugins-base gstreamer lame libcdio libdvdread \
+$(PKG)_DEPS     := cc a52dec gst-plugins-base gstreamer lame libcdio libdvdread \
                    opencore-amr twolame x264
 
 $(PKG)_UPDATE = $(subst gstreamer/refs,gst-plugins-ugly/refs,$(gstreamer_UPDATE))

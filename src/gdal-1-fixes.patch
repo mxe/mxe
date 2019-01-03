@@ -1,0 +1,95 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Luke Potgieter <fried.roadkill+ght@gmail.com>
+Date: Tue, 29 Aug 2017 16:31:09 +0200
+Subject: [PATCH 1/2] Detect spatialite more effectively than just checking for
+ headers in the system paths. PostgreSQL detection requires -lpthread when
+ building statically.
+
+
+diff --git a/configure.ac b/configure.ac
+index 1111111..2222222 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -1124,7 +1124,7 @@ else
+ 
+   AC_MSG_RESULT([yes])
+ 
+-  AC_CHECK_LIB(pq,PQconnectdb,HAVE_PG=yes,HAVE_PG=no,-L`$PG_CONFIG --libdir`)
++  AC_CHECK_LIB(pq,PQconnectdb,HAVE_PG=yes,HAVE_PG=no,-L`$PG_CONFIG --libdir` -lpthread)
+ 
+   if test "${HAVE_PG}" = "yes" ; then
+     LIBS=-L`$PG_CONFIG --libdir`" -lpq $LIBS"
+@@ -3557,16 +3557,21 @@ AC_ARG_WITH(spatialite-soname,
+ 
+ HAVE_SPATIALITE=no
+ SPATIALITE_AMALGAMATION=no
++HAVE_SPAT_PKG=no
+ 
+ if test -z "$with_spatialite" -o "$with_spatialite" = "no"; then
+     AC_MSG_RESULT(disabled)
+ elif test "$with_spatialite" = "yes"; then
+     AC_CHECK_HEADERS(sqlite3.h)
+     if test "$ac_cv_header_sqlite3_h" = "yes"; then
+-        AC_MSG_CHECKING([for spatialite.h in /usr/include or /usr/local/include])
+-        if test -f "/usr/include/spatialite.h" -o -f "/usr/local/include/spatialite.h"; then
+-            AC_MSG_RESULT(found)
++        #AC_MSG_CHECKING([for spatialite.h in /usr/include or /usr/local/include])
++        #if test -f "/usr/include/spatialite.h" -o -f "/usr/local/include/spatialite.h"; then
++        PKG_CHECK_MODULES(SPATIALITE, spatialite, [HAVE_SPAT_PKG=yes], [HAVE_SPAT_PKG=no])
++        if test "$HAVE_SPAT_PKG" = "yes"; then
++            OLD_LIBS="$LIBS"
++            LIBS="$LIBS -lsqlite3 -lspatialite -lgeos_c -lgeos -lxml2 -liconv -llzma -lproj -lstdc++ -lws2_32 -lm -lz"
+             AC_CHECK_LIB(spatialite,spatialite_init,SPATIALITE_INIT_FOUND=yes,SPATIALITE_INIT_FOUND=no,)
++            LIBS="$OLD_LIBS"
+             if test "$SPATIALITE_INIT_FOUND" = "yes"; then
+                 HAVE_SPATIALITE=yes
+                 SPATIALITE_LIBS="-lspatialite -lsqlite3"
+diff --git a/m4/geos.m4 b/m4/geos.m4
+index 1111111..2222222 100644
+--- a/m4/geos.m4
++++ b/m4/geos.m4
+@@ -121,14 +121,14 @@ AC_DEFUN([GEOS_INIT],[
+ 
+       HAVE_GEOS="no"
+ 
+-      GEOS_LIBS="`${GEOS_CONFIG} --ldflags` -lgeos_c"
++      GEOS_LIBS="`${GEOS_CONFIG} --clibs`"
+       GEOS_CFLAGS="`${GEOS_CONFIG} --cflags`"
+       GEOS_VERSION="`${GEOS_CONFIG} --version`"
+ 
+       ax_save_LIBS="${LIBS}"
+-      LIBS=${GEOS_LIBS}
++      LIBS="${LIBS} ${GEOS_LIBS}"
+       ax_save_CFLAGS="${CFLAGS}"
+-      CFLAGS="${GEOS_CFLAGS}"
++      CFLAGS="${CFLAGS} ${GEOS_CFLAGS}"
+ 
+       AC_CHECK_LIB([geos_c],
+         [GEOSversion],
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Luke Potgieter <fried.roadkill+ght@gmail.com>
+Date: Tue, 26 Sep 2017 14:56:19 +0200
+Subject: [PATCH 2/2] Use the new proj dll version number for the latest proj.
+
+
+diff --git a/ogr/ogrct.cpp b/ogr/ogrct.cpp
+index 1111111..2222222 100644
+--- a/ogr/ogrct.cpp
++++ b/ogr/ogrct.cpp
+@@ -96,9 +96,9 @@ static bool      bProjLocaleSafe = false;
+ // build) it can be named either way, so use PROJSO environment variable to
+ // specify the right library name. By default assume that in Cygwin/MinGW all
+ // components were built in the same way.
+-#  define LIBNAME "libproj-9.dll"
++#  define LIBNAME "libproj-12.dll"
+ #elif defined(__CYGWIN__)
+-#  define LIBNAME "cygproj-9.dll"
++#  define LIBNAME "cygproj-12.dll"
+ #elif defined(__APPLE__)
+ #  define LIBNAME "libproj.dylib"
+ #else

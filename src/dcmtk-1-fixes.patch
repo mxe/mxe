@@ -2,10 +2,10 @@ This file is part of MXE. See LICENSE.md for licensing information.
 
 Contains ad hoc patches for cross building.
 
-From ac29986df03482c61dbd7271554e6bc453228bd6 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Joerg Riesmeier <dicom@offis.de>
 Date: Thu, 17 Nov 2011 16:13:14 +0000
-Subject: [PATCH] Minor fixes to keep XCode 4.2 on Mac OS X Lion (clang
+Subject: [PATCH 1/1] Minor fixes to keep XCode 4.2 on Mac OS X Lion (clang
  compiler) quiet.
 
 (cherry picked from commit dbadc0d8f3760f65504406c8b2cb8633f868a258)
@@ -14,31 +14,9 @@ Conflicts:
 
 	CHANGES.361
 	ofstd/libsrc/ofchrenc.cc
----
- dcmimage/include/dcmtk/dcmimage/diargpxt.h |   25 ++++++++++++++-----------
- dcmimage/include/dcmtk/dcmimage/dicmypxt.h |   11 +++++++----
- dcmimage/include/dcmtk/dcmimage/dicocpt.h  |   11 +++++++----
- dcmimage/include/dcmtk/dcmimage/dicoflt.h  |   17 ++++++++++-------
- dcmimage/include/dcmtk/dcmimage/dicorot.h  |   17 ++++++++++-------
- dcmimage/include/dcmtk/dcmimage/dicosct.h  |   13 ++++++++-----
- dcmimage/include/dcmtk/dcmimage/dihsvpxt.h |   11 +++++++----
- dcmimage/include/dcmtk/dcmimage/dipalpxt.h |   11 +++++++----
- dcmimage/include/dcmtk/dcmimage/dirgbpxt.h |   15 +++++++++------
- dcmimage/include/dcmtk/dcmimage/diybrpxt.h |   15 +++++++++------
- dcmimage/include/dcmtk/dcmimage/diyf2pxt.h |   11 +++++++----
- dcmimage/include/dcmtk/dcmimage/diyp2pxt.h |   11 +++++++----
- dcmimgle/include/dcmtk/dcmimgle/diflipt.h  |   11 +++++++----
- dcmimgle/include/dcmtk/dcmimgle/dimoflt.h  |   15 +++++++++------
- dcmimgle/include/dcmtk/dcmimgle/dimoipxt.h |   13 ++++++++-----
- dcmimgle/include/dcmtk/dcmimgle/dimorot.h  |   15 +++++++++------
- dcmimgle/include/dcmtk/dcmimgle/dimosct.h  |   11 +++++++----
- dcmimgle/include/dcmtk/dcmimgle/dirotat.h  |   11 +++++++----
- dcmimgle/include/dcmtk/dcmimgle/discalet.h |   19 +++++++++++--------
- ofstd/include/dcmtk/ofstd/ofoset.h         |   13 ++++++++-----
- 20 files changed, 168 insertions(+), 108 deletions(-)
 
 diff --git a/dcmimage/include/dcmtk/dcmimage/diargpxt.h b/dcmimage/include/dcmtk/dcmimage/diargpxt.h
-index 7e3894d..1ed9291 100644
+index 1111111..2222222 100644
 --- a/dcmimage/include/dcmtk/dcmimage/diargpxt.h
 +++ b/dcmimage/include/dcmtk/dcmimage/diargpxt.h
 @@ -1,6 +1,6 @@
@@ -121,7 +99,7 @@ index 7e3894d..1ed9291 100644
   * Updated copyright header. Added reference to COPYRIGHT file.
   *
 diff --git a/dcmimage/include/dcmtk/dcmimage/dicmypxt.h b/dcmimage/include/dcmtk/dcmimage/dicmypxt.h
-index 5357780..bf1161e 100644
+index 1111111..2222222 100644
 --- a/dcmimage/include/dcmtk/dcmimage/dicmypxt.h
 +++ b/dcmimage/include/dcmtk/dcmimage/dicmypxt.h
 @@ -1,6 +1,6 @@
@@ -163,7 +141,7 @@ index 5357780..bf1161e 100644
   * Updated copyright header. Added reference to COPYRIGHT file.
   *
 diff --git a/dcmimage/include/dcmtk/dcmimage/dicocpt.h b/dcmimage/include/dcmtk/dcmimage/dicocpt.h
-index 0c06de7..3f03b6b 100644
+index 1111111..2222222 100644
 --- a/dcmimage/include/dcmtk/dcmimage/dicocpt.h
 +++ b/dcmimage/include/dcmtk/dcmimage/dicocpt.h
 @@ -1,6 +1,6 @@
@@ -205,7 +183,7 @@ index 0c06de7..3f03b6b 100644
   * Updated copyright header. Added reference to COPYRIGHT file.
   *
 diff --git a/dcmimage/include/dcmtk/dcmimage/dicoflt.h b/dcmimage/include/dcmtk/dcmimage/dicoflt.h
-index a5bed81..bc809ab 100644
+index 1111111..2222222 100644
 --- a/dcmimage/include/dcmtk/dcmimage/dicoflt.h
 +++ b/dcmimage/include/dcmtk/dcmimage/dicoflt.h
 @@ -1,6 +1,6 @@
@@ -257,7 +235,7 @@ index a5bed81..bc809ab 100644
   * Updated copyright header. Added reference to COPYRIGHT file.
   *
 diff --git a/dcmimage/include/dcmtk/dcmimage/dicorot.h b/dcmimage/include/dcmtk/dcmimage/dicorot.h
-index 2bcd71e..c8afd70 100644
+index 1111111..2222222 100644
 --- a/dcmimage/include/dcmtk/dcmimage/dicorot.h
 +++ b/dcmimage/include/dcmtk/dcmimage/dicorot.h
 @@ -1,6 +1,6 @@
@@ -309,7 +287,7 @@ index 2bcd71e..c8afd70 100644
   * Updated copyright header. Added reference to COPYRIGHT file.
   *
 diff --git a/dcmimage/include/dcmtk/dcmimage/dicosct.h b/dcmimage/include/dcmtk/dcmimage/dicosct.h
-index 006a829..3bccc45 100644
+index 1111111..2222222 100644
 --- a/dcmimage/include/dcmtk/dcmimage/dicosct.h
 +++ b/dcmimage/include/dcmtk/dcmimage/dicosct.h
 @@ -1,6 +1,6 @@
@@ -353,7 +331,7 @@ index 006a829..3bccc45 100644
   * Updated copyright header. Added reference to COPYRIGHT file.
   *
 diff --git a/dcmimage/include/dcmtk/dcmimage/dihsvpxt.h b/dcmimage/include/dcmtk/dcmimage/dihsvpxt.h
-index 10d8b70..52580ec 100644
+index 1111111..2222222 100644
 --- a/dcmimage/include/dcmtk/dcmimage/dihsvpxt.h
 +++ b/dcmimage/include/dcmtk/dcmimage/dihsvpxt.h
 @@ -1,6 +1,6 @@
@@ -395,7 +373,7 @@ index 10d8b70..52580ec 100644
   * Updated copyright header. Added reference to COPYRIGHT file.
   *
 diff --git a/dcmimage/include/dcmtk/dcmimage/dipalpxt.h b/dcmimage/include/dcmtk/dcmimage/dipalpxt.h
-index 2e5eef7..1ae2352 100644
+index 1111111..2222222 100644
 --- a/dcmimage/include/dcmtk/dcmimage/dipalpxt.h
 +++ b/dcmimage/include/dcmtk/dcmimage/dipalpxt.h
 @@ -1,6 +1,6 @@
@@ -437,7 +415,7 @@ index 2e5eef7..1ae2352 100644
   * Updated copyright header. Added reference to COPYRIGHT file.
   *
 diff --git a/dcmimage/include/dcmtk/dcmimage/dirgbpxt.h b/dcmimage/include/dcmtk/dcmimage/dirgbpxt.h
-index 85f973d..d9cc7ed 100644
+index 1111111..2222222 100644
 --- a/dcmimage/include/dcmtk/dcmimage/dirgbpxt.h
 +++ b/dcmimage/include/dcmtk/dcmimage/dirgbpxt.h
 @@ -1,6 +1,6 @@
@@ -491,7 +469,7 @@ index 85f973d..d9cc7ed 100644
   * Updated copyright header. Added reference to COPYRIGHT file.
   *
 diff --git a/dcmimage/include/dcmtk/dcmimage/diybrpxt.h b/dcmimage/include/dcmtk/dcmimage/diybrpxt.h
-index 6b523fb..ecd2038 100644
+index 1111111..2222222 100644
 --- a/dcmimage/include/dcmtk/dcmimage/diybrpxt.h
 +++ b/dcmimage/include/dcmtk/dcmimage/diybrpxt.h
 @@ -1,6 +1,6 @@
@@ -545,7 +523,7 @@ index 6b523fb..ecd2038 100644
   * Updated copyright header. Added reference to COPYRIGHT file.
   *
 diff --git a/dcmimage/include/dcmtk/dcmimage/diyf2pxt.h b/dcmimage/include/dcmtk/dcmimage/diyf2pxt.h
-index ed27796..93d28cc 100644
+index 1111111..2222222 100644
 --- a/dcmimage/include/dcmtk/dcmimage/diyf2pxt.h
 +++ b/dcmimage/include/dcmtk/dcmimage/diyf2pxt.h
 @@ -1,6 +1,6 @@
@@ -587,7 +565,7 @@ index ed27796..93d28cc 100644
   * Updated copyright header. Added reference to COPYRIGHT file.
   *
 diff --git a/dcmimage/include/dcmtk/dcmimage/diyp2pxt.h b/dcmimage/include/dcmtk/dcmimage/diyp2pxt.h
-index 518fed7..0dd9d5b 100644
+index 1111111..2222222 100644
 --- a/dcmimage/include/dcmtk/dcmimage/diyp2pxt.h
 +++ b/dcmimage/include/dcmtk/dcmimage/diyp2pxt.h
 @@ -1,6 +1,6 @@
@@ -629,7 +607,7 @@ index 518fed7..0dd9d5b 100644
   * Updated copyright header. Added reference to COPYRIGHT file.
   *
 diff --git a/dcmimgle/include/dcmtk/dcmimgle/diflipt.h b/dcmimgle/include/dcmtk/dcmimgle/diflipt.h
-index 4933fe1..05c198c 100644
+index 1111111..2222222 100644
 --- a/dcmimgle/include/dcmtk/dcmimgle/diflipt.h
 +++ b/dcmimgle/include/dcmtk/dcmimgle/diflipt.h
 @@ -1,6 +1,6 @@
@@ -671,7 +649,7 @@ index 4933fe1..05c198c 100644
   * Updated copyright header. Added reference to COPYRIGHT file.
   *
 diff --git a/dcmimgle/include/dcmtk/dcmimgle/dimoflt.h b/dcmimgle/include/dcmtk/dcmimgle/dimoflt.h
-index a88ab9d..52d71a3 100644
+index 1111111..2222222 100644
 --- a/dcmimgle/include/dcmtk/dcmimgle/dimoflt.h
 +++ b/dcmimgle/include/dcmtk/dcmimgle/dimoflt.h
 @@ -1,6 +1,6 @@
@@ -719,7 +697,7 @@ index a88ab9d..52d71a3 100644
   * Updated copyright header. Added reference to COPYRIGHT file.
   *
 diff --git a/dcmimgle/include/dcmtk/dcmimgle/dimoipxt.h b/dcmimgle/include/dcmtk/dcmimgle/dimoipxt.h
-index e815e90..c190dd6 100644
+index 1111111..2222222 100644
 --- a/dcmimgle/include/dcmtk/dcmimgle/dimoipxt.h
 +++ b/dcmimgle/include/dcmtk/dcmimgle/dimoipxt.h
 @@ -1,6 +1,6 @@
@@ -765,7 +743,7 @@ index e815e90..c190dd6 100644
   * Updated copyright header. Added reference to COPYRIGHT file.
   *
 diff --git a/dcmimgle/include/dcmtk/dcmimgle/dimorot.h b/dcmimgle/include/dcmtk/dcmimgle/dimorot.h
-index 4ef277d..e729424 100644
+index 1111111..2222222 100644
 --- a/dcmimgle/include/dcmtk/dcmimgle/dimorot.h
 +++ b/dcmimgle/include/dcmtk/dcmimgle/dimorot.h
 @@ -1,6 +1,6 @@
@@ -813,7 +791,7 @@ index 4ef277d..e729424 100644
   * Updated copyright header. Added reference to COPYRIGHT file.
   *
 diff --git a/dcmimgle/include/dcmtk/dcmimgle/dimosct.h b/dcmimgle/include/dcmtk/dcmimgle/dimosct.h
-index 60c9abb..8f89855 100644
+index 1111111..2222222 100644
 --- a/dcmimgle/include/dcmtk/dcmimgle/dimosct.h
 +++ b/dcmimgle/include/dcmtk/dcmimgle/dimosct.h
 @@ -1,6 +1,6 @@
@@ -855,7 +833,7 @@ index 60c9abb..8f89855 100644
   * Updated copyright header. Added reference to COPYRIGHT file.
   *
 diff --git a/dcmimgle/include/dcmtk/dcmimgle/dirotat.h b/dcmimgle/include/dcmtk/dcmimgle/dirotat.h
-index edb452e..2e7e3a0 100644
+index 1111111..2222222 100644
 --- a/dcmimgle/include/dcmtk/dcmimgle/dirotat.h
 +++ b/dcmimgle/include/dcmtk/dcmimgle/dirotat.h
 @@ -1,6 +1,6 @@
@@ -897,7 +875,7 @@ index edb452e..2e7e3a0 100644
   * Updated copyright header. Added reference to COPYRIGHT file.
   *
 diff --git a/dcmimgle/include/dcmtk/dcmimgle/discalet.h b/dcmimgle/include/dcmtk/dcmimgle/discalet.h
-index 758dde2..0bcbc70 100644
+index 1111111..2222222 100644
 --- a/dcmimgle/include/dcmtk/dcmimgle/discalet.h
 +++ b/dcmimgle/include/dcmtk/dcmimgle/discalet.h
 @@ -1,6 +1,6 @@
@@ -972,7 +950,7 @@ index 758dde2..0bcbc70 100644
   * Updated copyright header. Added reference to COPYRIGHT file.
   *
 diff --git a/ofstd/include/dcmtk/ofstd/ofoset.h b/ofstd/include/dcmtk/ofstd/ofoset.h
-index 1a7f208..a534ebf 100644
+index 1111111..2222222 100644
 --- a/ofstd/include/dcmtk/ofstd/ofoset.h
 +++ b/ofstd/include/dcmtk/ofstd/ofoset.h
 @@ -1,6 +1,6 @@
@@ -1022,6 +1000,3 @@ index 1a7f208..a534ebf 100644
  ** Revision 1.11  2010-10-14 13:15:50  joergr
  ** Updated copyright header. Added reference to COPYRIGHT file.
  **
--- 
-1.7.9.2
-

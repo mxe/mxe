@@ -2,7 +2,7 @@
  * This file is part of MXE. See LICENSE.md for licensing information.
  */
 
-/*  taken from http://www.netlib.org/lapack/lapacke.html */
+/*  taken from https://www.netlib.org/lapack/lapacke.html */
 
 /*  Calling CGEQRF and CUNGQR to compute Q with workspace querying */
 

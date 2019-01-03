@@ -12,7 +12,7 @@ $(PKG)_CHECKSUM := 5113c06884f7de453ce57702abaac1d618307f33f6789fa870e87a59d772a
 $(PKG)_SUBDIR   := lua-$($(PKG)_VERSION)
 $(PKG)_FILE     := lua-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://www.lua.org/ftp/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 $(PKG)_DEPS_$(BUILD) :=
 
 define $(PKG)_UPDATE
@@ -32,7 +32,7 @@ define $(PKG)_BUILD_COMMON
      echo 'Libs: -l$(PKG)';) \
      > '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG).pc'
 
-    cp '$(1)/src/lua' '$(PREFIX)/$(TARGET)/bin/lua.exe'
+    cp '$(1)/src/lua.exe' '$(PREFIX)/$(TARGET)/bin/lua.exe' || cp '$(1)/src/lua' '$(PREFIX)/$(TARGET)/bin/lua.exe'
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \

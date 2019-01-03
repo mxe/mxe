@@ -13,6 +13,9 @@ $(PKG)_OWNER    := https://github.com/tonytheodore
 $(PKG)_TARGETS  := $(BUILD)
 $(PKG)_DEPS     :=
 
+# recursive variable so always use literal instead of $(PKG)
+MXE_REQS_PKGS   += $(BUILD)~patch
+
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://ftp.gnu.org/gnu/patch/?C=M;O=D' | \
     $(SED) -n 's,.*<a href="patch-\([0-9][^"]*\)\.tar.*,\1,p' | \

@@ -1,5 +1,7 @@
 # Notes about GCC version 6.1.0 and later
 
+*N.B* all packages build with gcc6 as of [2018-08-15](https://github.com/mxe/mxe/commit/7a5b4281dc86f225e55f3fb2122477eeb8088d15)
+
 GCC 6.1 is released with a number of major changes
 [[1](https://gcc.gnu.org/ml/gcc-announce/2016/msg00000.html)]
 [[2](https://gcc.gnu.org/gcc-6/changes.html)]

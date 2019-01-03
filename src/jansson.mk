@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 241125a55f739cd713808c4e0089986b8c3da746da8b384952912ad659fa2
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://www.digip.org/$(PKG)/releases/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.digip.org/jansson/' | \

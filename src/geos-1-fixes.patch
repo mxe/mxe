@@ -1,48 +1,23 @@
 This file is part of MXE. See LICENSE.md for licensing information.
 
-From 7966e3a9768f3db85fd93f8e4334ef6b58f0fb92 Mon Sep 17 00:00:00 2001
-From: Timothy Gu <timothygu99@gmail.com>
-Date: Sat, 18 Oct 2014 17:28:27 -0400
-Subject: [PATCH 1/2] geos-config: Fix linking to libm and libstdc++ for static
+Contains ad hoc patches for cross building.
 
-Signed-off-by: Timothy Gu <timothygu99@gmail.com>
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Luke Potgieter <fried.roadkill+ght@gmail.com>
+Date: Mon, 7 Aug 2017 15:24:32 +0200
+Subject: [PATCH 1/1] Always link as static (based on the previous patch by
+ Timothy Gu)
+
 
 diff --git a/tools/geos-config.in b/tools/geos-config.in
-index 9b45b5f..f521772 100644
+index 1111111..2222222 100644
 --- a/tools/geos-config.in
 +++ b/tools/geos-config.in
-@@ -52,10 +52,10 @@ case $1 in
-       echo -L${libdir} -lgeos
-       ;;
-     --static-clibs)
--      echo -L${libdir} -lgeos_c -lgeos -m
-+      echo -L${libdir} -lgeos_c -lgeos -lstdc++ -lm
-       ;;
-     --static-cclibs)
--      echo -L${libdir} -lgeos -m
-+      echo -L${libdir} -lgeos -lstdc++ -lm
-       ;;
-     --ldflags)
-       echo -L${libdir}
--- 
-1.9.1
-
-
-From 22befe6776025838d876c6f36a789f2ba467fbb6 Mon Sep 17 00:00:00 2001
-From: Timothy Gu <timothygu99@gmail.com>
-Date: Sat, 18 Oct 2014 17:29:24 -0400
-Subject: [PATCH 2/2] [MXE] geos-config: Always link as static
-
-Signed-off-by: Timothy Gu <timothygu99@gmail.com>
-
-diff --git a/tools/geos-config.in b/tools/geos-config.in
-index f521772..4c9a72b 100644
---- a/tools/geos-config.in
-+++ b/tools/geos-config.in
-@@ -40,21 +40,21 @@ case $1 in
+@@ -39,33 +39,22 @@ case $1 in
+      ;;
      --cflags)
      echo -I${prefix}/include 
-       ;;
+-      ;;
 -    --libs)
 -      # TODO: make an alias for --clibs
 -      # see http://trac.osgeo.org/geos/ticket/497
@@ -55,25 +30,32 @@ index f521772..4c9a72b 100644
 -      echo -L${libdir} -lgeos
 -      ;;
 -    --static-clibs)
-+#    --libs)
-+#      # TODO: make an alias for --clibs
-+#      # see http://trac.osgeo.org/geos/ticket/497
-+#      echo -L${libdir} -lgeos
-+#      ;;
-+#    --clibs)
-+#      echo -L${libdir} -lgeos_c
-+#      ;;
-+#    --cclibs)
-+#      echo -L${libdir} -lgeos
-+#      ;;
-+    --clibs|--static-clibs)
-       echo -L${libdir} -lgeos_c -lgeos -lstdc++ -lm
-       ;;
+-      echo -L${libdir} -lgeos_c -lgeos -lm
+-      ;;
 -    --static-cclibs)
+-      echo -L${libdir} -lgeos -lm
+-      ;;
++     ;;
++    --clibs|--static-clibs)
++    echo -L${libdir} -lgeos_c -lgeos -lstdc++ -lm
++     ;;
 +    --libs|--cclibs|--static-cclibs)
-       echo -L${libdir} -lgeos -lstdc++ -lm
-       ;;
++    echo -L${libdir} -lgeos -lstdc++ -lm
++     ;;
      --ldflags)
--- 
-1.9.1
-
+-      echo -L${libdir}
+-      ;;
++    echo -L${libdir}
++     ;;
+     --includes)
+-      echo ${prefix}/include
+-      ;;
++    echo ${prefix}/include
++     ;;
+     --jtsport)
+     echo @JTS_PORT@ 
+-      ;;
++     ;;
+     *)
+       usage 1 1>&2
+       ;;

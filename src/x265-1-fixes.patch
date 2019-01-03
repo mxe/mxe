@@ -1,0 +1,36 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: darealshinji <djcj@gmx.de>
+Date: Sat, 1 Jul 2017 17:09:40 +0200
+Subject: [PATCH 1/1] Use C++14 so we can build with dynamicHDR
+
+
+diff --git a/source/CMakeLists.txt b/source/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/source/CMakeLists.txt
++++ b/source/CMakeLists.txt
+@@ -187,7 +187,7 @@ endif()
+ if(GCC)
+     add_definitions(-Wall -Wextra -Wshadow)
+     add_definitions(-D__STDC_LIMIT_MACROS=1)
+-    add_definitions(-std=gnu++98)
++    add_definitions(-std=gnu++14)
+     if(ENABLE_PIC)
+          add_definitions(-fPIC)
+     endif(ENABLE_PIC)
+diff --git a/source/encoder/encoder.h b/source/encoder/encoder.h
+index 1111111..2222222 100644
+--- a/source/encoder/encoder.h
++++ b/source/encoder/encoder.h
+@@ -33,7 +33,7 @@
+ #include "framedata.h"
+ 
+ #ifdef ENABLE_DYNAMIC_HDR10
+-    #include "dynamicHDR10\hdr10plus.h"
++    #include "dynamicHDR10/hdr10plus.h"
+ #endif
+ 
+ struct x265_encoder {};

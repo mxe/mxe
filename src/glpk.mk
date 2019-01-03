@@ -8,8 +8,8 @@ $(PKG)_VERSION  := 4.60
 $(PKG)_CHECKSUM := 1356620cb0a0d33ac3411dd49d9fd40d53ece73eaec8f6b8d19a77887ff5e297
 $(PKG)_SUBDIR   := glpk-$($(PKG)_VERSION)
 $(PKG)_FILE     := glpk-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://ftp.gnu.org/gnu/$(PKG)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc gmp
+$(PKG)_URL      := https://ftp.gnu.org/gnu/glpk/glpk-$($(PKG)_VERSION).tar.gz
+$(PKG)_DEPS     := cc gmp
 
 # internal zlib is always used
 # libmysqlclient and odbc not supported on windows (see INSTALL and configure.ac)

@@ -2,9 +2,16 @@ This file is part of MXE. See LICENSE.md for licensing information.
 
 Contains ad hoc patches for cross building.
 
-diff -ur OpenCSG-1.4.1.orig/example/example.pro OpenCSG-1.4.1/example/example.pro
---- OpenCSG-1.4.1.orig/example/example.pro	2016-09-08 23:08:33.000000000 +0200
-+++ OpenCSG-1.4.1/example/example.pro	2016-09-11 14:24:18.839741352 +0200
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sat, 18 Nov 2017 21:39:30 +1100
+Subject: [PATCH 1/1] fixes
+
+
+diff --git a/example/example.pro b/example/example.pro
+index 1111111..2222222 100644
+--- a/example/example.pro
++++ b/example/example.pro
 @@ -1,10 +1,10 @@
  TEMPLATE = app
  TARGET = opencsgexample
@@ -18,7 +25,7 @@ diff -ur OpenCSG-1.4.1.orig/example/example.pro OpenCSG-1.4.1/example/example.pr
  
  INSTALLDIR = /usr/local
  INSTALLS += target
-@@ -15,7 +15,8 @@
+@@ -15,7 +15,8 @@ macx {
    LIBS += -framework GLUT -L/opt/local/lib
  }
  else {
@@ -28,10 +35,11 @@ diff -ur OpenCSG-1.4.1.orig/example/example.pro OpenCSG-1.4.1/example/example.pr
  }
  
  HEADERS = displaylistPrimitive.h
-diff -ur OpenCSG-1.4.1.orig/src/src.pro OpenCSG-1.4.1/src/src.pro
---- OpenCSG-1.4.1.orig/src/src.pro	2016-09-08 23:08:33.000000000 +0200
-+++ OpenCSG-1.4.1/src/src.pro	2016-09-11 14:25:15.833496135 +0200
-@@ -6,10 +6,11 @@
+diff --git a/src/src.pro b/src/src.pro
+index 1111111..2222222 100644
+--- a/src/src.pro
++++ b/src/src.pro
+@@ -6,10 +6,11 @@ isEmpty(INSTALLDIR) {
    INSTALLDIR = /usr/local
  }
  

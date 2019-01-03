@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 1939627d5358d1da62bc6158d63f7ed12905552f3a799c799ee90296a7612
 $(PKG)_SUBDIR   := wavpack-$($(PKG)_VERSION)
 $(PKG)_FILE     := wavpack-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://www.wavpack.com/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.wavpack.com/downloads.html' | \

@@ -4,10 +4,10 @@ PKG             := libomemo
 $(PKG)_WEBSITE  := https://github.com/gkdr/libomemo
 $(PKG)_DESCR    := Implementation of OMEMO in C
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.4.1
-$(PKG)_CHECKSUM := af66fd2958dc5d6b23bc488b69e9f431bfb308d79bdd1b1c31de4575862c5142
-$(PKG)_GH_CONF  := gkdr/libomemo, v
-$(PKG)_DEPS     := gcc glib libgcrypt mxml sqlite
+$(PKG)_VERSION  := 0.6.1
+$(PKG)_CHECKSUM := 26e2ef3df93d9461ed6d62bbb495b8ac6de385ec7a5aa28ff28dd869ba908170
+$(PKG)_GH_CONF  := gkdr/libomemo/tags, v
+$(PKG)_DEPS     := cc glib libgcrypt mxml sqlite
 
 define $(PKG)_BUILD
     $(MAKE) -C '$(SOURCE_DIR)' -j '$(JOBS)' all \
@@ -18,8 +18,21 @@ define $(PKG)_BUILD
         LIBGCRYPT_CONFIG='$(PREFIX)/$(TARGET)/bin/libgcrypt-config'
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib'
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/include'
-    $(INSTALL) -m644 '$(SOURCE_DIR)/build'/libomemo*.a  '$(PREFIX)/$(TARGET)/lib/'
     $(INSTALL) -m644 '$(SOURCE_DIR)/src'/libomemo*.h  '$(PREFIX)/$(TARGET)/include/'
+    $(if $(BUILD_STATIC),\
+        $(INSTALL) -m644 '$(SOURCE_DIR)/build'/libomemo*.a  '$(PREFIX)/$(TARGET)/lib/' \
+    $(else), \
+        $(MAKE_SHARED_FROM_STATIC) '$(SOURCE_DIR)/build/libomemo-conversations.a' \
+        `$(TARGET)-pkg-config --libs-only-l glib-2.0 sqlite3 mxml libgcrypt`)
+
+    # create pkg-config file
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
+    (echo 'Name: $(PKG)'; \
+     echo 'Version: $($(PKG)_VERSION)'; \
+     echo 'Description: $($(PKG)_DESCR)'; \
+     echo 'Requires: glib-2.0 sqlite3 mxml libgcrypt'; \
+     echo 'Libs: -lomemo-conversations';) \
+     > '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG).pc'
 
     # test cmake
     mkdir '$(SOURCE_DIR).test-cmake'
@@ -28,5 +41,3 @@ define $(PKG)_BUILD
         '$(PWD)/src/cmake/test'
     $(MAKE) -C '$(SOURCE_DIR).test-cmake' -j 1 install
 endef
-
-$(PKG)_BUILD_SHARED =

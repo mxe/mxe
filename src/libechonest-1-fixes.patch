@@ -1,0 +1,98 @@
+diff -ruN libechonest-2.3.1.orig/CMakeLists.txt libechonest-2.3.1/CMakeLists.txt
+--- libechonest-2.3.1.orig/CMakeLists.txt	2015-02-07 20:56:50.000000000 +0100
++++ libechonest-2.3.1/CMakeLists.txt	2018-06-07 22:01:52.627482773 +0200
+@@ -11,12 +11,18 @@
+ option(ECHONEST_BUILD_TESTS "Build all unit tests" ON)
+ option(BUILD_WITH_QT4 "Build libechonest with Qt4 no matter if Qt5 was found" ON)
+ 
++if(NOT BUILD_SHARED)
++	add_definitions(-DECHONEST_STATIC)
++	set(ECHONEST_PC_CFLAGS "-DECHONEST_STATIC")
++endif()
++
+ if( NOT BUILD_WITH_QT4 )
+     find_package(Qt5Core QUIET)
+     # CMAKE 2.8.13+/3.0.0+ requires these for IMPORTed targets
+     find_package(Qt5Xml REQUIRED)
+     if( Qt5Core_DIR )
+         message(STATUS "Found Qt5! Be aware that Qt5-support is still experimental and not officially supported!")
++        find_package(Qt5 REQUIRED COMPONENTS Core Network Xml Test)
+         set(ECHONEST_LIB_VERSION_SUFFIX 5)
+ 
+         macro(qt_wrap_cpp)
+@@ -105,13 +111,13 @@
+ SET (LIB_SUFFIX "" CACHE STRING "Define suffix of directory name (32/64)" )
+ SET (LIB_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}" CACHE STRING "Directory where lib will install")
+ SET (INCLUDE_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/include" CACHE PATH "The directory the headers are installed in")
+-IF (NOT WIN32)
++IF (MINGW OR NOT WIN32)
+   CONFIGURE_FILE (${CMAKE_CURRENT_SOURCE_DIR}/libechonest.pc.in
+                   ${CMAKE_CURRENT_BINARY_DIR}/libechonest${ECHONEST_LIB_VERSION_SUFFIX}.pc
+                   @ONLY)
+   INSTALL (FILES ${CMAKE_CURRENT_BINARY_DIR}/libechonest${ECHONEST_LIB_VERSION_SUFFIX}.pc
+            DESTINATION lib${LIB_SUFFIX}/pkgconfig)
+-ENDIF (NOT WIN32)
++ENDIF (MINGW OR NOT WIN32)
+ 
+ include(CPack)
+ 
+diff -ruN libechonest-2.3.1.orig/libechonest.pc.in libechonest-2.3.1/libechonest.pc.in
+--- libechonest-2.3.1.orig/libechonest.pc.in	2015-02-07 20:56:50.000000000 +0100
++++ libechonest-2.3.1/libechonest.pc.in	2018-06-07 21:56:24.101224738 +0200
+@@ -8,4 +8,4 @@
+ Version: @ECHONEST_LIB_MAJOR_VERSION@.@ECHONEST_LIB_MINOR_VERSION@.@ECHONEST_LIB_PATCH_VERSION@
+ Requires: Qt@ECHONEST_QT_MAJOR_VERSION@Core Qt@ECHONEST_QT_MAJOR_VERSION@Network @ECHONEST_PC_DEPS@
+ Libs: -L${libdir} -lechonest@ECHONEST_LIB_VERSION_SUFFIX@
+-Cflags: -I${includedir}
++Cflags: -I${includedir} @ECHONEST_PC_CFLAGS@
+diff -ruN libechonest-2.3.1.orig/src/CMakeLists.txt libechonest-2.3.1/src/CMakeLists.txt
+--- libechonest-2.3.1.orig/src/CMakeLists.txt	2015-02-07 20:56:50.000000000 +0100
++++ libechonest-2.3.1/src/CMakeLists.txt	2018-06-07 22:02:45.471202543 +0200
+@@ -44,13 +44,13 @@
+ 
+ QT_WRAP_CPP( ${LIBECHONEST_H} )
+ 
+-add_library( ${ECHONEST_LIB_TARGET_NAME} SHARED ${LIBECHONEST_SRC} )
++add_library( ${ECHONEST_LIB_TARGET_NAME} ${LIBECHONEST_SRC} )
+ target_link_libraries( ${ECHONEST_LIB_TARGET_NAME} ${QT_QTCORE_LIBRARY} ${QT_QTNETWORK_LIBRARY} ${QJSON_LIBRARIES} )
+ set_target_properties( ${ECHONEST_LIB_TARGET_NAME} PROPERTIES VERSION ${ECHONEST_LIB_VERSION} SOVERSION ${ECHONEST_LIB_VERSION_SONAME} )
+-qt5_use_modules( ${ECHONEST_LIB_TARGET_NAME} Core Network Xml )
++target_link_libraries( ${ECHONEST_LIB_TARGET_NAME} Qt5::Core Qt5::Network Qt5::Xml )
+ install( TARGETS ${ECHONEST_LIB_TARGET_NAME}   RUNTIME DESTINATION bin
+                             LIBRARY DESTINATION lib${LIB_SUFFIX}
+                             ARCHIVE DESTINATION lib${LIB_SUFFIX}
+ )
+ 
+-install( FILES ${LIBECHONEST_H} DESTINATION  include/echonest${ECHONEST_LIB_VERSION_SUFFIX} COMPONENT Devel )
++install( FILES ${LIBECHONEST_H} DESTINATION  include/echonest COMPONENT Devel )
+diff -ruN libechonest-2.3.1.orig/src/echonest_export.h libechonest-2.3.1/src/echonest_export.h
+--- libechonest-2.3.1.orig/src/echonest_export.h	2015-02-07 20:56:50.000000000 +0100
++++ libechonest-2.3.1/src/echonest_export.h	2018-06-07 21:56:24.101224738 +0200
+@@ -18,11 +18,15 @@
+ #define ECHONEST_EXPORT_H
+ 
+ #if defined _WIN32
++  #ifdef ECHONEST_STATIC
++    #define ECHONEST_EXPORT
++  #else
+     #if defined ( echonest_EXPORTS ) || defined ( echonest5_EXPORTS )
+         #define ECHONEST_EXPORT __declspec(dllexport)
+     #else
+         #define ECHONEST_EXPORT __declspec(dllimport)
+     #endif
++  #endif
+ #elif __GNUC__ >= 4
+   #define ECHONEST_EXPORT __attribute__ ((visibility("default")))
+ #else
+diff -ruN libechonest-2.3.1.orig/tests/CMakeLists.txt libechonest-2.3.1/tests/CMakeLists.txt
+--- libechonest-2.3.1.orig/tests/CMakeLists.txt	2015-02-07 20:56:50.000000000 +0100
++++ libechonest-2.3.1/tests/CMakeLists.txt	2018-06-07 21:59:49.888133620 +0200
+@@ -17,7 +17,7 @@
+     add_executable(${_name} ${_source})
+     target_link_libraries(${_name} ${ECHONEST_LIB_TARGET_NAME} ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY} ${QTCORE_QTNETWORK_LIBRARY} ${QT_QTXML_LIBRARY} ${QJSON_LIBRARIES} )
+     add_test(${_name}-test ${EXECUTABLE_OUTPUT_PATH}/${_name})
+-    qt5_use_modules(${_name} Network Test)
++    target_link_libraries(${_name} Qt5::Network Qt5::Test)
+ endmacro(add_echonest_test)
+ 
+ add_echonest_test( ArtistTest.cpp )

@@ -3,12 +3,14 @@
 PKG             := opencsg
 $(PKG)_WEBSITE  := http://www.opencsg.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.4.1
-$(PKG)_CHECKSUM := 48182c8233e6f89cd6752679bde44ef6cc9eda4c06f4db845ec7de2cae2bb07a
+$(PKG)_VERSION  := 1.4.2
+$(PKG)_CHECKSUM := d952ec5d3a2e46a30019c210963fcddff66813efc9c29603b72f9553adff4afb
 $(PKG)_SUBDIR   := OpenCSG-$($(PKG)_VERSION)
 $(PKG)_FILE     := OpenCSG-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.opencsg.org/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc freeglut glew qt
+$(PKG)_DEPS     := cc freeglut glew qtbase
+
+$(PKG)_QT_DIR   := qt5
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.opencsg.org/#download' | \
@@ -18,14 +20,15 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)/src' && '$(PREFIX)/$(TARGET)/qt/bin/qmake' src.pro
-    $(MAKE) -C '$(1)/src' -j '$(JOBS)'
-    $(INSTALL) -m644 '$(1)/include/opencsg.h' '$(PREFIX)/$(TARGET)/include/'
-    $(INSTALL) -m644 '$(1)/lib/libopencsg.a' '$(PREFIX)/$(TARGET)/lib/'
+    # doesn't support out-of-source build
+    cd '$(SOURCE_DIR)/src' && '$(PREFIX)/$(TARGET)/$($(PKG)_QT_DIR)/bin/qmake' src.pro
+    $(MAKE) -C '$(SOURCE_DIR)/src' -j '$(JOBS)'
+    $(INSTALL) -m644 '$(SOURCE_DIR)/include/opencsg.h' '$(PREFIX)/$(TARGET)/include/'
+    $(INSTALL) -m644 '$(SOURCE_DIR)/lib/libopencsg.a' '$(PREFIX)/$(TARGET)/lib/'
 
-    cd '$(1)/example' && '$(PREFIX)/$(TARGET)/qt/bin/qmake' example.pro
-    $(MAKE) -C '$(1)/example' -j '$(JOBS)'
-    $(INSTALL) -m755 '$(1)/example/release/opencsgexample.exe' '$(PREFIX)/$(TARGET)/bin/test-opencsg.exe'
+    cd '$(SOURCE_DIR)/example' && '$(PREFIX)/$(TARGET)/$($(PKG)_QT_DIR)/bin/qmake' example.pro
+    $(MAKE) -C '$(SOURCE_DIR)/example' -j '$(JOBS)'
+    $(INSTALL) -m755 '$(SOURCE_DIR)/example/release/opencsgexample.exe' '$(PREFIX)/$(TARGET)/bin/test-opencsg.exe'
 endef
 
 $(PKG)_BUILD_SHARED =

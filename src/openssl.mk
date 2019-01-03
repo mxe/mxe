@@ -3,13 +3,13 @@
 PKG             := openssl
 $(PKG)_WEBSITE  := https://www.openssl.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.0.2l
-$(PKG)_CHECKSUM := ce07195b659e75f4e1db43552860070061f156a98bb37b672b101ba6e3ddf30c
+$(PKG)_VERSION  := 1.1.1a
+$(PKG)_CHECKSUM := fc20130f8b7cbd2fb918b2f14e2f429e109c31ddd0fb38fc5d71d9ffed3f9f41
 $(PKG)_SUBDIR   := openssl-$($(PKG)_VERSION)
 $(PKG)_FILE     := openssl-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://www.openssl.org/source/$($(PKG)_FILE)
 $(PKG)_URL_2    := https://www.openssl.org/source/old/$(call tr,$([a-z]),,$($(PKG)_VERSION))/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc zlib
+$(PKG)_DEPS     := cc zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://www.openssl.org/source/' | \
@@ -19,6 +19,12 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    # remove previous install
+    rm -rfv '$(PREFIX)/$(TARGET)/include/openssl'
+    rm -rfv '$(PREFIX)/$(TARGET)/bin/engines'
+    rm -fv '$(PREFIX)/$(TARGET)/'*/{libcrypto*,libssl*}
+    rm -fv '$(PREFIX)/$(TARGET)/lib/pkgconfig/'{libcrypto*,libssl*,openssl*}
+
     cd '$(1)' && CC='$(TARGET)-gcc' RC='$(TARGET)-windres' ./Configure \
         @openssl-target@ \
         zlib \
@@ -28,13 +34,10 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' all install_sw -j 1 \
         CC='$(TARGET)-gcc' \
         RANLIB='$(TARGET)-ranlib' \
-        AR='$(TARGET)-ar rcu' \
-        CROSS_COMPILE='$(TARGET)-'
-
-    # no way to configure engines subdir install
-    $(if $(BUILD_SHARED),
-        rm -rf '$(PREFIX)/$(TARGET)/bin/engines' && \
-        mv -vf '$(PREFIX)/$(TARGET)/lib/engines' '$(PREFIX)/$(TARGET)/bin/')
+        AR='$(TARGET)-ar' \
+        RC='$(TARGET)-windres' \
+        CROSS_COMPILE='$(TARGET)-' \
+        $(if $(BUILD_SHARED), ENGINESDIR='$(PREFIX)/$(TARGET)/bin/engines')
 endef
 
 $(PKG)_BUILD_i686-w64-mingw32   = $(subst @openssl-target@,mingw,$($(PKG)_BUILD))

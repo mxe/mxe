@@ -1,6 +1,8 @@
 This file is part of MXE. See LICENSE.md for licensing information.
 
-From e91b3a8a4edb0d574f0c71372eddf9889c13dc8e Mon Sep 17 00:00:00 2001
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Timothy Gu <timothygu99@gmail.com>
 Date: Sun, 31 Aug 2014 13:57:14 -0700
 Subject: [PATCH 1/2] build: Modernize
@@ -10,7 +12,7 @@ dist-lzma was removed in automake 1.11.2.
 Signed-off-by: Timothy Gu <timothygu99@gmail.com>
 
 diff --git a/configure.ac b/configure.ac
-index 5a2f76c..288031a 100644
+index 1111111..2222222 100644
 --- a/configure.ac
 +++ b/configure.ac
 @@ -5,13 +5,13 @@ AC_PREREQ([2.63])
@@ -29,19 +31,16 @@ index 5a2f76c..288031a 100644
  PKG_PROG_PKG_CONFIG
  
  # Checks for libraries.
--- 
-1.9.1
 
-
-From 38e7d5e2641c79c4f34a4731f3f68d60865a9a6b Mon Sep 17 00:00:00 2001
-From: MXE
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "fix@me" <fix@me>
 Date: Sun, 31 Aug 2014 14:11:44 -0700
 Subject: [PATCH 2/2] Make libsndfile optional
 
 Signed-off-by: Timothy Gu <timothygu99@gmail.com>
 
 diff --git a/configure.ac b/configure.ac
-index 288031a..44b3340 100644
+index 1111111..2222222 100644
 --- a/configure.ac
 +++ b/configure.ac
 @@ -16,8 +16,10 @@ PKG_PROG_PKG_CONFIG
@@ -58,7 +57,7 @@ index 288031a..44b3340 100644
  # Checks for header files.
  AC_CHECK_HEADERS([fcntl.h malloc.h string.h])
 diff --git a/src/Makefile.am b/src/Makefile.am
-index 414aeec..cb46f1a 100644
+index 1111111..2222222 100644
 --- a/src/Makefile.am
 +++ b/src/Makefile.am
 @@ -1,11 +1,6 @@
@@ -90,6 +89,3 @@ index 414aeec..cb46f1a 100644
  bs2bstream_SOURCES = \
  	bs2bstream.c
 +endif
--- 
-1.9.1
-

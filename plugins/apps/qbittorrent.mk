@@ -9,7 +9,7 @@ $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$(PKG)-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_WEBSITE  := https://qbittorrent.org/
 $(PKG)_OWNER    := https://github.com/starius
-$(PKG)_DEPS     := gcc boost libtorrent-rasterbar qt
+$(PKG)_DEPS     := cc boost libtorrent-rasterbar qt $(BUILD)~geoip-database
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://www.qbittorrent.org/download.php' | \

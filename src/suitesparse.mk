@@ -3,13 +3,13 @@
 PKG             := suitesparse
 $(PKG)_WEBSITE  := http://faculty.cse.tamu.edu/davis/suitesparse.html
 $(PKG)_DESCR    := SuiteSparse
-$(PKG)_VERSION  := 4.2.1
-$(PKG)_CHECKSUM := e8023850bc30742e20a3623fabda02421cb5774b980e3e7c9c6d9e7e864946bd
+$(PKG)_VERSION  := 4.5.6
+$(PKG)_CHECKSUM := de5fb496bdc029e55955e05d918a1862a177805fbbd5b957e8b5ce6632f6c77e
 $(PKG)_SUBDIR   := SuiteSparse
 $(PKG)_FILE     := SuiteSparse-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://faculty.cse.tamu.edu/davis/SuiteSparse/$($(PKG)_FILE)
 $(PKG)_URL_2    := https://distfiles.macports.org/SuiteSparse/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc blas lapack
+$(PKG)_DEPS     := cc intel-tbb metis openblas
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://faculty.cse.tamu.edu/davis/suitesparse.html' | \
@@ -17,42 +17,74 @@ define $(PKG)_UPDATE
     head -1
 endef
 
-define $(PKG)_BUILD
-    # exclude demos
-    find '$(1)' -name 'Makefile' \
-        -exec $(SED) -i 's,( cd Demo,#( cd Demo,' {} \;
+$(PKG)_MAKE_OPTS = \
+    UNAME=Windows \
+    AR='$(TARGET)-ar' \
+    CC='$(TARGET)-gcc' \
+    CXX='$(TARGET)-g++' \
+    F77='$(TARGET)-gfortran' \
+    RANLIB='$(TARGET)-ranlib' \
+    BLAS="`'$(TARGET)-pkg-config' --libs openblas`" \
+    LAPACK="`'$(TARGET)-pkg-config' --libs openblas`" \
+    MY_METIS_LIB="`'$(TARGET)-pkg-config' --libs metis`" \
+    TBB="`'$(TARGET)-pkg-config' --libs intel-tbb`" \
+    SPQR_CONFIG="-DHAVE_TBB"
 
-    # build all
-    $(MAKE) -C '$(1)' -j '$(JOBS)' \
-        CC='$(TARGET)-gcc' \
-        CPLUSPLUS='$(TARGET)-g++' \
-        CXX='$(TARGET)-g++' \
-        F77='$(TARGET)-gfortran' \
-        AR='$(TARGET)-ar' \
-        RANLIB='$(TARGET)-ranlib' \
-        BLAS='-lblas -lgfortran -lgfortranbegin -lquadmath' \
-        CHOLMOD_CONFIG='-DNPARTITION'
+define $(PKG)_PC_TEST
+    # create pkg-config file for includes and base deps
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
+    (echo 'Name: suitesparseconfig'; \
+     echo 'Version: $($(PKG)_VERSION)'; \
+     echo 'Description: SuiteSparse includes and deps'; \
+     echo 'Requires: intel-tbb openblas metis'; \
+     echo 'Libs: -lsuitesparseconfig'; \
+     echo 'Cflags: -I"$(PREFIX)/$(TARGET)/include/suitesparse"'; \
+    ) > '$(PREFIX)/$(TARGET)/lib/pkgconfig/suitesparseconfig.pc'
+
+    '$(TARGET)-g++' \
+        -W -Wall \
+        '$(SOURCE_DIR)/SPQR/Demo/qrdemo.cpp' \
+        -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
+        -lspqr -lcholmod -lcolamd -lccolamd -lcamd -lamd \
+        `'$(TARGET)-pkg-config' suitesparseconfig --cflags --libs `
+
+    # batch file to run test program
+    cp '$(SOURCE_DIR)/SPQR/Matrix/a2.mtx' '$(PREFIX)/$(TARGET)/bin/test-$(PKG)-matrix.txt'
+    (printf 'test-$(PKG).exe < test-$(PKG)-matrix.txt\r\n'; \
+    ) > '$(PREFIX)/$(TARGET)/bin/test-$(PKG).bat'
+endef
+
+define $(PKG)_BUILD_STATIC
+    # build libraries
+    $(MAKE) -C '$(SOURCE_DIR)' -j '$(JOBS)' \
+        $($(PKG)_MAKE_OPTS) \
+        static
 
     # install library files
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib'
-    find '$(1)' -name '*.a' \
+    find '$(SOURCE_DIR)' -name 'lib*.a' \
         -exec $(INSTALL) -m644 {} '$(PREFIX)/$(TARGET)/lib/' \;
 
-    # install include files
-    $(INSTALL) -d                                '$(PREFIX)/$(TARGET)/include/suitesparse/'
-    $(INSTALL) -m644 '$(1)/SuiteSparse_config/'*.h '$(PREFIX)/$(TARGET)/include/suitesparse/'
-    $(INSTALL) -m644 '$(1)/AMD/Include/'*.h      '$(PREFIX)/$(TARGET)/include/suitesparse/'
-    $(INSTALL) -m644 '$(1)/BTF/Include/'*.h      '$(PREFIX)/$(TARGET)/include/suitesparse/'
-    $(INSTALL) -m644 '$(1)/CAMD/Include/'*.h     '$(PREFIX)/$(TARGET)/include/suitesparse/'
-    $(INSTALL) -m644 '$(1)/CCOLAMD/Include/'*.h  '$(PREFIX)/$(TARGET)/include/suitesparse/'
-    $(INSTALL) -m644 '$(1)/CHOLMOD/Include/'*.h  '$(PREFIX)/$(TARGET)/include/suitesparse/'
-    $(INSTALL) -m644 '$(1)/COLAMD/Include/'*.h   '$(PREFIX)/$(TARGET)/include/suitesparse/'
-    $(INSTALL) -m644 '$(1)/CSparse/Include/'*.h  '$(PREFIX)/$(TARGET)/include/suitesparse/'
-    $(INSTALL) -m644 '$(1)/CXSparse/Include/'*.h '$(PREFIX)/$(TARGET)/include/suitesparse/'
-    $(INSTALL) -m644 '$(1)/KLU/Include/'*.h      '$(PREFIX)/$(TARGET)/include/suitesparse/'
-    $(INSTALL) -m644 '$(1)/LDL/Include/'*.h      '$(PREFIX)/$(TARGET)/include/suitesparse/'
-    $(INSTALL) -m644 '$(1)/SPQR/Include/'*       '$(PREFIX)/$(TARGET)/include/suitesparse/'
-    $(INSTALL) -m644 '$(1)/UMFPACK/Include/'*.h  '$(PREFIX)/$(TARGET)/include/suitesparse/'
+    # install headers
+    $(MAKE) -C '$(SOURCE_DIR)' -j 1 install \
+        $($(PKG)_MAKE_OPTS) \
+        INSTALL_INCLUDE='$(PREFIX)/$(TARGET)/include/suitesparse'
+
+    # pc and test
+    $($(PKG)_PC_TEST)
 endef
 
-$(PKG)_BUILD_SHARED =
+define $(PKG)_BUILD_SHARED
+    # build and install libraries and headers
+    $(MAKE) -C '$(SOURCE_DIR)' -j '$(JOBS)' \
+        $($(PKG)_MAKE_OPTS) \
+        library
+    $(MAKE) -C '$(SOURCE_DIR)' -j 1 install \
+        $($(PKG)_MAKE_OPTS) \
+        INSTALL_INCLUDE='$(PREFIX)/$(TARGET)/include/suitesparse' \
+        INSTALL_LIB='$(PREFIX)/$(TARGET)/lib' \
+        INSTALL_SO='$(PREFIX)/$(TARGET)/bin'
+
+    # pc and test
+    $($(PKG)_PC_TEST)
+endef

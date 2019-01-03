@@ -4,31 +4,20 @@ PKG             := ossim
 $(PKG)_WEBSITE  := https://trac.osgeo.org/ossim
 $(PKG)_DESCR    := OSSIM
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.8.20
-$(PKG)_CHECKSUM := d7981d0d7e84bdbc26d5bda9e5b80c583d806164e4d6e5fab276c9255a2b407c
-$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)-3
-$(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
-$(PKG)_URL      := http://download.osgeo.org/ossim/source/$(PKG)-$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc freetype geos jpeg libgeotiff libpng openthreads proj tiff zlib
-
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://download.osgeo.org/ossim/source/latest/' | \
-    $(SED) -n 's,.*ossim-\([0-9][^>]*\)\.tar.*,\1,p' | \
-    head -1
-endef
+$(PKG)_VERSION  := 43a071a
+$(PKG)_CHECKSUM := 1796994c8586e62ef799724969e3bef57178194fafe056db3de41dd6ee0dc931
+# releases have unpredictable names and are based on master branch
+$(PKG)_GH_CONF  := ossimlabs/ossim/branches/master
+$(PKG)_DEPS     := cc freetype geos hdf5 jpeg libgeotiff libpng openthreads proj tiff zlib
 
 define $(PKG)_BUILD
-    mkdir '$(1).build'
-    cd '$(1).build' && '$(TARGET)-cmake' \
+    cd '$(BUILD_DIR)' && '$(TARGET)-cmake' '$(SOURCE_DIR)' \
         -DCMAKE_VERBOSE_MAKEFILE=TRUE \
-        -DPKG_CONFIG_EXECUTABLE='$(PREFIX)/bin/$(TARGET)-pkg-config' \
-        -DCMAKE_MODULE_PATH='$(1)/ossim_package_support/cmake/CMakeModules' \
         -DBUILD_OSSIM_FREETYPE_SUPPORT=TRUE \
         -DBUILD_OSSIM_CURL_APPS=FALSE \
-        -DBUILD_OSSIM_TEST_APPS=FALSE \
-        -DBUILD_OSSIM_APPS=FALSE \
-        -DCMAKE_CXX_FLAGS='-DGEOS_INLINE=1' \
-        '$(1)/ossim'
+        -DBUILD_OSSIM_TESTS=FALSE \
+        -DBUILD_OSSIM_APPS=FALSE
 
-    $(MAKE) -C '$(1).build' -j '$(JOBS)' install VERBOSE=1
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install VERBOSE=1
 endef

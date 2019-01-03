@@ -1,0 +1,84 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sun, 11 Mar 2018 18:57:48 +1100
+Subject: [PATCH 1/2] fix double free
+
+https://bugs.gentoo.org/show_bug.cgi?id=406739
+Nikos Chantziaras 2012-03-03 03:13:39 EST
+
+There's a bug in the current version of SDL_mixer where failing to load
+a WAV sample will result in freeing a resource twice, resulting in an
+application crash.  There is an upstream fix for this:
+
+http://hg.libsdl.org/SDL_mixer/rev/ea53a85853dd
+
+Upstream bug: http://bugzilla.libsdl.org/show_bug.cgi?id=1418
+
+diff --git a/mixer.c b/mixer.c
+index 1111111..2222222 100644
+--- a/mixer.c
++++ b/mixer.c
+@@ -610,13 +610,15 @@ Mix_Chunk *Mix_LoadWAV_RW(SDL_RWops *src, int freesrc)
+ 			break;
+ 		default:
+ 			SDL_SetError("Unrecognized sound file type");
+-			return(0);			
++			if ( freesrc ) {
++				SDL_RWclose(src);
++			}
++			loaded = NULL;
++			break;
+ 	}
+ 	if ( !loaded ) {
++		/* The individual loaders have closed src if needed */
+ 		SDL_free(chunk);
+-		if ( freesrc ) {
+-			SDL_RWclose(src);
+-		}
+ 		return(NULL);
+ 	}
+ 
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sun, 11 Mar 2018 19:00:16 +1100
+Subject: [PATCH 2/2] fix ogg linking
+
+This patch has been taken from: https://hg.libsdl.org/SDL_mixer/rev/0aadc9b6daac
+
+Gabriel Jacobo 2012-09-20 16:01:32 PDT
+
+When --disable-music-ogg-shared the OGG tests fail when they should pass.
+Attached is a crude patch that gets them working (though the changes done to
+configure.in, inside AC_CHECK_LIB, will produce ugly status string such as
+"checking for ov_open_callbacks in -lvorbisidec -logg", which is mostly a
+aesthetic concern)
+
+Upstream bug: https://bugzilla.libsdl.org/show_bug.cgi?id=1604
+
+diff --git a/configure b/configure
+index 1111111..2222222 100755
+--- a/configure
++++ b/configure
+@@ -13345,7 +13345,7 @@ if test "${ac_cv_lib_vorbisidec_ov_open_callbacks+set}" = set; then
+   echo $ECHO_N "(cached) $ECHO_C" >&6
+ else
+   ac_check_lib_save_LIBS=$LIBS
+-LIBS="-lvorbisidec  $LIBS"
++LIBS="-lvorbisidec -logg $LIBS"
+ cat >conftest.$ac_ext <<_ACEOF
+ /* confdefs.h.  */
+ _ACEOF
+@@ -13576,7 +13576,7 @@ if test "${ac_cv_lib_vorbisfile_ov_open_callbacks+set}" = set; then
+   echo $ECHO_N "(cached) $ECHO_C" >&6
+ else
+   ac_check_lib_save_LIBS=$LIBS
+-LIBS="-lvorbisfile  $LIBS"
++LIBS="-lvorbisfile -lvorbis -logg -lm $LIBS"
+ cat >conftest.$ac_ext <<_ACEOF
+ /* confdefs.h.  */
+ _ACEOF

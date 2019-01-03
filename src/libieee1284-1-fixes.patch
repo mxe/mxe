@@ -5,7 +5,8 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Daniel=20Gl=C3=B6ckner?= <daniel-gl@gmx.net>
 Date: Sun, 3 Jan 2016 05:48:59 +0100
-Subject: [PATCH] make configure determine if basetsd.h is needed for ssize_t
+Subject: [PATCH 1/5] make configure determine if basetsd.h is needed for
+ ssize_t
 
 The result is hardcoded in ieee1284.h.
 Duplicate logic in detect.h is replaced by including that file.
@@ -77,7 +78,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Daniel=20Gl=C3=B6ckner?= <daniel-gl@gmx.net>
 Date: Sun, 20 Sep 2015 19:14:18 +0200
-Subject: [PATCH] persuade libtool build a DLL on windows
+Subject: [PATCH 2/5] persuade libtool build a DLL on windows
 
 
 diff --git a/Makefile.am b/Makefile.am
@@ -97,7 +98,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Daniel=20Gl=C3=B6ckner?= <daniel-gl@gmx.net>
 Date: Sun, 20 Sep 2015 19:15:15 +0200
-Subject: [PATCH] search for windows.h
+Subject: [PATCH 3/5] search for windows.h
 
 instead of relying on the __CYGWIN__ macro
 
@@ -180,7 +181,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Daniel=20Gl=C3=B6ckner?= <daniel-gl@gmx.net>
 Date: Sat, 19 Sep 2015 01:39:15 +0200
-Subject: [PATCH] check Windows version before allowing IO access
+Subject: [PATCH 4/5] check Windows version before allowing IO access
 
 
 diff --git a/src/detect.c b/src/detect.c
@@ -217,7 +218,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Daniel=20Gl=C3=B6ckner?= <daniel-gl@gmx.net>
 Date: Mon, 4 Jan 2016 00:49:41 +0100
-Subject: [PATCH] add pkg-config metadata file
+Subject: [PATCH 5/5] add pkg-config metadata file
 
 
 diff --git a/Makefile.am b/Makefile.am

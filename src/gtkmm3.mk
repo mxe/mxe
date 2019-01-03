@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := d9f528a62c6ec226fa08287c45c7465b2dce5aae5068e9ac48d30a64a378e
 $(PKG)_SUBDIR   := gtkmm-$($(PKG)_VERSION)
 $(PKG)_FILE     := gtkmm-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.gnome.org/sources/gtkmm/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc atkmm cairomm gtk3 libsigc++ pangomm
+$(PKG)_DEPS     := cc atkmm cairomm gtk3 libsigc++ pangomm
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://git.gnome.org/browse/gtkmm/refs/tags' | \
@@ -28,6 +28,7 @@ define $(PKG)_BUILD
 
     '$(TARGET)-g++' \
         -W -Wall -Wno-deprecated-declarations -Werror -pedantic -std=c++11 \
+        -Wno-error=deprecated \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-gtkmm3.exe' \
         `'$(TARGET)-pkg-config' gtkmm-3.0 --cflags --libs`
 endef

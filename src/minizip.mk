@@ -1,27 +1,24 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := minizip
-$(PKG)_WEBSITE  := http://www.winimage.com/zLibDll/minizip.html
+$(PKG)_WEBSITE  := https://www.winimage.com/zLibDll/minizip.html
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0b46a2b
-$(PKG)_CHECKSUM := 2ecc8da9bcc3b3c42de915567dfceb6fcb4a70a2b2704f59c6447b54da811a65
-$(PKG)_SUBDIR   := nmoinvaz-minizip-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://github.com/nmoinvaz/minizip/tarball/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc zlib
-
-$(PKG)_UPDATE    = $(call MXE_GET_GITHUB_SHA, nmoinvaz/minizip, master)
+$(PKG)_VERSION  := 68a48aa
+$(PKG)_CHECKSUM := 3fca5754b6e9f96fc907bb6755a1daef72f869cee172a4e687611c47ee693ada
+$(PKG)_GH_CONF  := nmoinvaz/minizip/branches/master
+$(PKG)_DEPS     := cc zlib
 
 define $(PKG)_BUILD
-    cd '$(1)' && $(TARGET)-gcc -c -O '$(1)'/*.c
-    cd '$(1)' && $(TARGET)-ar cr libminizip.a *.o
-    $(TARGET)-ranlib '$(1)/libminizip.a'
-    $(INSTALL) -d               '$(PREFIX)/$(TARGET)/lib'
-    $(INSTALL) -m644 '$(1)'/*.a '$(PREFIX)/$(TARGET)/lib/'
-    $(INSTALL) -d               '$(PREFIX)/$(TARGET)/include/minizip'
-    $(INSTALL) -m644 '$(1)'/ioapi.h '$(PREFIX)/$(TARGET)/include/minizip/'
-    $(INSTALL) -m644 '$(1)'/unzip.h '$(PREFIX)/$(TARGET)/include/minizip/'
-    $(INSTALL) -m644 '$(1)'/zip.h '$(PREFIX)/$(TARGET)/include/minizip/'
-endef
+    # build and install the library
+    cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \
+        -DBUILD_TEST=OFF \
+        -DUSE_ZLIB=ON
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
-$(PKG)_BUILD_SHARED =
+    # compile test
+    '$(TARGET)-gcc' \
+        -W -Wall -Werror \
+        '$(SOURCE_DIR)/src/minizip.c' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
+        `'$(TARGET)-pkg-config' $(PKG) --libs-only-l`
+endef

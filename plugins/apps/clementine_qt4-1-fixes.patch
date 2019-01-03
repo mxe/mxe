@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Pavel Vatagin <pavelvat@gmail.com>
 Date: Sat, 5 Nov 2016 02:19:37 +0300
-Subject: [PATCH] fix clementine
+Subject: [PATCH 1/2] fix clementine
 
 
 diff --git a/3rdparty/libprojectm/CMakeLists.txt b/3rdparty/libprojectm/CMakeLists.txt
@@ -47,45 +47,16 @@ index 1111111..2222222 100644
  )
  
  add_library(tinysvcmdns STATIC
-diff --git a/ext/clementine-tagreader/CMakeLists.txt b/ext/clementine-tagreader/CMakeLists.txt
-index 1111111..2222222 100644
---- a/ext/clementine-tagreader/CMakeLists.txt
-+++ b/ext/clementine-tagreader/CMakeLists.txt
-@@ -27,10 +27,10 @@ add_executable(clementine-tagreader
- 
- target_link_libraries(clementine-tagreader
-   ${TAGLIB_LIBRARIES}
--  ${QT_QTCORE_LIBRARY}
--  ${QT_QTNETWORK_LIBRARY}
-   libclementine-common
-   libclementine-tagreader
-+  ${QT_QTCORE_LIBRARY}
-+  ${QT_QTNETWORK_LIBRARY}
- )
- 
- if(${CMAKE_SYSTEM_NAME} MATCHES "FreeBSD")
-diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
-index 1111111..2222222 100644
---- a/src/CMakeLists.txt
-+++ b/src/CMakeLists.txt
-@@ -1343,6 +1343,7 @@ if (WIN32)
-     tinysvcmdns
-     qtwin
-     dsound
-+    ${QT_QTGUI_LIBRARY}
-   )
- endif (WIN32)
  
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Alexander Golubev <fatzer2@gmail.com>
 Date: Thu, 16 Mar 2017 14:54:55 +0300
-Subject: [PATCH] core/database: configure fts3 tokenizer support
+Subject: [PATCH 2/2] core/database: configure fts3 tokenizer support
 
 Original patch by Arfrever
 This fixes https://github.com/clementine-player/Clementine/issues/5297
 https://github.com/clementine-player/Clementine/pull/5669
-
 
 diff --git a/src/core/database.cpp b/src/core/database.cpp
 index 1111111..2222222 100644
@@ -93,7 +64,7 @@ index 1111111..2222222 100644
 +++ b/src/core/database.cpp
 @@ -265,6 +265,20 @@ QSqlDatabase Database::Connect() {
    StaticInit();
-
+ 
    {
 +
 +#ifdef SQLITE_DBCONFIG_ENABLE_FTS3_TOKENIZER

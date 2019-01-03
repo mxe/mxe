@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := a6ea795c829219015eb372b03008351cee3fb39f684bff3bf8a4620b55848
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://www.intra2net.com/en/developer/libftdi/download/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libusb1
+$(PKG)_DEPS     := cc libusb1
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://www.intra2net.com/en/developer/libftdi/download.php' | \

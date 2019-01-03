@@ -4,12 +4,12 @@ PKG             := sdl2
 $(PKG)_WEBSITE  := https://www.libsdl.org/
 $(PKG)_DESCR    := SDL2
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.0.6
-$(PKG)_CHECKSUM := 03658b5660d16d7b31263a691e058ed37acdab155d68dabbad79998fb552c5df
+$(PKG)_VERSION  := 2.0.9
+$(PKG)_CHECKSUM := 255186dc676ecd0c1dbf10ec8a2cc5d6869b5079d8a38194c2aecdff54b324b1
 $(PKG)_SUBDIR   := SDL2-$($(PKG)_VERSION)
 $(PKG)_FILE     := SDL2-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://www.libsdl.org/release/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libiconv
+$(PKG)_DEPS     := cc libiconv libsamplerate
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://hg.libsdl.org/SDL/tags' | \
@@ -21,7 +21,9 @@ define $(PKG)_BUILD
     cd '$(1)' && aclocal -I acinclude && autoconf && ./configure \
         $(MXE_CONFIGURE_OPTS) \
         --enable-threads \
-        --enable-directx
+        --enable-directx \
+        --enable-libsamplerate \
+        --enable-libsamplerate-shared=$(if $(BUILD_SHARED),yes,no)
     $(SED) -i 's,defined(__MINGW64_VERSION_MAJOR),defined(__MINGW64_VERSION_MAJOR) \&\& defined(_WIN64),' '$(1)/include/SDL_cpuinfo.h'
     $(SED) -i 's,-XCClinker,,' '$(1)/sdl2.pc'
     $(SED) -i 's,-XCClinker,,' '$(1)/sdl2-config'

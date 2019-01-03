@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Thomas Danckaert <thomas.danckaert@gmail.com>
 Date: Fri, 27 May 2016 17:39:23 +0200
-Subject: [PATCH] fixes
+Subject: [PATCH 1/2] fixes
 
 
 diff --git a/configure.ac b/configure.ac
@@ -129,7 +129,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Thomas Danckaert <thomas.danckaert@gmail.com>
 Date: Fri, 27 May 2016 17:49:30 +0200
-Subject: [PATCH] Fix compilation without SZIP.
+Subject: [PATCH 2/2] Fix compilation without SZIP.
 
 A wrongly placed #endif causes a missing symbol 'HE5_EHHEisHE5' when
 compiling without szip.  Bug & fix reported upstream.

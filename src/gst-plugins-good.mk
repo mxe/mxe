@@ -3,12 +3,12 @@
 PKG             := gst-plugins-good
 $(PKG)_WEBSITE  := https://gstreamer.freedesktop.org/modules/gst-plugins-good.html
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.12.2
-$(PKG)_CHECKSUM := 5591ee7208ab30289a30658a82b76bf87169c927572d9b794f3a41ed48e1ee96
+$(PKG)_VERSION  := 1.14.4
+$(PKG)_CHECKSUM := 5f8b553260cb0aac56890053d8511db1528d53cae10f0287cfce2cb2acc70979
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://gstreamer.freedesktop.org/src/$(PKG)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc cairo flac gdk-pixbuf glib gst-plugins-base gstreamer jpeg libcaca \
+$(PKG)_DEPS     := cc cairo flac gdk-pixbuf glib gst-plugins-base gstreamer jpeg libcaca \
                    liboil libpng libshout libsoup libvpx libxml2 speex taglib wavpack
 
 $(PKG)_UPDATE = $(subst gstreamer/refs,gst-plugins-good/refs,$(gstreamer_UPDATE))

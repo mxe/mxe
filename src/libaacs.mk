@@ -8,8 +8,7 @@ $(PKG)_CHECKSUM := 47e0bdc9c9f0f6146ed7b4cc78ed1527a04a537012cf540cf5211e06a248b
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.bz2
 $(PKG)_URL      := https://download.videolan.org/pub/videolan/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_URL_2    := http://videolan-nyc.defaultroute.com/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libgcrypt libgpg_error
+$(PKG)_DEPS     := cc libgcrypt libgpg_error
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://download.videolan.org/pub/videolan/libaacs/' | \

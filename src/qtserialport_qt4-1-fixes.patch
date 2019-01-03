@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Daniel Burr <dburr@topcon.com>
 Date: Tue, 12 Jan 2016 18:37:28 +0100
-Subject: [PATCH] Allow static building of qtserialport_qt4
+Subject: [PATCH 1/1] Allow static building of qtserialport_qt4
 
 Taken from:
 https://github.com/qtproject/qtserialport/pull/2

@@ -7,8 +7,8 @@ $(PKG)_VERSION  := 322
 $(PKG)_CHECKSUM := a3469436f795bb3f8b1e65ea761e14e5599ec7ee941c001d771c07b7da318ac6
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://github.com/cjlin1/$(PKG)/archive/v$($(PKG)_VERSION).tar.gz
-$(PKG)_DEPS     := gcc
+$(PKG)_URL      := https://www.csie.ntu.edu.tw/~cjlin/$(PKG)/$($(PKG)_FILE)
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://github.com/cjlin1/libsvm/releases' | \

@@ -5,8 +5,8 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Thu, 15 Jun 2017 21:05:31 +1000
-Subject: [PATCH] main: support undocumented PKG_CONFIG_SYSTEM_INCLUDE_PATH and
- PKG_CONFIG_SYSTEM_LIBRARY_PATH environment variables.
+Subject: [PATCH 1/1] main: support undocumented PKG_CONFIG_SYSTEM_INCLUDE_PATH
+ and PKG_CONFIG_SYSTEM_LIBRARY_PATH environment variables.
 
 Backported from:
 https://github.com/pkgconf/pkgconf/commit/7e6fa325eb668c3462981a16fb4c36270832e00f

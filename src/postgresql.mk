@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := d97dd918a88a4449225998f46aafa85216a3f89163a3411830d6890507ffa
 $(PKG)_SUBDIR   := postgresql-$($(PKG)_VERSION)
 $(PKG)_FILE     := postgresql-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://ftp.postgresql.org/pub/source/v$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc openssl pthreads zlib
+$(PKG)_DEPS     := cc openssl pthreads zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://git.postgresql.org/gitweb?p=postgresql.git;a=tags' | \
@@ -23,7 +23,7 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && autoconf
     cp -Rp '$(1)' '$(1).native'
-    # Since we build only client libary, use bogus tzdata to satisfy configure.
+    # Since we build only client library, use bogus tzdata to satisfy configure.
     # pthreads is needed in both LIBS and PTHREAD_LIBS
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
@@ -43,6 +43,7 @@ define $(PKG)_BUILD
         --without-libxslt \
         --with-zlib \
         --with-system-tzdata=/dev/null \
+        CFLAGS="-DSSL_library_init=OPENSSL_init_ssl" \
         LIBS="-lsecur32 `'$(TARGET)-pkg-config' openssl pthreads --libs`" \
         ac_cv_func_getaddrinfo=no
 

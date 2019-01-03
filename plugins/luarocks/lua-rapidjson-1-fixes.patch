@@ -1,16 +1,15 @@
 This file is part of MXE. See LICENSE.md for licensing information.
 
-From dbedfa6c3b350b6cb2c13d17790a17129ce28721 Mon Sep 17 00:00:00 2001
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
 Date: Sun, 11 Oct 2015 22:47:50 +0200
 Subject: [PATCH 1/2] use Unix file functions on MinGW
 
----
- src/rapidjson.cpp |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/src/rapidjson.cpp b/src/rapidjson.cpp
-index 3b5b129..955009f 100644
+index 1111111..2222222 100644
 --- a/src/rapidjson.cpp
 +++ b/src/rapidjson.cpp
 @@ -54,7 +54,7 @@ static void setfuncs(lua_State* L, const luaL_Reg *funcs)
@@ -31,21 +30,15 @@ index 3b5b129..955009f 100644
  	fopen_s(&fp, filename, "wb");
  #else
  	fp = fopen(filename, "w");
--- 
-1.7.10.4
 
-
-From ad7426ad156f90dcf2b051fe125900caf5b8b2da Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
 Date: Sun, 11 Oct 2015 22:48:26 +0200
 Subject: [PATCH 2/2] link with Lua libraries on MinGW and MXE
 
----
- rapidjson-0.2.2-1.rockspec |   15 ++++++++++-----
- 1 file changed, 10 insertions(+), 5 deletions(-)
 
 diff --git a/rapidjson-0.2.2-1.rockspec b/rapidjson-0.2.2-1.rockspec
-index 9efe7e1..6ad9188 100644
+index 1111111..2222222 100644
 --- a/rapidjson-0.2.2-1.rockspec
 +++ b/rapidjson-0.2.2-1.rockspec
 @@ -27,6 +27,13 @@ dependencies = {
@@ -76,6 +69,3 @@ index 9efe7e1..6ad9188 100644
 +    mxe = link,
    }
  }
--- 
-1.7.10.4
-

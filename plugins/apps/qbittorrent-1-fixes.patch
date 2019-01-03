@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
 Date: Sun, 30 Aug 2015 00:28:50 +0200
-Subject: [PATCH] do not check qmake existance
+Subject: [PATCH 1/3] do not check qmake existence
 
 Fix ./configure error:
 
@@ -57,7 +57,7 @@ index 1111111..2222222 100755
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
 Date: Sun, 29 May 2016 23:35:25 +0200
-Subject: [PATCH] link with boost_random and boost_chrono
+Subject: [PATCH 2/3] link with boost_random and boost_chrono
 
 libtorrent-rasterbar 1.1.0 uses them
 
@@ -85,7 +85,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
 Date: Mon, 30 May 2016 00:09:20 +0200
-Subject: [PATCH] disable BOOST_ASIO_SEPARATE_COMPILATION
+Subject: [PATCH 3/3] disable BOOST_ASIO_SEPARATE_COMPILATION
 
 After upgrading libtorrent-rasterbar to 1.1.0, qbittorrent fails to link
 main executable with undefined symbols in boost_asio:

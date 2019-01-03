@@ -3,1352 +3,692 @@ This file is part of MXE. See LICENSE.md for licensing information.
 Contains ad hoc patches for cross building.
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Boris Nagaev <bnagaev@gmail.com>
-Date: Sat, 16 Jul 2016 13:01:59 +0200
-Subject: [PATCH] apply mingw-build.patch from MINGW-packages
-
-Source: https://git.io/vKz1V
-
-diff --git a/Makefile.in b/Makefile.in
-index 1111111..2222222 100644
---- a/Makefile.in
-+++ b/Makefile.in
-@@ -60,6 +60,14 @@ GPDLOBJDIR=./$(BUILDDIRPREFIX)@OBJDIR_BSDMAKE_WORKAROUND@
- 
- CONTRIBDIR=@srcdir@/contrib
- 
-+# ------ MINGW options ------ #
-+
-+MINGW_BUILD=@MINGW_BUILD@
-+MINGW_PLATFORM=@MINGW_PLATFORM@
-+MINGW_PLATFORM_BITS=@MINGW_PLATFORM_BITS@
-+MINGW_WITH_WINLIB_NAMES=@MINGW_WITH_WINLIB_NAMES@
-+MINGW_WITH_GDI=@MINGW_WITH_GDI@
-+
- # Do not edit the next group of lines.
- 
- include $(GLSRCDIR)/version.mak
-@@ -433,8 +441,8 @@ LDFLAGS_SO=@DYNAMIC_LDFLAGS@
- # Solaris may need -lnsl -lsocket -lposix4.
- # (Libraries required by individual drivers are handled automatically.)
- 
--EXTRALIBS=$(XTRALIBS) @LIBS@ @DYNAMIC_LIBS@ @FONTCONFIG_LIBS@ @FT_LIBS@ @JPX_AUTOCONF_LIBS@
--AUXEXTRALIBS=$(XTRALIBS) @LIBS@ @DYNAMIC_LIBS@ @FONTCONFIG_LIBS@ @FT_LIBS@ @JPX_AUTOCONF_LIBS@ @AUX_SHARED_ZLIB@
-+EXTRALIBS=$(XTRALIBS) @LIBS@ @MINGW_XTLIBS@ @DYNAMIC_LIBS@ @FONTCONFIG_LIBS@ @FT_LIBS@ @JPX_AUTOCONF_LIBS@
-+AUXEXTRALIBS=$(XTRALIBS) @LIBS@ @MINGW_XTLIBS@ @DYNAMIC_LIBS@ @FONTCONFIG_LIBS@ @FT_LIBS@ @JPX_AUTOCONF_LIBS@ @AUX_SHARED_ZLIB@
- 
- # Define the standard libraries to search at the end of linking.
- # Most platforms require -lpthread for the POSIX threads library;
-@@ -484,9 +492,10 @@ SYNC=@SYNC@
- RM=rm -f
- 
- # ------ Dynamic loader options ------- #
--SOC_CFLAGS	=	@SOC_CFLAGS@
--SOC_LIBS	=	@SOC_LIBS@
--SOC_LOADER	=	@SOC_LOADER@
-+SOC_CFLAGS	        =	@SOC_CFLAGS@
-+SOC_LIBS	        =	@SOC_LIBS@
-+SOC_LOADER	        =	@SOC_LOADER@
-+SOC_LOADER_PLAIN	=	@SOC_LOADER_PLAIN@
- 
- # on virtually every Unix-a-like system, this is "so",
- # but Apple just had to be different, so it's now set
-@@ -637,7 +646,17 @@ AK=
- 
- CCFLAGS=$(GENOPT) $(CAPOPT) $(CFLAGS)
- CC_=$(CC) $(CCFLAGS)
--CCAUX_=$(CCAUX) $(CFLAGS)
-+
-+ifeq ($(MINGW_BUILD), 1)
-+	# adding -lz to the compilation flags seems to be an error:
-+	# if not always, then at least under MSys/MinGW, 
-+	# compiled against the system's zlib,
-+	# and having no zlib sub-folder (see also: unixaux.mak)
-+	CCAUX_=$(CCAUX) $(CFLAGS)
-+else
-+	CCAUX_=$(CCAUX) $(CFLAGS) @AUX_SHARED_ZLIB@
-+endif	
-+
- CC_LEAF=$(CC_)
- # note gcc can't use -fomit-frame-pointer with -pg.
- CC_LEAF_PG=$(CC_)
-@@ -707,6 +726,12 @@ include $(GLSRCDIR)/unixinst.mak
- @CONTRIBINCLUDE@
- @CUPSINCLUDE@
- 
-+# conditionally include the two .mak files that are only needed with a MINGW build
-+ifeq ($(MINGW_BUILD), 1)
-+	include $(GLSRCDIR)/mingw-fs.mak
-+	include $(GLSRCDIR)/mingwlib.mak
-+endif
-+
- # Clean up after the autotools scripts
- distclean : clean config-clean soclean pgclean debugclean mementoclean
- 	-$(RM_) -r $(BINDIR) $(GLOBJDIR) $(PSOBJDIR) $(AUXDIR)
-diff --git a/base/gp_mswin.c b/base/gp_mswin.c
-index 1111111..2222222 100644
---- a/base/gp_mswin.c
-+++ b/base/gp_mswin.c
-@@ -989,7 +989,7 @@ bool gp_fseekable (FILE *f)
- 
- /* -------------------------  _snprintf -----------------------------*/
- 
--#if defined(_MSC_VER) && _MSC_VER>=1900 /* VS 2014 and later have (finally) snprintf */
-+#if (defined(_MSC_VER) && _MSC_VER>=1900) || defined(__MINGW64_VERSION_MAJOR) /* VS 2014 and later have (finally) snprintf */
- #  define STDC99
- #else
- /* Microsoft Visual C++ 2005  doesn't properly define snprintf,
-diff --git a/base/gp_mswin.h b/base/gp_mswin.h
-index 1111111..2222222 100644
---- a/base/gp_mswin.h
-+++ b/base/gp_mswin.h
-@@ -56,4 +56,13 @@ extern int is_spool(const char *queue);
- 
- #endif /* !defined(RC_INVOKED) */
- 
-+// in gp_mswin.c, mswin_popen is called 
-+// before it is implemented, so we must
-+// provide a prototype (at least with GCC) to
-+// avoid implicit definition with the wrong return type
-+
-+#ifdef __GNUC__
-+FILE *mswin_popen(const char *cmd, const char *mode);
-+#endif
-+
- #endif /* gp_mswin_INCLUDED */
-diff --git a/base/gs.mak b/base/gs.mak
-index 1111111..2222222 100644
---- a/base/gs.mak
-+++ b/base/gs.mak
-@@ -520,6 +520,7 @@ $(gconfig_h) : $(gconfxx_h)
- # save our set of makefile variables that are defined in every build (paths, etc.)
- $(gconfigd_h) : $(ECHOGS_XE) $(GS_MAK) $(GLSRCDIR)$(D)version.mak $(MAKEDIRS)
- 	$(EXP)$(ECHOGS_XE) -w $(gconfigd_h) -x 23 define -s -u GS_LIB_DEFAULT -x 2022 $(GS_LIB_DEFAULT) -x 22
-+	$(MINGW_FONTPATH_PATCH_OR_EMPTY_COMMAND)
- 	$(EXP)$(ECHOGS_XE) -a $(gconfigd_h) -x 23 define -s -u GS_DEV_DEFAULT -x 2022 $(GS_DEV_DEFAULT) -x 22
- 	$(EXP)$(ECHOGS_XE) -a $(gconfigd_h) -x 23 define -s -u GS_CACHE_DIR -x 2022 $(GS_CACHE_DIR) -x 22
- 	$(EXP)$(ECHOGS_XE) -a $(gconfigd_h) -x 23 define -s -u SEARCH_HERE_FIRST -s $(SEARCH_HERE_FIRST)
-diff --git a/base/lib.mak b/base/lib.mak
-index 1111111..2222222 100644
---- a/base/lib.mak
-+++ b/base/lib.mak
-@@ -42,13 +42,13 @@ GLCCSHARED=$(CC_SHARED) $(GLCCFLAGS)
- # We can't use $(CC_) for GLLCMSCC becuase that includes /Za on
- # msvc builds, and lcms configures itself to depend on msvc extensions
- # (inline asm, including windows.h) when compiled under msvc.
--GLLCMSCC=$(CC) $(LCMS_CFLAGS) $(CFLAGS) $(I_)$(GLI_) $(II)$(LCMSSRCDIR)$(D)include$(_I) $(GLF_)
-+GLLCMSCC=$(CC) $(LCMS_CFLAGS) $(CFLAGS) $(I_)$(GLI_) $(GLF_)
- lcms_h=$(LCMSSRCDIR)$(D)include$(D)lcms.h
- icc34_h=$(GLSRC)icc34.h
- # We can't use $(CC_) for GLLCMS2CC becuase that includes /Za on
- # msvc builds, and lcms configures itself to depend on msvc extensions
- # (inline asm, including windows.h) when compiled under msvc.
--GLLCMS2CC=$(CC) $(LCMS2_CFLAGS) $(CFLAGS) $(I_)$(GLI_) $(II)$(LCMS2SRCDIR)$(D)include$(_I) $(GLF_)
-+GLLCMS2CC=$(CC) $(LCMS2_CFLAGS) $(CFLAGS) $(I_)$(GLI_) $(GLF_)
- lcms2_h=$(LCMS2SRCDIR)$(D)include$(D)lcms2.h
- lcms2_plugin_h=$(LCMS2SRCDIR)$(D)include$(D)lcms2_plugin.h
- 
-diff --git a/base/mingw-fp.sh b/base/mingw-fp.sh
-new file mode 100644
-index 1111111..2222222
---- /dev/null
-+++ b/base/mingw-fp.sh
-@@ -0,0 +1 @@
-+sed -i -e 's?\\?/?g' $1
-diff --git a/base/mingw-fs.mak b/base/mingw-fs.mak
-new file mode 100644
-index 1111111..2222222
---- /dev/null
-+++ b/base/mingw-fs.mak
-@@ -0,0 +1,34 @@
-+# MSys/MinGW file- and operating-system section
-+# adapted from winplat.mak
-+
-+# Define the name of this makefile.
-+
-+MINGW_FS_MAK=$(GLSRC)mingw-fs.mak
-+
-+# Define generic Windows-specific modules.
-+
-+mingw-fs_=$(GLOBJ)gp_ntfs.$(OBJ) $(GLOBJ)gp_win32.$(OBJ)
-+$(GLD)mingw-fs.dev : $(MINGW_FS_MAK) $(ECHOGS_XE) $(mingw-fs_)
-+	$(SETMOD) $(GLD)mingw-fs $(mingw-fs_)
-+
-+$(GLOBJ)gp_ntfs.$(OBJ): $(GLSRC)gp_ntfs.c $(AK)\
-+ $(dos__h) $(memory__h) $(stdio__h) $(string__h) $(windows__h)\
-+ $(gp_h) $(gpmisc_h) $(gsmemory_h) $(gsstruct_h) $(gstypes_h) $(gsutil_h)
-+	$(GLCC) $(GLO_)gp_ntfs.$(OBJ) $(C_) $(GLSRC)gp_ntfs.c
-+
-+$(GLOBJ)gp_win32.$(OBJ): $(GLSRC)gp_win32.c $(AK)\
-+ $(dos__h) $(malloc__h) $(stdio__h) $(string__h) $(windows__h)\
-+ $(gp_h) $(gsmemory_h) $(gstypes_h)
-+	$(GLCC) $(GLO_)gp_win32.$(OBJ) $(C_) $(GLSRC)gp_win32.c
-+
-+# Define the Windows thread / synchronization module.
-+
-+winsync_=$(GLOBJ)gp_wsync.$(OBJ)
-+$(GLD)winsync.dev : $(MINGW_FS_MAK) $(ECHOGS_XE) $(winsync_)
-+	$(SETMOD) $(GLD)winsync $(winsync_)
-+	$(ADDMOD) $(GLD)winsync -replace $(GLD)nosync
-+
-+$(GLOBJ)gp_wsync.$(OBJ): $(GLSRC)gp_wsync.c $(AK)\
-+ $(dos__h) $(malloc__h) $(stdio__h) $(string__h) $(windows__h)\
-+ $(gp_h) $(gsmemory_h) $(gstypes_h)
-+	$(GLCC) $(GLO_)gp_wsync.$(OBJ) $(C_) $(GLSRC)gp_wsync.c
-diff --git a/base/mingwlib.mak b/base/mingwlib.mak
-new file mode 100644
-index 1111111..2222222
---- /dev/null
-+++ b/base/mingwlib.mak
-@@ -0,0 +1,76 @@
-+# Common makefile section for MSys/MinGW
-+# adapted from winlib.mak
-+
-+# Define the files to be removed by `make clean'.
-+# nmake expands macros when encountered, not when used,
-+# so this must precede the !include statements.
-+
-+BEGINFILES=$(GLGENDIR)\ccf32.tr\
-+ $(GLOBJDIR)\*.res $(GLOBJDIR)\*.ico\
-+ $(BINDIR)\$(GSDLL).dll $(BINDIR)\$(GSCONSOLE).exe\
-+ $(BINDIR)\setupgs.exe $(BINDIR)\uninstgs.exe\
-+ $(GLOBJDIR)\cups\*.h\
-+ $(BEGINFILES2)
-+
-+# -------------------------------- Library -------------------------------- #
-+
-+# The MSys/MinGW Win32 platform
-+
-+mingw32__=$(GLOBJ)gp_mswin.$(OBJ) $(GLOBJ)gp_wgetv.$(OBJ) $(GLOBJ)gp_wpapr.$(OBJ) \
-+ $(GLOBJ)gp_stdia.$(OBJ) $(GLOBJ)gp_wutf8.$(OBJ)
-+mingw32_inc=$(GLD)nosync.dev $(GLD)mingw-fs.dev
-+
-+$(GLGEN)mingw32_.dev:  $(mingw32__) $(ECHOGS_XE) $(mingw32_inc)
-+	$(SETMOD) $(GLGEN)mingw32_ $(mingw32__)
-+	$(ADDMOD) $(GLGEN)mingw32_ -include $(mingw32_inc)
-+
-+$(GLOBJ)gp_mswin.$(OBJ): $(GLSRC)gp_mswin.c $(AK) $(gp_mswin_h) \
-+ $(ctype__h) $(dos__h) $(malloc__h) $(memory__h) $(pipe__h) \
-+ $(stdio__h) $(string__h) $(windows__h) $(winspool_h)\
-+ $(gx_h) $(gp_h) $(gpcheck_h) $(gpmisc_h) $(gserrors_h) $(gsexit_h)
-+	$(GLCC) $(GLO_)gp_mswin.$(OBJ) $(C_) $(GLSRC)gp_mswin.c
-+
-+$(GLOBJ)gp_wutf8.$(OBJ): $(GLSRC)gp_wutf8.c $(windows__h)
-+	$(GLCC) $(GLO_)gp_wutf8.$(OBJ) $(C_) $(GLSRC)gp_wutf8.c
-+
-+$(GLOBJ)gp_wgetv.$(OBJ): $(GLSRC)gp_wgetv.c $(AK) $(gscdefs_h)
-+	$(GLCC) $(GLO_)gp_wgetv.$(OBJ) $(C_) $(GLSRC)gp_wgetv.c
-+
-+$(GLOBJ)gp_wpapr.$(OBJ): $(GLSRC)gp_wpapr.c $(AK) $(gp_h)
-+	$(GLCC) $(GLO_)gp_wpapr.$(OBJ) $(C_) $(GLSRC)gp_wpapr.c
-+
-+# Define MS-Windows handles (file system) as a separable feature.
-+
-+mshandle_=$(GLOBJ)gp_mshdl.$(OBJ)
-+$(GLD)mshandle.dev: $(ECHOGS_XE) $(mshandle_)
-+	$(SETMOD) $(GLD)mshandle $(mshandle_)
-+	$(ADDMOD) $(GLD)mshandle -iodev handle
-+
-+$(GLOBJ)gp_mshdl.$(OBJ): $(GLSRC)gp_mshdl.c $(AK)\
-+ $(ctype__h) $(errno__h) $(stdio__h) $(string__h)\
-+ $(gsmemory_h) $(gstypes_h) $(gxiodev_h) $(gserrors_h)
-+	$(GLCC) $(GLO_)gp_mshdl.$(OBJ) $(C_) $(GLSRC)gp_mshdl.c
-+
-+# Define MS-Windows printer (file system) as a separable feature.
-+
-+msprinter_=$(GLOBJ)gp_msprn.$(OBJ)
-+$(GLD)msprinter.dev: $(ECHOGS_XE) $(msprinter_)
-+	$(SETMOD) $(GLD)msprinter $(msprinter_)
-+	$(ADDMOD) $(GLD)msprinter -iodev printer
-+
-+$(GLOBJ)gp_msprn.$(OBJ): $(GLSRC)gp_msprn.c $(AK)\
-+ $(ctype__h) $(errno__h) $(stdio__h) $(string__h)\
-+ $(gsmemory_h) $(gstypes_h) $(gxiodev_h)
-+	$(GLCC) $(GLO_)gp_msprn.$(OBJ) $(C_) $(GLSRC)gp_msprn.c
-+
-+# Define MS-Windows polling as a separable feature
-+# because it is not needed by the gslib.
-+mspoll_=$(GLOBJ)gp_mspol.$(OBJ)
-+$(GLD)mspoll.dev: $(ECHOGS_XE) $(mspoll_)
-+	$(SETMOD) $(GLD)mspoll $(mspoll_)
-+
-+$(GLOBJ)gp_mspol.$(OBJ): $(GLSRC)gp_mspol.c $(AK)\
-+ $(gx_h) $(gp_h) $(gpcheck_h)
-+	$(GLCC) $(GLO_)gp_mspol.$(OBJ) $(C_) $(GLSRC)gp_mspol.c
-+
-+# end of mingwlib.mak
-diff --git a/base/stat_.h b/base/stat_.h
-index 1111111..2222222 100644
---- a/base/stat_.h
-+++ b/base/stat_.h
-@@ -43,7 +43,7 @@
-  * Microsoft C uses _stat instead of stat,
-  * for both the function name and the structure name.
-  */
--#ifdef _MSC_VER
-+#if defined(_MSC_VER) || defined(__MINGW32__)
- #  define stat _stat
- #define struct_stat struct _stat
- #else
-diff --git a/base/time_.h b/base/time_.h
-index 1111111..2222222 100644
---- a/base/time_.h
-+++ b/base/time_.h
-@@ -78,7 +78,7 @@ struct timezone {
- #endif
- 
- /* Some System V environments, and Posix environments, need <sys/times.h>. */
--#if defined(HAVE_SYS_TIMES_H) && HAVE_SYS_TIMES_H == 1
-+#if defined(HAVE_SYS_TIMES_H) && HAVE_SYS_TIMES_H == 1 && !defined(__MINGW32__)
- #  include <sys/times.h>
- #  define use_times_for_usertime 1
-                 /* Posix 1003.1b-1993 section 4.8.1.5 says that
-diff --git a/base/unix-aux.mak b/base/unix-aux.mak
-index 1111111..2222222 100644
---- a/base/unix-aux.mak
-+++ b/base/unix-aux.mak
-@@ -69,6 +69,13 @@ $(GLOBJ)gp_sysv.$(OBJ): $(GLSRC)gp_sysv.c $(stdio__h) $(time__h) $(AK)\
-  $(UNIX_AUX_MAK) $(MAKEDIRS)
- 	$(GLCC) $(GLO_)gp_sysv.$(OBJ) $(C_) $(GLSRC)gp_sysv.c
- 
-+# the MINGW platform / build environment, joining unix for the ride 
-+mingw__=$(GLOBJ)gp_wgetv.$(OBJ) $(GLOBJ)gp_wpapr.$(OBJ) $(GLOBJ)gp_win32.$(OBJ) $(GLOBJ)gp_mswin.$(OBJ) $(GLOBJ)gp_ntfs.$(OBJ) $(GLOBJ)gp_stdia.$(OBJ) $(GLOBJ)gp_wutf8.$(OBJ) $(GLOBJ)gp_nxpsprn.$(OBJ)
-+$(GLGEN)mingw_.dev: $(mingw__) $(GLD)nosync.dev $(GLD)smd5.dev
-+	$(SETMOD) $(GLGEN)mingw_ $(mingw__) -include $(GLD)nosync
-+	$(ADDMOD) $(GLGEN)mingw_ -include $(GLD)smd5
-+
-+
- # -------------------------- Auxiliary programs --------------------------- #
- 
- $(ECHOGS_XE): $(GLSRC)echogs.c $(AK) $(stdpre_h) $(UNIX_AUX_MAK) $(MAKEDIRS)
-@@ -91,18 +98,31 @@ $(GENHT_XE): $(GLSRC)genht.c $(AK) $(GENHT_DEPS) $(UNIX_AUX_MAK) $(MAKEDIRS)
- # To get GS to use the system zlib, you remove/hide the gs/zlib directory
- # which means that the mkromfs build can't find the zlib source it needs.
- # So it's split into two targets, one using the zlib source directly.....
--MKROMFS_OBJS_0=$(MKROMFS_ZLIB_OBJS) $(AUX)gpmisc.$(OBJ) $(AUX)gp_getnv.$(OBJ) \
-- $(AUX)gscdefs.$(OBJ) $(AUX)gp_unix.$(OBJ) $(AUX)gp_unifs.$(OBJ) $(AUX)gp_unifn.$(OBJ) \
-- $(AUX)gp_stdia.$(OBJ) $(AUX)gsutil.$(OBJ) $(AUX)memento.$(OBJ)
-+ifeq ($(MINGW_BUILD), 1)
-+    MKROMFS_OBJS_0=$(MKROMFS_ZLIB_OBJS) $(AUX)gpmisc.$(OBJ) $(AUX)gp_getnv.$(OBJ) \
-+        $(AUX)gscdefs.$(OBJ)  $(AUX)gp_ntfs.$(OBJ) $(AUX)gp_mswin.$(OBJ) \
-+        $(AUX)gp_stdia.$(OBJ) $(AUX)gsutil.$(OBJ) $(AUX)memento.$(OBJ)
-+else
-+    MKROMFS_OBJS_0=$(MKROMFS_ZLIB_OBJS) $(AUX)gpmisc.$(OBJ) $(AUX)gp_getnv.$(OBJ) \
-+        $(AUX)gscdefs.$(OBJ) $(AUX)gp_unix.$(OBJ) $(AUX)gp_unifs.$(OBJ) $(AUX)gp_unifn.$(OBJ) \
-+        $(AUX)gp_stdia.$(OBJ) $(AUX)gsutil.$(OBJ) $(AUX)memento.$(OBJ)
-+endif
- 
- $(MKROMFS_XE)_0: $(GLSRC)mkromfs.c $(MKROMFS_COMMON_DEPS) $(MKROMFS_OBJS_0) $(UNIX_AUX_MAK) $(MAKEDIRS)
- 	$(CCAUX_) $(GENOPT) $(CFLAGS) $(I_)$(GLSRCDIR)$(_I) $(I_)$(GLOBJ)$(_I) $(I_)$(ZSRCDIR)$(_I) $(GLSRC)mkromfs.c $(O_)$(MKROMFS_XE)_0 $(MKROMFS_OBJS_0) $(AUXEXTRALIBS)
- 
- # .... and one using the zlib library linked via the command line
--MKROMFS_OBJS_1=$(AUX)gscdefs.$(OBJ) \
-- $(AUX)gpmisc.$(OBJ) $(AUX)gp_getnv.$(OBJ) \
-- $(AUX)gp_unix.$(OBJ) $(AUX)gp_unifs.$(OBJ) $(AUX)gp_unifn.$(OBJ) \
-- $(AUX)gp_stdia.$(OBJ) $(AUX)gsutil.$(OBJ)
-+# (here two, MINGW has a different set of dependencies,
-+# most notably gp_ntfs and gp_wutf8)
-+ifeq ($(MINGW_BUILD), 1)
-+    MKROMFS_OBJS_1=$(GLOBJ)gp_ntfs.$(OBJ) $(GLOBJ)gp_wutf8.$(OBJ) \
-+        $(GLOBJ)gpmisc.$(OBJ) $(GLOBJ)gp_wgetv.$(OBJ) $(GLOBJ)gscdefs.$(OBJ)
-+else
-+    MKROMFS_OBJS_1=$(AUX)gscdefs.$(OBJ) \
-+        $(AUX)gpmisc.$(OBJ) $(AUX)gp_getnv.$(OBJ) \
-+        $(AUX)gp_unix.$(OBJ) $(AUX)gp_unifs.$(OBJ) $(AUX)gp_unifn.$(OBJ) \
-+        $(AUX)gp_stdia.$(OBJ) $(AUX)gsutil.$(OBJ)
-+endif
- 
- $(MKROMFS_XE)_1: $(GLSRC)mkromfs.c $(MKROMFS_COMMON_DEPS) $(MKROMFS_OBJS_1) $(UNIX_AUX_MAK) $(MAKEDIRS)
- 	$(CCAUX_) $(GENOPT) $(CFLAGS) $(I_)$(GLSRCDIR)$(_I) $(I_)$(GLOBJ)$(_I) $(I_)$(ZSRCDIR)$(_I) $(GLSRC)mkromfs.c $(O_)$(MKROMFS_XE)_1 $(MKROMFS_OBJS_1) $(AUXEXTRALIBS)
-diff --git a/base/unix-dll.mak b/base/unix-dll.mak
-index 1111111..2222222 100644
---- a/base/unix-dll.mak
-+++ b/base/unix-dll.mak
-@@ -35,17 +35,38 @@ SODEBUGDIRPREFIX=sodebug
- # Shared object names
- 
- # simple loader (no support for display device)
--GSSOC_XENAME=$(GS_SO_BASE)c$(XE)
-+ifeq ($(MINGW_WITH_WINLIB_NAMES), 1)
-+    GSSOC_XENAME=gswin$(MINGW_PLATFORM_BITS)c$(XE)
-+else
-+    GSSOC_XENAME=$(GS_SO_BASE)c$(XE)
-+endif
-+
- GSSOC_XE=$(BINDIR)/$(GSSOC_XENAME)
- GSSOC=$(BINDIR)/$(GSSOC_XENAME)
- 
- # loader suporting display device using Gtk+
--GSSOX_XENAME=$(GS_SO_BASE)x$(XE)
-+ifeq ($(MINGW_WITH_WINLIB_NAMES), 1)
-+    GSSOX_XENAME=gswin$(MINGW_PLATFORM_BITS)$(XE)
-+else
-+    GSSOX_XENAME=$(GS_SO_BASE)x$(XE)
-+endif
-+
- GSSOX_XE=$(BINDIR)/$(GSSOX_XENAME)
- GSSOX=$(BINDIR)/$(GSSOX_XENAME)
- 
--# shared library
--GS_SONAME_BASE=lib$(GS_SO_BASE)
-+# shared library: handle unix and mingw library names
-+ifeq ($(MINGW_BUILD), 1)
-+    ifeq ($(MINGW_WITH_WINLIB_NAMES), 1)
-+        GS_SONAME_BASE=gsdll$(MINGW_PLATFORM_BITS)
-+        GS_SONAME_LINK=$(GS_SONAME_BASE)
-+    else
-+        GS_SONAME_BASE=lib$(GS_SO_BASE)
-+        GS_SONAME_LINK=lib$(GS_SO_BASE)
-+    endif
-+else
-+    GS_SONAME_BASE=lib$(GS_SO_BASE)
-+    GS_SONAME_LINK=$(GS_SO_BASE)
-+endif
- 
- # GNU/Linux
- GS_SOEXT=$(SO_LIB_EXT)
-@@ -82,30 +103,30 @@ GS_SO_MAJOR_MINOR=$(BINDIR)/$(GS_SONAME_MAJOR_MINOR)
- 
- # Create symbolic links to the Ghostscript interpreter library
- 
--$(GS_SO): $(GS_SO_MAJOR) $(UNIX_DLL_MAK) $(MAKEDIRS)
-+$(GS_SO): $(GS_SO_MAJOR_MINOR) $(UNIX_DLL_MAK) $(MAKEDIRS)
- 	$(RM_) $(GS_SO)
--	ln -s $(GS_SONAME_MAJOR_MINOR) $(GS_SO)
-+	ln -s $(GS_SONAME_MAJOR) $(GS_SO)
- 
--$(GS_SO_MAJOR): $(GS_SO_MAJOR_MINOR) $(UNIX_DLL_MAK) $(MAKEDIRS)
--	$(RM_) $(GS_SO_MAJOR)
--	ln -s $(GS_SONAME_MAJOR_MINOR) $(GS_SO_MAJOR)
-+$(GS_SO_MAJOR_MINOR): $(GS_SO_MAJOR) $(UNIX_DLL_MAK) $(MAKEDIRS)
-+	$(RM_) $(GS_SO_MAJOR_MINOR)
-+	ln -s $(GS_SONAME_MAJOR) $(GS_SO_MAJOR_MINOR)
- 
- so-links-subtarget:	$(GS_SO) $(UNIX_DLL_MAK) $(MAKEDIRS)
- 	$(NO_OP)
- 
- # Build the small Ghostscript loaders, with Gtk+ and without
- $(GSSOC_XE): so-links-subtarget $(PSSRC)$(SOC_LOADER) $(UNIX_DLL_MAK) $(MAKEDIRS)
--	$(GLCC) -g -o $(GSSOC_XE) $(PSSRC)dxmainc.c \
--	-L$(BINDIR) -l$(GS_SO_BASE)
-+	$(GLCC) -g -o $(GSSOC_XE) $(PSSRC)$(SOC_LOADER_PLAIN) \
-+	-L$(BINDIR) -l$(GS_SONAME_LINK)
- 
- $(GSSOX_XE): so-links-subtarget $(PSSRC)$(SOC_LOADER) $(UNIX_DLL_MAK) $(MAKEDIRS)
- 	$(GLCC) -g $(SOC_CFLAGS) -o $(GSSOX_XE) $(PSSRC)$(SOC_LOADER) \
--	-L$(BINDIR) -l$(GS_SO_BASE) $(SOC_LIBS)
-+	-L$(BINDIR) -l$(GS_SONAME_LINK) $(SOC_LIBS)
- 
- # ------------------------- Recursive make targets ------------------------- #
- 
- SODEFS=\
-- GS_XE=$(BINDIR)/$(GS_SONAME_MAJOR_MINOR)\
-+ GS_XE=$(BINDIR)/$(GS_SONAME_MAJOR)\
-  DISPLAY_DEV=$(DD)display.dev\
-  STDIO_IMPLEMENTATION=c\
-  BUILDDIRPREFIX=$(BUILDDIRPREFIX)
-@@ -179,11 +200,17 @@ install-so-subtarget: so-subtarget
- 	-mkdir -p $(DESTDIR)$(gsincludedir)
- 	$(INSTALL_PROGRAM) $(GSSOC) $(DESTDIR)$(bindir)/$(GSSOC_XENAME)
- 	$(INSTALL_PROGRAM) $(GSSOX) $(DESTDIR)$(bindir)/$(GSSOX_XENAME)
--	$(INSTALL_PROGRAM) $(BINDIR)/$(GS_SONAME_MAJOR_MINOR) $(DESTDIR)$(libdir)/$(GS_SONAME_MAJOR_MINOR)
--	$(RM_) $(DESTDIR)$(libdir)/$(GS_SONAME)
--	ln -s $(GS_SONAME_MAJOR_MINOR) $(DESTDIR)$(libdir)/$(GS_SONAME)
--	$(RM_) $(DESTDIR)$(libdir)/$(GS_SONAME_MAJOR)
--	ln -s $(GS_SONAME_MAJOR_MINOR) $(DESTDIR)$(libdir)/$(GS_SONAME_MAJOR)
-+	@if test "$(MINGW_BUILD)" = "1" ; then \
-+	  $(INSTALL_PROGRAM) $(BINDIR)/$(GS_SONAME_MAJOR) $(DESTDIR)$(bindir)/$(GS_SONAME_MAJOR) ; \
-+	  $(INSTALL_PROGRAM) $(BINDIR)/$(GS_SONAME_LINK).dll.a $(DESTDIR)$(libdir)/$(GS_SONAME_LINK).dll.a ; \
-+	else \
-+	  $(INSTALL_PROGRAM) $(BINDIR)/$(GS_SONAME_MAJOR) $(DESTDIR)$(libdir)/$(GS_SONAME_MAJOR) ; \
-+	  $(RM_) $(DESTDIR)$(libdir)/$(GS_SONAME) ; \
-+	  ln -s $(GS_SONAME_MAJOR) $(DESTDIR)$(libdir)/$(GS_SONAME) ; \
-+	  $(RM_) $(DESTDIR)$(libdir)/$(GS_SONAME_MAJOR) ; \
-+	  ln -s $(GS_SONAME_MAJOR) $(DESTDIR)$(libdir)/$(GS_SONAME_MAJOR_MINOR) ; \
-+	fi
-+	$(INSTALL_DATA) $(GLSRCDIR)/gserrors.h $(DESTDIR)$(gsincludedir)gserrors.h
- 	$(INSTALL_DATA) $(PSSRC)iapi.h $(DESTDIR)$(gsincludedir)iapi.h
- 	$(INSTALL_DATA) $(PSSRC)ierrors.h $(DESTDIR)$(gsincludedir)ierrors.h
- 	$(INSTALL_DATA) $(GLSRC)gserrors.h $(DESTDIR)$(gsincludedir)gserrors.h
-diff --git a/base/unix-gcc.mak b/base/unix-gcc.mak
-index 1111111..2222222 100644
---- a/base/unix-gcc.mak
-+++ b/base/unix-gcc.mak
-@@ -79,7 +79,7 @@ INSTALL_PROGRAM = $(INSTALL) -m 755
- INSTALL_DATA = $(INSTALL) -m 644
- INSTALL_SHARED = 
- 
--prefix = /usr/local
-+prefix = /usr
- exec_prefix = ${prefix}
- bindir = ${exec_prefix}/bin
- scriptdir = $(bindir)
-@@ -98,7 +98,7 @@ gsdatadir = $(gsdir)/$(GS_DOT_VERSION)
- gssharedir = ${exec_prefix}/lib/ghostscript/$(GS_DOT_VERSION)
- gsincludedir = ${prefix}/include/ghostscript/
- 
--docdir=$(gsdatadir)/doc
-+docdir=$(gsdatadir)/doc/ghostscript-$(GS_DOT_VERSION)
- exdir=$(gsdatadir)/examples
- GS_DOCDIR=$(docdir)
- 
-diff --git a/base/unixhead.mak b/base/unixhead.mak
-index 1111111..2222222 100644
---- a/base/unixhead.mak
-+++ b/base/unixhead.mak
-@@ -22,7 +22,12 @@
- # Define the platform name.  For a "stock" System V platform,
- # use sysv_ instead of unix_.
- 
--GSPLATFORM=unix_
-+# select platform: unix or mingw
-+ifeq ($(MINGW_BUILD), 1)
-+	GSPLATFORM=mingw_
-+else	
-+	GSPLATFORM=unix_
-+endif
- 
- # Define the syntax for command, object, and executable files.
- 
-@@ -65,3 +70,9 @@ CONFLDTR=-ol
- # Define the compilation rules and flags.
- 
- BEGINFILES=
-+
-+ifeq ($(MINGW_BUILD), 1)
-+	MINGW_FONTPATH_PATCH_OR_EMPTY_COMMAND=$(SH) $(GLSRCDIR)/mingw-fp.sh $(gconfigd_h)
-+else
-+	MINGW_FONTPATH_PATCH_OR_EMPTY_COMMAND=
-+endif
-diff --git a/configure.ac b/configure.ac
-index 1111111..2222222 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -187,6 +187,26 @@ case `uname` in
-             SET_DT_SONAME="so"
-         fi
-         ;;
-+		MINGW*)
-+		MINGW_BUILD=1
-+		MINGW_PLATFORM=`uname`
-+		MINGW_XTLIBS="-lwinspool"
-+
-+		# inner MINGW case statement: 32/64 bits
-+		case $MINGW_PLATFORM in
-+            MINGW32*)
-+            MINGW_PLATFORM_BITS=32
-+            ;;
-+            MINGW64*)
-+            MINGW_PLATFORM_BITS=64
-+            ;;
-+        esac
-+
-+		AC_SUBST(MINGW_BUILD)
-+		AC_SUBST(MINGW_PLATFORM)
-+		AC_SUBST(MINGW_PLATFORM_BITS)
-+		AC_SUBST(MINGW_XTLIBS)
-+		;;
- esac
- 
- AC_SUBST(SET_DT_SONAME)
-@@ -1521,12 +1541,41 @@ AC_SUBST(JPXDIR)
- AC_SUBST(SHARE_JPX)
- AC_SUBST(JPXDEVS)
- 
-+dnl checks for MinGW shared object name and gdi must precede the gtk checks
-+dnl check whether MinGW should use the MSVC dll names
-+AC_ARG_WITH([winlib-names], AC_HELP_STRING([--with-winlib-names],
-+                                             [MSys/MinGW only: dll and executable names should be gsdll32.dll (gsdll64.dll), gswin32.exe (gswin64.exe), and gswin32c.exe (gswin64c.exe)]),
-+            [], [with_winlib_names=no])
-+if test "x$with_winlib_names" = "xyes"; then
-+    MINGW_WITH_WINLIB_NAMES=1
-+fi
-+
-+dnl check whether MinGW should use the gdi-based (dwmain.c, dwmainc.c) front end
-+AC_ARG_WITH([gdi], AC_HELP_STRING([--with-gdi],
-+                                             [MSys/MinGW only: use the gdi-based Shared Object loaders (dwmain.c & dwmainc.c; implies --with-winlib-names=yes): not yet implemented]),
-+            [], [with_gdi=no])
-+if test "x$with_gdi" = "xyes"; then
-+    MINGW_WITH_WINLIB_NAMES=1
-+    MINGW_WITH_GDI=1
-+    # SOC_LOADER value will be set after the initial gtk test
-+fi
-+
-+AC_SUBST(MINGW_WITH_WINLIB_NAMES)
-+AC_SUBST(MINGW_WITH_GDI)
-+
- dnl check if we can/should build the gtk loader
- AC_ARG_ENABLE([gtk], AC_HELP_STRING([--disable-gtk],
-     [Do not build the gtk loader]))
- SOC_CFLAGS=""
- SOC_LIBS=""
--SOC_LOADER=""
-+SOC_LOADER="" # default may not be set before the gtk+-2.0 test
-+SOC_LOADER_PLAIN=""
-+
-+if test "x$with_gdi" = "xyes"; then
-+    AC_MSG_WARN([the gdi front end under MSys/MinGW is not yet implemented])
-+    enable_gtk=yes # try to use gtk+ instead
-+fi
-+
- if test "x$enable_gtk" != "xno"; then
-     # Try GTK+ 3.x first...
-     if test "x$PKGCONFIG" != x; then
-@@ -1559,9 +1608,15 @@ if test "x$SOC_LOADER" = "x"; then
-   SOC_LOADER="dxmainc.c"
- fi
- 
-+dnl set default SOC_LOADER_PLAIN as necessary
-+if test "x$SOC_LOADER_PLAIN" = x; then
-+	SOC_LOADER_PLAIN="dxmainc.c"
-+fi
-+
- AC_SUBST(SOC_CFLAGS)
- AC_SUBST(SOC_LIBS)
- AC_SUBST(SOC_LOADER)
-+AC_SUBST(SOC_LOADER_PLAIN)
- 
- dnl look for omni implementation
- AC_ARG_WITH([omni], AC_HELP_STRING([--with-omni],
-@@ -2103,6 +2158,12 @@ case `uname` in
-           DYNAMIC_LDFLAGS="-shared -Wl,-brtl,-G -fPIC"
-           SO_LIB_EXT=".so"
-         ;;
-+        MINGW*)
-+        DYNAMIC_CFLAGS="-fPIC"
-+        DYNAMIC_LDFLAGS="-fPIC -shared"
-+        DYNAMIC_LIBS=""
-+        DYNANIC_LIB_EXT="dll"
-+        ;;
- esac
- 
- AC_ARG_ENABLE([dynamic], AC_HELP_STRING([--enable-dynamic],
-@@ -2175,6 +2236,20 @@ if test "x$datadir" = 'x${prefix}/share'; then
- fi
- 
- dnl Fix "fontpath" variable...
-+if test $MINGW_BUILD = 1; then
-+    # Add a reference to the Windows Fonts directory.
-+    # This must take place priot to the test below,
-+    # as it is also our way to avoid inclusion
-+    # of the various unix font directories.
-+    # Since gs uses here a colon as delimiter,
-+    # we must refer to %windir% as /c/Windows
-+    if test "x$fontpath" = "x"; then
-+        fontpath="/c/Windows/Fonts"
-+    else
-+        fontpath="${fontpath}:/c/Windows/Fonts"
-+    fi
-+fi
-+
- if test "x$fontpath" = "x"; then
-         # These font directories are used by various Linux distributions...
-         fontpath="$datadir/fonts/default/ghostscript"
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Boris Nagaev <bnagaev@gmail.com>
-Date: Sat, 16 Jul 2016 13:05:54 +0200
-Subject: [PATCH] import patch libspectre.patch from MINGW-packages
-
-Source: https://git.io/vKz18
-
-diff --git a/psi/iapi.h b/psi/iapi.h
-index 1111111..2222222 100644
---- a/psi/iapi.h
-+++ b/psi/iapi.h
-@@ -246,6 +246,7 @@ GSDLLEXPORT int GSDLLAPI gsapi_init_with_args(void *instance,
-     int argc, char **argv);
- 
- #ifdef __WIN32__
-+#include <stddef.h>
- GSDLLEXPORT int GSDLLAPI gsapi_init_with_argsA(void *instance,
-     int argc, char **argv);
- 
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Boris Nagaev <bnagaev@gmail.com>
-Date: Sat, 16 Jul 2016 13:13:22 +0200
-Subject: [PATCH] import patch ghostscript-sys-zlib.patch from MINGW-packages
-
-Source: https://git.io/vKz1D
-
-diff --git a/configure.ac b/configure.ac
-index 1111111..2222222 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -912,7 +912,7 @@ AC_MSG_CHECKING([for local zlib source])
- dnl zlib is needed for language level 3, and libpng
- # we must define ZLIBDIR regardless because png.mak does a -I$(ZLIBDIR)
- # this seems a harmless default
--ZLIBDIR=src
-+ZLIBDIR=$includedir
- AUX_SHARED_ZLIB=
- 
- if test -d $srcdir/zlib; then
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: darealshinji <djcj@gmx.de>
-Date: Sat, 16 Jul 2016 13:15:57 +0200
-Subject: [PATCH] further changes for MXE
+Date: Mon, 3 Dec 2018 21:05:41 +0100
+Subject: [PATCH 1/1] cross-build fixes, hide libgs symbols
 
 
 diff --git a/Makefile.in b/Makefile.in
 index 1111111..2222222 100644
 --- a/Makefile.in
 +++ b/Makefile.in
-@@ -110,6 +110,9 @@ docdir=$(gsdatadir)/doc
- exdir=$(gsdatadir)/examples
- GS_DOCDIR=$(docdir)
+@@ -173,6 +173,9 @@ CAPOPT= @HAVE_MKSTEMP@ @HAVE_FILE64@ @HAVE_FSEEKO@ @HAVE_MKSTEMP64@ @HAVE_FONTCO
  
-+# Are we cross-compiling?
-+CROSS_COMPILING=@CROSS_COMPILING@
-+
- # Choose whether to compile the .ps initialization files into the executable.
- # See gs.mak for details.
+ GS=@GS@
+ GS_SO_BASE=@GS@
++GS_SONAME=@GS_SONAME@
++GS_SONAME_MAJOR=@GS_SONAME_MAJOR@
++GS_SONAME_MAJOR_MINOR=@GS_SONAME_MAJOR_MINOR@
  
-@@ -184,7 +187,7 @@ XPS=@XPS@
- GPDL=@GPDL@
+ PCL=@PCL@
+ PCL_SO_BASE=@PCL@
+@@ -184,7 +187,7 @@ GPDL=@GPDL@
+ GPDL_SO_BASE=@GPDL@
  
  XE=@EXEEXT@
 -XEAUX=@EXEEXT@
-+XEAUX=@EXEEXTAUX@
++XEAUX=@AUXEXEEXT@
  
- PCL_XPS_TARGETS=@PCL_TARGET@ @XPS_TARGET@ @GPDL_TARGET@
- 
-@@ -369,7 +372,7 @@ RANLIB=@RANLIB@
- # Define the name of the C compiler (target and host (AUX))
- 
- CC=@CC@
--CCAUX=@CC@
-+CCAUX=@CCAUX@
- 
- # Define the name of the linker for the final link step.
- # Normally this is the same as the C compiler.
-@@ -379,6 +382,7 @@ CCAUXLD=$(CCAUX)
- 
- # Define the default gcc flags.
- GCFLAGS=@CPPFLAGS@ @GCFLAGS@ @CFLAGS@
-+GCFLAGS_AUX=@GCFLAGS@
- 
- # Define the added flags for standard, debugging, profiling 
- # and shared object builds.
-@@ -442,7 +446,11 @@ LDFLAGS_SO=@DYNAMIC_LDFLAGS@
- # (Libraries required by individual drivers are handled automatically.)
- 
- EXTRALIBS=$(XTRALIBS) @LIBS@ @MINGW_XTLIBS@ @DYNAMIC_LIBS@ @FONTCONFIG_LIBS@ @FT_LIBS@ @JPX_AUTOCONF_LIBS@
-+ifeq ($(CROSS_COMPILING),yes)
-+AUXEXTRALIBS=$(XTRALIBS) -lz
-+else
- AUXEXTRALIBS=$(XTRALIBS) @LIBS@ @MINGW_XTLIBS@ @DYNAMIC_LIBS@ @FONTCONFIG_LIBS@ @FT_LIBS@ @JPX_AUTOCONF_LIBS@ @AUX_SHARED_ZLIB@
-+endif
- 
- # Define the standard libraries to search at the end of linking.
- # Most platforms require -lpthread for the POSIX threads library;
-@@ -492,10 +500,10 @@ SYNC=@SYNC@
- RM=rm -f
- 
- # ------ Dynamic loader options ------- #
--SOC_CFLAGS	        =	@SOC_CFLAGS@
--SOC_LIBS	        =	@SOC_LIBS@
--SOC_LOADER	        =	@SOC_LOADER@
--SOC_LOADER_PLAIN	=	@SOC_LOADER_PLAIN@
-+SOC_CFLAGS	=	@SOC_CFLAGS@
-+SOC_LIBS	=	@SOC_LIBS@
-+SOC_LOADER	=	@SOC_LOADER@
-+SOC_LOADER_PLAIN = @SOC_LOADER_PLAIN@
- 
- # on virtually every Unix-a-like system, this is "so",
- # but Apple just had to be different, so it's now set
-@@ -646,16 +654,15 @@ AK=
- 
- CCFLAGS=$(GENOPT) $(CAPOPT) $(CFLAGS)
- CC_=$(CC) $(CCFLAGS)
--
- ifeq ($(MINGW_BUILD), 1)
- 	# adding -lz to the compilation flags seems to be an error:
--	# if not always, then at least under MSys/MinGW, 
-+	# if not always, then at least under MSys/MinGW,
- 	# compiled against the system's zlib,
- 	# and having no zlib sub-folder (see also: unixaux.mak)
--	CCAUX_=$(CCAUX) $(CFLAGS)
-+	CCAUX_=$(CCAUX) -I"@TARGET_INCLUDE@" $(GCFLAGS_AUX)
- else
- 	CCAUX_=$(CCAUX) $(CFLAGS) @AUX_SHARED_ZLIB@
--endif	
-+endif
- 
- CC_LEAF=$(CC_)
- # note gcc can't use -fomit-frame-pointer with -pg.
-diff --git a/base/gp_mswin.h b/base/gp_mswin.h
-index 1111111..2222222 100644
---- a/base/gp_mswin.h
-+++ b/base/gp_mswin.h
-@@ -56,7 +56,7 @@ extern int is_spool(const char *queue);
- 
- #endif /* !defined(RC_INVOKED) */
- 
--// in gp_mswin.c, mswin_popen is called 
-+// in gp_mswin.c, mswin_popen is called
- // before it is implemented, so we must
- // provide a prototype (at least with GCC) to
- // avoid implicit definition with the wrong return type
+ PCL_TARGET=@PCL_TARGET@
+ XPS_TARGET=@XPS_TARGET@
 diff --git a/base/gp_unix.c b/base/gp_unix.c
 index 1111111..2222222 100644
 --- a/base/gp_unix.c
 +++ b/base/gp_unix.c
-@@ -13,6 +13,9 @@
-    CA  94903, U.S.A., +1(415)492-9861, for further information.
- */
- 
-+#if defined(__WIN32__) && !defined(METRO)
-+#include "windows_.h"
-+#endif
+@@ -16,6 +16,9 @@
  
  /* Unix-specific routines for Ghostscript */
  
-@@ -442,3 +445,11 @@ void gp_enumerate_fonts_free(void *enum_state)
++#ifdef __MINGW32__
++#  include "windows_.h"
++#endif
+ #include "pipe_.h"
+ #include "string_.h"
+ #include "time_.h"
+@@ -454,3 +457,54 @@ void gp_enumerate_fonts_free(void *enum_state)
      }
  #endif
  }
 +
-+#if defined(__WIN32__) && !defined(METRO)
-+/* include gp_local_arg_encoding_get_codepoint for MinGW cross-builds */
-+#ifndef GP_LAEGC_INCLUDED
-+#  define GP_LAEGC_INCLUDED
-+#endif
-+#include "gp_win32.c"
-+#endif
-diff --git a/base/gp_win32.c b/base/gp_win32.c
-index 1111111..2222222 100644
---- a/base/gp_win32.c
-+++ b/base/gp_win32.c
-@@ -13,6 +13,7 @@
-    CA  94903, U.S.A., +1(415)492-9861, for further information.
- */
- 
-+#ifndef GP_LAEGC_INCLUDED
- 
- /* Common platform-specific routines for MS-Windows WIN32 */
- /* originally hacked from gp_msdos.c by Russell Lang */
-@@ -131,6 +132,8 @@ const char gp_null_file_name[] = "nul";
- /* Define the name that designates the current directory. */
- const char gp_current_directory_name[] = ".";
- 
-+#endif /* GP_LAEGC_INCLUDED */
++/* A function to decode the next codepoint of the supplied args from the
++ * local windows codepage, or -1 for EOF.
++ * (copied from gp_win32.c)
++ */
 +
- /* A function to decode the next codepoint of the supplied args from the
-  * local windows codepage, or -1 for EOF.
-  */
-diff --git a/base/lib.mak b/base/lib.mak
-index 1111111..2222222 100644
---- a/base/lib.mak
-+++ b/base/lib.mak
-@@ -76,7 +76,7 @@ stdpre_h=$(GLSRC)stdpre.h $(stdpn_h)
- stdint__h=$(GLSRC)stdint_.h $(std_h)
- 
- $(GLGEN)arch.h : $(GENARCH_XE)
--	$(EXP)$(GENARCH_XE) $(GLGEN)arch.h $(TARGET_ARCH_FILE)
-+	test -f $@ || $(GENARCH_XE) $(GLGEN)arch.h $(TARGET_ARCH_FILE)
- 
- # Platform interfaces
- 
++#ifdef __MINGW32__
++int
++gp_local_arg_encoding_get_codepoint(FILE *file, const char **astr)
++{
++    int len;
++    int c;
++    char arg[3];
++    wchar_t unicode[2];
++    char utf8[4];
++
++    if (file) {
++        c = fgetc(file);
++        if (c == EOF)
++            return EOF;
++    } else if (**astr) {
++        c = *(*astr)++;
++        if (c == 0)
++            return EOF;
++    } else {
++        return EOF;
++    }
++
++    arg[0] = c;
++    if (IsDBCSLeadByte(c)) {
++        if (file) {
++            c = fgetc(file);
++            if (c == EOF)
++                return EOF;
++        } else if (**astr) {
++            c = *(*astr)++;
++            if (c == 0)
++                return EOF;
++        }
++        arg[1] = c;
++        len = 2;
++    } else {
++        len = 1;
++    }
++
++    /* Convert the string (unterminated in, unterminated out) */
++    len = MultiByteToWideChar(CP_ACP, 0, arg, len, unicode, 2);
++
++    return unicode[0];
++}
++#endif /* __MINGW32__ */
 diff --git a/base/unix-aux.mak b/base/unix-aux.mak
 index 1111111..2222222 100644
 --- a/base/unix-aux.mak
 +++ b/base/unix-aux.mak
-@@ -69,7 +69,7 @@ $(GLOBJ)gp_sysv.$(OBJ): $(GLSRC)gp_sysv.c $(stdio__h) $(time__h) $(AK)\
-  $(UNIX_AUX_MAK) $(MAKEDIRS)
- 	$(GLCC) $(GLO_)gp_sysv.$(OBJ) $(C_) $(GLSRC)gp_sysv.c
+@@ -57,23 +57,29 @@ $(AUX)gp_stdia.$(OBJ): $(GLSRC)gp_stdia.c $(AK)\
+ # -------------------------- Auxiliary programs --------------------------- #
  
--# the MINGW platform / build environment, joining unix for the ride 
-+# the MINGW platform / build environment, joining unix for the ride
- mingw__=$(GLOBJ)gp_wgetv.$(OBJ) $(GLOBJ)gp_wpapr.$(OBJ) $(GLOBJ)gp_win32.$(OBJ) $(GLOBJ)gp_mswin.$(OBJ) $(GLOBJ)gp_ntfs.$(OBJ) $(GLOBJ)gp_stdia.$(OBJ) $(GLOBJ)gp_wutf8.$(OBJ) $(GLOBJ)gp_nxpsprn.$(OBJ)
- $(GLGEN)mingw_.dev: $(mingw__) $(GLD)nosync.dev $(GLD)smd5.dev
- 	$(SETMOD) $(GLGEN)mingw_ $(mingw__) -include $(GLD)nosync
-@@ -98,6 +98,11 @@ $(GENHT_XE): $(GLSRC)genht.c $(AK) $(GENHT_DEPS) $(UNIX_AUX_MAK) $(MAKEDIRS)
+ $(ECHOGS_XE): $(GLSRC)echogs.c $(AK) $(stdpre_h) $(UNIX_AUX_MAK) $(MAKEDIRS)
++	test -e $(ECHOGS_XE) || \
+ 	$(CCAUX_) $(I_)$(GLSRCDIR)$(_I) $(O_)$(ECHOGS_XE) $(GLSRC)echogs.c $(AUXEXTRALIBS)
+ 
+ $(PACKPS_XE): $(GLSRC)pack_ps.c $(stdpre_h) $(UNIX_AUX_MAK) $(MAKEDIRS)
++	test -e $(PACKPS_XE) || \
+ 	$(CCAUX_) $(I_)$(GLSRCDIR)$(_I) $(O_)$(PACKPS_XE) $(GLSRC)pack_ps.c $(AUXEXTRALIBS)
+ 
+ # On the RS/6000 (at least), compiling genarch.c with gcc with -O
+ # produces a buggy executable.
+ $(GENARCH_XE): $(GLSRC)genarch.c $(AK) $(GENARCH_DEPS) $(UNIX_AUX_MAK) $(MAKEDIRS)
++	test -e $(GENARCH_XE) || \
+ 	$(CCAUX_) $(I_)$(GLSRCDIR)$(_I) $(O_)$(GENARCH_XE) $(GLSRC)genarch.c $(AUXEXTRALIBS)
+ 
+ $(GENCONF_XE): $(GLSRC)genconf.c $(AK) $(GENCONF_DEPS) $(UNIX_AUX_MAK) $(MAKEDIRS)
++	test -e $(GENCONF_XE) || \
+ 	$(CCAUX_) $(I_)$(GLSRCDIR)$(_I) $(O_)$(GENCONF_XE) $(GLSRC)genconf.c $(AUXEXTRALIBS)
+ 
+ $(GENDEV_XE): $(GLSRC)gendev.c $(AK) $(GENDEV_DEPS) $(UNIX_AUX_MAK) $(MAKEDIRS)
++	test -e $(GENDEV_XE) || \
+ 	$(CCAUX_) $(I_)$(GLSRCDIR)$(_I) $(O_)$(GENDEV_XE) $(GLSRC)gendev.c $(AUXEXTRALIBS)
+ 
+ $(GENHT_XE): $(GLSRC)genht.c $(AK) $(GENHT_DEPS) $(UNIX_AUX_MAK) $(MAKEDIRS)
++	test -e $(GENHT_XE) || \
+ 	$(CCAUX_) $(GENHT_CFLAGS) $(O_)$(GENHT_XE) $(GLSRC)genht.c $(AUXEXTRALIBS)
+ 
  # To get GS to use the system zlib, you remove/hide the gs/zlib directory
- # which means that the mkromfs build can't find the zlib source it needs.
- # So it's split into two targets, one using the zlib source directly.....
-+ifeq ($(CROSS_COMPILING),yes)
-+MKROMFS_OBJS_0=$(MKROMFS_ZLIB_OBJS) $(AUX)gpmisc.$(OBJ) $(AUX)gp_getnv.$(OBJ) \
-+        $(AUX)gscdefs.$(OBJ) $(AUX)gp_unix.$(OBJ) $(AUX)gp_unifs.$(OBJ) $(AUX)gp_unifn.$(OBJ) \
-+        $(AUX)gp_stdia.$(OBJ) $(AUX)gsutil.$(OBJ) $(AUX)memento.$(OBJ)
-+else
- ifeq ($(MINGW_BUILD), 1)
-     MKROMFS_OBJS_0=$(MKROMFS_ZLIB_OBJS) $(AUX)gpmisc.$(OBJ) $(AUX)gp_getnv.$(OBJ) \
-         $(AUX)gscdefs.$(OBJ)  $(AUX)gp_ntfs.$(OBJ) $(AUX)gp_mswin.$(OBJ) \
-@@ -107,13 +112,20 @@ else
-         $(AUX)gscdefs.$(OBJ) $(AUX)gp_unix.$(OBJ) $(AUX)gp_unifs.$(OBJ) $(AUX)gp_unifn.$(OBJ) \
-         $(AUX)gp_stdia.$(OBJ) $(AUX)gsutil.$(OBJ) $(AUX)memento.$(OBJ)
- endif
-+endif
+@@ -84,6 +90,7 @@ MKROMFS_OBJS_0=$(MKROMFS_ZLIB_OBJS) $(AUX)gpmisc.$(OBJ) $(AUX)gp_getnv.$(OBJ) \
+  $(AUX)gp_stdia.$(OBJ) $(AUX)gsutil.$(OBJ) $(AUX)memento.$(OBJ)
  
  $(MKROMFS_XE)_0: $(GLSRC)mkromfs.c $(MKROMFS_COMMON_DEPS) $(MKROMFS_OBJS_0) $(UNIX_AUX_MAK) $(MAKEDIRS)
--	$(CCAUX_) $(GENOPT) $(CFLAGS) $(I_)$(GLSRCDIR)$(_I) $(I_)$(GLOBJ)$(_I) $(I_)$(ZSRCDIR)$(_I) $(GLSRC)mkromfs.c $(O_)$(MKROMFS_XE)_0 $(MKROMFS_OBJS_0) $(AUXEXTRALIBS)
-+	$(CCAUX_) $(GENOPT) $(I_)$(GLSRCDIR)$(_I) $(I_)$(GLOBJ)$(_I) $(GLSRC)mkromfs.c $(O_)$(MKROMFS_XE)_0 $(MKROMFS_OBJS_0) $(AUXEXTRALIBS)
++	test -e $(MKROMFS_XE)_0 || \
+ 	$(CCAUX_) $(GENOPTAUX) $(I_)$(GLSRCDIR)$(_I) $(I_)$(GLOBJ)$(_I) $(I_)$(ZSRCDIR)$(_I) $(GLSRC)mkromfs.c $(O_)$(MKROMFS_XE)_0 $(MKROMFS_OBJS_0) $(AUXEXTRALIBS)
  
  # .... and one using the zlib library linked via the command line
- # (here two, MINGW has a different set of dependencies,
- # most notably gp_ntfs and gp_wutf8)
-+ifeq ($(CROSS_COMPILING),yes)
-+MKROMFS_OBJS_1=$(AUX)gscdefs.$(OBJ) \
-+        $(AUX)gpmisc.$(OBJ) $(AUX)gp_getnv.$(OBJ) \
-+        $(AUX)gp_unix.$(OBJ) $(AUX)gp_unifs.$(OBJ) $(AUX)gp_unifn.$(OBJ) \
-+        $(AUX)gp_stdia.$(OBJ) $(AUX)gsutil.$(OBJ)
-+else
- ifeq ($(MINGW_BUILD), 1)
-     MKROMFS_OBJS_1=$(GLOBJ)gp_ntfs.$(OBJ) $(GLOBJ)gp_wutf8.$(OBJ) \
-         $(GLOBJ)gpmisc.$(OBJ) $(GLOBJ)gp_wgetv.$(OBJ) $(GLOBJ)gscdefs.$(OBJ)
-@@ -123,9 +135,10 @@ else
-         $(AUX)gp_unix.$(OBJ) $(AUX)gp_unifs.$(OBJ) $(AUX)gp_unifn.$(OBJ) \
-         $(AUX)gp_stdia.$(OBJ) $(AUX)gsutil.$(OBJ)
- endif
-+endif
+@@ -93,9 +100,11 @@ MKROMFS_OBJS_1=$(AUX)gscdefs.$(OBJ) \
+  $(AUX)gp_stdia.$(OBJ) $(AUX)gsutil.$(OBJ)
  
  $(MKROMFS_XE)_1: $(GLSRC)mkromfs.c $(MKROMFS_COMMON_DEPS) $(MKROMFS_OBJS_1) $(UNIX_AUX_MAK) $(MAKEDIRS)
--	$(CCAUX_) $(GENOPT) $(CFLAGS) $(I_)$(GLSRCDIR)$(_I) $(I_)$(GLOBJ)$(_I) $(I_)$(ZSRCDIR)$(_I) $(GLSRC)mkromfs.c $(O_)$(MKROMFS_XE)_1 $(MKROMFS_OBJS_1) $(AUXEXTRALIBS)
-+	$(CCAUX_) $(GENOPT) $(I_)$(GLSRCDIR)$(_I) $(I_)$(GLOBJ)$(_I) $(GLSRC)mkromfs.c $(O_)$(MKROMFS_XE)_1 $(MKROMFS_OBJS_1) $(AUXEXTRALIBS)
++	test -e $(MKROMFS_XE)_1 || \
+ 	$(CCAUX_) $(GENOPTAUX) $(I_)$(GLSRCDIR)$(_I) $(I_)$(GLOBJ)$(_I) $(I_)$(ZSRCDIR)$(_I) $(GLSRC)mkromfs.c $(O_)$(MKROMFS_XE)_1 $(MKROMFS_OBJS_1) $(AUXEXTRALIBS)
  
  $(MKROMFS_XE): $(MKROMFS_XE)_$(SHARE_ZLIB) $(UNIX_AUX_MAK) $(MAKEDIRS)
++	test -e $(MKROMFS_XE) || \
  	$(CP_) $(MKROMFS_XE)_$(SHARE_ZLIB) $(MKROMFS_XE)
+ 
+ # Query the environment to construct gconfig_.h.
 diff --git a/base/unix-dll.mak b/base/unix-dll.mak
 index 1111111..2222222 100644
 --- a/base/unix-dll.mak
 +++ b/base/unix-dll.mak
-@@ -54,7 +54,8 @@ endif
- GSSOX_XE=$(BINDIR)/$(GSSOX_XENAME)
- GSSOX=$(BINDIR)/$(GSSOX_XENAME)
+@@ -66,9 +66,6 @@ GPDL_SONAME_BASE=lib$(GPDL_SO_BASE)
+ GS_SOEXT=$(SO_LIB_EXT)
+ GS_DLLEXT=$(DLL_EXT)
  
--# shared library: handle unix and mingw library names
-+# shared library
-+# handle unix and mingw library names
- ifeq ($(MINGW_BUILD), 1)
-     ifeq ($(MINGW_WITH_WINLIB_NAMES), 1)
-         GS_SONAME_BASE=gsdll$(MINGW_PLATFORM_BITS)
-@@ -210,7 +211,6 @@ install-so-subtarget: so-subtarget
- 	  $(RM_) $(DESTDIR)$(libdir)/$(GS_SONAME_MAJOR) ; \
- 	  ln -s $(GS_SONAME_MAJOR) $(DESTDIR)$(libdir)/$(GS_SONAME_MAJOR_MINOR) ; \
- 	fi
--	$(INSTALL_DATA) $(GLSRCDIR)/gserrors.h $(DESTDIR)$(gsincludedir)gserrors.h
- 	$(INSTALL_DATA) $(PSSRC)iapi.h $(DESTDIR)$(gsincludedir)iapi.h
- 	$(INSTALL_DATA) $(PSSRC)ierrors.h $(DESTDIR)$(gsincludedir)ierrors.h
- 	$(INSTALL_DATA) $(GLSRC)gserrors.h $(DESTDIR)$(gsincludedir)gserrors.h
-diff --git a/base/unixhead.mak b/base/unixhead.mak
-index 1111111..2222222 100644
---- a/base/unixhead.mak
-+++ b/base/unixhead.mak
-@@ -25,7 +25,7 @@
- # select platform: unix or mingw
- ifeq ($(MINGW_BUILD), 1)
- 	GSPLATFORM=mingw_
--else	
-+else
- 	GSPLATFORM=unix_
- endif
+-GS_SONAME=$(GS_SONAME_BASE)$(GS_SOEXT)$(GS_DLLEXT)
+-GS_SONAME_MAJOR=$(GS_SONAME_BASE)$(GS_SOEXT)$(SO_LIB_VERSION_SEPARATOR)$(GS_VERSION_MAJOR)$(GS_DLLEXT)
+-GS_SONAME_MAJOR_MINOR=$(GS_SONAME_BASE)$(GS_SOEXT)$(SO_LIB_VERSION_SEPARATOR)$(GS_VERSION_MAJOR)$(SO_LIB_VERSION_SEPARATOR)$(GS_VERSION_MINOR)$(GS_DLLEXT)
  
+ PCL_SONAME=$(PCL_SONAME_BASE)$(GS_SOEXT)$(GS_DLLEXT)
+ PCL_SONAME_MAJOR=$(PCL_SONAME_BASE)$(GS_SOEXT)$(SO_LIB_VERSION_SEPARATOR)$(GS_VERSION_MAJOR)$(GS_DLLEXT)
 diff --git a/configure.ac b/configure.ac
 index 1111111..2222222 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -24,6 +24,9 @@ AC_PREREQ(2.63)
+@@ -23,6 +23,7 @@ AC_INIT
+ AC_PREREQ(2.63)
  AC_LANG(C)
  AC_CONFIG_SRCDIR(psi/gs.c)
- 
 +AC_CANONICAL_HOST
-+AC_CANONICAL_BUILD
-+
+ 
  dnl Inherit compiler flags from the environment...
  CFLAGS="${CFLAGS:=}"
- CPPFLAGS="${CPPFLAGS:=}"
-@@ -106,7 +109,7 @@ AC_PROG_RANLIB
- #AC_PROG_INSTALL
+@@ -125,8 +126,11 @@ AUXEXTRALIBSTMP="\$(EXTRALIBS)"
  
- dnl pkg-config is used for several tests now...
--AC_PATH_PROG(PKGCONFIG, pkg-config)
-+AC_PATH_TARGET_TOOL(PKGCONFIG, pkg-config)
+ # purposefully do not include "help" output for this
+ AC_ARG_ENABLE([save_confaux])
++AC_ARG_ENABLE([auxtools_only])
  
- dnl --------------------------------------------------  
- dnl Allow excluding the contributed drivers
-@@ -117,8 +120,8 @@ AC_ARG_ENABLE([contrib], AC_HELP_STRING([--disable-contrib],
- CONTRIBINCLUDE="include $srcdir/contrib/contrib.mak"
+-if test x"$CCAUX" != x"" ; then
++absolute_source_path=$(cd "$(dirname "$0")" && pwd)
++
++if test x"$host" != x"$build" ; then
+   # rerun configure for the AUX tools, disabling a load of tests not relevant for CCAUX
+   olddir=`pwd`
+   if test x"$enable_save_confaux" = x"yes"; then
+@@ -146,9 +150,10 @@ if test x"$CCAUX" != x"" ; then
+   echo $AUXFLAGS_MAK_LINE06 >> $AUXFLAGS_MAK.in
+   echo $AUXFLAGS_MAK_LINE07 >> $AUXFLAGS_MAK.in
+ 
+-  ../$0 CC="$CCAUX" CFLAGS="$CFLAGSAUX" LDFLAGS="$LDFLAGSAUX" CCAUX= CFLAGSAUX= CFLAGSAUX= MAKEFILE=$AUXFLAGS_MAK --host= --build= --without-libtiff --disable-contrib --disable-fontconfig --disable-dbus --disable-freetype --disable-fapi --disable-cups --disable-openjpeg --disable-gtk --with-libiconv=no --without-libidn --without-libpaper --without-pdftoraster --without-ijs --without-luratech --without-jbig2dec --without-x --with-drivers=""
++  AC_MSG_NOTICE([Begin recursive call to configure script (for auxiliary tools)])
++  "$absolute_source_path/configure" CC="$CCAUX" CFLAGS="$CFLAGSAUX" LDFLAGS="$LDFLAGSAUX" CCAUX= CFLAGSAUX= CFLAGSAUX= MAKEFILE=$AUXFLAGS_MAK --host=$build --build=$build --enable-auxtools_only --with-local-zlib --without-libtiff --disable-contrib --disable-fontconfig --disable-dbus --disable-freetype --disable-fapi --disable-cups --disable-openjpeg --disable-gtk --with-libiconv=no --without-libidn --without-libpaper --without-pdftoraster --without-ijs --without-luratech --without-jbig2dec --without-x --with-drivers=""
+   status=$?
+-  cp config.log ../configaux.log
++  cp config.log $olddir/configaux.log
+   if test $status -eq 0 ; then
+     CCAUX=$(grep CCAUX $AUXFLAGS_MAK | sed "s/CCAUX=//g")
+     GCFLAGSAUXTMP=$(grep GCFLAGSAUX $AUXFLAGS_MAK | sed "s/GCFLAGSAUX=//g")
+@@ -204,7 +209,7 @@ AC_PATH_TOOL(PKGCONFIG, pkg-config)
+ # but if we are cross compiling, and there isn't a matching
+ # pkconfig for the --host setting, then don't use the 'local'
+ # pkconfig at all
+-if test x"$cross_compiling" = x"yes"; then
++if test x"$host" != x"$build" ; then
+   AC_PATH_PROG(BUILD_PKGCONFIG, pkg-config)
+   if test x"$BUILD_PKGCONFIG" = x"$PKGCONFIG" ; then
+     PKGCONFIG=
+@@ -217,7 +222,7 @@ AC_PATH_TOOL(STRIP_XE, strip)
+ # but if we are cross compiling, and there isn't a matching
+ # pkconfig for the --host setting, then don't use the 'local'
+ # pkconfig at all
+-if test x"$cross_compiling" = x"yes"; then
++if test x"$host" != x"$build" ; then
+   AC_PATH_PROG(BUILD_STRIP_XE, strip)
+   if test x"$BUILD_STRIP_XE" = x"$STRIP_XE" ; then
+     STRIP_XE=
+@@ -234,18 +239,14 @@ CONTRIBINCLUDE="include $srcdir/contrib/contrib.mak"
  INSTALL_CONTRIB="install-contrib-extras"
  
--case `uname` in
--    MINGW*|MSYS*)
-+case $host in
-+    *-mingw*)
-       AC_MSG_WARN([disabling contrib devices])
-       enable_contrib=no
-     ;;
-@@ -146,28 +149,23 @@ dnl --------------------------------------------------
- 
- CC_OPT_FLAGS_TO_TRY="-O"
- SET_DT_SONAME="-soname="
-+MINGW_BUILD=0
- 
--case `uname` in
--        Linux*|GNU*)
-+case $host in
-+        *-linux*|*-gnu*|*bsd*)
-         if test $ac_cv_prog_gcc = yes; then
-             CC_OPT_FLAGS_TO_TRY="-O2"
-             CC_DBG_FLAGS_TO_TRY="-gdwarf-2 -g3 -O0"
-         fi
-         ;;
--        *BSD)
--        if test $ac_cv_prog_gcc = yes; then
--            CC_OPT_FLAGS_TO_TRY="-O2"
--            CC_DBG_FLAGS_TO_TRY="-gdwarf-2 -g3 -O0"
--        fi
--        ;;
--        Darwin*)
-+        *-darwin*)
-         if test $ac_cv_prog_gcc = yes; then
-             CC_OPT_FLAGS_TO_TRY="-O2"
-             CC_DBG_FLAGS_TO_TRY="-gdwarf-2 -g3 -O0"
-         fi
-         SET_DT_SONAME=""
-         ;;
--        SunOS)
-+        *-sunos*|*-solaris*)
-         CC_OPT_FLAGS_TO_TRY="-O2"
-         # the trailing space is required!
-         if test $ac_cv_prog_gcc = no; then
-@@ -180,33 +178,32 @@ case `uname` in
-             CC_DBG_FLAGS_TO_TRY="-g -O0"
-         fi
-         ;;
--        AIX)
-+        *-aix*)
-         if test $ac_cv_prog_gcc = yes; then
-             CC_OPT_FLAGS_TO_TRY="-O2"
-             CC_DBG_FLAGS_TO_TRY="-gdwarf-2 -g3 -O0"
-             SET_DT_SONAME="so"
-         fi
-         ;;
--		MINGW*)
--		MINGW_BUILD=1
--		MINGW_PLATFORM=`uname`
--		MINGW_XTLIBS="-lwinspool"
--
--		# inner MINGW case statement: 32/64 bits
--		case $MINGW_PLATFORM in
--            MINGW32*)
--            MINGW_PLATFORM_BITS=32
--            ;;
--            MINGW64*)
--            MINGW_PLATFORM_BITS=64
--            ;;
--        esac
--
--		AC_SUBST(MINGW_BUILD)
--		AC_SUBST(MINGW_PLATFORM)
--		AC_SUBST(MINGW_PLATFORM_BITS)
--		AC_SUBST(MINGW_XTLIBS)
--		;;
-+        *-mingw*)
-+            MINGW_BUILD=1
-+            MINGW_XTLIBS="-lwinspool"
-+            # inner MINGW case statement: 32/64 bits
-+            case $host in
-+                i?86-*)
-+                MINGW_PLATFORM=MINGW32
-+                MINGW_PLATFORM_BITS=32
-+                ;;
-+                x86_64-*)
-+                MINGW_PLATFORM=MINGW64
-+                MINGW_PLATFORM_BITS=64
-+                ;;
-+            esac
-+            AC_SUBST(MINGW_BUILD)
-+            AC_SUBST(MINGW_PLATFORM)
-+            AC_SUBST(MINGW_PLATFORM_BITS)
-+            AC_SUBST(MINGW_XTLIBS)
-+        ;;
- esac
- 
- AC_SUBST(SET_DT_SONAME)
-@@ -227,10 +224,16 @@ fi
- 
- ARCH_CONF_HEADER=
- 
--case `uname` in
--        Darwin*)
-+case $host in
-+        *-darwin*)
-           ARCH_CONF_HEADER="\$(GLSRCDIR)/../arch/osx-x86-x86_64-ppc-gcc.h"
-         ;;
-+        i?86-*-mingw*)
-+          ARCH_CONF_HEADER="\$(GLSRCDIR)/../arch/windows-x86-msvc.h"
-+        ;;
-+        x86_64-*-mingw*)
-+          ARCH_CONF_HEADER="\$(GLSRCDIR)/../arch/windows-x64-msvc.h"
-+        ;;
-         *)
-           ARCH_CONF_HEADER=
-         ;;
-@@ -342,8 +345,8 @@ dnl --------------------------------------------------
- 
- OBJDIR_BSDMAKE_WORKAROUND=obj
- 
--case `uname` in
--        *BSD)
-+case $host in
-+        *bsd*)
-         OBJDIR_BSDMAKEWORKAOROUND="notobj"
-         ;;
- esac
-@@ -513,8 +516,8 @@ AC_ARG_ENABLE([threading], AC_HELP_STRING([--disable-threading],
- # if you haven't got pread/pwrite, we can't use multithreading
- if test "x$HAVE_PREAD_PWRITE" != "x"; then
-   if test "$enable_threading" != "no"; then
+ if test x"$enable_contrib" = x; then
+-  if test x"$cross_compiling" = x"yes"; then
+-    enable_contrib=
+-  else
 -    case `uname` in
 -      MINGW*|MSYS*)
 +    case $host in
-+      *-mingw*)
-         AC_MSG_WARN([disabling support for pthreads......])
++      *-mingw*|*-msys*|*-cygwin*)
+         AC_MSG_WARN([disabling contrib devices])
+         enable_contrib=no
        ;;
        *)
-@@ -1251,8 +1254,8 @@ dnl look for IJS implementation
+       ;;
+     esac
+-  fi
+ fi
+ 
+ if test x"$enable_contrib" != x"no"; then
+@@ -274,26 +275,27 @@ dnl --------------------------------------------------
+ CC_OPT_FLAGS_TO_TRY="-O"
+ SET_DT_SONAME="-soname="
+ 
+-if test x"$cross_compiling" = x"yes"; then
+-  if test $ac_cv_prog_gcc = yes; then
+-      CC_OPT_FLAGS_TO_TRY="-O2"
+-      CC_DBG_FLAGS_TO_TRY="-gdwarf-2 -g3 -O0"
+-  fi
+-else
+-  case `uname` in
+-        Linux*|GNU*)
++  case $host in
++        *-mingw*|*-msys*|*-cygwin*)
+         if test $ac_cv_prog_gcc = yes; then
+             CC_OPT_FLAGS_TO_TRY="-O2"
+             CC_DBG_FLAGS_TO_TRY="-gdwarf-2 -g3 -O0"
+         fi
++        SET_DT_SONAME=""
+         ;;
+-        *BSD)
++        *-linux*|*-gnu)
++        if test $ac_cv_prog_gcc = yes; then
++            CC_OPT_FLAGS_TO_TRY="-O2"
++            CC_DBG_FLAGS_TO_TRY="-gdwarf-2 -g3 -O0"
++        fi
++        ;;
++        *bsd*)
+         if test $ac_cv_prog_gcc = yes; then
+             CC_OPT_FLAGS_TO_TRY="-O2"
+             CC_DBG_FLAGS_TO_TRY="-gdwarf-2 -g3 -O0"
+         fi
+         ;;
+-        Darwin*)
++        *-darwin*)
+         if test $ac_cv_prog_gcc = yes; then
+             CC_OPT_FLAGS_TO_TRY="-O2"
+             CC_DBG_FLAGS_TO_TRY="-gdwarf-2 -g3 -O0"
+@@ -321,7 +323,6 @@ else
+         fi
+         ;;
+   esac
+-fi
+ 
+ AC_SUBST(SET_DT_SONAME)
+ 
+@@ -368,18 +369,20 @@ AC_ARG_WITH([arch_h], AC_HELP_STRING([--with-arch_h=<arch.h to use>],
+ ARCH_CONF_HEADER=
+ 
+ if test x"$with_arch_h" = x""; then
+-  if test x"$cross_compiling" = x"yes"; then
+-    ARCH_CONF_HEADER="\$(GLSRCDIR)/../$ARCH_AUTOCONF_HEADER"
+-  else
+-    case `uname` in
+-          Darwin*)
++  case $host in
++          x86_64*-mingw*|x86_64*-msys*|x86_64*-cygwin*)
++            ARCH_CONF_HEADER="\$(GLSRCDIR)/../arch/windows-x64-msvc.h"
++          ;;
++          *-mingw*|*-msys*|*-cygwin*)
++            ARCH_CONF_HEADER="\$(GLSRCDIR)/../arch/windows-x86-msvc.h"
++          ;;
++          *-darwin*)
+             ARCH_CONF_HEADER="\$(GLSRCDIR)/../arch/osx-x86-x86_64-ppc-gcc.h"
+           ;;
+           *)
+             ARCH_CONF_HEADER=
+           ;;
+     esac
+-  fi
+ else
+   ARCH_CONF_HEADER=$with_arch_h
+ fi
+@@ -658,15 +661,7 @@ dnl Set options that we want to pass into all other
+ dnl configure scripts we might call
+ dnl --------------------------------------------------
+ 
+-SUBCONFIG_OPTS=""
+-
+-if test x"$build_alias" != x""; then
+-  SUBCONFIG_OPTS="$SUBCONFIG_OPTS --build=$build_alias"
+-fi
+-
+-if test x"$host_alias" != x""; then
+-  SUBCONFIG_OPTS="$SUBCONFIG_OPTS --host=$host_alias"
+-fi
++SUBCONFIG_OPTS="--build=$build --host=$host"
+ 
+ dnl --------------------------------------------------
+ dnl Check for libraries
+@@ -996,7 +991,7 @@ if test x"$enable_fapi" != xno; then
+             if $PKGCONFIG --atleast-version=12.0.6 freetype2; then
+                 AC_MSG_RESULT(yes)
+                 FT_CFLAGS="$CFLAGS `$PKGCONFIG --cflags freetype2`"
+-                FT_LIBS="`$PKGCONFIG --libs freetype2`"
++                FT_LIBS="`$PKGCONFIG --libs-only-l freetype2`"
+                 FT_BRIDGE=1
+                 SHARE_FT=1
+             else
+@@ -1047,6 +1042,14 @@ AC_SUBST(FTSRCDIR)
+ AC_SUBST(FT_CFLAGS)
+ AC_SUBST(FT_LIBS)
+ 
++if test x"$enable_auxtools_only" = x"yes" ; then
++  LIBJPEGDIR=
++  SHARE_LIBJPEG=0
++  AC_DEFINE([DONT_HAVE_JMEMSYS_H], 1, [])
++  AC_SUBST(SHARE_LIBJPEG)
++  AC_SUBST(LIBJPEGDIR)
++else
++
+ AC_MSG_CHECKING([for local jpeg library source])
+ dnl At present, we give the local source priority over the shared
+ dnl build, so that the D_MAX_BLOCKS_IN_MCU patch will be applied.
+@@ -1088,6 +1091,13 @@ else
+     [define if the libjpeg memory system prototypes aren't available])
+ fi
+ 
++fi # $enable_auxtools_only
++
++# this option is useful if you're cross-compiling and want to use
++# your toolchain's zlib for $host but the local one for $build
++AC_ARG_WITH([local-zlib], AC_HELP_STRING([--without-local-zlib],
++  [do not check for local zlib sources (has no effect on AUX toolchain when cross-building)]))
++
+ AC_MSG_CHECKING([for local zlib source])
+ dnl zlib is needed for language level 3, and libpng
+ # we must define ZLIBDIR regardless because png.mak does a -I$(ZLIBDIR)
+@@ -1096,6 +1106,13 @@ ZLIBDIR=src
+ AUX_SHARED_ZLIB=
+ ZLIBCFLAGS=""
+ 
++if test x"$with_local_zlib" = x"no" ; then
++  AC_MSG_RESULT([skip])
++  AC_CHECK_LIB(z, deflate, [
++    AC_CHECK_HEADERS(zlib.h, [SHARE_ZLIB=1; AUX_SHARED_ZLIB="-l\$(ZLIB_NAME)"])
++  ])
++else
++
+ if test -d $srcdir/zlib; then
+         AC_MSG_RESULT([yes])
+         SHARE_ZLIB=0
+@@ -1110,6 +1127,9 @@ else
+           AC_CHECK_HEADERS(zlib.h, [SHARE_ZLIB=1; AUX_SHARED_ZLIB="-l\$(ZLIB_NAME)"])
+         ])
+ fi
++
++fi # $with_local_zlib
++
+ if test -z "$SHARE_ZLIB"; then
+   AC_MSG_ERROR([I did not find a copy of zlib on your system.
+   Please either install it, or unpack a copy of the source in a
+@@ -1136,6 +1156,11 @@ AC_SUBST(ZLIBDIR)
+ AC_SUBST(FT_SYS_ZLIB)
+ 
+ dnl png for the png output device; it also requires zlib
++if test x"$enable_auxtools_only" = x"yes" ; then
++  LIBPNGDIR=""
++  SHARE_LIBPNG=0
++else
++
+ LIBPNGDIR=src
+ PNGDEVS=''
+ PNGDEVS_ALL='png48 png16m pnggray pngmono pngmonod png256 png16 pngalpha'
+@@ -1157,12 +1182,21 @@ fi
+ if test -z "$PNGDEVS"; then
+   AC_MSG_NOTICE([disabling png output devices])
+ fi
++
++fi # $enable_auxtools_only
++
+ AC_SUBST(SHARE_LIBPNG)
+ AC_SUBST(LIBPNGDIR)
+ #AC_SUBST(PNGDEVS)
+ 
+ WHICHLCMS=
+ 
++if test x"$enable_auxtools_only" = x"yes" ; then
++  SHARELCMS=0
++  LCMS2DIR=
++  LCMS2MTDIR=
++else
++
+ AC_MSG_CHECKING([for local lcms2mt library source])
+ LCMS2DIR=src
+ LCMS2MTDIR=src
+@@ -1197,6 +1231,8 @@ else
+    fi
+ fi
+ 
++fi # $enable_auxtools_only
++
+ AC_SUBST(SHARELCMS)
+ AC_SUBST(WHICHLCMS)
+ AC_SUBST(LCMS2DIR)
+@@ -1349,7 +1385,7 @@ EXPATDIR=src
+ EXPAT_CFLAGS=
+ EXPAT_LIBS=
+ 
+-if test x"$with_xps" != x"no" ; then
++if test x"$with_xps" != x"no" -a x"$enable_auxtools_only" != x"yes" ; then
+   if test -f $srcdir/xps/xps.mak; then
+     AC_MSG_CHECKING([for local expat library source])
+     if test -f $srcdir/expat/lib/expat.h ; then
+@@ -1528,16 +1564,14 @@ dnl look for IJS implementation
  AC_ARG_WITH([ijs], AC_HELP_STRING([--without-ijs],
      [disable IJS driver support]))
  
--case `uname` in
+-if test x"$cross_compiling" != x"yes"; then
+-  case `uname` in
 -    MINGW*|MSYS*)
-+case $host in
-+    *-mingw*)
++  case $host in
++    *-mingw*|*-msys*|*-cygwin*)
        AC_MSG_WARN([disabling the ijs device])
        with_ijs=no
      ;;
-@@ -1311,11 +1314,11 @@ if test x$with_luratech != xno; then
+     *)
+     ;;
+   esac
+-fi
+ 
+ dnl set safe defaults
+     IJSDIR=src
+@@ -1589,15 +1623,8 @@ if test x$with_luratech != xno; then
      SHARE_JBIG2=0
      JBIG2DIR=$srcdir/luratech/ldf_jb2
  
--    case `uname` in
--      Darwin*)
-+    case $host in
-+      *-darwin*)
-         JBIG2_AUTOCONF_CFLAGS="-DUSE_LDF_JB2 -DMAC -DMAC_OS_X_BUILD"
-       ;;
--      AIX)
-+      *-aix*)
-         if test $ac_cv_prog_gcc = yes; then
-           JBIG2_AUTOCONF_CFLAGS="-DUSE_LDF_JB2 -fsigned-char -DLINUX"
-         else
-@@ -1433,11 +1436,11 @@ if test x$with_luratech != xno; then
+-    if test x"$cross_compiling" = x"yes"; then
+-        if test x"$JBIG2_CFLAGS" != x""; then
+-          JBIG2_AUTOCONF_CFLAGS="-DUSE_LDF_JB2 -fsigned-char $JBIG2_CFLAGS"
+-        else
+-          JBIG2_AUTOCONF_CFLAGS="-DUSE_LDF_JB2 -fsigned-char -DLINUX=1 -DFORTE"
+-        fi
+-    else
+-      case `uname` in
+-        Darwin*)
++      case $host in
++        *-darwin*)
+           JBIG2_AUTOCONF_CFLAGS="-DUSE_LDF_JB2 -DMAC -DMAC_OS_X_BUILD -fsigned-char"
+         ;;
+         AIX)
+@@ -1611,7 +1638,6 @@ if test x$with_luratech != xno; then
+           JBIG2_AUTOCONF_CFLAGS="-DUSE_LDF_JB2 -fsigned-char -DLINUX=1 -DFORTE"
+         ;;
+       esac
+-    fi
+ 
+     JBIG2FILEDEVS='$(DD)gdevjbig2.dev'
+     JBIG2DEVS='$(PSD)jbig2.dev'
+@@ -1718,15 +1744,8 @@ if test x$with_luratech != xno; then
      SHARE_JPX=0
      JPXDIR=$srcdir/luratech/lwf_jp2
  
--    case `uname` in
--      Darwin*)
-+    case $host in
-+      *-darwin*)
-         JPX_AUTOCONF_CFLAGS="-DUSE_LWF_JP2 -DMAC -DMAC_OS_X_BUILD"
-       ;;
--      AIX)
-+      *-aix*)
-         if test $ac_cv_prog_gcc = yes; then
-           JPX_AUTOCONF_CFLAGS="-DUSE_LWF_JP2 -fsigned-char -DLINUX"
-         else
-@@ -1568,7 +1571,7 @@ AC_ARG_ENABLE([gtk], AC_HELP_STRING([--disable-gtk],
-     [Do not build the gtk loader]))
- SOC_CFLAGS=""
- SOC_LIBS=""
--SOC_LOADER="" # default may not be set before the gtk+-2.0 test
-+SOC_LOADER=""
- SOC_LOADER_PLAIN=""
- 
- if test "x$with_gdi" = "xyes"; then
-@@ -2111,8 +2114,8 @@ SO_LIB_EXT=".so"
+-    if test x"$cross_compiling" = x"yes"; then
+-        if test x"$JPX_CFLAGS" != x""; then
+-          JPX_AUTOCONF_CFLAGS="-DUSE_LWF_JP2 $JPX_CFLAGS"
+-        else
+-          JPX_AUTOCONF_CFLAGS="-DUSE_LWF_JP2 -DLINUX=1 -DFORTE"
+-        fi
+-    else
+-      case `uname` in
+-        Darwin*)
++      case $host in
++        *-darwin*)
+           JPX_AUTOCONF_CFLAGS="-DUSE_LWF_JP2 -DMAC -DMAC_OS_X_BUILD"
+         ;;
+         AIX)
+@@ -1740,7 +1759,6 @@ if test x$with_luratech != xno; then
+           JPX_AUTOCONF_CFLAGS="-DUSE_LWF_JP2 -DLINUX=1 -DFORTE"
+         ;;
+       esac
+-    fi
+     JPXDEVS='$(PSD)jpx.dev'
+   else
+     AC_MSG_RESULT([no])
+@@ -2357,22 +2375,15 @@ SO_LIB_EXT=".so"
  DLL_EXT=""
  SO_LIB_VERSION_SEPARATOR="."
  
--case `uname` in
--        Linux*|GNU*)
+-if test x"$cross_compiling" = x"yes"; then
+-  DYNAMIC_CFLAGS="-fPIC"
+-  GS_DYNAMIC_LDFLAGS="-shared -Wl,\$(LD_SET_DT_SONAME)\$(LDFLAGS_SO_PREFIX)\$(GS_SONAME_MAJOR)"
+-  PCL_DYNAMIC_LDFLAGS="-shared -Wl,\$(LD_SET_DT_SONAME)\$(LDFLAGS_SO_PREFIX)\$(PCL_SONAME_MAJOR)"
+-  XPS_DYNAMIC_LDFLAGS="-shared -Wl,\$(LD_SET_DT_SONAME)\$(LDFLAGS_SO_PREFIX)\$(XPS_SONAME_MAJOR)"
+-  PDL_DYNAMIC_LDFLAGS="-shared -Wl,\$(LD_SET_DT_SONAME)\$(LDFLAGS_SO_PREFIX)\$(GPDL_SONAME_MAJOR)"
+-  if test $ac_cv_prog_gcc = yes; then
+-    # GCC high level flag
+-    DYNAMIC_LIBS="-rdynamic"
+-  else
+-    DYNAMIC_LIBS=""
+-  fi
+-  SO_LIB_EXT=".so"
+-else
+-  case `uname` in
+-    Linux*|GNU*)
++libname1="_SO_BASE)\$(GS_SOEXT)\$(DLL_EXT)"
++libname2="_SO_BASE)\$(GS_SOEXT)\$(SO_LIB_VERSION_SEPARATOR)\$(GS_VERSION_MAJOR)\$(DLL_EXT)"
++libname3="_SO_BASE)\$(GS_SOEXT)\$(SO_LIB_VERSION_SEPARATOR)\$(GS_VERSION_MAJOR)\$(SO_LIB_VERSION_SEPARATOR)\$(GS_VERSION_MINOR)\$(DLL_EXT)"
++GS_SONAME="lib\$(GS${libname1}"
++GS_SONAME_MAJOR="lib\$(GS${libname2}"
++GS_SONAME_MAJOR_MINOR="lib\$(GS${libname3}"
++
 +case $host in
-+        *-linux*|*-gnu*|*bsd*)
-           DYNAMIC_CFLAGS="-fPIC"
-           DYNAMIC_LDFLAGS="-shared -Wl,\$(LD_SET_DT_SONAME)\$(LDFLAGS_SO_PREFIX)\$(GS_SONAME_MAJOR)"
-           if test $ac_cv_prog_gcc = yes; then
-@@ -2123,25 +2126,20 @@ case `uname` in
-           fi
-           SO_LIB_EXT=".so"
-         ;;
--        MINGW*|MSYS*)
--          DYNAMIC_CFLAGS=""
-+        *-mingw*)
-+          DYNAMIC_LIBS=""
-+          DYNAMIC_CFLAGS="-DGSDLLEXPORT=\"__declspec(dllexport)\""
-           DYNAMIC_LDFLAGS="-shared  -Wl,--out-implib=\$(BINDIR)/lib\$(GS_SO_BASE).dll.a -Wl,--export-all-symbols -Wl,--enable-auto-import"
-           SO_LIB_EXT=""
-           DLL_EXT=".dll"
-           SO_LIB_VERSION_SEPARATOR="-"
-         ;;
--        *BSD)
--          DYNAMIC_CFLAGS="-fPIC"
--          DYNAMIC_LDFLAGS="-shared -Wl,\$(LD_SET_DT_SONAME)\$(LDFLAGS_SO_PREFIX)\$(GS_SONAME_MAJOR)"
--          DYNAMIC_LIBS=""
--          SO_LIB_EXT=".so"
--        ;;
--        Darwin*)
-+        *-darwin*)
-           DYNAMIC_LDFLAGS="-dynamiclib -install_name \$(GS_SONAME_MAJOR_MINOR)"
-           DYNAMIC_LIBS=""
-           SO_LIB_EXT=".dylib"
-         ;;
--        SunOS)
-+        *-sunos*|*-solaris*)
-           if test $ac_cv_prog_gcc = yes; then
-             DYNAMIC_CFLAGS="-fPIC"
-           else
-@@ -2152,26 +2150,20 @@ case `uname` in
-           DYNAMIC_LIBS=""
-           SO_LIB_EXT=".so"
-         ;;
--        AIX)
-+        *-aix*)
-           DYNAMIC_CFLAGS="-fPIC"
-           GCFLAGS="-Wl,-brtl $GCFLAGS"
-           DYNAMIC_LDFLAGS="-shared -Wl,-brtl,-G -fPIC"
-           SO_LIB_EXT=".so"
-         ;;
--        MINGW*)
--        DYNAMIC_CFLAGS="-fPIC"
--        DYNAMIC_LDFLAGS="-fPIC -shared"
--        DYNAMIC_LIBS=""
--        DYNANIC_LIB_EXT="dll"
--        ;;
- esac
++    *-linux*|*-gnu)
+       DYNAMIC_CFLAGS="-fPIC"
+       GS_DYNAMIC_LDFLAGS="-shared -Wl,\$(LD_SET_DT_SONAME)\$(LDFLAGS_SO_PREFIX)\$(GS_SONAME_MAJOR)"
+       PCL_DYNAMIC_LDFLAGS="-shared -Wl,\$(LD_SET_DT_SONAME)\$(LDFLAGS_SO_PREFIX)\$(PCL_SONAME_MAJOR)"
+@@ -2386,17 +2397,21 @@ else
+       fi
+       SO_LIB_EXT=".so"
+     ;;
+-    MINGW*|MSYS*)
+-      DYNAMIC_CFLAGS=""
+-      GS_DYNAMIC_LDFLAGS="-shared  -Wl,--out-implib=\$(BINDIR)/lib\$(GS_SO_BASE).dll.a -Wl,--export-all-symbols -Wl,--enable-auto-import"
++    *-mingw*|*-msys*|*-cygwin*)
++      DYNAMIC_CFLAGS="-fvisibility=hidden -DGSDLLEXPORT=\"__declspec(dllexport)\""
++      GS_DYNAMIC_LDFLAGS="-shared -Wl,--out-implib=\$(BINDIR)/lib\$(GS_SO_BASE).dll.a -Wl,--enable-auto-import"
+       PCL_DYNAMIC_LDFLAGS="-shared  -Wl,--out-implib=\$(BINDIR)/lib\$(PCL_SO_BASE).dll.a -Wl,--export-all-symbols -Wl,--enable-auto-import"
+       XPS_DYNAMIC_LDFLAGS="-shared  -Wl,--out-implib=\$(BINDIR)/lib\$(XPS_SO_BASE).dll.a -Wl,--export-all-symbols -Wl,--enable-auto-import"
+       PDL_DYNAMIC_LDFLAGS="-shared  -Wl,--out-implib=\$(BINDIR)/lib\$(PDL_SO_BASE).dll.a -Wl,--export-all-symbols -Wl,--enable-auto-import"
+       SO_LIB_EXT=""
+       DLL_EXT=".dll"
+       SO_LIB_VERSION_SEPARATOR="-"
++      # make sure the import library doesn't link a program against the DLL with the minor version in it
++      GS_SONAME="lib\$(GS${libname1}"
++      GS_SONAME_MAJOR="lib\$(GS${libname3}"
++      GS_SONAME_MAJOR_MINOR="lib\$(GS${libname2}"
+     ;;
+-    *BSD)
++    *bsd*)
+       DYNAMIC_CFLAGS="-fPIC"
+       GS_DYNAMIC_LDFLAGS="-shared -Wl,\$(LD_SET_DT_SONAME)\$(LDFLAGS_SO_PREFIX)\$(GS_SONAME_MAJOR)"
+       PCL_DYNAMIC_LDFLAGS="-shared -Wl,\$(LD_SET_DT_SONAME)\$(LDFLAGS_SO_PREFIX)\$(PCL_SONAME_MAJOR)"
+@@ -2404,7 +2419,7 @@ else
+       DYNAMIC_LIBS=""
+       SO_LIB_EXT=".so"
+     ;;
+-    Darwin*)
++    *-darwin*)
+       GS_DYNAMIC_LDFLAGS="-dynamiclib -install_name \$(GS_SONAME_MAJOR_MINOR)"
+       PCL_DYNAMIC_LDFLAGS="-dynamiclib -install_name \$(PCL_SONAME_MAJOR_MINOR)"
+       XPS_DYNAMIC_LDFLAGS="-dynamiclib -install_name \$(XPS_SONAME_MAJOR_MINOR)"
+@@ -2442,15 +2457,18 @@ else
+       fi
+       SO_LIB_EXT=".so"
+       ;;
+-  esac
+-fi
++esac
++
++AC_SUBST(GS_SONAME)
++AC_SUBST(GS_SONAME_MAJOR)
++AC_SUBST(GS_SONAME_MAJOR_MINOR)
  
  AC_ARG_ENABLE([dynamic], AC_HELP_STRING([--enable-dynamic],
      [Enable dynamically loaded drivers]),
  [
-         if test "x$enable_dynamic" != xno; then
--                case `uname` in
--                        Linux*|GNU*)
-+                case $host in
-+                        *-linux*)
-                         INSTALL_SHARED="install-shared"
-                         if test "x$X_DEVS" != x; then
-                                 DYNAMIC_DEVS="\$(GLOBJDIR)/X11.so"
-@@ -2183,21 +2175,21 @@ AC_ARG_ENABLE([dynamic], AC_HELP_STRING([--enable-dynamic],
-                         OPT_CFLAGS="$DYNAMIC_CFLAGS $OPT_CFLAGS"
-                         DBG_CFLAGS="$DYNAMIC_CFLAGS $DBG_CFLAGS"
-                         ;;
--                        *BSD)
-+                        *bsd*)
-                         DYNAMIC_DEVS="\$(GLOBJDIR)/X11.so"
-                         DYNAMIC_FLAGS="-DGS_DEVS_SHARED -DGS_DEVS_SHARED_DIR=\\\"\$(gssharedir)\\\""
-                         X11_DEVS=""
-                         OPT_CFLAGS="$DYNAMIC_CFLAGS $OPT_CFLAGS"
-                         DBG_CFLAGS="$DYNAMIC_CFLAGS $DBG_CFLAGS"
-                         ;;
--                        Darwin*)
-+                        *darwin*)
-                         INSTALL_SHARED="install-shared"
-                         DYNAMIC_FLAGS="-DGS_DEVS_SHARED -DGS_DEVS_SHARED_DIR=\\\"\$(gssharedir)\\\""
-                         X11_DEVS=""
-                         OPT_CFLAGS="$DYNAMIC_CFLAGS $OPT_CFLAGS"
-                         DBG_CFLAGS="$DYNAMIC_CFLAGS $DBG_CFLAGS"
-                         ;;
--                        SunOS)
-+                        *-sunos*|*-solaris*)
-                         DYNAMIC_DEVS="\$(GLOBJDIR)/X11.so"
-                         DYNAMIC_FLAGS="-DGS_DEVS_SHARED -DGS_DEVS_SHARED_DIR=\\\"\$(gssharedir)\\\""
-                         OPT_CFLAGS="$DYNAMIC_CFLAGS $OPT_CFLAGS"
-@@ -2316,8 +2308,8 @@ dnl --------------------------------------------------
- dnl disable the memory header ID code on SPARC
- dnl --------------------------------------------------
- 
--case `uname -a` in
--        *sparc*)
-+case $host in
-+        sparc*)
- 	  GCFLAGS="$GCFLAGS -DGS_USE_MEMORY_HEADER_ID=0"
-         ;;
- esac
-@@ -2513,8 +2505,8 @@ AC_SUBST(SUB_MAKE_OPTION)
- # mingw, add the same prefix as the VS build uses
+   if test "x$enable_dynamic" != xno; then
+-    case `uname` in
+-      Linux*|GNU*)
++    case $host in
++      *-linux*|*-gnu)
+       INSTALL_SHARED="install-shared"
+       if test "x$X_DEVS" != x; then
+               DYNAMIC_DEVS="\$(GLOBJDIR)/X11.so"
+@@ -2462,14 +2480,14 @@ AC_ARG_ENABLE([dynamic], AC_HELP_STRING([--enable-dynamic],
+       OPT_CFLAGS="$DYNAMIC_CFLAGS $OPT_CFLAGS"
+       DBG_CFLAGS="$DYNAMIC_CFLAGS $DBG_CFLAGS"
+       ;;
+-      *BSD)
++      *bsd*)
+       DYNAMIC_DEVS="\$(GLOBJDIR)/X11.so"
+       DYNAMIC_FLAGS="-DGS_DEVS_SHARED -DGS_DEVS_SHARED_DIR=\\\"\$(gssharedir)\\\""
+       X11_DEVS=""
+       OPT_CFLAGS="$DYNAMIC_CFLAGS $OPT_CFLAGS"
+       DBG_CFLAGS="$DYNAMIC_CFLAGS $DBG_CFLAGS"
+       ;;
+-      Darwin*)
++      *-darwin*)
+       INSTALL_SHARED="install-shared"
+       DYNAMIC_FLAGS="-DGS_DEVS_SHARED -DGS_DEVS_SHARED_DIR=\\\"\$(gssharedir)\\\""
+       X11_DEVS=""
+@@ -2814,23 +2832,31 @@ AC_SUBST(AUXDIRPOSTFIX)
+ # usually empty on Unix-like systems
  # --------------------------------------------------
- AUXDIRPOSTFIX=""
--case `uname` in
--    MINGW*|MSYS*)
+ EXEEXT=""
++AUXEXEEXT=""
++
 +case $host in
-+    *-mingw*)
-     AUXDIRPOSTFIX="_"
-     CFLAGS="-DGS_NO_UTF8=1 $CFLAGS"
-     ;;
-@@ -2533,8 +2525,8 @@ AC_ARG_WITH([exe-ext],  AC_HELP_STRING([--with-exe-ext=EXT],
- if test "x"$with_exe_ext != "x"; then
-   EXEEXT="$with_exe_ext"
- else
--  case `uname` in
--    MINGW*|MSYS*)
-+  case $host in
-+    *-mingw*)
-       EXEEXT=".exe"
-     ;;
-   esac
-@@ -2543,6 +2535,36 @@ fi
- AC_SUBST(EXEEXT)
- 
- dnl --------------------------------------------------
-+dnl AUX and cross compiling
-+dnl --------------------------------------------------
-+EXEEXTAUX="$EXEEXT"
-+CROSS_COMPILING=no
-+
-+AC_ARG_VAR(CCAUX, [auxilliary C compiler])
-+
-+if test "$cross_compiling" = yes ; then
-+  CROSS_COMPILING=yes
-+  case $build in
-+    *-mingw*)
-+      EXEEXTAUX=".exe"
++    *-mingw*|*-msys*|*-cygwin*)
++      EXEEXT=".exe"
 +    ;;
 +    *)
-+      EXEEXTAUX=""
 +    ;;
-+  esac
-+  if test "x$CCAUX" = "x" ; then
-+    CCAUX="gcc"
-+  fi
-+else
-+  if test "x$CCAUX" = "x" ; then
-+    CCAUX="\$(CC)"
-+  fi
-+fi
-+
-+AC_SUBST(EXEEXTAUX)
-+AC_SUBST(CROSS_COMPILING)
-+
-+dnl --------------------------------------------------
- dnl Do substitutions
- dnl --------------------------------------------------
- SRCDIR="$srcdir"
-diff --git a/ijs/ijs_exec_unix.c b/ijs/ijs_exec_unix.c
-index 1111111..2222222 100644
---- a/ijs/ijs_exec_unix.c
-+++ b/ijs/ijs_exec_unix.c
-@@ -22,6 +22,12 @@
-  * SOFTWARE.
- **/
++esac
  
-+#ifdef __WIN32__
-+
-+#include "ijs_exec_win.c"
-+
-+#else
-+
- #include "unistd_.h"
- #include <stdio.h>
- #include <stdlib.h>
-@@ -101,3 +107,5 @@ ijs_exec_server(const char *server_cmd, int *pfd_to, int *pfd_from,
+ AC_ARG_WITH([exe-ext],  AC_HELP_STRING([--with-exe-ext=EXT],
+-    [set the file name executable extension (must include any separator e.g. the period in ".exe")]),[], [exe_ext=])
++    [set the file name executable extension (must include any separator e.g. the period in ".exe")]),
++    [EXEEXT="$with_exe_ext"])
  
-   return 0;
- }
-+
-+#endif /* __WIN32__ */
+-if test "x"$with_exe_ext != "x"; then
+-  EXEEXT="$with_exe_ext"
+-else
+-  if test x"$cross_compiling" != x"yes"; then
+-    case `uname` in
+-      MINGW*|MSYS*)
+-        EXEEXT=".exe"
+-      ;;
+-    esac
+-  fi
+-fi
++case $build in
++    *-mingw*|*-msys*|*-cygwin*)
++      AUXEXEEXT=".exe"
++    ;;
++    *)
++      AUXEXEEXT="$EXEEXT"
++    ;;
++esac
+ 
+ AC_SUBST(EXEEXT)
++AC_SUBST(AUXEXEEXT)
+ 
+ # --------------------------------------------------
+ # Check for disabling of versioned path option.
+@@ -2885,7 +2911,7 @@ fi
+ 
+ AC_SUBST(CLUSTER_CFLAGS)
+ 
+-if test x"$CCAUX" != x"$CC"; then
++if test x"$build" != x"$host"; then
+ 
+   ilog2()
+   {
+@@ -3025,7 +3051,7 @@ AC_SUBST(AUXEXTRALIBS)
+ 
+ CONFIG_FILES_LIST="$CONFIG_FILES_LIST $THEMAKEFILE"
+ 
+-if test x"$THEMAKEFILE" != x"$MAKEFILE" && test x"$CCAUX" = x"$CC"; then
++if test x"$THEMAKEFILE" != x"$MAKEFILE" && test x"$build" = x"$host"; then
+   CONFIG_FILES_LIST="$CONFIG_FILES_LIST"
+ fi
+ 
 diff --git a/psi/iapi.h b/psi/iapi.h
 index 1111111..2222222 100644
 --- a/psi/iapi.h
@@ -1365,24 +705,3 @@ index 1111111..2222222 100644
  # ifndef GSDLLAPI
  #  define GSDLLAPI __stdcall
  # endif
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Boris Nagaev <bnagaev@gmail.com>
-Date: Tue, 19 Jul 2016 23:58:16 +0300
-Subject: [PATCH] fix noncontribmakefiles if srcdir!=dstdir
-
-See https://github.com/mxe/mxe/pull/1382#issuecomment-233653542
-
-diff --git a/configure.ac b/configure.ac
-index 1111111..2222222 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -2054,7 +2054,7 @@ if test x$enable_threadsafe = xyes; then
-   NTS_EXCLUDES=`echo "$NTS_EXCLUDES" | tr " " "\n" | sort | uniq | tr "\n" " "`
- fi # x$enable_threadsafe = xyes
- 
--noncontribmakefiles=`find $srcdir -name '*.mak' -print | grep -v '^\./contrib/'`
-+noncontribmakefiles=`find $srcdir -name '*.mak' -print | grep -v '/contrib/'`
- 
- # No need to include opvp/oprp driver without iconv/libiconv.
- if test -n "$P_DEVS0"; then

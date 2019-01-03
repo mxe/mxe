@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Thomas Danckaert <thomas.danckaert@gmail.com>
 Date: Thu, 3 Mar 2016 17:13:29 +0100
-Subject: [PATCH] Remove AC_TRY_RUN to fix cross compiling.
+Subject: [PATCH 1/1] Remove AC_TRY_RUN to fix cross compiling.
 
 
 diff --git a/configure.ac b/configure.ac

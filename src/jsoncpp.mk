@@ -4,10 +4,10 @@ PKG             := jsoncpp
 $(PKG)_WEBSITE  := https://github.com/open-source-parsers/jsoncpp
 $(PKG)_DESCR    := A C++ library for interacting with JSON
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.8.3
-$(PKG)_CHECKSUM := 3671ba6051e0f30849942cc66d1798fdf0362d089343a83f704c09ee7156604f
-$(PKG)_GH_CONF  := open-source-parsers/jsoncpp,,,svn
-$(PKG)_DEPS     := gcc
+$(PKG)_VERSION  := 1.8.4
+$(PKG)_CHECKSUM := c49deac9e0933bcb7044f08516861a2d560988540b23de2ac1ad443b219afdb6
+$(PKG)_GH_CONF  := open-source-parsers/jsoncpp/tags,,,svn
+$(PKG)_DEPS     := cc
 
 # workaround for builds with GCC >= 6.x
 $(PKG)_CXXFLAGS := -Wno-error=conversion -Wno-shift-negative-value

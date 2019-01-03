@@ -4,16 +4,10 @@ PKG             := qtsparkle
 $(PKG)_WEBSITE  := https://github.com/davidsansome/qtsparkle
 $(PKG)_DESCR    := Qt auto-updater lib
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4c852e57061d7928573afdf88f04f89d85167477
-$(PKG)_CHECKSUM := 6b8500de51c6a8dd402663fed99bced0588e5be50cfe8474f6d3b46f92025934
-$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://github.com/davidsansome/$(PKG)/archive/$($(PKG)_VERSION).tar.gz
-$(PKG)_DEPS     := gcc qttools
-
-define $(PKG)_UPDATE
-    $(call MXE_GET_GITHUB_TAGS, davidsansome/qtsparkle)
-endef
+$(PKG)_VERSION  := 4c852e5
+$(PKG)_CHECKSUM := 10a45b65f259db1c4984223c10e5b287f5d9c6e03bbc5dbea6d4fc44497108b2
+$(PKG)_GH_CONF  := davidsansome/qtsparkle/branches/master
+$(PKG)_DEPS     := cc qttools
 
 define $(PKG)_BUILD_COMMON
     cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \

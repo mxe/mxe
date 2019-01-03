@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Sun, 31 Jan 2016 21:13:24 +1100
-Subject: [PATCH] add pthreads option
+Subject: [PATCH 01/10] add pthreads option
 
 
 diff --git a/configure.ac b/configure.ac
@@ -43,7 +43,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Sun, 31 Jan 2016 20:10:22 +1100
-Subject: [PATCH] use namespace mingw
+Subject: [PATCH 02/10] use namespace mingw
 
 taken from:
 https://aur.archlinux.org/cgit/aur.git/plain/0001-use-namespace.mingw.patch?h=mingw-w64-aspell
@@ -72,7 +72,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Sun, 31 Jan 2016 20:14:27 +1100
-Subject: [PATCH] printf mingw
+Subject: [PATCH 03/10] printf mingw
 
 taken from:
 https://aur.archlinux.org/cgit/aur.git/plain/0002-printf.mingw.patch?h=mingw-w64-aspell
@@ -123,7 +123,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Sun, 31 Jan 2016 20:15:48 +1100
-Subject: [PATCH] no-undefined mingw
+Subject: [PATCH 04/10] no-undefined mingw
 
 taken from:
 https://aur.archlinux.org/cgit/aur.git/plain/0003-no-undefined-on.mingw.patch?h=mingw-w64-aspell
@@ -145,7 +145,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Sun, 31 Jan 2016 20:16:41 +1100
-Subject: [PATCH] reloc mingw
+Subject: [PATCH 05/10] reloc mingw
 
 taken from:
 https://aur.archlinux.org/cgit/aur.git/plain/0004-reloc.mingw.patch?h=mingw-w64-aspell
@@ -281,7 +281,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Sun, 31 Jan 2016 20:17:30 +1100
-Subject: [PATCH] w32 home
+Subject: [PATCH 06/10] w32 home
 
 taken from:
 https://aur.archlinux.org/cgit/aur.git/plain/0005-w32-home.all.patch?h=mingw-w64-aspell
@@ -316,7 +316,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Sun, 31 Jan 2016 20:18:24 +1100
-Subject: [PATCH] abort mingw
+Subject: [PATCH 07/10] abort mingw
 
 taken from:
 https://aur.archlinux.org/cgit/aur.git/plain/0006-abort.mingw.patch?h=mingw-w64-aspell
@@ -561,7 +561,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Sun, 31 Jan 2016 20:19:16 +1100
-Subject: [PATCH] fix including langinfo
+Subject: [PATCH 08/10] fix including langinfo
 
 taken from:
 https://aur.archlinux.org/cgit/aur.git/plain/0007-fix-including-langinfo.patch?h=mingw-w64-aspell
@@ -583,7 +583,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Tue, 2 Feb 2016 15:46:07 +1100
-Subject: [PATCH] add dlopen option
+Subject: [PATCH 09/10] add dlopen option
 
 
 diff --git a/configure.ac b/configure.ac
@@ -636,7 +636,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Kevin Atkinson <kevina@gnu.org>
 Date: Thu, 29 Dec 2016 00:50:31 -0500
-Subject: [PATCH] Compile Fixes for GCC 7.
+Subject: [PATCH 10/10] Compile Fixes for GCC 7.
 
 Closes #519.
 

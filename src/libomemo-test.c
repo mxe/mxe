@@ -23,11 +23,11 @@ int main(int argc, char *argv[])
     uint32_t sid = 9178;
 
     omemo_message * msg_out_p;
-    if (omemo_message_prepare_encryption(msg_p, sid, &crypto, &msg_out_p) != 0)
+    if (omemo_message_prepare_encryption(msg_p, sid, &crypto, OMEMO_STRIP_NONE, &msg_out_p) != 0)
         return 1;
 
     char * xml_out_p;
-    if (omemo_message_export_encrypted(msg_out_p, &xml_out_p) != 0)
+    if (omemo_message_export_encrypted(msg_out_p, OMEMO_ADD_MSG_NONE, &xml_out_p) != 0)
         return 1;
 
     printf("Encrypted message:\n%s\n\n", xml_out_p);

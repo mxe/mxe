@@ -3,18 +3,19 @@
 PKG             := nettle
 $(PKG)_WEBSITE  := https://www.lysator.liu.se/~nisse/nettle/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.3
-$(PKG)_CHECKSUM := 46942627d5d0ca11720fec18d81fc38f7ef837ea4197c1f630e71ce0d470b11e
+$(PKG)_VERSION  := 3.4.1
+$(PKG)_CHECKSUM := f941cf1535cd5d1819be5ccae5babef01f6db611f9b5a777bae9c7604b8a92ad
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://www.lysator.liu.se/~nisse/archive/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc gmp
+$(PKG)_DEPS     := cc gmp
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://www.lysator.liu.se/~nisse/archive/' | \
     $(SED) -n 's,.*nettle-\([0-9][^>]*\)\.tar.*,\1,p' | \
     grep -v 'pre' | \
     grep -v 'rc' | \
+    sort | \
     tail -1
 endef
 

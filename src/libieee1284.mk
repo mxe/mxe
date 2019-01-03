@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 7730de107782e5d2b071bdcb5b06a44da74856f00ef4a9be85d1ba4806a38
 $(PKG)_SUBDIR   := libieee1284-$($(PKG)_VERSION)
 $(PKG)_FILE     := libieee1284-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O - https://sourceforge.net/projects/libieee1284/files/ | \

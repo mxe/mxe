@@ -1,4 +1,8 @@
-From 65ae975e2a670869580e289d5d9bf255d2a10209 Mon Sep 17 00:00:00 2001
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 2 Sep 2012 00:55:28 +0200
 Subject: [PATCH 1/2] include gpg-error with gcrypt for static linking
@@ -9,7 +13,7 @@ whole list via LIBS. Otherwise, LIBS gets simplified with
 -lgcrypt appearing only after its static dependencies.
 
 diff --git a/acinclude.m4 b/acinclude.m4
-index 734ef07..a6ee65a 100644
+index 1111111..2222222 100644
 --- a/acinclude.m4
 +++ b/acinclude.m4
 @@ -423,7 +423,6 @@ AC_DEFUN([LIBSSH2_CHECKFOR_GCRYPT], [
@@ -20,18 +24,15 @@ index 734ef07..a6ee65a 100644
      found_crypto=libgcrypt
    else
      # restore
--- 
-2.9.3
 
-
-From fb65371e600772e72491f06a368a727c96d525c7 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 7 Nov 2016 10:47:13 +0100
 Subject: [PATCH 2/2] fix yes/no in lib path
 
 
 diff --git a/acinclude.m4 b/acinclude.m4
-index a6ee65a..510a0d3 100644
+index 1111111..2222222 100644
 --- a/acinclude.m4
 +++ b/acinclude.m4
 @@ -386,10 +386,6 @@ AC_DEFUN([LIBSSH2_CHECKFOR_MBEDTLS], [
@@ -56,6 +57,3 @@ index a6ee65a..510a0d3 100644
    AC_LIB_HAVE_LINKFLAGS([gcrypt], [], [
      #include <gcrypt.h>
    ])
--- 
-2.9.3
-

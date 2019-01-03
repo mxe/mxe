@@ -9,7 +9,12 @@ $(PKG)_SUBDIR   := gettext-$($(PKG)_VERSION)
 $(PKG)_FILE     := gettext-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://ftp.gnu.org/gnu/gettext/$($(PKG)_FILE)
 $(PKG)_URL_2    := https://ftpmirror.gnu.org/gettext/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc libiconv
+# native gettext isn't technically required, but downstream
+# cross-packages may need binaries and/or *.m4 files etc.
+$(PKG)_DEPS     := cc libiconv $(BUILD)~$(PKG)
+
+$(PKG)_TARGETS       := $(BUILD) $(MXE_TARGETS)
+$(PKG)_DEPS_$(BUILD) := libiconv
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://ftp.gnu.org/gnu/gettext/' | \
@@ -29,10 +34,29 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)/gettext-runtime/intl' -j '$(JOBS)' install
 endef
 
+define $(PKG)_BUILD_NATIVE
+    # build and install the library
+    cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
+        $(MXE_CONFIGURE_OPTS)
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(MXE_DISABLE_DOCS)
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install $(MXE_DISABLE_DOCS)
+endef
+
+define $(PKG)_BUILD_DARWIN
+    # causes issues with other packages so use different prefix
+    # but install *.m4 files and bins to standard location
+    cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
+        $(MXE_CONFIGURE_OPTS) \
+        --with-included-libcroco \
+        --prefix='$(PREFIX)/$(TARGET).gnu' \
+        --bindir='$(PREFIX)/$(TARGET)/bin' \
+        --datarootdir='$(PREFIX)/$(TARGET)/share'
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(MXE_DISABLE_DOCS)
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install $(MXE_DISABLE_DOCS)
+endef
+
 define $(PKG)_BUILD_$(BUILD)
-    mkdir '$(1).build'
-    cd    '$(1).build' && '$(1)/configure' \
-        --prefix='$(PREFIX)/$(TARGET)'
-    $(MAKE) -C '$(1).build' -j '$(JOBS)' man1_MANS=
-    $(MAKE) -C '$(1).build' -j 1 install man1_MANS=
+    $(if $(findstring darwin, $(BUILD)), \
+        $($(PKG)_BUILD_DARWIN), \
+        $($(PKG)_BUILD_NATIVE))
 endef

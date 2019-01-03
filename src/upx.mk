@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 527ce757429841f51675352b1f9f6fc8ad97b18002080d7bf8672c466d8c6
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)-src
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION)-src.tar.bz2
 $(PKG)_URL      := https://upx.sourceforge.io/download/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc lzma ucl zlib
+$(PKG)_DEPS     := cc lzma ucl zlib
 $(PKG)_DEPS_$(BUILD) := ucl zlib lzma
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 

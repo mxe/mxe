@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 56ba6071b9462f980c5a72ab0023893b65ba6debb4eeb475d7a563dc65caf
 $(PKG)_SUBDIR   := readline-$($(PKG)_VERSION)
 $(PKG)_FILE     := readline-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://ftp.gnu.org/gnu/readline/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc termcap
+$(PKG)_DEPS     := cc termcap
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://tiswww.case.edu/php/chet/readline/rltop.html' | \

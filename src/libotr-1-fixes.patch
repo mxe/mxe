@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
 Date: Thu, 16 Mar 2017 04:09:42 +0100
-Subject: [PATCH] fix out-of-tree build
+Subject: [PATCH 1/2] fix out-of-tree build
 
 Fix the error:
 libotr-4.1.1/toolkit/otr_parse.c:26:19: fatal error: proto.h:
@@ -25,7 +25,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
 Date: Thu, 16 Mar 2017 06:09:50 +0100
-Subject: [PATCH] .pc: add -fstack-protector-all and private libs
+Subject: [PATCH 2/2] .pc: add -fstack-protector-all and private libs
 
 The flags taken from the build log.
 
@@ -39,5 +39,5 @@ index 1111111..2222222 100644
  URL: https://otr.cypherpunks.ca/
 -Libs: -L${libdir} -lotr
 +Libs: -L${libdir} -lotr -fstack-protector-all
-+Libs.private: -lgcrypt -lgpg-error -lintl -liconv
++Libs.private: -lgcrypt -lgpg-error -lintl -liconv -lws2_32
  Cflags: -I${includedir}

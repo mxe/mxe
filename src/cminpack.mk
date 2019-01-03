@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 3b517bf7dca68cc9a882883db96dac0a0d37d72aba6dfb0c9c7e78e67af50
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://devernay.free.fr/hacks/cminpack/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://devernay.free.fr/hacks/cminpack/index.html' | \
@@ -16,7 +16,7 @@ define $(PKG)_UPDATE
     head -1
 endef
 
-define $(PKG)_BUILD
+define $(PKG)_BUILD_STATIC
     cd '$(1)' && '$(TARGET)-cmake'
     $(MAKE) -C '$(1)' -j $(JOBS)
 
@@ -26,4 +26,14 @@ define $(PKG)_BUILD
     $(INSTALL) -m644 '$(1)/cminpack.h'    '$(PREFIX)/$(TARGET)/include/'
 endef
 
-$(PKG)_BUILD_SHARED =
+define $(PKG)_BUILD_SHARED
+    cd '$(1)' && '$(TARGET)-cmake' -DUSE_FPIC=ON -DSHARED_LIBS=ON -DBUILD_EXAMPLES=OFF 
+    $(MAKE) -C '$(1)' -j $(JOBS)
+
+    $(INSTALL) -d                             '$(PREFIX)/$(TARGET)/bin'
+    $(INSTALL) -m644 '$(1)/libcminpack.dll'   '$(PREFIX)/$(TARGET)/bin/'
+    $(INSTALL) -d                             '$(PREFIX)/$(TARGET)/lib'
+    $(INSTALL) -m644 '$(1)/libcminpack.dll.a' '$(PREFIX)/$(TARGET)/lib/'
+    $(INSTALL) -d                             '$(PREFIX)/$(TARGET)/include'
+    $(INSTALL) -m644 '$(1)/cminpack.h'        '$(PREFIX)/$(TARGET)/include/'
+endef

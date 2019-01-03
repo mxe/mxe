@@ -1,16 +1,14 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libtorrent-rasterbar
-$(PKG)_WEBSITE  := http://www.rasterbar.com/products/libtorrent/
+$(PKG)_WEBSITE  := https://www.libtorrent.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.1.0
-$(PKG)_CHECKSUM := 2713df7da4aec5263ac11b6626ea966f368a5a8081103fd8f2f2ed97b5cd731d
+$(PKG)_VERSION  := 1.1.6
+$(PKG)_CHECKSUM := b7c74d004bd121bd6e9f8975ee1fec3c95c74044c6a6250f6b07f259f55121ef
 $(PKG)_SUBDIR   := libtorrent-rasterbar-$($(PKG)_VERSION)
 $(PKG)_FILE     := libtorrent-rasterbar-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/arvidn/libtorrent/releases/download/libtorrent-$(subst .,_,$($(PKG)_VERSION))/libtorrent-rasterbar-$($(PKG)_VERSION).tar.gz
-# this will likely revert to standard naming in future releases
-$(PKG)_URL      := https://github.com/arvidn/libtorrent/releases/download/libtorrent-1_1/libtorrent-rasterbar-$($(PKG)_VERSION).tar.gz
-$(PKG)_DEPS     := gcc boost openssl
+$(PKG)_DEPS     := cc boost openssl
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://github.com/arvidn/libtorrent/releases' | \
@@ -19,16 +17,15 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && ./configure \
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS) \
         PKG_CONFIG='$(PREFIX)/bin/$(TARGET)-pkg-config' \
         --with-boost='$(PREFIX)/$(TARGET)' \
         --disable-debug \
         --disable-tests \
         --disable-examples \
-        CXXFLAGS='-D_WIN32_WINNT=0x0501 -g -O2'
-    $(MAKE) -C '$(1)' -j '$(JOBS)'
-    $(MAKE) -C '$(1)' -j 1 install
+        CXXFLAGS='-D_WIN32_WINNT=0x0501 -g -O2' \
+        LIBS='-lws2_32 -lmswsock'
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' LDFLAGS=-no-undefined
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install LDFLAGS=-no-undefined
 endef
-
-$(PKG)_BUILD_SHARED =

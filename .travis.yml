@@ -3,7 +3,7 @@ language: c
 sudo: false
 
 script:
-  - make docs/build-matrix.html docs/packages.json OS_SHORT_NAME=disable-native-plugins
+  - make docs/build-matrix.html docs/packages.json OS_SHORT_NAME=disable-native-plugins MXE_TARGETS="`echo {i686-w64-mingw32,x86_64-w64-mingw32}.{static,shared}`"
   - if [ "$GH_TOKEN" != "" ]; then ./tools/travis-push.sh; fi
   # Package wxwidgets is downloaded for more than 10 minutes,
   # Travis failed because of no output for 10 minutes.

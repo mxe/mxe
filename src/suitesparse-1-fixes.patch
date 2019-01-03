@@ -1,0 +1,717 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Tue, 21 Nov 2017 00:39:21 +1100
+Subject: [PATCH 1/3] mingw-w64-Use-a-not-lib-as-AR_TARGET-extension
+
+taken from:
+https://github.com/Alexpux/MINGW-packages/blob/6d1afc34842f2faf6c50c04e5904cdb8b7f20e3b/mingw-w64-suitesparse/0001-mingw-w64-Use-a-not-lib-as-AR_TARGET-extension.patch
+
+diff --git a/SuiteSparse_config/SuiteSparse_config.mk b/SuiteSparse_config/SuiteSparse_config.mk
+index 1111111..2222222 100644
+--- a/SuiteSparse_config/SuiteSparse_config.mk
++++ b/SuiteSparse_config/SuiteSparse_config.mk
+@@ -429,10 +429,8 @@ SO_OPTS = $(LDFLAGS)
+ 
+ ifeq ($(UNAME),Windows)
+     # Cygwin Make on Windows (untested)
+-    AR_TARGET = $(LIBRARY).lib
+-    SO_PLAIN  = $(LIBRARY).dll
+-    SO_MAIN   = $(LIBRARY).$(SO_VERSION).dll
+-    SO_TARGET = $(LIBRARY).$(VERSION).dll
++    AR_TARGET = $(LIBRARY).a
++    SO_TARGET = $(LIBRARY).dll
+     SO_INSTALL_NAME = echo
+ else
+     # Mac or Linux/Unix
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Tue, 21 Nov 2017 00:41:07 +1100
+Subject: [PATCH 2/3] 
+ mingw-w64-Set-SO_OPTS--shared-move-dlls-create-import-libs
+
+taken from:
+https://github.com/Alexpux/MINGW-packages/blob/6d1afc34842f2faf6c50c04e5904cdb8b7f20e3b/mingw-w64-suitesparse/0002-mingw-w64-Set-SO_OPTS--shared-move-dlls-create-import-libs.patch
+
+diff --git a/AMD/Lib/Makefile b/AMD/Lib/Makefile
+index 1111111..2222222 100644
+--- a/AMD/Lib/Makefile
++++ b/AMD/Lib/Makefile
+@@ -81,28 +81,24 @@ libamdf77.a: $(AMDF77)
+ #-------------------------------------------------------------------------------
+ 
+ # install AMD
+-install: $(AR_TARGET) $(INSTALL_LIB)/$(SO_TARGET)
++install: $(AR_TARGET) $(INSTALL_SO)/$(SO_TARGET)
+ 
+-$(INSTALL_LIB)/$(SO_TARGET): $(OBJ)
++$(INSTALL_SO)/$(SO_TARGET): $(OBJ)
+ 	@mkdir -p $(INSTALL_LIB)
+ 	@mkdir -p $(INSTALL_INCLUDE)
+ 	@mkdir -p $(INSTALL_DOC)
+ 	$(CC) $(SO_OPTS) $^ -o $@ $(LDLIBS)
+-	( cd $(INSTALL_LIB) ; ln -sf $(SO_TARGET) $(SO_PLAIN) )
+-	( cd $(INSTALL_LIB) ; ln -sf $(SO_TARGET) $(SO_MAIN) )
+ 	$(CP) ../Include/amd.h $(INSTALL_INCLUDE)
+ 	$(CP) ../Doc/AMD_UserGuide.pdf $(INSTALL_DOC)
+ 	$(CP) ../README.txt $(INSTALL_DOC)/AMD_README.txt
+-	chmod 755 $(INSTALL_LIB)/$(SO_TARGET)
++	chmod 755 $(INSTALL_SO)/$(SO_TARGET)
+ 	chmod 644 $(INSTALL_INCLUDE)/amd.h
+ 	chmod 644 $(INSTALL_DOC)/AMD_UserGuide.pdf
+ 	chmod 644 $(INSTALL_DOC)/AMD_README.txt
+ 
+ # uninstall AMD
+ uninstall:
+-	$(RM) $(INSTALL_LIB)/$(SO_TARGET)
+-	$(RM) $(INSTALL_LIB)/$(SO_PLAIN)
+-	$(RM) $(INSTALL_LIB)/$(SO_MAIN)
++	$(RM) $(INSTALL_SO)/$(SO_TARGET)
+ 	$(RM) $(INSTALL_INCLUDE)/amd.h
+ 	$(RM) $(INSTALL_DOC)/AMD_UserGuide.pdf
+ 	$(RM) $(INSTALL_DOC)/AMD_README.txt
+diff --git a/BTF/Lib/Makefile b/BTF/Lib/Makefile
+index 1111111..2222222 100644
+--- a/BTF/Lib/Makefile
++++ b/BTF/Lib/Makefile
+@@ -66,25 +66,21 @@ btf_l_strongcomp.o: ../Source/btf_strongcomp.c
+ #-------------------------------------------------------------------------------
+ 
+ # install BTF
+-install: $(AR_TARGET) $(INSTALL_LIB)/$(SO_TARGET)
++install: $(AR_TARGET) $(INSTALL_SO)/$(SO_TARGET)
+ 
+-$(INSTALL_LIB)/$(SO_TARGET): $(OBJ)
++$(INSTALL_SO)/$(SO_TARGET): $(OBJ)
+ 	@mkdir -p $(INSTALL_LIB)
+ 	@mkdir -p $(INSTALL_INCLUDE)
+ 	@mkdir -p $(INSTALL_DOC)
+ 	$(CC) $(SO_OPTS) $^ -o $@ $(LDLIBS)
+-	( cd $(INSTALL_LIB) ; ln -sf $(SO_TARGET) $(SO_PLAIN) )
+-	( cd $(INSTALL_LIB) ; ln -sf $(SO_TARGET) $(SO_MAIN) )
+ 	$(CP) ../Include/btf.h $(INSTALL_INCLUDE)
+ 	$(CP) ../README.txt $(INSTALL_DOC)/BTF_README.txt
+-	chmod 755 $(INSTALL_LIB)/$(SO_TARGET)
++	chmod 755 $(INSTALL_SO)/$(SO_TARGET)
+ 	chmod 644 $(INSTALL_INCLUDE)/btf.h
+ 	chmod 644 $(INSTALL_DOC)/BTF_README.txt
+ 
+ uninstall:
+-	$(RM) $(INSTALL_LIB)/$(SO_TARGET)
+-	$(RM) $(INSTALL_LIB)/$(SO_PLAIN)
+-	$(RM) $(INSTALL_LIB)/$(SO_MAIN)
++	$(RM) $(INSTALL_SO)/$(SO_TARGET)
+ 	$(RM) $(INSTALL_INCLUDE)/btf.h
+ 	$(RM) $(INSTALL_DOC)/BTF_README.txt
+ 
+diff --git a/CAMD/Lib/Makefile b/CAMD/Lib/Makefile
+index 1111111..2222222 100644
+--- a/CAMD/Lib/Makefile
++++ b/CAMD/Lib/Makefile
+@@ -62,28 +62,24 @@ $(AR_TARGET): $(OBJ)
+ #-------------------------------------------------------------------------------
+ 
+ # install CAMD
+-install: $(AR_TARGET) $(INSTALL_LIB)/$(SO_TARGET)
++install: $(AR_TARGET) $(INSTALL_SO)/$(SO_TARGET)
+ 
+-$(INSTALL_LIB)/$(SO_TARGET): $(OBJ)
++$(INSTALL_SO)/$(SO_TARGET): $(OBJ)
+ 	@mkdir -p $(INSTALL_LIB)
+ 	@mkdir -p $(INSTALL_INCLUDE)
+ 	@mkdir -p $(INSTALL_DOC)
+ 	$(CC) $(SO_OPTS) $^ -o $@ $(LDLIBS)
+-	( cd $(INSTALL_LIB) ; ln -sf $(SO_TARGET) $(SO_PLAIN) )
+-	( cd $(INSTALL_LIB) ; ln -sf $(SO_TARGET) $(SO_MAIN) )
+ 	$(CP) ../Include/camd.h $(INSTALL_INCLUDE)
+ 	$(CP) ../Doc/CAMD_UserGuide.pdf $(INSTALL_DOC)
+ 	$(CP) ../README.txt $(INSTALL_DOC)/CAMD_README.txt
+-	chmod 755 $(INSTALL_LIB)/$(SO_TARGET)
++	chmod 755 $(INSTALL_SO)/$(SO_TARGET)
+ 	chmod 644 $(INSTALL_INCLUDE)/camd.h
+ 	chmod 644 $(INSTALL_DOC)/CAMD_UserGuide.pdf
+ 	chmod 644 $(INSTALL_DOC)/CAMD_README.txt
+ 
+ # uninstall CAMD
+ uninstall:
+-	$(RM) $(INSTALL_LIB)/$(SO_TARGET)
+-	$(RM) $(INSTALL_LIB)/$(SO_PLAIN)
+-	$(RM) $(INSTALL_LIB)/$(SO_MAIN)
++	$(RM) $(INSTALL_SO)/$(SO_TARGET)
+ 	$(RM) $(INSTALL_INCLUDE)/camd.h
+ 	$(RM) $(INSTALL_DOC)/CAMD_UserGuide.pdf
+ 	$(RM) $(INSTALL_DOC)/CAMD_README.txt
+diff --git a/CCOLAMD/Lib/Makefile b/CCOLAMD/Lib/Makefile
+index 1111111..2222222 100644
+--- a/CCOLAMD/Lib/Makefile
++++ b/CCOLAMD/Lib/Makefile
+@@ -49,25 +49,21 @@ distclean: clean
+ 	- $(RM) -r $(PURGE)
+ 
+ # install CCOLAMD
+-install: $(AR_TARGET) $(INSTALL_LIB)/$(SO_TARGET)
++install: $(AR_TARGET) $(INSTALL_SO)/$(SO_TARGET)
+ 
+-$(INSTALL_LIB)/$(SO_TARGET): $(OBJ)
++$(INSTALL_SO)/$(SO_TARGET): $(OBJ)
+ 	@mkdir -p $(INSTALL_LIB)
+ 	@mkdir -p $(INSTALL_INCLUDE)
+ 	@mkdir -p $(INSTALL_DOC)
+ 	$(CC) $(SO_OPTS) $^ -o $@ $(LDLIBS)
+-	( cd $(INSTALL_LIB) ; ln -sf $(SO_TARGET) $(SO_PLAIN) )
+-	( cd $(INSTALL_LIB) ; ln -sf $(SO_TARGET) $(SO_MAIN) )
+ 	$(CP) ../Include/ccolamd.h $(INSTALL_INCLUDE)
+ 	$(CP) ../README.txt $(INSTALL_DOC)/CCOLAMD_README.txt
+-	chmod 755 $(INSTALL_LIB)/$(SO_TARGET)
++	chmod 755 $(INSTALL_SO)/$(SO_TARGET)
+ 	chmod 644 $(INSTALL_INCLUDE)/ccolamd.h
+ 	chmod 644 $(INSTALL_DOC)/CCOLAMD_README.txt
+ 
+ uninstall:
+-	$(RM) $(INSTALL_LIB)/$(SO_TARGET)
+-	$(RM) $(INSTALL_LIB)/$(SO_PLAIN)
+-	$(RM) $(INSTALL_LIB)/$(SO_MAIN)
++	$(RM) $(INSTALL_SO)/$(SO_TARGET)
+ 	$(RM) $(INSTALL_INCLUDE)/ccolamd.h
+ 	$(RM) $(INSTALL_DOC)/CCOLAMD_README.txt
+ 
+diff --git a/CHOLMOD/Lib/Makefile b/CHOLMOD/Lib/Makefile
+index 1111111..2222222 100644
+--- a/CHOLMOD/Lib/Makefile
++++ b/CHOLMOD/Lib/Makefile
+@@ -535,29 +535,25 @@ cholmod_l_gpu.o: ../GPU/cholmod_gpu.c
+ #-------------------------------------------------------------------------------
+ 
+ # install CHOLMOD
+-install: $(AR_TARGET) $(INSTALL_LIB)/$(SO_TARGET)
++install: $(AR_TARGET) $(INSTALL_SO)/$(SO_TARGET)
+ 
+-$(INSTALL_LIB)/$(SO_TARGET): $(OBJ)
++$(INSTALL_SO)/$(SO_TARGET): $(OBJ)
+ 	@mkdir -p $(INSTALL_LIB)
+ 	@mkdir -p $(INSTALL_INCLUDE)
+ 	@mkdir -p $(INSTALL_DOC)
+ 	$(CC) $(SO_OPTS) $^ -o $@ $(LDLIBS)
+-	( cd $(INSTALL_LIB) ; ln -sf $(SO_TARGET) $(SO_PLAIN) )
+-	( cd $(INSTALL_LIB) ; ln -sf $(SO_TARGET) $(SO_MAIN) )
+ 	$(CP) ../Include/cholmod*.h $(INSTALL_INCLUDE)
+ 	$(RM) $(INSTALL_INCLUDE)/cholmod_internal.h
+ 	$(CP) ../Doc/CHOLMOD_UserGuide.pdf $(INSTALL_DOC)
+ 	$(CP) ../README.txt $(INSTALL_DOC)/CHOLMOD_README.txt
+-	chmod 755 $(INSTALL_LIB)/$(SO_TARGET)
++	chmod 755 $(INSTALL_SO)/$(SO_TARGET)
+ 	chmod 644 $(INSTALL_INCLUDE)/cholmod*.h
+ 	chmod 644 $(INSTALL_DOC)/CHOLMOD_UserGuide.pdf
+ 	chmod 644 $(INSTALL_DOC)/CHOLMOD_README.txt
+ 
+ # uninstall CHOLMOD
+ uninstall:
+-	$(RM) $(INSTALL_LIB)/$(SO_TARGET)
+-	$(RM) $(INSTALL_LIB)/$(SO_PLAIN)
+-	$(RM) $(INSTALL_LIB)/$(SO_MAIN)
++	$(RM) $(INSTALL_SO)/$(SO_TARGET)
+ 	$(RM) $(INSTALL_INCLUDE)/cholmod*.h
+ 	$(RM) $(INSTALL_DOC)/CHOLMOD_UserGuide.pdf
+ 	$(RM) $(INSTALL_DOC)/CHOLMOD_README.txt
+diff --git a/COLAMD/Lib/Makefile b/COLAMD/Lib/Makefile
+index 1111111..2222222 100644
+--- a/COLAMD/Lib/Makefile
++++ b/COLAMD/Lib/Makefile
+@@ -49,25 +49,21 @@ distclean: clean
+ 	- $(RM) -r $(PURGE)
+ 
+ # install COLAMD
+-install: $(AR_TARGET) $(INSTALL_LIB)/$(SO_TARGET)
++install: $(AR_TARGET) $(INSTALL_SO)/$(SO_TARGET)
+ 
+-$(INSTALL_LIB)/$(SO_TARGET): $(OBJ)
++$(INSTALL_SO)/$(SO_TARGET): $(OBJ)
+ 	@mkdir -p $(INSTALL_LIB)
+ 	@mkdir -p $(INSTALL_INCLUDE)
+ 	@mkdir -p $(INSTALL_DOC)
+ 	$(CC) $(SO_OPTS) $^ -o $@ $(LDLIBS)
+-	( cd $(INSTALL_LIB) ; ln -sf $(SO_TARGET) $(SO_PLAIN) )
+-	( cd $(INSTALL_LIB) ; ln -sf $(SO_TARGET) $(SO_MAIN) )
+ 	$(CP) ../Include/colamd.h $(INSTALL_INCLUDE)
+ 	$(CP) ../README.txt $(INSTALL_DOC)/COLAMD_README.txt
+-	chmod 755 $(INSTALL_LIB)/$(SO_TARGET)
++	chmod 755 $(INSTALL_SO)/$(SO_TARGET)
+ 	chmod 644 $(INSTALL_INCLUDE)/colamd.h
+ 	chmod 644 $(INSTALL_DOC)/COLAMD_README.txt
+ 
+ uninstall:
+-	$(RM) $(INSTALL_LIB)/$(SO_TARGET)
+-	$(RM) $(INSTALL_LIB)/$(SO_PLAIN)
+-	$(RM) $(INSTALL_LIB)/$(SO_MAIN)
++	$(RM) $(INSTALL_SO)/$(SO_TARGET)
+ 	$(RM) $(INSTALL_INCLUDE)/colamd.h
+ 	$(RM) $(INSTALL_DOC)/COLAMD_README.txt
+ 
+diff --git a/CXSparse/Lib/Makefile b/CXSparse/Lib/Makefile
+index 1111111..2222222 100644
+--- a/CXSparse/Lib/Makefile
++++ b/CXSparse/Lib/Makefile
+@@ -113,26 +113,22 @@ distclean: clean
+ 	- $(RM) -r $(PURGE)
+ 
+ # install CXSparse
+-install: $(AR_TARGET) $(INSTALL_LIB)/$(SO_TARGET)
++install: $(AR_TARGET) $(INSTALL_SO)/$(SO_TARGET)
+ 
+-$(INSTALL_LIB)/$(SO_TARGET): $(CS)
++$(INSTALL_SO)/$(SO_TARGET): $(CS)
+ 	@mkdir -p $(INSTALL_LIB)
+ 	@mkdir -p $(INSTALL_INCLUDE)
+ 	@mkdir -p $(INSTALL_DOC)
+ 	$(CC) $(SO_OPTS) $^ -o $@ $(LDLIBS)
+-	( cd $(INSTALL_LIB) ; ln -sf $(SO_TARGET) $(SO_PLAIN) )
+-	( cd $(INSTALL_LIB) ; ln -sf $(SO_TARGET) $(SO_MAIN) )
+ 	$(CP) ../Include/cs.h $(INSTALL_INCLUDE)
+ 	$(CP) ../README.txt $(INSTALL_DOC)/CXSPARSE_README.txt
+-	chmod 755 $(INSTALL_LIB)/$(SO_TARGET)
++	chmod 755 $(INSTALL_SO)/$(SO_TARGET)
+ 	chmod 644 $(INSTALL_INCLUDE)/cs.h
+ 	chmod 644 $(INSTALL_DOC)/CXSPARSE_README.txt
+ 
+ # uninstall CXSparse
+ uninstall:
+-	$(RM) $(INSTALL_LIB)/$(SO_TARGET)
+-	$(RM) $(INSTALL_LIB)/$(SO_PLAIN)
+-	$(RM) $(INSTALL_LIB)/$(SO_MAIN)
++	$(RM) $(INSTALL_SO)/$(SO_TARGET)
+ 	$(RM) $(INSTALL_INCLUDE)/cs.h
+ 	$(RM) $(INSTALL_DOC)/CXSPARSE_README.txt
+ 
+diff --git a/CXSparse_newfiles/Lib/Makefile b/CXSparse_newfiles/Lib/Makefile
+index 1111111..2222222 100644
+--- a/CXSparse_newfiles/Lib/Makefile
++++ b/CXSparse_newfiles/Lib/Makefile
+@@ -113,26 +113,22 @@ distclean: clean
+ 	- $(RM) -r $(PURGE)
+ 
+ # install CXSparse
+-install: $(AR_TARGET) $(INSTALL_LIB)/$(SO_TARGET)
++install: $(AR_TARGET) $(INSTALL_SO)/$(SO_TARGET)
+ 
+-$(INSTALL_LIB)/$(SO_TARGET): $(CS)
++$(INSTALL_SO)/$(SO_TARGET): $(CS)
+ 	@mkdir -p $(INSTALL_LIB)
+ 	@mkdir -p $(INSTALL_INCLUDE)
+ 	@mkdir -p $(INSTALL_DOC)
+ 	$(CC) $(SO_OPTS) $^ -o $@ $(LDLIBS)
+-	( cd $(INSTALL_LIB) ; ln -sf $(SO_TARGET) $(SO_PLAIN) )
+-	( cd $(INSTALL_LIB) ; ln -sf $(SO_TARGET) $(SO_MAIN) )
+ 	$(CP) ../Include/cs.h $(INSTALL_INCLUDE)
+ 	$(CP) ../README.txt $(INSTALL_DOC)/CXSPARSE_README.txt
+-	chmod 755 $(INSTALL_LIB)/$(SO_TARGET)
++	chmod 755 $(INSTALL_SO)/$(SO_TARGET)
+ 	chmod 644 $(INSTALL_INCLUDE)/cs.h
+ 	chmod 644 $(INSTALL_DOC)/CXSPARSE_README.txt
+ 
+ # uninstall CXSparse
+ uninstall:
+-	$(RM) $(INSTALL_LIB)/$(SO_TARGET)
+-	$(RM) $(INSTALL_LIB)/$(SO_PLAIN)
+-	$(RM) $(INSTALL_LIB)/$(SO_MAIN)
++	$(RM) $(INSTALL_SO)/$(SO_TARGET)
+ 	$(RM) $(INSTALL_INCLUDE)/cs.h
+ 	$(RM) $(INSTALL_DOC)/CXSPARSE_README.txt
+ 
+diff --git a/GPUQREngine/Lib/Makefile b/GPUQREngine/Lib/Makefile
+index 1111111..2222222 100644
+--- a/GPUQREngine/Lib/Makefile
++++ b/GPUQREngine/Lib/Makefile
+@@ -129,24 +129,20 @@ $(AR_TARGET): $(OBJS)
+ #-------------------------------------------------------------------------------
+ 
+ # install GPUQREngine.  Note that the include files are not installed.
+-install: $(AR_TARGET) $(INSTALL_LIB)/$(SO_TARGET)
++install: $(AR_TARGET) $(INSTALL_SO)/$(SO_TARGET)
+ 
+-$(INSTALL_LIB)/$(SO_TARGET): $(OBJS)
++$(INSTALL_SO)/$(SO_TARGET): $(OBJS)
+ 	@mkdir -p $(INSTALL_LIB)
+ 	@mkdir -p $(INSTALL_INCLUDE)
+ 	@mkdir -p $(INSTALL_DOC)
+ 	$(CXX) $(SO_OPTS) $^ -o $@ $(LDLIBS)
+-	( cd $(INSTALL_LIB) ; ln -sf $(SO_TARGET) $(SO_PLAIN) )
+-	( cd $(INSTALL_LIB) ; ln -sf $(SO_TARGET) $(SO_MAIN) )
+ 	$(CP) ../README.txt $(INSTALL_DOC)/GPUQRENGINE_README.txt
+-	chmod 755 $(INSTALL_LIB)/$(SO_TARGET)
++	chmod 755 $(INSTALL_SO)/$(SO_TARGET)
+ 	chmod 644 $(INSTALL_DOC)/GPUQRENGINE_README.txt
+ 
+ # uninstall GPUQREngine
+ uninstall:
+-	$(RM) $(INSTALL_LIB)/$(SO_TARGET)
+-	$(RM) $(INSTALL_LIB)/$(SO_PLAIN)
+-	$(RM) $(INSTALL_LIB)/$(SO_MAIN)
++	$(RM) $(INSTALL_SO)/$(SO_TARGET)
+ 	$(RM) $(INSTALL_DOC)/GPUQRENGINE_README.txt
+ 
+ #-------------------------------------------------------------------------------
+diff --git a/KLU/Lib/Makefile b/KLU/Lib/Makefile
+index 1111111..2222222 100644
+--- a/KLU/Lib/Makefile
++++ b/KLU/Lib/Makefile
+@@ -263,28 +263,24 @@ klu_l_memory.o: ../Source/klu_memory.c
+ #-------------------------------------------------------------------------------
+ 
+ # install KLU
+-install: $(AR_TARGET) $(INSTALL_LIB)/$(SO_TARGET)
++install: $(AR_TARGET) $(INSTALL_SO)/$(SO_TARGET)
+ 
+-$(INSTALL_LIB)/$(SO_TARGET): $(OBJ)
++$(INSTALL_SO)/$(SO_TARGET): $(OBJ)
+ 	@mkdir -p $(INSTALL_LIB)
+ 	@mkdir -p $(INSTALL_INCLUDE)
+ 	@mkdir -p $(INSTALL_DOC)
+ 	$(CC) $(SO_OPTS) $^ -o $@ $(LDLIBS)
+-	( cd $(INSTALL_LIB) ; ln -sf $(SO_TARGET) $(SO_PLAIN) )
+-	( cd $(INSTALL_LIB) ; ln -sf $(SO_TARGET) $(SO_MAIN) )
+ 	$(CP) ../Include/klu.h $(INSTALL_INCLUDE)
+ 	$(CP) ../Doc/KLU_UserGuide.pdf $(INSTALL_DOC)
+ 	$(CP) ../README.txt $(INSTALL_DOC)/KLU_README.txt
+-	chmod 755 $(INSTALL_LIB)/$(SO_TARGET)
++	chmod 755 $(INSTALL_SO)/$(SO_TARGET)
+ 	chmod 644 $(INSTALL_INCLUDE)/klu.h
+ 	chmod 644 $(INSTALL_DOC)/KLU_UserGuide.pdf
+ 	chmod 644 $(INSTALL_DOC)/KLU_README.txt
+ 
+ # uninstall KLU
+ uninstall:
+-	$(RM) $(INSTALL_LIB)/$(SO_TARGET)
+-	$(RM) $(INSTALL_LIB)/$(SO_PLAIN)
+-	$(RM) $(INSTALL_LIB)/$(SO_MAIN)
++	$(RM) $(INSTALL_SO)/$(SO_TARGET)
+ 	$(RM) $(INSTALL_INCLUDE)/klu.h
+ 	$(RM) $(INSTALL_DOC)/KLU_UserGuide.pdf
+ 	$(RM) $(INSTALL_DOC)/KLU_README.txt
+diff --git a/LDL/Lib/Makefile b/LDL/Lib/Makefile
+index 1111111..2222222 100644
+--- a/LDL/Lib/Makefile
++++ b/LDL/Lib/Makefile
+@@ -46,28 +46,24 @@ clean:
+ 	- $(RM) -r $(CLEAN)
+ 
+ # install LDL
+-install: $(AR_TARGET) $(INSTALL_LIB)/$(SO_TARGET)
++install: $(AR_TARGET) $(INSTALL_SO)/$(SO_TARGET)
+ 
+-$(INSTALL_LIB)/$(SO_TARGET): $(OBJ)
++$(INSTALL_SO)/$(SO_TARGET): $(OBJ)
+ 	@mkdir -p $(INSTALL_LIB)
+ 	@mkdir -p $(INSTALL_INCLUDE)
+ 	@mkdir -p $(INSTALL_DOC)
+ 	$(CC) $(SO_OPTS) $^ -o $@ $(LDLIBS)
+-	( cd $(INSTALL_LIB) ; ln -sf $(SO_TARGET) $(SO_PLAIN) )
+-	( cd $(INSTALL_LIB) ; ln -sf $(SO_TARGET) $(SO_MAIN) )
+ 	$(CP) ../Include/ldl.h $(INSTALL_INCLUDE)
+ 	$(CP) ../Doc/ldl_userguide.pdf $(INSTALL_DOC)
+ 	$(CP) ../README.txt $(INSTALL_DOC)/LDL_README.txt
+-	chmod 755 $(INSTALL_LIB)/$(SO_TARGET)
++	chmod 755 $(INSTALL_SO)/$(SO_TARGET)
+ 	chmod 644 $(INSTALL_INCLUDE)/ldl.h
+ 	chmod 644 $(INSTALL_DOC)/ldl_userguide.pdf
+ 	chmod 644 $(INSTALL_DOC)/LDL_README.txt
+ 
+ # uninstall LDL
+ uninstall:
+-	$(RM) $(INSTALL_LIB)/$(SO_TARGET)
+-	$(RM) $(INSTALL_LIB)/$(SO_PLAIN)
+-	$(RM) $(INSTALL_LIB)/$(SO_MAIN)
++	$(RM) $(INSTALL_SO)/$(SO_TARGET)
+ 	$(RM) $(INSTALL_INCLUDE)/ldl.h
+ 	$(RM) $(INSTALL_DOC)/ldl_userguide.pdf
+ 	$(RM) $(INSTALL_DOC)/LDL_README.txt
+diff --git a/Makefile b/Makefile
+index 1111111..2222222 100644
+--- a/Makefile
++++ b/Makefile
+@@ -63,13 +63,13 @@ ifeq (,$(MY_METIS_LIB))
+ 	@mkdir -p $(INSTALL_LIB)
+ 	@mkdir -p $(INSTALL_INCLUDE)
+ 	@mkdir -p $(INSTALL_DOC)
+-	- $(CP) lib/libmetis.* $(INSTALL_LIB)
++	- $(CP) lib/libmetis.* $(INSTALL_SO)
+ 	- $(CP) metis-5.1.0/manual/manual.pdf $(INSTALL_DOC)/METIS_manual.pdf
+ 	- $(CP) metis-5.1.0/README.txt $(INSTALL_DOC)/METIS_README.txt
+         # the following is needed only on the Mac, so *.dylib is hardcoded:
+ 	$(SO_INSTALL_NAME) $(INSTALL_LIB)/libmetis.dylib $(INSTALL_LIB)/libmetis.dylib
+ 	- $(CP) include/metis.h $(INSTALL_INCLUDE)
+-	chmod 755 $(INSTALL_LIB)/libmetis.*
++	chmod 755 $(INSTALL_SO)/libmetis.*
+ 	chmod 644 $(INSTALL_INCLUDE)/metis.h
+ 	chmod 644 $(INSTALL_DOC)/METIS_manual.pdf
+ 	chmod 644 $(INSTALL_DOC)/METIS_README.txt
+diff --git a/RBio/Lib/Makefile b/RBio/Lib/Makefile
+index 1111111..2222222 100644
+--- a/RBio/Lib/Makefile
++++ b/RBio/Lib/Makefile
+@@ -60,25 +60,21 @@ RBio_i.o: ../Source/RBio.c
+ #-------------------------------------------------------------------------------
+ 
+ # install RBio
+-install: $(AR_TARGET) $(INSTALL_LIB)/$(SO_TARGET)
++install: $(AR_TARGET) $(INSTALL_SO)/$(SO_TARGET)
+ 
+-$(INSTALL_LIB)/$(SO_TARGET): $(OBJ)
++$(INSTALL_SO)/$(SO_TARGET): $(OBJ)
+ 	@mkdir -p $(INSTALL_LIB)
+ 	@mkdir -p $(INSTALL_INCLUDE)
+ 	@mkdir -p $(INSTALL_DOC)
+ 	$(CC) $(SO_OPTS) $^ -o $@ $(LDLIBS)
+-	( cd $(INSTALL_LIB) ; ln -sf $(SO_TARGET) $(SO_PLAIN) )
+-	( cd $(INSTALL_LIB) ; ln -sf $(SO_TARGET) $(SO_MAIN) )
+ 	$(CP) ../Include/RBio.h $(INSTALL_INCLUDE)
+ 	$(CP) ../README.txt $(INSTALL_DOC)/RBIO_README.txt
+-	chmod 755 $(INSTALL_LIB)/$(SO_TARGET)
++	chmod 755 $(INSTALL_SO)/$(SO_TARGET)
+ 	chmod 644 $(INSTALL_INCLUDE)/RBio.h
+ 	chmod 644 $(INSTALL_DOC)/RBIO_README.txt
+ 
+ # uninstall RBio
+ uninstall:
+-	$(RM) $(INSTALL_LIB)/$(SO_TARGET)
+-	$(RM) $(INSTALL_LIB)/$(SO_PLAIN)
+-	$(RM) $(INSTALL_LIB)/$(SO_MAIN)
++	$(RM) $(INSTALL_SO)/$(SO_TARGET)
+ 	$(RM) $(INSTALL_INCLUDE)/RBio.h
+ 	$(RM) $(INSTALL_DOC)/RBIO_README.txt
+diff --git a/SPQR/Lib/Makefile b/SPQR/Lib/Makefile
+index 1111111..2222222 100644
+--- a/SPQR/Lib/Makefile
++++ b/SPQR/Lib/Makefile
+@@ -242,22 +242,20 @@ spqrgpu_computeFrontStaging.o: ../SPQRGPU/spqrgpu_computeFrontStaging.cpp
+ #-------------------------------------------------------------------------------
+ 
+ # install SPQR
+-install: $(AR_TARGET) $(INSTALL_LIB)/$(SO_TARGET)
++install: $(AR_TARGET) $(INSTALL_SO)/$(SO_TARGET)
+ 
+-$(INSTALL_LIB)/$(SO_TARGET): $(OBJ)
++$(INSTALL_SO)/$(SO_TARGET): $(OBJ)
+ 	@mkdir -p $(INSTALL_LIB)
+ 	@mkdir -p $(INSTALL_INCLUDE)
+ 	@mkdir -p $(INSTALL_DOC)
+ 	$(CXX) $(SO_OPTS) $^ -o $@ $(LDLIBS)
+-	( cd $(INSTALL_LIB) ; ln -sf $(SO_TARGET) $(SO_PLAIN) )
+-	( cd $(INSTALL_LIB) ; ln -sf $(SO_TARGET) $(SO_MAIN) )
+ 	$(CP) ../Include/SuiteSparseQR.hpp $(INSTALL_INCLUDE)
+ 	$(CP) ../Include/SuiteSparseQR_C.h $(INSTALL_INCLUDE)
+ 	$(CP) ../Include/SuiteSparseQR_definitions.h $(INSTALL_INCLUDE)
+ 	$(CP) ../Include/spqr.hpp $(INSTALL_INCLUDE)
+ 	$(CP) ../Doc/spqr_user_guide.pdf $(INSTALL_DOC)
+ 	$(CP) ../README.txt $(INSTALL_DOC)/SPQR_README.txt
+-	chmod 755 $(INSTALL_LIB)/$(SO_TARGET)
++	chmod 755 $(INSTALL_SO)/$(SO_TARGET)
+ 	chmod 644 $(INSTALL_INCLUDE)/SuiteSparseQR.hpp
+ 	chmod 644 $(INSTALL_INCLUDE)/SuiteSparseQR_C.h
+ 	chmod 644 $(INSTALL_INCLUDE)/SuiteSparseQR_definitions.h
+@@ -267,9 +265,7 @@ $(INSTALL_LIB)/$(SO_TARGET): $(OBJ)
+ 
+ # uninstall SPQR
+ uninstall:
+-	$(RM) $(INSTALL_LIB)/$(SO_TARGET)
+-	$(RM) $(INSTALL_LIB)/$(SO_PLAIN)
+-	$(RM) $(INSTALL_LIB)/$(SO_MAIN)
++	$(RM) $(INSTALL_SO)/$(SO_TARGET)
+ 	$(RM) $(INSTALL_INCLUDE)/SuiteSparseQR.hpp
+ 	$(RM) $(INSTALL_INCLUDE)/SuiteSparseQR_C.h
+ 	$(RM) $(INSTALL_INCLUDE)/SuiteSparseQR_definitions.h
+diff --git a/SuiteSparse_GPURuntime/Lib/Makefile b/SuiteSparse_GPURuntime/Lib/Makefile
+index 1111111..2222222 100644
+--- a/SuiteSparse_GPURuntime/Lib/Makefile
++++ b/SuiteSparse_GPURuntime/Lib/Makefile
+@@ -70,23 +70,19 @@ SuiteSparseGPU_Workspace_transfer.o: ../Source/SuiteSparseGPU_Workspace_transfer
+ #-------------------------------------------------------------------------------
+ 
+ # install SuiteSparse_GPURuntime (just the library, not the include files)
+-install: $(AR_TARGET) $(INSTALL_LIB)/$(SO_TARGET)
++install: $(AR_TARGET) $(INSTALL_SO)/$(SO_TARGET)
+ 
+-$(INSTALL_LIB)/$(SO_TARGET): $(OBJS)
++$(INSTALL_SO)/$(SO_TARGET): $(OBJS)
+ 	@mkdir -p $(INSTALL_LIB)
+ 	@mkdir -p $(INSTALL_INCLUDE)
+ 	@mkdir -p $(INSTALL_DOC)
+ 	$(CXX) $(SO_OPTS) $^ -o $@ $(LDLIBS)
+-	( cd $(INSTALL_LIB) ; ln -sf $(SO_TARGET) $(SO_PLAIN) )
+-	( cd $(INSTALL_LIB) ; ln -sf $(SO_TARGET) $(SO_MAIN) )
+ 	$(CP) ../README.txt $(INSTALL_DOC)/GPURUNTIME_README.txt
+-	chmod 755 $(INSTALL_LIB)/$(SO_TARGET)
++	chmod 755 $(INSTALL_SO)/$(SO_TARGET)
+ 	chmod 644 $(INSTALL_DOC)/GPURUNTIME_README.txt
+ 
+ # uninstall SuiteSparse_GPURuntime
+ uninstall:
+-	$(RM) $(INSTALL_LIB)/$(SO_TARGET)
+-	$(RM) $(INSTALL_LIB)/$(SO_PLAIN)
+-	$(RM) $(INSTALL_LIB)/$(SO_MAIN)
++	$(RM) $(INSTALL_SO)/$(SO_TARGET)
+ 	$(RM) $(INSTALL_DOC)/GPURUNTIME_README.txt
+ 
+diff --git a/SuiteSparse_config/Makefile b/SuiteSparse_config/Makefile
+index 1111111..2222222 100644
+--- a/SuiteSparse_config/Makefile
++++ b/SuiteSparse_config/Makefile
+@@ -44,27 +44,22 @@ clean:
+ 	- $(RM) -r $(CLEAN)
+ 
+ # install SuiteSparse_config
+-install: $(AR_TARGET) $(INSTALL_LIB)/$(SO_TARGET)
++install: $(AR_TARGET) $(INSTALL_SO)/$(SO_TARGET)
+ 
+-$(INSTALL_LIB)/$(SO_TARGET): $(OBJ)
++$(INSTALL_SO)/$(SO_TARGET): $(OBJ)
+ 	@mkdir -p $(INSTALL_LIB)
+ 	@mkdir -p $(INSTALL_INCLUDE)
+ 	@mkdir -p $(INSTALL_DOC)
+ 	$(CC) $(SO_OPTS) $^ -o $@ $(LDLIBS)
+-	( cd $(INSTALL_LIB) ; ln -sf $(SO_TARGET) $(SO_PLAIN) )
+-	( cd $(INSTALL_LIB) ; ln -sf $(SO_TARGET) $(SO_MAIN) )
+ 	$(CP) SuiteSparse_config.h $(INSTALL_INCLUDE)
+ 	$(CP) README.txt $(INSTALL_DOC)/SUITESPARSECONFIG_README.txt
+-	chmod 755 $(INSTALL_LIB)/$(SO_TARGET)
+-	chmod 755 $(INSTALL_LIB)/$(SO_PLAIN)
++	chmod 755 $(INSTALL_SO)/$(SO_TARGET)
+ 	chmod 644 $(INSTALL_INCLUDE)/SuiteSparse_config.h
+ 	chmod 644 $(INSTALL_DOC)/SUITESPARSECONFIG_README.txt
+ 
+ # uninstall SuiteSparse_config
+ uninstall:
+-	$(RM) $(INSTALL_LIB)/$(SO_TARGET)
+-	$(RM) $(INSTALL_LIB)/$(SO_PLAIN)
+-	$(RM) $(INSTALL_LIB)/$(SO_MAIN)
++	$(RM) $(INSTALL_SO)/$(SO_TARGET)
+ 	$(RM) $(INSTALL_INCLUDE)/SuiteSparse_config.h
+ 	$(RM) $(INSTALL_DOC)/SUITESPARSECONFIG_README.txt
+ 	( cd xerbla ; $(MAKE) uninstall )
+diff --git a/SuiteSparse_config/SuiteSparse_config.mk b/SuiteSparse_config/SuiteSparse_config.mk
+index 1111111..2222222 100644
+--- a/SuiteSparse_config/SuiteSparse_config.mk
++++ b/SuiteSparse_config/SuiteSparse_config.mk
+@@ -54,6 +54,7 @@ SUITESPARSE_VERSION = 4.5.6
+     # and documentation in /solo/mydox.
+     INSTALL ?= $(SUITESPARSE)
+     INSTALL_LIB ?= $(INSTALL)/lib
++    INSTALL_SO ?= $(INSTALL)/lib
+     INSTALL_INCLUDE ?= $(INSTALL)/include
+     INSTALL_DOC ?= $(INSTALL)/share/doc/suitesparse-$(SUITESPARSE_VERSION)
+ 
+@@ -339,7 +340,7 @@ SUITESPARSE_VERSION = 4.5.6
+ 
+     ifeq ($(UNAME),Linux)
+         # add the realtime library, librt, and SuiteSparse/lib
+-        LDLIBS += -lrt -Wl,-rpath=$(INSTALL_LIB)
++        LDLIBS += -lrt -Wl,-rpath=$(INSTALL_SO)
+     endif
+ 
+     #---------------------------------------------------------------------------
+@@ -428,10 +429,11 @@ SUITESPARSE_VERSION = 4.5.6
+ SO_OPTS = $(LDFLAGS)
+ 
+ ifeq ($(UNAME),Windows)
+-    # Cygwin Make on Windows (untested)
+     AR_TARGET = $(LIBRARY).a
+     SO_TARGET = $(LIBRARY).dll
+     SO_INSTALL_NAME = echo
++    SO_OPTS  += -shared -Wl,--out-implib,$(INSTALL_LIB)/$(LIBRARY).dll.a
++    INSTALL_SO = $(INSTALL)/bin
+ else
+     # Mac or Linux/Unix
+     AR_TARGET = $(LIBRARY).a
+@@ -550,6 +552,7 @@ config:
+ 	@echo 'System:                   UNAME=          ' '$(UNAME)'
+ 	@echo 'Install directory:        INSTALL=        ' '$(INSTALL)'
+ 	@echo 'Install libraries in:     INSTALL_LIB=    ' '$(INSTALL_LIB)'
++	@echo 'Install shared libs in:   INSTALL_SO=     ' '$(INSTALL_SO)'
+ 	@echo 'Install include files in: INSTALL_INCLUDE=' '$(INSTALL_INCLUDE)'
+ 	@echo 'Install documentation in: INSTALL_DOC=    ' '$(INSTALL_DOC)'
+ 	@echo 'Optimization level:       OPTIMIZATION=   ' '$(OPTIMIZATION)'
+diff --git a/SuiteSparse_config/xerbla/Makefile b/SuiteSparse_config/xerbla/Makefile
+index 1111111..2222222 100644
+--- a/SuiteSparse_config/xerbla/Makefile
++++ b/SuiteSparse_config/xerbla/Makefile
+@@ -53,16 +53,13 @@ $(INSTALL_LIB)/$(SO_TARGET): $(DEPENDS)
+ 	$(COMPILE)
+ 	$(CC) $(SO_OPTS) xerbla.o -o $@
+ 	- $(RM) xerbla.o
+-	( cd $(INSTALL_LIB) ; ln -sf $(SO_TARGET) $(SO_PLAIN) )
+-	( cd $(INSTALL_LIB) ; ln -sf $(SO_TARGET) $(SO_MAIN) )
+ 	$(CP) xerbla.h $(INSTALL_INCLUDE)
+-	chmod 755 $(INSTALL_LIB)/$(SO_TARGET)
++	chmod 755 $(INSTALL_SO)/$(SO_TARGET)
+ 	chmod 644 $(INSTALL_INCLUDE)/xerbla.h
+ 
+ # uninstall libcerbla / libxerbla
+ uninstall:
+-	$(RM) $(INSTALL_LIB)/$(SO_TARGET)
+-	$(RM) $(INSTALL_LIB)/$(SO_PLAIN)
++	$(RM) $(INSTALL_SO)/$(SO_TARGET)
+ 	$(RM) $(INSTALL_INCLUDE)/xerbla.h
+ 
+ distclean: purge
+diff --git a/UMFPACK/Lib/Makefile b/UMFPACK/Lib/Makefile
+index 1111111..2222222 100644
+--- a/UMFPACK/Lib/Makefile
++++ b/UMFPACK/Lib/Makefile
+@@ -288,20 +288,18 @@ clean:
+ 
+ #-------------------------------------------------------------------------------
+ # install UMFPACK
+-install: $(AR_TARGET) $(INSTALL_LIB)/$(SO_TARGET)
++install: $(AR_TARGET) $(INSTALL_SO)/$(SO_TARGET)
+ 
+-$(INSTALL_LIB)/$(SO_TARGET): $(OBJ)
++$(INSTALL_SO)/$(SO_TARGET): $(OBJ)
+ 	@mkdir -p $(INSTALL_LIB)
+ 	@mkdir -p $(INSTALL_INCLUDE)
+ 	@mkdir -p $(INSTALL_DOC)
+ 	$(CC) $(SO_OPTS) $^ -o $@ $(LDLIBS)
+-	( cd $(INSTALL_LIB) ; ln -sf $(SO_TARGET) $(SO_PLAIN) )
+-	( cd $(INSTALL_LIB) ; ln -sf $(SO_TARGET) $(SO_MAIN) )
+ 	$(CP) ../Include/umfpack*.h $(INSTALL_INCLUDE)
+ 	$(CP) ../Doc/UMFPACK_UserGuide.pdf $(INSTALL_DOC)
+ 	$(CP) ../Doc/UMFPACK_QuickStart.pdf $(INSTALL_DOC)
+ 	$(CP) ../README.txt $(INSTALL_DOC)/UMFPACK_README.txt
+-	chmod 755 $(INSTALL_LIB)/$(SO_TARGET)
++	chmod 755 $(INSTALL_SO)/$(SO_TARGET)
+ 	chmod 644 $(INSTALL_INCLUDE)/umfpack*.h
+ 	chmod 644 $(INSTALL_DOC)/UMFPACK_UserGuide.pdf
+ 	chmod 644 $(INSTALL_DOC)/UMFPACK_QuickStart.pdf
+@@ -309,9 +307,7 @@ $(INSTALL_LIB)/$(SO_TARGET): $(OBJ)
+ 
+ # uninstall UMFPACK
+ uninstall:
+-	$(RM) $(INSTALL_LIB)/$(SO_TARGET)
+-	$(RM) $(INSTALL_LIB)/$(SO_PLAIN)
+-	$(RM) $(INSTALL_LIB)/$(SO_MAIN)
++	$(RM) $(INSTALL_SO)/$(SO_TARGET)
+ 	$(RM) $(INSTALL_INCLUDE)/umfpack*.h
+ 	$(RM) $(INSTALL_DOC)/UMFPACK_UserGuide.pdf
+ 	$(RM) $(INSTALL_DOC)/UMFPACK_QuickStart.pdf
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Tue, 21 Nov 2017 01:20:21 +1100
+Subject: [PATCH 3/3] add $(TBB) libs to SPQR
+
+
+diff --git a/SPQR/Lib/Makefile b/SPQR/Lib/Makefile
+index 1111111..2222222 100644
+--- a/SPQR/Lib/Makefile
++++ b/SPQR/Lib/Makefile
+@@ -13,7 +13,7 @@ ccode: all
+ include ../../SuiteSparse_config/SuiteSparse_config.mk
+ 
+ # SPQR depends on CHOLMOD, AMD, COLAMD, LAPACK, the BLAS and SuiteSparse_config
+-LDLIBS += -lamd -lcolamd -lcholmod -lsuitesparseconfig $(LAPACK) $(BLAS)
++LDLIBS += -lamd -lcolamd -lcholmod -lsuitesparseconfig $(LAPACK) $(BLAS) $(TBB)
+ 
+ # compile and install in SuiteSparse/lib
+ library:

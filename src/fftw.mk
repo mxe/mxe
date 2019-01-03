@@ -3,12 +3,12 @@
 PKG             := fftw
 $(PKG)_WEBSITE  := http://www.fftw.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.3.6-pl2
-$(PKG)_CHECKSUM := a5de35c5c824a78a058ca54278c706cdf3d4abba1c56b63531c2cb05f5d57da2
+$(PKG)_VERSION  := 3.3.8
+$(PKG)_CHECKSUM := 6113262f6e92c5bd474f2875fa1b01054c4ad5040f6b0da7c03c98821d9ae303
 $(PKG)_SUBDIR   := fftw-$($(PKG)_VERSION)
 $(PKG)_FILE     := fftw-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.fftw.org/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://www.fftw.org/download.html' | \

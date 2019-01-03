@@ -1,24 +1,19 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := muparserx
-$(PKG)_WEBSITE  := http://muparserx.beltoforion.de/
+$(PKG)_WEBSITE  := http://beltoforion.de/article.php?a=muparserx
 $(PKG)_DESCR    := muParserX
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.0.4
-$(PKG)_CHECKSUM := d7ebcab8cb1de88e6dcba21651db8f6055b3e904c45afc387b06b5f4218dda40
-$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
-$(PKG)_URL      := https://github.com/beltoforion/$(PKG)/archive/v$($(PKG)_VERSION).tar.gz
-$(PKG)_DEPS     := gcc
-
-define $(PKG)_UPDATE
-    $(call MXE_GET_GITHUB_TAGS, beltoforion/muparserx, v)
-endef
+$(PKG)_VERSION  := 4.0.7
+$(PKG)_CHECKSUM := dd3c68da70a7177224fba015de8a948f2c8e6940d3c6ecde1a87d87ed97d6edf
+$(PKG)_GH_CONF  := beltoforion/muparserx/tags,v
+$(PKG)_DEPS     := cc
 
 define $(PKG)_BUILD
-    cd '$(1)' && '$(TARGET)-cmake' \
+    cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \
         -DBUILD_EXAMPLES=OFF
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
     '$(TARGET)-g++' \
         -W -Wall -Werror -ansi -pedantic \

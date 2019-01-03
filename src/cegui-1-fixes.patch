@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Wed, 3 Aug 2016 03:19:48 +1000
-Subject: [PATCH] cegui: separate shared and static builds
+Subject: [PATCH 1/2] cegui: separate shared and static builds
 
 minimal workaround till correctly implemented upstream:
 https://bitbucket.org/cegui/cegui/issues/1132/libxml2-based-xml-parser-fails-to#comment-29553011
@@ -92,7 +92,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Thu, 4 Aug 2016 13:30:13 +1000
-Subject: [PATCH] use cegui_target_link_libraries for minizip
+Subject: [PATCH 2/2] use cegui_target_link_libraries for minizip
 
 
 diff --git a/cegui/src/CMakeLists.txt b/cegui/src/CMakeLists.txt

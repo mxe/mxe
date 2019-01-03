@@ -9,7 +9,10 @@ $(PKG)_CHECKSUM := 686affff989ac2488f79a97b9479efb9f2abae035b5ed4d8226de6857933f
 $(PKG)_SUBDIR   := boost_$(subst .,_,$($(PKG)_VERSION))
 $(PKG)_FILE     := boost_$(subst .,_,$($(PKG)_VERSION)).tar.bz2
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/boost/boost/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc bzip2 expat zlib
+$(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
+$(PKG)_DEPS     := cc bzip2 expat zlib
+
+$(PKG)_DEPS_$(BUILD) := zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://www.boost.org/users/download/' | \
@@ -83,4 +86,40 @@ define $(PKG)_BUILD
         -DPKG_VERSION=$($(PKG)_VERSION) \
         '$(PWD)/src/cmake/test'
     $(MAKE) -C '$(1).test-cmake' -j 1 install
+endef
+
+define $(PKG)_BUILD_$(BUILD)
+    # old version appears to interfere
+    rm -rf '$(PREFIX)/$(TARGET)/include/boost/'
+    rm -f "$(PREFIX)/$(TARGET)/lib/libboost"*
+
+    # compile boost build (b2)
+    cd '$(SOURCE_DIR)/tools/build/' && ./bootstrap.sh
+
+    # minimal native build - for more features, replace:
+    # --with-system \
+    # --with-filesystem \
+    #
+    # with:
+    # --without-mpi \
+    # --without-python \
+
+    cd '$(SOURCE_DIR)' && ./tools/build/b2 \
+        -a \
+        -q \
+        -j '$(JOBS)' \
+        --ignore-site-config \
+        variant=release \
+        link=static \
+        threading=multi \
+        runtime-link=static \
+        --disable-icu \
+        --with-system \
+        --with-filesystem \
+        --build-dir='$(BUILD_DIR)' \
+        --prefix='$(PREFIX)/$(TARGET)' \
+        --exec-prefix='$(PREFIX)/$(TARGET)/bin' \
+        --libdir='$(PREFIX)/$(TARGET)/lib' \
+        --includedir='$(PREFIX)/$(TARGET)/include' \
+        install
 endef

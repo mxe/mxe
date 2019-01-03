@@ -4,34 +4,26 @@ Contains ad hoc patches for cross building.
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
-Date: Wed, 26 Jul 2017 18:34:16 +1000
-Subject: [PATCH] link examples with boost libraries
+Date: Mon, 20 Nov 2017 10:25:44 +1100
+Subject: [PATCH 1/1] fix boost linking errors
 
 
-diff --git a/cmake/modules/CGAL_CreateSingleSourceCGALProgram.cmake b/cmake/modules/CGAL_CreateSingleSourceCGALProgram.cmake
+diff --git a/src/CGAL/CMakeLists.txt b/src/CGAL/CMakeLists.txt
 index 1111111..2222222 100644
---- a/cmake/modules/CGAL_CreateSingleSourceCGALProgram.cmake
-+++ b/cmake/modules/CGAL_CreateSingleSourceCGALProgram.cmake
-@@ -1,6 +1,8 @@
- include(CGAL_add_test)
- include(CMakeParseArguments)
+--- a/src/CGAL/CMakeLists.txt
++++ b/src/CGAL/CMakeLists.txt
+@@ -2,6 +2,14 @@ message("Configuring libCGAL")
  
-+find_package(Boost COMPONENTS system thread REQUIRED)
+ use_essential_libs()
+ 
++# same as src/CGAL_Core/CMakeLists.txt
++if (NOT MSVC)
++  # See the release notes of CGAL-4.10: CGAL_Core now requires
++  # Boost.Thread, with all compilers but MSVC.
++  find_package( Boost 1.48 REQUIRED thread system )
++  cache_set(CGAL_3RD_PARTY_LIBRARIES    ${CGAL_3RD_PARTY_LIBRARIES} ${Boost_LIBRARIES} )
++endif(NOT MSVC)
 +
- function(create_single_source_cgal_program firstfile )
-   set(options NO_TESTING)
-   set(oneValueArgs)
-@@ -61,11 +63,11 @@ function(create_single_source_cgal_program firstfile )
-     # Link the executable to CGAL and third-party libraries
-     if ( CGAL_AUTO_LINK_ENABLED )
+ include_directories (SYSTEM ${CGAL_3RD_PARTY_INCLUDE_DIRS})
  
--      target_link_libraries(${exe_name} ${CGAL_3RD_PARTY_LIBRARIES} )
-+      target_link_libraries(${exe_name} ${CGAL_3RD_PARTY_LIBRARIES} ${Boost_LIBRARIES} )
- 
-     else()
- 
--      target_link_libraries(${exe_name} ${CGAL_LIBRARIES} ${CGAL_3RD_PARTY_LIBRARIES} )
-+      target_link_libraries(${exe_name} ${CGAL_LIBRARIES} ${CGAL_3RD_PARTY_LIBRARIES} ${Boost_LIBRARIES} )
- 
-     endif()
-   else()
+ add_definitions(${CGAL_3RD_PARTY_DEFINITIONS})

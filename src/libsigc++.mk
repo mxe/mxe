@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 7628072c0afe5e3d7375877356c6009a9e4933800c1728424b1f2853aa355
 $(PKG)_SUBDIR   := libsigc++-$($(PKG)_VERSION)
 $(PKG)_FILE     := libsigc++-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.gnome.org/sources/libsigc++/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
      $(WGET) -q -O- 'https://github.com/GNOME/libsigcplusplus/releases' | \

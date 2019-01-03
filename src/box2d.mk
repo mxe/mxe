@@ -1,12 +1,12 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := box2d
-$(PKG)_WEBSITE  := http://www.box2d.org/
+$(PKG)_WEBSITE  := https://www.box2d.org/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.3.1
 $(PKG)_CHECKSUM := 75d62738b13d2836cd56647581b6e574d4005a6e077ddefa5d727d445d649752
-$(PKG)_GH_CONF  := erincatto/Box2D, v
-$(PKG)_DEPS     := gcc
+$(PKG)_GH_CONF  := erincatto/Box2D/tags, v
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://github.com/erincatto/Box2D/releases' | \

@@ -2,7 +2,7 @@ local lpeg = require 'lpeg'
 assert(((lpeg.R('AZ'))^1):match("TEXT") == 5)
 
 local http = require "socket.http"
-assert(http.request("http://mxe.cc"):match('MXE'))
+assert(http.request("http://example.org/"):match('Example'))
 
 local ll = require 'llthreads2'
 local thread = ll.new("return 123")

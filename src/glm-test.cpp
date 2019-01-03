@@ -5,6 +5,7 @@
  * http://glm.g-truc.net/0.9.7/index.html.
  */
 
+#define GLM_ENABLE_EXPERIMENTAL // for string_cast
 #include <glm/gtc/matrix_transform.hpp> // glm::translate, glm::rotate, glm::scale, glm::perspective
 #include <glm/mat4x4.hpp> // glm::mat4
 #include <glm/vec3.hpp> // glm::vec3

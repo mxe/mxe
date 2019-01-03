@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 44e9c7f5bdd463c4a01738f44ad4f0ee9c68e3f0cb9872eca160e3fddc8b9
 $(PKG)_SUBDIR   := hdf-$($(PKG)_VERSION)
 $(PKG)_FILE     := hdf-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://support.hdfgroup.org/ftp/HDF/releases/HDF$($(PKG)_VERSION)/src/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc jpeg portablexdr zlib
+$(PKG)_DEPS     := cc jpeg portablexdr zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://www.hdfgroup.org/ftp/HDF/HDF_Current/src/' | \

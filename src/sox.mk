@@ -9,12 +9,12 @@ $(PKG)_CHECKSUM := b45f598643ffbd8e363ff24d61166ccec4836fea6d3888881b8df53e3bb55
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc file flac lame libltdl libmad libpng libsndfile \
+$(PKG)_DEPS     := cc file flac lame libltdl libmad libpng libsndfile \
                    opencore-amr opus twolame vorbis wavpack
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://sourceforge.net/projects/sox/files/sox/' | \
-    $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
+    $(SED) -n 's,.*projects/.*/\([0-9][^"]*\)/".*,\1,p' | \
     head -1
 endef
 

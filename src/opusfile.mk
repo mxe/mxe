@@ -3,12 +3,12 @@
 PKG             := opusfile
 $(PKG)_WEBSITE  := https://opus-codec.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.9
-$(PKG)_CHECKSUM := f75fb500e40b122775ac1a71ad80c4477698842a8fe9da4a1b4a1a9f16e4e979
+$(PKG)_VERSION  := 0.11
+$(PKG)_CHECKSUM := 74ce9b6cf4da103133e7b5c95df810ceb7195471e1162ed57af415fabf5603bf
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://archive.mozilla.org/pub/opus/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc ogg opus
+$(PKG)_DEPS     := cc ogg opus
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://archive.mozilla.org/pub/opus/?C=M;O=D' | \

@@ -1,30 +1,26 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := blas
-$(PKG)_WEBSITE  := http://www.netlib.org/blas/
-$(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.7.1
-$(PKG)_CHECKSUM := c5a654351f0b046a502bf04b16740b9ab49c7d8512d6d57ad3a64184c8e575c3
-$(PKG)_SUBDIR   := BLAS-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tgz
-$(PKG)_URL      := http://www.netlib.org/$(PKG)/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_WEBSITE  := https://www.netlib.org/blas/
+$(PKG)_DESCR    := Reference BLAS (Basic Linear Algebra Subprograms)
+$(PKG)_IGNORE    = $(lapack_IGNORE)
+$(PKG)_VERSION   = $(lapack_VERSION)
+$(PKG)_CHECKSUM  = $(lapack_CHECKSUM)
+$(PKG)_SUBDIR    = $(lapack_SUBDIR)
+$(PKG)_FILE      = $(lapack_FILE)
+$(PKG)_URL       = $(lapack_URL)
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://www.netlib.org/blas/' | \
-    $(SED) -n 's,.*>REFERENCE BLAS Version \([0-9.]*\)<.*,\1,p'
+    echo $(lapack_VERSION)
 endef
 
 define $(PKG)_BUILD
-    $(MAKE) -C '$(1)' -j '$(JOBS)' \
-        FORTRAN='$(TARGET)-gfortran' \
-        RANLIB='$(TARGET)-ranlib' \
-        ARCH='$(TARGET)-ar' \
-        BLASLIB='libblas.a'
-
-    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib'
-    $(if $(BUILD_STATIC), \
-        $(INSTALL) -m644 '$(1)/libblas.a' '$(PREFIX)/$(TARGET)/lib/', \
-        $(MAKE_SHARED_FROM_STATIC) '$(1)/libblas.a' --ld '$(TARGET)-gfortran' \
-    )
+    cd '$(BUILD_DIR)' && '$(TARGET)-cmake' '$(SOURCE_DIR)' \
+        -DCMAKE_AR='$(PREFIX)/bin/$(TARGET)-ar' \
+        -DCMAKE_RANLIB='$(PREFIX)/bin/$(TARGET)-ranlib' \
+        -DCBLAS=OFF \
+        -DLAPACKE=OFF
+    $(MAKE) -C '$(BUILD_DIR)/BLAS' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)/BLAS' -j 1 install
 endef

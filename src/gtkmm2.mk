@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 443a2ff3fcb42a915609f1779000390c640a6d7fd19ad8816e6161053696f
 $(PKG)_SUBDIR   := gtkmm-$($(PKG)_VERSION)
 $(PKG)_FILE     := gtkmm-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.gnome.org/sources/gtkmm/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc atkmm cairomm gtk2 libsigc++ pangomm
+$(PKG)_DEPS     := cc atkmm cairomm gtk2 libsigc++ pangomm
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://git.gnome.org/browse/gtkmm/refs/tags' | \
@@ -32,6 +32,7 @@ define $(PKG)_BUILD
 
     '$(TARGET)-g++' \
         -W -Wall -Wno-deprecated-declarations -Werror -pedantic -std=c++11 \
+        -Wno-error=deprecated \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-gtkmm2.exe' \
         `'$(TARGET)-pkg-config' gtkmm-2.4 --cflags --libs`
 endef

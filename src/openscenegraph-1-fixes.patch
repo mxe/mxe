@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
 Date: Fri, 9 Oct 2015 11:13:12 +0200
-Subject: [PATCH] fix case in headers windows.h, winsock2.h
+Subject: [PATCH 1/6] fix case in headers windows.h, winsock2.h
 
 
 diff --git a/examples/osghangglide/hat.cpp b/examples/osghangglide/hat.cpp
@@ -21,19 +21,6 @@ index 1111111..2222222 100644
  #pragma warning( disable : 4244 )
  #endif
  
-diff --git a/src/osg/DisplaySettings.cpp b/src/osg/DisplaySettings.cpp
-index 1111111..2222222 100644
---- a/src/osg/DisplaySettings.cpp
-+++ b/src/osg/DisplaySettings.cpp
-@@ -24,7 +24,7 @@ using namespace osg;
- using namespace std;
- 
- #if defined(WIN32) && !defined(__CYGWIN__)
--#include<Windows.h>
-+#include<windows.h>
- extern "C" { OSG_EXPORT DWORD NvOptimusEnablement=0x00000001; }
- #else
- extern "C" { int NvOptimusEnablement=0x00000001; }
 diff --git a/src/osgPlugins/ply/typedefs.h b/src/osgPlugins/ply/typedefs.h
 index 1111111..2222222 100644
 --- a/src/osgPlugins/ply/typedefs.h
@@ -51,75 +38,9 @@ index 1111111..2222222 100644
  #   include <osg/Notify>
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Boris Nagaev <bnagaev@gmail.com>
-Date: Fri, 9 Oct 2015 12:54:07 +0200
-Subject: [PATCH] fix case in library ws2_32
-
-
-diff --git a/src/osgPlugins/ZeroConfDevice/CMakeLists.txt b/src/osgPlugins/ZeroConfDevice/CMakeLists.txt
-index 1111111..2222222 100644
---- a/src/osgPlugins/ZeroConfDevice/CMakeLists.txt
-+++ b/src/osgPlugins/ZeroConfDevice/CMakeLists.txt
-@@ -19,7 +19,7 @@ IF(WIN32)
-         mdns_win/dns_sd.h
-         mdns_win/dns-sd.c
-     )
--    SET(TARGET_EXTERNAL_LIBRARIES "${TARGET_EXTERNAL_LIBRARIES};Ws2_32.lib;winmm")
-+    SET(TARGET_EXTERNAL_LIBRARIES "${TARGET_EXTERNAL_LIBRARIES};ws2_32.lib;winmm")
-     SET(TARGET_LIBRARIES_VARS ZEROCONF_LIBRARY)
-     ADD_DEFINITIONS(-DNOT_HAVE_GETOPT)
-     ADD_DEFINITIONS(-DNOT_HAVE_SETLINEBUF)
-diff --git a/src/osgPlugins/osc/CMakeLists.txt b/src/osgPlugins/osc/CMakeLists.txt
-index 1111111..2222222 100644
---- a/src/osgPlugins/osc/CMakeLists.txt
-+++ b/src/osgPlugins/osc/CMakeLists.txt
-@@ -35,7 +35,7 @@ if(WIN32 AND NOT ANDROID)
-         ip/win32/NetworkingUtils.cpp
-         ip/win32/UdpSocket.cpp
-     )
--    SET(TARGET_EXTERNAL_LIBRARIES "${TARGET_EXTERNAL_LIBRARIES};Ws2_32.lib;winmm")
-+    SET(TARGET_EXTERNAL_LIBRARIES "${TARGET_EXTERNAL_LIBRARIES};ws2_32.lib;winmm")
- ELSE()
-     SET(TARGET_SRC
-         ${TARGET_SRC}
-diff --git a/src/osgPlugins/vrml/CMakeLists.txt b/src/osgPlugins/vrml/CMakeLists.txt
-index 1111111..2222222 100644
---- a/src/osgPlugins/vrml/CMakeLists.txt
-+++ b/src/osgPlugins/vrml/CMakeLists.txt
-@@ -27,7 +27,7 @@ IF (WIN32)
-         PNG_LIBRARY
-         ZLIB_LIBRARY)
-     SET(TARGET_EXTERNAL_LIBRARIES
--        Ws2_32.lib)
-+        ws2_32.lib)
- ELSE()
-     SET(TARGET_LIBRARIES_VARS
-         OPENVRML_LIBRARY)
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Boris Nagaev <bnagaev@gmail.com>
-Date: Fri, 9 Oct 2015 14:00:54 +0200
-Subject: [PATCH] fix pointer to int conversion on 64bit
-
-
-diff --git a/src/osgPlugins/osgjs/WriteVisitor.cpp b/src/osgPlugins/osgjs/WriteVisitor.cpp
-index 1111111..2222222 100644
---- a/src/osgPlugins/osgjs/WriteVisitor.cpp
-+++ b/src/osgPlugins/osgjs/WriteVisitor.cpp
-@@ -225,7 +225,7 @@ JSONObject* createImage(osg::Image* image, bool inlineImages, int maxTextureDime
-             // no image file so use this inline name image and create a file
-             std::stringstream ss;
-             ss << osgDB::getFilePath(baseName) << osgDB::getNativePathSeparator();
--            ss << (long int)image << ".inline_conv_generated.png"; // write the pointer location
-+            ss << (uintptr_t)image << ".inline_conv_generated.png"; // write the pointer location
-             std::string filename = ss.str();
-             if (osgDB::writeImageFile(*image, filename)) {
-                 image->setFileName(filename);
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Rashad Kanavath <rashad.kanavath@c-s.fr>
 Date: Sun, 10 Jan 2016 14:04:18 +1100
-Subject: [PATCH] openscenegraph: use previously built openthreads
+Subject: [PATCH 2/6] openscenegraph: use previously built openthreads
 
 
 diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
@@ -136,29 +57,9 @@ index 1111111..2222222 100644
          osgUtil
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Tony Theodore <tonyt@logyst.com>
-Date: Sun, 10 Jan 2016 14:19:57 +1100
-Subject: [PATCH] use pkg-config for gstreamer detection in mingw
-
-
-diff --git a/CMakeModules/FindGStreamer.cmake b/CMakeModules/FindGStreamer.cmake
-index 1111111..2222222 100644
---- a/CMakeModules/FindGStreamer.cmake
-+++ b/CMakeModules/FindGStreamer.cmake
-@@ -65,7 +65,7 @@
- #    )
- #endmacro()
- 
--if (WIN32)
-+if (WIN32 AND NOT MINGW)
-     macro(FIND_GSTREAMER_COMPONENT _component_prefix _pkgconfig_name _header _library)
-         find_path(${_component_prefix}_INCLUDE_DIRS
-             NAMES ${_header}
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
 Date: Mon, 22 Feb 2016 03:35:28 +0300
-Subject: [PATCH] disable ffmpeg
+Subject: [PATCH 3/6] disable ffmpeg
 
 OpenSceneGraph is using removed features of ffmpeg, which have
 been deprecated for 3+ years.
@@ -167,40 +68,116 @@ See https://github.com/mxe/mxe/issues/1230#issuecomment-186936198
 Source of patch: http://forum.openscenegraph.org/viewtopic.php?t=10485
 
 diff --git a/src/osgPlugins/CMakeLists.txt b/src/osgPlugins/CMakeLists.txt
-index 1111111..2222222 100644
+index 77d66f8..1c8398e 100644
 --- a/src/osgPlugins/CMakeLists.txt
 +++ b/src/osgPlugins/CMakeLists.txt
-@@ -199,10 +199,6 @@ IF(XINE_FOUND)
-     ADD_SUBDIRECTORY(xine)
+@@ -213,10 +213,6 @@ IF(OSG_CPP_EXCEPTIONS_AVAILABLE)
+     ADD_PLUGIN_DIRECTORY(txp)
  ENDIF()
  
 -IF(FFMPEG_FOUND AND OSG_CPP_EXCEPTIONS_AVAILABLE)
--    ADD_SUBDIRECTORY(ffmpeg)
+-    ADD_PLUGIN_DIRECTORY(ffmpeg)
 -ENDIF()
 -
  IF(GSTREAMER_FOUND AND GLIB_FOUND)
-     ADD_SUBDIRECTORY(gstreamer)
+     ADD_PLUGIN_DIRECTORY(gstreamer)
  ENDIF()
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Saikrishna Arcot <saiarcot895@gmail.com>
-Date: Mon, 6 Jun 2016 19:06:00 -0500
-Subject: [PATCH] Require the presence of either qt5 or qt4.
+From: Boris Pek <tehnick-8@yandex.ru>
+Date: Thu, 14 Dec 2017 15:29:38 +0300
+Subject: [PATCH 4/6] fix case in library ws2_32
 
 
-diff --git a/CMakeLists.txt b/CMakeLists.txt
+diff --git a/src/osgPlugins/ZeroConfDevice/CMakeLists.txt b/src/osgPlugins/ZeroConfDevice/CMakeLists.txt
 index 1111111..2222222 100644
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -712,9 +712,9 @@ IF(OSG_USE_QT AND NOT ANDROID)
+--- a/src/osgPlugins/ZeroConfDevice/CMakeLists.txt
++++ b/src/osgPlugins/ZeroConfDevice/CMakeLists.txt
+@@ -19,7 +19,7 @@ IF(WIN32)
+         mdns_win/dns_sd.h
+         mdns_win/dns-sd.c
+     )
+-    SET(TARGET_EXTERNAL_LIBRARIES "${TARGET_EXTERNAL_LIBRARIES};Ws2_32.lib;winmm")
++    SET(TARGET_EXTERNAL_LIBRARIES "${TARGET_EXTERNAL_LIBRARIES};ws2_32.lib;winmm")
+     SET(TARGET_LIBRARIES_VARS ZEROCONF_LIBRARY)
+     ADD_DEFINITIONS(-DNOT_HAVE_GETOPT)
+     ADD_DEFINITIONS(-DNOT_HAVE_SETLINEBUF)
+diff --git a/src/osgPlugins/vrml/CMakeLists.txt b/src/osgPlugins/vrml/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/src/osgPlugins/vrml/CMakeLists.txt
++++ b/src/osgPlugins/vrml/CMakeLists.txt
+@@ -27,7 +27,7 @@ IF (WIN32)
+         PNG_LIBRARY
+         ZLIB_LIBRARY)
+     SET(TARGET_EXTERNAL_LIBRARIES
+-        Ws2_32.lib)
++        ws2_32.lib)
+ ELSE()
+     SET(TARGET_LIBRARIES_VARS
+         OPENVRML_LIBRARY)
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Pek <tehnick-8@yandex.ru>
+Date: Wed, 10 Oct 2018 00:56:37 +0300
+Subject: [PATCH 5/6] fix build with GCC < 6.x
+
+
+diff --git a/src/osgViewer/GraphicsWindowWin32.cpp b/src/osgViewer/GraphicsWindowWin32.cpp
+index 91e6c8f..d11347e 100644
+--- a/src/osgViewer/GraphicsWindowWin32.cpp
++++ b/src/osgViewer/GraphicsWindowWin32.cpp
+@@ -799,7 +799,7 @@ Win32WindowingSystem::Win32WindowingSystem()
+ 	if (hModuleShore) {
+ 		setProcessDpiAwareness = (SetProcessDpiAwarenessFunc *) GetProcAddress(hModuleShore, "SetProcessDpiAwareness");
+ 		if (setProcessDpiAwareness) {
+-			(*setProcessDpiAwareness)(PROCESS_DPI_AWARENESS::PROCESS_PER_MONITOR_DPI_AWARE);
++			(*setProcessDpiAwareness)(PROCESS_PER_MONITOR_DPI_AWARE);
+ 		}
+ 	}
+ // #endif
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Pek <tehnick-8@yandex.ru>
+Date: Wed, 10 Oct 2018 01:48:22 +0300
+Subject: [PATCH 6/6] fix build of gta plugin when pkg-config is used
+ + update related variable for build without pkg-config.
+
+
+diff --git a/CMakeModules/FindGTA.cmake b/CMakeModules/FindGTA.cmake
+index 086069c..e483ad3 100644
+--- a/CMakeModules/FindGTA.cmake
++++ b/CMakeModules/FindGTA.cmake
+@@ -33,7 +33,7 @@ IF(NOT GTA_FOUND)
+         /usr/freeware/include
+     )
+     
+-    FIND_LIBRARY(GTA_LIBRARY
++    FIND_LIBRARY(GTA_LIBRARIES
+         NAMES gta libgta
+         PATHS
+         $ENV{GTA_DIR}/lib
+@@ -50,8 +50,8 @@ IF(NOT GTA_FOUND)
+     )
+     
+     SET(GTA_FOUND "NO")
+-    IF(GTA_LIBRARY AND GTA_INCLUDE_DIRS)
++    IF(GTA_LIBRARIES AND GTA_INCLUDE_DIRS)
+         SET(GTA_FOUND "YES")
+-    ENDIF(GTA_LIBRARY AND GTA_INCLUDE_DIRS)
++    ENDIF(GTA_LIBRARIES AND GTA_INCLUDE_DIRS)
  
-     IF  (DESIRED_QT_VERSION)
-         IF  (DESIRED_QT_VERSION MATCHES 5)
--            FIND_PACKAGE(Qt5Widgets)
-+            FIND_PACKAGE(Qt5Widgets REQUIRED)
-         ELSEIF (DESIRED_QT_VERSION MATCHES 4)
--            FIND_PACKAGE(Qt4)
-+            FIND_PACKAGE(Qt4 REQUIRED)
-         ELSE()
-             FIND_PACKAGE(Qt3)
-         ENDIF()
+ ENDIF(NOT GTA_FOUND)
+\ No newline at end of file
+diff --git a/src/osgPlugins/gta/CMakeLists.txt b/src/osgPlugins/gta/CMakeLists.txt
+index 2b910a6..16466fe 100644
+--- a/src/osgPlugins/gta/CMakeLists.txt
++++ b/src/osgPlugins/gta/CMakeLists.txt
+@@ -2,7 +2,7 @@ INCLUDE_DIRECTORIES( ${GTA_INCLUDE_DIRS} )
+ 
+ SET(TARGET_SRC ReaderWriterGTA.cpp )
+ 
+-SET(TARGET_LIBRARIES_VARS GTA_LIBRARY)
++SET(TARGET_LIBRARIES_VARS GTA_LIBRARIES)
+ 
+ #### end var setup  ###
+ SETUP_PLUGIN(gta)

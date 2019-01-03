@@ -8,16 +8,16 @@ $(PKG)_CHECKSUM := 105f02079b0b50034c759db34b473ecb5704ffa20a5486b60a8b7698128bf
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://$(PKG).freedesktop.org/download/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://cgit.freedesktop.org/liboil/refs/tags' | \
-    $(SED) -n "s,.*<a href='[^']*/tag/?id=[^0-9]*\\([0-9][^']*\\)'.*,\\1,p" | \
+    $(SED) -n "s,.*<a href='[^']*/tag/?h=[^0-9]*\\([0-9][^']*\\)'.*,\\1,p" | \
     head -1
 endef
 
 # liboil is in maintenance-only phase:
-# https://cgit.freedesktop.org/liboil/commit/?id=04b154aa118c0fdf244932dadc3d085f6290db7a
+# https://cgit.freedesktop.org/liboil/commit/?h=04b154aa118c0fdf244932dadc3d085f6290db7a
 
 # configure doesn't wildcard host test for x86_64
 # `as_cv_unaligned_access` so set it manually

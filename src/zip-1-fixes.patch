@@ -1,0 +1,95 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Tue, 27 Feb 2018 16:22:41 +0100
+Subject: [PATCH 1/2] MXE build fixes
+
+
+diff --git a/win32/makefile.gcc b/win32/makefile.gcc
+index 1111111..2222222 100644
+--- a/win32/makefile.gcc
++++ b/win32/makefile.gcc
+@@ -150,10 +150,10 @@ zipcloak.exe: $(OBJC)
+ 	$(LD) $(LDFLAGS) $(OBJC) $(LIBS)
+ 
+ zipnote.exe: $(OBJN)
+-	$(LD) $(LDFLAGS) $(OBJN)
++	$(LD) $(LDFLAGS) $(OBJN) $(LIBS)
+ 
+ zipsplit.exe: $(OBJS)
+-	$(LD) $(LDFLAGS) $(OBJS)
++	$(LD) $(LDFLAGS) $(OBJS) $(LIBS)
+ 
+ clean:
+ 	rm -f *.o $(ZIPS)
+diff --git a/win32/osdep.h b/win32/osdep.h
+index 1111111..2222222 100644
+--- a/win32/osdep.h
++++ b/win32/osdep.h
+@@ -438,10 +438,10 @@
+ #endif
+ 
+ #ifdef _MBCS
+-#  if (!defined(__EMX__) && !defined(__MINGW32__) && !defined(__CYGWIN__))
++//#  if (!defined(__EMX__) && !defined(__MINGW32__) && !defined(__CYGWIN__))
+ #    include <stdlib.h>
+ #    include <mbstring.h>
+-#  endif
++//#  endif
+ #  if (defined(__MINGW32__) && !defined(MB_CUR_MAX))
+ #    ifdef __MSVCRT__
+        IZ_IMP extern int *__p___mb_cur_max(void);
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Mon, 17 Sep 2018 22:10:32 +0200
+Subject: [PATCH 2/2] avoid define clash on CR
+
+
+diff --git a/zip.h b/zip.h
+index 1111111..2222222 100644
+--- a/zip.h
++++ b/zip.h
+@@ -262,7 +262,7 @@ struct plist {
+ 
+ /* ASCII definitions for line terminators in text files: */
+ #define LF     10        /* '\n' on ASCII machines; must be 10 due to EBCDIC */
+-#define CR     13        /* '\r' on ASCII machines; must be 13 due to EBCDIC */
++#define ZIPCR  13        /* '\r' on ASCII machines; must be 13 due to EBCDIC */
+ #define CTRLZ  26        /* DOS & OS/2 EOF marker (used in fileio.c, vms.c) */
+ 
+ /* return codes of password fetches (negative: user abort; positive: error) */
+diff --git a/zipup.c b/zipup.c
+index 1111111..2222222 100644
+--- a/zipup.c
++++ b/zipup.c
+@@ -1207,7 +1207,7 @@ local unsigned file_read(buf, size)
+             char c;
+ 
+             if ((c = *b++) == '\n') {
+-               *buf++ = CR; *buf++ = LF; len++;
++               *buf++ = ZIPCR; *buf++ = LF; len++;
+             } else {
+               *buf++ = (char)ascii[(uch)c];
+             }
+@@ -1217,7 +1217,7 @@ local unsigned file_read(buf, size)
+ #endif /* EBCDIC */
+       {
+          do {
+-            if ((*buf++ = *b++) == '\n') *(buf-1) = CR, *buf++ = LF, len++;
++            if ((*buf++ = *b++) == '\n') *(buf-1) = ZIPCR, *buf++ = LF, len++;
+          } while (--size != 0);
+       }
+       buf -= len;
+@@ -1257,7 +1257,7 @@ local unsigned file_read(buf, size)
+ #endif /* EBCDIC */
+       {
+          do {
+-            if (( *buf++ = *b++) == CR && *b == LF) buf--, len--;
++            if (( *buf++ = *b++) == ZIPCR && *b == LF) buf--, len--;
+          } while (--size != 0);
+       }
+       if (len == 0) {

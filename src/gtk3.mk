@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := a3a27564bfb1679ebbc75c37cd2bcd6e727c8bdfbcd3984d29305bf9ee60d
 $(PKG)_SUBDIR   := gtk+-$($(PKG)_VERSION)
 $(PKG)_FILE     := gtk+-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.gnome.org/sources/gtk+/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc atk cairo gdk-pixbuf gettext glib jasper jpeg libepoxy libpng pango tiff
+$(PKG)_DEPS     := cc atk cairo gdk-pixbuf gettext glib jasper jpeg libepoxy libpng pango tiff
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://git.gnome.org/browse/gtk+/refs/tags' | \
@@ -20,7 +20,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && ./configure \
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS) \
         --disable-glibtest \
         --disable-cups \
@@ -29,7 +29,12 @@ define $(PKG)_BUILD
         --disable-man \
         --with-included-immodules \
         --enable-win32-backend
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(MXE_DISABLE_CRUFT) EXTRA_DIST=
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install $(MXE_DISABLE_CRUFT) EXTRA_DIST=
+
+    # cleanup to avoid gtk2/3 conflicts (EXTRA_DIST doesn't exclude it)
+    # and *.def files aren't really relevant for MXE
+    rm -f '$(PREFIX)/$(TARGET)/lib/gailutil.def'
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi \

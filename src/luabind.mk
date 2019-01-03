@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := luabind
-$(PKG)_WEBSITE  := http://www.rasterbar.com/products/luabind.html
+$(PKG)_WEBSITE  := https://github.com/luabind/luabind
 $(PKG)_DESCR    := Luabind
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.9.1
@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 80de5e04918678dd8e6dac3b22a34b3247f74bf744c719bae21faaa49649a
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/luabind/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc boost lua
+$(PKG)_DEPS     := cc boost lua
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://sourceforge.net/projects/luabind/files/luabind/' | \

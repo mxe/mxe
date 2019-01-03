@@ -4,23 +4,15 @@ PKG             := xxhash
 $(PKG)_WEBSITE  := https://cyan4973.github.io/xxHash/
 $(PKG)_DESCR    := xxHash
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.6.1
-$(PKG)_CHECKSUM := a940123baa6c71b75b6c02836bae2155cd2f74f7682e1a1d6f7b889f7bc9e7f8
-$(PKG)_SUBDIR   := xxHash-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://github.com/Cyan4973/xxHash/archive/v$($(PKG)_VERSION).tar.gz
-$(PKG)_DEPS     := gcc
-
-define $(PKG)_UPDATE
-    $(call MXE_GET_GITHUB_TAGS, Cyan4973/xxHash) | \
-    $(SED) 's,^v,,g'
-endef
+$(PKG)_VERSION  := 0.6.5
+$(PKG)_CHECKSUM := 19030315f4fc1b4b2cdb9d7a317069a109f90e39d1fe4c9159b7aaa39030eb95
+$(PKG)_GH_CONF  := Cyan4973/xxHash/tags,v
+$(PKG)_DEPS     := cc
 
 define $(PKG)_BUILD
-    mkdir '$(1).build'
-    cd '$(1).build' && '$(TARGET)-cmake' '$(1)/cmake_unofficial'
-    $(MAKE) -C '$(1).build' -j '$(JOBS)'
-    $(MAKE) -C '$(1).build' -j 1 install
+    cd '$(BUILD_DIR)' && '$(TARGET)-cmake' '$(SOURCE_DIR)/cmake_unofficial'
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
     # create pkg-config files
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'

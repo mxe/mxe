@@ -3,15 +3,16 @@
 PKG             := lame
 $(PKG)_WEBSITE  := https://lame.sourceforge.io/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.99.5
-$(PKG)_CHECKSUM := 24346b4158e4af3bd9f2e194bb23eb473c75fb7377011523353196b19b9a23ff
+$(PKG)_VERSION  := 3.100
+$(PKG)_CHECKSUM := ddfe36cab873794038ae2c1210557ad34857a4b6bdc515785d1da9e175b1da1e
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc
+# $(BUILD)~gettext only required for autoreconf *.m4 macros
+$(PKG)_DEPS     := cc $(BUILD)~gettext
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://lame.cvs.sourceforge.net/viewvc/lame/lame/' | \
+    $(WGET) -q -O- 'https://sourceforge.net/p/lame/svn/HEAD/tree/tags' | \
     grep RELEASE_ | \
     $(SED) -n 's,.*RELEASE__\([0-9_][^<]*\)<.*,\1,p' | \
     tr '_' '.' | \
@@ -20,9 +21,11 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && autoreconf -i && ./configure \
+    cd '$(SOURCE_DIR)' && autoreconf -fi -I'$(PREFIX)/$(BUILD)/share/aclocal'
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS) \
-        --disable-frontend
-    $(MAKE) -C '$(1)' -j '$(JOBS)'
-    $(MAKE) -C '$(1)' -j 1 install
+        --disable-frontend \
+        --disable-gtktest
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 endef
