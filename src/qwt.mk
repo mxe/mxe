@@ -3,8 +3,8 @@
 PKG             := qwt
 $(PKG)_WEBSITE  := https://qwt.sourceforge.io/
 $(PKG)_DESCR    := Qwt
-$(PKG)_VERSION  := 6.1.3
-$(PKG)_CHECKSUM := 027c32c0473a682c1db5b9cb02ebed5e39a4fbb0afd2306e23b1113c30006042
+$(PKG)_VERSION  := 6.1.4
+$(PKG)_CHECKSUM := 77a5d17972865a45ca2f77b16aecd4fc7d7f913f9c705530eb586de51079abaa
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).zip
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
