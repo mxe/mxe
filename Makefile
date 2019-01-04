@@ -107,7 +107,7 @@ PKG_CONFIGURE_OPTS = \
 
 # GCC threads and exceptions
 MXE_GCC_THREADS = \
-    $(if $(findstring posix,$(or $(TARGET),$(1))),posix,win32)
+    $(if $(findstring win32,$(or $(TARGET),$(1))),win32,posix)
 
 # allowed exception handling for targets
 # default (first item) and alternate, revisit if gcc/mingw-w64 change defaults
@@ -544,8 +544,8 @@ $(foreach TARGET,$(MXE_TARGETS),\
 RULE_TYPES := BUILD DEPS FILE MESSAGE URL
 # by truncating the target elements then looking for STAIC|SHARED rules:
 #
-# foo_BUILD_i686-w64-mingw32.static.posix.dw2
-# foo_BUILD_i686-w64-mingw32.static.posix
+# foo_BUILD_i686-w64-mingw32.static.win32.dw2
+# foo_BUILD_i686-w64-mingw32.static.win32
 # foo_BUILD_i686-w64-mingw32.static
 # foo_BUILD_i686-w64-mingw32
 # foo_BUILD_SHARED
@@ -741,7 +741,7 @@ build-only-$(1)_$(3): PKG = $(1)
 build-only-$(1)_$(3): TARGET = $(3)
 build-only-$(1)_$(3): BUILD_$(if $(findstring shared,$(3)),SHARED,STATIC) = TRUE
 build-only-$(1)_$(3): BUILD_$(if $(call seq,$(TARGET),$(BUILD)),NATIVE,CROSS) = TRUE
-build-only-$(1)_$(3): $(if $(findstring posix,$(TARGET)),POSIX,WIN32)_THREADS = TRUE
+build-only-$(1)_$(3): $(if $(findstring win32,$(TARGET)),WIN32,POSIX)_THREADS = TRUE
 build-only-$(1)_$(3): LIB_SUFFIX = $(if $(findstring shared,$(3)),dll,a)
 build-only-$(1)_$(3): BITS = $(if $(findstring x86_64,$(3)),64,32)
 build-only-$(1)_$(3): PROCESSOR = $(firstword $(call split,-,$(3)))
