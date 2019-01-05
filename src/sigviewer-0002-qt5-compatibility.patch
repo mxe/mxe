@@ -1,0 +1,56 @@
+diff --git a/src/file_handling/file_signal_reader.h b/src/file_handling/file_signal_reader.h
+index eeac188..39d3207 100644
+--- a/src/file_handling/file_signal_reader.h
++++ b/src/file_handling/file_signal_reader.h
+@@ -10,6 +10,7 @@
+ #include "base/data_block.h"
+ #include "application_context_impl.h"
+ 
++#include <QFile>
+ #include <QVector>
+ #include <QPointer>
+ #include <QSharedPointer>
+diff --git a/src/gui/gui_action_factory.h b/src/gui/gui_action_factory.h
+index 07586e4..dc99c0d 100644
+--- a/src/gui/gui_action_factory.h
++++ b/src/gui/gui_action_factory.h
+@@ -12,6 +12,7 @@
+ #include <QString>
+ #include <QMap>
+ #include <QMenu>
++#include <QContextMenuEvent>
+ 
+ namespace sigviewer
+ {
+diff --git a/src/gui_impl/signal_browser/signal_graphics_item.cpp b/src/gui_impl/signal_browser/signal_graphics_item.cpp
+index cc60066..0572ed1 100644
+--- a/src/gui_impl/signal_browser/signal_graphics_item.cpp
++++ b/src/gui_impl/signal_browser/signal_graphics_item.cpp
+@@ -457,8 +457,8 @@ void SignalGraphicsItem::mousePressEvent (QGraphicsSceneMouseEvent * event )
+                     //check whether a user added stream has already been existing
+                     XDFdata->userAddedStream = XDFdata->streams.size();
+                     XDFdata->streams.emplace_back();
+-                    std::time_t currentTime = std::time(nullptr);
+-                    std::string timeString = std::asctime(std::localtime(&currentTime));
++                    time_t currentTime = time(nullptr);
++                    std::string timeString = asctime(localtime(&currentTime));
+                     timeString.pop_back(); //we don't need '\n' at the end
+                     XDFdata->streams.back().streamHeader =
+                             "<?xml version='1.0'?>"
+
+diff --git a/src/main.cpp b/src/main.cpp
+index a08546e..e0f6146 100644
+--- a/src/main.cpp
++++ b/src/main.cpp
+@@ -8,6 +8,10 @@
+ #include <QApplication>
+ #include <QCommandLineParser>
+ 
++#if defined(__WIN32__)
++  #include <QtPlugin>
++  Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin)
++#endif
+ 
+ using namespace sigviewer;
+ 
+
