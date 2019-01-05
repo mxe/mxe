@@ -25,7 +25,7 @@ define INIT_GIT
     find '$(call GIT_DIR,$(1))' -name .git -prune -exec sh -c 'mv "$$0" "$$0"_' {} \;
     # initialize git
     $(call GIT_CMD,$(1)) init
-    $(call GIT_CMD,$(1)) add -A
+    $(call GIT_CMD,$(1)) add -A -f
     $(call GIT_CMD,$(1)) commit -m "init"
     $(call GIT_CMD,$(1)) tag dist
 endef
