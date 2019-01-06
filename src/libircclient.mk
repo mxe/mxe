@@ -5,8 +5,8 @@
 PKG             := libircclient
 $(PKG)_WEBSITE  := https://sourceforge.net/projects/libircclient/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.8
-$(PKG)_CHECKSUM := 2cf8523ac683588f2785b08159a2df3e4d15939ee655c0024aa86334149de8f6
+$(PKG)_VERSION  := 1.10
+$(PKG)_CHECKSUM := bbb26f3af348b252c5204917a7f91cfdf172f1b6afbf4df1e561b03e20503c2d
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
