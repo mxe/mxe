@@ -13,21 +13,12 @@ diff --git a/build/cmake/lib/CMakeLists.txt b/build/cmake/lib/CMakeLists.txt
 index 1111111..2222222 100644
 --- a/build/cmake/lib/CMakeLists.txt
 +++ b/build/cmake/lib/CMakeLists.txt
-@@ -154,7 +154,7 @@ IF (ZSTD_BUILD_STATIC)
+@@ -165,7 +165,7 @@ if (ZSTD_BUILD_STATIC)
              OUTPUT_NAME ${STATIC_LIBRARY_BASE_NAME})
- ENDIF (ZSTD_BUILD_STATIC)
+ endif ()
  
--IF (UNIX)
-+IF (UNIX OR MINGW)
+-if (UNIX)
++if (UNIX OR MINGW)
      # pkg-config
-     SET(PREFIX "${CMAKE_INSTALL_PREFIX}")
-     SET(LIBDIR "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
-@@ -167,7 +167,7 @@ IF (UNIX)
-             COMMENT "Creating pkg-config file")
- 
-     INSTALL(FILES "${CMAKE_CURRENT_BINARY_DIR}/libzstd.pc" DESTINATION "${LIBDIR}/pkgconfig")
--ENDIF (UNIX)
-+ENDIF (UNIX OR MINGW)
- 
- # install target
- INSTALL(FILES
+     set(PREFIX "${CMAKE_INSTALL_PREFIX}")
+     set(LIBDIR "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
