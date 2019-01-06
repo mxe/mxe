@@ -3,12 +3,13 @@
 
 PKG             := sigviewer
 $(PKG)_IGNORE   := 
-$(PKG)_VERSION  := 0.5.1
-$(PKG)_CHECKSUM := 21338ddf502fa786f1ef4fa3a11549ecdcf4d3988b6be8f386d7fa5ffb2b53cd
-$(PKG)_SUBDIR   := sigviewer-0.5.1-r553-src
-$(PKG)_FILE     := $($(PKG)_SUBDIR).zip
-$(PKG)_URL      := http://sourceforge.net/projects/sigviewer/files/0.5.1/$($(PKG)_FILE)/download
-$(PKG)_DEPS     := gcc libbiosig qt
+$(PKG)_VERSION  := 0.6.2
+$(PKG)_CHECKSUM := ddbe6a96802af73c0cee8dfc80d3ba4ca47f9bce9492713cf6da6aa049244b09
+$(PKG)_SUBDIR   := sigviewer-$($(PKG)_VERSION)
+$(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
+$(PKG)_URL      := https://github.com/cbrnr/$(PKG)/archive/v$($(PKG)_VERSION).tar.gz
+$(PKG)_QT_DIR   := qt5
+$(PKG)_DEPS     := libbiosig libxdf qtbase
 
 define $(PKG)_UPDATE
 #    wget -q -O- 'http://biosig.sourceforge.net/download.html' | \
@@ -17,12 +18,11 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    cd '$(1)' && CFLAGS=-fstack-protector CXXFLAGS=-fstack-protector && \
+        LIBS='-l$(PREFIX)/$(TARGET)/$($(PKG)_QT_DIR)/plugins/platforms/libqwindows.a' \
+        $(PREFIX)/$(TARGET)/$($(PKG)_QT_DIR)/bin/qmake sigviewer.pro
 
-	cd '$(1)'/src/ && CFLAGS=-fstack-protector CXXFLAGS=-fstack-protector $(PREFIX)/$(TARGET)/qt/bin/qmake
+    $(MAKE) -C '$(1)'
 
-	$(MAKE) -C '$(1)'/src/  
-
-	$(INSTALL) '$(1)'/bin/release/sigviewer.exe $(PREFIX)/$(TARGET)/bin/
-
+    $(INSTALL) '$(1)'/bin/release/sigviewer.exe $(PREFIX)/$(TARGET)/bin/$(PKG).exe
 endef
-
