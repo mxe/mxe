@@ -48,22 +48,23 @@ define $(PKG)_BUILD_POST
     $(INSTALL) -m644 '$(1)/biosig2.h'            '$(PREFIX)/$(TARGET)/include/'
     $(INSTALL) -m644 '$(1)/gdftime.h'            '$(PREFIX)/$(TARGET)/include/'
     $(INSTALL) -m644 '$(1)/biosig-dev.h'         '$(PREFIX)/$(TARGET)/include/'
+
     $(INSTALL) -m644 '$(1)/libbiosig.a'          '$(PREFIX)/$(TARGET)/lib/'
     $(INSTALL) -m644 '$(1)/libbiosig.def' 	 '$(PREFIX)/$(TARGET)/lib/'
     $(INSTALL) -m644 '$(1)/libbiosig.dll.a' 	 '$(PREFIX)/$(TARGET)/lib/'
-    $(INSTALL) -m644 '$(1)/libbiosig.dll' 	 '$(PREFIX)/$(TARGET)/lib/'
+    $(INSTALL) -m644 '$(1)/libbiosig.dll' 	 '$(PREFIX)/$(TARGET)/bin/'
 
     $(INSTALL) -m644 '$(1)/libgdf.a'             '$(PREFIX)/$(TARGET)/lib/'
     $(INSTALL) -m644 '$(1)/libgdf.def' 		 '$(PREFIX)/$(TARGET)/lib/'
     $(INSTALL) -m644 '$(1)/libgdf.dll.a' 	 '$(PREFIX)/$(TARGET)/lib/'
-    $(INSTALL) -m644 '$(1)/libgdf.dll'	 	 '$(PREFIX)/$(TARGET)/lib/'
+    $(INSTALL) -m644 '$(1)/libgdf.dll'	 	 '$(PREFIX)/$(TARGET)/bin/'
 
 
     $(INSTALL) -m644 '$(1)/physicalunits.h'      '$(PREFIX)/$(TARGET)/include/'
     $(INSTALL) -m644 '$(1)/libphysicalunits.a'   '$(PREFIX)/$(TARGET)/lib/'
     $(INSTALL) -m644 '$(1)/libphysicalunits.def' '$(PREFIX)/$(TARGET)/lib/'
     $(INSTALL) -m644 '$(1)/libphysicalunits.dll.a' '$(PREFIX)/$(TARGET)/lib/'
-    $(INSTALL) -m644 '$(1)/libphysicalunits.dll' '$(PREFIX)/$(TARGET)/lib/'
+    $(INSTALL) -m644 '$(1)/libphysicalunits.dll' '$(PREFIX)/$(TARGET)/bin/'
 
     $(INSTALL) -m644 '$(1)/libbiosig.pc'         '$(PREFIX)/$(TARGET)/lib/pkgconfig/'
 
@@ -71,12 +72,12 @@ define $(PKG)_BUILD_POST
     rm -f $(PREFIX)/$($(PKG)_SUBDIR).$(TARGET).zip
     cd $(PREFIX)/$(TARGET) && zip $(PREFIX)/$($(PKG)_SUBDIR).$(TARGET).zip \
 		include/biosig.h include/biosig-dev.h include/biosig2.h include/gdftime.h  \
-		lib/libbiosig.a lib/libbiosig.def lib/libbiosig.dll lib/libbiosig.dll.a \
-		lib/libgdf.a lib/libgdf.def lib/libgdf.dll lib/libgdf.dll.a \
+		lib/libbiosig.a lib/libbiosig.def bin/libbiosig.dll lib/libbiosig.dll.a \
+		lib/libgdf.a lib/libgdf.def bin/libgdf.dll lib/libgdf.dll.a \
 		lib/libz.a lib/libcholmod.a lib/liblapack.a lib/libiconv.a lib/libiberty.a  \
 		include/libiberty/*.h include/iconv.h \
 		include/physicalunits.h \
-		lib/libphysicalunits.a lib/libphysicalunits.def lib/libphysicalunits.dll lib/libphysicalunits.dll.a
+		lib/libphysicalunits.a lib/libphysicalunits.def bin/libphysicalunits.dll lib/libphysicalunits.dll.a
 
     mkdir -p $(PREFIX)/release/$(TARGET)/include/
     cd $(PREFIX)/$(TARGET) && cp -r \
@@ -87,10 +88,10 @@ define $(PKG)_BUILD_POST
 
     mkdir -p $(PREFIX)/release/$(TARGET)/lib/
     cd $(PREFIX)/$(TARGET) && cp -r \
-		lib/libbiosig.a lib/libbiosig.def lib/libbiosig.dll lib/libbiosig.dll.a \
-		lib/libgdf.a lib/libgdf.def lib/libgdf.dll lib/libgdf.dll.a \
+		lib/libbiosig.a lib/libbiosig.def bin/libbiosig.dll lib/libbiosig.dll.a \
+		lib/libgdf.a lib/libgdf.def bin/libgdf.dll lib/libgdf.dll.a \
 		lib/libz.a lib/libcholmod.a lib/liblapack.a lib/libiconv.a lib/libiberty.a  \
-		lib/libphysicalunits.a lib/libphysicalunits.def lib/libphysicalunits.dll lib/libphysicalunits.dll.a \
+		lib/libphysicalunits.a lib/libphysicalunits.def bin/libphysicalunits.dll lib/libphysicalunits.dll.a \
 		$(PREFIX)/release/$(TARGET)/lib/
 
     mkdir -p $(PREFIX)/release/$(TARGET)/bin/
