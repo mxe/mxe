@@ -10,7 +10,7 @@ $(PKG)_CHECKSUM := d5cec2c1a563a3728854cf985111734089b90f35080629bacd5e894e9d132
 $(PKG)_SUBDIR   := biosig4c++-$($(PKG)_VERSION)
 $(PKG)_FILE     := biosig4c++-$($(PKG)_VERSION).src.tar.gz
 $(PKG)_URL      := https://sourceforge.net/projects/biosig/files/BioSig%20for%20C_C%2B%2B/src/$($(PKG)_FILE)/download
-$(PKG)_DEPS     := cc suitesparse zlib libiberty libiconv libb64 lapack
+$(PKG)_DEPS     := cc suitesparse zlib libiberty libiconv libb64 lapack dcmtk
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://biosig.sourceforge.net/download.html' | \
