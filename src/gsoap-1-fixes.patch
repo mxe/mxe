@@ -12,7 +12,7 @@ diff --git a/configure b/configure
 index 1111111..2222222 100755
 --- a/configure
 +++ b/configure
-@@ -5126,8 +5126,8 @@ case "${host}" in
+@@ -5132,8 +5132,8 @@ case "${host}" in
  			;;
  	*-*-cygwin*)	platform=CYGWIN ;;
  	*-*-mingw*)	platform=MINGW
@@ -103,7 +103,7 @@ diff --git a/gsoap/stdsoap2.h b/gsoap/stdsoap2.h
 index 1111111..2222222 100644
 --- a/gsoap/stdsoap2.h
 +++ b/gsoap/stdsoap2.h
-@@ -3570,6 +3570,12 @@ SOAP_FMAC1 int SOAP_FMAC2 soap_putsetcookies(struct soap *soap);
+@@ -3635,6 +3635,12 @@ SOAP_FMAC1 int SOAP_FMAC2 soap_putsetcookies(struct soap *soap);
  SOAP_FMAC1 int SOAP_FMAC2 soap_putcookies(struct soap *soap, const char *domain, const char *path, int secure);
  #endif
  
