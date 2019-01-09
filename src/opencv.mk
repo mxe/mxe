@@ -48,7 +48,7 @@ define $(PKG)_BUILD
       -DBUILD_PNG=OFF \
       -DBUILD_OPENEXR=OFF \
       -DCMAKE_VERBOSE=ON \
-      -DCMAKE_CXX_STANDARD=98 \
+      -DCMAKE_CXX_STANDARD=11 \
       -DCMAKE_CXX_FLAGS='-D_WIN32_WINNT=0x0500'
 
     # install
