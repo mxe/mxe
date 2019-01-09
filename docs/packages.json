@@ -340,7 +340,7 @@
     "postgresql": {"version": "9.2.4", "website": "https://www.postgresql.org/", "description": "PostgreSQL"},
     "primesieve": {"version": "5.5.0", "website": "https://primesieve.org/", "description": "Primesieve"},
     "proj": {"version": "5.1.0", "website": "https://trac.osgeo.org/proj/", "description": ""},
-    "protobuf": {"version": "3.5.2", "website": "https://github.com/google/protobuf", "description": ""},
+    "protobuf": {"version": "3.6.1.3", "website": "https://github.com/google/protobuf", "description": ""},
     "pthreads": {"version": "POSIX 1003.1-2001", "website": "https://en.wikipedia.org/wiki/POSIX_Threads", "description": "POSIX Threads"},
     "pugixml": {"version": "1.8", "website": "https://pugixml.org/", "description": "Light-weight, simple, and fast XML parser for C++ with XPath support"},
     "qca": {"version": "2.1.3", "website": "https://userbase.kde.org/QCA", "description": "Qt Cryptographic Architecture"},
