@@ -7,7 +7,7 @@ $(PKG)_CHECKSUM := b783b390cb571c837b392857945f5a1f00ec6b043177cc42abb8ee1b542ee
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://ftp.gnu.org/gnu/$(PKG)/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc gnutls libidn2 libntlm pthreads
+$(PKG)_DEPS     := cc gnutls libidn2 libntlm pcre2 pthreads
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://git.savannah.gnu.org/cgit/wget.git/refs/' | \
