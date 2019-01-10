@@ -3,9 +3,9 @@
 PKG             := wget
 $(PKG)_WEBSITE  := https://www.gnu.org/software/wget/
 $(PKG)_VERSION  := 1.20.1
-$(PKG)_CHECKSUM := b783b390cb571c837b392857945f5a1f00ec6b043177cc42abb8ee1b542ee1b3
+$(PKG)_CHECKSUM := 0f63e84dd23dc53ab3ab6f483c3afff8301e54c165783f772101cdd9b1c64928
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
+$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.lz
 $(PKG)_URL      := https://ftp.gnu.org/gnu/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc gnutls libidn2 libntlm pcre2 pthreads
 
