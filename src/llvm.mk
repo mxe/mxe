@@ -9,8 +9,7 @@ $(PKG)_SUBDIR   := llvm-$($(PKG)_VERSION).src
 $(PKG)_FILE     := llvm-$($(PKG)_VERSION).src.tar.xz
 $(PKG)_URL      := https://releases.llvm.org/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc $(BUILD)~$(PKG)
-# requires posix toolchain
-$(PKG)_TARGETS  := $(BUILD) $(foreach TGT,$(MXE_TARGETS),$(and $(findstring posix,$(TGT)),$(TGT)))
+$(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 $(PKG)_DEPS_$(BUILD) := cmake
 
 define $(PKG)_UPDATE

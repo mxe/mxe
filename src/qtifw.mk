@@ -11,8 +11,7 @@ $(PKG)_FILE     := $($(PKG)_SUBDIR).zip
 $(PKG)_URL      := https://download.qt.io/official_releases/qt-installer-framework/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc qtbase qttools qtwinextras
 $(PKG)_DEPS_$(BUILD) := qtbase qttools
-# requires posix toolchain and only makes sense for static builds
-$(PKG)_TARGETS  := $(BUILD) $(foreach TGT,$(MXE_TARGETS),$(and $(findstring static,$(TGT)),$(findstring posix,$(TGT)),$(TGT)))
+$(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 
 define $(PKG)_BUILD_$(BUILD)
     cd '$(1)' && $(TARGET)-qmake-qt5
@@ -23,7 +22,8 @@ define $(PKG)_BUILD_$(BUILD)
     $(INSTALL) -m755 '$(1)/bin/devtool' '$(PREFIX)/bin/$(TARGET)-devtool'
 endef
 
-define $(PKG)_BUILD
+# only makes sense for static builds
+define $(PKG)_BUILD_STATIC
     cd '$(1)' && '$(PREFIX)/$(TARGET)/qt5/bin/qmake'
     $(MAKE) -C '$(1)' -j '$(JOBS)' || $(MAKE) -C '$(1)' -j  1
     $(MAKE) -C '$(1)' -j 1 install
