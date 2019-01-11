@@ -741,7 +741,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <pre>yum install epel-release</pre>
 
-    <!-- https://admin.fedoraproject.org/pkgdb/ -->
+    <!-- https://apps.fedoraproject.org/packages/ -->
     <pre>yum install \
     autoconf \
     automake \
@@ -945,27 +945,8 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <h5 id="requirements-macos-rudix">Rudix</h5>
     <p>
-    Install <a href="https://rudix.org/">Rudix</a>,
-    then run:
-    </p>
-    <!-- https://rudix.org/packages/index.html -->
-    <pre>sudo rudix install \
-    autoconf \
-    automake \
-    coreutils \
-    glib \
-    intltool \
-    libtool \
-    lzip \
-    p7zip \
-    sed \
-    tar \
-    wget \
-    xz</pre>
-    <p>
-    Note: <b>gdk-pixbuf2</b> is not installed in method 2,
-    so you can not build <b>gtk3</b>. Other packages may be
-    missing on Rudix - please open an issue if you find any.
+    <a href="https://rudix.org/">Rudix</a> has
+    <a href="https://twitter.com/__rudix__/status/1022273255942565893">shut down since August 2018</a>
     </p>
 
     <h5 id="requirements-macos-homebrew">Homebrew</h5>
@@ -974,6 +955,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     then run:
     </p>
     <!-- https://formulae.brew.sh/ -->
+    <!-- wget -q -O- https://formulae.brew.sh/api/formula.json | tr ',' '\n' | grep 'name\|desc' | grep -i {pkg} -->
     <pre>brew install \
     autoconf \
     automake \
@@ -1011,7 +993,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <h3 id="requirements-opensuse">openSUSE</h3>
 
-    <!-- https://software.opensuse.org/131/en -->
+    <!-- https://software.opensuse.org/explore -->
     <pre>zypper install -R \
     autoconf \
     automake \
@@ -1062,7 +1044,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <h3 id="requirements-void">Void</h3>
 
-    <!-- https://voidlinux.org/packages -->
+    <!-- https://voidlinux.org/packages/ -->
     <pre>xbps-install -S \
     autoconf \
     automake \
