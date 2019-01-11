@@ -2,9 +2,63 @@ This file is part of MXE. See LICENSE.md for licensing information.
 
 Contains ad hoc patches for cross building.
 
---- a/Source/WTF/wtf/CurrentTime.cpp	2017-02-07 20:18:29.395887200 +0300
-+++ b/Source/WTF/wtf/CurrentTime.cpp	2017-02-07 20:20:03.241254800 +0300
-@@ -91,6 +91,35 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Fri, 11 Jan 2019 18:02:55 +1100
+Subject: [PATCH 1/4] ad hoc fixes
+
+
+diff --git a/Source/JavaScriptCore/jsc.cpp b/Source/JavaScriptCore/jsc.cpp
+index 1111111..2222222 100644
+--- a/Source/JavaScriptCore/jsc.cpp
++++ b/Source/JavaScriptCore/jsc.cpp
+@@ -1714,7 +1714,7 @@ int main(int argc, char** argv)
+     fesetenv( &env );
+ #endif
+ 
+-#if OS(WINDOWS) && (defined(_M_X64) || defined(__x86_64__))
++#if OS(WINDOWS) && (defined(_M_X64) || defined(__x86_64__)) && !COMPILER(GCC)
+     // The VS2013 runtime has a bug where it mis-detects AVX-capable processors
+     // if the feature has been disabled in firmware. This causes us to crash
+     // in some of the math functions. For now, we disable those optimizations
+diff --git a/Source/JavaScriptCore/llint/LLIntOfflineAsmConfig.h b/Source/JavaScriptCore/llint/LLIntOfflineAsmConfig.h
+index 1111111..2222222 100644
+--- a/Source/JavaScriptCore/llint/LLIntOfflineAsmConfig.h
++++ b/Source/JavaScriptCore/llint/LLIntOfflineAsmConfig.h
+@@ -92,13 +92,13 @@
+ #define OFFLINE_ASM_ARM 0
+ #endif
+ 
+-#if CPU(X86_64) && !COMPILER(MSVC)
++#if CPU(X86_64) && !OS(WINDOWS)
+ #define OFFLINE_ASM_X86_64 1
+ #else
+ #define OFFLINE_ASM_X86_64 0
+ #endif
+ 
+-#if CPU(X86_64) && COMPILER(MSVC)
++#if CPU(X86_64) && OS(WINDOWS)
+ #define OFFLINE_ASM_X86_64_WIN 1
+ #else
+ #define OFFLINE_ASM_X86_64_WIN 0
+diff --git a/Source/WTF/wtf/Atomics.h b/Source/WTF/wtf/Atomics.h
+index 1111111..2222222 100644
+--- a/Source/WTF/wtf/Atomics.h
++++ b/Source/WTF/wtf/Atomics.h
+@@ -125,7 +125,7 @@ inline void memoryBarrierBeforeUnlock() { armV7_dmb(); }
+ 
+ inline void x86_mfence()
+ {
+-#if OS(WINDOWS)
++#if OS(WINDOWS) && !COMPILER(GCC)
+     // I think that this does the equivalent of a dummy interlocked instruction,
+     // instead of using the 'mfence' instruction, at least according to MSDN. I
+     // know that it is equivalent for our purposes, but it would be good to
+diff --git a/Source/WTF/wtf/CurrentTime.cpp b/Source/WTF/wtf/CurrentTime.cpp
+index 1111111..2222222 100644
+--- a/Source/WTF/wtf/CurrentTime.cpp
++++ b/Source/WTF/wtf/CurrentTime.cpp
+@@ -91,6 +91,35 @@ static double lowResUTCTime()
  
  #if USE(QUERY_PERFORMANCE_COUNTER)
  
@@ -40,79 +94,11 @@ Contains ad hoc patches for cross building.
  static LARGE_INTEGER qpcFrequency;
  static bool syncedTime;
  
---- a/Source/WTF/wtf/Atomics.h	2016-06-09 19:14:49.225087412 +0100
-+++ b/Source/WTF/wtf/Atomics.h	2016-06-09 19:15:02.498182976 +0100
-@@ -125,7 +125,7 @@
- 
- inline void x86_mfence()
- {
--#if OS(WINDOWS)
-+#if OS(WINDOWS) && !COMPILER(GCC)
-     // I think that this does the equivalent of a dummy interlocked instruction,
-     // instead of using the 'mfence' instruction, at least according to MSDN. I
-     // know that it is equivalent for our purposes, but it would be good to
-
---- a/Source/JavaScriptCore/jsc.cpp	2017-02-07 21:14:51.788349000 +0300
-+++ b/Source/JavaScriptCore/jsc.cpp	2017-02-07 21:15:15.280692700 +0300
-@@ -1710,7 +1710,7 @@
-     fesetenv( &env );
- #endif
- 
--#if OS(WINDOWS) && (defined(_M_X64) || defined(__x86_64__))
-+#if OS(WINDOWS) && (defined(_M_X64) || defined(__x86_64__)) && !COMPILER(GCC)
-     // The VS2013 runtime has a bug where it mis-detects AVX-capable processors
-     // if the feature has been disabled in firmware. This causes us to crash
-     // in some of the math functions. For now, we disable those optimizations
-
---- a/Source/cmake/FindICU.cmake	2017-02-07 21:39:31.536985800 +0300
-+++ b/Source/cmake/FindICU.cmake	2017-02-07 21:43:45.849531600 +0300
-@@ -49,7 +49,7 @@
-     pkg_check_modules(PC_ICU_I18N icu-i18n)
-     find_library(
-         ICU_I18N_LIBRARY
--        NAMES icui18n icuin cygicuin cygicuin32
-+        NAMES icuin icui18n cygicuin cygicuin32
-         HINTS ${PC_ICU_I18N_LIBRARY_DIRS}
-               ${PC_ICU_I18N_LIBDIR}
-         DOC "Libraries to link against for ICU internationalization")
-
---- a/Source/WebCore/platform/network/create-http-header-name-table	2017-02-07 23:28:00.520278300 +0300
-+++ b/Source/WebCore/platform/network/create-http-header-name-table	2017-02-07 23:29:15.412561900 +0300
-@@ -54,7 +55,7 @@
- 
- http_header_names.sort()
- 
--gperf_file = open('HTTPHeaderNames.gperf', 'w')
-+gperf_file = open('HTTPHeaderNames.gperf', 'wb')
- gperf_file.write('''
- %{
- /*
---- a/Source/WebCore/css/makeSelectorPseudoClassAndCompatibilityElementMap.py	2017-02-08 00:23:27.256556700 +0300
-+++ b/Source/WebCore/css/makeSelectorPseudoClassAndCompatibilityElementMap.py	2017-02-08 00:23:33.040887600 +0300
-@@ -57,7 +57,7 @@
- def expand_ifdef_condition(condition):
-     return condition.replace('(', '_').replace(')', '')
- 
--output_file = open('SelectorPseudoClassAndCompatibilityElementMap.gperf', 'w')
-+output_file = open('SelectorPseudoClassAndCompatibilityElementMap.gperf', 'wb')
- 
- output_file.write("""
- %{
---- a/Source/WebCore/css/makeSelectorPseudoElementsMap.py	2017-02-08 00:23:46.797674400 +0300
-+++ b/Source/WebCore/css/makeSelectorPseudoElementsMap.py	2017-02-08 00:23:51.732956700 +0300
-@@ -57,7 +57,7 @@
- def expand_ifdef_condition(condition):
-     return condition.replace('(', '_').replace(')', '')
- 
--output_file = open('SelectorPseudoElementTypeMap.gperf', 'w')
-+output_file = open('SelectorPseudoElementTypeMap.gperf', 'wb')
- 
- output_file.write("""
- %{
-
---- a/Source/WebCore/bindings/scripts/preprocess-idls.pl	2017-02-08 07:25:12.036907400 +0300
-+++ b/Source/WebCore/bindings/scripts/preprocess-idls.pl	2017-02-08 07:32:03.926466100 +0300
-@@ -179,9 +179,9 @@
+diff --git a/Source/WebCore/bindings/scripts/preprocess-idls.pl b/Source/WebCore/bindings/scripts/preprocess-idls.pl
+index 1111111..2222222 100644
+--- a/Source/WebCore/bindings/scripts/preprocess-idls.pl
++++ b/Source/WebCore/bindings/scripts/preprocess-idls.pl
+@@ -179,9 +179,9 @@ my $cygwinPathAdded;
  sub CygwinPathIfNeeded
  {
      my $path = shift;
@@ -124,10 +110,50 @@ Contains ad hoc patches for cross building.
              $cygwinPathAdded = 1; 
          }
          chomp($path = `cygpath -u '$path'`);
-
---- a/Source/cmake/ECMGeneratePriFile.cmake	2017-02-10 09:36:07.508360400 +0300
-+++ b/Source/cmake/ECMGeneratePriFile.cmake	2017-02-10 09:44:52.735367300 +0300
-@@ -101,7 +101,11 @@
+diff --git a/Source/WebCore/css/makeSelectorPseudoClassAndCompatibilityElementMap.py b/Source/WebCore/css/makeSelectorPseudoClassAndCompatibilityElementMap.py
+index 1111111..2222222 100644
+--- a/Source/WebCore/css/makeSelectorPseudoClassAndCompatibilityElementMap.py
++++ b/Source/WebCore/css/makeSelectorPseudoClassAndCompatibilityElementMap.py
+@@ -57,7 +57,7 @@ def enumerablePseudoType(stringPseudoType):
+ def expand_ifdef_condition(condition):
+     return condition.replace('(', '_').replace(')', '')
+ 
+-output_file = open('SelectorPseudoClassAndCompatibilityElementMap.gperf', 'w')
++output_file = open('SelectorPseudoClassAndCompatibilityElementMap.gperf', 'wb')
+ 
+ output_file.write("""
+ %{
+diff --git a/Source/WebCore/css/makeSelectorPseudoElementsMap.py b/Source/WebCore/css/makeSelectorPseudoElementsMap.py
+index 1111111..2222222 100644
+--- a/Source/WebCore/css/makeSelectorPseudoElementsMap.py
++++ b/Source/WebCore/css/makeSelectorPseudoElementsMap.py
+@@ -57,7 +57,7 @@ def enumerablePseudoType(stringPseudoType):
+ def expand_ifdef_condition(condition):
+     return condition.replace('(', '_').replace(')', '')
+ 
+-output_file = open('SelectorPseudoElementTypeMap.gperf', 'w')
++output_file = open('SelectorPseudoElementTypeMap.gperf', 'wb')
+ 
+ output_file.write("""
+ %{
+diff --git a/Source/WebCore/platform/network/create-http-header-name-table b/Source/WebCore/platform/network/create-http-header-name-table
+index 1111111..2222222 100755
+--- a/Source/WebCore/platform/network/create-http-header-name-table
++++ b/Source/WebCore/platform/network/create-http-header-name-table
+@@ -54,7 +54,7 @@ input_file.close()
+ 
+ http_header_names.sort()
+ 
+-gperf_file = open('HTTPHeaderNames.gperf', 'w')
++gperf_file = open('HTTPHeaderNames.gperf', 'wb')
+ gperf_file.write('''
+ %{
+ /*
+diff --git a/Source/cmake/ECMGeneratePriFile.cmake b/Source/cmake/ECMGeneratePriFile.cmake
+index 1111111..2222222 100644
+--- a/Source/cmake/ECMGeneratePriFile.cmake
++++ b/Source/cmake/ECMGeneratePriFile.cmake
+@@ -101,7 +101,11 @@ if(KDE_INSTALL_USE_QT_SYS_PATHS OR _askqmake)
    query_qmake(qt_host_data_dir QT_HOST_DATA)
    set(ECM_MKSPECS_INSTALL_DIR ${qt_host_data_dir}/mkspecs/modules CACHE PATH "The directory where mkspecs will be installed to.")
  else()
@@ -140,41 +166,29 @@ Contains ad hoc patches for cross building.
  endif()
  
  function(ECM_GENERATE_PRI_FILE)
+diff --git a/Source/cmake/FindICU.cmake b/Source/cmake/FindICU.cmake
+index 1111111..2222222 100644
+--- a/Source/cmake/FindICU.cmake
++++ b/Source/cmake/FindICU.cmake
+@@ -49,7 +49,7 @@ if (ICU_INCLUDE_DIR AND ICU_LIBRARY)
+     pkg_check_modules(PC_ICU_I18N icu-i18n)
+     find_library(
+         ICU_I18N_LIBRARY
+-        NAMES icui18n icuin cygicuin cygicuin32
++        NAMES icuin icui18n cygicuin cygicuin32
+         HINTS ${PC_ICU_I18N_LIBRARY_DIRS}
+               ${PC_ICU_I18N_LIBDIR}
+         DOC "Libraries to link against for ICU internationalization")
 
-diff --git a/Source/JavaScriptCore/llint/LLIntOfflineAsmConfig.h b/Source/JavaScriptCore/llint/LLIntOfflineAsmConfig.h
-index 51ada4fbf63..23eb928c307 100644
---- a/Source/JavaScriptCore/llint/LLIntOfflineAsmConfig.h
-+++ b/Source/JavaScriptCore/llint/LLIntOfflineAsmConfig.h
-@@ -92,13 +92,13 @@
- #define OFFLINE_ASM_ARM 0
- #endif
- 
--#if CPU(X86_64) && !COMPILER(MSVC)
-+#if CPU(X86_64) && !OS(WINDOWS)
- #define OFFLINE_ASM_X86_64 1
- #else
- #define OFFLINE_ASM_X86_64 0
- #endif
- 
--#if CPU(X86_64) && COMPILER(MSVC)
-+#if CPU(X86_64) && OS(WINDOWS)
- #define OFFLINE_ASM_X86_64_WIN 1
- #else
- #define OFFLINE_ASM_X86_64_WIN 0
-
-From dc9ff80e6341913d1077fb4ffe23aed6754dcd96 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Konstantin Tokarev <annulen@yandex.ru>
 Date: Fri, 3 Nov 2017 18:59:25 +0300
-Subject: [PATCH] Install private headers for WK2 and private .pri modules
+Subject: [PATCH 2/4] Install private headers for WK2 and private .pri modules
 
 Change-Id: Ie2f52c600180fd31cc5fac2f5d30952df28ea9d6
----
- Source/WebKit/PlatformQt.cmake  | 74 +++++++++++++++++++++++++++++++++++++++--
- Source/cmake/WebKitMacros.cmake |  2 --
- 2 files changed, 71 insertions(+), 5 deletions(-)
 
 diff --git a/Source/WebKit/PlatformQt.cmake b/Source/WebKit/PlatformQt.cmake
-index 8708cedf8463..f0e4acf8a5a6 100644
+index 1111111..2222222 100644
 --- a/Source/WebKit/PlatformQt.cmake
 +++ b/Source/WebKit/PlatformQt.cmake
 @@ -418,7 +418,7 @@ install(
@@ -186,8 +200,26 @@ index 8708cedf8463..f0e4acf8a5a6 100644
  install(
      FILES
          ${WebKit_PRIVATE_HEADERS}
+@@ -510,7 +510,7 @@ if (NOT MACOS_BUILD_FRAMEWORKS)
+     install(FILES ${WebKit_PKGCONFIG_FILENAME} DESTINATION ${ECM_PKGCONFIG_INSTALL_DIR} COMPONENT Data)
+ endif ()
+ 
+-if (KDE_INSTALL_USE_QT_SYS_PATHS)
++if (KDE_INSTALL_USE_QT_SYS_PATHS OR MINGW)
+     set(WebKit_PRI_ARGUMENTS
+         BIN_INSTALL_DIR "$$QT_MODULE_BIN_BASE"
+         LIB_INSTALL_DIR "$$QT_MODULE_LIB_BASE"
+@@ -734,7 +734,7 @@ if (NOT MACOS_BUILD_FRAMEWORKS)
+     install(FILES ${WebKitWidgets_PKGCONFIG_FILENAME} DESTINATION ${ECM_PKGCONFIG_INSTALL_DIR} COMPONENT Data)
+ endif ()
+ 
+-if (KDE_INSTALL_USE_QT_SYS_PATHS)
++if (KDE_INSTALL_USE_QT_SYS_PATHS OR MINGW)
+     set(WebKitWidgets_PRI_ARGUMENTS
+         BIN_INSTALL_DIR "$$QT_MODULE_BIN_BASE"
+         LIB_INSTALL_DIR "$$QT_MODULE_LIB_BASE"
 diff --git a/Source/cmake/WebKitMacros.cmake b/Source/cmake/WebKitMacros.cmake
-index 858e2e47d8d5..4c54c1c5de1e 100644
+index 1111111..2222222 100644
 --- a/Source/cmake/WebKitMacros.cmake
 +++ b/Source/cmake/WebKitMacros.cmake
 @@ -265,8 +265,6 @@ macro(WEBKIT_FRAMEWORK _target)
@@ -200,36 +232,14 @@ index 858e2e47d8d5..4c54c1c5de1e 100644
      target_link_libraries(${_target} ${${_target}_LIBRARIES})
      set_target_properties(${_target} PROPERTIES COMPILE_DEFINITIONS "BUILDING_${_target}")
 
---- a/Source/WebKit/PlatformQt.cmake	2017-12-11 14:58:21.092231000 +0300
-+++ b/Source/WebKit/PlatformQt.cmake	2017-12-11 15:02:04.943675300 +0300
-@@ -490,7 +490,7 @@
-     install(FILES ${WebKit_PKGCONFIG_FILENAME} DESTINATION ${ECM_PKGCONFIG_INSTALL_DIR} COMPONENT Data)
- endif ()
- 
--if (KDE_INSTALL_USE_QT_SYS_PATHS)
-+if (KDE_INSTALL_USE_QT_SYS_PATHS OR MINGW)
-     set(WebKit_PRI_ARGUMENTS
-         BIN_INSTALL_DIR "$$QT_MODULE_BIN_BASE"
-         LIB_INSTALL_DIR "$$QT_MODULE_LIB_BASE"
-@@ -718,7 +718,7 @@
-     install(FILES ${WebKitWidgets_PKGCONFIG_FILENAME} DESTINATION ${ECM_PKGCONFIG_INSTALL_DIR} COMPONENT Data)
- endif ()
- 
--if (KDE_INSTALL_USE_QT_SYS_PATHS)
-+if (KDE_INSTALL_USE_QT_SYS_PATHS OR MINGW)
-     set(WebKitWidgets_PRI_ARGUMENTS
-         BIN_INSTALL_DIR "$$QT_MODULE_BIN_BASE"
-         LIB_INSTALL_DIR "$$QT_MODULE_LIB_BASE"
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Pek <tehnick-8@yandex.ru>
+Date: Fri, 11 Jan 2019 18:06:01 +1100
+Subject: [PATCH 3/4] cmake: fix Cflags sections in pkg-config files
 
-
-commit c770db9a5c09bf90779b5bc3bf019efbc28011a8
-Author: Boris Pek <tehnick-8@yandex.ru>
-Date:   Thu Jan 3 20:53:17 2019 +0300
-
-    cmake: fix Cflags sections in pkg-config files
 
 diff --git a/Source/cmake/ECMGeneratePkgConfigFile.cmake b/Source/cmake/ECMGeneratePkgConfigFile.cmake
-index 09d7e2b47..320e06d13 100644
+index 1111111..2222222 100644
 --- a/Source/cmake/ECMGeneratePkgConfigFile.cmake
 +++ b/Source/cmake/ECMGeneratePkgConfigFile.cmake
 @@ -129,6 +129,7 @@ function(ECM_GENERATE_PKGCONFIG_FILE)
@@ -241,17 +251,15 @@ index 09d7e2b47..320e06d13 100644
    if(NOT EGPF_LIB_INSTALL_DIR)
        if(LIB_INSTALL_DIR)
 
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Pek <tehnick-8@yandex.ru>
+Date: Fri, 11 Jan 2019 18:07:10 +1100
+Subject: [PATCH 4/4] Fix cross-compilation using MinGW
 
-commit a38b2c49781471136aefa1e5b411b9f15d06a463
-Author: Boris Pek <tehnick-8@yandex.ru>
-Date:   Sat Jan 5 13:58:15 2019 +0300
-
-    Fix cross-compilation using MinGW
-    
-    with USE_MEDIA_FOUNDATION=ON. (Part 1)
+with USE_MEDIA_FOUNDATION=ON. (Part 1)
 
 diff --git a/Source/WebCore/platform/graphics/win/MediaPlayerPrivateMediaFoundation.h b/Source/WebCore/platform/graphics/win/MediaPlayerPrivateMediaFoundation.h
-index 0fe07fa13..95b7fd863 100644
+index 1111111..2222222 100644
 --- a/Source/WebCore/platform/graphics/win/MediaPlayerPrivateMediaFoundation.h
 +++ b/Source/WebCore/platform/graphics/win/MediaPlayerPrivateMediaFoundation.h
 @@ -31,12 +31,13 @@
@@ -274,7 +282,7 @@ index 0fe07fa13..95b7fd863 100644
  #include <evr.h>
  
 diff --git a/Source/WebCore/platform/win/HWndDC.h b/Source/WebCore/platform/win/HWndDC.h
-index c7586c3e5..6ed82117c 100644
+index 1111111..2222222 100644
 --- a/Source/WebCore/platform/win/HWndDC.h
 +++ b/Source/WebCore/platform/win/HWndDC.h
 @@ -27,7 +27,7 @@
