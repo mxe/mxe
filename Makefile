@@ -69,6 +69,11 @@ STRIP_TOOLCHAIN := $(true)
 STRIP_LIB       := $(false)
 STRIP_EXE       := $(true)
 
+# disable by setting MXE_USE_CCACHE
+MXE_USE_CCACHE      := mxe
+MXE_CCACHE_DIR      := $(PWD)/.ccache
+MXE_CCACHE_BASE_DIR := $(PWD)
+
 # define some whitespace variables
 define newline
 
@@ -431,7 +436,13 @@ $(PREFIX)/installed/print-git-oneline-$(GIT_HEAD): | $(PREFIX)/installed/.gitkee
 # cross libraries depend on virtual toolchain package, variable used
 # in `cleanup-deps-style` rule below
 CROSS_COMPILER := cc
-MXE_REQS_PKGS   =
+
+# set reqs and bootstrap variables to recursive so pkgs can add themselves
+# CROSS_COMPILER depends (order-only) on MXE_REQS_PKGS
+# all depend (order-only) on BOOTSTRAP_PKGS
+# BOOTSTRAP_PKGS may be prefixed with $(BUILD)~
+MXE_REQS_PKGS  =
+BOOTSTRAP_PKGS =
 
 # warning about switching from `gcc` to `cc`
 $(if $(and $(filter gcc,$(LOCAL_PKG_LIST)$(MAKECMDGOALS)),\
@@ -521,6 +532,7 @@ $(foreach PKG,$(PKGS), \
         $(eval $(PKG)_OO_DEPS += $(BUILD)~autotools)) \
     $(if $(filter $(PKG),$(CMAKE_PKGS)),$(eval $(PKG)_OO_DEPS += cmake-conf)) \
     $(if $(filter $(PKG),$(MXE_CONF_PKGS)),,$(eval $(PKG)_OO_DEPS += mxe-conf)) \
+    $(if $(filter %$(PKG),$(MXE_CONF_PKGS) $(BOOTSTRAP_PKGS)),,$(eval $(PKG)_OO_DEPS += $(BOOTSTRAP_PKGS))) \
     $(eval $(PKG)_TARGETS := $(sort $($(PKG)_TARGETS))) \
     $(if $($(PKG)_TARGETS),,$(eval $(PKG)_TARGETS := $(CROSS_TARGETS))) \
     $(foreach TARGET,$(filter $($(PKG)_TARGETS),$(CROSS_TARGETS) $(BUILD)), \
@@ -918,6 +930,9 @@ BUILD_PKG_TMP_FILES := *-*.list mxe-*.tar.xz mxe-*.deb* wheezy jessie
 clean:
 	rm -rf $(call TMP_DIR,*) $(PREFIX) \
 	       $(addprefix $(TOP_DIR)/, $(BUILD_PKG_TMP_FILES))
+	@echo
+	@echo 'review ccache size with:'
+	@echo '$(MXE_CCACHE_DIR)/bin/ccache -s'
 
 .PHONY: clean-pkg
 clean-pkg:

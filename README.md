@@ -18,6 +18,7 @@ various target platforms, which:
   * is able to update the version numbers of all packages automatically
   * directly uses source packages, thus ensuring the whole build mechanism is transparent
   * allows inter-package and intra-package parallel builds whenever possible
+  * bundles [ccache](https://ccache.samba.org) to speed up repeated builds
   * integrates well with autotools, cmake, qmake, and hand-written makefiles.
   * has been in continuous development since 2007 and is used by several projects
 
