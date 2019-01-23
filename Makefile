@@ -761,7 +761,7 @@ build-only-$(1)_$(3): CMAKE_SHARED_BOOL = $(if $(findstring shared,$(3)),ON,OFF)
 build-only-$(1)_$(3):
 	$(if $(value $(call LOOKUP_PKG_RULE,$(1),BUILD,$(3))),
 	    uname -a
-	    git log --pretty=tformat:"%H - %s [%ar] [%d]" -1
+	    - git log --pretty=tformat:"%H - %s [%ar] [%d]" -1
 	    lsb_release -a 2>/dev/null || sw_vers 2>/dev/null || true
 	    autoconf --version 2>/dev/null | head -1
 	    automake --version 2>/dev/null | head -1
