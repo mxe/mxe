@@ -19,6 +19,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    cd '$(SOURCE_DIR)' && '$(SOURCE_DIR)/autogen.sh'
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
         --with-sdl-prefix='$(PREFIX)/$(TARGET)'

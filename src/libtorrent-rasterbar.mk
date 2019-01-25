@@ -21,6 +21,7 @@ define $(PKG)_BUILD
         $(MXE_CONFIGURE_OPTS) \
         PKG_CONFIG='$(PREFIX)/bin/$(TARGET)-pkg-config' \
         --with-boost='$(PREFIX)/$(TARGET)' \
+        --with-boost-libdir='$(PREFIX)/$(TARGET)/lib' \
         --disable-debug \
         --disable-tests \
         --disable-examples \

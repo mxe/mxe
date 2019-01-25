@@ -27,7 +27,7 @@ define $(PKG)_BUILD_STATIC
 endef
 
 define $(PKG)_BUILD_SHARED
-    cd '$(1)' && '$(TARGET)-cmake' -DUSE_FPIC=ON -DSHARED_LIBS=ON -DBUILD_EXAMPLES=OFF 
+    cd '$(1)' && '$(TARGET)-cmake' -DUSE_FPIC=ON -DSHARED_LIBS=ON -DBUILD_EXAMPLES=OFF
     $(MAKE) -C '$(1)' -j $(JOBS)
 
     $(INSTALL) -d                             '$(PREFIX)/$(TARGET)/bin'

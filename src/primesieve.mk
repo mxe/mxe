@@ -10,7 +10,7 @@ $(PKG)_GH_CONF  := kimwalisch/primesieve/tags, v
 $(PKG)_DEPS     := cc
 
 define $(PKG)_BUILD
-    cd '$(1)' && '$(TARGET)-cmake' -DCMAKE_CXX_FLAGS='-D_WIN32_WINNT=0x0601' .
+    cd '$(1)' && '$(TARGET)-cmake' -DCMAKE_CXX_FLAGS='-D_WIN32_WINNT=0x0601' -DBUILD_PRIMESIEVE=OFF .
     $(MAKE) -C '$(1)' -j '$(JOBS)' VERBOSE=1
     $(MAKE) -C '$(1)' -j 1 install
 
