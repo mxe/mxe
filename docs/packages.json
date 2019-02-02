@@ -392,7 +392,7 @@
     "qtwebsockets": {"version": "5.12.1", "website": "https://www.qt.io/", "description": "Qt"},
     "qtwebview": {"version": "5.12.1", "website": "https://www.qt.io/", "description": "Qt"},
     "qtwinextras": {"version": "5.12.1", "website": "https://www.qt.io/", "description": "Qt"},
-    "qtxlsxwriter": {"version": "cd33e43", "website": "https://github.com/dbzhang800/QtXlsxWriter/", "description": "QtXlsxWriter"},
+    "qtxlsxwriter": {"version": "5b685b5", "website": "https://github.com/VSRonin/QtXlsxWriter/", "description": "QtXlsxWriter"},
     "qtxmlpatterns": {"version": "5.12.1", "website": "https://www.qt.io/", "description": "Qt"},
     "quazip": {"version": "0.7.6", "website": "https://github.com/stachenov/quazip", "description": ""},
     "qwt": {"version": "6.1.4", "website": "https://qwt.sourceforge.io/", "description": "Qwt"},
