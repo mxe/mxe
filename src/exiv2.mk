@@ -8,7 +8,7 @@ $(PKG)_VERSION  := 0.25
 $(PKG)_CHECKSUM := c80bfc778a15fdb06f71265db2c3d49d8493c382e516cb99b8c9f9cbde36efa4
 $(PKG)_SUBDIR   := exiv2-$($(PKG)_VERSION)
 $(PKG)_FILE     := exiv2-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://www.exiv2.org/$($(PKG)_FILE)
+$(PKG)_URL      := http://www.exiv2.org/releases/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc expat gettext mman-win32 zlib
 
 define $(PKG)_UPDATE
