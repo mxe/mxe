@@ -103,7 +103,7 @@ diff --git a/gsoap/stdsoap2.h b/gsoap/stdsoap2.h
 index 1111111..2222222 100644
 --- a/gsoap/stdsoap2.h
 +++ b/gsoap/stdsoap2.h
-@@ -3641,6 +3641,12 @@ SOAP_FMAC1 int SOAP_FMAC2 soap_putsetcookies(struct soap *soap);
+@@ -3655,6 +3655,12 @@ SOAP_FMAC1 int SOAP_FMAC2 soap_putsetcookies(struct soap *soap);
  SOAP_FMAC1 int SOAP_FMAC2 soap_putcookies(struct soap *soap, const char *domain, const char *path, int secure);
  #endif
  
