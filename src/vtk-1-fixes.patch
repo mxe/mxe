@@ -4,74 +4,21 @@ Contains ad hoc patches for cross building.
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Martin=20M=C3=BCllenhaupt?= <mm+mxe.cc@netlair.de>
-Date: Sat, 18 Nov 2017 23:04:57 +1100
-Subject: [PATCH 1/1] fix libharu shared linking
+Date: Wed, 20 Feb 2019 23:04:57 +1100
+Subject: [PATCH 1/1] fix glew static linking
+]
 
-
-diff --git a/CMake/FindLibHaru.cmake b/CMake/FindLibHaru.cmake
-index 1111111..2222222 100644
---- a/CMake/FindLibHaru.cmake
-+++ b/CMake/FindLibHaru.cmake
-@@ -19,7 +19,7 @@
- 
- find_path(LIBHARU_INCLUDE_DIR hpdf.h)
- 
--find_library(LIBHARU_LIBRARY NAMES hpdf)
-+find_library(LIBHARU_LIBRARY NAMES hpdf hpdfs)
- 
- # handle the QUIETLY and REQUIRED arguments and set FONTCONFIG_FOUND to TRUE if
- # all listed variables are TRUE
-diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 1111111..2222222 100644
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -251,9 +251,9 @@ endif()
- # Full functional CMAKE_CROSSCOMPILING_EMULATOR support for custom_command and
- # custom_target is available in CMake 3.8.0
- # It was first added in CMake 3.6.0 and later fixed in CMake 3.8.0 (commit e7480d67, CMake issue #16288)
--set(_crosscompiling_emulator_support_custom_target 1)
--if(CMAKE_VERSION VERSION_LESS 3.8.0)
--  set(_crosscompiling_emulator_support_custom_target 0)
-+set(_crosscompiling_emulator_support_custom_target 0)
-+if(DEFINED CMAKE_CROSSCOMPILING_EMULATOR AND NOT CMAKE_VERSION VERSION_LESS 3.8.0)
-+  set(_crosscompiling_emulator_support_custom_target 1)
+--- a/Rendering/OpenGL2/CMakeLists.txt	2019-02-20 09:09:42.537485751 +0100
++++ b/Rendering/OpenGL2/CMakeLists.txt	2019-02-20 09:09:51.327305577 +0100
+@@ -345,3 +345,11 @@
+       )
+   target_link_libraries(vtkTestOpenGLVersion opengl32)
  endif()
- # Maintain backward compatibility with user setting COMPILE_TOOLS_IMPORTED
- if(DEFINED COMPILE_TOOLS_IMPORTED AND NOT DEFINED VTK_COMPILE_TOOLS_IMPORTED)
-diff --git a/IO/Export/CMakeLists.txt b/IO/Export/CMakeLists.txt
-index 1111111..2222222 100644
---- a/IO/Export/CMakeLists.txt
-+++ b/IO/Export/CMakeLists.txt
-@@ -33,6 +33,16 @@ set_source_files_properties(
-   ABSTRACT
-   )
- 
-+if(VTK_BUILD_SHARED_LIBS)
-+  set_source_files_properties(
-+      vtkPDFContextDevice2D.cxx
-+      vtkPDFExporter.cxx
-+    PROPERTIES
-+    COMPILE_DEFINITIONS
-+      HPDF_DLL
-+    )
-+endif()
 +
- vtk_module_library(vtkIOExport ${Module_SRCS})
- include(vtkOpenGL)
- vtk_opengl_link(vtkIOExport)
-diff --git a/Rendering/OpenGL2/CMakeLists.txt b/Rendering/OpenGL2/CMakeLists.txt
-index 1111111..2222222 100644
---- a/Rendering/OpenGL2/CMakeLists.txt
-+++ b/Rendering/OpenGL2/CMakeLists.txt
-@@ -122,6 +122,11 @@ set_source_files_properties(
-   vtkTransformFeedback
-   WRAP_EXCLUDE)
- 
++#fix GLEW static linking
 +if(NOT VTK_BUILD_SHARED_LIBS)
 +  set_source_files_properties(${Module_SRCS}
-+    PROPERTIES COMPILE_DEFINITIONS GLEW_STATIC)
++    PROPERTIES
++      COMPILE_DEFINITIONS GLEW_STATIC
++      )
 +endif()
-+
- set_source_files_properties(
-   ${CMAKE_CURRENT_BINARY_DIR}/${vtk-module}ObjectFactory.cxx
-   vtkOpenGLGL2PSHelper
