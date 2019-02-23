@@ -681,7 +681,10 @@ download-$(3)~$(1): download-only-$(1) \
                     $(addprefix download-,$(PKG_ALL_DEPS))
 
 .PHONY: $(1) $(1)~$(3)
-$(1) $(1)~$(3): $(PREFIX)/$(3)/installed/$(1)
+# requested pkgs should not build their native version unless
+# explicitly set in DEPS or they only have a single target
+$(if $(filter-out $(BUILD),$(3))$(call not,$(word 2,$($(1)_TARGETS))),$(1)) \
+    $(1)~$(3): $(PREFIX)/$(3)/installed/$(1)
 $(PREFIX)/$(3)/installed/$(1): $(PKG_MAKEFILES) \
                           $($(PKG)_PATCHES) \
                           $(PKG_TESTFILES) \
