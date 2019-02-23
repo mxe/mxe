@@ -9,9 +9,10 @@ $(PKG)_CHECKSUM := a4ecafc37086f96a833463214f873caac977199e64f0b1453aa49bdd6f24f
 $(PKG)_SUBDIR    = qt-installer-framework-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).zip
 $(PKG)_URL      := https://download.qt.io/official_releases/qt-installer-framework/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc qtbase qttools qtwinextras
-$(PKG)_DEPS_$(BUILD) := qtbase qttools
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
+
+$(PKG)_DEPS_$(BUILD) := cc qtbase qttools
+$(PKG)_DEPS_STATIC   := $($(PKG)_DEPS_$(BUILD)) qtwinextras $(BUILD)~$(PKG)
 
 define $(PKG)_BUILD_$(BUILD)
     cd '$(1)' && $(TARGET)-qmake-qt5
