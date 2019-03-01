@@ -3,65 +3,26 @@ This file is part of MXE. See LICENSE.md for licensing information.
 Contains ad hoc patches for cross building.
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Boris Pek <tehnick-8@yandex.ru>
-Date: Thu, 22 Mar 2018 22:40:00 +0300
-Subject: [PATCH 1/2] Added cmake options for disabling building of
- applications and tests
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sat, 2 Mar 2019 02:57:50 +1100
+Subject: [PATCH 1/1] add option to disable protobuf
 
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 1111111..2222222 100755
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -326,6 +326,10 @@ ENDIF(INSTALL_TO_OSG_DIR)
- # osgEarth Examples
- OPTION(BUILD_OSGEARTH_EXAMPLES "Enable to build osgEarth Examples" ON)
+@@ -162,8 +162,11 @@ ENDIF(MINGW)
+ FIND_PACKAGE(SilverLining QUIET)
+ FIND_PACKAGE(Triton QUIET)
  
-+# Applications and tests
-+OPTION(BUILD_APPLICATIONS "Enable build of Applications" ON)
-+OPTION(BUILD_TESTS "Enable build of Tests" ON)
-+
- # OE Core
- ADD_SUBDIRECTORY(src)
+-FIND_PACKAGE(Protobuf QUIET)
+-SET (PROTOBUF_USE_DLLS FALSE CACHE BOOL "Set this to true if Protobuf is compiled as dll")
++OPTION(OSGEARTH_USE_PROTOBUF "Set to OFF to disable Protobuf" ON)
++IF (OSGEARTH_USE_PROTOBUF)
++    FIND_PACKAGE(Protobuf QUIET)
++    SET (PROTOBUF_USE_DLLS FALSE CACHE BOOL "Set this to true if Protobuf is compiled as dll")
++ENDIF (OSGEARTH_USE_PROTOBUF)
  
-diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
-index 1111111..2222222 100644
---- a/src/CMakeLists.txt
-+++ b/src/CMakeLists.txt
-@@ -23,11 +23,11 @@ ENDFOREACH( lib )
- 
- ADD_SUBDIRECTORY( osgEarthDrivers )
- 
--IF(NOT ANDROID)
-+IF(BUILD_APPLICATIONS AND NOT ANDROID)
-     ADD_SUBDIRECTORY( applications )
- ENDIF()
- 
--IF(NOT OSGEARTH_BUILD_PLATFORM_IPHONE AND NOT OSGEARTH_BUILD_PLATFORM_IPHONE_SIMULATOR)
-+IF(BUILD_TESTS AND NOT OSGEARTH_BUILD_PLATFORM_IPHONE AND NOT OSGEARTH_BUILD_PLATFORM_IPHONE_SIMULATOR)
-     ADD_SUBDIRECTORY( tests )
- ENDIF()
- 
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Boris Pek <tehnick-8@yandex.ru>
-Date: Mon, 18 Jun 2018 18:49:40 +0300
-Subject: Fix build with OpenSceneGraph >= 3.6.1
-
-
-diff --git a/src/osgEarth/ScreenSpaceLayout.cpp b/src/osgEarth/ScreenSpaceLayout.cpp
-index 346d7bcae..760d26fa8 100644
---- a/src/osgEarth/ScreenSpaceLayout.cpp
-+++ b/src/osgEarth/ScreenSpaceLayout.cpp
-@@ -106,7 +106,11 @@ namespace
-                     return diff < 0.0f;
- 
-                 // then fallback on traversal order.
-+#if OSG_VERSION_GREATER_THAN(3,6,1)
-+                diff = float(lhs->_traversalOrderNumber) - float(rhs->_traversalOrderNumber);
-+#else
-                 diff = float(lhs->_traversalNumber) - float(rhs->_traversalNumber);
-+#endif
-                 return diff < 0.0f;
-             }
-         }
-
+ SET (WITH_EXTERNAL_DUKTAPE FALSE CACHE BOOL "Use bundled or system wide version of Duktape")
+ IF (WITH_EXTERNAL_DUKTAPE)
