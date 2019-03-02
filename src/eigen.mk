@@ -18,9 +18,14 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    # remove previous install
+    rm -rf "$(PREFIX)/$(TARGET)/*/eigen3"
+    rm -rf "$(PREFIX)/$(TARGET)/*/pkgconfig/eigen3.pc"
+
     # build and install the library
     cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \
         -DEIGEN_BUILD_PKGCONFIG=ON \
+        -DPKGCONFIG_INSTALL_DIR='$(PREFIX)/$(TARGET)/lib/pkgconfig' \
         -DBUILD_TESTING=OFF
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
