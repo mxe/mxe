@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Sat, 24 Feb 2018 15:54:48 +1100
-Subject: [PATCH 1/1] fixes
+Subject: [PATCH 1/2] fixes
 
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
@@ -65,3 +65,73 @@ index 1111111..2222222 100755
  )
  
  if(MSVC)
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Ivan Romanov <drizt@land.ru>
+Date: Fri, 27 Jul 2018 13:32:18 +0500
+Subject: [PATCH 2/2] Fix numbers parsing
+
+This patch has been taken from: https://github.com/flavio/qjson/issues/48#ref-pullrequest-345139226
+
+strtoll and strtoull may not reset errno for valid input.
+Need to check actual returned value as sayed in strtoll
+documentation.
+
+Fix #48
+
+diff --git a/src/json_scanner.cc b/src/json_scanner.cc
+index 1111111..2222222 100644
+--- a/src/json_scanner.cc
++++ b/src/json_scanner.cc
+@@ -3393,8 +3393,9 @@ YY_RULE_SETUP
+ #line 82 "json_scanner.yy"
+ {
+                 m_yylloc->columns(yyleng);
+-                *m_yylval = QVariant(strtoull(yytext, NULL, 10));
+-                if (errno == ERANGE) {
++                unsigned long long val = strtoull(yytext, NULL, 10);
++                *m_yylval = QVariant(val);
++                if (val == ULLONG_MAX && errno == ERANGE) {
+                     qCritical() << "Number is out of range: " << yytext;
+                     return yy::json_parser::token::INVALID;
+                 }
+@@ -3408,8 +3409,9 @@ YY_RULE_SETUP
+ #line 93 "json_scanner.yy"
+ {
+                 m_yylloc->columns(yyleng);
+-                *m_yylval = QVariant(strtoll(yytext, NULL, 10));
+-                if (errno == ERANGE) {
++                long long val = strtoll(yytext, NULL, 10);
++                *m_yylval = QVariant(val);
++                if ((val == LLONG_MAX || val == LLONG_MIN) && errno == ERANGE) {
+                     qCritical() << "Number is out of range: " << yytext;
+                     return yy::json_parser::token::INVALID;
+                 }
+diff --git a/src/json_scanner.yy b/src/json_scanner.yy
+index 1111111..2222222 100644
+--- a/src/json_scanner.yy
++++ b/src/json_scanner.yy
+@@ -81,8 +81,9 @@ null          {
+ [0-9]         |
+ [1-9][0-9]+   {
+                 m_yylloc->columns(yyleng);
+-                *m_yylval = QVariant(strtoull(yytext, NULL, 10));
+-                if (errno == ERANGE) {
++                unsigned long long val = strtoull(yytext, NULL, 10);
++                *m_yylval = QVariant(val);
++                if (val == ULLONG_MAX && errno == ERANGE) {
+                     qCritical() << "Number is out of range: " << yytext;
+                     return yy::json_parser::token::INVALID;
+                 }
+@@ -92,8 +93,9 @@ null          {
+ -[0-9]        |
+ -[1-9][0-9]+  {
+                 m_yylloc->columns(yyleng);
+-                *m_yylval = QVariant(strtoll(yytext, NULL, 10));
+-                if (errno == ERANGE) {
++                long long val = strtoll(yytext, NULL, 10);
++                *m_yylval = QVariant(val);
++                if ((val == LLONG_MAX || val == LLONG_MIN) && errno == ERANGE) {
+                     qCritical() << "Number is out of range: " << yytext;
+                     return yy::json_parser::token::INVALID;
+                 }

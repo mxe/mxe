@@ -4,92 +4,293 @@ Contains ad hoc patches for cross building.
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
-Date: Wed, 18 Jan 2017 19:38:56 +1100
-Subject: [PATCH 1/3] fix msys build
+Date: Fri, 11 Jan 2019 18:02:55 +1100
+Subject: [PATCH 1/4] ad hoc fixes
 
-Taken from:
-https://github.com/Alexpux/Qt-builds/blob/master/patches/qt/5.0.x/qt-5.0.0-fix-build-under-msys.patch
 
-diff --git a/Source/WebCore/DerivedSources.pri b/Source/WebCore/DerivedSources.pri
+diff --git a/Source/JavaScriptCore/jsc.cpp b/Source/JavaScriptCore/jsc.cpp
 index 1111111..2222222 100644
---- a/Source/WebCore/DerivedSources.pri
-+++ b/Source/WebCore/DerivedSources.pri
-@@ -752,7 +752,7 @@ IDL_ATTRIBUTES_FILE = $$PWD/bindings/scripts/IDLAttributes.txt
- preprocessIdls.input = IDL_ATTRIBUTES_FILE
- preprocessIdls.script = $$PREPROCESS_IDLS_SCRIPT
- # FIXME : We need to use only perl at some point.
--win_cmd_shell: preprocessIdls.commands = type nul > $$IDL_FILES_TMP $$EOC
-+win_cmd_shell: preprocessIdls.commands = cat /dev/null > $$IDL_FILES_TMP $$EOC
- else: preprocessIdls.commands = cat /dev/null > $$IDL_FILES_TMP $$EOC
- for(binding, IDL_BINDINGS) {
-     # We need "$$binding" instead of "$$binding ", because Windows' echo writes trailing whitespaces. (http://wkb.ug/88304)
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Martchus <martchus@gmx.net>
-Date: Sun, 25 Sep 2016 22:21:54 +0200
-Subject: [PATCH 2/3] Include intrin.h for declaration of _mm_mfence
-
-taken from:
-https://aur.archlinux.org/cgit/aur.git/tree/0007-Include-intrin.h-for-declaration-of-_mm_mfence.patch?h=mingw-w64-qt5-webkit
-
+--- a/Source/JavaScriptCore/jsc.cpp
++++ b/Source/JavaScriptCore/jsc.cpp
+@@ -1714,7 +1714,7 @@ int main(int argc, char** argv)
+     fesetenv( &env );
+ #endif
+ 
+-#if OS(WINDOWS) && (defined(_M_X64) || defined(__x86_64__))
++#if OS(WINDOWS) && (defined(_M_X64) || defined(__x86_64__)) && !COMPILER(GCC)
+     // The VS2013 runtime has a bug where it mis-detects AVX-capable processors
+     // if the feature has been disabled in firmware. This causes us to crash
+     // in some of the math functions. For now, we disable those optimizations
+diff --git a/Source/JavaScriptCore/llint/LLIntOfflineAsmConfig.h b/Source/JavaScriptCore/llint/LLIntOfflineAsmConfig.h
+index 1111111..2222222 100644
+--- a/Source/JavaScriptCore/llint/LLIntOfflineAsmConfig.h
++++ b/Source/JavaScriptCore/llint/LLIntOfflineAsmConfig.h
+@@ -92,13 +92,13 @@
+ #define OFFLINE_ASM_ARM 0
+ #endif
+ 
+-#if CPU(X86_64) && !COMPILER(MSVC)
++#if CPU(X86_64) && !OS(WINDOWS)
+ #define OFFLINE_ASM_X86_64 1
+ #else
+ #define OFFLINE_ASM_X86_64 0
+ #endif
+ 
+-#if CPU(X86_64) && COMPILER(MSVC)
++#if CPU(X86_64) && OS(WINDOWS)
+ #define OFFLINE_ASM_X86_64_WIN 1
+ #else
+ #define OFFLINE_ASM_X86_64_WIN 0
 diff --git a/Source/WTF/wtf/Atomics.h b/Source/WTF/wtf/Atomics.h
 index 1111111..2222222 100644
 --- a/Source/WTF/wtf/Atomics.h
 +++ b/Source/WTF/wtf/Atomics.h
-@@ -68,6 +68,8 @@
- #elif !COMPILER(GCC)
- extern "C" void _ReadWriteBarrier(void);
- #pragma intrinsic(_ReadWriteBarrier)
-+#else
-+#include <intrin.h>
- #endif
- #include <windows.h>
- #elif OS(QNX)
+@@ -125,7 +125,7 @@ inline void memoryBarrierBeforeUnlock() { armV7_dmb(); }
+ 
+ inline void x86_mfence()
+ {
+-#if OS(WINDOWS)
++#if OS(WINDOWS) && !COMPILER(GCC)
+     // I think that this does the equivalent of a dummy interlocked instruction,
+     // instead of using the 'mfence' instruction, at least according to MSDN. I
+     // know that it is equivalent for our purposes, but it would be good to
+diff --git a/Source/WTF/wtf/CurrentTime.cpp b/Source/WTF/wtf/CurrentTime.cpp
+index 1111111..2222222 100644
+--- a/Source/WTF/wtf/CurrentTime.cpp
++++ b/Source/WTF/wtf/CurrentTime.cpp
+@@ -91,6 +91,35 @@ static double lowResUTCTime()
+ 
+ #if USE(QUERY_PERFORMANCE_COUNTER)
+ 
++#if defined(_WIN32) && (defined(__x86_64__) || defined(_AMD64_)) && _WIN32_WINNT < 0x0600
++/* GetTickCount64() is not available on XP. */
++ULONGLONG GetTickCount64 ()
++{
++    static ULONGLONG (CALLBACK *DynGetTickCount64)() = (ULONGLONG (*)(void))-1;
++    static DWORD last_ticks = 0;
++    static DWORD n_overflow = 0;
++    DWORD ticks = 0;
++    HINSTANCE hKernel32;
++
++    if (DynGetTickCount64 == (void*)-1)
++    {
++        hKernel32 = GetModuleHandleW(L"KERNEL32");
++        DynGetTickCount64 = *(ULONGLONG (*)(void))(GetProcAddress(hKernel32,
++                                        "GetTickCount64"));
++    }
++    if (DynGetTickCount64 != (void*) NULL)
++    {
++        return DynGetTickCount64();
++    }
++
++    ticks = GetTickCount();
++    if (ticks < last_ticks)
++        n_overflow++;
++    last_ticks = ticks;
++    return ((ULONGLONG)n_overflow << 32LL) + (ULONGLONG)GetTickCount();
++}
++#endif
++
+ static LARGE_INTEGER qpcFrequency;
+ static bool syncedTime;
+ 
+diff --git a/Source/WebCore/bindings/scripts/preprocess-idls.pl b/Source/WebCore/bindings/scripts/preprocess-idls.pl
+index 1111111..2222222 100644
+--- a/Source/WebCore/bindings/scripts/preprocess-idls.pl
++++ b/Source/WebCore/bindings/scripts/preprocess-idls.pl
+@@ -179,9 +179,9 @@ my $cygwinPathAdded;
+ sub CygwinPathIfNeeded
+ {
+     my $path = shift;
+-    if ($path && $Config{osname} eq "cygwin") {
++    if ($path && ($Config{osname} eq "cygwin" || $Config{osname} eq "msys")) {
+         if (not $cygwinPathAdded) {
+-            $ENV{PATH} = "$ENV{PATH}:/cygdrive/c/cygwin/bin";
++            $ENV{PATH} = "$ENV{PATH}:/usr/bin";
+             $cygwinPathAdded = 1; 
+         }
+         chomp($path = `cygpath -u '$path'`);
+diff --git a/Source/WebCore/css/makeSelectorPseudoClassAndCompatibilityElementMap.py b/Source/WebCore/css/makeSelectorPseudoClassAndCompatibilityElementMap.py
+index 1111111..2222222 100644
+--- a/Source/WebCore/css/makeSelectorPseudoClassAndCompatibilityElementMap.py
++++ b/Source/WebCore/css/makeSelectorPseudoClassAndCompatibilityElementMap.py
+@@ -57,7 +57,7 @@ def enumerablePseudoType(stringPseudoType):
+ def expand_ifdef_condition(condition):
+     return condition.replace('(', '_').replace(')', '')
+ 
+-output_file = open('SelectorPseudoClassAndCompatibilityElementMap.gperf', 'w')
++output_file = open('SelectorPseudoClassAndCompatibilityElementMap.gperf', 'wb')
+ 
+ output_file.write("""
+ %{
+diff --git a/Source/WebCore/css/makeSelectorPseudoElementsMap.py b/Source/WebCore/css/makeSelectorPseudoElementsMap.py
+index 1111111..2222222 100644
+--- a/Source/WebCore/css/makeSelectorPseudoElementsMap.py
++++ b/Source/WebCore/css/makeSelectorPseudoElementsMap.py
+@@ -57,7 +57,7 @@ def enumerablePseudoType(stringPseudoType):
+ def expand_ifdef_condition(condition):
+     return condition.replace('(', '_').replace(')', '')
+ 
+-output_file = open('SelectorPseudoElementTypeMap.gperf', 'w')
++output_file = open('SelectorPseudoElementTypeMap.gperf', 'wb')
+ 
+ output_file.write("""
+ %{
+diff --git a/Source/WebCore/platform/network/create-http-header-name-table b/Source/WebCore/platform/network/create-http-header-name-table
+index 1111111..2222222 100755
+--- a/Source/WebCore/platform/network/create-http-header-name-table
++++ b/Source/WebCore/platform/network/create-http-header-name-table
+@@ -54,7 +54,7 @@ input_file.close()
+ 
+ http_header_names.sort()
+ 
+-gperf_file = open('HTTPHeaderNames.gperf', 'w')
++gperf_file = open('HTTPHeaderNames.gperf', 'wb')
+ gperf_file.write('''
+ %{
+ /*
+diff --git a/Source/cmake/ECMGeneratePriFile.cmake b/Source/cmake/ECMGeneratePriFile.cmake
+index 1111111..2222222 100644
+--- a/Source/cmake/ECMGeneratePriFile.cmake
++++ b/Source/cmake/ECMGeneratePriFile.cmake
+@@ -101,7 +101,11 @@ if(KDE_INSTALL_USE_QT_SYS_PATHS OR _askqmake)
+   query_qmake(qt_host_data_dir QT_HOST_DATA)
+   set(ECM_MKSPECS_INSTALL_DIR ${qt_host_data_dir}/mkspecs/modules CACHE PATH "The directory where mkspecs will be installed to.")
+ else()
+-  set(ECM_MKSPECS_INSTALL_DIR mkspecs/modules CACHE PATH "The directory where mkspecs will be installed to.")
++  if(MINGW)
++    set(ECM_MKSPECS_INSTALL_DIR share/qt5/mkspecs/modules CACHE PATH "The directory where mkspecs will be installed to.")
++  else()
++    set(ECM_MKSPECS_INSTALL_DIR mkspecs/modules CACHE PATH "The directory where mkspecs will be installed to.")
++  endif()
+ endif()
+ 
+ function(ECM_GENERATE_PRI_FILE)
+diff --git a/Source/cmake/FindICU.cmake b/Source/cmake/FindICU.cmake
+index 1111111..2222222 100644
+--- a/Source/cmake/FindICU.cmake
++++ b/Source/cmake/FindICU.cmake
+@@ -49,7 +49,7 @@ if (ICU_INCLUDE_DIR AND ICU_LIBRARY)
+     pkg_check_modules(PC_ICU_I18N icu-i18n)
+     find_library(
+         ICU_I18N_LIBRARY
+-        NAMES icui18n icuin cygicuin cygicuin32
++        NAMES icuin icui18n cygicuin cygicuin32
+         HINTS ${PC_ICU_I18N_LIBRARY_DIRS}
+               ${PC_ICU_I18N_LIBDIR}
+         DOC "Libraries to link against for ICU internationalization")
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Konstantin Tokarev <annulen@yandex.ru>
-Date: Fri, 4 Nov 2016 00:44:49 +0300
-Subject: [PATCH 3/3] Fixed crash (probably miscompilation) with MinGW-w64
- 5.3.0
+Date: Fri, 3 Nov 2017 18:59:25 +0300
+Subject: [PATCH 2/4] Install private headers for WK2 and private .pri modules
 
-Change-Id: Iac1c5fe1879abfaa299ec909e5928912c2354126
+Change-Id: Ie2f52c600180fd31cc5fac2f5d30952df28ea9d6
 
-taken from:
-https://github.com/Martchus/PKGBUILDs/blob/c7b900625449ba7f00539d4e23d2500765bc6f9a/qt5-webkit/mingw-w64/0009-Fixed-crash-probably-miscompilation-with-MinGW-w64-5.patch
-
-diff --git a/Source/WebKit/qt/WidgetApi/qwebframe.cpp b/Source/WebKit/qt/WidgetApi/qwebframe.cpp
+diff --git a/Source/WebKit/PlatformQt.cmake b/Source/WebKit/PlatformQt.cmake
 index 1111111..2222222 100644
---- a/Source/WebKit/qt/WidgetApi/qwebframe.cpp
-+++ b/Source/WebKit/qt/WidgetApi/qwebframe.cpp
-@@ -119,16 +119,6 @@ QWebFrameAdapter* QWebFramePrivate::createChildFrame(QWebFrameData* frameData)
-     return newFrame->d;
- }
+--- a/Source/WebKit/PlatformQt.cmake
++++ b/Source/WebKit/PlatformQt.cmake
+@@ -418,7 +418,7 @@ install(
+     COMPONENT Data
+ )
  
--QWebFrame *QWebFramePrivate::apiHandle()
--{
--    return q;
--}
--
--QObject *QWebFramePrivate::handle()
--{
--    return q;
--}
--
- void QWebFramePrivate::contentsSizeDidChange(const QSize &size)
- {
-     emit q->contentsSizeChanged(size);
-diff --git a/Source/WebKit/qt/WidgetApi/qwebframe_p.h b/Source/WebKit/qt/WidgetApi/qwebframe_p.h
+-file(GLOB WebKit_PRIVATE_HEADERS qt/Api/*_p.h)
++file(GLOB WebKit_PRIVATE_HEADERS qt/Api/*_p.h ../WebKit2/UIProcess/API/qt/*_p.h)
+ install(
+     FILES
+         ${WebKit_PRIVATE_HEADERS}
+@@ -510,7 +510,7 @@ if (NOT MACOS_BUILD_FRAMEWORKS)
+     install(FILES ${WebKit_PKGCONFIG_FILENAME} DESTINATION ${ECM_PKGCONFIG_INSTALL_DIR} COMPONENT Data)
+ endif ()
+ 
+-if (KDE_INSTALL_USE_QT_SYS_PATHS)
++if (KDE_INSTALL_USE_QT_SYS_PATHS OR MINGW)
+     set(WebKit_PRI_ARGUMENTS
+         BIN_INSTALL_DIR "$$QT_MODULE_BIN_BASE"
+         LIB_INSTALL_DIR "$$QT_MODULE_LIB_BASE"
+@@ -734,7 +734,7 @@ if (NOT MACOS_BUILD_FRAMEWORKS)
+     install(FILES ${WebKitWidgets_PKGCONFIG_FILENAME} DESTINATION ${ECM_PKGCONFIG_INSTALL_DIR} COMPONENT Data)
+ endif ()
+ 
+-if (KDE_INSTALL_USE_QT_SYS_PATHS)
++if (KDE_INSTALL_USE_QT_SYS_PATHS OR MINGW)
+     set(WebKitWidgets_PRI_ARGUMENTS
+         BIN_INSTALL_DIR "$$QT_MODULE_BIN_BASE"
+         LIB_INSTALL_DIR "$$QT_MODULE_LIB_BASE"
+diff --git a/Source/cmake/WebKitMacros.cmake b/Source/cmake/WebKitMacros.cmake
 index 1111111..2222222 100644
---- a/Source/WebKit/qt/WidgetApi/qwebframe_p.h
-+++ b/Source/WebKit/qt/WidgetApi/qwebframe_p.h
-@@ -49,8 +49,8 @@ public:
-     static QWebFrame* kit(const QWebFrameAdapter*);
+--- a/Source/cmake/WebKitMacros.cmake
++++ b/Source/cmake/WebKitMacros.cmake
+@@ -265,8 +265,6 @@ macro(WEBKIT_FRAMEWORK _target)
+         ${${_target}_HEADERS}
+         ${${_target}_SOURCES}
+         ${${_target}_DERIVED_SOURCES}
+-        ${${_target}_PRIVATE_HEADERS}
+-        ${${_target}_PUBLIC_HEADERS}
+     )
+     target_link_libraries(${_target} ${${_target}_LIBRARIES})
+     set_target_properties(${_target} PROPERTIES COMPILE_DEFINITIONS "BUILDING_${_target}")
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Pek <tehnick-8@yandex.ru>
+Date: Fri, 11 Jan 2019 18:06:01 +1100
+Subject: [PATCH 3/4] cmake: fix Cflags sections in pkg-config files
+
+
+diff --git a/Source/cmake/ECMGeneratePkgConfigFile.cmake b/Source/cmake/ECMGeneratePkgConfigFile.cmake
+index 1111111..2222222 100644
+--- a/Source/cmake/ECMGeneratePkgConfigFile.cmake
++++ b/Source/cmake/ECMGeneratePkgConfigFile.cmake
+@@ -129,6 +129,7 @@ function(ECM_GENERATE_PKGCONFIG_FILE)
+       else()
+           set(EGPF_INCLUDE_INSTALL_DIR "include/${EGPF_BASE_NAME}")
+       endif()
++      string(REPLACE "/Qt5" "/Qt" EGPF_INCLUDE_INSTALL_DIR "${EGPF_INCLUDE_INSTALL_DIR}")
+   endif()
+   if(NOT EGPF_LIB_INSTALL_DIR)
+       if(LIB_INSTALL_DIR)
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Pek <tehnick-8@yandex.ru>
+Date: Fri, 11 Jan 2019 18:07:10 +1100
+Subject: [PATCH 4/4] Fix cross-compilation using MinGW
+
+with USE_MEDIA_FOUNDATION=ON. (Part 1)
+
+diff --git a/Source/WebCore/platform/graphics/win/MediaPlayerPrivateMediaFoundation.h b/Source/WebCore/platform/graphics/win/MediaPlayerPrivateMediaFoundation.h
+index 1111111..2222222 100644
+--- a/Source/WebCore/platform/graphics/win/MediaPlayerPrivateMediaFoundation.h
++++ b/Source/WebCore/platform/graphics/win/MediaPlayerPrivateMediaFoundation.h
+@@ -31,12 +31,13 @@
+ #include "MediaPlayerPrivate.h"
+ #include "Win32Handle.h"
  
-     // Adapter implementation
--    virtual QWebFrame* apiHandle() OVERRIDE;
--    virtual QObject* handle() OVERRIDE;
-+    virtual QWebFrame* apiHandle() OVERRIDE { return q; }
-+    virtual QObject* handle() OVERRIDE { return q; }
-     virtual void contentsSizeDidChange(const QSize &) OVERRIDE;
-     virtual int scrollBarPolicy(Qt::Orientation) const OVERRIDE;
-     virtual void emitUrlChanged() OVERRIDE;
+-#include <D3D9.h>
+-#include <Dxva2api.h>
++#include <d3d9.h>
++#include <dxva2api.h>
+ 
+-#include <Mfapi.h>
+-#include <Mferror.h>
+-#include <Mfidl.h>
++#include <mfapi.h>
++#include <mferror.h>
++#include <mfidl.h>
++#include <mfobjects.h>
+ #include <evcode.h>
+ #include <evr.h>
+ 
+diff --git a/Source/WebCore/platform/win/HWndDC.h b/Source/WebCore/platform/win/HWndDC.h
+index 1111111..2222222 100644
+--- a/Source/WebCore/platform/win/HWndDC.h
++++ b/Source/WebCore/platform/win/HWndDC.h
+@@ -27,7 +27,7 @@
+ #define HWndDC_h
+ 
+ #include <windows.h>
+-#include <wtf/NonCopyable.h>
++#include <wtf/Noncopyable.h>
+ 
+ namespace WebCore {
+ 

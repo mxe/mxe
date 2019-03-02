@@ -58,3 +58,24 @@ index 1111111..2222222 100644
  
  /* Output STRING, a string representing a filename, to FILE.
     We canonicalize it to be in Unix format (backslashes are replaced
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Cameron Kaiser <classilla@floodgap.com>
+Date: Sat, 13 Oct 2018 18:59:18 -0700
+Subject: [PATCH 1/1] fix gcc compile error on ppc64le
+
+https://gcc.gnu.org/viewcvs/gcc/branches/gcc-6-branch/libcpp/lex.c?view=log&pathrev=261621
+
+diff --git a/libcpp/lex.c b/libcpp/lex.c
+index 1111111..2222222 100644
+--- a/libcpp/lex.c	2015-04-06 10:01:50.000000000 -0700
++++ b/libcpp/lex.c	2018-10-13 18:55:33.693558942 -0700
+@@ -550,7 +550,7 @@
+     {
+       vc m_nl, m_cr, m_bs, m_qm;
+
+-      data = *((const vc *)s);
++      data = __builtin_vec_vsx_ld (0, s);
+       s += 16;
+
+       m_nl = (vc) __builtin_vec_cmpeq(data, repl_nl);

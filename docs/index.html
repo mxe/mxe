@@ -163,7 +163,7 @@
     </p>
     <p>
         Experimental support for GCC with posix threads was
-        added in <a href="https://github.com/mxe/mxe/pull/958">November 2015</a>.
+        added in <a href="https://github.com/mxe/mxe/pull/958">November 2015</a>. Since <a href="https://github.com/mxe/mxe/pull/2263">January 2019</a> it is used by default.
     </p>
     <p>
         Experimental support for alternate GCC Exception Handling was
@@ -537,13 +537,14 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     </p>
 
     <ul class="compact-list">
-        <li><a href="#requirements-debian">Debian</a></li>
-        <li><a href="#requirements-fedora">Fedora</a></li>
+        <li><a href="#requirements-debian">Debian/Ubuntu</a></li>
+        <li><a href="#requirements-fedora">Fedora/Red Hat/CentOS</a></li>
         <li><a href="#requirements-freebsd">FreeBSD</a></li>
         <li><a href="#requirements-frugalware">Frugalware</a></li>
         <li><a href="#requirements-gentoo">Gentoo</a></li>
         <li><a href="#requirements-macos">Mac OS X</a></li>
         <li><a href="#requirements-opensuse">openSUSE</a></li>
+        <li><a href="#requirements-void">Void</a></li>
         <li><a href="#requirements-wsl">Windows Subsystem for Linux</a></li>
     </ul>
 
@@ -565,7 +566,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         <td></td>
     </tr>
     <tr>
-        <td><a href="http://www.bzip.org/">Bzip2</a></td>
+        <td><a href="https://en.wikipedia.org/wiki/Bzip2">Bzip2</a></td>
         <td></td>
     </tr>
     <tr>
@@ -577,7 +578,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         <td></td>
     </tr>
     <tr>
-        <td><a href="http://www.gdk-pixbuf.org/">gdk-pixbuf</a></td>
+        <td><a href="https://developer.gnome.org/gdk-pixbuf/">gdk-pixbuf</a></td>
         <td></td>
     </tr>
     <tr>
@@ -621,6 +622,10 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         <td>≥ 2.2</td>
     </tr>
     <tr>
+        <td><a href="http://lzip.nongnu.org/">Lzip</a></td>
+        <td></td>
+    </tr>
+    <tr>
         <td><a href="https://www.openssl.org/">OpenSSL</a>-dev</td>
         <td>≥ 1.01</td>
     </tr>
@@ -637,7 +642,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         <td></td>
     </tr>
     <tr>
-        <td><a href="http://search.cpan.org/dist/XML-Parser/Parser.pm">Perl XML::Parser</a></td>
+        <td><a href="https://metacpan.org/pod/distribution/XML-Parser/Parser.pm">Perl XML::Parser</a></td>
         <td></td>
     </tr>
     <tr>
@@ -653,11 +658,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         <td></td>
     </tr>
     <tr>
-        <td><a href="http://www.scons.org/">SCons</a></td>
-        <td>≥ 0.98</td>
-    </tr>
-    <tr>
-        <td><a href="http://www.info-zip.org/UnZip.html">UnZip</a></td>
+        <td><a href="https://infozip.sourceforge.io/UnZip.html">UnZip</a></td>
         <td></td>
     </tr>
     <tr>
@@ -697,6 +698,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     libssl-dev \
     libtool-bin \
     libxml-parser-perl \
+    lzip \
     make \
     openssl \
     p7zip-full \
@@ -705,7 +707,6 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     pkg-config \
     python \
     ruby \
-    scons \
     sed \
     unzip \
     wget \
@@ -730,9 +731,17 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     See <a href="http://pkg.mxe.cc/">pkg.mxe.cc</a>.
     </p>
 
-    <h3 id="requirements-fedora">Fedora</h3>
+    <h3 id="requirements-fedora">Fedora/Red Hat/Centos</h3>
 
-    <!-- https://admin.fedoraproject.org/pkgdb/ -->
+    <p>
+    Ensure <a href="https://fedoraproject.org/wiki/EPEL">Extra Packages
+    for Enterprise Linux (EPEL)</a> is installed/available. On some
+    systems, it may be as simple as:
+    </p>
+
+    <pre>yum install epel-release</pre>
+
+    <!-- https://apps.fedoraproject.org/packages/ -->
     <pre>yum install \
     autoconf \
     automake \
@@ -747,6 +756,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     gperf \
     intltool \
     libtool \
+    lzip \
     make \
     openssl-devel \
     p7zip \
@@ -755,7 +765,6 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     pkgconfig \
     python \
     ruby \
-    scons \
     sed \
     unzip \
     wget \
@@ -794,7 +803,6 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     pkgconf \
     python \
     ruby \
-    scons \
     unzip \
     wget</pre>
 
@@ -856,6 +864,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     gperf \
     intltool \
     libtool \
+    lzip \
     make \
     openssl \
     patch \
@@ -864,7 +873,6 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     pkgconfig \
     python \
     ruby \
-    scons \
     sed \
     unzip \
     wget \
@@ -881,6 +889,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <!-- https://packages.gentoo.org/ -->
     <pre>emerge \
     app-arch/bzip2 \
+    app-arch/lzip \
     app-arch/p7zip \
     app-arch/unzip \
     app-arch/xz-utils \
@@ -893,7 +902,6 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     dev-util/gperf \
     dev-util/intltool \
     dev-util/pkgconfig \
-    dev-util/scons \
     dev-vcs/git \
     net-misc/wget \
     sys-apps/sed \
@@ -929,35 +937,16 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     gsed \
     intltool \
     libtool \
+    lzip \
     p7zip \
     pkgconfig \
-    scons \
     wget \
     xz</pre>
 
     <h5 id="requirements-macos-rudix">Rudix</h5>
     <p>
-    Install <a href="http://rudix.org/">Rudix</a>,
-    then run:
-    </p>
-    <!-- http://rudix.org/packages/index.html -->
-    <pre>sudo rudix install \
-    autoconf \
-    automake \
-    coreutils \
-    glib \
-    intltool \
-    libtool \
-    p7zip \
-    scons \
-    sed \
-    tar \
-    wget \
-    xz</pre>
-    <p>
-    Note: <b>gdk-pixbuf2</b> is not installed in method 2,
-    so you can not build <b>gtk3</b>. Other packages may be
-    missing on Rudix - please open an issue if you find any.
+    <a href="https://rudix.org/">Rudix</a> has
+    <a href="https://twitter.com/__rudix__/status/1022273255942565893">shut down since August 2018</a>
     </p>
 
     <h5 id="requirements-macos-homebrew">Homebrew</h5>
@@ -965,7 +954,8 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     Install <a href="https://brew.sh/">Homebrew</a>,
     then run:
     </p>
-    <!-- http://braumeister.org/ -->
+    <!-- https://formulae.brew.sh/ -->
+    <!-- wget -q -O- https://formulae.brew.sh/api/formula.json | tr ',' '\n' | grep 'name\|desc' | grep -i {pkg} -->
     <pre>brew install \
     autoconf \
     automake \
@@ -975,9 +965,9 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     gnu-tar \
     intltool \
     libtool \
+    lzip \
     p7zip \
     pkg-config \
-    scons \
     wget \
     xz</pre>
     <p>
@@ -1003,7 +993,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <h3 id="requirements-opensuse">openSUSE</h3>
 
-    <!-- https://software.opensuse.org/131/en -->
+    <!-- https://software.opensuse.org/explore -->
     <pre>zypper install -R \
     autoconf \
     automake \
@@ -1024,6 +1014,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     libopenssl-devel \
     libstdc++46-devel-32bit \
     libtool \
+    lzip \
     make \
     openssl \
     p7zip \
@@ -1033,7 +1024,6 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     pkg-config \
     python \
     ruby \
-    scons \
     sed \
     unzip \
     wget \
@@ -1051,6 +1041,33 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     are not required, however there are potential issues with
     <a href="#issue-32-bit-systems">32-bit systems</a>.
     </p>
+
+    <h3 id="requirements-void">Void</h3>
+
+    <!-- https://voidlinux.org/packages/ -->
+    <pre>xbps-install -S \
+    autoconf \
+    automake \
+    flex \
+    gcc \
+    gdk-pixbuf-devel \
+    gettext \
+    gettext-devel \
+    git \
+    gperf \
+    intltool \
+    libcurl-devel \
+    libtool \
+    lzip \
+    make \
+    p7zip \
+    patch \
+    perl-XML-Parser \
+    python \
+    ruby \
+    unzip \
+    wget \
+    xz</pre>
 
     <h3 id="requirements-wsl">Windows Subsystem for Linux</h3>
 
@@ -1413,7 +1430,7 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         The package should be a
         <a href="https://www.gnu.org/philosophy/free-sw.html">free</a>
         <a href="https://www.debian.org/social_contract#guidelines">software</a>
-        <a href="http://www.opensource.org/osd.html">library</a>
+        <a href="https://www.opensource.org/osd.html">library</a>
         that is really used by one of your applications. Please also review our
         <a href="#legal">legal notes</a>.
         </p>
@@ -1948,7 +1965,7 @@ endef</pre>
 
     <p>
     Packages that are
-    <a href="http://www.audiocoding.com/faac.html">non-free</a>
+    <a href="https://www.audiocoding.com/faac.html">non-free</a>
     or
     <a href="http://glaros.dtc.umn.edu/gkhome/metis/metis/faq#distribute">ambiguous</a>
     will be
@@ -1963,7 +1980,7 @@ endef</pre>
     <ul>
     <li><a href="https://www.gnu.org/philosophy/free-sw.html">The Free Software Definition</a></li>
     <li><a href="https://www.debian.org/social_contract#guidelines">The Debian Free Software Guidelines (DFSG)</a></li>
-    <li><a href="http://www.opensource.org/osd.html">The Open Source Definition</a></li>
+    <li><a href="https://www.opensource.org/osd.html">The Open Source Definition</a></li>
     </ul>
 
     <p>
@@ -2884,7 +2901,7 @@ endef</pre>
 
     <ul class="compact-list">
     <li>
-        <a href="http://mxe.cc">Website</a>
+        <a href="https://mxe.cc/">Website</a>
     </li>
     <li>
         <a href="https://github.com/mxe/mxe">Project on GitHub</a>
@@ -2908,7 +2925,7 @@ endef</pre>
 
     <ul>
     <li>
-        <a href="http://www.valdyas.org/fading/index.cgi/hacking/krita/mxe_krita.html">Cross-compiling Krita using MXE</a>
+        <a href="https://valdyas.org/fading/hacking/cross-compiling-krita-using-mxe/">Cross-compiling Krita using MXE</a>
         <br>
         Experience report of the
         <a href="https://krita.org/">Krita project</a>
@@ -2919,7 +2936,7 @@ endef</pre>
         Appeared on
         <a href="http://lxer.com/module/newswire/view/118868">LXer</a>
         and
-        <a href="http://www.linuxtoday.com/developer/2009041501335RVSWDV">Linux Today</a>
+        <a href="https://www.linuxtoday.com/developer/2009041501335RVSWDV">Linux Today</a>
     </li>
     <li>
         <a href="http://www.mingw.org/wiki/LinuxCrossMinGW">MinGW cross compiler for Linux build environment</a>
@@ -3016,7 +3033,7 @@ endef</pre>
         <a href="https://cvtool.sourceforge.io/">cvtool</a>
     </li>
     <li>
-        <a href="http://www.qtrac.eu/diffpdf.html">DiffPDF</a>
+        <a href="https://www.qtrac.eu/diffpdf.html">DiffPDF</a>
     </li>
     <li>
         <a href="https://www.digikam.org/">digiKam</a>
@@ -3028,16 +3045,16 @@ endef</pre>
         <a href="https://github.com/ThKattanek/emu64">Emu64</a>
     </li>
     <li>
-        <a href="http://www.ros.org/wiki/eros">Eros</a>
+        <a href="https://www.ros.org/wiki/eros">Eros</a>
     </li>
     <li>
-        <a href="http://www.nongnu.org/galois/">Galois</a>
+        <a href="https://www.nongnu.org/galois/">Galois</a>
     </li>
     <li>
-        <a href="http://gcompris.net/">GCompris</a>
+        <a href="https://www.gcompris.net/">GCompris</a>
     </li>
     <li>
-        <a href="http://www.nongnu.org/gta/">Generic Tagged Arrays</a>
+        <a href="https://www.nongnu.org/gta/">Generic Tagged Arrays</a>
     </li>
     <li>
         <a href="https://www.gnu.org/software/freedink/">GNU FreeDink</a>
@@ -3067,7 +3084,7 @@ endef</pre>
         <a href="https://msmtp.sourceforge.io/">msmtp</a>
     </li>
     <li>
-        <a href="http://www.openscad.org/">OpenSCAD</a>
+        <a href="https://www.openscad.org/">OpenSCAD</a>
     </li>
     <li>
         <a href="https://pdfgrep.org/">Pdfgrep</a>
@@ -3124,13 +3141,16 @@ endef</pre>
         <a href="http://ph.on.things.free.fr/projects/ube/">Ube</a>
     </li>
     <li>
-        <a href="http://ufoai.org/">UFO: Alien Invasion</a>
+        <a href="https://ufoai.org/">UFO: Alien Invasion</a>
     </li>
     <li>
         <a href="https://violetland.github.io/">Violetland</a>
     </li>
     <li>
         <a href="https://wz2100.net/">Warzone 2100</a>
+    </li>
+    <li>
+        <a href="https://wkhtmltopdf.org/">wkhtmltopdf</a>
     </li>
     <li>
         <a href="https://sourceforge.net/projects/xfemm/">xfemm</a>

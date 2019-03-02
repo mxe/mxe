@@ -1,21 +1,20 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libntlm
-$(PKG)_WEBSITE  := http://www.nongnu.org/libntlm/
+$(PKG)_WEBSITE  := https://www.nongnu.org/libntlm/
 $(PKG)_DESCR    := Libntlm
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.4
-$(PKG)_CHECKSUM := 8415d75e31d3135dc7062787eaf4119b984d50f86f0d004b964cdc18a3182589
+$(PKG)_VERSION  := 1.5
+$(PKG)_CHECKSUM := 53d799f696a93b01fe877ccdef2326ed990c0b9f66e380bceaf7bd9cdcd99bbd
 $(PKG)_SUBDIR   := libntlm-$($(PKG)_VERSION)
 $(PKG)_FILE     := libntlm-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://www.nongnu.org/libntlm/releases/$($(PKG)_FILE)
+$(PKG)_URL      := https://www.nongnu.org/libntlm/releases/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://git.savannah.gnu.org/gitweb/?p=libntlm.git;a=tags' | \
-    grep '<a class="list subject"' | \
-    $(SED) -n 's,.*<a[^>]*>\([0-9][^<]*\)<.*,\1,p' | \
-    head -1
+    $(WGET) -q -O- 'https://www.nongnu.org/libntlm/releases/'  | \
+    $(SED) -n 's,.*libntlm-\([0-9]\+\)\(\.[0-9]\+\)*\..*,\1\2,p' |\
+    tail -1
 endef
 
 define $(PKG)_BUILD

@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := gta
-$(PKG)_WEBSITE  := http://www.nongnu.org/gta/
+$(PKG)_WEBSITE  := https://www.nongnu.org/gta/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.0.8
 $(PKG)_CHECKSUM := 1d2ff713955eee28310de082a8fd8e236403c27dee3716ba1238c56e6643e4fb

@@ -3,12 +3,11 @@
 PKG             := libaacs
 $(PKG)_WEBSITE  := https://www.videolan.org/developers/libaacs.html
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.8.1
-$(PKG)_CHECKSUM := 95c344a02c47c9753c50a5386fdfb8313f9e4e95949a5c523a452f0bcb01bbe8
+$(PKG)_VERSION  := 0.9.0
+$(PKG)_CHECKSUM := 47e0bdc9c9f0f6146ed7b4cc78ed1527a04a537012cf540cf5211e06a248bace
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.bz2
 $(PKG)_URL      := https://download.videolan.org/pub/videolan/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_URL_2    := http://videolan-nyc.defaultroute.com/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc libgcrypt libgpg_error
 
 define $(PKG)_UPDATE

@@ -1,11 +1,11 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := vorbis
-$(PKG)_WEBSITE  := http://www.vorbis.com/
+$(PKG)_WEBSITE  := https://xiph.org/vorbis/
 $(PKG)_DESCR    := Vorbis
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.3.5
-$(PKG)_CHECKSUM := 6efbcecdd3e5dfbf090341b485da9d176eb250d893e3eb378c428a2db38301ce
+$(PKG)_VERSION  := 1.3.6
+$(PKG)_CHECKSUM := 6ed40e0241089a42c48604dc00e362beee00036af2d8b3f46338031c9e0351cb
 $(PKG)_SUBDIR   := libvorbis-$($(PKG)_VERSION)
 $(PKG)_FILE     := libvorbis-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://downloads.xiph.org/releases/vorbis/$($(PKG)_FILE)

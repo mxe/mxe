@@ -1,12 +1,12 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := taglib
-$(PKG)_WEBSITE  := https://developer.kde.org/~wheeler/taglib.html
+$(PKG)_WEBSITE  := https://taglib.org/
 $(PKG)_DESCR    := TagLib
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.11.1
-$(PKG)_CHECKSUM := b6d1a5a610aae6ff39d93de5efd0fdc787aa9e9dc1e7026fa4c961b26563526b
-$(PKG)_GH_CONF  := taglib/taglib/tags,v
+$(PKG)_VERSION  := 5cb589a
+$(PKG)_CHECKSUM := faae533f6139e6d6d9642d3b5afa1b9b5706c0800a1d8baa3c6f051edc75b34b
+$(PKG)_GH_CONF  := taglib/taglib/branches/master
 $(PKG)_DEPS     := cc zlib
 
 define $(PKG)_BUILD

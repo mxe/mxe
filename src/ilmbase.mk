@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := ilmbase
-$(PKG)_WEBSITE  := http://www.openexr.com/
+$(PKG)_WEBSITE  := https://www.openexr.com/
 $(PKG)_DESCR    := IlmBase
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.2.0
@@ -12,7 +12,7 @@ $(PKG)_URL      := https://download.savannah.nongnu.org/releases/openexr/$($(PKG
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://www.openexr.com/downloads.html' | \
+    $(WGET) -q -O- 'https://www.openexr.com/downloads.html' | \
     grep 'ilmbase-' | \
     $(SED) -n 's,.*/ilmbase-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1

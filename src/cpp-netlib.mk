@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := cpp-netlib
-$(PKG)_WEBSITE  := http://cpp-netlib.org/
+$(PKG)_WEBSITE  := https://cpp-netlib.org/
 $(PKG)_DESCR    := Boost C++ Networking Library
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 73d4024

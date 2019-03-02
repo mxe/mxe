@@ -1,0 +1,95 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Mon, 28 May 2018 13:00:57 +1000
+Subject: [PATCH 1/1] tcl: remove bundled zlib
+
+see: https://github.com/mxe/mxe/issues/2130
+
+diff --git a/win/Makefile.in b/win/Makefile.in
+index 1111111..2222222 100644
+--- a/win/Makefile.in
++++ b/win/Makefile.in
+@@ -146,9 +146,8 @@ REG_DLL_FILE		= tclreg$(REGVER)${DLLSUFFIX}
+ REG_LIB_FILE		= @LIBPREFIX@tclreg$(REGVER)${LIBSUFFIX}
+ TEST_DLL_FILE		= tcltest$(VER)${DLLSUFFIX}
+ TEST_LIB_FILE		= @LIBPREFIX@tcltest$(VER)${LIBSUFFIX}
+-ZLIB_DLL_FILE		= zlib1.dll
+ 
+-SHARED_LIBRARIES 	= $(TCL_DLL_FILE) @ZLIB_DLL_FILE@
++SHARED_LIBRARIES 	= $(TCL_DLL_FILE)
+ STATIC_LIBRARIES	= $(TCL_LIB_FILE)
+ 
+ TCLSH			= tclsh$(VER)${EXESUFFIX}
+@@ -411,7 +410,7 @@ ZLIB_OBJS = \
+ 	uncompr.$(OBJEXT) \
+ 	zutil.$(OBJEXT)
+ 
+-TCL_OBJS = ${GENERIC_OBJS} $(TOMMATH_OBJS) ${WIN_OBJS} @ZLIB_OBJS@
++TCL_OBJS = ${GENERIC_OBJS} $(TOMMATH_OBJS) ${WIN_OBJS}
+ 
+ TCL_DOCS = "$(ROOT_DIR_NATIVE)"/doc/*.[13n]
+ 
+@@ -446,7 +445,7 @@ ${TCL_STUB_LIB_FILE}: ${STUB_OBJS}
+ 	@MAKE_STUB_LIB@ ${STUB_OBJS}
+ 	@POST_MAKE_LIB@
+ 
+-${TCL_DLL_FILE}: ${TCL_OBJS} tcl.$(RES) @ZLIB_DLL_FILE@
++${TCL_DLL_FILE}: ${TCL_OBJS} tcl.$(RES)
+ 	@$(RM) ${TCL_DLL_FILE} $(TCL_LIB_FILE)
+ 	@MAKE_DLL@ ${TCL_OBJS} tcl.$(RES) $(SHLIB_LD_LIBS)
+ 	@VC_MANIFEST_EMBED_DLL@
+@@ -466,14 +465,6 @@ ${TEST_DLL_FILE}: ${TCL_STUB_LIB_FILE} ${TCLTEST_OBJS}
+ 	@$(RM) ${TEST_DLL_FILE} ${TEST_LIB_FILE}
+ 	@MAKE_DLL@ ${TCLTEST_OBJS} $(TCL_STUB_LIB_FILE) $(SHLIB_LD_LIBS)
+ 
+-# use pre-built zlib1.dll
+-${ZLIB_DLL_FILE}: ${TCL_STUB_LIB_FILE}
+-	@if test "@ZLIB_LIBS@set" != "${ZLIB_DIR_NATIVE}/win32/zdll.libset" ; then \
+-		$(COPY) $(ZLIB_DIR)/win64/${ZLIB_DLL_FILE} ${ZLIB_DLL_FILE}; \
+-	else \
+-		$(COPY) $(ZLIB_DIR)/win32/${ZLIB_DLL_FILE} ${ZLIB_DLL_FILE}; \
+-	fi;
+-
+ # Add the object extension to the implicit rules. By default .obj is not
+ # automatically added.
+ 
+@@ -579,7 +570,7 @@ install-binaries: binaries
+ 		else true; \
+ 		fi; \
+ 	    done;
+-	@for i in $(TCL_DLL_FILE) $(ZLIB_DLL_FILE) $(TCLSH); \
++	@for i in $(TCL_DLL_FILE) $(TCLSH); \
+ 	    do \
+ 	    if [ -f $$i ]; then \
+ 		echo "Installing $$i to $(BIN_INSTALL_DIR)/"; \
+diff --git a/win/configure.in b/win/configure.in
+index 1111111..2222222 100644
+--- a/win/configure.in
++++ b/win/configure.in
+@@ -126,20 +126,8 @@ AS_IF([test "${enable_shared+set}" = "set"], [
+ ], [
+   tcl_ok=yes
+ ])
+-AS_IF([test "$tcl_ok" = "yes"], [
+-  AC_SUBST(ZLIB_DLL_FILE,[\${ZLIB_DLL_FILE}])
+-  AS_IF([test "$do64bit" != "no"], [
+-    AS_IF([test "$GCC" == "yes"],[
+-      AC_SUBST(ZLIB_LIBS,[\${ZLIB_DIR_NATIVE}/win64/libz.dll.a])
+-    ], [
+-      AC_SUBST(ZLIB_LIBS,[\${ZLIB_DIR_NATIVE}/win64/zdll.lib])
+-    ])
+-  ], [
+-    AC_SUBST(ZLIB_LIBS,[\${ZLIB_DIR_NATIVE}/win32/zdll.lib])
+-  ])
+-], [
+-  AC_SUBST(ZLIB_OBJS,[\${ZLIB_OBJS}])
+-])
++
++AC_SUBST(ZLIB_LIBS,[-lz])
+ AC_DEFINE(HAVE_ZLIB, 1, [Is there an installed zlib?])
+ 
+ AC_CHECK_TYPE([intptr_t], [

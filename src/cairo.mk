@@ -3,11 +3,11 @@
 PKG             := cairo
 $(PKG)_WEBSITE  := https://cairographics.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.15.4
-$(PKG)_CHECKSUM := deddf31e196e826e7790bbbf7d0f4b3fd15df243aa48511b349f1791b96be291
+$(PKG)_VERSION  := 1.16.0
+$(PKG)_CHECKSUM := 5e7b29b3f113ef870d1e3ecf8adf21f923396401604bda16d44be45e66052331
 $(PKG)_SUBDIR   := cairo-$($(PKG)_VERSION)
 $(PKG)_FILE     := cairo-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := https://cairographics.org/snapshots/$($(PKG)_FILE)
+$(PKG)_URL      := https://cairographics.org/releases/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc fontconfig freetype-bootstrap glib libpng lzo pixman zlib
 
 define $(PKG)_UPDATE

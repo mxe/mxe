@@ -1,14 +1,14 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := rubberband
-$(PKG)_WEBSITE  := http://breakfastquay.com/rubberband/
+$(PKG)_WEBSITE  := https://breakfastquay.com/rubberband/
 $(PKG)_DESCR    := Rubberband
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.8.1
 $(PKG)_CHECKSUM := ff0c63b0b5ce41f937a8a3bc560f27918c5fe0b90c6bc1cb70829b86ada82b75
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := http://code.breakfastquay.com/attachments/download/34/$(PKG)-$($(PKG)_VERSION).tar.bz2
+$(PKG)_URL      := https://code.breakfastquay.com/attachments/download/34/$(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_DEPS     := cc fftw libsamplerate libsndfile pthreads vamp-plugin-sdk
 
 define $(PKG)_UPDATE

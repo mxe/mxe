@@ -14,7 +14,7 @@
 # Keys: https://github.com/<user>.keys or https://api.github.com/users/<user>/keys
 #
 # The script uses s3cmd to sync package tarballs:
-# http://s3tools.org/s3cmd
+# https://s3tools.org/s3cmd
 
 # Manual switch to enable/disable issue filing on GitHub.
 # Useful to prevent the same issue from being filed multiple times

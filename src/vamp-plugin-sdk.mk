@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := vamp-plugin-sdk
-$(PKG)_WEBSITE  := http://vamp-plugins.org/
+$(PKG)_WEBSITE  := https://vamp-plugins.org/
 $(PKG)_DESCR    := Vamp Plugins SDK
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.5

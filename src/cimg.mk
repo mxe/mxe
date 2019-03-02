@@ -45,8 +45,8 @@ define $(PKG)_BUILD
         'CIMG_EXR_LIBS=`$(TARGET)-pkg-config --libs OpenEXR`' \
         'CIMG_PNG_INCDIR=`$(TARGET)-pkg-config --cflags libpng`' \
         'CIMG_PNG_LIBS=`$(TARGET)-pkg-config --libs libpng`' \
-        'CIMG_JPEG_INCDIR=`$(TARGET)-pkg-config --cflags jpeg`' \
-        'CIMG_JPEG_LIBS=`$(TARGET)-pkg-config --libs jpeg`' \
+        'CIMG_JPEG_INCDIR=`$(TARGET)-pkg-config --cflags libjpeg`' \
+        'CIMG_JPEG_LIBS=`$(TARGET)-pkg-config --libs libjpeg`' \
         'CIMG_ZLIB_INCDIR=`$(TARGET)-pkg-config --cflags zlib`' \
         'CIMG_ZLIB_LIBS=`$(TARGET)-pkg-config --libs zlib`' \
         'CIMG_OPENCV_INCDIR=`$(TARGET)-pkg-config --cflags opencv`' \

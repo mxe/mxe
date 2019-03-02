@@ -1,15 +1,17 @@
 This file is part of MXE. See LICENSE.md for licensing information.
 
-From 62efa18a61560a7757acffbd4ac6ca7b153155cc Mon Sep 17 00:00:00 2001
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 6 Aug 2015 23:35:08 +0200
-Subject: [PATCH 1/8] fix qwindows plugin linking with system-freetype (MXE
+Subject: [PATCH 1/9] fix qwindows plugin linking with system-freetype (MXE
  specific)
 
 Change-Id: I8783e3ab2d19011b083dd3c471107298a17293c4
 
 diff --git a/src/3rdparty/freetype_dependency.pri b/src/3rdparty/freetype_dependency.pri
-index 39280de..e152b0d 100644
+index 1111111..2222222 100644
 --- a/src/3rdparty/freetype_dependency.pri
 +++ b/src/3rdparty/freetype_dependency.pri
 @@ -4,4 +4,5 @@ contains(QT_CONFIG, freetype) {
@@ -18,19 +20,16 @@ index 39280de..e152b0d 100644
      include($$QT_SOURCE_TREE/config.tests/unix/freetype/freetype.pri)
 +    win32:shared:LIBS_PRIVATE += -lfreetype
  }
--- 
-2.9.3
 
-
-From 5a15e0374758b7786204d98b66f49b4fd3daea79 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sat, 21 Jun 2014 13:12:49 +0200
-Subject: [PATCH 2/8] use pkg-config for harfbuzz (MXE specific)
+Subject: [PATCH 2/9] use pkg-config for harfbuzz (MXE specific)
 
 Change-Id: Id4e4c37d68b63c9f480d72a561d95d4d2a5ded50
 
 diff --git a/config.tests/unix/harfbuzz/harfbuzz.pro b/config.tests/unix/harfbuzz/harfbuzz.pro
-index 32edd6e..a7f2c28 100644
+index 1111111..2222222 100644
 --- a/config.tests/unix/harfbuzz/harfbuzz.pro
 +++ b/config.tests/unix/harfbuzz/harfbuzz.pro
 @@ -1,3 +1,4 @@
@@ -40,7 +39,7 @@ index 32edd6e..a7f2c28 100644
 +CONFIG += link_pkgconfig
 +PKGCONFIG += harfbuzz
 diff --git a/src/3rdparty/harfbuzz_dependency.pri b/src/3rdparty/harfbuzz_dependency.pri
-index 7443368..c24e684 100644
+index 1111111..2222222 100644
 --- a/src/3rdparty/harfbuzz_dependency.pri
 +++ b/src/3rdparty/harfbuzz_dependency.pri
 @@ -2,5 +2,6 @@ contains(QT_CONFIG, harfbuzz) {
@@ -51,19 +50,16 @@ index 7443368..c24e684 100644
 +    CONFIG += link_pkgconfig
 +    PKGCONFIG += harfbuzz
  }
--- 
-2.9.3
 
-
-From bc002ee2a8418c7afcba362d155ba1a591bc3d1a Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 8 Dec 2014 14:15:12 +0100
-Subject: [PATCH 3/8] fix oci config test on windows
+Subject: [PATCH 3/9] fix oci config test on windows
 
 Change-Id: If1ce2241682259ca495b0ba68bf18410f8548922
 
 diff --git a/config.tests/unix/oci/oci.pro b/config.tests/unix/oci/oci.pro
-index 3ffda1d..39b6f3759 100644
+index 1111111..2222222 100644
 --- a/config.tests/unix/oci/oci.pro
 +++ b/config.tests/unix/oci/oci.pro
 @@ -1,3 +1,3 @@
@@ -71,19 +67,16 @@ index 3ffda1d..39b6f3759 100644
  CONFIG -= qt dylib
 -LIBS += -lclntsh
 +!win32:LIBS += -lclntsh
--- 
-2.9.3
 
-
-From 92d2ae7b6eb175b4f15e5f0f231a9c29824d6f57 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 6 Aug 2015 13:24:56 +0200
-Subject: [PATCH 4/8] configure: don't set QT_NO_SYSTEMSEMAPHORE for Windows
+Subject: [PATCH 4/9] configure: don't set QT_NO_SYSTEMSEMAPHORE for Windows
 
 Change-Id: I53c110ef40e3d14cc49fa23aa5d294611cac2ffa
 
 diff --git a/configure b/configure
-index ba94d08..50e6dfb 100755
+index 1111111..2222222 100755
 --- a/configure
 +++ b/configure
 @@ -4677,7 +4677,7 @@ fi
@@ -95,19 +88,16 @@ index ba94d08..50e6dfb 100755
      # SYSV IPC is not supported - check POSIX IPC
      if compileTest unix/ipc_posix "ipc_posix" ; then
          QCONFIG_FLAGS="$QCONFIG_FLAGS QT_POSIX_IPC"
--- 
-2.9.3
 
-
-From f0054e940467a64dffc0c3cc070233fdf2848d43 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Tue, 6 Oct 2015 09:53:20 +0200
-Subject: [PATCH 5/8] fix building mysql driver under mingw
+Subject: [PATCH 5/9] fix building mysql driver under mingw
 
 Change-Id: I9c4e821d5b3a6919566c6b684cb4916827feb6a9
 
 diff --git a/src/sql/drivers/mysql/qsql_mysql.pri b/src/sql/drivers/mysql/qsql_mysql.pri
-index 3cfb614..8b7063f 100644
+index 1111111..2222222 100644
 --- a/src/sql/drivers/mysql/qsql_mysql.pri
 +++ b/src/sql/drivers/mysql/qsql_mysql.pri
 @@ -4,7 +4,7 @@ SOURCES += $$PWD/qsql_mysql.cpp
@@ -119,14 +109,11 @@ index 3cfb614..8b7063f 100644
      isEmpty(QT_LFLAGS_MYSQL) {
          !contains(LIBS, .*mysqlclient.*):!contains(LIBS, .*mysqld.*) {
              use_libmysqlclient_r:LIBS += -lmysqlclient_r
--- 
-2.9.3
 
-
-From 26229596fbb711bc222c831eca3a9e5b62c7acc6 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Ray Donnelly <mingw.android@gmail.com>
 Date: Wed, 26 Aug 2015 12:45:43 +0100
-Subject: [PATCH 6/8] cmake: Rearrange STATIC vs INTERFACE targets
+Subject: [PATCH 6/9] cmake: Rearrange STATIC vs INTERFACE targets
 
 Otherwise we attempt to add_library(Qt5::UiPlugin STATIC IMPORTED)
 for header-only modules when building Qt5 statically.
@@ -135,10 +122,10 @@ Source: https://git.io/vzWJz
 See also: https://github.com/mxe/mxe/issues/1185
 
 diff --git a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
-index d2358ca..6b1dc95 100644
+index 1111111..2222222 100644
 --- a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
 +++ b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
-@@ -222,13 +222,13 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
+@@ -222,12 +222,12 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
      endif()
  !!ENDIF
  
@@ -148,21 +135,17 @@ index d2358ca..6b1dc95 100644
  !!IF !isEmpty(CMAKE_STATIC_TYPE)
      add_library(Qt5::$${CMAKE_MODULE_NAME} STATIC IMPORTED)
      set_property(TARGET Qt5::$${CMAKE_MODULE_NAME} PROPERTY IMPORTED_LINK_INTERFACE_LANGUAGES "CXX")
- !!ELSE
+-!!ELSE
 -!!IF equals(TEMPLATE, aux)
 -    add_library(Qt5::$${CMAKE_MODULE_NAME} INTERFACE IMPORTED)
--!!ELSE
+ !!ELSE
      add_library(Qt5::$${CMAKE_MODULE_NAME} SHARED IMPORTED)
  !!ENDIF
- !!ENDIF
--- 
-2.9.3
 
-
-From 59fd7fdff5bf0cda3c7a11982ee96f50d8eddec1 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Sat, 16 Jul 2016 20:31:07 +1000
-Subject: [PATCH 7/8] Fix pkgconfig file and library naming
+Subject: [PATCH 7/9] Fix pkgconfig file and library naming
 
 See: https://codereview.qt-project.org/#/c/165394/
      https://bugreports.qt.io/browse/QTBUG-30898
@@ -187,7 +170,7 @@ Task-number: 30898
 Change-Id: If75336ec7d21a7ec0cb6d245fe87c64afcb5a644
 
 diff --git a/mkspecs/features/qt_module.prf b/mkspecs/features/qt_module.prf
-index d9011f5..1993a7f 100644
+index 1111111..2222222 100644
 --- a/mkspecs/features/qt_module.prf
 +++ b/mkspecs/features/qt_module.prf
 @@ -244,6 +244,10 @@ load(qt_installs)
@@ -224,14 +207,11 @@ index d9011f5..1993a7f 100644
  }
 -
 -TARGET = $$qt5LibraryTarget($$TARGET$$QT_LIBINFIX)  # Do this towards the end
--- 
-2.9.3
 
-
-From a2ed2c9fe74b549cb163f89a56df6eec3af553fa Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 15 Dec 2016 17:20:56 +0100
-Subject: [PATCH 8/8] fix mysql config test
+Subject: [PATCH 8/9] fix mysql config test
 
 The config test already gets link flags which should include
 the library. Blindly adding it to the end of the list can break
@@ -240,7 +220,7 @@ static linking.
 Change-Id: Ief71c4ad64cbbb1b141b0ef5549f42a36bbd125b
 
 diff --git a/config.tests/unix/mysql/mysql.pro b/config.tests/unix/mysql/mysql.pro
-index 06d1880..ca6d6aa 100644
+index 1111111..2222222 100644
 --- a/config.tests/unix/mysql/mysql.pro
 +++ b/config.tests/unix/mysql/mysql.pro
 @@ -1,3 +1,3 @@
@@ -248,6 +228,46 @@ index 06d1880..ca6d6aa 100644
  CONFIG -= qt dylib
 -LIBS += -lmysqlclient
 +LIBS *= -lmysqlclient
--- 
-2.9.3
 
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sun, 1 Jul 2018 17:45:34 +1000
+Subject: [PATCH 9/9] Fix build with GCC 8: memset/memcpy/memmove of
+ non-trivials
+
+
+diff --git a/src/corelib/tools/qarraydataops.h b/src/corelib/tools/qarraydataops.h
+index 1111111..2222222 100644
+--- a/src/corelib/tools/qarraydataops.h
++++ b/src/corelib/tools/qarraydataops.h
+@@ -60,7 +60,7 @@ struct QPodArrayOps
+         Q_ASSERT(newSize > uint(this->size));
+         Q_ASSERT(newSize <= this->alloc);
+ 
+-        ::memset(this->end(), 0, (newSize - this->size) * sizeof(T));
++        ::memset(static_cast<void *>(this->end()), 0, (newSize - this->size) * sizeof(T));
+         this->size = int(newSize);
+     }
+ 
+@@ -115,8 +115,9 @@ struct QPodArrayOps
+         Q_ASSERT(e <= where || b > this->end()); // No overlap
+         Q_ASSERT(size_t(e - b) <= this->alloc - uint(this->size));
+ 
+-        ::memmove(where + (e - b), where, (static_cast<const T*>(this->end()) - where) * sizeof(T));
+-        ::memcpy(where, b, (e - b) * sizeof(T));
++        ::memmove(static_cast<void *>(where + (e - b)), static_cast<void *>(where),
++                  (static_cast<const T*>(this->end()) - where) * sizeof(T));
++        ::memcpy(static_cast<void *>(where), static_cast<const void *>(b), (e - b) * sizeof(T));
+         this->size += (e - b);
+     }
+ 
+@@ -127,7 +128,8 @@ struct QPodArrayOps
+         Q_ASSERT(b >= this->begin() && b < this->end());
+         Q_ASSERT(e > this->begin() && e < this->end());
+ 
+-        ::memmove(b, e, (static_cast<T *>(this->end()) - e) * sizeof(T));
++        ::memmove(static_cast<void *>(b), static_cast<void *>(e),
++                  (static_cast<T *>(this->end()) - e) * sizeof(T));
+         this->size -= (e - b);
+     }
+ };

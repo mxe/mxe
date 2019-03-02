@@ -4,15 +4,15 @@ PKG             := freexl
 $(PKG)_WEBSITE  := https://www.gaia-gis.it/fossil/freexl/index
 $(PKG)_DESCR    := FreeXL
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.0.3
-$(PKG)_CHECKSUM := f8ed29e03a6155454e538fce621e53991a270fcee31120ded339cff2523650a8
+$(PKG)_VERSION  := 1.0.5
+$(PKG)_CHECKSUM := 3dc9b150d218b0e280a3d6a41d93c1e45f4d7155829d75f1e5bf3e0b0de6750d
 $(PKG)_SUBDIR   := freexl-$($(PKG)_VERSION)
 $(PKG)_FILE     := freexl-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://www.gaia-gis.it/gaia-sins/freexl-sources/$($(PKG)_FILE)
+$(PKG)_URL      := https://www.gaia-gis.it/gaia-sins/freexl-sources/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc libiconv
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://www.gaia-gis.it/gaia-sins/freexl-sources/' | \
+    $(WGET) -q -O- 'https://www.gaia-gis.it/gaia-sins/freexl-sources/' | \
     $(SED) -n 's,.*freexl-\([0-9][^>]*\)\.tar.*,\1,p' | \
     tail -1
 endef

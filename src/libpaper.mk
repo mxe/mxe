@@ -3,12 +3,12 @@
 PKG             := libpaper
 $(PKG)_WEBSITE  := https://packages.debian.org/unstable/libpaper1
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.1.24+nmu4
-$(PKG)_CHECKSUM := 2491fce3f590d922d2d3070555df4425921b89c76a18e1c62e36336d6657526a
+$(PKG)_VERSION  := 1.1.24+nmu5
+$(PKG)_CHECKSUM := e29deda4cd7350189c71af0925cbf4a4473f9841d1419a922e1e8ff1954db1f2
 $(PKG)_SUBDIR   := libpaper-$($(PKG)_VERSION)
 $(PKG)_FILE     := libpaper_$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://ftp.debian.org/debian/pool/main/libp/$(PKG)/$($(PKG)_FILE)
-$(PKG)_URL_2    := http://linux.mirrors.es.net/pub/ubuntu/pool/main/libp/$(PKG)/$($(PKG)_FILE)
+$(PKG)_URL      := https://deb.debian.org/debian/pool/main/libp/$(PKG)/$($(PKG)_FILE)
+$(PKG)_URL_2    := https://mirrorservice.org/sites/ftp.debian.org/debian/pool/main/libp/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
@@ -18,12 +18,17 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && ./configure \
-        --host='$(TARGET)' \
-        --build="`config.guess`" \
-        --disable-shared \
-        --prefix='$(PREFIX)/$(TARGET)'
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+    cd '$(SOURCE_DIR)' && autoreconf -fi
+    cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
+        $(MXE_CONFIGURE_OPTS)
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+
+    # create pkg-config file
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
+    (echo 'Name: libpaper'; \
+     echo 'Version: $($(PKG)_VERSION)'; \
+     echo 'Description: library for handling paper characteristics'; \
+     echo 'Libs: -lpaper';) \
+     > '$(PREFIX)/$(TARGET)/lib/pkgconfig/libpaper.pc'
 endef
 
-$(PKG)_BUILD_SHARED =

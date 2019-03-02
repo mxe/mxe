@@ -4,11 +4,11 @@ PKG             := chromaprint
 $(PKG)_WEBSITE  := https://acoustid.org/chromaprint
 $(PKG)_DESCR    := Chromaprint
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.1
-$(PKG)_CHECKSUM := 6b14d7ea4964581b73bd3f8038c8857c01e446421c1ae99cbbf64de26b47cd12
+$(PKG)_VERSION  := 1.4.3
+$(PKG)_CHECKSUM := d4ae6596283aad7a015a5b0445012054c634a4b9329ecb23000cd354b40a283b
+$(PKG)_GH_CONF  := acoustid/chromaprint/tags, v
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://bitbucket.org/acoustid/chromaprint/downloads/$(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_DEPS     := cc ffmpeg
 
 define $(PKG)_UPDATE

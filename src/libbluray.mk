@@ -8,7 +8,6 @@ $(PKG)_CHECKSUM := efc994f42d2bce6af2ce69d05ba89dbbd88bcec7aca065de094fb3a7880ce
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.bz2
 $(PKG)_URL      := https://download.videolan.org/pub/videolan/libbluray/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_URL_2    := http://videolan-nyc.defaultroute.com/libbluray/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc freetype libxml2
 
 define $(PKG)_UPDATE

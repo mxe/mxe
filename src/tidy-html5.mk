@@ -1,11 +1,11 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := tidy-html5
-$(PKG)_WEBSITE  := http://www.html-tidy.org/
+$(PKG)_WEBSITE  := https://www.html-tidy.org/
 $(PKG)_DESCR    := HTML/XML syntax checker and reformatter
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.4.0
-$(PKG)_CHECKSUM := a2d754b7349982e33f12d798780316c047a3b264240dc6bbd4641542e57a0b7a
+$(PKG)_VERSION  := 5.6.0
+$(PKG)_CHECKSUM := 08a63bba3d9e7618d1570b4ecd6a7daa83c8e18a41c82455b6308bc11fe34958
 $(PKG)_GH_CONF  := htacg/tidy-html5/tags
 $(PKG)_DEPS     := cc
 

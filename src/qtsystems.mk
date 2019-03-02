@@ -3,8 +3,8 @@ PKG             := qtsystems
 $(PKG)_WEBSITE  := https://www.qt.io/
 $(PKG)_DESCR    := Qt
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 66e4567
-$(PKG)_CHECKSUM := 20c98396ad7c5d819e98a6b34935ab2c0eed25e701dc062ac37d2b8d20b71bfb
+$(PKG)_VERSION  := e3332ee
+$(PKG)_CHECKSUM := 29101923081aa57d994cdb1ba4b6128cef82f5e310f81c280c1acd6442a1fc38
 $(PKG)_GH_CONF  := qt/qtsystems/branches/dev
 $(PKG)_DEPS     := cc qtbase qtdeclarative qtxmlpatterns
 

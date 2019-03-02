@@ -1,0 +1,22 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "fix@me" <fix@me>
+Date: Sat, 6 Jul 2013 17:55:39 +1000
+Subject: [PATCH 1/1] fix openal static
+
+
+diff --git a/cmake/Macros.cmake b/cmake/Macros.cmake
+index 1111111..2222222 100644
+--- a/cmake/Macros.cmake
++++ b/cmake/Macros.cmake
+@@ -178,6 +178,7 @@ macro(sfml_add_library target)
+     # define SFML_STATIC if the build type is not set to 'shared'
+     if(NOT BUILD_SHARED_LIBS)
+         target_compile_definitions(${target} PUBLIC "SFML_STATIC")
++        target_compile_definitions(${target} PUBLIC "AL_LIBTYPE_STATIC")
+     endif()
+ 
+ endmacro()

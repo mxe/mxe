@@ -2,7 +2,7 @@
  * This file is part of MXE. See LICENSE.md for licensing information.
  */
 
-// Based on: http://webdav.org/neon/doc/html/refresolve.html
+/* Based on: https://web.archive.org/web/webdav.org/neon/doc/html/refresolve.html */
 
 #include <stdio.h>
 

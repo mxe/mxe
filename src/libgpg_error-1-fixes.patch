@@ -1,122 +1,21 @@
 This file is part of MXE. See LICENSE.md for licensing information.
 
-Contains ad hoc patches for cross building.
-
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Werner Koch <wk@gnupg.org>
-Date: Wed, 14 Mar 2018 10:07:42 +0100
-Subject: [PATCH 1/1] core: Fix building on W64
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Sat, 15 Dec 2018 16:51:30 +0100
+Subject: [PATCH 1/1] [MXE] more tolerant parsing for mingw in host triplet
 
-* src/w32-add.h: Remove hack to define pid_t.
-* src/gpg-error.h.in: Eval macro to define pid_t.
-* src/mkheader.c (have_sys_types_h, sys_types_h_included): New.
-(parse_config_h): Test for sys/types.h.
-(write_special): Protect inclusion of sys/types.h.  Define new macro
-'define:pid_t'.
---
 
-Regression-due-to: 1865c0ba1769b407a3c504f1ab0a4278704a9fc1
-Signed-off-by: Werner Koch <wk@gnupg.org>
-
-diff --git a/src/gpg-error.h.in b/src/gpg-error.h.in
-index 1111111..2222222 100644
---- a/src/gpg-error.h.in
-+++ b/src/gpg-error.h.in
-@@ -405,6 +405,7 @@ const char *gpgrt_check_version (const char *req_version);
- const char *gpg_error_check_version (const char *req_version);
- 
- /* System specific type definitions.  */
-+@define:pid_t@
- @define:gpgrt_ssize_t@
- @define:gpgrt_off_t@
- 
 diff --git a/src/mkheader.c b/src/mkheader.c
 index 1111111..2222222 100644
 --- a/src/mkheader.c
 +++ b/src/mkheader.c
-@@ -30,6 +30,7 @@ static const char *hdr_version_number;
- 
- /* Values take from the supplied config.h.  */
- static int have_stdint_h;
-+static int have_sys_types_h;
- static int have_w32_system;
- static int have_w64_system;
- static char *replacement_for_off_type;
-@@ -37,6 +38,7 @@ static int use_posix_threads;
- 
- /* Various state flags.  */
- static int stdint_h_included;
-+static int sys_types_h_included;
- 
- 
- /* The usual free wrapper.  */
-@@ -151,6 +153,8 @@ parse_config_h (const char *fname)
-         continue; /* oops */
-       if (!strcmp (p1, "HAVE_STDINT_H"))
-         have_stdint_h = 1;
-+      else if (!strcmp (p1, "HAVE_SYS_TYPES_H"))
-+        have_sys_types_h = 1;
-       else if (!strcmp (p1, "HAVE_W32_SYSTEM"))
-         have_w32_system = 1;
-       else if (!strcmp (p1, "HAVE_W64_SYSTEM"))
-@@ -474,8 +478,12 @@ write_special (const char *fname, int lnr, const char *tag)
-         }
-       else
-         {
--          fputs ("#include <sys/types.h>\n"
--                 "typedef ssize_t gpgrt_ssize_t;\n", stdout);
-+          if (!sys_types_h_included)
-+            {
-+              fputs ("#include <sys/types.h>\n", stdout);
-+              sys_types_h_included = 1;
-+            }
-+          fputs ("typedef ssize_t gpgrt_ssize_t;\n", stdout);
-         }
+@@ -601,7 +601,7 @@ write_special (const char *fname, int lnr, const char *tag)
      }
-   else if (!strcmp (tag, "api_ssize_t"))
-@@ -485,6 +493,30 @@ write_special (const char *fname, int lnr, const char *tag)
-       else
-         fputs ("ssize_t", stdout);
-     }
-+  else if (!strcmp (tag, "define:pid_t"))
-+    {
-+      if (have_sys_types_h)
-+        {
-+          if (!sys_types_h_included)
-+            {
-+              fputs ("#include <sys/types.h>\n", stdout);
-+              sys_types_h_included = 1;
-+            }
-+        }
-+      else if (have_w64_system)
-+        {
-+          if (!stdint_h_included && have_stdint_h)
-+            {
-+              fputs ("#include <stdint.h>\n", stdout);
-+              stdint_h_included = 1;
-+            }
-+          fputs ("typedef int64_t pid_t\n", stdout);
-+        }
-+      else
-+        {
-+          fputs ("typedef int     pid_t\n", stdout);
-+        }
-+    }
-   else if (!strcmp (tag, "include:err-sources"))
+   else if (!strcmp (tag, "include:os-add"))
      {
-       write_sources_or_codes (NULL);
-diff --git a/src/w32-add.h b/src/w32-add.h
-index 1111111..2222222 100644
---- a/src/w32-add.h
-+++ b/src/w32-add.h
-@@ -3,10 +3,6 @@
- ## peculiarity of the script the first used line must not
- ## start with a hash mark.
- 
--/* Fixme: This is a quick hack.  We need to check whether the compiler
-- * actually in use already knows that type.  */
--typedef int pid_t;
--
- /* Decide whether to use the format_arg attribute.  */
- #if _GPG_ERR_GCC_VERSION > 20800
- # define _GPG_ERR_ATTR_FORMAT_ARG(a)  __attribute__ ((__format_arg__ (a)))
+-      if (!strcmp (host_os, "mingw32"))
++      if (strstr (host_os, "mingw"))
+         {
+           include_file (fname, lnr, "w32-add.h", write_line);
+         }

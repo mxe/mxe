@@ -22,7 +22,6 @@ $(PKG)_ARCH_FLAGS = \
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && $(TARGET)-cmake \
         -DRAGEL='$(PREFIX)/$(BUILD)/bin/ragel' \
-        -DMXE_DISABLE_INCLUDE_SYSTEM_FLAG=TRUE \
         -DCMAKE_C_FLAGS="`$($(PKG)_ARCH_FLAGS)`" \
         -DCMAKE_CXX_FLAGS="`$($(PKG)_ARCH_FLAGS)`" \
         '$(SOURCE_DIR)'

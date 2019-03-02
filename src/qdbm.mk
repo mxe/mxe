@@ -1,18 +1,18 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := qdbm
-$(PKG)_WEBSITE  := http://fallabs.com/qdbm/
+$(PKG)_WEBSITE  := https://fallabs.com/qdbm/
 $(PKG)_DESCR    := QDBM
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.8.78
 $(PKG)_CHECKSUM := b466fe730d751e4bfc5900d1f37b0fb955f2826ac456e70012785e012cdcb73e
 $(PKG)_SUBDIR   := qdbm-$($(PKG)_VERSION)
 $(PKG)_FILE     := qdbm-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://fallabs.com/qdbm/$($(PKG)_FILE)
+$(PKG)_URL      := https://fallabs.com/qdbm/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc bzip2 libiconv lzo zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://fallabs.com/qdbm/' | \
+    $(WGET) -q -O- 'https://fallabs.com/qdbm/' | \
     grep 'qdbm-' | \
     $(SED) -n 's,.*qdbm-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1

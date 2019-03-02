@@ -3,8 +3,8 @@
 PKG             := libuv
 $(PKG)_WEBSITE  := https://libuv.org
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.19.2
-$(PKG)_CHECKSUM := ccc5f3b43ed171640513786e5e809508cb6308279b4d71a016e4550ad62f1686
+$(PKG)_VERSION  := 1.24.1
+$(PKG)_CHECKSUM := 0d026c8f68c4d7b7c59de8f485f262ac71c24e0f3a80d740a25d20edd2f2774e
 $(PKG)_GH_CONF  := libuv/libuv/tags, v
 $(PKG)_DEPS     := cc
 

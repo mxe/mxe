@@ -1,0 +1,24 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Mon, 2 Jul 2018 08:03:47 +1000
+Subject: [PATCH 1/1] install .pc file on mingw
+
+see: https://github.com/facebook/zstd/pull/1203
+
+diff --git a/build/cmake/lib/CMakeLists.txt b/build/cmake/lib/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/build/cmake/lib/CMakeLists.txt
++++ b/build/cmake/lib/CMakeLists.txt
+@@ -165,7 +165,7 @@ if (ZSTD_BUILD_STATIC)
+             OUTPUT_NAME ${STATIC_LIBRARY_BASE_NAME})
+ endif ()
+ 
+-if (UNIX)
++if (UNIX OR MINGW)
+     # pkg-config
+     set(PREFIX "${CMAKE_INSTALL_PREFIX}")
+     set(LIBDIR "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")

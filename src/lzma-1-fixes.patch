@@ -1,0 +1,42 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Sun, 30 Aug 2015 14:26:24 +0200
+Subject: [PATCH 1/2] include stdio.h
+
+
+diff --git a/CPP/7zip/Common/FileStreams.cpp b/CPP/7zip/Common/FileStreams.cpp
+index 1111111..2222222 100644
+--- a/CPP/7zip/Common/FileStreams.cpp
++++ b/CPP/7zip/Common/FileStreams.cpp
+@@ -1,6 +1,7 @@
+ // FileStreams.cpp
+ 
+ #include "StdAfx.h"
++#include <stdio.h>
+ 
+ #ifndef _WIN32
+ #include <fcntl.h>
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Sun, 30 Aug 2015 14:46:10 +0200
+Subject: [PATCH 2/2] MyString: include windows.h
+
+Functions CharUpperA, CharPrev etc
+
+diff --git a/CPP/Common/MyString.h b/CPP/Common/MyString.h
+index 1111111..2222222 100644
+--- a/CPP/Common/MyString.h
++++ b/CPP/Common/MyString.h
+@@ -4,6 +4,7 @@
+ #define __COMMON_STRING_H
+ 
+ #include <string.h>
++#include <windows.h>
+ 
+ #ifndef _WIN32
+ #include <wctype.h>

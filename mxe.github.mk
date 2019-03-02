@@ -10,9 +10,10 @@
 #   Release:
 #     Manually uploaded distribution tarballs, especially useful for
 #     autotools packages with generated sources. No universal convention,
-#     but generally:
-#     url = <owner>/<repo>/releases/downloads/<ref>/<repo>-<version>.tar.[bz2,gz,xz,...]
+#     but the default is:
+#     url = <owner>/<repo>/releases/downloads/<ref>/<repo>-<version>.[archive extension] | tar.gz
 #     dir = <repo>-<version>
+#
 #
 #   Tarball:
 #     url = <owner>/<repo>/tarball/<ref>/output-file.tar.gz
@@ -51,7 +52,7 @@ GITHUB_SHA_LENGTH := 7
 #     a version string and bypass `sort -V`
 #
 #   Track releases - Release API
-#     GH_CONF := owner/repo/releases[/latest], tag prefix, tag suffix, tag filter-out, version separator
+#     GH_CONF := owner/repo/releases[/latest], tag prefix, tag suffix, tag filter-out, version separator, archive extension
 #     updates can optionally use the latest non-prerelease with /latest
 #     or manually specify version numbering based on:
 #     <tag prefix><s/<version sep>/./version><tag suffix>
@@ -85,6 +86,7 @@ GH_TAG_PREFIX  = $(subst $(__gmsl_aa_magic),,$(word 1,$(GH_TAG_VARS)))
 GH_TAG_SUFFIX  = $(subst $(__gmsl_aa_magic),,$(word 2,$(GH_TAG_VARS)))
 GH_TAG_FILTER  = $(subst $(__gmsl_aa_magic),,$(word 3,$(GH_TAG_VARS)))
 GH_VERSION_SEP = $(subst $(__gmsl_aa_magic),,$(word 4,$(GH_TAG_VARS)))
+GH_ARCHIVE_EXT = $(subst $(__gmsl_aa_magic),,$(word 5,$(GH_TAG_VARS)))
 
 define MXE_SETUP_GITHUB
     $(PKG)_GH_OWNER    := $(GH_OWNER)
@@ -96,16 +98,17 @@ define MXE_SETUP_GITHUB
     $(PKG)_TAG_SUFFIX  := $(GH_TAG_SUFFIX)
     $(PKG)_TAG_FILTER  := $(GH_TAG_FILTER)
     $(PKG)_VERSION_SEP := $(or $(GH_VERSION_SEP),.)
-    $(PKG)_FILE        := $(or $($(PKG)_FILE),$(PKG)-$$(filter-out $$(PKG)-,$$($$(PKG)_TAG_PREFIX))$($(PKG)_VERSION)$$($$(PKG)_TAG_SUFFIX).tar.gz)
+    $(PKG)_ARCHIVE_EXT := $(or $(GH_ARCHIVE_EXT),.tar.gz)
+    $(PKG)_FILE        := $(or $($(PKG)_FILE),$(PKG)-$$(filter-out $$(PKG)-,$$($$(PKG)_TAG_PREFIX))$($(PKG)_VERSION)$$($$(PKG)_TAG_SUFFIX)$$($$(PKG)_ARCHIVE_EXT))
     $(if $(and $(GH_BRANCH),$(GH_TAG_VARS)),\
         $(error $(newline) $(PKG) specifies both branch and tag variables $(newline)))
     $(if $(filter-out $(GH_APIS),$(GH_API))$(filter x,x$(GH_API)),\
         $(error $(newline) $(PKG) has unknown API in GH_CONF := $($(PKG)_GH_CONF) $(newline)\
-                           must be branches|tags|releases))
-    $(if $(GH_BRANCH),$(value MXE_SETUP_GITHUB_BRANCH),$(value MXE_SETUP_GITHUB_$(call uc,$(GH_API))))
+                           must be $(call merge,|,$(GH_APIS))))
+    $(value MXE_SETUP_GITHUB_$(call uc,$(GH_API)))
 endef
 
-define MXE_SETUP_GITHUB_BRANCH
+define MXE_SETUP_GITHUB_BRANCHES
     $(PKG)_SUBDIR := $(or $($(PKG)_SUBDIR),$($(PKG)_GH_OWNER)-$($(PKG)_GH_REPO)-$($(PKG)_VERSION))
     $(PKG)_URL    := $(or $($(PKG)_URL),https://github.com/$($(PKG)_GH_OWNER)/$($(PKG)_GH_REPO)/tarball/$($(PKG)_VERSION)/$($(PKG)_FILE))
     $(PKG)_UPDATE := $(or $($(PKG)_UPDATE),$(call MXE_GET_GH_SHA,$($(PKG)_GH_OWNER)/$($(PKG)_GH_REPO),$($(PKG)_BRANCH)))
@@ -114,7 +117,7 @@ endef
 define MXE_SETUP_GITHUB_RELEASES
     $(PKG)_SUBDIR  := $(or $($(PKG)_SUBDIR),$($(PKG)_GH_REPO)-$(if $(call sne,v,$($(PKG)_TAG_PREFIX)),$($(PKG)_TAG_PREFIX))$(subst .,$($(PKG)_VERSION_SEP),$($(PKG)_VERSION))$($(PKG)_TAG_SUFFIX))
     $(PKG)_TAG_REF := $(or $($(PKG)_TAG_REF),$($(PKG)_TAG_PREFIX)$(subst .,$($(PKG)_VERSION_SEP),$($(PKG)_VERSION))$($(PKG)_TAG_SUFFIX))
-    $(PKG)_URL     := $(or $($(PKG)_URL),https://github.com/$($(PKG)_GH_OWNER)/$($(PKG)_GH_REPO)/releases/download/$($(PKG)_TAG_REF)/$($(PKG)_SUBDIR).tar.gz)
+    $(PKG)_URL     := $(or $($(PKG)_URL),https://github.com/$($(PKG)_GH_OWNER)/$($(PKG)_GH_REPO)/releases/download/$($(PKG)_TAG_REF)/$($(PKG)_SUBDIR)$($(PKG)_ARCHIVE_EXT))
     $(PKG)_URL_2   := $(or $($(PKG)_URL_2),https://github.com/$($(PKG)_GH_OWNER)/$($(PKG)_GH_REPO)/archive/$($(PKG)_TAG_REF).tar.gz)
     $(PKG)_UPDATE  := $(or $($(PKG)_UPDATE),$(call MXE_GET_GH_RELEASE,$($(PKG)_GH_OWNER)/$($(PKG)_GH_REPO)/releases$($(PKG)_GH_LATEST),$($(PKG)_TAG_PREFIX),$($(PKG)_TAG_SUFFIX),$(or $($(PKG)_TAG_FILTER),$(GITHUB_TAG_FILTER)),$($(PKG)_VERSION_SEP)))
 endef

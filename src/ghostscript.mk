@@ -3,39 +3,30 @@
 PKG             := ghostscript
 $(PKG)_WEBSITE  := https://www.ghostscript.com/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 9.23
+$(PKG)_VERSION  := 9.26
 $(PKG)_NODOTVER := $(subst .,,$($(PKG)_VERSION))
-$(PKG)_CHECKSUM := 1fcedc27d4d6081105cdf35606cb3f809523423a6cf9e3c23cead3525d6ae8d9
+$(PKG)_CHECKSUM := 90ed475f37584f646e9ef829932b2525d5c6fc2e0147e8d611bc50aa0e718598
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs$($(PKG)_NODOTVER)/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc dbus fontconfig freetype lcms libiconv libidn libjpeg-turbo libpaper libpng openjpeg tiff zlib
+$(PKG)_DEPS     := cc dbus fontconfig freetype libiconv libidn libpaper libpng openjpeg tiff zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://ghostscript.com/Releases.html' | \
-    $(SED) -n 's:.*GPL_Ghostscript_::p' | \
-    $(SED) -n 's:\.html.*::p'
+    $(WGET) -q -O- 'https://api.github.com/repos/ArtifexSoftware/ghostpdl-downloads/releases' | \
+    $(SED) -n 's,.*"ghostscript-\([0-9\.]*\)\.tar.xz".*,\1,p' | \
+    head -1
 endef
 
 define $(PKG)_BUILD
-    cd '$(SOURCE_DIR)' && rm -rf freetype jpeg lcms2art libpng openjpeg tiff zlib
+    cp -f `automake --print-libdir`/{config.guess,config.sub,install-sh} '$(SOURCE_DIR)'
+    cd '$(SOURCE_DIR)' && rm -rf freetype jpeg libpng openjpeg tiff
     cd '$(SOURCE_DIR)' && autoreconf -f -i
-    cd '$(BUILD_DIR)' && CCAUX='$(BUILD_CC)' \
+    cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
         CPPFLAGS='$(CPPFLAGS) -DHAVE_SYS_TIMES_H=0' \
-        $(SOURCE_DIR)/configure \
         $(MXE_CONFIGURE_OPTS) \
-        --with-drivers=ALL \
-        --with-arch_h='$(SOURCE_DIR)/arch/windows-x$(if $(filter x86_64-%,$(TARGET)),64,86)-msvc.h' \
-        --with-memory-alignment='$(if $(filter x86_64-%,$(TARGET)),8,4)' \
-        --disable-contrib \
-        --disable-cups \
-        --disable-gtk \
         --with-libiconv=gnu \
-        --without-ijs
-    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' so CFLAGS_SO='' \
-        GS_LDFLAGS_SO='-shared -Wl,--out-implib=sobin/libgs.dll.a' \
-        GS_SONAME_MAJOR='libgs-ignore-me.dll' \
-        GS_SONAME_MAJOR_MINOR='libgs-9.dll'
+        --without-local-zlib
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(if $(BUILD_STATIC),libgs,so)
 
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/include/ghostscript'
     $(INSTALL) '$(SOURCE_DIR)/devices/gdevdsp.h' '$(PREFIX)/$(TARGET)/include/ghostscript/gdevdsp.h'
@@ -45,12 +36,7 @@ define $(PKG)_BUILD
 
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/bin'
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib'
-    $(if $(BUILD_STATIC),\
-        cd '$(BUILD_DIR)' && \
-        '$(PREFIX)/bin/$(TARGET)-ar' qc libgs.a `cat soobj/ldt.tr | tr ' ' '\n' | grep '^\./soobj/.*\.o$$'` && \
-        '$(PREFIX)/bin/$(TARGET)-ranlib' libgs.a && \
-        $(INSTALL) libgs.a '$(PREFIX)/$(TARGET)/lib/libgs.a' \
-    ,\
+    $(if $(BUILD_STATIC),$(INSTALL) '$(BUILD_DIR)/bin/gs.a' '$(PREFIX)/$(TARGET)/lib/libgs.a', \
         $(INSTALL) '$(BUILD_DIR)/sobin/libgs-9.dll' '$(PREFIX)/$(TARGET)/bin/libgs-9.dll' && \
         $(INSTALL) '$(BUILD_DIR)/sobin/libgs.dll.a' '$(PREFIX)/$(TARGET)/lib/libgs.dll.a')
 
@@ -59,11 +45,10 @@ define $(PKG)_BUILD
      echo 'Version: $($(PKG)_VERSION)'; \
      echo 'Description: Ghostscript library'; \
      echo 'Cflags: -I"$(PREFIX)/$(TARGET)/include/ghostscript"'; \
-     echo 'Cflags.private: -DGS_STATIC_LIB'; \
      echo 'Libs: -L"$(PREFIX)/$(TARGET)/lib" -lgs'; \
-     echo 'Requires: fontconfig freetype2 libidn libtiff-4 libpng jpeg lcms2 zlib'; \
+     echo 'Requires: fontconfig freetype2 libidn libtiff-4 libpng libopenjp2 libjpeg zlib'; \
      echo '# https://github.com/mxe/mxe/issues/1446'; \
-     echo 'Libs.private: -lm -liconv -lpaper -lopenjp2 -lwinspool';) \
+     echo 'Libs.private: -lm -liconv -lpaper -lwinspool';) \
      > '$(PREFIX)/$(TARGET)/lib/pkgconfig/ghostscript.pc'
 
     '$(TARGET)-gcc' \

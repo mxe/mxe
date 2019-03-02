@@ -19,7 +19,7 @@ function `require`.
 Example:
 ```
 $ luarocks install luasocket
-$ lua -e 'http = require "socket.http"; print(http.request("http://mxe.cc"))'
+$ lua -e 'http = require "socket.http"; print(http.request("http://example.org/"))'
 <!DOCTYPE html>
 ....
 ```

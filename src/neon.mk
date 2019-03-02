@@ -1,19 +1,19 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := neon
-$(PKG)_WEBSITE  := http://webdav.org/neon/
+$(PKG)_WEBSITE  := https://web.archive.org/web/webdav.org/neon/
 $(PKG)_DESCR    := HTTP and WebDAV client library (libneon)
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.30.2
 $(PKG)_CHECKSUM := db0bd8cdec329b48f53a6f00199c92d5ba40b0f015b153718d1b15d3d967fbca
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://webdav.org/$(PKG)/$(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL_2    := https://fossies.org/linux/www/$(PKG)-$($(PKG)_VERSION).tar.gz
+$(PKG)_URL      := https://fossies.org/linux/www/$(PKG)-$($(PKG)_VERSION).tar.gz
+$(PKG)_URL_2    := https://mirrorservice.org/sites/distfiles.macports.org/$(PKG)/$(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_DEPS     := cc expat gettext openssl
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://webdav.org/$(PKG)/' | \
+    $(WGET) -q -O- 'https://mirrorservice.org/sites/distfiles.macports.org/$(PKG)/' | \
     $(SED) -n 's,.*/\([0-9][^"]*\)/"\.tar.*,\1,p' | \
     sort | uniq | \
     head -1

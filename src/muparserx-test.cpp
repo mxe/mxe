@@ -2,7 +2,7 @@
  * This file is part of MXE. See LICENSE.md for licensing information.
  *
  * based on:
- * http://articles.beltoforion.de/article.php?a=muparserx&hl=en&p=using&s=idInclude#idEval
+ * http://beltoforion.de/article.php?a=muparserx&hl=en&p=using&s=idInclude#idEval
  */
 
 #include "mpParser.h"
@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
     p.DefineVar("c",  Variable(&fVal));
 
     p.SetExpr("va[0]+a*strlen(b)-c");
-    for (int i=0; i<<10; ++i)
+    for (int i=0; i<10; ++i)
     {
       // evaluate the expression and change the value of
       // the variable c in each turn

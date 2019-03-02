@@ -38,6 +38,11 @@ LIBTOOL    := $(shell glibtool --help >/dev/null 2>&1 && echo g)libtool
 LIBTOOLIZE := $(shell glibtoolize --help >/dev/null 2>&1 && echo g)libtoolize
 OPENSSL    := openssl
 PATCH      := $(shell gpatch --help >/dev/null 2>&1 && echo g)patch
+PYTHON2    := $(or $(shell ([ `python -c "import sys; print('{0[0]}'.format(sys.version_info))"` == 2 ] && echo python) 2>/dev/null || \
+                           which python2 2>/dev/null || \
+                           which python2.7 2>/dev/null), \
+                   $(warning Warning: python v2 not found (or default python changed to v3))\
+                   $(shell touch check-requirements-failed))
 SED        := $(shell gsed --help >/dev/null 2>&1 && echo g)sed
 SORT       := $(shell gsort --help >/dev/null 2>&1 && echo g)sort
 DEFAULT_UA := $(shell wget --version | $(SED) -n 's,GNU \(Wget\) \([0-9.]*\).*,\1/\2,p')
@@ -46,8 +51,8 @@ WGET        = $(WGET_TOOL) --user-agent='$(or $($(1)_UA),$(DEFAULT_UA))'
 
 REQUIREMENTS := autoconf automake autopoint bash bison bzip2 flex \
                 $(BUILD_CC) $(BUILD_CXX) gperf intltoolize $(LIBTOOL) \
-                $(LIBTOOLIZE) $(MAKE) $(OPENSSL) $(PATCH) $(PERL) python \
-                ruby scons $(SED) $(SORT) unzip wget xz 7za gdk-pixbuf-csource
+                $(LIBTOOLIZE) lzip $(MAKE) $(OPENSSL) $(PATCH) $(PERL) python \
+                ruby $(SED) $(SORT) unzip wget xz 7za gdk-pixbuf-csource
 
 PREFIX     := $(PWD)/usr
 LOG_DIR    := $(PWD)/log
@@ -96,9 +101,13 @@ MXE_CONFIGURE_OPTS = \
         --disable-static --enable-shared ) \
     $(MXE_DISABLE_DOC_OPTS)
 
+PKG_CONFIGURE_OPTS = \
+    $(_$(PKG)_CONFIGURE_OPTS) \
+    $($(PKG)_CONFIGURE_OPTS)
+
 # GCC threads and exceptions
 MXE_GCC_THREADS = \
-    $(if $(findstring posix,$(or $(TARGET),$(1))),posix,win32)
+    $(if $(findstring win32,$(or $(TARGET),$(1))),win32,posix)
 
 # allowed exception handling for targets
 # default (first item) and alternate, revisit if gcc/mingw-w64 change defaults
@@ -204,7 +213,7 @@ PRELOAD_VARS := LD_PRELOAD DYLD_FORCE_FLAT_NAMESPACE DYLD_INSERT_LIBRARIES
 # use a minimal whitelist of safe environment variables
 # basic working shell environment and mxe variables
 # see http://www.linuxfromscratch.org/lfs/view/stable/chapter04/settingenvironment.html
-ENV_WHITELIST := EDITOR HOME LANG PATH %PROXY %proxy PS1 TERM
+ENV_WHITELIST := EDITOR HOME LANG LC_% PATH %PROXY %proxy PS1 TERM
 ENV_WHITELIST += MAKE% MXE% $(PRELOAD_VARS) WINEPREFIX
 
 # OS/Distro related issues - "unsafe" but practical
@@ -222,13 +231,14 @@ UNPACK_ARCHIVE = \
     $(if $(filter %.tar.Z,   $(1)),tar xzf '$(1)', \
     $(if $(filter %.tbz2,    $(1)),tar xjf '$(1)', \
     $(if $(filter %.tar.bz2, $(1)),tar xjf '$(1)', \
+    $(if $(filter %.tar.lz,  $(1)),lzip -dc '$(1)'| tar xf -, \
     $(if $(filter %.tar.lzma,$(1)),xz -dc -F lzma '$(1)' | tar xf -, \
     $(if $(filter %.txz,     $(1)),xz -dc '$(1)' | tar xf -, \
     $(if $(filter %.tar.xz,  $(1)),xz -dc '$(1)' | tar xf -, \
     $(if $(filter %.7z,      $(1)),7za x '$(1)', \
     $(if $(filter %.zip,     $(1)),unzip -q '$(1)', \
     $(if $(filter %.deb,     $(1)),ar x '$(1)' && tar xf data.tar*, \
-    $(error Unknown archive format: $(1)))))))))))))
+    $(error Unknown archive format: $(1))))))))))))))
 
 UNPACK_PKG_ARCHIVE = \
     $(call UNPACK_ARCHIVE,$(PKG_DIR)/$($(1)_FILE))
@@ -535,8 +545,8 @@ $(foreach TARGET,$(MXE_TARGETS),\
 RULE_TYPES := BUILD DEPS FILE MESSAGE URL
 # by truncating the target elements then looking for STAIC|SHARED rules:
 #
-# foo_BUILD_i686-w64-mingw32.static.posix.dw2
-# foo_BUILD_i686-w64-mingw32.static.posix
+# foo_BUILD_i686-w64-mingw32.static.win32.dw2
+# foo_BUILD_i686-w64-mingw32.static.win32
 # foo_BUILD_i686-w64-mingw32.static
 # foo_BUILD_i686-w64-mingw32
 # foo_BUILD_SHARED
@@ -648,7 +658,7 @@ ifeq ($(findstring darwin,$(BUILD)),)
 else
     NONET_LIB := $(PREFIX)/$(BUILD)/lib/nonetwork.dylib
     PRELOAD   := DYLD_FORCE_FLAT_NAMESPACE=1 DYLD_INSERT_LIBRARIES='$(NONET_LIB)'
-    NONET_CFLAGS := -arch i386 -arch x86_64
+    NONET_CFLAGS := -arch x86_64
 endif
 
 $(NONET_LIB): $(TOP_DIR)/tools/nonetwork.c | $(PREFIX)/$(BUILD)/lib/.gitkeep
@@ -671,7 +681,10 @@ download-$(3)~$(1): download-only-$(1) \
                     $(addprefix download-,$(PKG_ALL_DEPS))
 
 .PHONY: $(1) $(1)~$(3)
-$(1) $(1)~$(3): $(PREFIX)/$(3)/installed/$(1)
+# requested pkgs should not build their native version unless
+# explicitly set in DEPS or they only have a single target
+$(if $(filter-out $(BUILD),$(3))$(call not,$(word 2,$($(1)_TARGETS))),$(1)) \
+    $(1)~$(3): $(PREFIX)/$(3)/installed/$(1)
 $(PREFIX)/$(3)/installed/$(1): $(PKG_MAKEFILES) \
                           $($(PKG)_PATCHES) \
                           $(PKG_TESTFILES) \
@@ -692,7 +705,7 @@ $(PREFIX)/$(3)/installed/$(1): $(PKG_MAKEFILES) \
 	    $(if $(BUILD_DRY_RUN)$(MXE_BUILD_DRY_RUN), \
 	        @$(PRINTF_FMT) '[dry-run]' '$(1)' '$(3)' | $(RTRIM)
 	        @[ -d '$(PREFIX)/$(3)/lib' ] || mkdir -p '$(PREFIX)/$(3)/lib'
-	        @touch '$(PREFIX)/$(3)/lib/$(1).dry-run'
+	        @echo $(1)~$(3) > '$(PREFIX)/$(3)/lib/$(1).dry-run'
 	        @touch '$(PREFIX)/$(3)/installed/$(1)'
 	    $(else),
 	        @$(PRINTF_FMT) '[build]'    '$(1)' '$(3)' | $(RTRIM)
@@ -732,7 +745,7 @@ build-only-$(1)_$(3): PKG = $(1)
 build-only-$(1)_$(3): TARGET = $(3)
 build-only-$(1)_$(3): BUILD_$(if $(findstring shared,$(3)),SHARED,STATIC) = TRUE
 build-only-$(1)_$(3): BUILD_$(if $(call seq,$(TARGET),$(BUILD)),NATIVE,CROSS) = TRUE
-build-only-$(1)_$(3): $(if $(findstring posix,$(TARGET)),POSIX,WIN32)_THREADS = TRUE
+build-only-$(1)_$(3): $(if $(findstring win32,$(TARGET)),WIN32,POSIX)_THREADS = TRUE
 build-only-$(1)_$(3): LIB_SUFFIX = $(if $(findstring shared,$(3)),dll,a)
 build-only-$(1)_$(3): BITS = $(if $(findstring x86_64,$(3)),64,32)
 build-only-$(1)_$(3): PROCESSOR = $(firstword $(call split,-,$(3)))
@@ -751,7 +764,7 @@ build-only-$(1)_$(3): CMAKE_SHARED_BOOL = $(if $(findstring shared,$(3)),ON,OFF)
 build-only-$(1)_$(3):
 	$(if $(value $(call LOOKUP_PKG_RULE,$(1),BUILD,$(3))),
 	    uname -a
-	    git log --pretty=tformat:"%H - %s [%ar] [%d]" -1
+	    - git log --pretty=tformat:"%H - %s [%ar] [%d]" -1
 	    lsb_release -a 2>/dev/null || sw_vers 2>/dev/null || true
 	    autoconf --version 2>/dev/null | head -1
 	    automake --version 2>/dev/null | head -1
@@ -894,7 +907,7 @@ print-deps-for-build-pkg:
 	        $(if $(or $(value $(call LOOKUP_PKG_RULE,$(PKG),BUILD,$(TARGET))), \
 	                  $(filter $($(PKG)_TYPE),$(BUILD_PKG_TYPES))), \
 	            $(info $(strip for-build-pkg $(TARGET)~$(PKG) \
-	            $(subst $(space),-,$($(PKG)_VERSION)) \
+	            $(subst $(space),-,$($(PKG)_VERSION)-$(OS_SHORT_NAME)) \
 	            $(subst /installed/,~,$(PKG_DEPS) $(PKG_OO_DEPS)))))))
 	            @echo -n
 

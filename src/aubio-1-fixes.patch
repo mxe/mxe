@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Paul Brossier <piem@piem.org>
 Date: Tue, 5 Jan 2016 21:28:06 -0500
-Subject: [PATCH 1/7] wscript: check HAVE_AV* from ctx.env
+Subject: [PATCH 1/8] wscript: check HAVE_AV* from ctx.env
 
 From https://github.com/aubio/aubio/commit/eb6899125ac83900710180c02b94bc593a1426d2
 
@@ -26,7 +26,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Timothy Gu <timothygu99@gmail.com>
 Date: Tue, 5 Jan 2016 21:47:01 -0500
-Subject: [PATCH 2/7] wscript: check more variables from ctx.env
+Subject: [PATCH 2/8] wscript: check more variables from ctx.env
 
 
 diff --git a/wscript b/wscript
@@ -52,7 +52,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Timothy Gu <timothygu99@gmail.com>
 Date: Tue, 5 Jan 2016 22:48:20 -0500
-Subject: [PATCH 3/7] wscript: fftw3 support requires pthreads
+Subject: [PATCH 3/8] wscript: fftw3 support requires pthreads
 
 
 diff --git a/wscript b/wscript
@@ -74,7 +74,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Timothy Gu <timothygu99@gmail.com>
 Date: Tue, 5 Jan 2016 22:18:21 -0500
-Subject: [PATCH 4/7] wscript: Install static library
+Subject: [PATCH 4/8] wscript: Install static library
 
 
 diff --git a/src/wscript_build b/src/wscript_build
@@ -93,7 +93,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Timothy Gu <timothygu99@gmail.com>
 Date: Tue, 5 Jan 2016 21:15:37 -0500
-Subject: [PATCH 5/7] Add options for enabling shared and/or static libraries
+Subject: [PATCH 5/8] Add options for enabling shared and/or static libraries
 
 
 diff --git a/src/wscript_build b/src/wscript_build
@@ -153,7 +153,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Timothy Gu <timothygu99@gmail.com>
 Date: Tue, 5 Jan 2016 21:25:46 -0500
-Subject: [PATCH 6/7] Add static deps to pkgconfig file
+Subject: [PATCH 6/8] Add static deps to pkgconfig file
 
 
 diff --git a/aubio.pc.in b/aubio.pc.in
@@ -236,7 +236,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Timothy Gu <timothygu99@gmail.com>
 Date: Tue, 5 Jan 2016 21:27:05 -0500
-Subject: [PATCH 7/7] disable tests and examples
+Subject: [PATCH 7/8] disable tests and examples
 
 
 diff --git a/wscript b/wscript
@@ -256,3 +256,26 @@ index 1111111..2222222 100644
  
      bld( source = 'aubio.pc.in' )
  
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: James Cowgill <jcowgill@jcowgill.uk>
+Date: Sun, 25 Feb 2018 14:23:25 +0000
+Subject: [PATCH 8/8] Fix build with FFmpeg 4.0
+
+
+diff --git a/src/io/source_avcodec.c b/src/io/source_avcodec.c
+index 1111111..2222222 100644
+--- a/src/io/source_avcodec.c
++++ b/src/io/source_avcodec.c
+@@ -34,7 +34,11 @@
+ #include "fmat.h"
+ #include "source_avcodec.h"
+ 
++#if LIBAVCODEC_VERSION_INT < AV_VERSION_INT(56, 56, 0)
+ #define AUBIO_AVCODEC_MAX_BUFFER_SIZE FF_MIN_BUFFER_SIZE
++#else
++#define AUBIO_AVCODEC_MAX_BUFFER_SIZE AV_INPUT_BUFFER_MIN_SIZE
++#endif
+ 
+ struct _aubio_source_avcodec_t {
+   uint_t hop_size;

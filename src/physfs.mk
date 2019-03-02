@@ -3,8 +3,8 @@
 PKG             := physfs
 $(PKG)_WEBSITE  := https://icculus.org/physfs/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.0.3
-$(PKG)_CHECKSUM := ca862097c0fb451f2cacd286194d071289342c107b6fe69079c079883ff66b69
+$(PKG)_VERSION  := 3.0.1
+$(PKG)_CHECKSUM := b77b9f853168d9636a44f75fca372b363106f52d789d18a2f776397bf117f2f1
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.bz2
 $(PKG)_URL      := https://icculus.org/physfs/downloads/$($(PKG)_FILE)
@@ -18,15 +18,14 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && '$(TARGET)-cmake' . \
-        $(if $(BUILD_SHARED), \
-            -DPHYSFS_BUILD_SHARED=TRUE \
-            -DPHYSFS_BUILD_STATIC=FALSE, \
-            -DPHYSFS_BUILD_SHARED=FALSE) \
+    cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \
+        -DPHYSFS_BUILD_STATIC=$(CMAKE_STATIC_BOOL) \
+        -DPHYSFS_BUILD_SHARED=$(CMAKE_SHARED_BOOL) \
         -DPHYSFS_INTERNAL_ZLIB=FALSE \
         -DPHYSFS_BUILD_TEST=FALSE \
         -DPHYSFS_BUILD_WX_TEST=FALSE
-        $(MAKE) -C '$(1)' -j '$(JOBS)' install
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic -std=c99 \

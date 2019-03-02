@@ -4,38 +4,29 @@ PKG             := netcdf
 $(PKG)_WEBSITE  := https://www.unidata.ucar.edu/software/netcdf/
 $(PKG)_DESCR    := NetCDF
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.3.0
-$(PKG)_CHECKSUM := e796413d27da6b053e07a18f567a1d0c23d2a317cef905faa2a05fe4f725fc63
-$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := ftp://ftp.unidata.ucar.edu/pub/netcdf/old/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc curl hdf4 hdf5 portablexdr zlib
-
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://www.unidata.ucar.edu/downloads/netcdf/index.jsp' | \
-    grep netcdf | \
-    $(SED) -n 's,.*href="netcdf-\([0-9_]*\)">.*,\1,p' | \
-    head -1 | \
-    tr '_' '.'
-endef
-
-# NetCDF uses '#ifdef IGNORE' as a synonym to '#if 0' in several places.
-# IGNORE is assumed to never be defined, but winbase.h defines it...
-# We just replace '#ifdef IGNORE' with '#if 0' to work around this.
+$(PKG)_VERSION  := 4.6.1
+$(PKG)_CHECKSUM := a2fabf27c72a5ee746e3843e1debbaad37cd035767eaede2045371322211eebb
+$(PKG)_GH_CONF  := Unidata/netcdf-c/releases,v
+$(PKG)_DEPS     := cc curl hdf4 hdf5 jpeg portablexdr zlib
 
 define $(PKG)_BUILD
-    cd '$(1)' && \
-        $(SED) -i -e 's/#ifdef IGNORE/#if 0/' libsrc4/nc4hdf.c libsrc4/ncfunc.c libsrc/attr.c ncgen/cvt.c && \
-        ./configure \
-            $(MXE_CONFIGURE_OPTS) \
-            --enable-netcdf-4 \
-            --enable-hdf4 \
-            --disable-testsets \
-            --disable-examples \
-            CPPFLAGS="-D_DLGS_H -DWIN32_LEAN_AND_MEAN" \
-            LIBS="-lmfhdf -ldf -lportablexdr -lws2_32"
+    # build and install the library
+    cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \
+        -DENABLE_DOXYGEN=OFF \
+        -DENABLE_EXAMPLES=OFF \
+        -DENABLE_TESTS=OFF \
+        -DBUILD_UTILITIES=OFF \
+        -DENABLE_HDF4=ON \
+        -DENABLE_HDF4_FILE_TESTS=OFF \
+        -DENABLE_NETCDF_4=ON \
+        -DENABLE_CDF5=ON \
+        -DUSE_HDF5=ON
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
-    $(MAKE) -C '$(1)' -j '$(JOBS)' LDFLAGS=-no-undefined
-
-    $(MAKE) -C '$(1)' -j 1 install
+    # compile test, pkg-config support incomplete
+    '$(TARGET)-gcc' \
+        -W -Wall -Werror -ansi -pedantic \
+        '$(SOURCE_DIR)/examples/C/simple.c' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
+        `'$(TARGET)-pkg-config' $(PKG) libjpeg libcurl --cflags --libs` -lportablexdr
 endef

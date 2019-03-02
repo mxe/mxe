@@ -45,8 +45,11 @@ terminal emulators:
 
 #### Make
 
-Make is difficult to cross-compile so it is downloaded from the [source
-recommended by the GNU Make team](https://git.savannah.gnu.org/cgit/make.git/tree/README.W32.template).
+```
+make make-host MXE_PLUGIN_DIRS=plugins/examples/host-toolchain/
+```
+
+This will cross-compile GNU Make from source (without guile support).
 
 #### pkgconf/pkg-config
 
@@ -65,8 +68,7 @@ with non-standard include paths.
 make qt5-host-tools MXE_PLUGIN_DIRS=plugins/examples/host-toolchain/
 ```
 
-This will build `qtbase`, cross-compile the toolchain and qt tools, and
-download `make` binaries.
+This will build `qtbase` and cross-compile the toolchain/qt tools/make
 
 On a windows machine, execute
 `usr\{target}\qt5\test-qt5-host-tools\test-qt5-host-tools.bat` to build and

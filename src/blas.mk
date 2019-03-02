@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := blas
-$(PKG)_WEBSITE  := http://www.netlib.org/blas/
+$(PKG)_WEBSITE  := https://www.netlib.org/blas/
 $(PKG)_DESCR    := Reference BLAS (Basic Linear Algebra Subprograms)
 $(PKG)_IGNORE    = $(lapack_IGNORE)
 $(PKG)_VERSION   = $(lapack_VERSION)

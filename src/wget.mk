@@ -2,12 +2,12 @@
 
 PKG             := wget
 $(PKG)_WEBSITE  := https://www.gnu.org/software/wget/
-$(PKG)_VERSION  := 1.19.5
-$(PKG)_CHECKSUM := b39212abe1a73f2b28f4c6cb223c738559caac91d6e416a6d91d4b9d55c9faee
+$(PKG)_VERSION  := 1.20.1
+$(PKG)_CHECKSUM := 0f63e84dd23dc53ab3ab6f483c3afff8301e54c165783f772101cdd9b1c64928
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
+$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.lz
 $(PKG)_URL      := https://ftp.gnu.org/gnu/$(PKG)/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc gnutls libidn libntlm pthreads
+$(PKG)_DEPS     := cc gnutls libidn2 libntlm pcre2 pthreads
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://git.savannah.gnu.org/cgit/wget.git/refs/' | \

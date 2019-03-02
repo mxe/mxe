@@ -4,8 +4,8 @@ PKG             := expat
 $(PKG)_WEBSITE  := https://github.com/libexpat/libexpat
 $(PKG)_DESCR    := Expat XML Parser
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.2.5
-$(PKG)_CHECKSUM := d9dc32efba7e74f788fcc4f212a43216fc37cf5f23f4c2339664d473353aedf6
+$(PKG)_VERSION  := 2.2.6
+$(PKG)_CHECKSUM := 17b43c2716d521369f82fc2dc70f359860e90fa440bea65b3b85f0b246ea81f2
 $(PKG)_SUBDIR   := expat-$($(PKG)_VERSION)
 $(PKG)_FILE     := expat-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/expat/expat/$($(PKG)_VERSION)/$($(PKG)_FILE)
@@ -18,7 +18,9 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && ./configure \
-        $(MXE_CONFIGURE_OPTS)
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install
+    cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
+        $(MXE_CONFIGURE_OPTS) \
+        --without-docbook
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 endef

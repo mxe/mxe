@@ -9,7 +9,7 @@
  */
 
 /*
-    http://lensfun.sourceforge.net/manual/example_8c-example.html
+    https://lensfun.sourceforge.io/manual/v0.3.2/example_8c-example.html
     A simple example of library usage from plain C
 */
 

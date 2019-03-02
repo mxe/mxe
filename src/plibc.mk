@@ -13,7 +13,13 @@ define $(PKG)_BUILD
     cd '$(SOURCE_DIR)' && autoreconf -fi
     cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
         $(MXE_CONFIGURE_OPTS) \
-        --includedir='$(PREFIX)/$(TARGET)/include/plibc'
+        --includedir='$(PREFIX)/$(TARGET)/include/plibc' \
+        CFLAGS='-DEHOSTDOWN=WSAEHOSTDOWN \
+                -DESOCKTNOSUPPORT=WSAESOCKTNOSUPPORT \
+                -DEPROCLIM=WSAEPROCLIM \
+                -DEDQUOT=WSAEDQUOT \
+                -DESTALE=WSAESTALE \
+                -DECASECLASH=2137'
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 

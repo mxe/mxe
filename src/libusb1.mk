@@ -1,11 +1,11 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libusb1
-$(PKG)_WEBSITE  := http://libusb.org/
+$(PKG)_WEBSITE  := https://libusb.info/
 $(PKG)_DESCR    := LibUsb-1.0
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.0.21
-$(PKG)_CHECKSUM := 7dce9cce9a81194b7065ee912bcd55eeffebab694ea403ffb91b67db66b1824b
+$(PKG)_VERSION  := 1.0.22
+$(PKG)_CHECKSUM := 75aeb9d59a4fdb800d329a545c2e6799f732362193b465ea198f2aa275518157
 $(PKG)_SUBDIR   := libusb-$($(PKG)_VERSION)
 $(PKG)_FILE     := libusb-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/libusb/libusb-1.0/libusb-$($(PKG)_VERSION)/$($(PKG)_FILE)

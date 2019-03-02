@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := gtkglarea
-$(PKG)_WEBSITE  := http://www.mono-project.com/GtkGLArea/
+$(PKG)_WEBSITE  := https://www.mono-project.com/GtkGLArea/
 $(PKG)_DESCR    := GtkGLArea
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.0.1

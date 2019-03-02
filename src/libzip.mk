@@ -1,25 +1,24 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libzip
-$(PKG)_WEBSITE  := https://www.nih.at/libzip/
+$(PKG)_WEBSITE  := https://libzip.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.1.3
-$(PKG)_CHECKSUM := 729a295a59a9fd6e5b9fe9fd291d36ae391a9d2be0b0824510a214cfaa05ceee
-$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := https://www.nih.at/libzip/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc zlib
-
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://www.nih.at/libzip/' | \
-    $(SED) -n 's,.*libzip-\([0-9][^>]*\)\.tar.*,\1,p' | \
-    head -1
-endef
+$(PKG)_VERSION  := 1.5.1
+$(PKG)_CHECKSUM := 3ca79ff6b9a02b3e3bcf0b45f30a8159c3146658f57c8b6be0a370eabd3db071
+$(PKG)_GH_CONF  := nih-at/libzip/releases,rel-,,,-
+$(PKG)_DEPS     := cc bzip2 zlib
 
 define $(PKG)_BUILD
-    cd '$(1)' && ./configure \
-        $(MXE_CONFIGURE_OPTS)
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install $(MXE_DISABLE_CRUFT) SUBDIRS=lib
+    # build and install the library
+    cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \
+        -DENABLE_GNUTLS=OFF \
+        -DENABLE_OPENSSL=OFF \
+        -DENABLE_COMMONCRYPTO=OFF
+    $(MAKE) -C '$(BUILD_DIR)/lib' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)/lib' -j 1 install
+
+    $(INSTALL) -m644 '$(BUILD_DIR)/zipconf.h' '$(PREFIX)/$(TARGET)/include'
+    $(INSTALL) -m644 '$(BUILD_DIR)/libzip.pc' '$(PREFIX)/$(TARGET)/lib/pkgconfig'
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \

@@ -1,18 +1,18 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := sdl2_gfx
-$(PKG)_WEBSITE  := http://www.ferzkopp.net/joomla/content/view/19/14/
+$(PKG)_WEBSITE  := https://www.ferzkopp.net/joomla/content/view/19/14/
 $(PKG)_DESCR    := SDL2_gfx
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.0.3
-$(PKG)_CHECKSUM := a4066bd467c96469935a4b1fe472893393e7d74e45f95d59f69726784befd8f8
+$(PKG)_VERSION  := 1.0.4
+$(PKG)_CHECKSUM := 63e0e01addedc9df2f85b93a248f06e8a04affa014a835c2ea34bfe34e576262
 $(PKG)_SUBDIR   := SDL2_gfx-$($(PKG)_VERSION)
 $(PKG)_FILE     := SDL2_gfx-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://www.ferzkopp.net/Software/SDL2_gfx/$($(PKG)_FILE)
+$(PKG)_URL      := https://www.ferzkopp.net/Software/SDL2_gfx/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc sdl2
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://www.ferzkopp.net/joomla/content/view/19/14/' | \
+    $(WGET) -q -O- 'https://www.ferzkopp.net/joomla/content/view/19/14/' | \
     grep 'href.*tar\.' | \
     $(SED) -n 's,.*SDL2_gfx-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1

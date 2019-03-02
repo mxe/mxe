@@ -36,4 +36,9 @@ ifeq (,$(findstring 64,$(BUILD)))
     $(PKG)_BUILD_x86_64-w64-mingw32 =
 endif
 
+# darwin no longer supports multi-lib
+ifeq ($(findstring x86_64-apple-darwin,$(BUILD)),x86_64-apple-darwin)
+    $(PKG)_BUILD_i686-w64-mingw32 =
+endif
+
 $(PKG)_BUILD_SHARED =

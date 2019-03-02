@@ -31,8 +31,8 @@ various target platforms, which:
     - static
     - shared
   * GCC Threading Libraries (`winpthreads` is always available):
-    - win32
-    - [posix (experimental)](https://github.com/mxe/mxe/pull/958)
+    - [posix](https://github.com/mxe/mxe/pull/958) [(default)](https://github.com/mxe/mxe/issues/2258)
+    - win32 (supported by limited amount packages)
   * GCC Exception Handling:
     - Default
       - i686: sjlj
@@ -41,4 +41,4 @@ various target platforms, which:
       - i686: dw2
       - x86_64: sjlj
 
-Please see [mxe.cc](http://mxe.cc/) for further information and package support matrix.
+Please see [mxe.cc](https://mxe.cc/) for further information and package support matrix.

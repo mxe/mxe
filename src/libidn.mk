@@ -4,8 +4,8 @@ PKG             := libidn
 $(PKG)_WEBSITE  := https://www.gnu.org/software/libidn/
 $(PKG)_DESCR    := Libidn
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.33
-$(PKG)_CHECKSUM := 44a7aab635bb721ceef6beecc4d49dfd19478325e1b47f3196f7d2acc4930e19
+$(PKG)_VERSION  := 1.35
+$(PKG)_CHECKSUM := f11af1005b46b7b15d057d7f107315a1ad46935c7fcdf243c16e46ec14f0fe1e
 $(PKG)_SUBDIR   := libidn-$($(PKG)_VERSION)
 $(PKG)_FILE     := libidn-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://ftp.gnu.org/gnu/libidn/$($(PKG)_FILE)
@@ -14,13 +14,11 @@ $(PKG)_DEPS     := cc gettext libiconv
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://git.savannah.gnu.org/gitweb/?p=libidn.git;a=tags' | \
-    grep '<a class="list subject"' | \
-    $(SED) -n 's,.*<a[^>]*>\([0-9][^<]*\)<.*,\1,p' | \
+    $(SED) -n 's,.*<a[^>]*>\(Release \)\?\([0-9][^<]*\)<.*,\2,p' | \
     head -1
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && rm aclocal.m4 && autoreconf -fi
     # don't build and install docs
     (echo '# DISABLED'; echo 'all:'; echo 'install:') > '$(1)/doc/Makefile.in'
     cd '$(1)' && ./configure \

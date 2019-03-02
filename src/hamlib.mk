@@ -6,8 +6,8 @@ PKG             := hamlib
 $(PKG)_WEBSITE  := http://www.hamlib.org/
 $(PKG)_DESCR    := HamLib
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.2
-$(PKG)_CHECKSUM := b55cb5e6a8e876cceb86590c594ea5a6eb5dff2e30fc13ce053b46baa6d7ad1d
+$(PKG)_VERSION  := 3.3
+$(PKG)_CHECKSUM := c90b53949c767f049733b442cd6e0a48648b55d99d4df5ef3f852d985f45e880
 $(PKG)_GH_CONF  := hamlib/hamlib/releases/latest
 $(PKG)_DEPS     := cc libusb1 libxml2 pthreads
 

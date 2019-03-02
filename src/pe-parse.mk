@@ -17,7 +17,8 @@ $(PKG)_BUILD_$(BUILD) :=
 define $(PKG)_BUILD
     # build and install the cross-library
     cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \
-        -DBUILD_COMMAND_LINE_TOOLS=OFF
+        -DBUILD_COMMAND_LINE_TOOLS=OFF \
+        -DCMAKE_CXX_FLAGS='-Wno-error=redundant-decls -Wno-error=ignored-qualifiers'
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 

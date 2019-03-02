@@ -8,8 +8,7 @@ $(PKG)_VERSION  := 1.4.2
 $(PKG)_CHECKSUM := ad87048adb91167b07f34974a8e53e4ec356494c29f1748de95252e8f81a5e6e
 $(PKG)_SUBDIR   := libgeotiff-$($(PKG)_VERSION)
 $(PKG)_FILE     := libgeotiff-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://download.osgeo.org/geotiff/libgeotiff/$($(PKG)_FILE)
-$(PKG)_URL_2    := ftp://ftp.remotesensing.org/geotiff/libgeotiff/$($(PKG)_FILE)
+$(PKG)_URL      := https://download.osgeo.org/geotiff/libgeotiff/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc jpeg proj tiff zlib
 
 define $(PKG)_UPDATE

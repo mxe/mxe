@@ -3,13 +3,13 @@
 PKG             := ffmpeg
 $(PKG)_WEBSITE  := https://ffmpeg.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.4.2
-$(PKG)_CHECKSUM := eb0370bf223809b9ebb359fed5318f826ac038ce77933b3afd55ab1a0a21785a
+$(PKG)_VERSION  := 4.1
+$(PKG)_CHECKSUM := b684fb43244a5c4caae652af9022ed5d85ce15210835bce054a33fb26033a1a5
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://ffmpeg.org/releases/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc bzip2 gnutls lame libass libbluray libbs2b libcaca \
-                   libvpx opencore-amr opus sdl speex theora vidstab \
+                   libvpx opencore-amr opus sdl2 speex theora vidstab \
                    vo-amrwbenc vorbis x264 xvidcore yasm zlib
 
 # DO NOT ADD fdk-aac OR openssl SUPPORT.

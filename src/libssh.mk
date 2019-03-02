@@ -55,7 +55,7 @@ define $(PKG)_BUILD
 
     # compile test
     '$(TARGET)-gcc' \
-        -W -Wall -Werror -pedantic \
+        -W -Wall -Werror -pedantic -std=c99 $($(PKG)_EXTRA_WARNINGS) \
         $(SOURCE_DIR)/examples/{authentication.c,knownhosts.c,connect_ssh.c,exec.c} \
         -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
         `'$(TARGET)-pkg-config' $(PKG) --cflags --libs`

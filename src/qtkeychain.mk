@@ -4,14 +4,15 @@ PKG             := qtkeychain
 $(PKG)_WEBSITE  := https://github.com/frankosterfeld/qtkeychain
 $(PKG)_DESCR    := QtKeychain
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.8.0
-$(PKG)_CHECKSUM := b492f603197538bc04b2714105b1ab2b327a9a98d400d53d9a7cb70edd2db12f
+$(PKG)_VERSION  := 0.9.1
+$(PKG)_CHECKSUM := 9c2762d9d0759a65cdb80106d547db83c6e9fdea66f1973c6e9014f867c6f28e
 $(PKG)_GH_CONF  := frankosterfeld/qtkeychain/tags,v
 $(PKG)_DEPS     := cc qttools
 
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \
-        -DQTKEYCHAIN_STATIC=$(CMAKE_STATIC_BOOL)
+        -DQTKEYCHAIN_STATIC=$(CMAKE_STATIC_BOOL) \
+        -DBUILD_TEST_APPLICATION="OFF"
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 

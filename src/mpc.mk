@@ -4,21 +4,18 @@ PKG             := mpc
 $(PKG)_WEBSITE  := http://www.multiprecision.org/
 $(PKG)_DESCR    := GNU MPC
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.0.2
-$(PKG)_CHECKSUM := b561f54d8a479cee3bc891ee52735f18ff86712ba30f036f8b8537bae380c488
+$(PKG)_VERSION  := 1.1.0
+$(PKG)_CHECKSUM := 6985c538143c1208dcb1ac42cedad6ff52e267b47e5f970183a3e75125b43c2e
 $(PKG)_SUBDIR   := mpc-$($(PKG)_VERSION)
 $(PKG)_FILE     := mpc-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://ftp.gnu.org/gnu/mpc/$($(PKG)_FILE)
-$(PKG)_URL_2    := http://ftp.debian.org/debian/pool/main/m/mpclib/mpclib_$($(PKG)_VERSION).orig.tar.gz
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 $(PKG)_DEPS     := cc gmp mpfr
 
 $(PKG)_DEPS_$(BUILD) := gmp mpfr
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://gforge.inria.fr/scm/viewvc.php/tags/?root=mpc&sortby=date' | \
-    $(SED) -n 's,.*<a name="\([0-9][^"]*\)".*,\1,p' | \
-    head -1
+    $(call GET_LATEST_VERSION, https://ftp.gnu.org/gnu/mpc/)
 endef
 
 define $(PKG)_BUILD_$(BUILD)

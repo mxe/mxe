@@ -46,4 +46,4 @@ websites for further details.
 [issue-tracker]: https://github.com/mxe/mxe/issues
 [config.guess]: https://github.com/mxe/mxe/blob/master/ext/config.guess#L3-L27
 [gmsl]: https://github.com/mxe/mxe/blob/master/ext/gmsl#L8-L40
-[packages]: http://mxe.cc/#packages
+[packages]: https://mxe.cc/#packages

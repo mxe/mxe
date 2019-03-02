@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Sun, 6 Sep 2015 22:34:47 +0100
-Subject: [PATCH 01/11] use comp_err tool built in native build
+Subject: [PATCH 01/12] use comp_err tool built in native build
 
 See http://www.vtk.org/Wiki/CMake_Cross_Compiling#Using_executables_in_the_build_created_during_the_build
 
@@ -47,7 +47,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Sun, 6 Sep 2015 22:53:33 +0100
-Subject: [PATCH 02/11] fix extra qualification 'Handshake::'
+Subject: [PATCH 02/12] fix extra qualification 'Handshake::'
 
 Compilation error.
 
@@ -68,7 +68,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Mon, 7 Sep 2015 22:59:18 +0100
-Subject: [PATCH 03/11] fix case in headers and libs (should be lowercase)
+Subject: [PATCH 03/12] fix case in headers and libs (should be lowercase)
 
 
 diff --git a/extra/yassl/src/yassl_int.cpp b/extra/yassl/src/yassl_int.cpp
@@ -127,7 +127,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Mon, 7 Sep 2015 23:01:35 +0100
-Subject: [PATCH 04/11] define missing types
+Subject: [PATCH 04/12] define missing types
 
 We do not use types CERT_NAME_BLOB and CRYPT_HASH_BLOB,
 though they are used in mprapi.h. And are not defined!
@@ -150,7 +150,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Mon, 7 Sep 2015 23:04:23 +0100
-Subject: [PATCH 05/11] macro NATIVE_WIN32 for stuff we don't have here
+Subject: [PATCH 05/12] macro NATIVE_WIN32 for stuff we don't have here
 
 Macro NATIVE_WIN32 is undefined in MXE. It is used instead of _WIN32
 in #ifdef's where working variant is Unix and not Win32:
@@ -261,7 +261,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Thu, 8 Oct 2015 13:30:53 +1100
-Subject: [PATCH 06/11] fix shared lib names
+Subject: [PATCH 06/12] fix shared lib names
 
 
 diff --git a/libmysql/CMakeLists.txt b/libmysql/CMakeLists.txt
@@ -299,7 +299,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Thu, 8 Oct 2015 19:36:35 +1100
-Subject: [PATCH 07/11] allow install of mysql_config
+Subject: [PATCH 07/12] allow install of mysql_config
 
 
 diff --git a/scripts/CMakeLists.txt b/scripts/CMakeLists.txt
@@ -319,7 +319,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
 Date: Wed, 11 Nov 2015 07:44:44 +0000
-Subject: [PATCH 08/11] add 'static' to some inline functions
+Subject: [PATCH 08/12] add 'static' to some inline functions
 
 Fix https://gist.github.com/starius/71d5f276d62e58f36d2f
 See also http://stackoverflow.com/a/8502046
@@ -350,7 +350,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
 Date: Wed, 16 Dec 2015 17:39:28 +0100
-Subject: [PATCH 09/11] fix CMake error if dir contains special regex char
+Subject: [PATCH 09/12] fix CMake error if dir contains special regex char
 
 See https://github.com/mxe/mxe/issues/1030
 
@@ -374,7 +374,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Fri, 13 Nov 2015 10:22:12 -0500
-Subject: [PATCH 10/11] For Windows, check if POSIX thread model or win32
+Subject: [PATCH 10/12] For Windows, check if POSIX thread model or win32
  thread model is being used.
 
 
@@ -454,7 +454,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Wed, 8 Feb 2017 11:51:42 +1100
-Subject: [PATCH 11/11] only define localtime_r and gmtime_r when pthreads
+Subject: [PATCH 11/12] only define localtime_r and gmtime_r when pthreads
  isn't used
 
 
@@ -471,3 +471,26 @@ index 1111111..2222222 100644
  /****************************************************************************
  ** Replacements for localtime_r and gmtime_r
  ****************************************************************************/
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Mon, 17 Sep 2018 11:04:30 +0200
+Subject: [PATCH 12/12] mingw-w64 6 fix
+
+
+diff --git a/mysys/my_gethwaddr.c b/mysys/my_gethwaddr.c
+index 1111111..2222222 100644
+--- a/mysys/my_gethwaddr.c
++++ b/mysys/my_gethwaddr.c
+@@ -137,9 +137,11 @@ my_bool my_gethwaddr(uchar *to)
+ #define VOID void
+ #endif
+ 
++#if __MINGW64_VERSION_MAJOR < 6
+ // mprapi.h uses these undefined types
+ #define CERT_NAME_BLOB int
+ #define CRYPT_HASH_BLOB int
++#endif
+ #include <iphlpapi.h>
+ 
+ /*

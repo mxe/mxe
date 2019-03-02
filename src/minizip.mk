@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := minizip
-$(PKG)_WEBSITE  := http://www.winimage.com/zLibDll/minizip.html
+$(PKG)_WEBSITE  := https://www.winimage.com/zLibDll/minizip.html
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 68a48aa
 $(PKG)_CHECKSUM := 3fca5754b6e9f96fc907bb6755a1daef72f869cee172a4e687611c47ee693ada
