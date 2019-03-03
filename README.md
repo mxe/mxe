@@ -42,3 +42,10 @@ various target platforms, which:
       - x86_64: sjlj
 
 Please see [mxe.cc](https://mxe.cc/) for further information and package support matrix.
+
+## Shared Library Notes
+There are several approaches to recursively finding DLL dependencies (alphabetical list):
+  * [go script](https://github.com/desertbit/gml/blob/master/cmd/gml-copy-dlls/main.go)
+  * [pe-util](https://github.com/gsauthof/pe-util) packaged with [mxe](https://github.com/mxe/mxe/blob/master/src/pe-util.mk)
+  * [python script](https://github.com/mxe/mxe/blob/master/tools/copydlldeps.py)
+  * [shell script](https://github.com/mxe/mxe/blob/master/tools/copydlldeps.md)
