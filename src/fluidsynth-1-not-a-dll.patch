@@ -1,0 +1,13 @@
+--- fluidsynth-1.1.0/include/fluidsynth.h~	2009-09-22 08:55:01.000000000 +0200
++++ fluidsynth-1.1.0/include/fluidsynth.h	2009-11-12 14:10:35.784046956 +0100
+@@ -23,6 +23,10 @@
+ 
+ #include <stdio.h>
+ 
++#ifndef FLUIDSYNTH_NOT_A_DLL
++#define FLUIDSYNTH_NOT_A_DLL
++#endif /* FLUIDSYNTH_NOT_A_DLL */
++
+ #ifdef __cplusplus
+ extern "C" {
+ #endif

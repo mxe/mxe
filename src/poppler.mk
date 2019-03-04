@@ -56,8 +56,8 @@ define $(PKG)_BUILD
         LIBTIFF_LIBS="`'$(TARGET)-pkg-config' libtiff-4 --libs`"
     $(SED) -i 's,reference,'',g' '$(1)/glib/Makefile'
     PATH='$(PREFIX)/$(TARGET)/$(if $(filter qtbase,$($(PKG)_DEPS)),qt5,qt)/bin:$(PATH)' \
-        $(MAKE) -C '$(1)' -j '$(JOBS)' $(MXE_DISABLE_CRUFT) HTML_DIR=
-    $(MAKE) -C '$(1)' -j 1 install $(MXE_DISABLE_CRUFT) HTML_DIR=
+        $(MAKE) -C '$(1)' -j '$(JOBS)' $(MXE_DISABLE_CRUFT) 
+    $(MAKE) -C '$(1)' -j 1 install $(MXE_DISABLE_CRUFT) 
 
     # Test program
     '$(TARGET)-g++' \
