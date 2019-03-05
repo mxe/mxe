@@ -17,7 +17,31 @@ endef
 define $(PKG)_BUILD
     # build and install the library
     cd '$(BUILD_DIR)' && $(TARGET)-cmake \
-        -DENABLE_UNSTABLE_API_ABI_HEADERS=ON -DENABLE_TESTS=OFF -DENABLE_UTILS=OFF \
+        -DENABLE_UNSTABLE_API_ABI_HEADERS=ON \
+        -DENABLE_TESTS=OFF \
+        -DBUILD_GTK_TESTS=OFF \
+        -DBUILD_QT5_TESTS=OFF \
+        -DBUILD_CPP_TESTS=OFF \
+        -DENABLE_SPLASH=ON \
+        -DENABLE_UTILS=OFF \
+        -DENABLE_CPP=ON \
+        -DENABLE_GLIB=ON \
+        -DENABLE_GOBJECT_INTROSPECTION=OFF \
+        -ENABLE_GTK_DOC=OFF \
+        -DENABLE_QT5=ON \
+        -DENABLE_LIBOPENJPEG=openjpeg2 \
+        -DENABLE_CMS=lcms2 \
+        -DENABLE_DCTDECODER=libjpeg \
+        -DENABLE_LIBCURL=ON \
+        -DENABLE_ZLIB=ON \
+        -DENABLE_ZLIB_UNCOMPRESS=OFF \
+        -DSPLASH_CMYK=ON \
+        -DUSE_FIXEDPOINT=OFF \
+        -DUSE_FLOAT=OFF \
+        -DBUILD_SHARED_LIBS=$(CMAKE_SHARED_BOOL) \
+        -DENABLE_RELOCATABLE=ON \
+        -DEXTRA_WARN=OFF \
+        -DFONT_CONFIGURATION=win32 \
         '$(SOURCE_DIR)'
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
