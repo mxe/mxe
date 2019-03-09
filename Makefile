@@ -521,6 +521,7 @@ $(foreach PKG,$(PKGS), \
         $(eval $(PKG)_OO_DEPS += $(BUILD)~autotools)) \
     $(if $(filter $(PKG),$(CMAKE_PKGS)),$(eval $(PKG)_OO_DEPS += cmake-conf)) \
     $(if $(filter $(PKG),$(MXE_CONF_PKGS)),,$(eval $(PKG)_OO_DEPS += mxe-conf)) \
+    $(eval $(PKG)_TARGETS := $(sort $($(PKG)_TARGETS))) \
     $(if $($(PKG)_TARGETS),,$(eval $(PKG)_TARGETS := $(CROSS_TARGETS))) \
     $(foreach TARGET,$(filter $($(PKG)_TARGETS),$(CROSS_TARGETS) $(BUILD)), \
         $(eval $(TARGET)~$(PKG)_PKG := $(PKG)) \
