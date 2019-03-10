@@ -22,6 +22,7 @@
     "cairomm": {"version": "1.11.2", "website": "https://cairographics.org/cairomm/", "description": ""},
     "cblas": {"version": "3.8.0", "website": "https://www.netlib.org/blas/", "description": "C interface to Reference BLAS"},
     "cc": {"version": "1", "website": "https://mxe.cc/", "description": "Dependency package for cross libraries"},
+    "ccache": {"version": "3.6", "website": "https://ccache.samba.org", "description": "ccache – a fast compiler cache"},
     "ccfits": {"version": "2.5", "website": "https://heasarc.gsfc.nasa.gov/fitsio/ccfits", "description": "CCfits"},
     "cegui": {"version": "9726a2b505fb", "website": "http://cegui.org.uk/", "description": "Crazy Eddie’s GUI System (CEGUI)"},
     "cfitsio": {"version": "3410", "website": "https://heasarc.gsfc.nasa.gov/fitsio/", "description": ""},
