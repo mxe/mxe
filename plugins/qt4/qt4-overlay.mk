@@ -15,9 +15,6 @@ $(PKG)_QT_DIR     := qt
 PKG               := openscenegraph
 $(PKG)_DEPS       := $(filter-out qtbase ,$($(PKG)_DEPS)) qt
 
-PKG               := poppler
-$(PKG)_DEPS       := $(filter-out qtbase ,$($(PKG)_DEPS)) qt
-
 PKG               := qjson
 $(PKG)_DEPS       := $(filter-out qtbase ,$($(PKG)_DEPS)) qt
 $(PKG)_QT_SUFFIX  :=
