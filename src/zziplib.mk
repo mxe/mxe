@@ -25,7 +25,6 @@ define $(PKG)_BUILD
     # mman-win32 is only a partial implementation
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
-        --disable-mmap \
         CFLAGS="-O -ggdb" \
         PKG_CONFIG='$(TARGET)-pkg-config'
     $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= LDFLAGS="-no-undefined"
