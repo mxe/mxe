@@ -55,7 +55,7 @@
     "exiv2": {"version": "0.25", "website": "http://www.exiv2.org/", "description": "Exiv2"},
     "expat": {"version": "2.2.6", "website": "https://github.com/libexpat/libexpat", "description": "Expat XML Parser"},
     "faad2": {"version": "2.8.8", "website": "https://www.audiocoding.com/", "description": ""},
-    "fdk-aac": {"version": "0.1.4", "website": "https://github.com/mstorsjo/fdk-aac", "description": "FDK-AAC"},
+    "fdk-aac": {"version": "2.0.0", "website": "https://github.com/mstorsjo/fdk-aac", "description": "FDK-AAC"},
     "ffmpeg": {"version": "4.1.2", "website": "https://ffmpeg.org/", "description": ""},
     "fftw": {"version": "3.3.8", "website": "http://www.fftw.org/", "description": ""},
     "file": {"version": "5.24", "website": "https://www.darwinsys.com/file/", "description": ""},
