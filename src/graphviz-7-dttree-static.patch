@@ -1,0 +1,20 @@
+--- a/lib/cdt/dttree.c	2016-08-11 20:52:27.023112395 +1000
++++ b/lib/cdt/dttree.c	2016-08-17 20:22:18.894427327 +1000
+@@ -356,13 +356,13 @@
+ /* make this method available */
+ static Dtmethod_t	_Dtoset =  { dttree, DT_OSET };
+ static Dtmethod_t	_Dtobag =  { dttree, DT_OBAG };
+-__DEFINE__(Dtmethod_t*,Dtoset,&_Dtoset);
+-__DEFINE__(Dtmethod_t*,Dtobag,&_Dtobag);
++Dtmethod_t* Dtoset = &_Dtoset;
++Dtmethod_t* Dtobag = &_Dtobag;
+ 
+ #ifndef KPVDEL /* backward compatibility - delete next time around */
+ Dtmethod_t		_Dttree = { dttree, DT_OSET };
+-__DEFINE__(Dtmethod_t*,Dtorder,&_Dttree);
+-__DEFINE__(Dtmethod_t*,Dttree,&_Dttree);
++Dtmethod_t* Dtorder = &_Dttree; Dtmethod_t** __impl_Dtorder = &Dtorder;
++Dtmethod_t* Dttree = &_Dttree; Dtmethod_t** __impl_Dttree = &Dttree;
+ #endif
+ 
+ #ifdef NoF

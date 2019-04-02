@@ -1,0 +1,13 @@
+diff -ur graphviz-2.38.0/cmd/lefty/io.h graphviz-2.38.0/cmd/lefty/io.h
+--- a/cmd/lefty/io.h	2016-08-11 20:52:26.387127239 +1000
++++ b/cmd/lefty/io.h	2016-08-11 21:04:48.989737595 +1000
+@@ -15,6 +15,9 @@
+ extern "C" {
+ #endif
+ 
++#include <stdio.h>
++#include <stdlib.h>
++
+ /* Lefteris Koutsofios - AT&T Labs Research */
+ 
+ #ifndef _IO_H
