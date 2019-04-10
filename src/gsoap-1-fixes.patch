@@ -12,7 +12,7 @@ diff --git a/configure b/configure
 index 1111111..2222222 100755
 --- a/configure
 +++ b/configure
-@@ -5126,8 +5126,8 @@ case "${host}" in
+@@ -5132,8 +5132,8 @@ case "${host}" in
  			;;
  	*-*-cygwin*)	platform=CYGWIN ;;
  	*-*-mingw*)	platform=MINGW
@@ -78,8 +78,8 @@ index 1111111..2222222 100644
  Requires:
  Libs: -L${libdir} -lgsoapssl++
  Libs.private: @SAMPLE_SSL_LIBS@ @SAMPLE_EXTRA_LIBS@
--Cflags: @SOAPCPP2_IPV6@ @WSDL2H_EXTRA_FLAGS@ -DWITH_DOM -DWITH_COOKIES -I${includedir}
-+Cflags: @SOAPCPP2_IPV6@ @WSDL2H_EXTRA_FLAGS@ -DWITH_DOM -DWITH_DOM -DWITH_COOKIES -I${includedir}
+-Cflags: @SOAPCPP2_IPV6@ @WSDL2H_EXTRA_FLAGS@ -DWITH_DOM -I${includedir}
++Cflags: @SOAPCPP2_IPV6@ @WSDL2H_EXTRA_FLAGS@ -DWITH_DOM -DWITH_NTLM -I${includedir}
 diff --git a/gsoapssl.pc.in b/gsoapssl.pc.in
 index 1111111..2222222 100644
 --- a/gsoapssl.pc.in
@@ -88,8 +88,8 @@ index 1111111..2222222 100644
  Requires:
  Libs: -L${libdir} -lgsoapssl
  Libs.private: @SAMPLE_SSL_LIBS@ @SAMPLE_EXTRA_LIBS@
--Cflags: @SOAPCPP2_IPV6@ @WSDL2H_EXTRA_FLAGS@ -DWITH_DOM -DWITH_COOKIES -I${includedir}
-+Cflags: @SOAPCPP2_IPV6@ @WSDL2H_EXTRA_FLAGS@ -DWITH_DOM -DWITH_NTLM -DWITH_COOKIES -I${includedir}
+-Cflags: @SOAPCPP2_IPV6@ @WSDL2H_EXTRA_FLAGS@ -DWITH_DOM -I${includedir}
++Cflags: @SOAPCPP2_IPV6@ @WSDL2H_EXTRA_FLAGS@ -DWITH_DOM -DWITH_NTLM -I${includedir}
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
@@ -103,7 +103,7 @@ diff --git a/gsoap/stdsoap2.h b/gsoap/stdsoap2.h
 index 1111111..2222222 100644
 --- a/gsoap/stdsoap2.h
 +++ b/gsoap/stdsoap2.h
-@@ -3570,6 +3570,12 @@ SOAP_FMAC1 int SOAP_FMAC2 soap_putsetcookies(struct soap *soap);
+@@ -3649,6 +3649,12 @@ SOAP_FMAC1 int SOAP_FMAC2 soap_putsetcookies(struct soap *soap);
  SOAP_FMAC1 int SOAP_FMAC2 soap_putcookies(struct soap *soap, const char *domain, const char *path, int secure);
  #endif
  

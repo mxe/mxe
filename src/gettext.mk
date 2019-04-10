@@ -25,38 +25,20 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)/gettext-runtime' && ./configure \
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/gettext-runtime/configure' \
         $(MXE_CONFIGURE_OPTS) \
         --enable-threads=win32 \
         --without-libexpat-prefix \
         --without-libxml2-prefix \
         CONFIG_SHELL=$(SHELL)
-    $(MAKE) -C '$(1)/gettext-runtime/intl' -j '$(JOBS)' install
+    $(MAKE) -C '$(BUILD_DIR)/intl' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)/intl' -j 1 install
 endef
 
-define $(PKG)_BUILD_NATIVE
+define $(PKG)_BUILD_$(BUILD)
     # build and install the library
     cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
         $(MXE_CONFIGURE_OPTS)
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(MXE_DISABLE_DOCS)
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install $(MXE_DISABLE_DOCS)
-endef
-
-define $(PKG)_BUILD_DARWIN
-    # causes issues with other packages so use different prefix
-    # but install *.m4 files and bins to standard location
-    cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
-        $(MXE_CONFIGURE_OPTS) \
-        --with-included-libcroco \
-        --prefix='$(PREFIX)/$(TARGET).gnu' \
-        --bindir='$(PREFIX)/$(TARGET)/bin' \
-        --datarootdir='$(PREFIX)/$(TARGET)/share'
-    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(MXE_DISABLE_DOCS)
-    $(MAKE) -C '$(BUILD_DIR)' -j 1 install $(MXE_DISABLE_DOCS)
-endef
-
-define $(PKG)_BUILD_$(BUILD)
-    $(if $(findstring darwin, $(BUILD)), \
-        $($(PKG)_BUILD_DARWIN), \
-        $($(PKG)_BUILD_NATIVE))
 endef

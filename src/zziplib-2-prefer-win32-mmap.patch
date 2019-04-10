@@ -1,0 +1,23 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Hopper262 <hopper@whpress.com>
+Date: Sat, 23 Mar 2019 19:50:51 -0400
+Subject: [PATCH 1/1] Prefer win32 mmap
+
+
+diff --git a/zzip/__mmap.h b/zzip/__mmap.h
+index 1111111..2222222 100644
+--- a/zzip/__mmap.h
++++ b/zzip/__mmap.h
+@@ -18,7 +18,7 @@
+  */
+ 
+ #ifdef _USE_MMAP
+-#if    defined ZZIP_HAVE_SYS_MMAN_H
++#if    defined ZZIP_HAVE_SYS_MMAN_H && !defined WIN32
+ #include <sys/mman.h>
+ #define USE_POSIX_MMAP 1
+ #elif defined ZZIP_HAVE_WINBASE_H || defined WIN32

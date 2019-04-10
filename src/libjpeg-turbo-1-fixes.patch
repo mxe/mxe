@@ -27,4 +27,4 @@ index 1111111..2222222 100644
 + 
  /*
   * Maximum number of components (color channels) allowed in JPEG image.
-  * To meet the letter of the JPEG spec, set this to 255.  However, darn
+  * To meet the letter of Rec. ITU-T T.81 | ISO/IEC 10918-1, set this to 255.

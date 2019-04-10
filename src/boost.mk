@@ -50,7 +50,6 @@ define $(PKG)_BUILD
         threading=multi \
         variant=release \
         toolset=gcc-mxe \
-        cxxflags=$(if $(findstring posix,$(MXE_GCC_THREADS)),-std=gnu++11,-std=gnu++98) \
         --layout=tagged \
         --disable-icu \
         --without-mpi \

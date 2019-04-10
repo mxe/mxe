@@ -1,0 +1,58 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Wed, 27 Feb 2019 00:55:49 +1100
+Subject: [PATCH 1/1] mingw fixes
+
+
+diff --git a/common/include/pcl/pcl_macros.h b/common/include/pcl/pcl_macros.h
+index 1111111..2222222 100644
+--- a/common/include/pcl/pcl_macros.h
++++ b/common/include/pcl/pcl_macros.h
+@@ -412,7 +412,7 @@ aligned_malloc (size_t size)
+     ptr = 0;
+ #elif defined (HAVE_MM_MALLOC)
+   ptr = _mm_malloc (size, 16);
+-#elif defined (_MSC_VER)
++#elif defined (_WIN32)
+   ptr = _aligned_malloc (size, 16);
+ #elif defined (ANDROID)
+   ptr = memalign (16, size);
+@@ -430,7 +430,7 @@ aligned_free (void* ptr)
+   std::free (ptr);
+ #elif defined (HAVE_MM_MALLOC)
+   _mm_free (ptr);
+-#elif defined (_MSC_VER)
++#elif defined (_WIN32)
+   _aligned_free (ptr);
+ #elif defined (ANDROID)
+   free (ptr);
+diff --git a/io/include/pcl/io/low_level_io.h b/io/include/pcl/io/low_level_io.h
+index 1111111..2222222 100644
+--- a/io/include/pcl/io/low_level_io.h
++++ b/io/include/pcl/io/low_level_io.h
+@@ -52,8 +52,7 @@
+ # endif
+ # include <io.h>
+ # include <windows.h>
+-# include <BaseTsd.h>
+-typedef SSIZE_T ssize_t;
++# include <basetsd.h>
+ #else
+ # include <unistd.h>
+ # include <sys/mman.h>
+diff --git a/surface/CMakeLists.txt b/surface/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/surface/CMakeLists.txt
++++ b/surface/CMakeLists.txt
+@@ -181,4 +181,7 @@ if(build)
+     if(WIN32)
+       target_link_libraries("${LIB_NAME}" Rpcrt4.lib)
+     endif(WIN32)
++    if(MINGW)
++      add_definitions(-Wa,-mbig-obj)
++    endif(MINGW)
+ endif(build)

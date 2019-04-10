@@ -3,8 +3,8 @@
 PKG             := ffmpeg
 $(PKG)_WEBSITE  := https://ffmpeg.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.1
-$(PKG)_CHECKSUM := b684fb43244a5c4caae652af9022ed5d85ce15210835bce054a33fb26033a1a5
+$(PKG)_VERSION  := 4.1.2
+$(PKG)_CHECKSUM := 200eeffff0ceefa246614d76a3e0ca0f6ea5a002377c0581e6089ef404e3df03
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://ffmpeg.org/releases/$($(PKG)_FILE)
@@ -26,7 +26,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && ./configure \
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         --cross-prefix='$(TARGET)'- \
         --enable-cross-compile \
         --arch=$(firstword $(subst -, ,$(TARGET))) \
@@ -61,7 +61,8 @@ define $(PKG)_BUILD
         --enable-libvorbis \
         --enable-libvpx \
         --enable-libx264 \
-        --enable-libxvid
-    $(MAKE) -C '$(1)' -j '$(JOBS)'
-    $(MAKE) -C '$(1)' -j 1 install
+        --enable-libxvid \
+        $($(PKG)_CONFIGURE_OPTS)
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 endef

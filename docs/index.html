@@ -41,7 +41,7 @@
 <h2 id="introduction">Introduction</h2>
 
     <p>
-    MXE (M cross environment) is a Makefile that
+    MXE (M cross environment) is a GNU Makefile that
     compiles a cross compiler and cross compiles
     many free libraries such as SDL and Qt. Thus,
     it provides a nice cross compiling environment
@@ -82,6 +82,10 @@
         allows inter-package and intra-package
         <a href="#usage">parallel builds</a>
         whenever possible
+    </li>
+    <li>
+        bundles <a href="https://ccache.samba.org">ccache</a> to speed
+        up repeated builds
     </li>
     <li>
         integrates well with <a href="#tutorial-5a">autotools</a>,
@@ -162,8 +166,29 @@
         are always available.
     </p>
     <p>
+        When building shared libraries, there are several approaches to
+        recursively finding DLL dependencies (alphabetical list):
+    </p>
+        <ul>
+        <li>
+            <a href="https://github.com/desertbit/gml/blob/master/cmd/gml-copy-dlls/main.go">
+            go script</a>
+        </li>
+        <li>
+            <a href="https://github.com/gsauthof/pe-util">pe-util</a>
+            packaged with
+            <a href="https://github.com/mxe/mxe/blob/master/src/pe-util.mk">mxe</a>
+        </li>
+        <li>
+            <a href="https://github.com/mxe/mxe/blob/master/tools/copydlldeps.py">python script</a>
+        </li>
+        <li>
+            <a href="https://github.com/mxe/mxe/blob/master/tools/copydlldeps.md">shell script</a>
+        </li>
+        </ul>
+    <p>
         Experimental support for GCC with posix threads was
-        added in <a href="https://github.com/mxe/mxe/pull/958">November 2015</a>.
+        added in <a href="https://github.com/mxe/mxe/pull/958">November 2015</a>. Since <a href="https://github.com/mxe/mxe/pull/2263">January 2019</a> it is used by default.
     </p>
     <p>
         Experimental support for alternate GCC Exception Handling was
@@ -622,6 +647,10 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         <td>≥ 2.2</td>
     </tr>
     <tr>
+        <td><a href="http://lzip.nongnu.org/">Lzip</a></td>
+        <td></td>
+    </tr>
+    <tr>
         <td><a href="https://www.openssl.org/">OpenSSL</a>-dev</td>
         <td>≥ 1.01</td>
     </tr>
@@ -694,6 +723,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     libssl-dev \
     libtool-bin \
     libxml-parser-perl \
+    lzip \
     make \
     openssl \
     p7zip-full \
@@ -736,7 +766,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <pre>yum install epel-release</pre>
 
-    <!-- https://admin.fedoraproject.org/pkgdb/ -->
+    <!-- https://apps.fedoraproject.org/packages/ -->
     <pre>yum install \
     autoconf \
     automake \
@@ -751,6 +781,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     gperf \
     intltool \
     libtool \
+    lzip \
     make \
     openssl-devel \
     p7zip \
@@ -858,6 +889,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     gperf \
     intltool \
     libtool \
+    lzip \
     make \
     openssl \
     patch \
@@ -882,6 +914,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <!-- https://packages.gentoo.org/ -->
     <pre>emerge \
     app-arch/bzip2 \
+    app-arch/lzip \
     app-arch/p7zip \
     app-arch/unzip \
     app-arch/xz-utils \
@@ -929,6 +962,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     gsed \
     intltool \
     libtool \
+    lzip \
     p7zip \
     pkgconfig \
     wget \
@@ -936,26 +970,8 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <h5 id="requirements-macos-rudix">Rudix</h5>
     <p>
-    Install <a href="https://rudix.org/">Rudix</a>,
-    then run:
-    </p>
-    <!-- https://rudix.org/packages/index.html -->
-    <pre>sudo rudix install \
-    autoconf \
-    automake \
-    coreutils \
-    glib \
-    intltool \
-    libtool \
-    p7zip \
-    sed \
-    tar \
-    wget \
-    xz</pre>
-    <p>
-    Note: <b>gdk-pixbuf2</b> is not installed in method 2,
-    so you can not build <b>gtk3</b>. Other packages may be
-    missing on Rudix - please open an issue if you find any.
+    <a href="https://rudix.org/">Rudix</a> has
+    <a href="https://twitter.com/__rudix__/status/1022273255942565893">shut down since August 2018</a>
     </p>
 
     <h5 id="requirements-macos-homebrew">Homebrew</h5>
@@ -964,6 +980,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     then run:
     </p>
     <!-- https://formulae.brew.sh/ -->
+    <!-- wget -q -O- https://formulae.brew.sh/api/formula.json | tr ',' '\n' | grep 'name\|desc' | grep -i {pkg} -->
     <pre>brew install \
     autoconf \
     automake \
@@ -973,6 +990,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     gnu-tar \
     intltool \
     libtool \
+    lzip \
     p7zip \
     pkg-config \
     wget \
@@ -1000,7 +1018,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <h3 id="requirements-opensuse">openSUSE</h3>
 
-    <!-- https://software.opensuse.org/131/en -->
+    <!-- https://software.opensuse.org/explore -->
     <pre>zypper install -R \
     autoconf \
     automake \
@@ -1021,6 +1039,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     libopenssl-devel \
     libstdc++46-devel-32bit \
     libtool \
+    lzip \
     make \
     openssl \
     p7zip \
@@ -1050,7 +1069,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <h3 id="requirements-void">Void</h3>
 
-    <!-- https://voidlinux.org/packages -->
+    <!-- https://voidlinux.org/packages/ -->
     <pre>xbps-install -S \
     autoconf \
     automake \
@@ -1064,6 +1083,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     intltool \
     libcurl-devel \
     libtool \
+    lzip \
     make \
     p7zip \
     patch \
@@ -1198,6 +1218,13 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         build all packages with 4 inter-package parallel
         jobs and continue as much as possible after an error
         (short option "-j 4 -k")
+        </dd>
+
+    <dt>make foo bar MXE_USE_CCACHE=</dt>
+
+        <dd>
+        disables use of <a href="https://ccache.samba.org">ccache</a>
+        to eliminate potential error sources when debugging
         </dd>
 
     <dt>make EXCLUDE_PKGS='foo bar'</dt>

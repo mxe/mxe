@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := dfd78591901df7853eab7e56a86c34a1b03635da0d3d56b89aa577f189786
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://gstreamer.freedesktop.org/src/$(PKG)/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc gst-plugins-base $(BUILD)~nasm
+$(PKG)_DEPS     := cc gst-plugins-base gstreamer $(BUILD)~nasm
 
 $(PKG)_UPDATE = $(subst gstreamer/refs,gst-libav/refs,$(gstreamer_UPDATE))
 

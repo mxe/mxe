@@ -3,65 +3,52 @@
 PKG             := poppler
 $(PKG)_WEBSITE  := https://poppler.freedesktop.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.51.0
-$(PKG)_CHECKSUM := e997c9ad81a8372f2dd03a02b00692b8cc479c220340c8881edaca540f402c1f
+$(PKG)_VERSION  := 0.74.0
+$(PKG)_CHECKSUM := 92e09fd3302567fd36146b36bb707db43ce436e8841219025a82ea9fb0076b2f
 $(PKG)_SUBDIR   := poppler-$($(PKG)_VERSION)
 $(PKG)_FILE     := poppler-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://poppler.freedesktop.org/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc cairo curl freetype glib jpeg lcms libpng qtbase tiff zlib
+$(PKG)_DEPS     := cc cairo curl freetype glib jpeg lcms libpng libwebp openjpeg qtbase tiff zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://poppler.freedesktop.org/' | \
-    $(SED) -n 's,.*"poppler-\([0-9.]\+\)\.tar\.xz".*,\1,p' | \
-    head -1
+    $(call GET_LATEST_VERSION, https://poppler.freedesktop.org/releases.html, poppler-)
 endef
 
 define $(PKG)_BUILD
-    # Note: Specifying LIBS explicitly is necessary for configure to properly
-    #       pick up libtiff (otherwise linking a minimal test program fails not
-    #       because libtiff is not found, but because some references are
-    #       undefined)
-    cd '$(1)' \
-        && PATH='$(PREFIX)/$(TARGET)/$(if $(filter qtbase,$($(PKG)_DEPS)),qt5,qt)/bin:$(PATH)' \
-        ./configure \
-        $(MXE_CONFIGURE_OPTS) \
-        --disable-silent-rules \
-        --enable-xpdf-headers \
-        $(if $(filter qtbase,$($(PKG)_DEPS)), \
-          --enable-poppler-qt5 \
-          --disable-poppler-qt4, \
-          --disable-poppler-qt5 \
-          --enable-poppler-qt4) \
-        --enable-zlib \
-        --enable-cms=lcms2 \
-        --enable-libcurl \
-        --enable-libtiff \
-        --enable-libjpeg \
-        --enable-libpng \
-        --enable-poppler-glib \
-        --enable-poppler-cpp \
-        --enable-cairo-output \
-        --enable-splash-output \
-        --enable-compile-warnings=yes \
-        --enable-introspection=auto \
-        --disable-libopenjpeg \
-        --disable-gtk-test \
-        --disable-utils \
-        --disable-gtk-doc \
-        --disable-gtk-doc-html \
-        --disable-gtk-doc-pdf \
-        --with-font-configuration=win32 \
-        PKG_CONFIG_PATH_$(subst .,_,$(subst -,_,$(TARGET)))='$(PREFIX)/$(TARGET)/qt/lib/pkgconfig' \
-        CXXFLAGS="-D_WIN32_WINNT=0x0500 -std=c++11" \
-        LIBTIFF_LIBS="`'$(TARGET)-pkg-config' libtiff-4 --libs`"
-    $(SED) -i 's,reference,'',g' '$(1)/glib/Makefile'
-    PATH='$(PREFIX)/$(TARGET)/$(if $(filter qtbase,$($(PKG)_DEPS)),qt5,qt)/bin:$(PATH)' \
-        $(MAKE) -C '$(1)' -j '$(JOBS)' $(MXE_DISABLE_CRUFT) HTML_DIR=
-    $(MAKE) -C '$(1)' -j 1 install $(MXE_DISABLE_CRUFT) HTML_DIR=
+    # build and install the library
+    cd '$(BUILD_DIR)' && $(TARGET)-cmake \
+        -DENABLE_UNSTABLE_API_ABI_HEADERS=ON \
+        -DENABLE_TESTS=OFF \
+        -DBUILD_GTK_TESTS=OFF \
+        -DBUILD_QT5_TESTS=OFF \
+        -DBUILD_CPP_TESTS=OFF \
+        -DENABLE_SPLASH=ON \
+        -DENABLE_UTILS=OFF \
+        -DENABLE_CPP=ON \
+        -DENABLE_GLIB=ON \
+        -DENABLE_GOBJECT_INTROSPECTION=OFF \
+        -ENABLE_GTK_DOC=OFF \
+        -DENABLE_QT5=ON \
+        -DENABLE_LIBOPENJPEG=openjpeg2 \
+        -DENABLE_CMS=lcms2 \
+        -DENABLE_DCTDECODER=libjpeg \
+        -DENABLE_LIBCURL=ON \
+        -DENABLE_ZLIB=ON \
+        -DENABLE_ZLIB_UNCOMPRESS=OFF \
+        -DSPLASH_CMYK=ON \
+        -DUSE_FIXEDPOINT=OFF \
+        -DUSE_FLOAT=OFF \
+        -DBUILD_SHARED_LIBS=$(CMAKE_SHARED_BOOL) \
+        -DENABLE_RELOCATABLE=ON \
+        -DEXTRA_WARN=OFF \
+        -DFONT_CONFIGURATION=win32 \
+        '$(SOURCE_DIR)'
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
-    # Test program
+    # compile test
     '$(TARGET)-g++' \
         -W -Wall -Werror -ansi -pedantic \
-        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-poppler.exe' \
-        `'$(TARGET)-pkg-config' poppler poppler-cpp --cflags --libs`
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
+        `'$(TARGET)-pkg-config' poppler-cpp --cflags --libs`
 endef

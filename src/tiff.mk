@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 2c52d11ccaf767457db0c46795d9c7d1a8d8f76f68b0b800a3dfe45786b99
 $(PKG)_SUBDIR   := tiff-$($(PKG)_VERSION)
 $(PKG)_FILE     := tiff-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://download.osgeo.org/libtiff/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc jpeg xz zlib
+$(PKG)_DEPS     := cc jpeg libwebp xz zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://simplesystems.org/libtiff/' | \

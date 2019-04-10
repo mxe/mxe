@@ -3,9 +3,9 @@
 PKG             := eigen
 $(PKG)_WEBSITE  := https://eigen.tuxfamily.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.2.5
-$(PKG)_CHECKSUM := 5f6e6cb88188e34185f43cb819d7dab9b48ef493774ff834e568f4805d3dc2f9
-$(PKG)_SUBDIR   := $(PKG)-$(PKG)-bdd17ee3b1b3
+$(PKG)_VERSION  := 3.3.7
+$(PKG)_CHECKSUM := 9f13cf90dedbe3e52a19f43000d71fdf72e986beb9a5436dddcd61ff9d77a3ce
+$(PKG)_SUBDIR   := $(PKG)-$(PKG)-323c052e1731
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://bitbucket.org/$(PKG)/$(PKG)/get/$($(PKG)_VERSION).tar.bz2
 $(PKG)_DEPS     := cc
@@ -18,13 +18,19 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && mkdir build && cd build && '$(TARGET)-cmake' .. \
+    # remove previous install
+    rm -rf "$(PREFIX)/$(TARGET)/*/eigen3"
+    rm -rf "$(PREFIX)/$(TARGET)/*/pkgconfig/eigen3.pc"
+
+    # build and install the library
+    cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \
         -DEIGEN_BUILD_PKGCONFIG=ON \
-        -Drun_res=1 -Drun_res__TRYRUN_OUTPUT=""
-    $(MAKE) -C '$(1)'/build -j '$(JOBS)' install VERBOSE=1
+        -DPKGCONFIG_INSTALL_DIR='$(PREFIX)/$(TARGET)/lib/pkgconfig' \
+        -DBUILD_TESTING=OFF
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
     '$(TARGET)-g++' -W -Wall '$(TEST_FILE)' -o \
         '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
         `'$(TARGET)-pkg-config' --cflags --libs eigen3`
 endef
-
