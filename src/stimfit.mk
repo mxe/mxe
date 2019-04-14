@@ -7,7 +7,7 @@ $(PKG)_VERSION  := 0.15.8
 $(PKG)_CHECKSUM := 8a5330612245d3f442ed640b0df91028aa4798301bb6844eaf1cf9b463dfc466
 $(PKG)_SUBDIR   := stimfit-$($(PKG)_VERSION)windows
 $(PKG)_FILE     := stimfit-$($(PKG)_VERSION)windows.tar.gz
-$(PKG)_URL      := https://github.com/neurodroid/$(PKG)/archive/$($(PKG)_FILE)
+$(PKG)_URL      := https://github.com/neurodroid/$(PKG)/archive/v$($(PKG)_VERSION)windows.tar.gz
 $(PKG)_DEPS     := cc libbiosig wxwidgets hdf5 boost fftw levmar openblas
 
 define $(PKG)_UPDATE
@@ -37,10 +37,6 @@ define $(PKG)_BUILD
 	make -C '$(1)' -f Makefile.static -j '$(JOBS)'
 
     $(INSTALL) '$(1)/stimfit.exe' '$(PREFIX)/$(TARGET)/bin/'
-
-   -$(INSTALL) '$(1)'/stimfit.exe /fs3/group/jonasgrp/Software/Stimfit/stimfit.$(TARGET).$(shell date +%Y%m%d).exe
-
-   -(cd /fs3/group/jonasgrp/Software/Stimfit/ && ln sf stimfit.$(TARGET).$(shell date +%Y%m%d).exe stimfit.$(TARGET).LATEST.exe)
 
 endef
 
