@@ -2,15 +2,15 @@
 # See index.html for further information.
 
 PKG             := libxdf
-$(PKG)_WEBSITE  := 
+$(PKG)_WEBSITE  :=
 $(PKG)_DESCR    := libxdf
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.98
-$(PKG)_CHECKSUM := 0c3791474f3658fca54e62b16db9e6d82b3eb68e92b77fd37d349263d3fe1e75
-$(PKG)_SUBDIR   := libxdf-0.98
-$(PKG)_FILE     := libxdf-0.98.zip
-$(PKG)_URL      := https://github.com/Yida-Lin/libxdf/archive/v0.98.zip
-$(PKG)_DEPS     := gcc
+$(PKG)_VERSION  := 0.99
+$(PKG)_CHECKSUM := af66f6c1be5d9342fa33bc2a3b34c5a962db37d10623df57d352a213fe5201d1
+$(PKG)_SUBDIR   := libxdf-$($(PKG)_VERSION)
+$(PKG)_FILE     := libxdf-$($(PKG)_VERSION).tar.gz
+$(PKG)_URL      := https://github.com/xdf-modules/libxdf/archive/v$($(PKG)_VERSION).tar.gz
+$(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
 #    wget -q -O- 'http://biosig.sourceforge.net/download.html' | \
@@ -28,6 +28,5 @@ define $(PKG)_BUILD
 	$(MAKE) -C '$(1)/native_build'
 
 	$(INSTALL) '$(1)/xdf.h'    '$(PREFIX)/$(TARGET)/include/'
-	$(INSTALL) '$(1)'/native_build/libxdf.{a,dll.a} '$(PREFIX)/$(TARGET)/lib/'
-	$(INSTALL) '$(1)'/native_build/libxdf.dll '$(PREFIX)/$(TARGET)/bin/'
+	$(INSTALL) '$(1)'/native_build/libxdf.$(if $(BUILD_STATIC),"a","dll*") '$(PREFIX)/$(TARGET)/lib/'
 endef
