@@ -3,8 +3,9 @@
 
 PKG             := sigviewer
 $(PKG)_IGNORE   := 
-$(PKG)_VERSION  := 0.6.2
-$(PKG)_CHECKSUM := ddbe6a96802af73c0cee8dfc80d3ba4ca47f9bce9492713cf6da6aa049244b09
+$(PKG)_VERSION  := 0.6.3
+$(PKG)_CHECKSUM := 5fb5dfb84574920fc8bbdfd9d6c30b136e501cfd5a9f71a8790d6fac49ebac3c
+#ddbe6a96802af73c0cee8dfc80d3ba4ca47f9bce9492713cf6da6aa049244b09
 $(PKG)_SUBDIR   := sigviewer-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_URL      := https://github.com/cbrnr/$(PKG)/archive/v$($(PKG)_VERSION).tar.gz
