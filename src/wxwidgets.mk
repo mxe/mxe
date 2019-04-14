@@ -72,7 +72,7 @@ define $(PKG)_BUILD
 
     # build test program
     '$(TARGET)-g++' \
-        -W -Wall -Werror -Wno-error=unused-local-typedefs -pedantic -std=gnu++0x \
+        -W -Wall -Wno-error=unused-local-typedefs -pedantic -std=gnu++0x \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-wxwidgets.exe' \
         `'$(TARGET)-wx-config' --cflags --libs`
 endef
