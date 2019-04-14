@@ -1,0 +1,25 @@
+diff --git a/Makefile.static b/Makefile.static
+index 1e45833..7f3d997 100644
+--- a/Makefile.static
++++ b/Makefile.static
+@@ -217,11 +217,6 @@ LIBS     += $(shell $(WXCONF) --libs net,adv,aui,core,base)
+ PREFIX   ?= /usr
+ PKGCONF  ?= $(CROSS)pkg-config
+ 
+-ifeq (5,$(shell $(CXX) -v 2>&1 | awk '/gcc version / {print substr($$3,1,1)}' ))
+-  # g++-5 changes default ABI, if WX was compiled with an earlier compiler
+-  CXXFLAGS += -fabi-version=2
+-endif
+-
+ CPPFLAGS  += -I$(WXDIR)
+ 
+ ## HDF5 related stuff ##
+@@ -258,7 +253,7 @@ endif
+ 
+ ## BIOSIG related stuff ##
+ ifneq (,$(findstring WITH_BIOSIG2, $(DEFINES)))
+-  LIBS  += -lbiosig2
++  LIBS  += -lbiosig
+ else 
+   ifneq (,$(findstring WITH_BIOSIG, $(DEFINES)))
+     LIBS  += -lbiosig
