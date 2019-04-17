@@ -1,6 +1,6 @@
 This file is part of MXE. See LICENSE.md for licensing information.
 
-From ec9a746b191356a8caddb3f97e94cf7e06464249 Mon Sep 17 00:00:00 2001
+From c0c8cf4d8e554ac6f1a17dc8d2dce16897ae5cf3 Mon Sep 17 00:00:00 2001
 From: Ray Donnelly <mingw.android@gmail.com>
 Date: Wed, 26 Aug 2015 12:45:43 +0100
 Subject: [PATCH 1/5] cmake: Rearrange STATIC vs INTERFACE targets
@@ -32,10 +32,10 @@ index 3ed6dd5889..cc5bc9dc16 100644
      add_library(Qt5::$${CMAKE_MODULE_NAME} SHARED IMPORTED)
  !!ENDIF
 -- 
-2.19.1
+2.20.1
 
 
-From 4d85083061050bfb7c34214aa162549ba00ce027 Mon Sep 17 00:00:00 2001
+From b57baee4eee0a33338776498da7f216fb2a7fdc0 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Sat, 16 Jul 2016 20:31:07 +1000
 Subject: [PATCH 2/5] Fix pkgconfig file and library naming
@@ -101,10 +101,10 @@ index 51b5bde67a..faba17aedd 100644
 -
 -TARGET = $$qt5LibraryTarget($$TARGET$$QT_LIBINFIX)  # Do this towards the end
 -- 
-2.19.1
+2.20.1
 
 
-From cbba4b2b163b7c68e7148c5d16654c20b9ae965a Mon Sep 17 00:00:00 2001
+From 691b8c15f19116a881a6830cfbb344bf49c385e7 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 29 Jan 2017 13:02:16 +0100
 Subject: [PATCH 3/5] reenable fontconfig for win32 (MXE-specific)
@@ -112,10 +112,10 @@ Subject: [PATCH 3/5] reenable fontconfig for win32 (MXE-specific)
 Change-Id: I05b036366bd402e43309742412bcf8ca91fe125f
 
 diff --git a/src/gui/configure.json b/src/gui/configure.json
-index 44140bc7b6..2f172d4850 100644
+index 6fdcd562a7..69f00bc71d 100644
 --- a/src/gui/configure.json
 +++ b/src/gui/configure.json
-@@ -1211,7 +1211,7 @@
+@@ -1213,7 +1213,7 @@
          "fontconfig": {
              "label": "Fontconfig",
              "autoDetect": "!config.darwin",
@@ -125,10 +125,10 @@ index 44140bc7b6..2f172d4850 100644
          },
          "gbm": {
 diff --git a/src/plugins/platforms/minimal/qminimalintegration.cpp b/src/plugins/platforms/minimal/qminimalintegration.cpp
-index 0c04608fca..a26e02fbf3 100644
+index f457f69f11..2b2aec0868 100644
 --- a/src/plugins/platforms/minimal/qminimalintegration.cpp
 +++ b/src/plugins/platforms/minimal/qminimalintegration.cpp
-@@ -161,7 +161,11 @@ QPlatformFontDatabase *QMinimalIntegration::fontDatabase() const
+@@ -162,7 +162,11 @@ QPlatformFontDatabase *QMinimalIntegration::fontDatabase() const
  
          if (!m_fontDatabase) {
  #if QT_CONFIG(fontconfig)
@@ -142,10 +142,10 @@ index 0c04608fca..a26e02fbf3 100644
              m_fontDatabase = QPlatformIntegration::fontDatabase();
  #endif
 -- 
-2.19.1
+2.20.1
 
 
-From 2f3cffee96fd38c78696d1a2ef7ca028ad12df53 Mon Sep 17 00:00:00 2001
+From a2eab53930f2891a15cd1aa1721a5e247851035c Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 11 Jun 2017 00:27:41 +0200
 Subject: [PATCH 4/5] use pkg-config for harfbuzz
@@ -153,7 +153,7 @@ Subject: [PATCH 4/5] use pkg-config for harfbuzz
 Change-Id: Ia65cbb90fd180f1bc10ce077a9a8323a48e51421
 
 diff --git a/src/gui/configure.json b/src/gui/configure.json
-index 2f172d4850..f13afde258 100644
+index 69f00bc71d..7d15695499 100644
 --- a/src/gui/configure.json
 +++ b/src/gui/configure.json
 @@ -303,7 +303,8 @@
@@ -167,10 +167,10 @@ index 2f172d4850..f13afde258 100644
          },
          "imf": {
 -- 
-2.19.1
+2.20.1
 
 
-From 717921a8e3397e1b52d8cb6f95f029e07151427d Mon Sep 17 00:00:00 2001
+From 25e2683c3f2ecc5143211a9c80a0f0f8b72b6bd5 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 23 Nov 2017 11:28:47 +0200
 Subject: [PATCH 5/5] disable qt_random_cpu for i686-w64-mingw32
@@ -191,7 +191,7 @@ Based on https://codereview.qt-project.org/#/c/212360/
 Change-Id: Ia1c902e7b147bdda2b8d7904b40a3b968b8d0369
 
 diff --git a/src/corelib/global/qrandom.cpp b/src/corelib/global/qrandom.cpp
-index 6195c324e7..94902bcfc2 100644
+index 90df8653a7..0d7002f2e8 100644
 --- a/src/corelib/global/qrandom.cpp
 +++ b/src/corelib/global/qrandom.cpp
 @@ -90,7 +90,7 @@ DECLSPEC_IMPORT BOOLEAN WINAPI SystemFunction036(PVOID RandomBuffer, ULONG Rando
@@ -204,5 +204,5 @@ index 6195c324e7..94902bcfc2 100644
  
  #  ifdef Q_PROCESSOR_X86_64
 -- 
-2.19.1
+2.20.1
 
