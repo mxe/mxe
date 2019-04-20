@@ -3,8 +3,8 @@
 PKG             := llvm
 $(PKG)_WEBSITE  := https://llvm.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 7.0.0
-$(PKG)_CHECKSUM := 8bc1f844e6cbde1b652c19c1edebc1864456fd9c78b8c1bea038e51b363fe222
+$(PKG)_VERSION  := 8.0.0
+$(PKG)_CHECKSUM := 8872be1b12c61450cacc82b3d153eab02be2546ef34fa3580ed14137bb26224c
 $(PKG)_GH_CONF  := llvm/llvm-project/tags, llvmorg-
 $(PKG)_SUBDIR   := llvm-$($(PKG)_VERSION).src
 $(PKG)_FILE     := llvm-$($(PKG)_VERSION).src.tar.xz
