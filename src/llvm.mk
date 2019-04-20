@@ -5,19 +5,13 @@ $(PKG)_WEBSITE  := https://llvm.org/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 7.0.0
 $(PKG)_CHECKSUM := 8bc1f844e6cbde1b652c19c1edebc1864456fd9c78b8c1bea038e51b363fe222
+$(PKG)_GH_CONF  := llvm/llvm-project/tags, llvmorg-
 $(PKG)_SUBDIR   := llvm-$($(PKG)_VERSION).src
 $(PKG)_FILE     := llvm-$($(PKG)_VERSION).src.tar.xz
 $(PKG)_URL      := https://releases.llvm.org/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc $(BUILD)~$(PKG)
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 $(PKG)_DEPS_$(BUILD) := cmake
-
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://releases.llvm.org/download.html' | \
-    grep 'Download LLVM' | \
-    $(SED) -n 's,.*LLVM \([0-9][^<]*\).*,\1,p' | \
-    head -1
-endef
 
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \
