@@ -25,7 +25,9 @@ define $(PKG)_BUILD
     $(if $(findstring x86_64-w64-mingw32,$(TARGET)),\
         $(SED) -i 's/pei-i386/pei-x86-64/' '$(1)/SCons/Config/linker_script' && \
         $(SED) -i 's/m_target_type=TARGET_X86ANSI/m_target_type=TARGET_AMD64/' '$(SOURCE_DIR)/Source/build.cpp')
-    cd '$(SOURCE_DIR)' && $(PYTHON2) '$(BUILD_DIR).scons/scons.py' \
+
+    # scons does various PATH manipulations that don't play well with ccache
+    cd '$(SOURCE_DIR)' && PATH='$(PREFIX)/bin:$(PATH)' $(PYTHON2) '$(BUILD_DIR).scons/scons.py' \
         XGCC_W32_PREFIX='$(TARGET)-' \
         PREFIX='$(PREFIX)/$(TARGET)' \
         `[ -d /usr/local/include ] && echo APPEND_CPPPATH=/usr/local/include` \
