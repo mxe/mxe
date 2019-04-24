@@ -36,7 +36,7 @@ define $(PKG)_BUILD
         -DLLVM_INCLUDE_TESTS=OFF \
         -DLLVM_INCLUDE_TOOLS=OFF \
         -DLLVM_INCLUDE_UTILS=OFF
-    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' -k -l '$(JOBS)' VERBOSE=1 || $(MAKE) -C '$(BUILD_DIR)' -j 1 -l 1 VERBOSE=1
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 endef
 
