@@ -4,15 +4,15 @@ Contains ad hoc patches for cross building.
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
-Date: Sun, 9 Dec 2018 16:04:13 +1100
-Subject: [PATCH 1/1] fix shared build and install
+Date: Wed, 24 Apr 2019 22:53:20 +1000
+Subject: [PATCH 1/2] fix shared build and install
 
 
 diff --git a/cmake/modules/AddLLVM.cmake b/cmake/modules/AddLLVM.cmake
 index 1111111..2222222 100644
 --- a/cmake/modules/AddLLVM.cmake
 +++ b/cmake/modules/AddLLVM.cmake
-@@ -656,7 +656,7 @@ macro(add_llvm_library name)
+@@ -670,7 +670,7 @@ macro(add_llvm_library name)
  
        install(TARGETS ${name}
                ${export_to_llvmexports}
@@ -20,7 +20,7 @@ index 1111111..2222222 100644
 +              DESTINATION lib RUNTIME DESTINATION bin
                COMPONENT ${name})
  
-       if (NOT CMAKE_CONFIGURATION_TYPES)
+       if (NOT LLVM_ENABLE_IDE)
 diff --git a/lib/Testing/CMakeLists.txt b/lib/Testing/CMakeLists.txt
 index 1111111..2222222 100644
 --- a/lib/Testing/CMakeLists.txt
@@ -30,3 +30,23 @@ index 1111111..2222222 100644
 +if( LLVM_INCLUDE_TESTS )
 +  add_subdirectory(Support)
 +endif()
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Wed, 24 Apr 2019 22:55:01 +1000
+Subject: [PATCH 2/2] fix case
+
+
+diff --git a/utils/benchmark/src/CMakeLists.txt b/utils/benchmark/src/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/utils/benchmark/src/CMakeLists.txt
++++ b/utils/benchmark/src/CMakeLists.txt
+@@ -36,7 +36,7 @@ endif()
+ 
+ # We need extra libraries on Windows
+ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+-  target_link_libraries(benchmark Shlwapi)
++  target_link_libraries(benchmark shlwapi)
+ endif()
+ 
+ # We need extra libraries on Solaris
