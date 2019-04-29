@@ -85,7 +85,7 @@ running a Linux VM on Windows).
 
 
 [cmake-generators]:https://cmake.org/cmake/help/latest/manual/cmake-generators.7.html
-[cmder]:http://cmder.net/
+[cmder]:https://cmder.net/
 [conemu]:https://conemu.github.io/
 [git-win]:https://git-for-windows.github.io/
 [msys2]:https://msys2.github.io/

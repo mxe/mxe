@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := muparserx
-$(PKG)_WEBSITE  := http://beltoforion.de/article.php?a=muparserx
+$(PKG)_WEBSITE  := https://beltoforion.de/article.php?a=muparserx
 $(PKG)_DESCR    := muParserX
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 4.0.7
