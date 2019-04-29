@@ -1,13 +1,13 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libf2c
-$(PKG)_WEBSITE  := http://www.netlib.org/f2c/
+$(PKG)_WEBSITE  := https://www.netlib.org/f2c/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1
 $(PKG)_CHECKSUM := ca404070e9ce0a9aaa6a71fc7d5489d014ade952c5d6de7efb88de8e24f2e8e0
 $(PKG)_SUBDIR   :=
 $(PKG)_FILE     := $(PKG).zip
-$(PKG)_URL      := http://www.netlib.org/f2c/$($(PKG)_FILE)
+$(PKG)_URL      := https://www.netlib.org/f2c/$($(PKG)_FILE)
 # $(PKG)_URL_2 was disabled in https://github.com/mxe/mxe/issues/1719
 # because it has old version of the file.
 # $(PKG)_URL_2    := https://netlib.sandia.gov/f2c/$($(PKG)_FILE)

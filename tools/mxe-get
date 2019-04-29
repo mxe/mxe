@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Copyright 2017 Viktor Szakats <https://vszakats.net/>
+# Copyright 2017-2019 Viktor Szakats <https://vszakats.net/>
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 set -ue
@@ -27,12 +27,12 @@ Author: Viktor Szakats <https://vszakats.net/>"
 }
 
 mxe_curl() {
-  curl -fsS --connect-timeout 15 --retry 3 "$@"
+  curl -fsS --connect-timeout 15 -m 20 --retry 3 "$@"
 }
 
 mxe_get_pkg() {
 
-  if [[ "$1" =~ ^(mxe-(i686|x86\-64)-(w64|unknown)-(mingw32|linux-gnu)(\.shared|\.static)?)-(.*)$ ]]; then
+  if [[ "$1" =~ ^(mxe-(i686|x86-64)-(w64|unknown)-(mingw32|linux-gnu)(.shared|.static)?)-(.*)$ ]]; then
 
     repo="${BASH_REMATCH[1]}"  # mxe-x86-64-w64-mingw32.shared
     plat="${BASH_REMATCH[4]}"  # mingw32 | linux-gnu
@@ -81,7 +81,7 @@ mxe_get_pkg() {
             rm -f pack.bin
 
             for i in ${deps//,/}; do
-              mxe_get_pkg "$i"  # recurse
+              mxe_get_pkg "${i}"  # recurse
             done
           else
             echo "! Error: Download failed."
@@ -108,18 +108,21 @@ mkdir -p "${MXE_HOME}"
 (
   cd "${MXE_HOME}" || exit
 
-  base='http://pkg.mxe.cc/repos/apt/debian'  # APT root
+  base='https://pkg.mxe.cc/repos/apt/debian'  # APT root
   suid='D43A795B73B16ABE9643FE1AFD8FFF16DB45C6AB'  # Signer UID
 
-  alias gpg='gpg --batch --keyserver-options timeout=15 --keyid-format LONG'
+  alias gpg='gpg --batch --keyid-format LONG'
 
   echo "! Downloading and verifying MXE package list..."
   mxe_curl \
     -O "${base}/dists/wheezy/Release.gpg" \
     -O "${base}/dists/wheezy/Release"
-  mxe_curl \
-    "https://keyserver.ubuntu.com/pks/lookup?search=0x${suid}&op=get" \
-  | gpg --import --status-fd 1
+  (
+    set -x
+    mxe_curl \
+      "https://keyserver.ubuntu.com/pks/lookup?search=0x${suid}&op=get" \
+    | gpg --import --status-fd 1
+  )
   gpg --verify-options show-primary-uid-only --verify Release.gpg Release || exit 1
   mxe_curl \
     -O "${base}/dists/wheezy/main/binary-amd64/Packages.gz"
@@ -151,6 +154,9 @@ mkdir -p "${MXE_HOME}"
       -name '*.la' -o \
       -name '*.pc' -o \
       -name '*.cmake' -o \
+      -name '*.prf' -o \
+      -name '*.pri' -o \
+      -name '*.prl' -o \
       -name '*-config' | while IFS= read -r f; do
 
       sed "s|${ori}|${pwd}|" \
