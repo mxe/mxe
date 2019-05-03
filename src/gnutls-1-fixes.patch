@@ -30,7 +30,7 @@ Follow-up to 492c2b937ab66134d0b37499a6f3a747e19bc31a
 
 Signed-off-by: Mark Brand <mabrand@mabrand.nl>
 
-taken from: http://lists.gnutls.org/pipermail/gnutls-devel/2014-November/007250.html
+taken from: https://lists.gnupg.org/pipermail/gnutls-devel/2014-November/007250.html
 
 diff --git a/lib/x509/ip.c b/lib/x509/ip.c
 index 1111111..2222222 100644

@@ -272,7 +272,7 @@ From: Boris Nagaev <bnagaev@gmail.com>
 Date: Tue, 22 Mar 2016 23:05:26 +0100
 Subject: [PATCH 4/8] reorder -lssl and -lcrypto
 
-See http://stackoverflow.com/a/27136346
+See https://stackoverflow.com/a/27136346
 
 diff --git a/Makefile b/Makefile
 index 1111111..2222222 100644
@@ -410,7 +410,7 @@ index 1111111..2222222 100644
      luaL_openlibs(L);
 -    (void) luaL_dostring(L, "wrk = require \"wrk\"");
 +
-+    // Taken from http://stackoverflow.com/a/19426724
++    // Taken from https://stackoverflow.com/a/19426724
 +    lua_getglobal(L, "package");
 +    lua_getfield(L, -1, "preload");
 +    luaL_loadbuffer(L, luaJIT_BC_wrk, luaJIT_BC_wrk_SIZE, NULL);

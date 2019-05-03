@@ -7,7 +7,7 @@ From: "fix@me" <fix@me>
 Date: Sun, 6 Sep 2015 22:34:47 +0100
 Subject: [PATCH 01/12] use comp_err tool built in native build
 
-See http://www.vtk.org/Wiki/CMake_Cross_Compiling#Using_executables_in_the_build_created_during_the_build
+See https://gitlab.kitware.com/cmake/community/wikis/doc/cmake/CrossCompiling#using-executables-in-the-build-created-during-the-build
 
 diff --git a/extra/CMakeLists.txt b/extra/CMakeLists.txt
 index 1111111..2222222 100644
@@ -18,7 +18,7 @@ index 1111111..2222222 100644
  SET(MYSQL_INSTALL_COMPONENT Development)
  
 +# See https://bugs.mysql.com/bug.php?id=61340
-+# See http://www.vtk.org/Wiki/CMake_Cross_Compiling
++# See https://gitlab.kitware.com/cmake/community/wikis/doc/cmake/CrossCompiling
 +
 +# when crosscompiling import the executable targets from a file
 +IF(CMAKE_CROSSCOMPILING)
@@ -322,7 +322,7 @@ Date: Wed, 11 Nov 2015 07:44:44 +0000
 Subject: [PATCH 08/12] add 'static' to some inline functions
 
 Fix https://gist.github.com/starius/71d5f276d62e58f36d2f
-See also http://stackoverflow.com/a/8502046
+See also https://stackoverflow.com/a/8502046
 
 diff --git a/include/my_global.h b/include/my_global.h
 index 1111111..2222222 100644
