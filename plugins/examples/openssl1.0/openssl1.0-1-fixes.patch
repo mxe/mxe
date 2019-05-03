@@ -8,7 +8,7 @@ Date: Wed, 8 Jan 2014 02:19:10 +0100
 Subject: [PATCH 1/2] winsock2
 
 -This patch has been taken from:
--http://rt.openssl.org/Ticket/Display.html?id=2285&user=guest&pass=guest
+-https://rt.openssl.org/Ticket/Display.html?id=2285&user=guest&pass=guest
 
 diff --git a/ssl/dtls1.h b/ssl/dtls1.h
 index 1111111..2222222 100644

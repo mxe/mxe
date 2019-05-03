@@ -7,7 +7,7 @@ From: Mark Brand <mabrand@mabrand.nl>
 Date: Sat, 27 Oct 2012 22:57:27 +0200
 Subject: [PATCH] include string.h for memset
 
-taken from https://sourceforge.net/tracker/?func=detail&aid=3581223&group_id=11504&atid=311504
+taken from https://sourceforge.net/p/freeimage/patches/80/
 
 diff --git a/Source/OpenEXR/IlmImf/ImfAutoArray.h b/Source/OpenEXR/IlmImf/ImfAutoArray.h
 index 1111111..2222222 100644

@@ -9,7 +9,7 @@ Subject: [PATCH 1/1] detect if host cc accepts -malign-double
 
 This patch has been taken from:
 
-http://www.freelists.org/post/luajit/detect-if-host-cc-accepts-maligndouble
+https://web.archive.org/web/20160730055513/www.freelists.org/post/luajit/detect-if-host-cc-accepts-maligndouble
 
 diff --git a/src/Makefile b/src/Makefile
 index 1111111..2222222 100644

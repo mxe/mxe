@@ -1,6 +1,6 @@
 Description: Fix crashes when reading VBR MP3 file.
 Bug-Ubuntu: https://launchpad.net/bugs/444466
-Origin: upstream, http://sourceforge.net/tracker/?func=detail&aid=937707&group_id=979&atid=300979
+Origin: upstream, https://sourceforge.net/p/id3lib/patches/61/
 Forwarded: yes
 Author: Urs Fleisch
 

@@ -7,7 +7,7 @@ From: Tony Theodore <tonyt@logyst.com>
 Date: Sat, 18 Nov 2017 20:58:20 +1100
 Subject: [PATCH 1/1] fixes
 
-Patch taken from http://sourceforge.net/mailarchive/message.php?msg_id=27995461
+Patch taken from https://sourceforge.net/p/libdnet/mailman/message/27995461/
 
 mingwrt 3.20 provides ssize_t and defines _SSIZE_T_. This patch
 allows libdnet to use this ssize_t instead of defining its

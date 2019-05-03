@@ -10,7 +10,7 @@ Subject: [PATCH 1/1] Avoids deprecated syntax that causes failure in newer versi
 Contains patch for using too new Perl. Avoids deprecated syntax that causes failure in newer versions of Perl. More info at https://github.com/mxe/mxe/issues/2140
 
 Backported from:
-http://git.savannah.gnu.org/cgit/automake.git/commit/?id=13f00eb4493c217269b76614759e452d8302955e
+https://git.savannah.gnu.org/cgit/automake.git/commit/?id=13f00eb4493c217269b76614759e452d8302955e
 Original author: Paul Eggert <eggert@cs.ucla.edu>
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 

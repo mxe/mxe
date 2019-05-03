@@ -8,7 +8,7 @@ Date: Sat, 30 Mar 2013 17:07:15 +1100
 Subject: [PATCH] add extra cflags for static build in pkg-config file
 
 This patch has been taken from:
-http://liblqr.wikidot.com/forum/t-638530/static-cflags-in-pkg-config-file
+https://liblqr.wikidot.com/forum/t-638530/static-cflags-in-pkg-config-file
 
 diff --git a/configure.ac b/configure.ac
 index eaaa3ae..9b761cc 100644
