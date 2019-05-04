@@ -19,7 +19,7 @@ DEFAULT_MAX_JOBS   := 6
 PRINTF_COL_1_WIDTH := 13
 SOURCEFORGE_MIRROR := downloads.sourceforge.net
 MXE_MIRROR         := https://mirror.mxe.cc/pkg
-PKG_MIRROR         := https://s3.amazonaws.com/mxe-pkg
+PKG_MIRROR         := https://mxe-pkg.s3.amazonaws.com
 PKG_CDN            := http://d1yihgixbnrglp.cloudfront.net
 # reorder as required, ensuring final one is a http fallback
 MIRROR_SITES       := MXE_MIRROR PKG_MIRROR PKG_CDN
