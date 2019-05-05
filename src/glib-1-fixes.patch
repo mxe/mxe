@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 23 Sep 2010 21:42:46 +0200
-Subject: [PATCH 1/9] fix tool paths
+Subject: [PATCH 01/10] fix tool paths
 
 
 diff --git a/glib-2.0.pc.in b/glib-2.0.pc.in
@@ -29,7 +29,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Hans Petter Jansson <hpj@cl.no>
 Date: Fri, 15 Jun 2012 15:25:01 +0200
-Subject: [PATCH 2/9] Avoid DllMain symbol conflict when linking statically
+Subject: [PATCH 02/10] Avoid DllMain symbol conflict when linking statically
 
 Adjusted by Boris Nagaev on 29-Jan-2017 to fix
 https://gist.github.com/starius/f4fc85939352cb50122ba29e0f5b140d
@@ -103,7 +103,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Hans Petter Jansson <hpj@cl.no>
 Date: Fri, 15 Jun 2012 15:27:22 +0200
-Subject: [PATCH 3/9] Allow building without inotify support
+Subject: [PATCH 03/10] Allow building without inotify support
 
 
 diff --git a/configure.ac b/configure.ac
@@ -131,7 +131,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Hans Petter Jansson <hpj@cl.no>
 Date: Fri, 15 Jun 2012 15:28:14 +0200
-Subject: [PATCH 4/9] Make sure STDC_HEADERS is set for AC_CHECK_ALIGNOF.
+Subject: [PATCH 04/10] Make sure STDC_HEADERS is set for AC_CHECK_ALIGNOF.
  Backported from upstream
 
 
@@ -152,7 +152,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Hans Petter Jansson <hpj@cl.no>
 Date: Fri, 15 Jun 2012 15:29:06 +0200
-Subject: [PATCH 5/9] Link with dnsapi
+Subject: [PATCH 05/10] Link with dnsapi
 
 
 diff --git a/gio-2.0.pc.in b/gio-2.0.pc.in
@@ -171,7 +171,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Hans Petter Jansson <hpj@cl.no>
 Date: Fri, 15 Jun 2012 15:29:38 +0200
-Subject: [PATCH 6/9] Ensure globals are initialized even when DllMain is not
+Subject: [PATCH 06/10] Ensure globals are initialized even when DllMain is not
  being run
 
 
@@ -548,7 +548,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Gerardo Ballabio <gerardo.ballabio@gmail.com>
 Date: Sun, 16 Aug 2015 13:18:24 +0200
-Subject: [PATCH 7/9] Remove an annoying runtime warning
+Subject: [PATCH 07/10] Remove an annoying runtime warning
 
 that pops up when using GtkApplication in Gtk+ 3 programs.
 
@@ -576,7 +576,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: aquiles2k <aj@elane2k.com>
 Date: Wed, 6 Apr 2016 22:39:53 +0300
-Subject: [PATCH 8/9] fix error "won't overwrite defined macro" on OSX
+Subject: [PATCH 08/10] fix error "won't overwrite defined macro" on OSX
 
 See https://github.com/mxe/mxe/issues/1281
 
@@ -599,7 +599,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Mon, 26 Feb 2018 16:09:53 +1100
-Subject: [PATCH 9/9] darwin: disable g_cocoa_notification_backend
+Subject: [PATCH 09/10] darwin: disable g_cocoa_notification_backend
 
 
 diff --git a/gio/Makefile.am b/gio/Makefile.am
@@ -641,3 +641,65 @@ index 1111111..2222222 100644
  #ifdef G_OS_WIN32
        g_type_ensure (_g_winhttp_vfs_get_type ());
  #endif
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Ernestas Kulik <ekulik@redhat.com>
+Date: Tue, 29 Jan 2019 09:50:46 +0100
+Subject: [PATCH 10/10] gdbus: Avoid printing null strings
+
+This mostly affects the 2.56 branch, but, given that GCC 9 is being
+stricter about passing null string pointers to printf-like functions, it
+might make sense to proactively fix such calls.
+
+gdbusauth.c: In function '_g_dbus_auth_run_server':
+gdbusauth.c:1302:11: error: '%s' directive argument is null
+[-Werror=format-overflow=]
+ 1302 |           debug_print ("SERVER: WaitingForBegin, read '%s'",
+ line);
+       |
+
+gdbusmessage.c: In function ‘g_dbus_message_to_blob’:
+gdbusmessage.c:2730:30: error: ‘%s’ directive argument is null [-Werror=format-overflow=]
+ 2730 |       tupled_signature_str = g_strdup_printf ("(%s)", signature_str);
+      |
+
+diff --git a/gio/gdbusauth.c b/gio/gdbusauth.c
+index 1111111..2222222 100644
+--- a/gio/gdbusauth.c
++++ b/gio/gdbusauth.c
+@@ -1295,9 +1295,9 @@ _g_dbus_auth_run_server (GDBusAuth              *auth,
+                                                     &line_length,
+                                                     cancellable,
+                                                     error);
+-          debug_print ("SERVER: WaitingForBegin, read '%s'", line);
+           if (line == NULL)
+             goto out;
++          debug_print ("SERVER: WaitingForBegin, read '%s'", line);
+           if (g_strcmp0 (line, "BEGIN") == 0)
+             {
+               /* YAY, done! */
+diff --git a/gio/gdbusmessage.c b/gio/gdbusmessage.c
+index 1111111..2222222 100644
+--- a/gio/gdbusmessage.c
++++ b/gio/gdbusmessage.c
+@@ -2695,7 +2695,6 @@ g_dbus_message_to_blob (GDBusMessage          *message,
+   if (message->body != NULL)
+     {
+       gchar *tupled_signature_str;
+-      tupled_signature_str = g_strdup_printf ("(%s)", signature_str);
+       if (signature == NULL)
+         {
+           g_set_error (error,
+@@ -2703,10 +2702,10 @@ g_dbus_message_to_blob (GDBusMessage          *message,
+                        G_IO_ERROR_INVALID_ARGUMENT,
+                        _("Message body has signature '%s' but there is no signature header"),
+                        signature_str);
+-          g_free (tupled_signature_str);
+           goto out;
+         }
+-      else if (g_strcmp0 (tupled_signature_str, g_variant_get_type_string (message->body)) != 0)
++      tupled_signature_str = g_strdup_printf ("(%s)", signature_str);
++      if (g_strcmp0 (tupled_signature_str, g_variant_get_type_string (message->body)) != 0)
+         {
+           g_set_error (error,
+                        G_IO_ERROR,
