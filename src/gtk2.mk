@@ -12,9 +12,8 @@ $(PKG)_URL      := https://download.gnome.org/sources/gtk+/$(call SHORT_PKG_VERS
 $(PKG)_DEPS     := cc atk cairo gdk-pixbuf gettext glib jasper jpeg libpng pango tiff
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://git.gnome.org/browse/gtk+/refs/tags' | \
-    grep '<a href=' | \
-    $(SED) -n 's,.*<a[^>]*>\([0-9]*\.[0-9]*[02468]\.[^<]*\)<.*,\1,p' | \
+    $(WGET) -q -O- 'https://gitlab.gnome.org/GNOME/gtk+/tags' | \
+    $(SED) -n "s,.*<a [^>]\+>v\?\([0-9]\+\.[0-9.]\+\)<.*,\1,p" | \
     grep -v '^2\.9' | \
     grep '^2\.' | \
     head -1

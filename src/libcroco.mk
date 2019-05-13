@@ -12,9 +12,8 @@ $(PKG)_URL      := https://download.gnome.org/sources/libcroco/$(call SHORT_PKG_
 $(PKG)_DEPS     := cc glib libxml2
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://git.gnome.org/browse/libcroco/refs/tags' | \
-    $(SED) -n 's,.*<a[^>]*>LIBCROCO_\([0-9][0-9_]*\)<.*,\1,p' | \
-    $(SED) 's,_,.,g' | \
+    $(WGET) -q -O- 'https://gitlab.gnome.org/GNOME/libcroco/tags' | \
+    $(SED) -n "s,.*<a [^>]\+>v\?\([0-9]\+\.[0-9.]\+\)<.*,\1,p" | \
     head -1
 endef
 
