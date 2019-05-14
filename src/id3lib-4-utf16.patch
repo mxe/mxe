@@ -5,7 +5,7 @@ Patch from 'Spoon' to fix issues with writing certain unicode characters
 +2006-02-17  Jerome Couderc
 +
 +    * Patch from Spoon to fix UTF-16 writing bug
-+      http://sourceforge.net/tracker/index.php?func=detail&aid=1016290&group_id=979&atid=300979
++      https://sourceforge.net/p/id3lib/patches/64/
 +
  2003-03-02 Sunday 17:38   Thijmen Klok <thijmen@id3lib.org>
  
@@ -17,7 +17,7 @@ Patch from 'Spoon' to fix issues with writing certain unicode characters
      unicode_t BOM = 0xFEFF;
      writer.writeChars((const unsigned char*) &BOM, 2);
 +    // Patch from Spoon : 2004-08-25 14:17
-+    //   http://sourceforge.net/tracker/index.php?func=detail&aid=1016290&group_id=979&atid=300979
++    //   https://sourceforge.net/p/id3lib/patches/64/
 +    // Wrong code
 +    //for (size_t i = 0; i < size; i += 2)
 +    //{

@@ -3,18 +3,10 @@
 PKG             := libsigc++
 $(PKG)_WEBSITE  := https://libsigc.sourceforge.io/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.99.9
-$(PKG)_CHECKSUM := 7628072c0afe5e3d7375877356c6009a9e4933800c1728424b1f2853aa35571c
-$(PKG)_SUBDIR   := libsigc++-$($(PKG)_VERSION)
-$(PKG)_FILE     := libsigc++-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := https://download.gnome.org/sources/libsigc++/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
+$(PKG)_VERSION  := 2.4.0
+$(PKG)_CHECKSUM := 7593d5fa9187bbad7c6868dce375ce3079a805f3f1e74236143bceb15a37cd30
+$(PKG)_GH_CONF  := libsigcplusplus/libsigcplusplus/tags
 $(PKG)_DEPS     := cc
-
-define $(PKG)_UPDATE
-     $(WGET) -q -O- 'https://github.com/GNOME/libsigcplusplus/releases' | \
-     $(SED) -n '/<a href=.*archive/ s,.*archive/\([0-9.]*\).tar.gz.*,\1,p' | \
-     head -1
-endef
 
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \

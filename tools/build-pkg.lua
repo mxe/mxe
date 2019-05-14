@@ -4,7 +4,7 @@
 This file is part of MXE. See LICENSE.md for licensing information.
 
 build-pkg, Build binary packages from MXE packages
-Instructions: http://pkg.mxe.cc
+Instructions: https://pkg.mxe.cc/
 
 Requirements (see bootstrapped build below for non-debian systems):
     MXE (https://mxe.cc/#requirements-debian)

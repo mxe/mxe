@@ -12,9 +12,9 @@ $(PKG)_URL      := https://download.gnome.org/sources/gtksourceview/$(call SHORT
 $(PKG)_DEPS     := cc gtk2 libxml2
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://git.gnome.org/browse/gtksourceview/refs/tags' | \
-    $(SED) -n 's,.*>GTKSOURCEVIEW_\([0-9]\+_[0-9]*[02468]_[0-9_]\+\)<.*,\1,p' | \
-    $(SED) 's,_,.,g' | \
+    $(WGET) -q -O- 'https://gitlab.gnome.org/GNOME/gtksourceview/tags?&search=GTKSOURCEVIEW_2' | \
+    $(SED) -n "s,.*<a [^>]\+>GTKSOURCEVIEW_\(2_[0-9_]\+\)<.*,\1,p" | \
+    $(SED) "s,_,.,g;" | \
     grep -v '^2\.9[0-9]\.' | \
     head -1
 endef

@@ -6,7 +6,7 @@ Date: Tue, 7 Oct 2014 21:50:59 -0700
 Subject: [PATCH] Fix i686-w64-mingw32
 
 Cherry-picked from
-http://git.dcmtk.org/web?p=dcmtk.git;a=commitdiff;h=b8a53c5f7fd12e9479f830680ef84f93805fd004
+https://git.dcmtk.org/?p=dcmtk.git;a=commitdiff;h=b8a53c5f7fd12e9479f830680ef84f93805fd004
 
 diff --git a/config/configure.in b/config/configure.in
 index e343ce1..a305114 100644

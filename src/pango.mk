@@ -12,9 +12,8 @@ $(PKG)_URL      := https://download.gnome.org/sources/pango/$(call SHORT_PKG_VER
 $(PKG)_DEPS     := cc cairo fontconfig freetype glib harfbuzz
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://git.gnome.org/browse/pango/refs/tags' | \
-    grep '<a href=' | \
-    $(SED) -n "s,.*<a href='[^']*/tag/?h=\\([0-9][^']*\\)'.*,\\1,p" | \
+    $(WGET) -q -O- 'https://gitlab.gnome.org/GNOME/pango/tags' | \
+    $(SED) -n "s,.*<a [^>]\+>v\?\([0-9]\+\.[0-9.]\+\)<.*,\1,p" | \
     head -1
 endef
 

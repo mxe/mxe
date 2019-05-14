@@ -3,8 +3,8 @@
 PKG             := libiconv
 $(PKG)_WEBSITE  := https://www.gnu.org/software/libiconv/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.15
-$(PKG)_CHECKSUM := ccf536620a45458d26ba83887a983b96827001e92a13847b45e4925cc8913178
+$(PKG)_VERSION  := 1.16
+$(PKG)_CHECKSUM := e6a1b1b589654277ee790cce3734f07876ac4ccfaecbee8afa0b649cf529cc04
 $(PKG)_SUBDIR   := libiconv-$($(PKG)_VERSION)
 $(PKG)_FILE     := libiconv-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://ftp.gnu.org/gnu/libiconv/$($(PKG)_FILE)

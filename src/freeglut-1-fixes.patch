@@ -82,7 +82,7 @@ libglu32.a defines gluUnProject and other symbols used by users of GLU.
 
 Fix https://github.com/mxe/mxe/issues/1434
 See https://github.com/mxe/mxe/pull/1429
-See http://stackoverflow.com/a/17451000
+See https://stackoverflow.com/a/17451000
 
 diff --git a/freeglut.pc.in b/freeglut.pc.in
 index 1111111..2222222 100644

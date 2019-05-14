@@ -46,6 +46,6 @@ define $(PKG)_BUILD
         -DHAVE_SSE3_EXTENSIONS_EXITCODE=0 \
         -DHAVE_SSE2_EXTENSIONS_EXITCODE=0 \
         -DHAVE_SSE_EXTENSIONS_EXITCODE=0
-    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1 || $(MAKE) -C '$(BUILD_DIR)' -j 1 VERBOSE=1
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' -k -l '$(JOBS)' VERBOSE=1 || $(MAKE) -C '$(BUILD_DIR)' -j 1 -l 1 VERBOSE=1
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install VERBOSE=1
 endef

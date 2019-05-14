@@ -14,7 +14,8 @@ define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://ftp.osuosl.org/pub/clfs/conglomeration/bzip2/' | \
     grep 'bzip2-' | \
     $(SED) -n 's,.*bzip2-\([0-9][^>]*\)\.tar.*,\1,p' | \
-    head -1
+    sort -V | \
+    tail -1
 endef
 
 define $(PKG)_BUILD_COMMON

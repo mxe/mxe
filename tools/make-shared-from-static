@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Taken from:
-# http://hg.octave.org/mxe-octave/file/tip/tools/make-shared-from-static
+# https://hg.octave.org/mxe-octave/file/tip/tools/make-shared-from-static
 
 set -e
 

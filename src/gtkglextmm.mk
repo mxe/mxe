@@ -12,9 +12,8 @@ $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/gtkglext/gtkglextmm/$($
 $(PKG)_DEPS     := cc gtkglext gtkmm2
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://git.gnome.org/cgit/gtkglextmm/refs/tags' | \
-    grep '<a href=' | \
-    $(SED) -n "s,.*<a href='[^']*/tag/?h=\\([0-9][^']*\\)'.*,\\1,p" | \
+    $(WGET) -q -O- 'https://gitlab.gnome.org/Archive/gtkglextmm/tags' | \
+    $(SED) -n "s,.*<a [^>]\+>v\?\([0-9]\+\.[0-9.]\+\)<.*,\1,p" | \
     $(SORT) -V | \
     tail -1
 endef

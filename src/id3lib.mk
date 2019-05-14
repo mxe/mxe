@@ -12,7 +12,7 @@ $(PKG)_DEPS     := cc zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://sourceforge.net/projects/id3lib/files/id3lib/' | \
-    $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
+    $(SED) -n 's,.*/\([0-9][0-9.]*\)/".*,\1,p' | \
     head -1
 endef
 

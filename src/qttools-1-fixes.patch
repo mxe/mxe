@@ -1,0 +1,47 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Sun, 28 Apr 2019 23:07:09 +1000
+Subject: [PATCH 1/2] disable windeployqt (MXE specific)
+
+
+diff --git a/src/src.pro b/src/src.pro
+index 1111111..2222222 100644
+--- a/src/src.pro
++++ b/src/src.pro
+@@ -35,7 +35,7 @@ macos {
+ 
+ qtHaveModule(dbus): SUBDIRS += qdbus
+ 
+-win32|winrt:SUBDIRS += windeployqt
++#win32|winrt:SUBDIRS += windeployqt
+ winrt:SUBDIRS += winrtrunner
+ qtHaveModule(gui):!wasm:!android:!uikit:!qnx:!winrt: SUBDIRS += qtdiag
+ 
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sun, 28 Apr 2019 23:12:41 +1000
+Subject: [PATCH 2/2] disable qdoc (MXE specific - requires libclang-devel)
+
+
+diff --git a/src/src.pro b/src/src.pro
+index 1111111..2222222 100644
+--- a/src/src.pro
++++ b/src/src.pro
+@@ -23,9 +23,9 @@ qtConfig(library) {
+     !android|android_app: SUBDIRS += qtplugininfo
+ }
+ 
+-include($$OUT_PWD/qdoc/qtqdoc-config.pri)
+-QT_FOR_CONFIG += qdoc-private
+-qtConfig(qdoc): qtConfig(thread): SUBDIRS += qdoc
++#include($$OUT_PWD/qdoc/qtqdoc-config.pri)
++#QT_FOR_CONFIG += qdoc-private
++#qtConfig(qdoc): qtConfig(thread): SUBDIRS += qdoc
+ 
+ !android|android_app: SUBDIRS += qtpaths
+ 

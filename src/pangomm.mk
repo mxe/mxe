@@ -12,9 +12,8 @@ $(PKG)_URL      := https://download.gnome.org/sources/pangomm/$(call SHORT_PKG_V
 $(PKG)_DEPS     := cc cairomm glibmm pango
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://git.gnome.org/browse/pangomm/refs/tags' | \
-    grep '<a href=' | \
-    $(SED) -n "s,.*<a href='[^']*/tag/?h=\\([0-9][^']*\\)'.*,\\1,p" | \
+    $(WGET) -q -O- 'https://gitlab.gnome.org/GNOME/pangomm/tags' | \
+    $(SED) -n "s,.*<a [^>]\+>v\?\([0-9]\+\.[0-9.]\+\)<.*,\1,p" | \
     head -1
 endef
 

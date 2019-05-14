@@ -3,7 +3,7 @@
 See also article [cross-compile go code, including cgo][1]
 by Dimitri John Ledkov.
 
-[1]: http://blog.surgut.co.uk/2014/06/cross-compile-go-code-including-cgo.html
+[1]: https://blog.surgut.co.uk/2014/06/cross-compile-go-code-including-cgo.html
 
 Package `go-native` installs native Go 1.4. This version of Go
 doesn't depend on Go installation.
