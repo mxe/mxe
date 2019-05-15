@@ -26,7 +26,7 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)/Qt4Qt5' -j '$(JOBS)' install
 
     '$(TARGET)-g++' \
-        -W -Wall -Werror -std=c++0x -pedantic \
+        -W -Wall -Werror -std=c++0x -pedantic -Wno-deprecated-copy \
         `'$(TARGET)-pkg-config' Qt5Widgets --cflags` \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-qscintilla2.exe' -lqscintilla2_qt5 \
         `'$(TARGET)-pkg-config' Qt5Widgets --libs`

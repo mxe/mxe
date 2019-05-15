@@ -22,7 +22,9 @@ define $(PKG)_BUILD
 
     # build test as qmake project
     mkdir '$(BUILD_DIR).test-qmake'
-    cd '$(BUILD_DIR).test-qmake' && '$(PREFIX)/$(TARGET)/qt5/bin/qmake' '$(PWD)/src/qca-test.pro'
+    cd '$(BUILD_DIR).test-qmake' && '$(PREFIX)/$(TARGET)/qt5/bin/qmake' \
+        'greaterThan(QT_GCC_MAJOR_VERSION, 8): QMAKE_CXXFLAGS_WARN_ON += -Wno-deprecated-copy' \
+        '$(PWD)/src/qca-test.pro'
     $(MAKE) -C '$(BUILD_DIR).test-qmake' -j 1
     $(INSTALL) -m755 '$(BUILD_DIR).test-qmake/$(BUILD_TYPE)/test-qca-qmake.exe' '$(PREFIX)/$(TARGET)/bin/'
 
@@ -35,7 +37,7 @@ define $(PKG)_BUILD
 
     # build test manually
     '$(TARGET)-g++' \
-        -W -Wall -Werror -std=gnu++11 \
+        -W -Wall -Werror -std=gnu++11 -Wno-deprecated-copy \
         '$(PWD)/src/qca-test.cpp' \
         -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG)-pkgconfig.exe' \
         $(if $(BUILD_STATIC), -L'$(PREFIX)/$(TARGET)/qt5/plugins/crypto' -lqca-ossl) \
