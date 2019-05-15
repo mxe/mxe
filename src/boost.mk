@@ -16,7 +16,7 @@ $(PKG)_DEPS_$(BUILD) := zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://www.boost.org/users/download/' | \
-    $(SED) -n 's,.*/boost/\([0-9][^"/]*\)/".*,\1,p' | \
+    $(SED) -n 's,.*/release/\([0-9][^"/]*\)/.*,\1,p' | \
     grep -v beta | \
     head -1
 endef
