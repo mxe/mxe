@@ -1,0 +1,56 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Martin Herkt <lachs0r@srsfckn.biz>
+Date: Fri, 3 May 2019 21:26:06 +0200
+Subject: [PATCH 1/2] Fix MinGW build on case-sensitive filesystems
+
+
+diff --git a/lib/zip_crypto_win.c b/lib/zip_crypto_win.c
+index 1111111..2222222 100644
+--- a/lib/zip_crypto_win.c
++++ b/lib/zip_crypto_win.c
+@@ -39,7 +39,7 @@
+ #define WIN32_LEAN_AND_MEAN
+ #define NOCRYPT
+ 
+-#include <Windows.h>
++#include <windows.h>
+ #include <bcrypt.h>
+ 
+ #pragma comment(lib, "bcrypt.lib")
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Martin Herkt <lachs0r@srsfckn.biz>
+Date: Fri, 3 May 2019 23:39:11 +0200
+Subject: [PATCH 2/2] Fix pkg-config Libs.private for static linking
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -299,13 +299,17 @@ SET(exec_prefix \${prefix})
+ SET(bindir \${exec_prefix}/${CMAKE_INSTALL_BINDIR})
+ SET(libdir \${exec_prefix}/${CMAKE_INSTALL_LIBDIR})
+ SET(includedir \${prefix}/${CMAKE_INSTALL_INCLUDEDIR})
+-IF(BZIP2_FOUND)
+-  SET(LIBS "${LIBS} -lbz2")
+-ENDIF()
+-SET(LIBS "${LIBS} -lz")
+ IF(CMAKE_SYSTEM_NAME MATCHES BSD)
+   SET(PKG_CONFIG_RPATH "-Wl,-R\${libdir}")
+ ENDIF(CMAKE_SYSTEM_NAME MATCHES BSD)
++get_target_property(LIBS_PRIVATE zip LINK_LIBRARIES)
++foreach(LIB ${LIBS_PRIVATE})
++  if(LIB MATCHES "^/")
++    get_filename_component(LIB ${LIB} NAME_WE)
++    string(REGEX REPLACE "^lib" "" LIB ${LIB})
++  endif()
++  set(LIBS "${LIBS} -l${LIB}")
++endforeach()
+ CONFIGURE_FILE(libzip.pc.in libzip.pc @ONLY)
+ INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/libzip.pc DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
+ 
