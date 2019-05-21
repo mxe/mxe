@@ -181,7 +181,7 @@
     "libgdamm": {"version": "4.1.3", "website": "https://launchpad.net/libgdamm", "description": ""},
     "libgee": {"version": "0.20.1", "website": "https://wiki.gnome.org/Projects/Libgee", "description": ""},
     "libgeotiff": {"version": "1.4.2", "website": "https://trac.osgeo.org/geotiff/", "description": "GeoTiff"},
-    "libgit2": {"version": "0.28.1", "website": "https://libgit2.github.com/", "description": ""},
+    "libgit2": {"version": "0.28.2", "website": "https://libgit2.github.com/", "description": ""},
     "libglade": {"version": "2.6.4", "website": "https://glade.gnome.org/", "description": "glade"},
     "libgnurx": {"version": "2.6.1", "website": "https://sourceforge.net/projects/mingw/files/UserContributed/regex/", "description": ""},
     "libgpg_error": {"version": "1.36", "website": "https://www.gnupg.org/related_software/libgpg-error/", "description": "libgpg-error"},
