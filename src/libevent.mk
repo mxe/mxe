@@ -3,8 +3,8 @@
 PKG             := libevent
 $(PKG)_WEBSITE  := https://libevent.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.1.8
-$(PKG)_CHECKSUM := 316ddb401745ac5d222d7c529ef1eada12f58f6376a66c1118eee803cb70f83d
+$(PKG)_VERSION  := 2.1.10
+$(PKG)_CHECKSUM := 52c9db0bc5b148f146192aa517db0762b2a5b3060ccc63b2c470982ec72b9a79
 $(PKG)_GH_CONF  := libevent/libevent/tags, release-, -stable
 $(PKG)_DEPS     := cc openssl
 
