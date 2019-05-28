@@ -14,6 +14,7 @@ $(PKG)_DEPS     := cc fftw imagemagick jpeg libpng opencv openexr tiff zlib
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://cimg.eu/files/' | \
     $(SED) -n 's,.*CImg_\([0-9][^"]*\)\.zip.*,\1,p' | \
+    $(SORT) -Vr | \
     head -1
 endef
 
