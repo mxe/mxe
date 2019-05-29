@@ -18,10 +18,52 @@ define $(PKG)_BUILD
       -DgRPC_SSL_PROVIDER="package" \
       -DgRPC_GFLAGS_PROVIDER="modules" \
       -DgRPC_BENCHMARK_PROVIDER="modules" \
+      -DCMAKE_CXX_FLAGS="-D_WIN32_WINNT=0x0600" \
       $(PKG_CMAKE_OPTS)
 
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
+
+    # create pkg-config files
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
+    (echo 'Name: gRPC'; \
+     echo 'Description: high performance general RPC framework'; \
+     echo 'Version: $(grpc_VERSION)'; \
+     echo 'Cflags: -I${includedir}'; \
+     echo 'Requires.private:'; \
+     echo 'Libs: -L${libdir} -lgrpc'; \
+     echo 'Libs.private:  -lz -lcares -lssl -lcrypto -lgpr -lcares -laddress_sorting';) \
+     > '$(PREFIX)/$(TARGET)/lib/pkgconfig/grpc.pc'
+
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
+    (echp 'Name: gRPC++'; \
+     echo 'Description: C++ wrapper for gRPC'; \
+     echo 'Version: $(grpc_VERSION)'; \
+     echo 'Cflags: -I${includedir}'; \
+     echo 'Requires.private: grpc'; \
+     echo 'Libs: -L${libdir} -lgrpc++'; \
+     echo 'Libs.private: -lprotobuf';) \
+     > '$(PREFIX)/$(TARGET)/lib/pkgconfig/grpc++.pc'
+
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
+    (echo 'Name: gRPC unsecure'; \
+     echo 'Description: high performance general RPC framework without SSL'; \
+     echo 'Version: 3.0.0'; \
+     echo 'Cflags: -I${includedir}'; \
+     echo 'Requires.private:'; \
+     echo 'Libs: -L${libdir} -lgrpc'; \
+     echo 'Libs.private:  -lz -lcares';) \
+     > '$(PREFIX)/$(TARGET)/lib/pkgconfig/grpc_unsecure.pc'
+
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
+    (echo 'Name: gRPC++ unsecure'; \
+     echo 'Description: C++ wrapper for gRPC without SSL'; \
+     echo 'Version: 1.3.2'; \
+     echo 'Cflags: -I${includedir}'; \
+     echo 'Requires.private: grpc_unsecure'; \
+     echo 'Libs: -L${libdir} -lgrpc++'; \
+     echo 'Libs.private: -lprotobuf';) \
+     > '$(PREFIX)/$(TARGET)/lib/pkgconfig/grpc++_unsecure.pc'
 
 endef
 

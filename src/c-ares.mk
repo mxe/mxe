@@ -12,11 +12,16 @@ $(PKG)_DEPS_$(BUILD) := libtool
 
 define $(PKG)_CONFIGURE # cmake
     cd '$(BUILD_DIR)' && '$(TARGET)-cmake' '$(SOURCE_DIR)' \
+        $(if $(BUILD_STATIC),-DCARES_STATIC=ON -DCARES_SHARED=OFF) \
+        $(if $(BUILD_SHARED),-DCARES_STATIC=OFF -DCARES_SHARED=ON) \
         $(PKG_CMAKE_OPTS)
 endef
 
 define $(PKG)_MAKE
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+endef
+
+define $(PKG)_INSTALL
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 endef
 
@@ -31,4 +36,5 @@ endef
 define $(PKG)_BUILD
     $($(PKG)_CONFIGURE)
     $($(PKG)_MAKE)
+    $($(PKG)_INSTALL)
 endef
