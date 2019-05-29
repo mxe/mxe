@@ -30,5 +30,8 @@ define $(PKG)_BUILD_$(BUILD)
         CXX='$(BUILD_CXX)' \
         CC='$(BUILD_CC)' \
         prefix='$(PREFIX)/$(TARGET)' \
-        -C '$(SOURCE_DIR)' install-static_cxx install-static_c install-plugins
+        -C '$(SOURCE_DIR)' \
+				$(if $(BUILD_STATIC),install-static_cxx install-static_c) \
+				$(if $(BUILD_SHARED),install-shared_cxx install-shared_c) \
+				install-headers_c install-headers_cxx install-plugins
 endef
