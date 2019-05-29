@@ -1,0 +1,75 @@
+diff -uprN grpc-1.19.1.origin/CMakeLists.txt grpc-1.19.1/CMakeLists.txt
+--- grpc-1.19.1.origin/CMakeLists.txt	2019-05-29 11:09:48.725836321 +0000
++++ grpc-1.19.1/CMakeLists.txt	2019-05-29 11:16:25.289674853 +0000
+@@ -189,7 +189,15 @@ function(protobuf_generate_grpc_cpp)
+     file(RELATIVE_PATH REL_FIL ${CMAKE_CURRENT_SOURCE_DIR} ${ABS_FIL})
+     get_filename_component(REL_DIR ${REL_FIL} DIRECTORY)
+     set(RELFIL_WE "${REL_DIR}/${FIL_WE}")
++
++    #if cross-compiling, find host plugin
++    if(CMAKE_CROSSCOMPILING)
++        find_program(_gRPC_CPP_PLUGIN grpc_cpp_plugin)
++    else()
++        set(_gRPC_CPP_PLUGIN $<TARGET_FILE:grpc_cpp_plugin>)
++    endif()
+ 
++
+     add_custom_command(
+       OUTPUT "${_gRPC_PROTO_GENS_DIR}/${RELFIL_WE}.grpc.pb.cc"
+              "${_gRPC_PROTO_GENS_DIR}/${RELFIL_WE}.grpc.pb.h"
+@@ -199,7 +207,7 @@ function(protobuf_generate_grpc_cpp)
+       COMMAND ${_gRPC_PROTOBUF_PROTOC_EXECUTABLE}
+       ARGS --grpc_out=generate_mock_code=true:${_gRPC_PROTO_GENS_DIR}
+            --cpp_out=${_gRPC_PROTO_GENS_DIR}
+-           --plugin=protoc-gen-grpc=$<TARGET_FILE:grpc_cpp_plugin>
++           --plugin=protoc-gen-grpc=${_gRPC_CPP_PLUGIN}
+            ${_protobuf_include_path}
+            ${REL_FIL}
+       DEPENDS ${ABS_FIL} ${_gRPC_PROTOBUF_PROTOC} grpc_cpp_plugin
+diff -uprN grpc-1.19.1.origin/include/grpc/impl/codegen/port_platform.h grpc-1.19.1/include/grpc/impl/codegen/port_platform.h
+--- grpc-1.19.1.origin/include/grpc/impl/codegen/port_platform.h	2019-05-29 11:09:48.813835131 +0000
++++ grpc-1.19.1/include/grpc/impl/codegen/port_platform.h	2019-05-29 10:38:19.681657743 +0000
+@@ -39,16 +39,6 @@
+ #define NOMINMAX
+ #endif /* NOMINMAX */
+ 
+-#ifndef _WIN32_WINNT
+-#error \
+-    "Please compile grpc with _WIN32_WINNT of at least 0x600 (aka Windows Vista)"
+-#else /* !defined(_WIN32_WINNT) */
+-#if (_WIN32_WINNT < 0x0600)
+-#error \
+-    "Please compile grpc with _WIN32_WINNT of at least 0x600 (aka Windows Vista)"
+-#endif /* _WIN32_WINNT < 0x0600 */
+-#endif /* defined(_WIN32_WINNT) */
+-
+ #include <windows.h>
+ 
+ #ifdef GRPC_WIN32_LEAN_AND_MEAN_WAS_NOT_DEFINED
+diff -uprN grpc-1.19.1.origin/templates/CMakeLists.txt.template grpc-1.19.1/templates/CMakeLists.txt.template
+--- grpc-1.19.1.origin/templates/CMakeLists.txt.template	2019-05-29 11:09:49.237829406 +0000
++++ grpc-1.19.1/templates/CMakeLists.txt.template	2019-05-29 11:17:03.385370228 +0000
+@@ -239,6 +239,14 @@
+       get_filename_component(REL_DIR <%text>${REL_FIL}</%text> DIRECTORY)
+       set(RELFIL_WE "<%text>${REL_DIR}/${FIL_WE}</%text>")
+ 
++      #if cross-compiling, find host plugin
++      if(CMAKE_CROSSCOMPILING)
++          find_program(_gRPC_CPP_PLUGIN grpc_cpp_plugin)
++      else()
++          set(_gRPC_CPP_PLUGIN $<TARGET_FILE:grpc_cpp_plugin>)
++      endif()
++
++
+       add_custom_command(
+         OUTPUT <%text>"${_gRPC_PROTO_GENS_DIR}/${RELFIL_WE}.grpc.pb.cc"</%text>
+                <%text>"${_gRPC_PROTO_GENS_DIR}/${RELFIL_WE}.grpc.pb.h"</%text>
+@@ -248,7 +256,7 @@
+         COMMAND <%text>${_gRPC_PROTOBUF_PROTOC_EXECUTABLE}</%text>
+         ARGS --grpc_out=<%text>generate_mock_code=true:${_gRPC_PROTO_GENS_DIR}</%text>
+              --cpp_out=<%text>${_gRPC_PROTO_GENS_DIR}</%text>
+-             --plugin=protoc-gen-grpc=$<TARGET_FILE:grpc_cpp_plugin>
++             --plugin=protoc-gen-grpc=<%text>${_gRPC_CPP_PLUGIN}</%text>
+              <%text>${_protobuf_include_path}</%text>
+              <%text>${REL_FIL}</%text>
+         DEPENDS <%text>${ABS_FIL}</%text> <%text>${_gRPC_PROTOBUF_PROTOC}</%text> grpc_cpp_plugin
