@@ -89,7 +89,7 @@
     "glib": {"version": "2.50.2", "website": "https://gtk.org/", "description": "GLib"},
     "glibmm": {"version": "2.42.0", "website": "https://www.gtkmm.org/", "description": "GLibmm"},
     "glm": {"version": "0.9.9.0", "website": "https://glm.g-truc.net/", "description": "GLM - OpenGL Mathematics"},
-    "glpk": {"version": "4.60", "website": "https://www.gnu.org/software/glpk/", "description": "GNU Linear Programming Kit"},
+    "glpk": {"version": "4.65", "website": "https://www.gnu.org/software/glpk/", "description": "GNU Linear Programming Kit"},
     "gmp": {"version": "6.1.2", "website": "https://gmplib.org/", "description": "GMP"},
     "gnutls": {"version": "3.6.8", "website": "https://www.gnu.org/software/gnutls/", "description": "GnuTLS"},
     "googlemock": {"version": "1.7.0", "website": "https://github.com/google/googlemock", "description": "Google Mock"},
