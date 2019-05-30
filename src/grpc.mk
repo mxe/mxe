@@ -29,41 +29,40 @@ define $(PKG)_BUILD
     (echo 'Name: gRPC'; \
      echo 'Description: high performance general RPC framework'; \
      echo 'Version: $(grpc_VERSION)'; \
-     echo 'Cflags: -I${includedir}'; \
-     echo 'Requires.private:'; \
-     echo 'Libs: -L${libdir} -lgrpc'; \
-     echo 'Libs.private:  -lz -lcares -lssl -lcrypto -lgpr -lcares -laddress_sorting';) \
+     echo 'Libs: -lgrpc'; \
+     echo 'Libs.private: -lz -lcares -lssl -lcrypto -lgpr -lws2_32 -laddress_sorting';) \
      > '$(PREFIX)/$(TARGET)/lib/pkgconfig/grpc.pc'
 
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
     (echp 'Name: gRPC++'; \
      echo 'Description: C++ wrapper for gRPC'; \
      echo 'Version: $(grpc_VERSION)'; \
-     echo 'Cflags: -I${includedir}'; \
      echo 'Requires.private: grpc'; \
-     echo 'Libs: -L${libdir} -lgrpc++'; \
+     echo 'Libs: -lgrpc++'; \
      echo 'Libs.private: -lprotobuf';) \
      > '$(PREFIX)/$(TARGET)/lib/pkgconfig/grpc++.pc'
 
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
     (echo 'Name: gRPC unsecure'; \
      echo 'Description: high performance general RPC framework without SSL'; \
-     echo 'Version: 3.0.0'; \
-     echo 'Cflags: -I${includedir}'; \
-     echo 'Requires.private:'; \
-     echo 'Libs: -L${libdir} -lgrpc'; \
-     echo 'Libs.private:  -lz -lcares';) \
+     echo 'Version: $(grpc_VERSION)'; \
+     echo 'Libs: -lgrpc'; \
+     echo 'Libs.private: -lz -lcares -lgpr -lws2_32 -laddress_sorting';) \
      > '$(PREFIX)/$(TARGET)/lib/pkgconfig/grpc_unsecure.pc'
 
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
     (echo 'Name: gRPC++ unsecure'; \
      echo 'Description: C++ wrapper for gRPC without SSL'; \
-     echo 'Version: 1.3.2'; \
-     echo 'Cflags: -I${includedir}'; \
+     echo 'Version: $(grpc_VERSION)'; \
      echo 'Requires.private: grpc_unsecure'; \
-     echo 'Libs: -L${libdir} -lgrpc++'; \
+     echo 'Libs: -lgrpc++'; \
      echo 'Libs.private: -lprotobuf';) \
      > '$(PREFIX)/$(TARGET)/lib/pkgconfig/grpc++_unsecure.pc'
+
+     '$(TARGET)-g++' \
+            -W -Wall -Werror -ansi -pedantic -std=c++14 \
+            '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-grpc.exe' \
+            `'$(TARGET)-pkg-config' grpc grpc++ --cflags --libs`
 
 endef
 
