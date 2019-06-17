@@ -2,110 +2,66 @@ This file is part of MXE. See LICENSE.md for licensing information.
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
-Date: Thu, 3 Nov 2011 14:11:02 +0100
-Subject: [PATCH 1/3] [MXE] pkg-config support for libtiff-4
+Date: Mon, 17 Jun 2019 13:54:23 +0200
+Subject: [PATCH 1/1] use pkgconfig
 
 
-diff --git a/config.tests/libtiff/libtiff.pro b/config.tests/libtiff/libtiff.pro
+diff --git a/src/imageformats/configure.json b/src/imageformats/configure.json
 index 1111111..2222222 100644
---- a/config.tests/libtiff/libtiff.pro
-+++ b/config.tests/libtiff/libtiff.pro
-@@ -2,5 +2,7 @@ SOURCES = libtiff.cpp
- CONFIG -= qt dylib
- mac:CONFIG -= app_bundle
- win32:CONFIG += console
--unix|mingw: LIBS += -ltiff
-+CONFIG += link_pkgconfig
-+packagesExist(libtiff-4):PKGCONFIG += libtiff-4
-+else:if(unix|win32-g++*): LIBS += -ltiff
- else:win32: LIBS += libtiff.lib
-diff --git a/src/plugins/imageformats/tiff/tiff.pro b/src/plugins/imageformats/tiff/tiff.pro
-index 1111111..2222222 100644
---- a/src/plugins/imageformats/tiff/tiff.pro
-+++ b/src/plugins/imageformats/tiff/tiff.pro
-@@ -5,7 +5,9 @@ SOURCES += main.cpp qtiffhandler.cpp
- OTHER_FILES += tiff.json
- 
- config_libtiff {
--    unix|mingw: LIBS += -ltiff
-+    CONFIG += link_pkgconfig
-+    packagesExist(libtiff-4):PKGCONFIG += libtiff-4
-+    else:if(unix|win32-g++*): LIBS += -ltiff
-     else:win32: LIBS += libtiff.lib
- } else {
-     include($$PWD/../../../3rdparty/libtiff.pri)
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Wed, 19 Dec 2012 23:29:52 +0100
-Subject: [PATCH 2/3] [MXE] pkg-config support for libmng
-
-
-diff --git a/config.tests/libmng/libmng.pro b/config.tests/libmng/libmng.pro
-index 1111111..2222222 100644
---- a/config.tests/libmng/libmng.pro
-+++ b/config.tests/libmng/libmng.pro
-@@ -2,5 +2,7 @@ SOURCES = libmng.cpp
- CONFIG -= qt dylib
- mac:CONFIG -= app_bundle
- win32:CONFIG += console
--unix|mingw: LIBS += -lmng
-+CONFIG += link_pkgconfig
-+packagesExist(libmng):PKGCONFIG += libmng
-+else:if(unix|win32-g++*): LIBS += -lmng
- else:win32: LIBS += libmng.lib
-diff --git a/src/plugins/imageformats/mng/mng.pro b/src/plugins/imageformats/mng/mng.pro
-index 1111111..2222222 100644
---- a/src/plugins/imageformats/mng/mng.pro
-+++ b/src/plugins/imageformats/mng/mng.pro
-@@ -5,7 +5,10 @@ SOURCES += main.cpp \
-            qmnghandler.cpp
- OTHER_FILES += mng.json
- 
--msvc: LIBS += libmng.lib
-+CONFIG += link_pkgconfig
-+packagesExist(libmng):PKGCONFIG += libmng
-+else:if(unix|mingw): LIBS += -lmng
-+else:msvc: LIBS += libmng.lib
- else: LIBS += -lmng
- 
- PLUGIN_TYPE = imageformats
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Fri, 16 Nov 2018 10:13:11 +0100
-Subject: [PATCH 3/3] [MXE] pkg-config support for libwebp
-
-
-diff --git a/config.tests/libwebp/libwebp.pro b/config.tests/libwebp/libwebp.pro
-index 1111111..2222222 100644
---- a/config.tests/libwebp/libwebp.pro
-+++ b/config.tests/libwebp/libwebp.pro
-@@ -2,5 +2,9 @@ SOURCES = libwebp.cpp
- CONFIG -= qt dylib
- mac:CONFIG -= app_bundle
- win32:CONFIG += console
--unix|mingw: LIBS += -lwebp -lwebpdemux
-+unix|mingw {
-+    CONFIG += link_pkgconfig
-+    packagesExist(libwebp libwebpdemux): PKGCONFIG += libwebp libwebpdemux
-+    else: LIBS += -lwebp -lwebpdemux
-+}
- else:win32: LIBS += libwebp.lib libwebpdemux.lib
-diff --git a/src/plugins/imageformats/webp/webp.pro b/src/plugins/imageformats/webp/webp.pro
-index 1111111..2222222 100644
---- a/src/plugins/imageformats/webp/webp.pro
-+++ b/src/plugins/imageformats/webp/webp.pro
-@@ -5,7 +5,11 @@ SOURCES += main.cpp qwebphandler.cpp
- OTHER_FILES += webp.json
- 
- config_libwebp {
--    unix|win32-g++*: LIBS += -lwebp -lwebpdemux
-+    unix|mingw {
-+        CONFIG += link_pkgconfig
-+        packagesExist(libwebp libwebpdemux): PKGCONFIG += libwebp libwebpdemux
-+        else: LIBS += -lwebp -lwebpdemux
-+    }
-     else:win32: LIBS += libwebp.lib libwebpdemux.lib
- } else {
-     include($$PWD/../../../3rdparty/libwebp.pri)
+--- a/src/imageformats/configure.json
++++ b/src/imageformats/configure.json
+@@ -51,9 +51,6 @@
+                         "stdio.h",
+                         "libmng.h"
+                     ],
+-                    "qmake": [
+-                        "LIBS += -lmng"
+-                    ],
+                     "main": [
+                         "mng_handle hMNG;",
+                         "mng_cleanup(&hMNG);",
+@@ -67,6 +64,7 @@
+                 }
+             },
+             "sources": [
++                { "type": "pkgConfig", "args": "libmng" },
+                 "-lmng"
+             ]
+         },
+@@ -77,10 +75,6 @@
+                 "type": "compile",
+                 "test": {
+                     "include": "tiffio.h",
+-                    "qmake": [
+-                        "unix|mingw: LIBS += -ltiff",
+-                        "else:win32: LIBS += libtiff.lib"
+-                    ],
+                     "main": [
+                         "#if !defined(TIFF_VERSION) && defined(TIFF_VERSION_CLASSIC)",
+                         "// libtiff 4.0 splits it into TIFF_VERSION_CLASSIC and TIFF_VERSION_BIG",
+@@ -105,6 +99,7 @@
+                 }
+             },
+             "sources": [
++                { "type": "pkgConfig", "args": "libtiff-4" },
+                 "-ltiff"
+             ]
+         },
+@@ -119,9 +114,6 @@
+                         "webp/encode.h",
+                         "webp/demux.h"
+                     ],
+-                    "qmake": [
+-                        "LIBS += -lwebp -lwebpdemux"
+-                    ],
+                     "main": [
+                         "#if WEBP_ABI_IS_INCOMPATIBLE(WEBP_DECODER_ABI_VERSION, 0x0203) || WEBP_ABI_IS_INCOMPATIBLE(WEBP_ENCODER_ABI_VERSION, 0x0202)",
+                         "#error \"Incompatible libwebp version\"",
+@@ -144,6 +136,7 @@
+                 }
+             },
+             "sources": [
++                { "type": "pkgConfig", "args": "libwebp libwebpdemux" },
+                 "-lwebp -lwebpdemux"
+             ]
+         }
