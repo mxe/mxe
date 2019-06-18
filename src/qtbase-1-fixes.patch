@@ -1,6 +1,6 @@
 This file is part of MXE. See LICENSE.md for licensing information.
 
-From 15145baa429524cf5d14f36c2b96f9e10b52838f Mon Sep 17 00:00:00 2001
+From 86164c585b85559746c0eb80a7354a01d311bf64 Mon Sep 17 00:00:00 2001
 From: Ray Donnelly <mingw.android@gmail.com>
 Date: Wed, 26 Aug 2015 12:45:43 +0100
 Subject: [PATCH 1/4] cmake: Rearrange STATIC vs INTERFACE targets
@@ -12,10 +12,10 @@ Source: https://git.io/vzWJz
 See also: https://github.com/mxe/mxe/issues/1185
 
 diff --git a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
-index c729892889..8961199089 100644
+index 705e0a3c93..1adac54d3b 100644
 --- a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
 +++ b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
-@@ -214,12 +214,12 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
+@@ -291,6 +291,9 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
      list(APPEND _Qt5$${CMAKE_MODULE_NAME}_LIB_DEPENDENCIES \"$${CMAKE_INTERFACE_QT5_MODULE_DEPS}\")
  !!ENDIF
  
@@ -23,6 +23,10 @@ index c729892889..8961199089 100644
 +    add_library(Qt5::$${CMAKE_MODULE_NAME} INTERFACE IMPORTED)
 +!!ELSE
  !!IF !isEmpty(CMAKE_STATIC_TYPE)
+     if(NOT Qt5_EXCLUDE_STATIC_DEPENDENCIES)
+ !!IF !isEmpty(CMAKE_DEBUG_TYPE)
+@@ -328,9 +331,6 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
+ 
      add_library(Qt5::$${CMAKE_MODULE_NAME} STATIC IMPORTED)
      set_property(TARGET Qt5::$${CMAKE_MODULE_NAME} PROPERTY IMPORTED_LINK_INTERFACE_LANGUAGES "CXX")
 -!!ELSE
@@ -35,7 +39,7 @@ index c729892889..8961199089 100644
 2.20.1
 
 
-From 26458bce67f672e8c2f6eef3cd7adf3a9b88ee86 Mon Sep 17 00:00:00 2001
+From 2bdf75033a353d809d6faf2af33cf0af1d1282ff Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Sat, 16 Jul 2016 20:31:07 +1000
 Subject: [PATCH 2/4] Fix pkgconfig file and library naming
@@ -104,7 +108,7 @@ index 51b5bde67a..faba17aedd 100644
 2.20.1
 
 
-From 02bb523901a33b66cc0e625cef56ef573b2a01d8 Mon Sep 17 00:00:00 2001
+From 04a80b8d9d5ec64efb61f440238113a82015e7df Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 11 Jun 2017 00:27:41 +0200
 Subject: [PATCH 3/4] use pkg-config for harfbuzz
@@ -112,7 +116,7 @@ Subject: [PATCH 3/4] use pkg-config for harfbuzz
 Change-Id: Ia65cbb90fd180f1bc10ce077a9a8323a48e51421
 
 diff --git a/src/gui/configure.json b/src/gui/configure.json
-index c51e3ceee3..966b0170ba 100644
+index 6280b4dfa2..e094ee12e6 100644
 --- a/src/gui/configure.json
 +++ b/src/gui/configure.json
 @@ -303,7 +303,8 @@
@@ -129,7 +133,7 @@ index c51e3ceee3..966b0170ba 100644
 2.20.1
 
 
-From 71c816bca64e9169ce6860df3bd8216faf1d0355 Mon Sep 17 00:00:00 2001
+From ba796f23ed3145a856c6a05abee5d526c3b10d58 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 23 Nov 2017 11:28:47 +0200
 Subject: [PATCH 4/4] disable qt_random_cpu for i686-w64-mingw32
