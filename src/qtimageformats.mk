@@ -10,6 +10,7 @@ $(PKG)_SUBDIR    = $(subst qtbase,qtimageformats,$(qtbase_SUBDIR))
 $(PKG)_FILE      = $(subst qtbase,qtimageformats,$(qtbase_FILE))
 $(PKG)_URL       = $(subst qtbase,qtimageformats,$(qtbase_URL))
 $(PKG)_DEPS     := cc jasper libmng libwebp qtbase tiff
+$(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 
 define $(PKG)_UPDATE
     echo $(qtbase_VERSION)
