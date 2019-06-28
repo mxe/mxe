@@ -20,8 +20,10 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && ./configure \
-        $(MXE_CONFIGURE_OPTS)
-    $(MAKE) -C '$(1)' -j '$(JOBS)' $(if $(BUILD_STATIC),getopt.o getopt1.o,) SUBDIRS=
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install SUBDIRS=
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
+        $(MXE_CONFIGURE_OPTS) \
+        --disable-documentation \
+        $(if $(call seq,darwin,$(OS_SHORT_NAME)),gmp_cv_prog_exeext_for_build='')
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' SUBDIRS=
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install SUBDIRS=
 endef
