@@ -1,0 +1,25 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Fri, 28 Jun 2019 18:34:23 +1000
+Subject: [PATCH 1/1] fix darwin build
+
+see:
+https://github.com/macports/macports-ports/commit/edf0ee1e2cfa884c73089e7ca32e7009f071dbd0
+
+diff --git a/lib/vasnprintf.c b/lib/vasnprintf.c
+index 1111111..2222222 100644
+--- a/lib/vasnprintf.c
++++ b/lib/vasnprintf.c
+@@ -4858,7 +4858,7 @@ VASNPRINTF (DCHAR_T *resultbuf, size_t *lengthp,
+ #endif
+                   *fbp = dp->conversion;
+ #if USE_SNPRINTF
+-# if !(((__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 3)) && !defined __UCLIBC__) || ((defined _WIN32 || defined __WIN32__) && ! defined __CYGWIN__))
++# if !defined(__APPLE__) && !(((__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 3)) && !defined __UCLIBC__) || ((defined _WIN32 || defined __WIN32__) && ! defined __CYGWIN__))
+                 fbp[1] = '%';
+                 fbp[2] = 'n';
+                 fbp[3] = '\0';
