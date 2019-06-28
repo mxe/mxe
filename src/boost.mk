@@ -103,22 +103,24 @@ define $(PKG)_BUILD_$(BUILD)
     # --without-mpi \
     # --without-python \
 
-    cd '$(SOURCE_DIR)' && ./tools/build/b2 \
-        -a \
-        -q \
-        -j '$(JOBS)' \
-        --ignore-site-config \
-        variant=release \
-        link=static \
-        threading=multi \
-        runtime-link=static \
-        --disable-icu \
-        --with-system \
-        --with-filesystem \
-        --build-dir='$(BUILD_DIR)' \
-        --prefix='$(PREFIX)/$(TARGET)' \
-        --exec-prefix='$(PREFIX)/$(TARGET)/bin' \
-        --libdir='$(PREFIX)/$(TARGET)/lib' \
-        --includedir='$(PREFIX)/$(TARGET)/include' \
-        install
+    cd '$(SOURCE_DIR)' && \
+        $(if $(call seq,darwin,$(OS_SHORT_NAME)),PATH=/usr/bin:$$PATH) \
+        ./tools/build/b2 \
+            -a \
+            -q \
+            -j '$(JOBS)' \
+            --ignore-site-config \
+            variant=release \
+            link=static \
+            threading=multi \
+            runtime-link=static \
+            --disable-icu \
+            --with-system \
+            --with-filesystem \
+            --build-dir='$(BUILD_DIR)' \
+            --prefix='$(PREFIX)/$(TARGET)' \
+            --exec-prefix='$(PREFIX)/$(TARGET)/bin' \
+            --libdir='$(PREFIX)/$(TARGET)/lib' \
+            --includedir='$(PREFIX)/$(TARGET)/include' \
+            install
 endef
