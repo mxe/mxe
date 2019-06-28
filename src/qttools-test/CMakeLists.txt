@@ -32,4 +32,5 @@ target_link_libraries(
     pcre2-16
     version
     z
+    zstd
 )
