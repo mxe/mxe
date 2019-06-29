@@ -4,15 +4,19 @@ PKG             := hidapi
 $(PKG)_WEBSITE  := https://github.com/signal11/hidapi/
 $(PKG)_DESCR    := HIDAPI
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := a6a622ffb680c55da0de787ff93b80280498330f
-$(PKG)_CHECKSUM := a1d1ab45e0d52820f7b65049544ebfff3e6f56626fac1d2b4398c3360c0df5a1
-$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $($(PKG)_VERSION).zip
-$(PKG)_URL      := https://github.com/signal11/$(PKG)/archive/$($(PKG)_VERSION).zip
+$(PKG)_VERSION  := a6a622f
+$(PKG)_CHECKSUM := 32ea444bdd6c6a8a940bfa3287a2dc8c291a141fdc78cd638b37b546b44d95be
+$(PKG)_GH_CONF  := signal11/hidapi/branches/master
 $(PKG)_DEPS     := cc
 
 define $(PKG)_BUILD
-    cd '$(1)' && ./bootstrap && ./configure \
+    # autoreconf when fetching from source
+    cd '$(SOURCE_DIR)' && ./bootstrap
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS)
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
+
+    # install test
+    cp -f '$(BUILD_DIR)/hidtest/hidtest.exe' '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe'
 endef
