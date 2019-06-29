@@ -324,7 +324,7 @@
     "pe-parse": {"version": "64989f6", "website": "https://github.com/trailofbits/pe-parse", "description": "Principled, lightweight C/C++ PE parser"},
     "pe-util": {"version": "04f9475", "website": "https://github.com/gsauthof/pe-util", "description": "List shared object dependencies of a portable executable (PE)"},
     "pfstools": {"version": "2.0.4", "website": "https://pfstools.sourceforge.io/", "description": ""},
-    "physfs": {"version": "3.0.1", "website": "https://icculus.org/physfs/", "description": ""},
+    "physfs": {"version": "3.0.2", "website": "https://icculus.org/physfs/", "description": ""},
     "picomodel": {"version": "1142ad8", "website": "https://code.google.com/p/picomodel/", "description": ""},
     "pire": {"version": "0.0.5", "website": "https://github.com/yandex/pire", "description": "PIRE"},
     "pixman": {"version": "0.33.6", "website": "https://cairographics.org/", "description": ""},
