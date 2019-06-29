@@ -13,7 +13,8 @@ define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
         $(MXE_CONFIGURE_OPTS) \
         --enable-docs=no \
-        --enable-apps=no
+        --enable-apps=no \
+        LIBS="`$(TARGET)-pkg-config --libs-only-l dlfcn`"
 
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1 $(MXE_DISABLE_CRUFT) LIBS=-lgcrypt
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install VERBOSE=1 $(MXE_DISABLE_CRUFT)
@@ -22,5 +23,5 @@ define $(PKG)_BUILD
     '$(TARGET)-gcc' \
         -W -Wall -ansi -pedantic \
         '$(SOURCE_DIR)/examples/decrypt1.c' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
-        `'$(TARGET)-pkg-config' xmlsec1-openssl --cflags --libs`
+        `'$(TARGET)-pkg-config' xmlsec1-openssl dlfcn --cflags --libs`
 endef
