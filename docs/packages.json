@@ -123,6 +123,7 @@
     "hdf-eos5": {"version": "1.15", "website": "https://hdfeos.org/software/library.php", "description": "HDF-EOS5"},
     "hdf4": {"version": "4.2.10", "website": "https://www.hdfgroup.org/hdf4/", "description": "HDF4"},
     "hdf5": {"version": "1.8.12", "website": "https://www.hdfgroup.org/hdf5/", "description": "HDF5"},
+    "hidapi": {"version": "a6a622f", "website": "https://github.com/signal11/hidapi/", "description": "HIDAPI"},
     "hunspell": {"version": "1.7.0", "website": "https://hunspell.github.io/", "description": "Hunspell"},
     "hyperscan": {"version": "4.3.2", "website": "https://01.org/hyperscan", "description": "Hyperscan"},
     "icu4c": {"version": "56.1", "website": "https://ssl.icu-project.org/", "description": "ICU4C"},
