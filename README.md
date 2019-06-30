@@ -5,6 +5,8 @@
 [license-page]: LICENSE.md
 [license-badge]: https://img.shields.io/badge/License-MIT-brightgreen.svg
 
+[![Async Chat (Trial))](https://img.shields.io/badge/zulip-join_chat-brightgreen.svg)](https://mxe.zulipchat.com/)
+
 MXE (M cross environment) is a GNU Makefile that compiles a cross
 compiler and cross compiles many free libraries such as SDL and
 Qt. Thus, it provides a nice cross compiling environment for
