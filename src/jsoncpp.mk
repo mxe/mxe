@@ -4,8 +4,8 @@ PKG             := jsoncpp
 $(PKG)_WEBSITE  := https://github.com/open-source-parsers/jsoncpp
 $(PKG)_DESCR    := A C++ library for interacting with JSON
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.8.4
-$(PKG)_CHECKSUM := c49deac9e0933bcb7044f08516861a2d560988540b23de2ac1ad443b219afdb6
+$(PKG)_VERSION  := 1.9.0
+$(PKG)_CHECKSUM := bdd3ba9ed1f110b3eb57474d9094e90ab239b93b4803b4f9b1722c281e85a4ac
 $(PKG)_GH_CONF  := open-source-parsers/jsoncpp/tags,,,svn
 $(PKG)_DEPS     := cc
 
