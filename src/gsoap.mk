@@ -4,8 +4,8 @@ PKG             := gsoap
 $(PKG)_WEBSITE  := https://www.genivia.com/dev.html
 $(PKG)_DESCR    := gSOAP
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.8.84
-$(PKG)_CHECKSUM := 4e9d13a6fb641ab076de94590452fb2e8339f7a6a58be8f0dc640b274495ed87
+$(PKG)_VERSION  := 2.8.87
+$(PKG)_CHECKSUM := 0d117633cb973dbd46a0bdcdcba74c67485aa9bc62b065e0ca621fdef9425dda
 $(PKG)_SUBDIR   := gsoap-$(call SHORT_PKG_VERSION,$(PKG))
 $(PKG)_FILE     := gsoap_$($(PKG)_VERSION).zip
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/gsoap2/gsoap-$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
@@ -52,7 +52,7 @@ define $(PKG)_BUILD
         --prefix='$(PREFIX)/$(TARGET)' \
         --host='$(TARGET)' \
         --build="`config.guess`" \
-        CPPFLAGS='-DWITH_NTLM -DSOAP_SSLv3=0x40'
+        CPPFLAGS='-DWITH_NTLM -D_WIN32_WINNT=0x0601 -DWINVER=0x0601'
 
     # Building for mingw requires native soapcpp2
     ln -sf '$(PREFIX)/bin/$(TARGET)-soapcpp2' '$(1)/gsoap/src/soapcpp2'
