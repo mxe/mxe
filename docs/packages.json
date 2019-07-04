@@ -97,7 +97,7 @@
     "gpgme": {"version": "1.12.0", "website": "https://www.gnupg.org/related_software/gpgme/", "description": "gpgme"},
     "graphicsmagick": {"version": "1.3.21", "website": "http://www.graphicsmagick.org/", "description": "GraphicsMagick"},
     "gsl": {"version": "2.5", "website": "https://www.gnu.org/software/gsl/", "description": "GSL"},
-    "gsoap": {"version": "2.8.84", "website": "https://www.genivia.com/dev.html", "description": "gSOAP"},
+    "gsoap": {"version": "2.8.87", "website": "https://www.genivia.com/dev.html", "description": "gSOAP"},
     "gst-libav": {"version": "1.16.0", "website": "https://gstreamer.freedesktop.org/modules/gst-libav.html", "description": ""},
     "gst-plugins-bad": {"version": "1.16.0", "website": "https://gstreamer.freedesktop.org/modules/gst-plugins-bad.html", "description": ""},
     "gst-plugins-base": {"version": "1.16.0", "website": "https://gstreamer.freedesktop.org/modules/gst-plugins-base.html", "description": ""},
