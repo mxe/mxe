@@ -480,7 +480,7 @@
     "yasm": {"version": "1.3.0", "website": "https://yasm.tortall.net/", "description": "Yasm"},
     "zip": {"version": "3.0", "website": "https://infozip.sourceforge.io/Zip.html", "description": "Info-ZIP"},
     "zlib": {"version": "1.2.11", "website": "https://zlib.net/", "description": ""},
-    "zstd": {"version": "1.3.8", "website": "https://github.com/facebook/zstd", "description": "Zstandard is a fast lossless compression algorithm"},
+    "zstd": {"version": "1.4.0", "website": "https://github.com/facebook/zstd", "description": "Zstandard is a fast lossless compression algorithm"},
     "zziplib": {"version": "0.13.69", "website": "https://github.com/gdraheim/zziplib", "description": "ZZIPlib"},
     "": null
 }
