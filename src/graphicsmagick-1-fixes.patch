@@ -1,0 +1,44 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Volker Diels-Grabsch <v@njh.eu>
+Date: Sat, 11 Dec 2010 22:50:57 +0100
+Subject: [PATCH 1/2] fix .pc file for xml2 dependency
+
+This patch has been taken from:
+https://sourceforge.net/p/graphicsmagick/bugs/154/
+
+diff --git a/magick/GraphicsMagick.pc.in b/magick/GraphicsMagick.pc.in
+index 1111111..2222222 100644
+--- a/magick/GraphicsMagick.pc.in
++++ b/magick/GraphicsMagick.pc.in
+@@ -7,5 +7,7 @@ includedir=@includedir@/GraphicsMagick
+ Name: GraphicsMagick
+ Version: @PACKAGE_VERSION@
+ Description: GraphicsMagick image processing library
++Requires.private: libxml-2.0
+ Libs: -L${libdir} -lGraphicsMagick
++Libs.private: @MAGICK_API_LDFLAGS@ @MAGICK_API_LIBS@
+ Cflags: -I${includedir} @MAGICK_API_PC_CPPFLAGS@
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sun, 10 Feb 2013 15:24:58 +1100
+Subject: [PATCH 2/2] relax autoconf version requirement
+
+
+diff --git a/configure.ac b/configure.ac
+index 1111111..2222222 100755
+--- a/configure.ac
++++ b/configure.ac
+@@ -11,7 +11,7 @@
+ # Written by Bob Friesenhahn <bfriesen@GraphicsMagick.org>
+ #
+ 
+-AC_PREREQ(2.69)
++AC_PREREQ(2.67)
+ AC_INIT(magick/magick.h)
+ 
+ # Specify directory where m4 macros may be found.
