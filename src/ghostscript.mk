@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := fc0f1fbacd3610c67a9f080487a0e021f14390c38a4b4df9723e2bdf2b90b
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs$($(PKG)_NODOTVER)/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc dbus fontconfig freetype libiconv libidn libpaper libpng openjpeg tiff zlib
+$(PKG)_DEPS     := cc dbus fontconfig freetype lcms libiconv libidn libpaper libpng openjpeg tiff zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://api.github.com/repos/ArtifexSoftware/ghostpdl-downloads/releases' | \
@@ -19,9 +19,9 @@ endef
 
 define $(PKG)_BUILD
     cp -f `automake --print-libdir`/{config.guess,config.sub,install-sh} '$(SOURCE_DIR)'
-    cd '$(SOURCE_DIR)' && rm -rf freetype jpeg libpng openjpeg tiff
+    cd '$(SOURCE_DIR)' && rm -rf freetype jpeg lcms2mt libpng openjpeg tiff
     cd '$(SOURCE_DIR)' && autoreconf -f -i
-    cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         CPPFLAGS='$(CPPFLAGS) -DHAVE_SYS_TIMES_H=0' \
         $(MXE_CONFIGURE_OPTS) \
         --with-libiconv=gnu \
@@ -46,7 +46,7 @@ define $(PKG)_BUILD
      echo 'Description: Ghostscript library'; \
      echo 'Cflags: -I"$(PREFIX)/$(TARGET)/include/ghostscript"'; \
      echo 'Libs: -L"$(PREFIX)/$(TARGET)/lib" -lgs'; \
-     echo 'Requires: fontconfig freetype2 libidn libtiff-4 libpng libopenjp2 libjpeg zlib'; \
+     echo 'Requires: fontconfig freetype2 lcms2 libidn libtiff-4 libpng libopenjp2 libjpeg zlib'; \
      echo '# https://github.com/mxe/mxe/issues/1446'; \
      echo 'Libs.private: -lm -liconv -lpaper -lwinspool';) \
      > '$(PREFIX)/$(TARGET)/lib/pkgconfig/ghostscript.pc'

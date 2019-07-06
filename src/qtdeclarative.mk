@@ -12,6 +12,8 @@ $(PKG)_URL       = $(subst qtbase,qtdeclarative,$(qtbase_URL))
 $(PKG)_DEPS     := cc qtbase qtimageformats qtsvg qtxmlpatterns
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 
+$(PKG)_DEPS_$(BUILD) := qtbase qtsvg qtxmlpatterns
+
 define $(PKG)_UPDATE
     echo $(qtbase_VERSION)
 endef
