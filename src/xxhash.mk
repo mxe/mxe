@@ -4,8 +4,8 @@ PKG             := xxhash
 $(PKG)_WEBSITE  := https://cyan4973.github.io/xxHash/
 $(PKG)_DESCR    := xxHash
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.6.5
-$(PKG)_CHECKSUM := 19030315f4fc1b4b2cdb9d7a317069a109f90e39d1fe4c9159b7aaa39030eb95
+$(PKG)_VERSION  := 0.7.0
+$(PKG)_CHECKSUM := b34792646d5e19964bb7bba24f06cb13aecaac623ab91a54da08aa19d3686d7e
 $(PKG)_GH_CONF  := Cyan4973/xxHash/tags,v
 $(PKG)_DEPS     := cc
 
