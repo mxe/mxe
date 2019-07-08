@@ -31,7 +31,6 @@ define $(PKG)_BUILD
         --with-libregex-libs="-lgnurx" \
         --without-p11-kit \
         --disable-silent-rules \
-        CPPFLAGS='-DWINVER=0x0501' \
         LIBS='-lws2_32' \
         ac_cv_prog_AR='$(TARGET)-ar'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
