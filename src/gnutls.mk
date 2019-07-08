@@ -30,8 +30,7 @@ define $(PKG)_BUILD
         --with-included-libtasn1 \
         --with-libregex-libs="-lgnurx" \
         --without-p11-kit \
-        --disable-silent-rules \
-        LIBS='-lws2_32' \
+        --disable-silent-rules
         ac_cv_prog_AR='$(TARGET)-ar'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 
