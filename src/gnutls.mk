@@ -9,7 +9,7 @@ $(PKG)_SUBDIR   := gnutls-$($(PKG)_VERSION)
 $(PKG)_FILE     := gnutls-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://gnupg.org/ftp/gcrypt/gnutls/v3.6/$($(PKG)_FILE)
 $(PKG)_URL_2    := https://www.mirrorservice.org/sites/ftp.gnupg.org/gcrypt/gnutls/v3.5/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc gettext gmp libgnurx libidn2 libunistring nettle zlib
+$(PKG)_DEPS     := cc gettext gmp libgnurx libidn2 libtasn1 libunistring nettle zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- https://gnupg.org/ftp/gcrypt/gnutls/v3.6/ | \
@@ -27,7 +27,6 @@ define $(PKG)_BUILD
         --disable-doc \
         --disable-tests \
         --enable-local-libopts \
-        --with-included-libtasn1 \
         --with-libregex-libs="-lgnurx" \
         --without-p11-kit \
         --disable-silent-rules
