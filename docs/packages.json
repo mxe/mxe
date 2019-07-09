@@ -242,6 +242,7 @@
     "libssh": {"version": "0.7.5", "website": "https://www.libssh.org", "description": "SSHv2 and SSHv1 protocol on client and server side"},
     "libssh2": {"version": "1.9.0", "website": "https://libssh2.org/", "description": ""},
     "libsvm": {"version": "3.22", "website": "https://www.csie.ntu.edu.tw/~cjlin/libsvm", "description": ""},
+    "libtasn1": {"version": "4.13", "website": "https://www.gnu.org/software/libtasn1/", "description": "GnuTLS"},
     "libtool": {"version": "2.4.4", "website": "https://www.gnu.org/software/libtool/", "description": "GNU Libtool"},
     "libtorrent-rasterbar": {"version": "1.1.6", "website": "https://www.libtorrent.org/", "description": ""},
     "libunistring": {"version": "0.9.10", "website": "https://www.gnu.org/software/libunistring/", "description": ""},
