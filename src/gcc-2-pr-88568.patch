@@ -1,0 +1,42 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+This patch was taken from: https://github.com/msys2/MINGW-packages/issues/5006
+
+
+diff --git a/gcc/attribs.c b/gcc/attribs.c
+index 1111111..2222222 100644
+--- a/gcc/attribs.c
++++ b/gcc/attribs.c
+@@ -1685,8 +1685,11 @@ handle_dll_attribute (tree * pnode, tree name, tree args, int flags,
+ 	     a function global scope, unless declared static.  */
+ 	  if (current_function_decl != NULL_TREE && !TREE_STATIC (node))
+ 	    TREE_PUBLIC (node) = 1;
+-	  /* Clear TREE_STATIC because DECL_EXTERNAL is set.  */
+-	  TREE_STATIC (node) = 0;
++	  /* Clear TREE_STATIC because DECL_EXTERNAL is set, unless
++	     it is a C++ static data member.  */
++	  if (DECL_CONTEXT (node) == NULL_TREE
++	      || !RECORD_OR_UNION_TYPE_P (DECL_CONTEXT (node)))
++	    TREE_STATIC (node) = 0;
+ 	}
+ 
+       if (*no_add_attrs == false)
+diff --git a/gcc/testsuite/g++.dg/other/pr88568.C b/gcc/testsuite/g++.dg/other/pr88568.C
+new file mode 100644
+index 00000000..1111111
+--- /dev/null
++++ b/gcc/testsuite/g++.dg/other/pr88568.C
+@@ -0,0 +1,13 @@
++// PR c/88568
++// { dg-do compile }
++// { dg-require-dll "" }
++
++struct S {
++  __attribute__((dllimport)) static const char foo[];
++};
++
++int
++foo (int x)
++{
++  return S::foo[x];
++}
