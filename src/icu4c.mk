@@ -4,20 +4,20 @@ PKG             := icu4c
 $(PKG)_WEBSITE  := https://ssl.icu-project.org/
 $(PKG)_DESCR    := ICU4C
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 56.1
+$(PKG)_VERSION  := 64.2
 $(PKG)_MAJOR    := $(word 1,$(subst ., ,$($(PKG)_VERSION)))
-$(PKG)_CHECKSUM := 3a64e9105c734dcf631c0b3ed60404531bce6c0f5a64bfe1a6402a4cc2314816
+$(PKG)_CHECKSUM := 627d5d8478e6d96fc8c90fed4851239079a561a6a8b9e48b0892f24e82d31d6c
 $(PKG)_SUBDIR   := icu
 $(PKG)_FILE     := $(PKG)-$(subst .,_,$($(PKG)_VERSION))-src.tgz
 $(PKG)_URL      := https://ssl.icu-project.org/files/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://bugs.icu-project.org/trac/browser/icu/tags' | \
-    $(SED) -n 's,.*release-\([0-9-]*\)<.*,\1,p' | \
-    tr '-' '.' | \
-    $(SORT) -V | \
-    tail -1
+	$(WGET) --user-agent='Wget/1.19.5' -q -O- 'https://ssl.icu-project.org/files/icu4c/' | \
+	grep -o 'href="[0-9.]*/' | \
+	grep -o '[0-9.]*' | \
+	$(SORT) --version-sort | \
+	tail -1
 endef
 
 define $(PKG)_BUILD_COMMON
@@ -30,11 +30,13 @@ define $(PKG)_BUILD_COMMON
         $(MXE_CONFIGURE_OPTS) \
         --with-cross-build='$(1).native' \
         CFLAGS=-DU_USING_ICU_NAMESPACE=0 \
-        CXXFLAGS='--std=gnu++0x' \
+        CXXFLAGS='$(CXXFLAGS) -std=c++11' \
+        LIBS="-lmsvcr100" \
         SHELL=bash
-
-    $(MAKE) -C '$(1).cross' -j '$(JOBS)' install
-    ln -sf '$(PREFIX)/$(TARGET)/bin/icu-config' '$(PREFIX)/bin/$(TARGET)-icu-config'
+		LIBS="-lmsvcr100" $(MAKE) -C '$(1).cross' -j '$(JOBS)' install
+    	ln -sf '$(PREFIX)/$(TARGET)/bin/icu-config' '$(PREFIX)/bin/$(TARGET)-icu-config'
+    	rm -fv '$(PREFIX)/$(TARGET)/lib/icudt.dll' && rm -fv '$(PREFIX)/$(TARGET)/lib/icudt.dll.a'
+    	rm -fv '$(PREFIX)/$(TARGET)/lib/icudt$($(PKG)_MAJOR).dll'
 endef
 
 define $(PKG)_BUILD_SHARED
