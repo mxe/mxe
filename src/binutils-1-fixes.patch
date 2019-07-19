@@ -3,13 +3,11 @@ This file is part of MXE. See LICENSE.md for licensing information.
 Contains ad hoc patches for cross building.
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Stephen Kitt <skitt@debian.org>
-Date: Sat, 15 Jul 2017 00:09:40 +1000
+From: Jonas Kvinge <jonas@jkvinge.net>
+Date: Sun, 31 Mar 2019 03:26:17 +0200
 Subject: [PATCH 1/1] Allow the PE timestamp to be specified with
  SOURCE_DATE_EPOCH
 
-Taken from:
-https://sources.debian.net/patches/binutils-mingw-w64/7.4/specify-timestamp.patch/
 
 diff --git a/bfd/peXXigen.c b/bfd/peXXigen.c
 index 1111111..2222222 100644
@@ -25,13 +23,16 @@ index 1111111..2222222 100644
  /* NOTE: it's strange to be including an architecture specific header
     in what's supposed to be general (to PE/PEI) code.  However, that's
     where the definitions are, and they don't vary per architecture
-@@ -878,10 +881,38 @@ _bfd_XXi_only_swap_filehdr_out (bfd * abfd, void * in, void * out)
-   H_PUT_16 (abfd, filehdr_in->f_nscns, filehdr_out->f_nscns);
+@@ -879,10 +882,41 @@ _bfd_XXi_only_swap_filehdr_out (bfd * abfd, void * in, void * out)
  
-   /* Only use a real timestamp if the option was chosen.  */
+   /* Use a real timestamp by default, unless the no-insert-timestamp
+      option was chosen.  */
 -  if ((pe_data (abfd)->insert_timestamp))
 -    H_PUT_32 (abfd, time (0), filehdr_out->f_timdat);
 -  else
++  //if ((pe_data (abfd)->insert_timestamp))
++    //H_PUT_32 (abfd, time (0), filehdr_out->f_timdat);
++
 +  if (pe_data (abfd)->insert_timestamp) {
 +    time_t now;
 +    char *source_date_epoch;
@@ -71,11 +72,12 @@ diff --git a/ld/emultempl/pe.em b/ld/emultempl/pe.em
 index 1111111..2222222 100644
 --- a/ld/emultempl/pe.em
 +++ b/ld/emultempl/pe.em
-@@ -305,7 +305,7 @@ gld${EMULATION_NAME}_add_options
+@@ -303,7 +303,8 @@ gld${EMULATION_NAME}_add_options
       OPTION_USE_NUL_PREFIXED_IMPORT_TABLES},
      {"no-leading-underscore", no_argument, NULL, OPTION_NO_LEADING_UNDERSCORE},
      {"leading-underscore", no_argument, NULL, OPTION_LEADING_UNDERSCORE},
 -    {"insert-timestamp", no_argument, NULL, OPTION_INSERT_TIMESTAMP},
++    //{"insert-timestamp", no_argument, NULL, OPTION_INSERT_TIMESTAMP},
 +    {"insert-timestamp", optional_argument, NULL, OPTION_INSERT_TIMESTAMP},
      {"no-insert-timestamp", no_argument, NULL, OPTION_NO_INSERT_TIMESTAMP},
  #ifdef DLL_SUPPORT
@@ -84,11 +86,12 @@ diff --git a/ld/emultempl/pep.em b/ld/emultempl/pep.em
 index 1111111..2222222 100644
 --- a/ld/emultempl/pep.em
 +++ b/ld/emultempl/pep.em
-@@ -321,7 +321,7 @@ gld${EMULATION_NAME}_add_options
+@@ -321,7 +321,8 @@ gld${EMULATION_NAME}_add_options
      {"no-bind", no_argument, NULL, OPTION_NO_BIND},
      {"wdmdriver", no_argument, NULL, OPTION_WDM_DRIVER},
      {"tsaware", no_argument, NULL, OPTION_TERMINAL_SERVER_AWARE},
 -    {"insert-timestamp", no_argument, NULL, OPTION_INSERT_TIMESTAMP},
++    //{"insert-timestamp", no_argument, NULL, OPTION_INSERT_TIMESTAMP},
 +    {"insert-timestamp", optional_argument, NULL, OPTION_INSERT_TIMESTAMP},
      {"no-insert-timestamp", no_argument, NULL, OPTION_NO_INSERT_TIMESTAMP},
      {"build-id", optional_argument, NULL, OPTION_BUILD_ID},
@@ -97,21 +100,23 @@ diff --git a/ld/pe-dll.c b/ld/pe-dll.c
 index 1111111..2222222 100644
 --- a/ld/pe-dll.c
 +++ b/ld/pe-dll.c
-@@ -26,6 +26,8 @@
- #include "filenames.h"
+@@ -27,6 +27,8 @@
  #include "safe-ctype.h"
  
+ #include <time.h>
 +#include <errno.h>
 +#include <limits.h>
- #include <time.h>
  
  #include "ld.h"
-@@ -1192,8 +1194,36 @@ fill_edata (bfd *abfd, struct bfd_link_info *info ATTRIBUTE_UNUSED)
+ #include "ldexp.h"
+@@ -1202,8 +1204,38 @@ fill_edata (bfd *abfd, struct bfd_link_info *info ATTRIBUTE_UNUSED)
  
    memset (edata_d, 0, edata_sz);
  
 -  if (pe_data (abfd)->insert_timestamp)
 -    H_PUT_32 (abfd, time (0), edata_d + 4);
++  //if (pe_data (abfd)->insert_timestamp)
++    //H_PUT_32 (abfd, time (0), edata_d + 4);
 +  if (pe_data (abfd)->insert_timestamp) {
 +    time_t now;
 +    char *source_date_epoch;
