@@ -1,0 +1,24 @@
+diff -ruN glib-2.56.4.orig/gio/gdbusauth.c glib-2.56.4/gio/gdbusauth.c
+--- glib-2.56.4.orig/gio/gdbusauth.c	2018-12-18 16:03:26.000000000 +0100
++++ glib-2.56.4/gio/gdbusauth.c	2019-07-14 02:53:09.029587772 +0200
+@@ -1299,7 +1299,7 @@
+                                                     &line_length,
+                                                     cancellable,
+                                                     error);
+-          debug_print ("SERVER: WaitingForBegin, read '%s'", line);
++          //debug_print ("SERVER: WaitingForBegin, read '%s'", line);
+           if (line == NULL)
+             goto out;
+           if (g_strcmp0 (line, "BEGIN") == 0)
+diff -ruN glib-2.56.4.orig/gio/gdbusmessage.c glib-2.56.4/gio/gdbusmessage.c
+--- glib-2.56.4.orig/gio/gdbusmessage.c	2018-12-18 16:03:26.000000000 +0100
++++ glib-2.56.4/gio/gdbusmessage.c	2019-07-14 02:56:57.600242154 +0200
+@@ -2727,7 +2727,7 @@
+   if (message->body != NULL)
+     {
+       gchar *tupled_signature_str;
+-      tupled_signature_str = g_strdup_printf ("(%s)", signature_str);
++      tupled_signature_str = g_strdup_printf ("(%s)", signature_str == NULL ? "" : signature_str);
+       if (signature == NULL)
+         {
+           g_set_error (error,

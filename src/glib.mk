@@ -4,8 +4,8 @@ PKG             := glib
 $(PKG)_WEBSITE  := https://gtk.org/
 $(PKG)_DESCR    := GLib
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.50.2
-$(PKG)_CHECKSUM := be68737c1f268c05493e503b3b654d2b7f43d7d0b8c5556f7e4651b870acfbf5
+$(PKG)_VERSION  := 2.56.4
+$(PKG)_CHECKSUM := 27f703d125efb07f8a743666b580df0b4095c59fc8750e8890132c91d437504c
 $(PKG)_SUBDIR   := glib-$($(PKG)_VERSION)
 $(PKG)_FILE     := glib-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.gnome.org/sources/glib/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
@@ -15,11 +15,16 @@ $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 $(PKG)_DEPS_$(BUILD) := autotools gettext libffi libiconv zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://gitlab.gnome.org/GNOME/glib/tags' | \
-    $(SED) -n "s,.*<a [^>]\+>v\?\([0-9]\+\.[0-9.]\+\)<.*,\1,p" | \
-    $(SORT) -Vr | \
-    head -1
+    echo 'Updates for package $(PKG) is disabled.' >&2;
+    echo $($(PKG)_VERSION)
 endef
+
+#define $(PKG)_UPDATE
+#    $(call MXE_GET_GH_TAGS,GNOME/glib) | \
+#    $(SED) -n 's,^\([0-9]*\.[0-9]*[02468]\..*\),\1,p' | \
+#    $(SORT) -Vr | \
+#    head -1
+#endef
 
 define $(PKG)_BUILD_DARWIN
     # native build for glib-tools
