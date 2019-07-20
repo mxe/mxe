@@ -5,14 +5,14 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
 Date: Sat, 1 Apr 2017 15:17:43 +0200
-Subject: [PATCH 1/3] Wt fixes
+Subject: [PATCH 1/4] Wt fixes
 
 
 diff --git a/cmake/WtFindBoost-vintage.txt b/cmake/WtFindBoost-vintage.txt
 index 1111111..2222222 100644
 --- a/cmake/WtFindBoost-vintage.txt
 +++ b/cmake/WtFindBoost-vintage.txt
-@@ -70,6 +70,7 @@ ELSE(MSVC)
+@@ -58,6 +58,7 @@ ELSE(MSVC)
        boost_thread-${BOOST_COMPILER}-mt-${BOOST_FLAGS}-${BOOST_VERSION}
        boost_thread-${BOOST_COMPILER}-mt-${BOOST_VERSION}
        boost_thread-${BOOST_COMPILER}-mt
@@ -86,27 +86,34 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Wed, 15 Aug 2018 13:28:31 +1000
-Subject: [PATCH 2/3] fix w32 build posix threads enabled
+Subject: [PATCH 2/4] fix w32 build posix threads enabled
 
 
 diff --git a/src/http/Reply.C b/src/http/Reply.C
 index 1111111..2222222 100644
 --- a/src/http/Reply.C
 +++ b/src/http/Reply.C
-@@ -23,7 +23,7 @@
- #include <string>
- #include <boost/lexical_cast.hpp>
+@@ -24,6 +24,7 @@
  
--#ifdef WT_WIN32
-+#if defined(WT_WIN32) && !defined(_POSIX_THREAD_SAFE_FUNCTIONS)
+ #ifdef WT_WIN32
+ #ifndef __MINGW32__
++#ifndef _POSIX_THREAD_SAFE_FUNCTIONS
  // gmtime_r can be defined by mingw
  #ifndef gmtime_r
- static struct tm* gmtime_r(const time_t* t, struct tm* r)
+ namespace {
+@@ -42,6 +43,7 @@ struct tm* gmtime_r(const time_t* t, struct tm* r)
+ #endif // gmtime_r
+ #endif
+ #endif
++#endif
+ 
+ namespace Wt {
+   LOGGER("wthttp");
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 17 Sep 2018 23:31:42 +0200
-Subject: [PATCH 3/3] fix missing gmtime_r definition
+Subject: [PATCH 3/4] fix missing gmtime_r definition
 
 
 diff --git a/src/http/Reply.C b/src/http/Reply.C
@@ -121,3 +128,40 @@ index 1111111..2222222 100644
  #include "Configuration.h"
  #include "Connection.h"
  #include "Reply.h"
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Sat, 6 Jul 2019 17:25:06 +0200
+Subject: [PATCH 4/4] fix build on case senstive filesystem
+
+
+diff --git a/src/Wt/Dbo/backend/MySQL.C b/src/Wt/Dbo/backend/MySQL.C
+index 1111111..2222222 100644
+--- a/src/Wt/Dbo/backend/MySQL.C
++++ b/src/Wt/Dbo/backend/MySQL.C
+@@ -9,8 +9,8 @@
+ 
+ #ifdef WT_WIN32
+ #define NOMINMAX
+- // WinSock2.h warns that it should be included before windows.h
+-#include <WinSock2.h>
++ // winsock2.h warns that it should be included before windows.h
++#include <winsock2.h>
+ #endif // WT_WIN32
+ 
+ #include "Wt/Dbo/backend/MySQL.h"
+diff --git a/src/Wt/Dbo/backend/Postgres.C b/src/Wt/Dbo/backend/Postgres.C
+index 1111111..2222222 100644
+--- a/src/Wt/Dbo/backend/Postgres.C
++++ b/src/Wt/Dbo/backend/Postgres.C
+@@ -9,8 +9,8 @@
+ 
+ #ifdef WT_WIN32
+ #define NOMINMAX
+-// WinSock2.h warns that it should be included before windows.h
+-#include <WinSock2.h>
++// winsock2.h warns that it should be included before windows.h
++#include <winsock2.h>
+ #endif // WT_WIN32
+ 
+ #include "Wt/Dbo/backend/Postgres.h"

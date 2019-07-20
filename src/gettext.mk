@@ -3,10 +3,10 @@
 PKG             := gettext
 $(PKG)_WEBSITE  := https://www.gnu.org/software/gettext/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.19.8.1
-$(PKG)_CHECKSUM := ff942af0e438ced4a8b0ea4b0b6e0d6d657157c5e2364de57baa279c1c125c43
+$(PKG)_VERSION  := 0.20.1
+$(PKG)_CHECKSUM := 53f02fbbec9e798b0faaf7c73272f83608e835c6288dd58be6c9bb54624a3800
 $(PKG)_SUBDIR   := gettext-$($(PKG)_VERSION)
-$(PKG)_FILE     := gettext-$($(PKG)_VERSION).tar.gz
+$(PKG)_FILE     := gettext-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://ftp.gnu.org/gnu/gettext/$($(PKG)_FILE)
 $(PKG)_URL_2    := https://ftpmirror.gnu.org/gettext/$($(PKG)_FILE)
 # native gettext isn't technically required, but downstream
@@ -25,6 +25,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    cd '$(SOURCE_DIR)' && autoreconf -fi
     cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/gettext-runtime/configure' \
         $(MXE_CONFIGURE_OPTS) \
         --enable-threads=win32 \
@@ -36,6 +37,7 @@ define $(PKG)_BUILD
 endef
 
 define $(PKG)_BUILD_$(BUILD)
+    cd '$(SOURCE_DIR)' && autoreconf -fi
     # build and install the library
     cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
         $(MXE_CONFIGURE_OPTS)
