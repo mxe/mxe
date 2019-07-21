@@ -4,16 +4,15 @@ PKG             := libcdio
 $(PKG)_WEBSITE  := https://www.gnu.org/software/libcdio/
 $(PKG)_DESCR    := Libcdio
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.0.0
-$(PKG)_CHECKSUM := 1b481b5da009bea31db875805665974e2fc568e2b2afa516f4036733657cf958
+$(PKG)_VERSION  := 2.1.0
+$(PKG)_CHECKSUM := 8550e9589dbd594bfac93b81ecf129b1dc9d0d51e90f9696f1b2f9b2af32712b
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://ftp.gnu.org/gnu/libcdio/$(PKG)-$($(PKG)_VERSION).tar.gz
+$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
+$(PKG)_URL      := https://ftp.gnu.org/gnu/libcdio/$(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    echo 'TODO: Updates for package $(PKG) need to be written.' >&2;
-    echo $($(PKG)_VERSION)
+    $(call GET_LATEST_VERSION, https://ftp.gnu.org/gnu/libcdio)
 endef
 
 define $(PKG)_BUILD
