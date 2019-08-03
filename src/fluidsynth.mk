@@ -15,4 +15,11 @@ define $(PKG)_BUILD
 	-DCMAKE_BUILD_TYPE=Release
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install VERBOSE=1
+
+    # compile test
+    '$(TARGET)-gcc' \
+        -W -Wall -ansi -pedantic \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-fluidsynth.exe' \
+        `'$(TARGET)-pkg-config' --cflags --libs fluidsynth` \
+	`'$(TARGET)-pkg-config' --cflags --libs glib-2.0`
 endef
