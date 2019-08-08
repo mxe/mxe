@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 8a5330612245d3f442ed640b0df91028aa4798301bb6844eaf1cf9b463dfc
 $(PKG)_SUBDIR   := stimfit-$($(PKG)_VERSION)windows
 $(PKG)_FILE     := stimfit-$($(PKG)_VERSION)windows.tar.gz
 $(PKG)_URL      := https://github.com/neurodroid/$(PKG)/archive/v$($(PKG)_VERSION)windows.tar.gz
-$(PKG)_DEPS     := cc libbiosig wxwidgets hdf5 boost fftw levmar openblas
+$(PKG)_DEPS     := cc libbiosig wxwidgets hdf5 tinyxml fftw levmar openblas
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://github.com/neurodroid/stimfit/releases' | \
@@ -18,7 +18,11 @@ endef
 
 define $(PKG)_BUILD
 
-    cd '$(1)' && ./autogen.sh && CPPFLAGS="-std=gnu++11" \
+    #rm -rf '$(1)'
+    #rsync -avL  ~/src/stimfit/* '$(1)/'
+    #git clone ~/src/stimfit '$(1)'
+
+    cd '$(1)' && ./autogen.sh && CPPFLAGS="-std=gnu++17" \
 	./configure --disable-python --with-biosig2 --with-pslope \
 		--with-hdf5-prefix=$(PREFIX)/$(TARGET) \
 		--with-wx-config=$(PREFIX)/$(TARGET)/bin/wx-config \
