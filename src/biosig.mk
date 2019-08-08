@@ -4,17 +4,19 @@
 PKG             := biosig
 $(PKG)_WEBSITE  := http://biosig.sf.net/
 $(PKG)_DESCR    := Biosig
-$(PKG)_VERSION  := 1.9.4
-$(PKG)_CHECKSUM := f32339e14bf24faf37f2ddeaeeb1862a5b26aac6bb872a2c33b6684bca0ed02e
+$(PKG)_VERSION  := 1.9.5
+$(PKG)_CHECKSUM := 20e72a5a07d1bf8baa649efe437b4d3ed99944f0e4dfc1fbe23bfbe4d9749ed5
 $(PKG)_SUBDIR   := biosig4c++-$($(PKG)_VERSION)
 $(PKG)_FILE     := biosig4c++-$($(PKG)_VERSION).src.tar.gz
 $(PKG)_URL      := https://sourceforge.net/projects/biosig/files/BioSig%20for%20C_C%2B%2B/src/$($(PKG)_FILE)/download
-$(PKG)_DEPS     := cc libbiosig
+$(PKG)_DEPS     := cc libbiosig libb64
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://biosig.sourceforge.net/download.html' | \
-        $(SED) -n 's_.*>libbiosig, version \([0-9]\.[0-9]\.[0-9]\).*tar.gz_\1_ip' | \
-        head -1
+    $(WGET) -q -O- 'https://biosig.sourceforge.io/download.html' | \
+        $(GREP) biosig4c | \
+        $(SED) -n 's_.*>v\([0-9]\.[0-9]\.[0-9]\)<.*_\1_p' | \
+        $(SORT) -V | \
+        tail -1
 endef
 
 define $(PKG)_BUILD_PRE
