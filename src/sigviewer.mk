@@ -19,7 +19,7 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && CFLAGS=-fstack-protector CXXFLAGS=-fstack-protector && \
-        LIBS='-l$(PREFIX)/$(TARGET)/$($(PKG)_QT_DIR)/plugins/platforms/libqwindows.a' \
+        LIBS='-l$(PREFIX)/$(TARGET)/lib/libtinyxml.a -l$(PREFIX)/$(TARGET)/$($(PKG)_QT_DIR)/plugins/platforms/libqwindows.a' \
         $(PREFIX)/$(TARGET)/$($(PKG)_QT_DIR)/bin/qmake sigviewer.pro
 
     $(MAKE) -C '$(1)'

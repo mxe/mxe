@@ -11,7 +11,8 @@ index 39a9bb5..e063cd9 100644
  
  LIBS += \
 -    -L$$PWD/external/lib \
-     -lbiosig -lxdf
+-    -lbiosig -lxdf
++    -lbiosig -lxdf -ltinyxml
  
  RESOURCES = $$PWD/src/src.qrc
 
