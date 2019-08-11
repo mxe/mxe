@@ -13,8 +13,8 @@ define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && '$(TARGET)-cmake' '$(SOURCE_DIR)'
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1
 
-    echo "Requires: glib-2.0" >> '$(BUILD_DIR)/fluidsynth.pc'
-
+    echo 'Requires: glib-2.0' >> '$(BUILD_DIR)'/fluidsynth.pc
+    $(SED) -i -e 's/Libs: -L$${libdir} -lfluidsynth/Libs: -L$${libdir} -lfluidsynth -ldsound/g' '$(BUILD_DIR)/fluidsynth.pc'
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/include/fluidsynth'
     $(INSTALL) -v '$(BUILD_DIR)/include/fluidsynth.h'    '$(PREFIX)/$(TARGET)/include/'
     $(INSTALL) -v '$(BUILD_DIR)/include/fluidsynth/'*.h  '$(PREFIX)/$(TARGET)/include/fluidsynth/'
