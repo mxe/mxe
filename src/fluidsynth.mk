@@ -18,7 +18,7 @@ define $(PKG)_BUILD
     $(INSTALL) -v '$(BUILD_DIR)/include/fluidsynth/'*.h  '$(PREFIX)/$(TARGET)/include/fluidsynth/'
     $(INSTALL) -v '$(SOURCE_DIR)/include/fluidsynth/'*.h '$(PREFIX)/$(TARGET)/include/fluidsynth/'
     $(INSTALL) -v '$(BUILD_DIR)/fluidsynth.pc'           '$(PREFIX)/$(TARGET)/lib/pkgconfig/' 
-    $(INSTALL) -v '$(BUILD_DIR)/src/libfluidsynth.a' '$(PREFIX)/$(TARGET)/lib/'
+    $(INSTALL) -v '$(BUILD_DIR)/src/libfluidsynth.a'     '$(PREFIX)/$(TARGET)/lib/'
     $(if $(BUILD_SHARED),\
     $(INSTALL) -m755 -v '$(BUILD_DIR)/src/libfluidsynth.dll.a' '$(PREFIX)/$(TARGET)/bin/')
 
