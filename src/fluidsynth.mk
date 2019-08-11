@@ -10,16 +10,22 @@ $(PKG)_GH_CONF  := FluidSynth/fluidsynth/tags,v
 $(PKG)_DEPS     := cc glib
 
 define $(PKG)_BUILD
-    cd '$(BUILD_DIR)' && '$(TARGET)-cmake' '$(SOURCE_DIR)' \
-        -DBUILD_SHARED_LIBS=$(CMAKE_SHARED_BOOL) \
-	-DCMAKE_BUILD_TYPE=Release
+    cd '$(BUILD_DIR)' && '$(TARGET)-cmake' '$(SOURCE_DIR)'
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1
-    $(MAKE) -C '$(BUILD_DIR)' -j 1 install VERBOSE=1
+
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/include/fluidsynth'
+    $(INSTALL) -v '$(BUILD_DIR)/include/fluidsynth.h'    '$(PREFIX)/$(TARGET)/include/'
+    $(INSTALL) -v '$(BUILD_DIR)/include/fluidsynth/'*.h  '$(PREFIX)/$(TARGET)/include/fluidsynth/'
+    $(INSTALL) -v '$(SOURCE_DIR)/include/fluidsynth/'*.h '$(PREFIX)/$(TARGET)/include/fluidsynth/'
+    $(INSTALL) -v '$(BUILD_DIR)/fluidsynth.pc'           '$(PREFIX)/$(TARGET)/lib/pkgconfig/' 
+    $(INSTALL) -v '$(BUILD_DIR)/src/libfluidsynth.a' '$(PREFIX)/$(TARGET)/lib/'
+    $(if $(BUILD_SHARED),\
+    $(INSTALL) -m755 -v '$(BUILD_DIR)/src/libfluidsynth.dll.a' '$(PREFIX)/$(TARGET)/bin/')
 
     # compile test
     '$(TARGET)-gcc' \
         -W -Wall -ansi -pedantic \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-fluidsynth.exe' \
         `'$(TARGET)-pkg-config' --cflags --libs fluidsynth` \
-	`'$(TARGET)-pkg-config' --cflags --libs glib-2.0`
+        `'$(TARGET)-pkg-config' --cflags --libs glib-2.0`
 endef
