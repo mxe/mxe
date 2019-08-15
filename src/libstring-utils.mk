@@ -4,8 +4,8 @@ PKG             := libstring-utils
 $(PKG)_WEBSITE  := https://github.com/crocarneiro/libstring-utils
 $(PKG)_DESCR    := Library with some badass functions for strings in C.
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.0.1
-$(PKG)_CHECKSUM := 54d2cadafb36dce347a668ea18a20c7b2912f869d0842f0f954a5899c88d93e4
+$(PKG)_VERSION  := 1.0.3
+$(PKG)_CHECKSUM := f453e4fa6e3632dc739e71d5437c6bd2df1099812fa5e770041d0e5e7765f29e
 $(PKG)_GH_CONF  := crocarneiro/libstring-utils/releases/latest,v
 $(PKG)_DEPS     := cc
 
