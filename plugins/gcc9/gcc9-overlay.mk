@@ -17,8 +17,8 @@ $(PKG)_URL      := http://isl.gforge.inria.fr/$($(PKG)_FILE)
 $(PKG)_URL_2    := https://gcc.gnu.org/pub/gcc/infrastructure/$($(PKG)_FILE)
 
 PKG             := gcc
-$(PKG)_VERSION  := 9.1.0
-$(PKG)_CHECKSUM := 79a66834e96a6050d8fe78db2c3b32fb285b230b855d0a66288235bc04b327a0
+$(PKG)_VERSION  := 9.2.0
+$(PKG)_CHECKSUM := ea6ef08f121239da5695f76c9b33637a118dcf63e24164422231917fa61fb206
 $(PKG)_SUBDIR   := gcc-$($(PKG)_VERSION)
 $(PKG)_FILE     := gcc-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://ftp.gnu.org/gnu/gcc/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
