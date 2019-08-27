@@ -434,7 +434,7 @@
     "subversion": {"version": "1.9.7", "website": "https://subversion.apache.org/", "description": ""},
     "suitesparse": {"version": "4.5.6", "website": "http://faculty.cse.tamu.edu/davis/suitesparse.html", "description": "SuiteSparse"},
     "t4k_common": {"version": "0.1.1", "website": "https://tux4kids.alioth.debian.org/", "description": ""},
-    "taglib": {"version": "6455671", "website": "https://taglib.org/", "description": "TagLib"},
+    "taglib": {"version": "2918602", "website": "https://taglib.org/", "description": "TagLib"},
     "tcl": {"version": "8.6.9", "website": "https://tcl.tk/", "description": ""},
     "tclap": {"version": "1.2.1", "website": "https://tclap.sourceforge.io/", "description": ""},
     "teem": {"version": "1.11.0", "website": "https://teem.sourceforge.io/", "description": "Teem"},
