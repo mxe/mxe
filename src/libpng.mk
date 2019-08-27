@@ -23,7 +23,6 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
-        CFLAGS='-fno-asynchronous-unwind-tables' \
         $(MXE_CONFIGURE_OPTS)
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     ln -sf '$(PREFIX)/$(TARGET)/bin/libpng-config' '$(PREFIX)/bin/$(TARGET)-libpng-config'
