@@ -25,7 +25,7 @@ main(int argc, char *argv[])
     return 1;
   }
 
-  LZ4_decompress_fast(compressed, decompressed, data_len);
+  LZ4_decompress_safe(compressed, decompressed, data_len, sizeof(decompressed));
   if (strcmp(data, decompressed) != 0) {
     printf("Error: the compression was not lossless. Original='%s' Result='%s'\n", data, decompressed);
     return 3;

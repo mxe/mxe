@@ -37,10 +37,10 @@ index 1111111..2222222 100644
  
  install: all install-bin install-hdrs install-lib install-data
  install-bin:
-diff --git a/configure.in b/configure.in
+diff --git a/configure.ac b/configure.ac
 index 1111111..2222222 100644
---- a/configure.in
-+++ b/configure.in
+--- a/configure.ac
++++ b/configure.ac
 @@ -3962,10 +3962,10 @@ GEN_OBJECTS=`echo "$GEN_SOURCES" | sed 's,[[^ ]]*/\([[^ ]]*\)\.c,$(objects)/\1.l
  
  VERSION_OBJECTS=`echo $VERSION_SOURCES`
@@ -2264,14 +2264,14 @@ Date: Sat, 23 Dec 2017 03:38:56 +0200
 Subject: [PATCH 3/3] libsamplerate support for windows
 
 
-diff --git a/configure.in b/configure.in
+diff --git a/configure.ac b/configure.ac
 index 1111111..2222222 100644
---- a/configure.in
-+++ b/configure.in
-@@ -3453,6 +3453,7 @@ case "$host" in
-         CheckWINDOWSGLES
+--- a/configure.ac
++++ b/configure.ac
+@@ -3407,6 +3407,7 @@ case "$host" in
          CheckVulkan
          CheckDIRECTX
+         CheckHIDAPI
 +        CheckLibSampleRate
  
          # Set up the core platform files
