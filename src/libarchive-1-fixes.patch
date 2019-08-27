@@ -12,9 +12,9 @@ diff --git a/build/pkgconfig/libarchive.pc.in b/build/pkgconfig/libarchive.pc.in
 index 1111111..2222222 100644
 --- a/build/pkgconfig/libarchive.pc.in
 +++ b/build/pkgconfig/libarchive.pc.in
-@@ -8,4 +8,4 @@ Description: library that can create and read several streaming archive formats
- Version: @VERSION@
+@@ -9,4 +9,4 @@ Version: @VERSION@
  Cflags: -I${includedir}
+ Cflags.private: -DLIBARCHIVE_STATIC
  Libs: -L${libdir} -larchive
 -Libs.private: @LIBS@
 +Libs.private: @LIBS@ -liconv
