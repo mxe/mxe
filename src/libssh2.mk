@@ -22,8 +22,7 @@ define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
         --disable-examples-build \
-        --without-openssl \
-        --with-libgcrypt \
+        --with-crypto=libgcrypt \
         LIBS="`$(PREFIX)/$(TARGET)/bin/libgcrypt-config --libs`" \
         PKG_CONFIG='$(TARGET)-pkg-config'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install $(MXE_DISABLE_CRUFT)
