@@ -4,11 +4,11 @@ PKG             := hdf-eos2
 $(PKG)_WEBSITE  := https://hdfeos.org/software/library.php
 $(PKG)_DESCR    := HDF-EOS2
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 19v1.00
-$(PKG)_CHECKSUM := 3fffa081466e85d2b9436d984bc44fe97bbb33ad9d8b7055a322095dc4672e31
+$(PKG)_VERSION  := 20v1.00
+$(PKG)_CHECKSUM := cb0f900d2732ab01e51284d6c9e90d0e852d61bba9bce3b43af0430ab5414903
 $(PKG)_SUBDIR   := hdfeos
 $(PKG)_FILE     := HDF-EOS2.$($(PKG)_VERSION).tar.Z
-$(PKG)_URL      := ftp://edhs1.gsfc.nasa.gov/edhs/hdfeos/latest_release/$($(PKG)_FILE)
+$(PKG)_URL      := https://observer.gsfc.nasa.gov/ftp/edhs/hdfeos/latest_release/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc hdf4
 
 define $(PKG)_UPDATE
