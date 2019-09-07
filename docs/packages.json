@@ -30,7 +30,7 @@
     "check": {"version": "0.10.0", "website": "https://check.sourceforge.io/", "description": ""},
     "chipmunk": {"version": "7.0.2", "website": "https://chipmunk-physics.net/", "description": "Chipmunk Physics"},
     "chromaprint": {"version": "1.4.3", "website": "https://acoustid.org/chromaprint", "description": "Chromaprint"},
-    "cimg": {"version": "1.6.3", "website": "http://cimg.eu/", "description": "CImg Library"},
+    "cimg": {"version": "2.7.1", "website": "http://cimg.eu/", "description": "CImg Library"},
     "cloog": {"version": "0.18.4", "website": "https://www.bastoul.net/cloog/", "description": "CLooG Code Generator"},
     "cmake": {"version": "3.10.0", "website": "https://www.cmake.org/", "description": ""},
     "cmake-conf": {"version": "1", "website": "", "description": ""},
