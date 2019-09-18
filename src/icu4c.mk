@@ -21,19 +21,19 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD_COMMON
-    cd '$(1)/source' && autoreconf -fi
-    mkdir '$(1).native' && cd '$(1).native' && '$(1)/source/configure' \
-        CC=$(BUILD_CC) CXX=$(BUILD_CXX)
-    $(MAKE) -C '$(1).native' -j '$(JOBS)'
+    cd '$(PKG)/source' && autoreconf -fi
+    mkdir '$(PKG).native' && cd '$(PKG).native' && '$(PKG)/source/configure' \
+        CC=$(BUILD_CC) CXX=$(BUILD_CXX) 
+		$(MAKE) -C '$(PKG).native' -j '$(JOBS)'
 
-    mkdir '$(1).cross' && cd '$(1).cross' && '$(1)/source/configure' \
+    mkdir '$(PKG).cross' && cd '$(PKG).cross' && '$(PKG)/source/configure' \
         $(MXE_CONFIGURE_OPTS) \
-        --with-cross-build='$(1).native' \
+        --with-cross-build='$(PKG).native' \
         CFLAGS=-DU_USING_ICU_NAMESPACE=0 \
         CXXFLAGS='$(CXXFLAGS) -std=c++11' \
         LIBS="-lmsvcr100" \
         SHELL=bash
-		LIBS="-lmsvcr100" $(MAKE) -C '$(1).cross' -j '$(JOBS)' install
+		LIBS="-lmsvcr100" $(MAKE) -C '$(PKG).cross' -j '$(JOBS)' install
     	ln -sf '$(PREFIX)/$(TARGET)/bin/icu-config' '$(PREFIX)/bin/$(TARGET)-icu-config'
     	rm -fv '$(PREFIX)/$(TARGET)/lib/icudt.dll' && rm -fv '$(PREFIX)/$(TARGET)/lib/icudt.dll.a'
     	rm -fv '$(PREFIX)/$(TARGET)/lib/icudt$($(PKG)_MAJOR).dll'
@@ -41,8 +41,12 @@ endef
 
 define $(PKG)_BUILD_SHARED
     $($(PKG)_BUILD_COMMON)
+	rm -fv '$(PREFIX)/$(TARGET)/lib/icudt.dll' && rm -fv '$(PREFIX)/$(TARGET)/lib/icudt.dll.a'
+    LIBS="-lmsvcr100" $(MAKE) -C '$(PKG).cross/data' -j '$(JOBS)' install
     # icu4c installs its DLLs to lib/. Move them to bin/.
-    mv -fv $(PREFIX)/$(TARGET)/lib/icu*.dll '$(PREFIX)/$(TARGET)/bin/'
+	mv '$(PREFIX)/$(TARGET)/lib/icudt$($(PKG)_MAJOR).dll' '$(PREFIX)/$(TARGET)/lib/icudt$($(PKG)_MAJOR).dll' && \
+	cd '$(PREFIX)/$(TARGET)/lib' && ln -fs 'icudt$($(PKG)_MAJOR).dll' 'icudt.dll'
+   	mv -fv $(PREFIX)/$(TARGET)/lib/icu*.dll '$(PREFIX)/$(TARGET)/bin/'
     # add symlinks icu*<version>.dll.a to icu*.dll.a
     for lib in `ls '$(PREFIX)/$(TARGET)/lib/' | grep 'icu.*\.dll\.a' | cut -d '.' -f 1 | tr '\n' ' '`; \
     do \
