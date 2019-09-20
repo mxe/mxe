@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 4fc24506c968c5faf57614f5d0aebe0e9d0b90afa47a883e1a1ca94f15f4a
 $(PKG)_SUBDIR   := apr-$($(PKG)_VERSION)
 $(PKG)_FILE     := apr-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://archive.apache.org/dist/apr/$($(PKG)_FILE)
-$(PKG)_URL_2    := http://mirror.apache-kr.org/apr/$($(PKG)_FILE)
+$(PKG)_URL_2    := https://www.apache.org/dist/apr/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE

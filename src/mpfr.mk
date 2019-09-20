@@ -17,7 +17,7 @@ $(PKG)_DEPS_$(BUILD) := gmp
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://www.mpfr.org/mpfr-current/#download' | \
     grep 'mpfr-' | \
-    $(SED) -n 's,.*mpfr-\([0-9][^>]*\)\.tar.*,\1,p' | \
+    $(SED) -n 's,.*mpfr-\([0-9][^<]*\)/.*,\1,p' | \
     head -1
 endef
 

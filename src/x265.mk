@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := x265
-$(PKG)_WEBSITE  := http://x265.org
+$(PKG)_WEBSITE  := http://x265.org/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.5
 $(PKG)_CHECKSUM := 2e53259b504a7edb9b21b9800163b1ff4c90e60c74e23e7001d423c69c5d3d17

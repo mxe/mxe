@@ -17,7 +17,7 @@ diff --git a/src/libs/7zip/win/CPP/Windows/SecurityUtils.h b/src/libs/7zip/win/C
 index 715de250..bfb65a34 100644
 --- a/src/libs/7zip/win/CPP/Windows/SecurityUtils.h
 +++ b/src/libs/7zip/win/CPP/Windows/SecurityUtils.h
-@@ -3,7 +3,7 @@
+@@ -2,7 +2,7 @@
  #ifndef __WINDOWS_SECURITY_UTILS_H
  #define __WINDOWS_SECURITY_UTILS_H
  

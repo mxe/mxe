@@ -1,6 +1,6 @@
 This file is part of MXE. See LICENSE.md for licensing information.
 
-From 86164c585b85559746c0eb80a7354a01d311bf64 Mon Sep 17 00:00:00 2001
+From 2ff7d50d0f701915d810569d19e1413674aec79d Mon Sep 17 00:00:00 2001
 From: Ray Donnelly <mingw.android@gmail.com>
 Date: Wed, 26 Aug 2015 12:45:43 +0100
 Subject: [PATCH 1/4] cmake: Rearrange STATIC vs INTERFACE targets
@@ -12,10 +12,10 @@ Source: https://git.io/vzWJz
 See also: https://github.com/mxe/mxe/issues/1185
 
 diff --git a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
-index 705e0a3c93..1adac54d3b 100644
+index d4fd057682..600c8273f1 100644
 --- a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
 +++ b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
-@@ -291,6 +291,9 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
+@@ -323,6 +323,9 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
      list(APPEND _Qt5$${CMAKE_MODULE_NAME}_LIB_DEPENDENCIES \"$${CMAKE_INTERFACE_QT5_MODULE_DEPS}\")
  !!ENDIF
  
@@ -25,7 +25,7 @@ index 705e0a3c93..1adac54d3b 100644
  !!IF !isEmpty(CMAKE_STATIC_TYPE)
      if(NOT Qt5_EXCLUDE_STATIC_DEPENDENCIES)
  !!IF !isEmpty(CMAKE_DEBUG_TYPE)
-@@ -328,9 +331,6 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
+@@ -360,9 +363,6 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
  
      add_library(Qt5::$${CMAKE_MODULE_NAME} STATIC IMPORTED)
      set_property(TARGET Qt5::$${CMAKE_MODULE_NAME} PROPERTY IMPORTED_LINK_INTERFACE_LANGUAGES "CXX")
@@ -39,7 +39,7 @@ index 705e0a3c93..1adac54d3b 100644
 2.20.1
 
 
-From 2bdf75033a353d809d6faf2af33cf0af1d1282ff Mon Sep 17 00:00:00 2001
+From 7c3a397e8cc07ac4dad174dc6a0f4e02834b1f72 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Sat, 16 Jul 2016 20:31:07 +1000
 Subject: [PATCH 2/4] Fix pkgconfig file and library naming
@@ -67,10 +67,10 @@ Task-number: 30898
 Change-Id: If75336ec7d21a7ec0cb6d245fe87c64afcb5a644
 
 diff --git a/mkspecs/features/qt_module.prf b/mkspecs/features/qt_module.prf
-index 51b5bde67a..faba17aedd 100644
+index 46687f262e..4b2980a1a8 100644
 --- a/mkspecs/features/qt_module.prf
 +++ b/mkspecs/features/qt_module.prf
-@@ -263,6 +263,10 @@ load(qt_installs)
+@@ -268,6 +268,10 @@ load(qt_installs)
  
  load(qt_targets)
  
@@ -81,7 +81,7 @@ index 51b5bde67a..faba17aedd 100644
  # this builds on top of qt_common
  !internal_module:if(unix|mingw) {
      CONFIG += create_pc
-@@ -278,12 +282,12 @@ load(qt_targets)
+@@ -283,12 +287,12 @@ load(qt_targets)
          QMAKE_PKGCONFIG_INCDIR = $$[QT_INSTALL_HEADERS/raw]
          QMAKE_PKGCONFIG_CFLAGS = -D$$MODULE_DEFINE -I${includedir}/$$MODULE_INCNAME
      }
@@ -95,10 +95,10 @@ index 51b5bde67a..faba17aedd 100644
      isEmpty(QMAKE_PKGCONFIG_DESCRIPTION): \
 -        QMAKE_PKGCONFIG_DESCRIPTION = $$replace(TARGET, ^Qt, "Qt ") module
 +        QMAKE_PKGCONFIG_DESCRIPTION = $$replace(TARGET, ^Qt$$QT_MAJOR_VERSION, "Qt ") module
-     pclib_replace.match = $$lib_replace.match
-     !isEmpty(lib_replace.replace): \
-         pclib_replace.replace = $$QMAKE_PKGCONFIG_LIBDIR
-@@ -317,5 +321,3 @@ win32 {
+     !isEmpty(lib_replace0.match) {
+         pclib_replace0.match = $$lib_replace0.match
+         pclib_replace0.replace = $$QMAKE_PKGCONFIG_LIBDIR/
+@@ -334,5 +338,3 @@ win32 {
      # On other platforms, Qt's own compilation goes needs to compile the Qt 5.0 API
      DEFINES *= QT_DISABLE_DEPRECATED_BEFORE=0x050000
  }
@@ -108,7 +108,7 @@ index 51b5bde67a..faba17aedd 100644
 2.20.1
 
 
-From 04a80b8d9d5ec64efb61f440238113a82015e7df Mon Sep 17 00:00:00 2001
+From a4fe5af173b82d95c741df30d151576b2bc4e0b7 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 11 Jun 2017 00:27:41 +0200
 Subject: [PATCH 3/4] use pkg-config for harfbuzz
@@ -133,7 +133,7 @@ index 6280b4dfa2..e094ee12e6 100644
 2.20.1
 
 
-From ba796f23ed3145a856c6a05abee5d526c3b10d58 Mon Sep 17 00:00:00 2001
+From 033d4a71054d41f48d38027f091edc76526b8911 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 23 Nov 2017 11:28:47 +0200
 Subject: [PATCH 4/4] disable qt_random_cpu for i686-w64-mingw32
@@ -154,7 +154,7 @@ Based on https://codereview.qt-project.org/#/c/212360/
 Change-Id: Ia1c902e7b147bdda2b8d7904b40a3b968b8d0369
 
 diff --git a/src/corelib/global/qrandom.cpp b/src/corelib/global/qrandom.cpp
-index 90df8653a7..0d7002f2e8 100644
+index bf01b7ae2a..26bcaf0326 100644
 --- a/src/corelib/global/qrandom.cpp
 +++ b/src/corelib/global/qrandom.cpp
 @@ -90,7 +90,7 @@ DECLSPEC_IMPORT BOOLEAN WINAPI SystemFunction036(PVOID RandomBuffer, ULONG Rando

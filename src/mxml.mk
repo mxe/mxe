@@ -4,8 +4,8 @@ PKG             := mxml
 $(PKG)_WEBSITE  := https://michaelrsweet.github.io/mxml/
 $(PKG)_DESCR    := Mini-XML
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.11
-$(PKG)_CHECKSUM := 7d3dfe661e50908fe41aef9b97ba6f7f158cab5208515c6be9f5bc9daf032329
+$(PKG)_VERSION  := 3.1
+$(PKG)_CHECKSUM := 0a50cbb42ad078e51589208997858c8d86ea95f255d61e4af5b3d635d2659603
 $(PKG)_GH_CONF  := michaelrsweet/mxml/tags, v
 $(PKG)_DEPS     := cc pthreads
 

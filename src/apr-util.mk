@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 483ef4d59e6ac9a36c7d3fd87ad7b9db7ad8ae29c06b9dd8ff22dda1cc416
 $(PKG)_SUBDIR   := apr-util-$($(PKG)_VERSION)
 $(PKG)_FILE     := apr-util-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://archive.apache.org/dist/apr/$($(PKG)_FILE)
-$(PKG)_URL_2    := http://mirror.apache-kr.org/apr/$($(PKG)_FILE)
+$(PKG)_URL_2    := https://www.apache.org/dist/apr/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc apr expat libiconv
 
 define $(PKG)_UPDATE
