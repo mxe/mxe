@@ -99,7 +99,7 @@ define $(PKG)_BUILD
     cd '$(SOURCE_DIR)' && NOCONFIGURE=true ./autogen.sh
     cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS) \
-        --with-threads=win32 \
+        --with-threads=$(MXE_GCC_THREADS) \
         --with-pcre=system \
         --with-libiconv=gnu \
         --disable-inotify \
