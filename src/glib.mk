@@ -26,8 +26,6 @@ define $(PKG)_BUILD_DARWIN
     cd '$(SOURCE_DIR)' && NOCONFIGURE=true ./autogen.sh
     cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS) \
-        --enable-regex \
-        --disable-threads \
         --disable-selinux \
         --disable-inotify \
         --disable-fam \
@@ -42,6 +40,7 @@ define $(PKG)_BUILD_DARWIN
     $(MAKE) -C '$(BUILD_DIR)/gthread' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)/gmodule' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)/gobject' -j '$(JOBS)' lib_LTLIBRARIES= install-exec
+    $(MAKE) -C '$(BUILD_DIR)/gio'     -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)/gio/xdgmime'     -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)/gio/kqueue'      -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)/gio'     -j '$(JOBS)' glib-compile-schemas
