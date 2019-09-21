@@ -49,39 +49,31 @@ index 1111111..2222222 100644
  Cflags: -I${includedir}/gdk-pixbuf-@GDK_PIXBUF_API_VERSION@ @GDK_PIXBUF_EXTRA_CFLAGS@
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Fri, 12 Oct 2012 12:25:27 +0200
-Subject: [PATCH 3/3] allow static
+From: Gregorio Litenstein <g.litenstein@gmail.com>
+Date: Sat, 19 Oct 2019 17:35:02 -0300
+Subject: [PATCH 3/3] Remove tests and thumbnailer, which will fail.
 
 
-diff --git a/configure.ac b/configure.ac
+diff --git a/Makefile.am b/Makefile.am
 index 1111111..2222222 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -136,16 +136,16 @@ case $host in
-     ;;
- esac
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -1,4 +1,4 @@
+-SUBDIRS = gdk-pixbuf po docs thumbnailer tests contrib win32
++SUBDIRS = gdk-pixbuf po docs contrib win32
  
--if test "$os_win32" = "yes"; then
--  if test x$enable_static = xyes -o x$enable_static = x; then
--    AC_MSG_WARN([Disabling static library build, must build as DLL on Windows.])
--    enable_static=no
--  fi
--  if test x$enable_shared = xno; then
--    AC_MSG_WARN([Enabling shared library build, must build as DLL on Windows.])
--  fi
--  enable_shared=yes
--fi
-+dnl if test "$os_win32" = "yes"; then
-+dnl   if test x$enable_static = xyes -o x$enable_static = x; then
-+dnl     AC_MSG_WARN([Disabling static library build, must build as DLL on Windows.])
-+dnl     enable_static=no
-+dnl   fi
-+dnl   if test x$enable_shared = xno; then
-+dnl     AC_MSG_WARN([Enabling shared library build, must build as DLL on Windows.])
-+dnl   fi
-+dnl   enable_shared=yes
-+dnl fi
+ meson_files = \
+ 	meson.build \
+@@ -8,12 +8,9 @@ meson_files = \
+ 	docs/reference/gdk-pixbuf/meson.build \
+ 	contrib/gdk-pixbuf-xlib/meson.build \
+ 	po/meson.build \
+-	tests/meson.build \
+-	thumbnailer/meson.build \
+ 	build-aux/gen-color-table.pl \
+ 	build-aux/gen-installed-test.py \
+ 	build-aux/gen-resources.py \
+-	build-aux/gen-thumbnailer.py \
+ 	$()
  
- dnl Initialize libtool
- LT_PREREQ([2.2.6])
+ EXTRA_DIST = 			\
