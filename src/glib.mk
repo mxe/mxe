@@ -21,6 +21,10 @@ define $(PKG)_UPDATE
     head -1
 endef
 
+define $(PKG)_PATCH_STATIC
+	(cd $(SOURCE_DIR) && $(PATCH) -p1 -u) < $(TOP_DIR)/src/glib-patch-static-dllmain.diff
+endef
+
 define $(PKG)_BUILD_DARWIN
     # native build for glib-tools
     cd '$(SOURCE_DIR)' && NOCONFIGURE=true ./autogen.sh
@@ -84,6 +88,7 @@ define $(PKG)_BUILD_$(BUILD)
 endef
 
 define $(PKG)_BUILD
+	$(if $(BUILD_STATIC), $(call $(PKG)_PATCH_STATIC))
     # other packages expect glib-tools in $(TARGET)/bin
     rm -f  '$(PREFIX)/$(TARGET)/bin/glib-*'
     ln -sf '$(PREFIX)/$(BUILD)/bin/glib-genmarshal'        '$(PREFIX)/$(TARGET)/bin/'
