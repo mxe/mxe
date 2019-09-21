@@ -11,7 +11,6 @@ int main(int argc, char *argv[])
     (void)argc;
     (void)argv;
 
-    g_type_init();
     handle = rsvg_handle_new();
     g_object_unref(handle);
 
