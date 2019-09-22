@@ -21,7 +21,7 @@ define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && AS='$(PREFIX)/$(BUILD)/bin/nasm' '$(SOURCE_DIR)/configure'\
         $(MXE_CONFIGURE_OPTS) \
         --cross-prefix='$(TARGET)'- \
-        --enable-win32thread \
+        --$(if $(findstring posix,$(MXE_GCC_THREADS)),disable,enable)-win32thread \
         --disable-lavf \
         --disable-swscale   # Avoid circular dependency with ffmpeg. Remove if undesired.
     $(MAKE) -C '$(BUILD_DIR)' -j 1 uninstall
