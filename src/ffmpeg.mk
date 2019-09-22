@@ -37,8 +37,7 @@ define $(PKG)_BUILD
             --disable-static --enable-shared ) \
         --yasmexe='$(TARGET)-yasm' \
         --disable-debug \
-        --disable-pthreads \
-        --enable-w32threads \
+        --disable-$(if $(findstring posix, $(MXE_GCC_THREADS)),w32threads,pthreads) \
         --disable-doc \
         --enable-avresample \
         --enable-gpl \
