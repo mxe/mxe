@@ -24,7 +24,7 @@ define $(PKG)_BUILD
         --with-zlib='$(PREFIX)/$(TARGET)/lib' \
         --without-debug \
         --without-python \
-        --without-threads
+        --with-threads=$(MXE_GCC_THREADS)
     $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     ln -sf '$(PREFIX)/$(TARGET)/bin/xml2-config' '$(PREFIX)/bin/$(TARGET)-xml2-config'
