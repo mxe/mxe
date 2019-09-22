@@ -1,0 +1,164 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+https://github.com/openexr/openexr/commit/2cf0560dd8eb469680d2281e6d80348dad9ad500#diff-f69f65a3268b44083c2efec4288a2d5e
+
+diff --git a/IlmImf/ImfSystemSpecific.h b/IlmImf/ImfSystemSpecific.h
+index 11111111..22222222 100644
+--- a/IlmImf/ImfSystemSpecific.h
++++ b/IlmImf/ImfSystemSpecific.h
+@@ -51,71 +51,41 @@ static unsigned long* systemEndianCheckPointer = &systemEndianCheckValue;
+ static bool GLOBAL_SYSTEM_LITTLE_ENDIAN =
+         (*(unsigned char*)systemEndianCheckPointer == 0x78 ? true : false);
+ 
+-
+-#ifdef IMF_HAVE_SSE2
+-
+-#if defined(__GNUC__)
+-// Causes issues on certain gcc versions
+-//#define EXR_FORCEINLINE inline __attribute__((always_inline))
+-#define EXR_FORCEINLINE inline
+-#define EXR_RESTRICT __restrict
+-
+-static void* EXRAllocAligned(size_t size, size_t alignment)
++inline void*
++EXRAllocAligned (size_t size, size_t alignment)
+ {
+     // GNUC is used for things like mingw to (cross-)compile for windows
+ #ifdef _WIN32
+-    return _aligned_malloc(size, alignment);
+-#else
++    return _aligned_malloc (size, alignment);
++#elif defined(__INTEL_COMPILER) || defined(__ICL) || defined(__ICC) || defined(__ECC)
++    return _mm_malloc (size, alignment);
++#elif defined(_POSIX_C_SOURCE) && (_POSIX_C_SOURCE >= 200112L)
+     void* ptr = 0;
+-    posix_memalign(&ptr, alignment, size);
++    posix_memalign (&ptr, alignment, size);
+     return ptr;
++#else
++    return malloc(size);
+ #endif
+ }
+ 
+-
+-static void EXRFreeAligned(void* ptr)
++inline void
++EXRFreeAligned (void* ptr)
+ {
+ #ifdef _WIN32
+-    _aligned_free(ptr);
++    _aligned_free (ptr);
++#elif defined(__INTEL_COMPILER) || defined(__ICL) || defined(__ICC) ||         \
++    defined(__ECC)
++    _mm_free (ptr);
+ #else
+-    free(ptr);
++    free (ptr);
+ #endif
+ }
+ 
+-#elif defined _MSC_VER
+-
+-#define EXR_FORCEINLINE __forceinline
+-#define EXR_RESTRICT __restrict
+-
+-static void* EXRAllocAligned(size_t size, size_t alignment)
+-{
+-    return _aligned_malloc(size, alignment);
+-}
+-
+-
+-static void EXRFreeAligned(void* ptr)
+-{
+-    _aligned_free(ptr);
+-}
+-
+-#elif defined (__INTEL_COMPILER) || \
+-        defined(__ICL) || \
+-        defined(__ICC) || \
+-        defined(__ECC)
+-
++#if defined(__GNUC__) || defined(__clang__) || defined(_MSC_VER)
++// Causes issues on certain gcc versions
++//#define EXR_FORCEINLINE inline __attribute__((always_inline))
+ #define EXR_FORCEINLINE inline
+-#define EXR_RESTRICT restrict
+-
+-static void* EXRAllocAligned(size_t size, size_t alignment)
+-{
+-    return _mm_malloc(size, alignment);
+-}
+-
+-
+-static void EXRFreeAligned(void* ptr)
+-{
+-    _mm_free(ptr);
+-}
++#define EXR_RESTRICT __restrict
+ 
+ #else
+ 
+@@ -123,39 +93,7 @@ static void EXRFreeAligned(void* ptr)
+ #define EXR_FORCEINLINE inline
+ #define EXR_RESTRICT
+ 
+-static void* EXRAllocAligned(size_t size, size_t alignment)
+-{
+-    return malloc(size);
+-}
+-
+-
+-static void EXRFreeAligned(void* ptr)
+-{
+-    free(ptr);
+-}
+-
+-#endif // compiler switch
+-
+-
+-#else // IMF_HAVE_SSE2
+-
+-
+-#define EXR_FORCEINLINE inline
+-#define EXR_RESTRICT
+-
+-static void* EXRAllocAligned(size_t size, size_t alignment)
+-{
+-    return malloc(size);
+-}
+-
+-
+-static void EXRFreeAligned(void* ptr)
+-{
+-    free(ptr);
+-}
+-
+-
+-#endif  // IMF_HAVE_SSE2
++#endif
+ 
+ // 
+ // Simple CPUID based runtime detection of various capabilities
+@@ -178,4 +116,4 @@ class IMF_EXPORT CpuId
+ OPENEXR_IMF_INTERNAL_NAMESPACE_HEADER_EXIT
+ 
+ 
+-#endif //include guard
++#endif //include guard
+\ No newline at end of file
+
+diff --git a/configure.ac b/configure.ac
+index 067f9d08..6209af7c 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -13,7 +13,7 @@ AC_SUBST(OPENEXR_VERSION_API, ${OPENEXR_VERSION_MAJOR}_${OPENEXR_VERSION_MINOR})
+ AC_CANONICAL_HOST
+ AC_CONFIG_SRCDIR(IlmImfTest/main.cpp)
+ AC_CONFIG_HEADERS([config/OpenEXRConfig.h])
+-AM_INIT_AUTOMAKE(1.6.3)  dnl Require automake 1.6.3 or better
++AM_INIT_AUTOMAKE([1.6.3 foreign])  dnl Require automake 1.6.3 or better
+ AM_MAINTAINER_MODE
+ 
+ 

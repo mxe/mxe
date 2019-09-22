@@ -4,8 +4,8 @@ PKG             := ilmbase
 $(PKG)_WEBSITE  := https://www.openexr.com/
 $(PKG)_DESCR    := IlmBase
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.2.0
-$(PKG)_CHECKSUM := ecf815b60695555c1fbc73679e84c7c9902f4e8faa6e8000d2f905b8b86cedc7
+$(PKG)_VERSION  := 2.3.0
+$(PKG)_CHECKSUM := 456978d1a978a5f823c7c675f3f36b0ae14dba36638aeaa3c4b0e784f12a3862
 $(PKG)_SUBDIR   := ilmbase-$($(PKG)_VERSION)
 $(PKG)_FILE     := ilmbase-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://download.savannah.nongnu.org/releases/openexr/$($(PKG)_FILE)
@@ -18,17 +18,17 @@ define $(PKG)_UPDATE
     head -1
 endef
 
+GCC_VERSION_MAJOR := $(shell echo $(gcc_VERSION) | cut -f1 -d.)
+GCC_VERSION_MINOR := $(shell echo $(gcc_VERSION) | cut -f2 -d.)
+
+$(PKG)_CXXSTD_14 := $(shell [ $(GCC_VERSION_MAJOR) -gt 6 -o \( $(GCC_VERSION_MAJOR) -eq 6 -a $(GCC_VERSION_MINOR) -ge 1 \) ] && echo true)
+
 define $(PKG)_BUILD
-    # build the win32 thread sources instead of the posix thread sources
-    $(SED) -i 's,IlmThreadPosix\.,IlmThreadWin32.,'                   '$(1)/IlmThread/Makefile.in'
-    $(SED) -i 's,IlmThreadSemaphorePosix\.,IlmThreadSemaphoreWin32.,' '$(1)/IlmThread/Makefile.in'
-    $(SED) -i 's,IlmThreadMutexPosix\.,IlmThreadMutexWin32.,'         '$(1)/IlmThread/Makefile.in'
-    echo '/* disabled */' > '$(1)/IlmThread/IlmThreadSemaphorePosixCompat.cpp'
-    # Because of the previous changes, '--disable-threading' will not disable
-    # threading. It will just disable the unwanted check for pthread.
     cd '$(1)' && $(SHELL) ./configure \
         $(MXE_CONFIGURE_OPTS) \
-        --disable-threading \
+        --enable-threading \
+        --disable-posix-sem \
+        --enable-cxxstd=$(if $($(PKG)_CXXSTD_14),14,11) \
         CONFIG_SHELL=$(SHELL) \
         SHELL=$(SHELL)
     # do the first build step by hand, because programs are built that

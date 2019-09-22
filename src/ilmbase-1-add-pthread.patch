@@ -1,0 +1,127 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 11111111..22222222 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -90,12 +90,14 @@ ADD_SUBDIRECTORY ( IlmThread )
+ # avoid constantly updating it (unless a value has changed)
+ SET(ILMBASE_TMP_CONFIG ${CMAKE_CURRENT_BINARY_DIR}/config/IlmBaseConfig.h.in)
+ IF (WIN32)
+-  FILE ( WRITE  ${ILMBASE_TMP_CONFIG} "#ifdef HAVE_PTHREAD\n" )
+-  FILE ( APPEND ${ILMBASE_TMP_CONFIG} "# undef HAVE_PTHREAD\n" )
+-  FILE ( APPEND ${ILMBASE_TMP_CONFIG} "#endif\n" )
+-  FILE ( APPEND ${ILMBASE_TMP_CONFIG} "#ifdef HAVE_POSIX_SEMAPHORES\n" )
+-  FILE ( APPEND ${ILMBASE_TMP_CONFIG} "# undef HAVE_POSIX_SEMAPHORES\n" )
+-  FILE ( APPEND ${ILMBASE_TMP_CONFIG} "#endif\n" )
++#  FILE ( WRITE  ${ILMBASE_TMP_CONFIG} "#ifdef HAVE_PTHREAD\n" )
++#  FILE ( APPEND ${ILMBASE_TMP_CONFIG} "# undef HAVE_PTHREAD\n" )
++#  FILE ( APPEND ${ILMBASE_TMP_CONFIG} "#endif\n" )
++#  FILE ( APPEND ${ILMBASE_TMP_CONFIG} "#ifdef HAVE_POSIX_SEMAPHORES\n" )
++#  FILE ( APPEND ${ILMBASE_TMP_CONFIG} "# undef HAVE_POSIX_SEMAPHORES\n" )
++#  FILE ( APPEND ${ILMBASE_TMP_CONFIG} "#endif\n" )
++  FILE ( WRITE ${ILMBASE_TMP_CONFIG} "#define HAVE_PTHREAD 1\n" )
++  FILE ( APPEND ${ILMBASE_TMP_CONFIG} "#undef ILMBASE_FORCE_CXX03\n" )
+   FILE ( APPEND ${ILMBASE_TMP_CONFIG} "#define PLATFORM_WINDOWS 1\n" )
+ ELSE ()
+   IF (APPLE)
+
+diff --git a/IlmThread/IlmThreadSemaphorePosixCompat.cpp b/IlmThread/IlmThreadSemaphorePosixCompat.cpp
+index 11111111..22222222 100644
+--- a/IlmThread/IlmThreadSemaphorePosixCompat.cpp
++++ b/IlmThread/IlmThreadSemaphorePosixCompat.cpp
+@@ -42,7 +42,7 @@
+ 
+ #include "IlmBaseConfig.h"
+ 
+-#if (!HAVE_POSIX_SEMAPHORES) && !defined (_WIN32) && ! defined (_WIN64)
++#if (!HAVE_POSIX_SEMAPHORES)
+ 
+ #include "IlmThreadSemaphore.h"
+ #include "Iex.h"
+ 
+diff --git a/IlmThread/IlmThread.h b/IlmThread/IlmThread.h
+index 11111111..22222222 100644
+--- a/IlmThread/IlmThread.h
++++ b/IlmThread/IlmThread.h
+@@ -102,8 +102,6 @@
+ #       define NOMINMAX
+ #       include <windows.h>
+ #       include <process.h>
+-#   elif HAVE_PTHREAD
+-#      include <pthread.h>
+ #   endif
+ #else
+ #   include <thread>
+
+diff --git a/IlmThread/IlmThreadMutex.h b/IlmThread/IlmThreadMutex.h
+index 11111111..22222222 100644
+--- a/IlmThread/IlmThreadMutex.h
++++ b/IlmThread/IlmThreadMutex.h
+@@ -81,6 +81,7 @@
+ #      include <pthread.h>
+ #   endif
+ #else
++#   include <thread>
+ #   include <mutex>
+ #endif
+
+diff --git a/IlmThread/CMakeLists.txt b/IlmThread/CMakeLists.txt
+index 11111111..22222222 100644
+--- a/IlmThread/CMakeLists.txt
++++ b/IlmThread/CMakeLists.txt
+@@ -10,13 +10,6 @@ SET( ILMTHREAD_LIBRARY_SOURCES
+   IlmThreadSemaphorePosixCompat.cpp
+   IlmThreadSemaphorePosix.cpp
+ )
+-IF (WIN32)
+-  SET( ILMTHREAD_LIBRARY_SOURCES ${ILMTHREAD_LIBRARY_SOURCES}
+-    IlmThreadMutexWin32.cpp
+-    IlmThreadSemaphoreWin32.cpp
+-    IlmThreadWin32.cpp
+-  )
+-ENDIF()
+ 
+ SET (ILMBASE_LIB_TARGETS "")
+ 
+diff --git a/IlmThread/IlmThreadSemaphore.h b/IlmThread/IlmThreadSemaphore.h
+index 11111111..22222222 100644
+--- a/IlmThread/IlmThreadSemaphore.h
++++ b/IlmThread/IlmThreadSemaphore.h
+@@ -54,15 +54,12 @@
+ #   include <windows.h>
+ #elif HAVE_POSIX_SEMAPHORES
+ #   include <semaphore.h>
+-#else
+-#   ifdef ILMBASE_FORCE_CXX03
+-#      if HAVE_PTHREAD
+-#         include <pthread.h>
+-#      endif
+-#   else
+-#      include <mutex>
+-#      include <condition_variable>
+-#   endif
++#endif
++
++#ifndef ILMBASE_FORCE_CXX03
++#    include <thread>
++#    include <mutex>
++#    include <condition_variable>
+ #endif
+ 
+ ILMTHREAD_INTERNAL_NAMESPACE_HEADER_ENTER
+@@ -82,11 +79,7 @@ class ILMTHREAD_EXPORT Semaphore
+ 
+   private:
+ 
+-#if defined _WIN32 || defined _WIN64
+-
+-	mutable HANDLE _semaphore;
+-
+-#elif defined(HAVE_POSIX_SEMAPHORES)
++#if defined(HAVE_POSIX_SEMAPHORES)
+ 
+ 	mutable sem_t _semaphore;
+ 

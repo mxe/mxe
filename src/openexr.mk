@@ -4,8 +4,8 @@ PKG             := openexr
 $(PKG)_WEBSITE  := https://www.openexr.com/
 $(PKG)_DESCR    := OpenEXR
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.2.0
-$(PKG)_CHECKSUM := 36a012f6c43213f840ce29a8b182700f6cf6b214bea0d5735594136b44914231
+$(PKG)_VERSION  := 2.3.0
+$(PKG)_CHECKSUM := fd6cb3a87f8c1a233be17b94c74799e6241d50fc5efd4df75c7a4b9cf4e25ea6
 $(PKG)_SUBDIR   := openexr-$($(PKG)_VERSION)
 $(PKG)_FILE     := openexr-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://download.savannah.nongnu.org/releases/openexr/$($(PKG)_FILE)
@@ -18,28 +18,36 @@ define $(PKG)_UPDATE
     head -1
 endef
 
+GCC_VERSION_MAJOR := $(shell echo $(gcc_VERSION) | cut -f1 -d.)
+GCC_VERSION_MINOR := $(shell echo $(gcc_VERSION) | cut -f2 -d.)
+
+$(PKG)_CXXSTD_14 := $(shell [ $(GCC_VERSION_MAJOR) -gt 6 -o \( $(GCC_VERSION_MAJOR) -eq 6 -a $(GCC_VERSION_MINOR) -ge 1 \) ] && echo true)
+
 define $(PKG)_BUILD
     # Update auto-stuff, except autoheader, because if fails...
     cd '$(1)' && AUTOHEADER=true autoreconf -fi
     # unpack and build a native version of ilmbase
     cd '$(1)' && $(call UNPACK_PKG_ARCHIVE,ilmbase)
-    $(foreach PKG_PATCH,$(sort $(wildcard $(TOP_DIR)/src/ilmbase-*.patch)),
-        (cd '$(1)/$(ilmbase_SUBDIR)' && $(PATCH) -p1 -u) < $(PKG_PATCH))
+# Don't apply ilmbase patches.
+#    $(foreach PKG_PATCH,$(sort $(wildcard $(TOP_DIR)/src/ilmbase-*.patch)),
+ #       (cd '$(1)/$(ilmbase_SUBDIR)' && $(PATCH) -p1 -u) < $(PKG_PATCH))
     echo 'echo $1' > '$(1)/$(ilmbase_SUBDIR)/config.sub'
     cd '$(1)/$(ilmbase_SUBDIR)' && $(SHELL) ./configure \
         --build="`config.guess`" \
         --disable-shared \
         --prefix='$(1)/ilmbase' \
-        --enable-threading=no \
+        --enable-threading \
         --disable-posix-sem \
+        --enable-cxxstd=$(if $($(PKG)_CXXSTD_14),14,11) \
         CONFIG_SHELL=$(SHELL) \
         SHELL=$(SHELL)
     $(MAKE) -C '$(1)/$(ilmbase_SUBDIR)' -j '$(JOBS)' install \
         bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
-        --disable-threading \
+        --enable-threading \
         --disable-posix-sem \
+        --enable-cxxstd=$(if $($(PKG)_CXXSTD_14),14,11) \
         --disable-ilmbasetest \
         PKG_CONFIG='$(PREFIX)/bin/$(TARGET)-pkg-config' \
         CXXFLAGS="-g -O2"
