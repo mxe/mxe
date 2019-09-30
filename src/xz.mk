@@ -18,9 +18,10 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && ./configure \
+    cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
         $(MXE_CONFIGURE_OPTS) \
-        --disable-threads \
+        --enable-threads=$(if $(findstring win32,$(MXE_GCC_THREADS)),vista,posix) \
         --disable-nls
-    $(MAKE) -C '$(1)'/src/liblzma -j '$(JOBS)' install
+    $(MAKE) -C '$(BUILD_DIR)' src/liblzma -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' src/liblzma -j 1 install
 endef
