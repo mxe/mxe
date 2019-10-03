@@ -1,22 +1,21 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := icu4c
-$(PKG)_WEBSITE  := https://ssl.icu-project.org/
+$(PKG)_WEBSITE  := http://site.icu-project.org/
 $(PKG)_DESCR    := ICU4C
 $(PKG)_VERSION  := 64.2
 $(PKG)_MAJOR    := $(word 1,$(subst ., ,$($(PKG)_VERSION)))
 $(PKG)_CHECKSUM := 627d5d8478e6d96fc8c90fed4851239079a561a6a8b9e48b0892f24e82d31d6c
 $(PKG)_SUBDIR   := icu
 $(PKG)_FILE     := $(PKG)-$(subst .,_,$($(PKG)_VERSION))-src.tgz
-$(PKG)_URL      := https://ssl.icu-project.org/files/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := https://sourceforge.net/projects/icu/files/ICU4C/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://bugs.icu-project.org/trac/browser/icu/tags' | \
-    $(SED) -n 's,.*release-\([0-9-]*\)<.*,\1,p' | \
-    tr '-' '.' | \
-    $(SORT) -V | \
-    tail -1
+    $(WGET) -q -O- 'https://sourceforge.net/projects/icu/files/ICU4C/' | \
+    $(SED) -n 's,.*/projects/.*/.*/.*/\([0-9]\+[^"]*\)/".*,\1,p' | \
+    $(SORT) -Vr | \
+    head -1
 endef
 
 define $(PKG)_BUILD_COMMON
