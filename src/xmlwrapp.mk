@@ -2,12 +2,10 @@
 
 PKG             := xmlwrapp
 $(PKG)_WEBSITE  := https://sourceforge.net/projects/xmlwrapp/
-$(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.7.0
-$(PKG)_CHECKSUM := 2d46234058270d878e7674f4ff9005a4ebd4e991162de9d1215d33d99fde37aa
+$(PKG)_GH_CONF  := vslavik/xmlwrapp/releases/latest,v
+$(PKG)_VERSION  := 0.9.0
+$(PKG)_CHECKSUM := 4bd6d24f2039f9f1394ba400681a41690f53fb73cfd7135507c8918feec9f11c
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc boost libxml2 libxslt
 
 define $(PKG)_UPDATE
@@ -19,10 +17,8 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
-        --disable-shared \
+        $(MXE_CONFIGURE_OPTS) \
         --prefix='$(PREFIX)/$(TARGET)' \
         PKG_CONFIG='$(TARGET)-pkg-config'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= html_DATA=
 endef
-
-$(PKG)_BUILD_SHARED =
