@@ -3,8 +3,9 @@
 PKG             := libtorrent-rasterbar
 $(PKG)_WEBSITE  := https://www.libtorrent.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.1.6
-$(PKG)_CHECKSUM := b7c74d004bd121bd6e9f8975ee1fec3c95c74044c6a6250f6b07f259f55121ef
+$(PKG)_VERSION  := 1.2.2
+$(PKG)_CHECKSUM := e579261d7f0acbe82e9b4ce703cb721627cb8075023f8a26405992f489bc6202
+$(PKG)_GH_CONF  := arvidn/libtorrent/releases,-
 $(PKG)_SUBDIR   := libtorrent-rasterbar-$($(PKG)_VERSION)
 $(PKG)_FILE     := libtorrent-rasterbar-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/arvidn/libtorrent/releases/download/libtorrent-$(subst .,_,$($(PKG)_VERSION))/libtorrent-rasterbar-$($(PKG)_VERSION).tar.gz
