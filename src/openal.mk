@@ -4,10 +4,8 @@ PKG             := openal
 $(PKG)_WEBSITE  := https://openal-soft.org/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.19.1
-$(PKG)_CHECKSUM := 5c2f87ff5188b95e0dc4769719a9d89ce435b8322b4478b95dd4b427fe84b2e9
-$(PKG)_SUBDIR   := openal-soft-$($(PKG)_VERSION)
-$(PKG)_FILE     := openal-soft-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := https://openal-soft.org/openal-releases/$($(PKG)_FILE)
+$(PKG)_CHECKSUM := 9f3536ab2bb7781dbafabc6a61e0b34b17edd16bd6c2eaf2ae71bc63078f98c7
+$(PKG)_GH_CONF  := kcat/openal-soft/releases,openal-soft-
 $(PKG)_DEPS     := cc portaudio
 
 define $(PKG)_UPDATE
