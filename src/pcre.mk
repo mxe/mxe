@@ -13,7 +13,7 @@ $(PKG)_URL_2    := https://$(SOURCEFORGE_MIRROR)/project/pcre/pcre/$($(PKG)_VERS
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://ftp.pcre.org/pub/pcre/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://ftp.pcre.org/pub/pcre/' | \
     $(SED) -n 's,.*pcre-\([0-9]\+\)\(\.[0-9]\+\)*\.zip.*,\1\2,p' | \
     tail -1
 endef

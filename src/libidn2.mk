@@ -12,7 +12,7 @@ $(PKG)_URL      := https://ftp.gnu.org/gnu/libidn/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc libiconv libunistring
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- https://gitlab.com/libidn/libidn2/tags | \
+    $(WGET) -q -O- -t 2 --timeout=6 https://gitlab.com/libidn/libidn2/tags | \
     $(SED) -n 's,.*libidn2-\([0-9][^t]*\).tar.gz.*,\1,p' | \
     head -1
 endef

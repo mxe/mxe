@@ -12,7 +12,7 @@ $(PKG)_URL_2    := https://ftp.gnu.org/gnu/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc libpng pthreads
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://ftp.gnu.org/gnu/plotutils/?C=M;O=D' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://ftp.gnu.org/gnu/plotutils/?C=M;O=D' | \
     grep '<a href="plotutils-' | \
     $(SED) -n 's,.*plotutils-\([0-9][^<]*\)\.tar.*,\1,p' | \
     head -1

@@ -14,7 +14,7 @@ $(PKG)_TARGETS       := $(BUILD) $(MXE_TARGETS)
 $(PKG)_DEPS_$(BUILD) := cmake
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://vtk.org/gitweb?p=VTK.git;a=tags' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://vtk.org/gitweb?p=VTK.git;a=tags' | \
     grep 'refs/tags/v[0-9.]*"' | \
     $(SED) 's,.*refs/tags/v\(.*\)".*,\1,g;' | \
     grep -v rc | \

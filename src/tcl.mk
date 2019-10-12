@@ -16,7 +16,7 @@ $(PKG)_SOURCE_SUBDIR  = $(if $(findstring mingw,$(TARGET)),win,unix)
 $(PKG)_CONFIGURE_OPTS = $(if $(findstring mingw,$(TARGET)),CFLAGS=-D__MINGW_EXCPT_DEFINE_PSDK)
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://sourceforge.net/projects/tcl/files/Tcl/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://sourceforge.net/projects/tcl/files/Tcl/' | \
     $(SED) -n 's,.*/projects/.*/\([0-9][^"]*\)/".*,\1,p' | \
     head -1
 endef

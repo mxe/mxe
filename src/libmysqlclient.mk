@@ -11,7 +11,7 @@ $(PKG)_URL      := https://dev.mysql.com/get/Downloads/Connector-C/$($(PKG)_FILE
 $(PKG)_DEPS     := cc openssl zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://dev.mysql.com/downloads/connector/c/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://dev.mysql.com/downloads/connector/c/' | \
     $(SED) -n 's,.*mysql-connector-c-\([0-9\.]\+\)-win.*,\1,p' | \
     head -1
 endef

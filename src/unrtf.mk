@@ -11,7 +11,7 @@ $(PKG)_URL      := https://ftp.gnu.org/gnu/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc libiconv
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://hg.savannah.gnu.org/hgweb/unrtf/tags' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://hg.savannah.gnu.org/hgweb/unrtf/tags' | \
     $(SED) -n "s,^release_,,p" | \
     head -1
 endef

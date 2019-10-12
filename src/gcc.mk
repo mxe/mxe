@@ -13,7 +13,7 @@ $(PKG)_URL_2    := https://www.mirrorservice.org/sites/sourceware.org/pub/gcc/re
 $(PKG)_DEPS     := binutils mingw-w64 $(addprefix $(BUILD)~,gmp isl mpc mpfr)
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://ftp.gnu.org/gnu/gcc/?C=M;O=D' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://ftp.gnu.org/gnu/gcc/?C=M;O=D' | \
     grep -v 'gcc-6\|gcc-7' | \
     $(SED) -n 's,.*<a href="gcc-\([0-9][^"]*\)/".*,\1,p' | \
     $(SORT) -V | \

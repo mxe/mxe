@@ -13,7 +13,7 @@ $(PKG)_DEPS     := cc expat freeglut freeimage freetype fribidi glew \
                    glfw3 glm libxml2 minizip pcre xerces
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://bitbucket.org/cegui/cegui/downloads' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://bitbucket.org/cegui/cegui/downloads' | \
     $(SED) -n 's,.*href=.*get/v\([0-9]*-[0-9]*-[0-9]*\)\.tar.*,\1,p' | \
     $(SED) 's,-,.,g' | \
     $(SORT) -V | \
@@ -22,7 +22,7 @@ endef
 
 # track dev branch v0-8 until next release
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://bitbucket.org/cegui/cegui/commits/branch/v0-8' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://bitbucket.org/cegui/cegui/commits/branch/v0-8' | \
     $(SED) -n 's,.*cegui/cegui/commits/\([^?]\{12\}\).*at=.*,\1,p' | \
     head -1
 endef

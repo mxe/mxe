@@ -12,7 +12,7 @@ $(PKG)_URL      := https://deb.debian.org/debian/pool/main/g/$(PKG)/$($(PKG)_FIL
 $(PKG)_TARGETS  := $(BUILD)
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://packages.debian.org/jessie/all/geoip-database/download' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://packages.debian.org/jessie/all/geoip-database/download' | \
     $(SED) -n 's,.*geoip-database_\([0-9\-]*\)_all.deb.*,\1,p' | \
     head -1
 endef

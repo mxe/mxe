@@ -12,7 +12,7 @@ $(PKG)_URL      := http://cimg.eu/files/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://cimg.eu/files/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'http://cimg.eu/files/' | \
     $(SED) -n 's,.*CImg_\([0-9][^"]*\)\.zip.*,\1,p' | \
     $(SORT) -Vr | \
     head -1

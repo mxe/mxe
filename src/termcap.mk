@@ -12,7 +12,7 @@ $(PKG)_URL      := https://ftp.gnu.org/gnu/termcap/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://ftp.gnu.org/gnu/termcap/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://ftp.gnu.org/gnu/termcap/' | \
     grep 'termcap-' | \
     $(SED) -n 's,.*termcap-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1

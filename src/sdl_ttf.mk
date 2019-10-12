@@ -12,7 +12,7 @@ $(PKG)_URL      := https://www.libsdl.org/projects/SDL_ttf/release/$($(PKG)_FILE
 $(PKG)_DEPS     := cc freetype sdl
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://hg.libsdl.org/SDL_ttf/tags' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://hg.libsdl.org/SDL_ttf/tags' | \
     $(SED) -n 's,.*release-\([0-9][^<]*\).*,\1,p' | \
     head -1
 endef

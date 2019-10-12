@@ -12,7 +12,7 @@ $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$(call SH
 $(PKG)_DEPS     := cc $(BUILD)~gettext
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://sourceforge.net/p/lame/svn/HEAD/tree/tags' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://sourceforge.net/p/lame/svn/HEAD/tree/tags' | \
     grep RELEASE_ | \
     $(SED) -n 's,.*RELEASE__\([0-9_][^<]*\)<.*,\1,p' | \
     tr '_' '.' | \

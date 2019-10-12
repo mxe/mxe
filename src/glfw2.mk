@@ -12,7 +12,7 @@ $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/glfw/glfw/$($(PKG)_VERS
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://sourceforge.net/projects/glfw/files/glfw/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://sourceforge.net/projects/glfw/files/glfw/' | \
     $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
     grep '^2\.' | \
     $(SORT) -V | \

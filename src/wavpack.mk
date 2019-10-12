@@ -12,7 +12,7 @@ $(PKG)_URL      := http://www.wavpack.com/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://www.wavpack.com/downloads.html' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'http://www.wavpack.com/downloads.html' | \
     grep '<a href="wavpack-.*\.tar\.bz2">' | \
     head -n 1 | \
     $(SED) -e 's/^.*<a href="wavpack-\([0-9.]*\)\.tar\.bz2">.*$$/\1/'

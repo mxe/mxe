@@ -12,7 +12,7 @@ $(PKG)_URL      := https://mirrors.ircam.fr/pub/GNOME/sources/gtkglarea/2.0/$($(
 $(PKG)_DEPS     := cc freeglut gtk2
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://mirrors.ircam.fr/pub/GNOME/sources/gtkglarea/2.0' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://mirrors.ircam.fr/pub/GNOME/sources/gtkglarea/2.0' | \
     $(SED) -n 's,.*gtkglarea-\(2[^>]*\)\.tar.*,\1,ip' | \
     $(SORT) | \
     tail -1

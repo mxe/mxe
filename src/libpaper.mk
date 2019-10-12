@@ -12,7 +12,7 @@ $(PKG)_URL_2    := https://mirrorservice.org/sites/ftp.debian.org/debian/pool/ma
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://packages.debian.org/unstable/source/libpaper' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://packages.debian.org/unstable/source/libpaper' | \
     $(SED) -n 's,.*libpaper_\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef

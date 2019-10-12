@@ -12,7 +12,7 @@ $(PKG)_URL      := https://debian.inf.tu-dresden.de/debian/pool/main/c/cairo-oca
 $(PKG)_DEPS     := cc ocaml-core ocaml-findlib ocaml-lablgtk2
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://debian.inf.tu-dresden.de/debian/pool/main/c/cairo-ocaml/?C=M;O=D' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://debian.inf.tu-dresden.de/debian/pool/main/c/cairo-ocaml/?C=M;O=D' | \
     $(SED) -n 's,.*cairo-ocaml_\([0-9][^>]*\)\.orig\.tar.*,\1,ip' | \
     head -1
 endef

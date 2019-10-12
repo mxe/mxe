@@ -11,7 +11,7 @@ $(PKG)_URL      := https://ftp.gnu.org/gnu/libtasn1/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- https://ftp.gnu.org/gnu/libtasn1/ | \
+    $(WGET) -q -O- -t 2 --timeout=6 https://ftp.gnu.org/gnu/libtasn1/ | \
     $(SED) -n 's,.*libtasn1-\([1-9]\+\.[0-9]\+\)\..*,\1,p' | \
     $(SORT) -V | \
     tail -1

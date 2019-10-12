@@ -11,7 +11,7 @@ $(PKG)_URL      := http://caca.zoy.org/files/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc freeglut ncurses zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://caca.zoy.org/wiki/libcaca' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'http://caca.zoy.org/wiki/libcaca' | \
     $(SED) -n 's,.*/libcaca-\([0-9][^"]*\)\.tar.*,\1,p' | \
     $(SORT) -rV | \
     head -1

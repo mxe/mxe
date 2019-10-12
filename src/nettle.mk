@@ -12,7 +12,7 @@ $(PKG)_DEPS     := cc gmp
 $(PKG)_OO_DEPS   = $(BUILD)~autotools
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://www.lysator.liu.se/~nisse/archive/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://www.lysator.liu.se/~nisse/archive/' | \
     $(SED) -n 's,.*nettle-\([0-9][^>]*\)\.tar.*,\1,p' | \
     grep -v 'pre' | \
     grep -v 'rc' | \

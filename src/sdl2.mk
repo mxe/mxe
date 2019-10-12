@@ -12,7 +12,7 @@ $(PKG)_URL      := https://www.libsdl.org/release/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc libiconv libsamplerate
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://hg.libsdl.org/SDL/tags' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://hg.libsdl.org/SDL/tags' | \
     $(SED) -n 's,.*release-\([0-9][^<]*\).*,\1,p' | \
     head -1
 endef

@@ -12,7 +12,7 @@ $(PKG)_QT_DIR   := qt5
 $(PKG)_DEPS     := cc qtbase qtsvg
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://sourceforge.net/projects/qwt/files/qwt/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://sourceforge.net/projects/qwt/files/qwt/' | \
     $(SED) -n 's,.*/projects/.*/\([0-9][^"]*\)/".*,\1,p' | \
     head -1
 endef

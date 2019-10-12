@@ -12,7 +12,7 @@ $(PKG)_URL      := http://tech.motion-twin.com/zip/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc ocaml-findlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://tech.motion-twin.com/xmllight.html' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'http://tech.motion-twin.com/xmllight.html' | \
     $(SED) -n 's,.*xml-light-\(.*\)\.zip.*,\1,ip' | \
     head -1
 endef

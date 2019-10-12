@@ -12,7 +12,7 @@ $(PKG)_URL      := https://download.gnome.org/sources/libglade/2.6/$($(PKG)_FILE
 $(PKG)_DEPS     := cc atk glib gtk2 libxml2
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://download.gnome.org/sources/libglade/2.6/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://download.gnome.org/sources/libglade/2.6/' | \
     $(SED) -n 's,.*"libglade-\([0-9][^"]*\)\.tar.gz.*,\1,p' | \
     tail -1
 endef

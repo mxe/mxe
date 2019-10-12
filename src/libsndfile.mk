@@ -11,7 +11,7 @@ $(PKG)_URL      := http://www.mega-nerd.com/libsndfile/files/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc flac ogg vorbis
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://www.mega-nerd.com/libsndfile/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'http://www.mega-nerd.com/libsndfile/' | \
     grep '<META NAME="Version"' | \
     $(SED) -n 's,.*CONTENT="libsndfile-\([0-9][^"]*\)">.*,\1,p' | \
     head -1

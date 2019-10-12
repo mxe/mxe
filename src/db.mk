@@ -12,7 +12,7 @@ $(PKG)_URL      := https://download.oracle.com/berkeley-db/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://www.oracle.com/technetwork/database/database-technologies/berkeleydb/downloads/index.html' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://www.oracle.com/technetwork/database/database-technologies/berkeleydb/downloads/index.html' | \
     $(SED) -n 's,.*/db-\([0-9\.]\+\)\.tar.gz.*,\1,p' | \
     head -1
 endef

@@ -12,7 +12,7 @@ $(PKG)_URL      := https://www.pdflib.com/binaries/PDFlib/$(subst .,,$(word 1,$(
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://www.pdflib.com/download/free-software/pdflib-lite-7/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://www.pdflib.com/download/free-software/pdflib-lite-7/' | \
     $(SED) -n 's,.*PDFlib-Lite-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef

@@ -13,7 +13,7 @@ $(PKG)_URL_2    := https://web.archive.org/web/20170111090029/www.antigrain.com/
 $(PKG)_DEPS     := cc freetype sdl
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://antigrain.com/download/index.html' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://antigrain.com/download/index.html' | \
     $(SED) -n 's,.*<A href="https://antigrain.com/agg-\([0-9.]*\).tar.gz".*,\1,p' | \
     head -1
 endef

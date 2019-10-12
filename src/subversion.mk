@@ -12,7 +12,7 @@ $(PKG)_URL_2    := https://www.apache.org/dist/subversion/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc apr apr-util openssl sqlite
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://subversion.apache.org/download.cgi' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://subversion.apache.org/download.cgi' | \
     $(SED) -n 's,.*#recommended-release">\([0-9][^<]*\)<.*,\1,p' | \
     head -1
 endef

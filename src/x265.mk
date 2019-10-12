@@ -11,7 +11,7 @@ $(PKG)_URL      := https://bitbucket.org/multicoreware/x265/downloads/$($(PKG)_F
 $(PKG)_DEPS     := cc yasm
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- https://ftp.videolan.org/pub/videolan/x265/ | \
+    $(WGET) -q -O- -t 2 --timeout=6 https://ftp.videolan.org/pub/videolan/x265/ | \
     $(SED) -n 's,.*">x265_\([0-9][^<]*\)\.t.*,\1,p' | \
     tail -1
 endef

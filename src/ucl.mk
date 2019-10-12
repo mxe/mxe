@@ -14,7 +14,7 @@ $(PKG)_DEPS_$(BUILD) :=
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://www.oberhumer.com/opensource/ucl/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://www.oberhumer.com/opensource/ucl/' | \
     $(SED) -n 's,.*ucl-\([0-9][^"]*\)\.tar.*,\1,p' | \
     head -1
 endef

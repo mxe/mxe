@@ -12,7 +12,7 @@ $(PKG)_URL      := https://downloads.xiph.org/releases/flac/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc ogg $(BUILD)~nasm
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://downloads.xiph.org/releases/flac/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://downloads.xiph.org/releases/flac/' | \
     $(SED) -n 's,.*<a href="flac-\([0-9][0-9.]*\)\.tar\.[gx]z">.*,\1,p' | \
     $(SORT) -V | \
     tail -1

@@ -12,7 +12,7 @@ $(PKG)_URL      := https://ftp.gnu.org/gnu/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc gettext
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://ftp.gnu.org/gnu/aspell/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://ftp.gnu.org/gnu/aspell/' | \
     $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
     head -1
 endef

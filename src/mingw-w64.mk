@@ -13,7 +13,7 @@ $(PKG)_TYPE     := script
 $(PKG)_DEPS     :=
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://sourceforge.net/projects/mingw-w64/files/mingw-w64/mingw-w64-release/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://sourceforge.net/projects/mingw-w64/files/mingw-w64/mingw-w64-release/' | \
     $(SED) -n 's,.*mingw-w64-v\([0-9.]*\)\.tar.*,\1,p' | \
     $(SORT) -V | \
     tail -1

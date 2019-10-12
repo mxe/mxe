@@ -11,7 +11,7 @@ $(PKG)_URL      := https://download.videolan.org/pub/videolan/$(PKG)/$($(PKG)_VE
 $(PKG)_DEPS     := cc libdvdread
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://download.videolan.org/pub/videolan/libdvdnav/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://download.videolan.org/pub/videolan/libdvdnav/' | \
     $(SED) -n 's,.*href="\([0-9][^<]*\)/".*,\1,p' | \
     grep -v 'alpha\|beta\|rc' | \
     $(SORT) -V | \

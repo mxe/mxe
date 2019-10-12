@@ -12,7 +12,7 @@ $(PKG)_URL      := https://dl.dropboxusercontent.com/u/28869550/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc libgnurx libsamplerate libsndfile portaudio pthreads readline
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://jackaudio.org/downloads/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'http://jackaudio.org/downloads/' | \
     $(SED) -n 's,.*jack-\([0-9][^"]*\)\.tar.*,\1,p' | \
     head -1
 endef

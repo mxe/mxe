@@ -11,7 +11,7 @@ $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_
 $(PKG)_DEPS     := cc boost libxml2 libxslt
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://sourceforge.net/projects/xmlwrapp/files/xmlwrapp/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://sourceforge.net/projects/xmlwrapp/files/xmlwrapp/' | \
     $(SED) -n 's,.*/projects/.*/\([0-9][^"]*\)/".*,\1,p' | \
     head -1
 endef

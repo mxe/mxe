@@ -12,7 +12,7 @@ $(PKG)_URL      := https://download.osgeo.org/geotiff/libgeotiff/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc jpeg proj tiff zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://trac.osgeo.org/geotiff/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://trac.osgeo.org/geotiff/' | \
     $(SED) -n 's,.*libgeotiff-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef

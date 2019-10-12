@@ -12,7 +12,7 @@ $(PKG)_URL      := https://git.libssh.org/projects/libssh.git/snapshot/libssh-$(
 $(PKG)_DEPS     := cc libgcrypt zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://git.libssh.org/projects/libssh.git/refs/tags' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://git.libssh.org/projects/libssh.git/refs/tags' | \
     $(SED) -n "s,.*>libssh-\([0-9]*\.[^<]*\)\.tar.*,\1,p" | \
     $(SORT) -Vr | \
     head -1

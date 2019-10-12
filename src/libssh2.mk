@@ -11,7 +11,7 @@ $(PKG)_URL      := https://libssh2.org/download/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc libgcrypt zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://libssh2.org/download/?C=M;O=D' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://libssh2.org/download/?C=M;O=D' | \
     grep 'libssh2-' | \
     $(SED) -n 's,.*libssh2-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1

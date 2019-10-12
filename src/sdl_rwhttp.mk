@@ -12,7 +12,7 @@ $(PKG)_URL      := https://github.com/mgerhardy/SDL_rwhttp/releases/download/$(c
 $(PKG)_DEPS     := cc curl sdl2 sdl2_net
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://github.com/mgerhardy/SDL_rwhttp/tags' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://github.com/mgerhardy/SDL_rwhttp/tags' | \
     grep '<a href="/mgerhardy/SDL_rwhttp/archive/' | \
     $(SED) -n 's,.*href="/mgerhardy/SDL_rwhttp/archive/\([0-9][^"_]*\)\.tar.*,\1,p' | \
     head -1

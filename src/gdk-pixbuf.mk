@@ -12,7 +12,7 @@ $(PKG)_URL      := https://download.gnome.org/sources/gdk-pixbuf/$(call SHORT_PK
 $(PKG)_DEPS     := cc glib jasper jpeg libiconv libpng tiff
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://gitlab.gnome.org/GNOME/gdk-pixbuf/tags' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://gitlab.gnome.org/GNOME/gdk-pixbuf/tags' | \
     $(SED) -n "s,.*<a [^>]\+>v\?\([0-9]\+\.[0-9.]\+\)<.*,\1,p" | \
     grep -v '^2\.9' | \
     head -1

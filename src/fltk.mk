@@ -13,7 +13,7 @@ $(PKG)_URL      := https://fltk.org/pub/fltk/$($(PKG)_MAJOR)/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc jpeg libpng pthreads zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://www.fltk.org/software.php' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://www.fltk.org/software.php' | \
     $(SED) -n 's,.*>fltk-\([0-9]\+\([\.\-][0-9]\+\)\+\)-source\.tar\.gz<.*,\1,p' | \
     grep -v '^1\.1\.' | \
     head -1

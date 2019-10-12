@@ -12,7 +12,7 @@ $(PKG)_URL      := https://pocoproject.org/releases/$(PKG)-$(word 1,$(subst p, ,
 $(PKG)_DEPS     := cc expat openssl pcre sqlite zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://pocoproject.org/download/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://pocoproject.org/download/' | \
     $(SED) -n 's,.*poco-\([0-9][^>/]*\)\.tar.*,\1,p' | \
     head -1
 endef

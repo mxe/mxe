@@ -12,7 +12,7 @@ $(PKG)_URL      := https://curl.haxx.se/download/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc libidn2 libssh2 pthreads
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://curl.haxx.se/download/?C=M;O=D' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://curl.haxx.se/download/?C=M;O=D' | \
     $(SED) -n 's,.*curl-\([0-9][^"]*\)\.tar.*,\1,p' | \
     head -1
 endef

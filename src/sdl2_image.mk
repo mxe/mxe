@@ -12,7 +12,7 @@ $(PKG)_URL      := https://www.libsdl.org/projects/SDL_image/release/$($(PKG)_FI
 $(PKG)_DEPS     := cc jpeg libpng libwebp sdl2 tiff
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://hg.libsdl.org/SDL_image/tags' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://hg.libsdl.org/SDL_image/tags' | \
     $(SED) -n 's,.*release-\([0-9][^<]*\).*,\1,p' | \
     head -1
 endef

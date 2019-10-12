@@ -14,7 +14,7 @@ $(PKG)_DEPS     := cc armadillo curl expat geos giflib gta hdf4 hdf5 \
                    netcdf openjpeg postgresql proj spatialite sqlite tiff zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://trac.osgeo.org/gdal/wiki/DownloadSource' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://trac.osgeo.org/gdal/wiki/DownloadSource' | \
     $(SED) -n 's,.*gdal-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef

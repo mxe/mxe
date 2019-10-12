@@ -12,7 +12,7 @@ $(PKG)_URL      := https://www.gaia-gis.it/gaia-sins/libspatialite-sources/$($(P
 $(PKG)_DEPS     := cc dlfcn-win32 freexl geos libiconv libxml2 proj sqlite zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://www.gaia-gis.it/gaia-sins/libspatialite-sources/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://www.gaia-gis.it/gaia-sins/libspatialite-sources/' | \
     $(SED) -n 's,.*libspatialite-\([0-9][^>]*\)\.tar.*,\1,p' | \
     tail -1
 endef

@@ -11,7 +11,7 @@ $(PKG)_URL      := https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/$($(PKG)_
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- "https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/?C=M;O=D" | \
+    $(WGET) -q -O- -t 2 --timeout=6 "https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/?C=M;O=D" | \
     grep -i '<a href="cfitsio.*tar' | \
     $(SED) -n 's,.*cfitsio\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1

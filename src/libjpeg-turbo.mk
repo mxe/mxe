@@ -11,7 +11,7 @@ $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$($(PKG)_VERSION
 $(PKG)_DEPS     := cc yasm
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://sourceforge.net/projects/$(PKG)/files/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://sourceforge.net/projects/$(PKG)/files/' | \
     $(SED) -n 's,.*/projects/.*/\([0-9][^"%]*\)/".*,\1,p' | \
     sort -V | \
     tail -1

@@ -13,7 +13,7 @@ $(PKG)_URL      := https://distfiles.macports.org/file/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc libgnurx
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://distfiles.macports.org/file/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://distfiles.macports.org/file/' | \
     grep 'file-' | \
     $(SED) -n 's,.*file-\([0-9][^>]*\)\.tar.*,\1,p' | \
     tail -1

@@ -12,7 +12,7 @@ $(PKG)_URL      := https://download.gnome.org/sources/atk/$(call SHORT_PKG_VERSI
 $(PKG)_DEPS     := cc gettext glib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://gitlab.gnome.org/GNOME/atk/tags' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://gitlab.gnome.org/GNOME/atk/tags' | \
     $(SED) -n "s,.*<a [^>]\+>ATK_\([0-9]\+_[0-9_]\+\)<.*,\1,p" | \
     $(SED) "s,_,.,g;" | \
     head -1

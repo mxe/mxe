@@ -15,7 +15,7 @@ $(PKG)_DEPS     := cc gmp
 # libmysqlclient and odbc not supported on windows (see INSTALL and configure.ac)
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://ftp.gnu.org/gnu/glpk/?C=M;O=D' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://ftp.gnu.org/gnu/glpk/?C=M;O=D' | \
     $(SED) -n 's,.*<a href="glpk-\([0-9][^"]*\)\.tar.*,\1,p' | \
     head -1
 endef

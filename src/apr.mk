@@ -13,7 +13,7 @@ $(PKG)_URL_2    := https://www.apache.org/dist/apr/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://apr.apache.org/download.cgi' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://apr.apache.org/download.cgi' | \
     grep 'apr1.*best' |
     $(SED) -n 's,.*APR \([0-9.]*\).*,\1,p'
 endef

@@ -15,7 +15,7 @@ $(PKG)_DEPS     := cc
 $(PKG)_DEPS_$(BUILD) :=
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://gmplib.org/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://gmplib.org/' | \
     grep '<a href="' | \
     $(SED) -n 's,.*gmp-\([0-9][^>]*\)\.tar.*,\1,p' | \
     $(SORT) -V | \

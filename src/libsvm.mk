@@ -11,7 +11,7 @@ $(PKG)_URL      := https://www.csie.ntu.edu.tw/~cjlin/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://www.csie.ntu.edu.tw/~cjlin/libsvm/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://www.csie.ntu.edu.tw/~cjlin/libsvm/' | \
     $(SED) -n 's,.*>v\([0-9][^<]*\)<.*,\1,p' | \
     head -1
 endef

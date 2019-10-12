@@ -12,7 +12,7 @@ $(PKG)_URL      := https://ftp.postgresql.org/pub/source/v$($(PKG)_VERSION)/$($(
 $(PKG)_DEPS     := cc openssl pthreads zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://git.postgresql.org/gitweb?p=postgresql.git;a=tags' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://git.postgresql.org/gitweb?p=postgresql.git;a=tags' | \
     grep 'refs/tags/REL9[0-9_]*"' | \
     $(SED) 's,.*refs/tags/REL\(.*\)".*,\1,g;' | \
     $(SED) 's,_,.,g' | \

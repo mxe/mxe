@@ -12,7 +12,7 @@ $(PKG)_URL      := https://downloads.xiph.org/releases/ogg/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://www.xiph.org/downloads/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://www.xiph.org/downloads/' | \
     $(SED) -n 's,.*libogg-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef

@@ -11,7 +11,7 @@ $(PKG)_URL      := https://www.oberhumer.com/opensource/lzo/download/$($(PKG)_FI
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://www.oberhumer.com/opensource/lzo/download/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://www.oberhumer.com/opensource/lzo/download/' | \
     grep 'lzo-' | \
     grep -v 'minilzo-' | \
     $(SED) -n 's,.*lzo-\([0-9][^>]*\)\.tar.*,\1,p' | \

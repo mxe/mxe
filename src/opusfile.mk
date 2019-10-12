@@ -11,7 +11,7 @@ $(PKG)_URL      := https://archive.mozilla.org/pub/opus/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc ogg opus
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://archive.mozilla.org/pub/opus/?C=M;O=D' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://archive.mozilla.org/pub/opus/?C=M;O=D' | \
     $(SED) -n 's,.*opusfile-\([0-9][^>]*\)\.tar.*,\1,p' | \
     grep -v 'alpha' | \
     grep -v 'beta' | \

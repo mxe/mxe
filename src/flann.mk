@@ -12,7 +12,7 @@ $(PKG)_URL      := https://www.cs.ubc.ca/research/flann/uploads/FLANN/$($(PKG)_F
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://www.cs.ubc.ca/research/flann/index.php/FLANN/Changelog' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://www.cs.ubc.ca/research/flann/index.php/FLANN/Changelog' | \
     grep 'Version' | \
     $(SED) -n 's,.*Version.\([0-9.]*\).*,\1,p' | \
     head -1

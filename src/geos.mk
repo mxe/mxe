@@ -12,7 +12,7 @@ $(PKG)_URL      := https://download.osgeo.org/geos/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://download.osgeo.org/geos/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://download.osgeo.org/geos/' | \
     $(SED) -n 's,.*geos-\([0-9][^>]*\)\.tar.*,\1,p' | \
     tail -1
 endef

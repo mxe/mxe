@@ -11,7 +11,7 @@ $(PKG)_URL      := https://openal-soft.org/openal-releases/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc portaudio
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://openal-soft.org/openal-releases/?C=M;O=D' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://openal-soft.org/openal-releases/?C=M;O=D' | \
     $(SED) -n 's,.*"openal-soft-\([0-9][^"]*\)\.tar.*,\1,p' | \
     $(SORT) -V | \
     tail -1

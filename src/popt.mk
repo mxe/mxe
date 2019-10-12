@@ -11,7 +11,7 @@ $(PKG)_URL      := https://deb.debian.org/debian/pool/main/p/$(PKG)/$(PKG)_$($(P
 $(PKG)_DEPS     := cc gettext libiconv
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://web.archive.org/web/20170922140539/rpm5.org/files/popt/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://web.archive.org/web/20170922140539/rpm5.org/files/popt/' | \
     grep 'popt-' | \
     $(SED) -n 's,.*popt-\([0-9][^>]*\)\.tar.*,\1,p' | \
     tail -1

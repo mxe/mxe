@@ -18,7 +18,7 @@ define $(PKG)_UPDATE
     echo 'TODO: json_spirit automatic update explicitly disabled. Please ' >&2;
     echo '      manually check and update.' >&2;
     echo 'Latest:' >&2;
-    $(WGET) -q -O- 'https://www.codeproject.com/Articles/20027/JSON-Spirit-A-C-JSON-Parser-Generator-Implemented' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://www.codeproject.com/Articles/20027/JSON-Spirit-A-C-JSON-Parser-Generator-Implemented' | \
     $(SED) -n 's,.*/JSON_Spirit/json_spirit_v\([0-9.]*\)[.]zip.*".*,\1,p' | \
     head -1 >&2;
     echo 'Current:' >&2;

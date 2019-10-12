@@ -12,7 +12,7 @@ $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/nsis/NSIS 3/$($(PKG)_VE
 $(PKG)_DEPS     := cc scons-local
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://nsis.sourceforge.io/Download' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://nsis.sourceforge.io/Download' | \
     $(SED) -n 's,.*nsis-\([0-9.]\+\)-src.tar.*,\1,p' | \
     tail -1
 endef

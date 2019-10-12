@@ -11,7 +11,7 @@ $(PKG)_URL      := https://downloads.xiph.org/releases/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc ogg openssl speex theora vorbis
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://icecast.org/download/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://icecast.org/download/' | \
     $(SED) -n 's,.*libshout-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef

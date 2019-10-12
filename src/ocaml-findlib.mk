@@ -12,7 +12,7 @@ $(PKG)_URL      := http://download.camlcity.org/download/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc ocaml-core
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://download.camlcity.org/download' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'http://download.camlcity.org/download' | \
     $(SED) -n 's,.*findlib-\([0-9][^>]*\)\.tar.*,\1,ip' | \
     $(SORT) | \
     tail -1

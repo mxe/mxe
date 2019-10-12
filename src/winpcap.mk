@@ -12,7 +12,7 @@ $(PKG)_URL      := https://www.winpcap.org/install/bin/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://www.winpcap.org/devel.htm' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://www.winpcap.org/devel.htm' | \
     $(SED) -n 's,.*WpcapSrc_\([0-9][^>]*\)\.zip.*,\1,p' | \
     head -1
 endef

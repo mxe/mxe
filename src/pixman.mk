@@ -12,7 +12,7 @@ $(PKG)_URL_2    := https://xorg.freedesktop.org/archive/individual/lib/$($(PKG)_
 $(PKG)_DEPS     := cc libpng
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://cairographics.org/snapshots/?C=M;O=D' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://cairographics.org/snapshots/?C=M;O=D' | \
     $(SED) -n 's,.*"pixman-\([0-9][^"]*\)\.tar.*,\1,p' | \
     head -1
 endef

@@ -12,7 +12,7 @@ $(PKG)_URL      := https://www.libarchive.org/downloads/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc bzip2 libiconv libxml2 nettle openssl xz zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://www.libarchive.org/downloads/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://www.libarchive.org/downloads/' | \
     $(SED) -n 's,.*libarchive-\([0-9][^<]*\)\.tar.*,\1,p' | \
     $(SORT) -V | \
     tail -1

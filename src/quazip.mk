@@ -11,7 +11,7 @@ $(PKG)_GH_CONF  := stachenov/quazip/tags
 $(PKG)_DEPS     := cc qtbase zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://github.com/stachenov/quazip/tags' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://github.com/stachenov/quazip/tags' | \
     grep '<a href="/stachenov/quazip/archive/' | \
     $(SED) -n 's,.*href="/stachenov/quazip/archive/\([0-9][^"_]*\)\.tar.*,\1,p' | \
     head -1

@@ -15,7 +15,7 @@ $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 $(PKG)_DEPS_$(BUILD) := autotools gettext libffi libiconv zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://gitlab.gnome.org/GNOME/glib/tags' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://gitlab.gnome.org/GNOME/glib/tags' | \
     $(SED) -n "s,.*<a [^>]\+>v\?\([0-9]\+\.[0-9.]\+\)<.*,\1,p" | \
     $(SORT) -Vr | \
     head -1

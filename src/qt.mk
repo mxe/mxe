@@ -12,7 +12,7 @@ $(PKG)_URL      := https://download.qt.io/official_releases/qt/4.8/$($(PKG)_VERS
 $(PKG)_DEPS     := cc dbus freetds jpeg libmng libpng openssl postgresql sqlite tiff zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- https://download.qt.io/official_releases/qt/4.8/ | \
+    $(WGET) -q -O- -t 2 --timeout=6 https://download.qt.io/official_releases/qt/4.8/ | \
     $(SED) -n 's,.*href="\(4\.[0-9]\.[^/]*\)/".*,\1,p' | \
     grep -iv -- '-rc' | \
     $(SORT) -V | \

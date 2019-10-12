@@ -12,7 +12,7 @@ $(PKG)_URL_2    := https://ftp-osl.osuosl.org/pub/libpng/src/libpng16/$($(PKG)_F
 $(PKG)_DEPS     := cc zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://sourceforge.net/p/libpng/code/ref/master/tags/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://sourceforge.net/p/libpng/code/ref/master/tags/' | \
     $(SED) -n 's,.*<a[^>]*>v\([0-9][^<]*\)<.*,\1,p' | \
     grep -v alpha | \
     grep -v beta | \

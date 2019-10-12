@@ -12,7 +12,7 @@ $(PKG)_URL_2    := https://www.mirrorservice.org/sites/ftp.gnupg.org/gcrypt/libg
 $(PKG)_DEPS     := cc libgpg_error
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://gnupg.org/ftp/gcrypt/libgcrypt/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://gnupg.org/ftp/gcrypt/libgcrypt/' | \
     $(SED) -n 's,.*libgcrypt-\([0-9][^>]*\)\.tar.*,\1,p' | \
     $(SORT) -V | \
     tail -1

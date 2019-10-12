@@ -12,7 +12,7 @@ $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/libusb/libusb-1.0/libus
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://sourceforge.net/projects/libusb/files/libusb-1.0/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://sourceforge.net/projects/libusb/files/libusb-1.0/' | \
     grep -i 'libusb/files/libusb-1.0' | \
     $(SED) -n 's,.*/libusb-1.0/libusb-\([0-9\.]*\)/.*,\1,p' | \
     head -1

@@ -13,7 +13,7 @@ $(PKG)_DEPS     := cc freeglut glew qtbase
 $(PKG)_QT_DIR   := qt5
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://www.opencsg.org/#download' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'http://www.opencsg.org/#download' | \
     grep 'OpenCSG-' | \
     $(SED) -n 's,.*OpenCSG-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1

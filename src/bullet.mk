@@ -12,7 +12,7 @@ $(PKG)_URL      := https://storage.googleapis.com/google-code-archive-downloads/
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://code.google.com/p/bullet/downloads/list?sort=-uploaded' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://code.google.com/p/bullet/downloads/list?sort=-uploaded' | \
     $(SED) -n 's,.*bullet-\([0-9][^<]*\)\.tgz.*,\1,p' | \
     head -1
 endef

@@ -11,7 +11,7 @@ $(PKG)_URL      := https://download.osgeo.org/proj/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://proj4.org/download.html' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://proj4.org/download.html' | \
     $(SED) -n 's,.*proj-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef

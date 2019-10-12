@@ -11,7 +11,7 @@ $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)-devel/$($
 $(PKG)_DEPS     := cc jpeg lcms zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://sourceforge.net/projects/libmng/files/libmng-devel/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://sourceforge.net/projects/libmng/files/libmng-devel/' | \
     $(SED) -n 's,.*/projects/.*/\([0-9][^"]*\)/".*,\1,p' | \
     head -1
 endef

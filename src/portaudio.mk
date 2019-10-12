@@ -11,7 +11,7 @@ $(PKG)_URL      := http://www.portaudio.com/archives/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://www.portaudio.com/download.html' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'http://www.portaudio.com/download.html' | \
     $(SED) -n 's,.*pa_stable_v\([0-9][^>]*\)\.tgz.*,\1,p' | \
     head -1
 endef

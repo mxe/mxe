@@ -12,7 +12,7 @@ $(PKG)_URL      := https://people.redhat.com/~rjones/portablexdr/files/$($(PKG)_
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- "https://people.redhat.com/~rjones/portablexdr/files/?C=M;O=D" | \
+    $(WGET) -q -O- -t 2 --timeout=6 "https://people.redhat.com/~rjones/portablexdr/files/?C=M;O=D" | \
     grep -i '<a href=.*tar' | \
     $(SED) -n 's,.*portablexdr-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1

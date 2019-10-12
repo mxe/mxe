@@ -11,7 +11,7 @@ $(PKG)_URL      := https://github.com/mirror/$(PKG)/tarball/$($(PKG)_VERSION)/$(
 $(PKG)_DEPS     := cc curl pthreads
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://github.com/mirror/xmlrpc-c/commits/master' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://github.com/mirror/xmlrpc-c/commits/master' | \
     grep 'title="Release' | \
     $(SED) -n 's,.*/mirror/xmlrpc-c/commit/\([^"]\{7\}\)[^"]\{33\}".*Release \([0-9]*\),\1 \2,p' | \
     $(SORT) -V -k 2 | \

@@ -12,7 +12,7 @@ $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- "https://sourceforge.net/projects/plib/files/plib/" | \
+    $(WGET) -q -O- -t 2 --timeout=6 "https://sourceforge.net/projects/plib/files/plib/" | \
     grep 'plib/files/plib' | \
     $(SED) -n 's,.*plib/\([0-9][^>]*\)/.*,\1,p' | \
     head -1

@@ -15,7 +15,7 @@ $(PKG)_DEPS     := cc bzip2 expat zlib
 $(PKG)_DEPS_$(BUILD) := zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://www.boost.org/users/download/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://www.boost.org/users/download/' | \
     $(SED) -n 's,.*/release/\([0-9][^"/]*\)/.*,\1,p' | \
     grep -v beta | \
     head -1

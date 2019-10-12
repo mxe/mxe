@@ -12,7 +12,7 @@ $(PKG)_URL      := https://tukaani.org/xz/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://tukaani.org/xz/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://tukaani.org/xz/' | \
     $(SED) -n 's,.*xz-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef

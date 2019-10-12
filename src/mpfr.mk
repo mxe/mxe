@@ -15,7 +15,7 @@ $(PKG)_DEPS     := cc gmp
 $(PKG)_DEPS_$(BUILD) := gmp
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://www.mpfr.org/mpfr-current/#download' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://www.mpfr.org/mpfr-current/#download' | \
     grep 'mpfr-' | \
     $(SED) -n 's,.*mpfr-\([0-9][^<]*\)/.*,\1,p' | \
     head -1

@@ -12,7 +12,7 @@ $(PKG)_URL      := https://libmpeg2.sourceforge.io/files/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://libmpeg2.sourceforge.io/downloads.html' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://libmpeg2.sourceforge.io/downloads.html' | \
     $(SED) -n 's,.*files/libmpeg2-\([0-9][^"]*\)\.tar.*,\1,p' | \
     head -1
 endef

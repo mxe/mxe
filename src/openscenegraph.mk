@@ -12,7 +12,7 @@ $(PKG)_DEPS     := cc boost curl dcmtk freetype gdal giflib gstreamer \
                    tiff zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://www.openscenegraph.org/index.php/download-section/stable-releases' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'http://www.openscenegraph.org/index.php/download-section/stable-releases' | \
     $(SED) -n 's,.*OpenSceneGraph/tree/OpenSceneGraph-\([0-9]*\.[0-9]*[02468]\.[^<]*\)">.*,\1,p' | \
     $(SORT) -V | \
     tail -1

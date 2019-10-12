@@ -12,7 +12,7 @@ $(PKG)_URL      := https://archive.apache.org/dist/xerces/c/$(word 1,$(subst ., 
 $(PKG)_DEPS     := cc curl libiconv pthreads
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://www.apache.org/dist/xerces/c/3/sources/?C=M;O=D' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://www.apache.org/dist/xerces/c/3/sources/?C=M;O=D' | \
     $(SED) -n 's,.*<a href="xerces-c-\([0-9][^"]*\)\.tar.*,\1,p' | \
     grep -v rc | \
     head -1

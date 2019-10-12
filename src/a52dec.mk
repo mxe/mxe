@@ -12,7 +12,7 @@ $(PKG)_URL      := https://liba52.sourceforge.io/files/$(PKG)-$($(PKG)_VERSION).
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://liba52.sourceforge.io/downloads.html' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://liba52.sourceforge.io/downloads.html' | \
     $(SED) -n 's,.*files/a52dec-\([0-9][^"]*\)\.tar.*,\1,p' | \
     head -1
 endef

@@ -12,7 +12,7 @@ $(PKG)_URL      := https://caml.inria.fr/pub/distrib/ocaml-$(call SHORT_PKG_VERS
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://caml.inria.fr/download.en.html' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://caml.inria.fr/download.en.html' | \
     $(SED) -n 's,.*ocaml-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef

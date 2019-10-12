@@ -19,7 +19,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_UPDATE_DISABLED
-    $(WGET) -q -O- 'https://www.intra2net.com/en/developer/libftdi/download.php' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://www.intra2net.com/en/developer/libftdi/download.php' | \
     $(SED) -n 's,.*libftdi-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef

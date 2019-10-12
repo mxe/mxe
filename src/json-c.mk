@@ -11,7 +11,7 @@ $(PKG)_URL      := https://$(PKG)_releases.s3.amazonaws.com/releases/$($(PKG)_FI
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://json-c_releases.s3.amazonaws.com' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://json-c_releases.s3.amazonaws.com' | \
     $(SED) -r 's,<Key>,\n<Key>,g' | \
     $(SED) -n 's,.*releases/json-c-\([0-9.]*\).tar.gz.*,\1,p' | \
     $(SORT) -V | \

@@ -10,7 +10,7 @@ $(PKG)_URL      := https://download.gnome.org/sources/$(PKG)/$(call SHORT_PKG_VE
 $(PKG)_DEPS     := cc gnutls glib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://gitlab.gnome.org/GNOME/glib-networking/-/tags' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://gitlab.gnome.org/GNOME/glib-networking/-/tags' | \
     $(SED) -n "s,.*glib-networking-\([0-9]\+\.[0-9]*[0-9]*\.[^']*\)\.tar.*,\1,p" | \
     $(SORT) -Vr | \
     head -1

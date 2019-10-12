@@ -13,7 +13,7 @@ $(PKG)_URL_2    := https://mirrorservice.org/sites/distfiles.macports.org/$(PKG)
 $(PKG)_DEPS     := cc expat gettext openssl
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://mirrorservice.org/sites/distfiles.macports.org/$(PKG)/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://mirrorservice.org/sites/distfiles.macports.org/$(PKG)/' | \
     $(SED) -n 's,.*/\([0-9][^"]*\)/"\.tar.*,\1,p' | \
     sort | uniq | \
     head -1

@@ -13,7 +13,7 @@ $(PKG)_URL_2    := https://ftpmirror.gnu.org/libmicrohttpd/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc plibc pthreads
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://ftp.gnu.org/gnu/libmicrohttpd/?C=M;O=D' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://ftp.gnu.org/gnu/libmicrohttpd/?C=M;O=D' | \
     $(SED) -n 's,.*<a href="libmicrohttpd-\([0-9][^"]*\)\.tar.*,\1,p' | \
     $(SORT) -V | \
     tail -1

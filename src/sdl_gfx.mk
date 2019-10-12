@@ -12,7 +12,7 @@ $(PKG)_URL      := https://www.ferzkopp.net/Software/SDL_gfx-2.0/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc sdl
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://www.ferzkopp.net/joomla/content/view/19/14/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://www.ferzkopp.net/joomla/content/view/19/14/' | \
     grep 'href.*tar\.' | \
     $(SED) -n 's,.*SDL_gfx-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1

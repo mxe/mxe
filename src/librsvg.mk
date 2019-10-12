@@ -11,7 +11,7 @@ $(PKG)_URL      := https://download.gnome.org/sources/librsvg/$(call SHORT_PKG_V
 $(PKG)_DEPS     := cc cairo gdk-pixbuf glib libcroco libgsf pango
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://gitlab.gnome.org/GNOME/librsvg/tags' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://gitlab.gnome.org/GNOME/librsvg/tags' | \
     $(SED) -n "s,.*<a [^>]\+>v\?\([0-9]\+\.[0-9.]\+\)<.*,\1,p" | \
     head -1
 endef

@@ -12,7 +12,7 @@ $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/arma/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc hdf5 openblas
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://sourceforge.net/projects/arma/files/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://sourceforge.net/projects/arma/files/' | \
     $(SED) -n 's,.*/armadillo-\([0-9.]*\)[.]tar.*".*,\1,p' | \
     head -1
 endef

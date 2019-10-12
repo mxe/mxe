@@ -18,7 +18,7 @@ $(PKG)_DEPS     := cc bzip2 gnutls lame libass libbluray libbs2b libcaca \
 # See docs/index.html#potential-legal-issues
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://ffmpeg.org/releases/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://ffmpeg.org/releases/' | \
     $(SED) -n 's,.*ffmpeg-\([0-9][^>]*\)\.tar.*,\1,p' | \
     grep -v 'alpha\|beta\|rc\|git' | \
     $(SORT) -Vr | \

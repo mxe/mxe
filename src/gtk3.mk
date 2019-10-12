@@ -12,7 +12,7 @@ $(PKG)_URL      := https://download.gnome.org/sources/gtk+/$(call SHORT_PKG_VERS
 $(PKG)_DEPS     := cc atk cairo gdk-pixbuf gettext glib jasper jpeg libepoxy libpng pango tiff
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://gitlab.gnome.org/GNOME/gtk+/tags' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://gitlab.gnome.org/GNOME/gtk+/tags' | \
     $(SED) -n "s,.*<a [^>]\+>v\?\([0-9]\+\.[0-9.]\+\)<.*,\1,p" | \
     grep '^3\.' | \
     grep -v '^3\.9[0-9]' | \

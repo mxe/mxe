@@ -14,7 +14,7 @@ $(PKG)_URL      := https://distfiles.macports.org/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc gtk2
 
 define $(PKG)_UPDATE_DISABLED
-    $(WGET) -q -O- "http://trac.bjourne.webfactional.com/chrome/common/releases/?C=M;O=D" | \
+    $(WGET) -q -O- -t 2 --timeout=6 "http://trac.bjourne.webfactional.com/chrome/common/releases/?C=M;O=D" | \
     grep -i '<a href="gtkimageview.*tar' | \
     $(SED) -n 's,.*gtkimageview-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1

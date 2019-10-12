@@ -12,7 +12,7 @@ $(PKG)_URL_2    := https://distfiles.macports.org/SuiteSparse/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc intel-tbb metis openblas
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://faculty.cse.tamu.edu/davis/suitesparse.html' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'http://faculty.cse.tamu.edu/davis/suitesparse.html' | \
     $(SED) -n 's,.*SuiteSparse-\([0-9][^"]*\)\.tar.*,\1,p' | \
     head -1
 endef

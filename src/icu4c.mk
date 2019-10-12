@@ -13,7 +13,7 @@ $(PKG)_URL      := https://sourceforge.net/projects/icu/files/ICU4C/$($(PKG)_VER
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://sourceforge.net/projects/icu/files/ICU4C/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://sourceforge.net/projects/icu/files/ICU4C/' | \
     $(SED) -n 's,.*/projects/.*/.*/.*/\([0-9]\+[^"]*\)/".*,\1,p' | \
     $(SORT) -Vr | \
     head -1

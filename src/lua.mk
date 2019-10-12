@@ -16,7 +16,7 @@ $(PKG)_DEPS     := cc
 $(PKG)_DEPS_$(BUILD) :=
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://www.lua.org/download.html' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://www.lua.org/download.html' | \
     $(SED) -n 's,.*lua-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef

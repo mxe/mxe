@@ -14,7 +14,7 @@ $(PKG)_DEPS_$(BUILD) := ucl zlib lzma
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://upx.sourceforge.io/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://upx.sourceforge.io/' | \
     $(SED) -n 's,.*upx-\([0-9][^"]*\)\-src.tar.*,\1,p' | \
     head -1
 endef

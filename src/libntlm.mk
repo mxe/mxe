@@ -12,7 +12,7 @@ $(PKG)_URL      := https://www.nongnu.org/libntlm/releases/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://www.nongnu.org/libntlm/releases/'  | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://www.nongnu.org/libntlm/releases/'  | \
     $(SED) -n 's,.*libntlm-\([0-9]\+\)\(\.[0-9]\+\)*\..*,\1\2,p' |\
     tail -1
 endef

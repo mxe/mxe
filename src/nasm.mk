@@ -13,7 +13,7 @@ $(PKG)_TARGETS  := $(BUILD)
 $(PKG)_DEPS     :=
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://www.nasm.us/pub/nasm/releasebuilds/?C=M;O=D' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://www.nasm.us/pub/nasm/releasebuilds/?C=M;O=D' | \
     $(SED) -n 's,.*href="\([0-9\.]*[^a-z]\)/".*,\1,p' | \
     head -1
 endef

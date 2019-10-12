@@ -11,7 +11,7 @@ $(PKG)_URL      := https://download.videolan.org/pub/videolan/$(PKG)/$($(PKG)_VE
 $(PKG)_DEPS     := cc libgcrypt libgpg_error
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://download.videolan.org/pub/videolan/libaacs/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://download.videolan.org/pub/videolan/libaacs/' | \
     $(SED) -n 's,<a href="\([0-9][^<]*\)/".*,\1,p' | \
     $(SORT) -Vr | \
     head -1

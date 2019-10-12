@@ -14,7 +14,7 @@ $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 $(PKG)_DEPS_$(BUILD) :=
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://www.gnu.org/software/libiconv/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://www.gnu.org/software/libiconv/' | \
     grep 'libiconv-' | \
     $(SED) -n 's,.*libiconv-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1

@@ -11,7 +11,7 @@ $(PKG)_URL      := https://kcat.strangesoft.net/alure-releases/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc flac libsndfile mpg123 ogg openal vorbis
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- https://repo.or.cz/alure.git/tags | \
+    $(WGET) -q -O- -t 2 --timeout=6 https://repo.or.cz/alure.git/tags | \
     grep alure- | \
     $(SED) -n 's,.*alure-\([0-9\.]*\)<.*,\1,p' | \
     head -1

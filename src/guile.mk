@@ -12,7 +12,7 @@ $(PKG)_URL      := https://ftp.gnu.org/gnu/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc gc gettext gmp libffi libgnurx libiconv libltdl libunistring readline
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://git.savannah.gnu.org/gitweb/?p=guile.git;a=tags' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://git.savannah.gnu.org/gitweb/?p=guile.git;a=tags' | \
     grep '<a [^>]*class="list subject"' | \
     $(SED) -n 's,.*<a[^>]*>[^0-9>]*\([0-9][^< ]*\)\.<.*,\1,p' | \
     grep -v 2.* | \

@@ -12,7 +12,7 @@ $(PKG)_URL      := https://download.gnome.org/sources/gtksourceviewmm/$(call SHO
 $(PKG)_DEPS     := cc gtkmm2 gtksourceview
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://gitlab.gnome.org/GNOME/gtksourceviewmm/tags' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://gitlab.gnome.org/GNOME/gtksourceviewmm/tags' | \
     $(SED) -n "s,.*<a [^>]\+>gtksourceviewmm-\(2\.10[0-9.]\+\)<.*,\1,p" | \
     sort -V | \
     tail -1

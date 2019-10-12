@@ -12,7 +12,7 @@ $(PKG)_URL      := https://www.intra2net.com/en/developer/libftdi/download/$($(P
 $(PKG)_DEPS     := cc libusb1
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://www.intra2net.com/en/developer/libftdi/download.php' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://www.intra2net.com/en/developer/libftdi/download.php' | \
     $(SED) -n 's,.*libftdi1-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef

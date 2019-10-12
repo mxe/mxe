@@ -11,7 +11,7 @@ $(PKG)_URL      := https://download.videolan.org/pub/libdvbpsi/$($(PKG)_VERSION)
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://download.videolan.org/pub/libdvbpsi/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://download.videolan.org/pub/libdvbpsi/' | \
     $(SED) -n 's,.*<a href="\([0-9][^<]*\)/".*,\1,p' | \
     $(SORT) -Vr | \
     head -1

@@ -11,7 +11,7 @@ $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/djvu/DjVuLibre/$($(PKG)
 $(PKG)_DEPS     := cc jpeg tiff zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://sourceforge.net/projects/djvu/files/DjVuLibre/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://sourceforge.net/projects/djvu/files/DjVuLibre/' | \
     $(SED) -n 's,.*/\([0-9][^A-Za-z"]*\)/".*,\1,p' | \
     head -1
 endef

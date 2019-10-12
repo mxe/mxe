@@ -12,7 +12,7 @@ $(PKG)_URL      := https://icculus.org/SDL_sound/downloads/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc flac libmikmod ogg sdl speex vorbis
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://hg.icculus.org/icculus/SDL_sound/tags' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://hg.icculus.org/icculus/SDL_sound/tags' | \
     $(SED) -n 's,.*release-\([0-9][^<]*\).*,\1,p' | \
     head -1
 endef

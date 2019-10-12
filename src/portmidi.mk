@@ -11,7 +11,7 @@ $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/portmedia/$(PKG)/$($(PK
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- "https://sourceforge.net/projects/portmedia/files/portmidi/" | \
+    $(WGET) -q -O- -t 2 --timeout=6 "https://sourceforge.net/projects/portmedia/files/portmidi/" | \
     grep -i 'portmedia/files/portmidi' | \
     $(SED) -n 's,.*portmidi/\([0-9]*\)/.*,\1,p' | \
     head -1

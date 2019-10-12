@@ -14,7 +14,7 @@ $(PKG)_DEPS_$(BUILD) :=
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- https://download.qt.io/official_releases/qt/5.8/ | \
+    $(WGET) -q -O- -t 2 --timeout=6 https://download.qt.io/official_releases/qt/5.8/ | \
     $(SED) -n 's,.*href="\(5\.[0-9]\.[^/]*\)/".*,\1,p' | \
     grep -iv -- '-rc' | \
     sort |

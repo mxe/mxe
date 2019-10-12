@@ -11,7 +11,7 @@ $(PKG)_URL      := https://github.com/brianb/$(PKG)/tarball/$($(PKG)_VERSION)/$(
 $(PKG)_DEPS     := cc glib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://github.com/brianb/mdbtools/tags' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://github.com/brianb/mdbtools/tags' | \
     grep '<a href="/brianb/mdbtools/archive/' | \
     $(SED) -n 's,.*href="/brianb/mdbtools/archive/\([0-9][^"_]*\)\.tar.*,\1,p' | \
     head -1

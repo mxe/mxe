@@ -12,7 +12,7 @@ $(PKG)_UA       := MXE
 $(PKG)_DEPS     := cc openblas
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- "https://www.ics.forth.gr/~lourakis/levmar/"  | \
+    $(WGET) -q -O- -t 2 --timeout=6 "https://www.ics.forth.gr/~lourakis/levmar/"  | \
     $(SED) -n 's_.*Latest:.*levmar-\([0-9]\.[0-9]\).*_\1_ip' | \
     head -1;
 endef

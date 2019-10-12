@@ -12,7 +12,7 @@ $(PKG)_URL      := http://www.digip.org/$(PKG)/releases/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://www.digip.org/jansson/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'http://www.digip.org/jansson/' | \
     $(SED) -n 's,.*/jansson-\([0-9][^>]*\)\.tar\.bz2.*,\1,p' | \
     tail -1
 endef

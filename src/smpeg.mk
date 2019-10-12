@@ -11,7 +11,7 @@ $(PKG)_URL      := https://deb.debian.org/debian/pool/main/s/$(PKG)/$($(PKG)_FIL
 $(PKG)_DEPS     := cc sdl
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://packages.debian.org/unstable/source/smpeg' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://packages.debian.org/unstable/source/smpeg' | \
     $(SED) -n 's,.*smpeg_\([0-9][^>]*\)\.orig\.tar.*,\1,p' | \
     head -1
 endef

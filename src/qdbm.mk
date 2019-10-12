@@ -12,7 +12,7 @@ $(PKG)_URL      := https://fallabs.com/qdbm/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc bzip2 libiconv lzo zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://fallabs.com/qdbm/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://fallabs.com/qdbm/' | \
     grep 'qdbm-' | \
     $(SED) -n 's,.*qdbm-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1

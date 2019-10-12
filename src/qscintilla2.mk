@@ -13,7 +13,7 @@ $(PKG)_URL      := https://www.riverbankcomputing.com/static/Downloads/QScintill
 $(PKG)_DEPS     := cc qtbase
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://www.riverbankcomputing.com/software/qscintilla/download' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://www.riverbankcomputing.com/software/qscintilla/download' | \
     grep QScintilla_gpl | \
     head -n 1 | \
     $(SED) -n 's,.*QScintilla_gpl-\([0-9][^>]*\)\.tar.*,\1,p'

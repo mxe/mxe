@@ -14,7 +14,7 @@ $(PKG)_URL_2    := https://www.cryptopp.com/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://www.cryptopp.com/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://www.cryptopp.com/' | \
     $(SED) -n 's,<TITLE>Crypto++ Library \([0-9]\.[0-9]\.[0-9]\).*,\1,p'
 endef
 

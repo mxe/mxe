@@ -12,7 +12,7 @@ $(PKG)_URL      := https://www.gaia-gis.it/gaia-sins/freexl-sources/$($(PKG)_FIL
 $(PKG)_DEPS     := cc libiconv
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://www.gaia-gis.it/gaia-sins/freexl-sources/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://www.gaia-gis.it/gaia-sins/freexl-sources/' | \
     $(SED) -n 's,.*freexl-\([0-9][^>]*\)\.tar.*,\1,p' | \
     tail -1
 endef

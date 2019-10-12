@@ -11,7 +11,7 @@ $(PKG)_URL      := https://download.videolan.org/pub/videolan/$(PKG)/snapshots/$
 $(PKG)_DEPS     := cc liblsmash $(BUILD)~nasm
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://git.videolan.org/?p=x264.git;a=shortlog' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://git.videolan.org/?p=x264.git;a=shortlog' | \
     $(SED) -n 's,.*\([0-9]\{4\}\)-\([0-9]\{2\}\)-\([0-9]\{2\}\).*,\1\2\3-2245,p' | \
     $(SORT) | \
     tail -1

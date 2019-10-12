@@ -11,7 +11,7 @@ $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/freetype/freetype2/$(sh
 $(PKG)_DEPS     := cc bzip2 harfbuzz libpng zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://sourceforge.net/projects/freetype/files/freetype2/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://sourceforge.net/projects/freetype/files/freetype2/' | \
     $(SED) -n 's,.*/projects/.*/\([0-9][^"]*\)/".*,\1,p' | \
     $(SORT) -V | \
     tail -1

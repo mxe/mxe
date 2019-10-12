@@ -11,7 +11,7 @@ $(PKG)_URL      := https://www.aubio.org/pub/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc ffmpeg fftw jack libsamplerate libsndfile $(BUILD)~waf
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://www.aubio.org/download' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://www.aubio.org/download' | \
     $(SED) -n 's,.*aubio-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef

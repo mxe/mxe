@@ -12,7 +12,7 @@ $(PKG)_URL_2    := https://www.openssl.org/source/old/$(call tr,$([a-z]),,$($(PK
 $(PKG)_DEPS     := cc zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://www.openssl.org/source/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://www.openssl.org/source/' | \
     $(SED) -n 's,.*openssl-\([0-9][0-9a-z.]*\)\.tar.*,\1,p' | \
     $(SORT) -V | \
     tail -1

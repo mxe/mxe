@@ -12,7 +12,7 @@ $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/pdcurses/pdcurses/$($(P
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://sourceforge.net/projects/pdcurses/files/pdcurses/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://sourceforge.net/projects/pdcurses/files/pdcurses/' | \
     $(SED) -n 's,.*/projects/.*/\([0-9][^"]*\)/".*,\1,p' | \
     head -1
 endef

@@ -12,7 +12,7 @@ $(PKG)_URL      := https://oligarchy.co.uk/xapian/$($(PKG)_VERSION)/$($(PKG)_FIL
 $(PKG)_DEPS     := cc zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- https://xapian.org/download | \
+    $(WGET) -q -O- -t 2 --timeout=6 https://xapian.org/download | \
     $(SED) -n 's,.*<a HREF="https://oligarchy.co.uk/xapian/\([^/]*\)/xapian-core[^"]*">.*,\1,p' | \
     head -1
 endef

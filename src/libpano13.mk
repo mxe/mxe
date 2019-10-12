@@ -11,7 +11,7 @@ $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/panotools/$(PKG)/$($(PK
 $(PKG)_DEPS     := cc jpeg libpng tiff zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://sourceforge.net/api/file/index/project-id/96188/rss?path=/libpano13' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://sourceforge.net/api/file/index/project-id/96188/rss?path=/libpano13' | \
     $(SED) -n 's,.*libpano13-\([0-9].*\)\.tar.*,\1,p' | \
     grep -v beta | \
     grep -v rc | \

@@ -11,7 +11,7 @@ $(PKG)_URL      := https://libspectre.freedesktop.org/releases/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc cairo ghostscript
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://libspectre.freedesktop.org/releases/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://libspectre.freedesktop.org/releases/' | \
     $(SED) -n 's:.*>LATEST-libspectre-::p' | \
     $(SED) -n 's:<.*::p'
 endef

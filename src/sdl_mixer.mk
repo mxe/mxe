@@ -12,7 +12,7 @@ $(PKG)_URL      := https://www.libsdl.org/projects/SDL_mixer/release/$($(PKG)_FI
 $(PKG)_DEPS     := cc libmodplug ogg sdl smpeg vorbis
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://hg.libsdl.org/SDL_mixer/tags' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://hg.libsdl.org/SDL_mixer/tags' | \
     $(SED) -n 's,.*release-\([0-9][^<]*\).*,\1,p' | \
     grep '^1\.' | \
     $(SORT) -V | \

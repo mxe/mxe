@@ -12,7 +12,7 @@ $(PKG)_URL      := https://bitbucket.org/libgd/gd-libgd/downloads/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc fontconfig freetype jpeg libpng libvpx pthreads tiff
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://bitbucket.org/libgd/gd-libgd/downloads/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://bitbucket.org/libgd/gd-libgd/downloads/' | \
     $(SED) -n 's,.*libgd-\([0-9.]*\)\.tar.*,\1,p' | \
     head -1
 endef

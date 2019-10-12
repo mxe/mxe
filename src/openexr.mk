@@ -12,7 +12,7 @@ $(PKG)_URL      := https://download.savannah.nongnu.org/releases/openexr/$($(PKG
 $(PKG)_DEPS     := cc ilmbase pthreads zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://www.openexr.com/downloads.html' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://www.openexr.com/downloads.html' | \
     grep 'openexr-' | \
     $(SED) -n 's,.*openexr-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1

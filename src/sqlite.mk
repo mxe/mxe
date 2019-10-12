@@ -12,7 +12,7 @@ $(PKG)_URL      := https://www.sqlite.org/2019/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://www.sqlite.org/download.html' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://www.sqlite.org/download.html' | \
     $(SED) -n 's,.*sqlite-autoconf-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef

@@ -11,7 +11,7 @@ $(PKG)_URL      := http://www.fftw.org/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://www.fftw.org/download.html' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'http://www.fftw.org/download.html' | \
     $(SED) -n 's,.*fftw-\([0-9][^>]*\)\.tar.*,\1,p' | \
     grep -v alpha | \
     grep -v beta | \

@@ -11,7 +11,7 @@ $(PKG)_URL      := https://www.libsdl.org/projects/SDL_net/release/$($(PKG)_FILE
 $(PKG)_DEPS     := cc sdl2
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://www.libsdl.org/projects/SDL_net/release/?C=M;O=D' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://www.libsdl.org/projects/SDL_net/release/?C=M;O=D' | \
     $(SED) -n 's,.*SDL_net-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef

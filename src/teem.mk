@@ -12,7 +12,7 @@ $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_
 $(PKG)_DEPS     := cc bzip2 levmar libpng pthreads zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- "https://sourceforge.net/projects/teem/files/teem/" | \
+    $(WGET) -q -O- -t 2 --timeout=6 "https://sourceforge.net/projects/teem/files/teem/" | \
     grep 'teem/files/teem' | \
     $(SED) -n 's,.*teem/\([0-9][^>]*\)/.*,\1,p' | \
     head -1

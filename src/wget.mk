@@ -10,7 +10,7 @@ $(PKG)_URL      := https://ftp.gnu.org/gnu/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc gnutls libidn2 libntlm pcre2 pthreads
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://git.savannah.gnu.org/cgit/wget.git/refs/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://git.savannah.gnu.org/cgit/wget.git/refs/' | \
     $(SED) -n "s,.*<a href='/cgit/wget.git/tag/?h=v\([0-9.]*\)'>.*,\1,p" | \
     head -1
 endef

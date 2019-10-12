@@ -15,7 +15,7 @@ $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/opencore-amr/$(PKG)/$($
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://sourceforge.net/projects/opencore-amr/files/fdk-aac/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://sourceforge.net/projects/opencore-amr/files/fdk-aac/' | \
     $(SED) -n 's,.*fdk-aac-\([0-9.]*\)\.tar.*,\1,p' | \
     $(SORT) -V | \
     tail -1

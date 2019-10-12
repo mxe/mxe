@@ -19,7 +19,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_UPDATE_DISABLED
-    $(WGET) -q -O- 'https://sourceforge.net/projects/libusb-win32/files/libusb-win32-releases/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://sourceforge.net/projects/libusb-win32/files/libusb-win32-releases/' | \
     $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
     head -1
 endef

@@ -13,7 +13,7 @@ $(PKG)_URL_2    := https://forge.ocamlcore.org/frs/download.php/1254/$($(PKG)_FI
 $(PKG)_DEPS     := cc gtkglarea ocaml-findlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://wwwfun.kurims.kyoto-u.ac.jp/soft/lsl/lablgl.html' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'http://wwwfun.kurims.kyoto-u.ac.jp/soft/lsl/lablgl.html' | \
     $(SED) -n 's,.*lablgl-\([^>]*\)\.tar.*,\1,ip' | \
     head -1
 endef

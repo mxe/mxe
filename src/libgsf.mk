@@ -11,7 +11,7 @@ $(PKG)_URL      := https://download.gnome.org/sources/libgsf/$(call SHORT_PKG_VE
 $(PKG)_DEPS     := cc bzip2 glib libxml2 zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://gitlab.gnome.org/GNOME/libgsf/tags' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://gitlab.gnome.org/GNOME/libgsf/tags' | \
     $(SED) -n "s,.*<a [^>]\+>v\?\([0-9]\+\.[0-9.]\+\)<.*,\1,p" | \
     head -1
 endef

@@ -16,7 +16,7 @@ $(PKG)_DEPS     := cc zlib
 # On the releases page of polarssl for update
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- https://polarssl.org/tech-updates/releases | \
+    $(WGET) -q -O- -t 2 --timeout=6 https://polarssl.org/tech-updates/releases | \
     $(SED) -n "s,.*releases/polarssl\-\([0-9]\.[0-9].[0-9]\)-released.*,\1,p" | \
     head -1
 endef

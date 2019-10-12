@@ -12,7 +12,7 @@ $(PKG)_URL      := https://otr.cypherpunks.ca/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc libgcrypt libgpg_error libiconv
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://otr.cypherpunks.ca/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://otr.cypherpunks.ca/' | \
     $(SED) -n 's,.*<a href="libotr-\([0-9][^>]*\)\.tar\.gz">.*,\1,p' | \
     head -1
 endef

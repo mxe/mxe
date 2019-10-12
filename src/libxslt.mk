@@ -12,7 +12,7 @@ $(PKG)_URL_2    := ftp://xmlsoft.org/libxslt/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc libgcrypt libxml2
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://gitlab.gnome.org/GNOME/libxslt/tags' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://gitlab.gnome.org/GNOME/libxslt/tags' | \
     $(SED) -n "s,.*<a [^>]\+>v\([0-9,\.]\+\)<.*,\\1,p" | \
     head -1
 endef

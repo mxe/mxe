@@ -11,7 +11,7 @@ $(PKG)_URL      := https://$(PKG).freedesktop.org/releases/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc expat
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://cgit.freedesktop.org/dbus/dbus/refs/tags' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://cgit.freedesktop.org/dbus/dbus/refs/tags' | \
     $(SED) -n "s,.*<a href='[^']*/tag/?h=dbus-\\([0-9][^']*\\)'.*,\\1,p" | \
     $(SORT) -V | \
     tail -1

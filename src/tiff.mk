@@ -12,7 +12,7 @@ $(PKG)_URL      := https://download.osgeo.org/libtiff/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc jpeg libwebp xz zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://simplesystems.org/libtiff/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'http://simplesystems.org/libtiff/' | \
     $(SED) -n 's,.*>v\([0-9][^<]*\)<.*,\1,p' | \
     head -1
 endef

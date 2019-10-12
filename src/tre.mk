@@ -13,7 +13,7 @@ $(PKG)_URL_2    := https://deb.debian.org/debian/pool/main/t/$(PKG)/$(PKG)_$($(P
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://laurikari.net/tre/download.html' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://laurikari.net/tre/download.html' | \
     $(SED) -n 's,.*tre-\([a-z0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef

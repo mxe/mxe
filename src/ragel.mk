@@ -13,7 +13,7 @@ $(PKG)_TARGETS  := $(BUILD)
 $(PKG)_DEPS     :=
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://www.colm.net/open-source/ragel/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://www.colm.net/open-source/ragel/' | \
     $(SED) -n 's,.*ragel-\([0-9.]*\)\.tar.*,\1,p' | \
     $(SORT) -V | \
     tail -1

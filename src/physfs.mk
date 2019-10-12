@@ -11,7 +11,7 @@ $(PKG)_URL      := https://icculus.org/physfs/downloads/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://icculus.org/physfs/downloads/?M=D' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://icculus.org/physfs/downloads/?M=D' | \
     $(SED) -n 's,.*<a href="physfs-\([0-9][^"]*\)\.tar.*,\1,pI' | \
     $(SORT) -V | \
     tail -1

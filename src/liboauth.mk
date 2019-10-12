@@ -11,7 +11,7 @@ $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc curl openssl
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://sourceforge.net/projects/liboauth/files/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://sourceforge.net/projects/liboauth/files/' | \
     $(SED) -n 's,.*liboauth-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef

@@ -11,7 +11,7 @@ $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/freeglut/freeglut/$($(P
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://sourceforge.net/projects/freeglut/files/freeglut/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://sourceforge.net/projects/freeglut/files/freeglut/' | \
     $(SED) -n 's,.*freeglut-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef

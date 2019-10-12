@@ -13,7 +13,7 @@ $(PKG)_URL_2    := https://gcc.gnu.org/pub/gcc/infrastructure/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc gmp isl
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://www.bastoul.net/cloog/download.php' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://www.bastoul.net/cloog/download.php' | \
     $(SED) -n 's,.*cloog-\([0-9][^>]*\)\.tar.*,\1,p' | \
     $(SORT) -V |
     tail -1

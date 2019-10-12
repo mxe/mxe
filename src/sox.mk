@@ -13,7 +13,7 @@ $(PKG)_DEPS     := cc file flac lame libltdl libmad libpng libsndfile \
                    opencore-amr opus twolame vorbis wavpack
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://sourceforge.net/projects/sox/files/sox/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://sourceforge.net/projects/sox/files/sox/' | \
     $(SED) -n 's,.*projects/.*/\([0-9][^"]*\)/".*,\1,p' | \
     head -1
 endef

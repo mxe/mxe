@@ -13,7 +13,7 @@ $(PKG)_URL_2    := https://www.mirrorservice.org/sites/ftp.gnupg.org/gcrypt/libg
 $(PKG)_DEPS     := cc gettext
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://gnupg.org/ftp/gcrypt/libgpg-error/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://gnupg.org/ftp/gcrypt/libgpg-error/' | \
     $(SED) -n 's,.*libgpg-error-\([1-9]\.[1-9][0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef

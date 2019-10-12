@@ -12,7 +12,7 @@ $(PKG)_URL_2    := https://www.apache.org/dist/logging/log4cxx/$($(PKG)_VERSION)
 $(PKG)_DEPS     := cc apr-util
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://logging.apache.org/log4cxx/download.html' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://logging.apache.org/log4cxx/download.html' | \
     $(SED) -n 's,.*log4cxx-\([0-9.]*\)\.tar.*,\1,p' | \
     head -1
 endef

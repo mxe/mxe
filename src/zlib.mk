@@ -15,7 +15,7 @@ $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 $(PKG)_DEPS_$(BUILD) :=
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://zlib.net/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://zlib.net/' | \
     $(SED) -n 's,.*zlib-\([0-9][^>]*\)\.tar.*,\1,ip' | \
     head -1
 endef

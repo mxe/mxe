@@ -11,7 +11,7 @@ $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$(subst a
 $(PKG)_DEPS     := cc jpeg tiff zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://sourceforge.net/projects/lcms/files/lcms/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://sourceforge.net/projects/lcms/files/lcms/' | \
     $(SED) -n 's,.*/projects/.*/\([0-9][^"]*\)/".*,\1,p' | \
     head -1
 endef

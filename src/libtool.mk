@@ -14,7 +14,7 @@ $(PKG)_DEPS     :=
 $(PKG)_TARGETS  := $(BUILD)
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://ftp.gnu.org/gnu/libtool/?C=M;O=D' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://ftp.gnu.org/gnu/libtool/?C=M;O=D' | \
     $(SED) -n 's,.*<a href="libtool-\([0-9][^"]*\)\.tar.*,\1,p' | \
     head -1
 endef

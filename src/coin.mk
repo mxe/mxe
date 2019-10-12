@@ -12,7 +12,7 @@ $(PKG)_URL      := https://bitbucket.org/Coin3D/coin/downloads/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc dlfcn-win32
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://bitbucket.org/Coin3D/coin/downloads' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://bitbucket.org/Coin3D/coin/downloads' | \
     $(SED) -n 's,.*Coin-\([0-9.]*\).tar.gz.*,\1,p' | \
     $(SORT) -V | \
     tail -1

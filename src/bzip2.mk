@@ -11,7 +11,7 @@ $(PKG)_URL      := https://ftp.osuosl.org/pub/clfs/conglomeration/bzip2/$($(PKG)
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://ftp.osuosl.org/pub/clfs/conglomeration/bzip2/' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://ftp.osuosl.org/pub/clfs/conglomeration/bzip2/' | \
     grep 'bzip2-' | \
     $(SED) -n 's,.*bzip2-\([0-9][^>]*\)\.tar.*,\1,p' | \
     sort -V | \

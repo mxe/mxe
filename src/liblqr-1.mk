@@ -11,7 +11,7 @@ $(PKG)_URL      := https://liblqr.wdfiles.com/local--files/en:download-page/$($(
 $(PKG)_DEPS     := cc glib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://liblqr.wikidot.com/en:download-page' | \
+    $(WGET) -q -O- -t 2 --timeout=6 'https://liblqr.wikidot.com/en:download-page' | \
     $(SED) -n 's,.*liblqr-1-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef
