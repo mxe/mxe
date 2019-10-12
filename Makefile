@@ -463,6 +463,9 @@ SCRIPT_PKG_TYPES := script
 # all pkgs have (implied) order-only dependencies on MXE_CONF_PKGS.
 MXE_CONF_PKGS := mxe-conf
 
+# dummy *.mk files (usually overrides for plugins)
+NON_PKG_BASENAMES := overrides
+
 # autotools/cmake are generally always required, but separate them
 # for the case of `make gcc` which should only build real deps.
 AUTOTOOLS_PKGS := $(filter-out $(MXE_CONF_PKGS) %autotools autoconf automake libtool, \
@@ -516,11 +519,12 @@ PKG_ALL_DEPS = \
 
 # include files from MXE_PLUGIN_DIRS, set base filenames and `all-<plugin>` target
 PLUGIN_FILES := $(realpath $(wildcard $(addsuffix /*.mk,$(MXE_PLUGIN_DIRS))))
-PKGS         := $(sort $(basename $(notdir $(PLUGIN_FILES))))
+PKGS         := $(sort $(filter-out $(NON_PKG_BASENAMES),$(basename $(notdir $(PLUGIN_FILES)))))
 $(foreach FILE,$(PLUGIN_FILES),\
-    $(eval $(basename $(notdir $(FILE)))_MAKEFILE  ?= $(FILE)) \
-    $(eval $(basename $(notdir $(FILE)))_TEST_FILE ?= $(filter-out %.cmake,$(wildcard $(basename $(FILE))-test.*))) \
-    $(eval all-$(lastword $(call split,/,$(dir $(FILE)))): $(basename $(notdir $(FILE)))))
+    $(if $(filter-out $(NON_PKG_BASENAMES),$(basename $(notdir $(FILE)))), \
+        $(eval $(basename $(notdir $(FILE)))_MAKEFILE  ?= $(FILE)) \
+        $(eval $(basename $(notdir $(FILE)))_TEST_FILE ?= $(filter-out %.cmake,$(wildcard $(basename $(FILE))-test.*))) \
+        $(eval all-$(lastword $(call split,/,$(dir $(FILE)))): $(basename $(notdir $(FILE))))))
 include $(PLUGIN_FILES)
 
 # create target sets for PKG_TARGET_RULE loop to avoid creating empty rules
