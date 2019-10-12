@@ -18,7 +18,8 @@ endef
 
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
-         $(MXE_CONFIGURE_OPTS)
+         $(MXE_CONFIGURE_OPTS) \
+         --without-ca-certificates
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' install
 endef
