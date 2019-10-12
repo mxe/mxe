@@ -26,7 +26,8 @@ define $(PKG)_BUILD
         $(MXE_CONFIGURE_OPTS) \
         --with-libiconv=gnu \
         --without-local-zlib
-    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(if $(BUILD_STATIC),libgs,so)
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(if $(BUILD_STATIC),libgs,so) || \
+    $(MAKE) -C '$(BUILD_DIR)' -j '1' $(if $(BUILD_STATIC),libgs,so)
 
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/include/ghostscript'
     $(INSTALL) '$(SOURCE_DIR)/devices/gdevdsp.h' '$(PREFIX)/$(TARGET)/include/ghostscript/gdevdsp.h'
