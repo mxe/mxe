@@ -29,6 +29,13 @@ define $(PKG)_BUILD_STATIC
     $(MAKE) -C '$(1)' -j '$(JOBS)' || $(MAKE) -C '$(1)' -j  1
     $(MAKE) -C '$(1)' -j 1 install
 
-    # build the tutorial installer in /tmp, because the binarycreator internal rename will fail if /tmp is not in the same filesystem as mxe
-    cd '$(1)examples/tutorial' && '$(PREFIX)/bin/$(BUILD)-binarycreator' -c config/config.xml -p packages -t $(PREFIX)/$(TARGET)/qt5/bin/installerbase.exe /tmp/test-$(PKG)-tutorialinstaller.exe && mv /tmp/test-$(PKG)-tutorialinstaller.exe $(PREFIX)/$(TARGET)/bin/test-$(PKG)-tutorialinstaller.exe
+    # build the tutorial installer in /tmp, because the binarycreator internal
+    # rename will fail if /tmp is not in the same filesystem as mxe
+    cd '$(1)examples/tutorial' && \
+    '$(PREFIX)/bin/$(BUILD)-binarycreator' \
+        -c config/config.xml \
+        -p packages \
+        -t '$(PREFIX)/$(TARGET)/qt5/bin/installerbase.exe' \
+        '/tmp/test-$(PKG)-tutorialinstaller.exe' && \
+    mv '/tmp/test-$(PKG)-tutorialinstaller.exe'* '$(PREFIX)/$(TARGET)/bin/'
 endef
