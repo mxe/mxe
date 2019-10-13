@@ -3,58 +3,20 @@ This file is part of MXE. See LICENSE.md for licensing information.
 Contains ad hoc patches for cross building.
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Guilherme Lima Bernal <dev@lbguilherme.com>
-Date: Sat, 28 Mar 2015 20:52:05 +0100
-Subject: [PATCH 1/1] fixes for cross-building
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sun, 13 Oct 2019 16:21:22 +1100
+Subject: [PATCH 1/1] fix *.pc libs
 
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 1111111..2222222 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -846,6 +846,7 @@ IF(HAVE_WINDOWS_H)
-                 SET(BACKENDS  "${BACKENDS} WinMM,")
-                 SET(ALC_OBJS  ${ALC_OBJS} Alc/backends/winmm.c)
-                 SET(EXTRA_LIBS winmm ${EXTRA_LIBS})
-+                SET(PKG_CONFIG_LIBS "${PKG_CONFIG_LIBS} -lwinmm")
-             ENDIF()
-         ENDIF()
-     ENDIF()
-@@ -862,6 +863,7 @@ IF(HAVE_WINDOWS_H)
-             IF(CMAKE_VERSION VERSION_LESS "2.8.8")
-                 INCLUDE_DIRECTORIES(${DSOUND_INCLUDE_DIRS})
-             ENDIF()
+@@ -1101,6 +1101,7 @@ IF(HAVE_WINDOWS_H)
+             SET(ALC_OBJS  ${ALC_OBJS} Alc/backends/dsound.c)
+             ADD_BACKEND_LIBS(${DSOUND_LIBRARIES})
+             SET(INC_PATHS ${INC_PATHS} ${DSOUND_INCLUDE_DIRS})
 +            SET(PKG_CONFIG_LIBS "${PKG_CONFIG_LIBS} -luuid -lole32")
          ENDIF()
      ENDIF()
  
-@@ -873,6 +875,7 @@ IF(HAVE_WINDOWS_H)
-             SET(HAVE_MMDEVAPI 1)
-             SET(BACKENDS  "${BACKENDS} MMDevApi,")
-             SET(ALC_OBJS  ${ALC_OBJS} Alc/backends/mmdevapi.c)
-+            SET(PKG_CONFIG_LIBS "${PKG_CONFIG_LIBS} -lole32")
-         ENDIF()
-     ENDIF()
- ENDIF()
-@@ -1027,10 +1030,10 @@ CONFIGURE_FILE(
-     @ONLY)
- 
- # Build a common library with reusable helpers
--ADD_LIBRARY(common STATIC ${COMMON_OBJS})
-+#ADD_LIBRARY(common STATIC ${COMMON_OBJS})
- 
- # Build main library
--ADD_LIBRARY(${LIBNAME} ${LIBTYPE} ${OPENAL_OBJS} ${ALC_OBJS})
-+ADD_LIBRARY(${LIBNAME} ${LIBTYPE} ${COMMON_OBJS} ${OPENAL_OBJS} ${ALC_OBJS})
- SET_PROPERTY(TARGET ${LIBNAME} APPEND PROPERTY COMPILE_DEFINITIONS AL_BUILD_LIBRARY AL_ALEXT_PROTOTYPES)
- IF(WIN32 AND ALSOFT_NO_UID_DEFS)
-     SET_PROPERTY(TARGET ${LIBNAME} APPEND PROPERTY COMPILE_DEFINITIONS AL_NO_UID_DEFS)
-@@ -1091,7 +1094,7 @@ IF(WIN32 AND NOT LIBTYPE STREQUAL "STATIC")
-     ENDIF()
- ENDIF()
- 
--TARGET_LINK_LIBRARIES(${LIBNAME} common ${EXTRA_LIBS})
-+TARGET_LINK_LIBRARIES(${LIBNAME} ${EXTRA_LIBS})
- 
- # Add an install target here
- INSTALL(TARGETS ${LIBNAME}
