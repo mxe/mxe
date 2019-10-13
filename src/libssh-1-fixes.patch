@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Sun, 29 Oct 2017 00:11:28 +1100
-Subject: [PATCH 1/3] add option to disable shared libs
+Subject: [PATCH 1/2] add option to disable shared libs
 
 Taken from:
 https://www.libssh.org/archive/libssh/2017-10/0000012.html
@@ -26,17 +26,15 @@ diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
 index 1111111..2222222 100644
 --- a/src/CMakeLists.txt
 +++ b/src/CMakeLists.txt
-@@ -285,6 +285,9 @@ include_directories(
+@@ -285,6 +285,7 @@ include_directories(
  # Set the path to the default map file
  set(MAP_PATH "${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.map")
  
 +if (WITH_SHARED_LIB)
-+add_library(${LIBSSH_SHARED_LIBRARY} SHARED ${libssh_SRCS})
-+
  if (WITH_SYMBOL_VERSIONING AND HAVE_LD_VERSION_SCRIPT AND ABIMAP_FOUND)
      # Get the list of header files
      get_file_list(dev_header_list
-@@ -362,6 +365,7 @@ install(
+@@ -362,6 +363,7 @@ install(
    ARCHIVE DESTINATION ${LIB_INSTALL_DIR}
    COMPONENT libraries
  )
@@ -46,177 +44,9 @@ index 1111111..2222222 100644
    add_library(${LIBSSH_STATIC_LIBRARY} STATIC ${libssh_SRCS})
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Tony Theodore <tonyt@logyst.com>
-Date: Sun, 29 Oct 2017 00:45:55 +1100
-Subject: [PATCH 2/3] add indentation for shared lib hunks
-
-Taken from:
-https://www.libssh.org/archive/libssh/2017-10/0000012.html
-
-diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
-index 1111111..2222222 100644
---- a/src/CMakeLists.txt
-+++ b/src/CMakeLists.txt
-@@ -286,85 +286,85 @@ include_directories(
- set(MAP_PATH "${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.map")
- 
- if (WITH_SHARED_LIB)
--add_library(${LIBSSH_SHARED_LIBRARY} SHARED ${libssh_SRCS})
-+    add_library(${LIBSSH_SHARED_LIBRARY} SHARED ${libssh_SRCS})
-+
-+    if (WITH_SYMBOL_VERSIONING AND HAVE_LD_VERSION_SCRIPT AND ABIMAP_FOUND)
-+        # Get the list of header files
-+        get_file_list(dev_header_list
-+                    DIRECTORIES "${LIBSSH_PUBLIC_INCLUDE_DIRS}/libssh"
-+                    FILES_PATTERNS "*.h")
-+
-+        # Extract the symbols marked as "LIBSSH_API" from the header files
-+        extract_symbols("${PROJECT_NAME}_dev.symbols"
-+                        HEADERS_LIST dev_header_list
-+                        FILTER_PATTERN "LIBSSH_API")
-+
-+        if (WITH_ABI_BREAK)
-+            set(ALLOW_ABI_BREAK "BREAK_ABI")
-+        endif()
-+
-+        # Generate the symbol version map file
-+        generate_map_file("${PROJECT_NAME}_dev.map"
-+                        SYMBOLS "${PROJECT_NAME}_dev.symbols"
-+                        RELEASE_NAME_VERSION ${PROJECT_NAME}_AFTER_${LIBRARY_VERSION}
-+                        CURRENT_MAP ${MAP_PATH}
-+                        ${ALLOW_ABI_BREAK})
- 
--if (WITH_SYMBOL_VERSIONING AND HAVE_LD_VERSION_SCRIPT AND ABIMAP_FOUND)
--    # Get the list of header files
--    get_file_list(dev_header_list
--                  DIRECTORIES "${LIBSSH_PUBLIC_INCLUDE_DIRS}/libssh"
--                  FILES_PATTERNS "*.h")
-+        set(libssh_SRCS
-+        ${libssh_SRCS}
-+        ${PROJECT_NAME}_dev.map
-+        )
-+    endif (WITH_SYMBOL_VERSIONING AND HAVE_LD_VERSION_SCRIPT AND ABIMAP_FOUND)
-+
-+    add_library(${LIBSSH_SHARED_LIBRARY} SHARED ${libssh_SRCS})
-+    target_compile_options(${LIBSSH_SHARED_LIBRARY}
-+                        PRIVATE
-+                            ${DEFAULT_C_COMPILE_FLAGS}
-+                            -D_GNU_SOURCE)
- 
--    # Extract the symbols marked as "LIBSSH_API" from the header files
--    extract_symbols("${PROJECT_NAME}_dev.symbols"
--                    HEADERS_LIST dev_header_list
--                    FILTER_PATTERN "LIBSSH_API")
-+    target_link_libraries(${LIBSSH_SHARED_LIBRARY} ${LIBSSH_LINK_LIBRARIES})
- 
--    if (WITH_ABI_BREAK)
--        set(ALLOW_ABI_BREAK "BREAK_ABI")
--    endif()
-+    if (WITH_SYMBOL_VERSIONING AND HAVE_LD_VERSION_SCRIPT)
-+        if (ABIMAP_FOUND)
-+            # Change path to devel map file
-+            set(MAP_PATH "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}_dev.map")
-+        endif (ABIMAP_FOUND)
- 
--    # Generate the symbol version map file
--    generate_map_file("${PROJECT_NAME}_dev.map"
--                      SYMBOLS "${PROJECT_NAME}_dev.symbols"
--                      RELEASE_NAME_VERSION ${PROJECT_NAME}_AFTER_${LIBRARY_VERSION}
--                      CURRENT_MAP ${MAP_PATH}
--                      ${ALLOW_ABI_BREAK})
-+        set_target_properties(${LIBSSH_SHARED_LIBRARY}
-+                            PROPERTIES LINK_FLAGS
-+                            "-Wl,--version-script,\"${MAP_PATH}\"")
-+    endif (WITH_SYMBOL_VERSIONING AND HAVE_LD_VERSION_SCRIPT)
- 
--    set(libssh_SRCS
--      ${libssh_SRCS}
--      ${PROJECT_NAME}_dev.map
-+    set_target_properties(
-+    ${LIBSSH_SHARED_LIBRARY}
-+        PROPERTIES
-+        VERSION
-+            ${LIBRARY_VERSION}
-+        SOVERSION
-+            ${LIBRARY_SOVERSION}
-+        OUTPUT_NAME
-+            ssh
-+        DEFINE_SYMBOL
-+            LIBSSH_EXPORTS
-     )
--endif (WITH_SYMBOL_VERSIONING AND HAVE_LD_VERSION_SCRIPT AND ABIMAP_FOUND)
--
--add_library(${LIBSSH_SHARED_LIBRARY} SHARED ${libssh_SRCS})
--target_compile_options(${LIBSSH_SHARED_LIBRARY}
--                       PRIVATE
--                           ${DEFAULT_C_COMPILE_FLAGS}
--                           -D_GNU_SOURCE)
--
--target_link_libraries(${LIBSSH_SHARED_LIBRARY} ${LIBSSH_LINK_LIBRARIES})
--
--if (WITH_SYMBOL_VERSIONING AND HAVE_LD_VERSION_SCRIPT)
--    if (ABIMAP_FOUND)
--        # Change path to devel map file
--        set(MAP_PATH "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}_dev.map")
--    endif (ABIMAP_FOUND)
--
--    set_target_properties(${LIBSSH_SHARED_LIBRARY}
--                          PROPERTIES LINK_FLAGS
--                          "-Wl,--version-script,\"${MAP_PATH}\"")
--endif (WITH_SYMBOL_VERSIONING AND HAVE_LD_VERSION_SCRIPT)
--
--set_target_properties(
--  ${LIBSSH_SHARED_LIBRARY}
--    PROPERTIES
--      VERSION
--        ${LIBRARY_VERSION}
--      SOVERSION
--        ${LIBRARY_SOVERSION}
--      OUTPUT_NAME
--        ssh
--      DEFINE_SYMBOL
--        LIBSSH_EXPORTS
--)
- 
--if (WITH_VISIBILITY_HIDDEN)
--  set_target_properties(${LIBSSH_SHARED_LIBRARY} PROPERTIES COMPILE_FLAGS "-fvisibility=hidden")
--endif (WITH_VISIBILITY_HIDDEN)
-+    if (WITH_VISIBILITY_HIDDEN)
-+    set_target_properties(${LIBSSH_SHARED_LIBRARY} PROPERTIES COMPILE_FLAGS "-fvisibility=hidden")
-+    endif (WITH_VISIBILITY_HIDDEN)
- 
--if (MINGW)
--    set_target_properties(${LIBSSH_SHARED_LIBRARY} PROPERTIES LINK_FLAGS "-Wl,--enable-stdcall-fixup")
--endif ()
-+    if (MINGW)
-+        set_target_properties(${LIBSSH_SHARED_LIBRARY} PROPERTIES LINK_FLAGS "-Wl,--enable-stdcall-fixup")
-+    endif ()
- 
- 
--install(
--  TARGETS
--    ${LIBSSH_SHARED_LIBRARY}
--  RUNTIME DESTINATION ${BIN_INSTALL_DIR}
--  LIBRARY DESTINATION ${LIB_INSTALL_DIR}
--  ARCHIVE DESTINATION ${LIB_INSTALL_DIR}
--  COMPONENT libraries
--)
-+    install(
-+    TARGETS
-+        ${LIBSSH_SHARED_LIBRARY}
-+    RUNTIME DESTINATION ${BIN_INSTALL_DIR}
-+    LIBRARY DESTINATION ${LIB_INSTALL_DIR}
-+    ARCHIVE DESTINATION ${LIB_INSTALL_DIR}
-+    COMPONENT libraries
-+    )
- endif (WITH_SHARED_LIB)
- 
- if (BUILD_STATIC_LIB)
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Tue, 20 Aug 2019 21:39:19 +0200
-Subject: [PATCH 3/3] remove unwanted dependencies from example program
+Subject: [PATCH 2/2] remove unwanted dependencies from example program
 
 
 diff --git a/examples/knownhosts.c b/examples/knownhosts.c
