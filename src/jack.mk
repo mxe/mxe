@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := jack
-$(PKG)_WEBSITE  := http://jackaudio.org/
+$(PKG)_WEBSITE  := https://jackaudio.org/
 $(PKG)_DESCR    := JACK Audio Connection Kit
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.9.10
@@ -12,7 +12,7 @@ $(PKG)_URL      := https://dl.dropboxusercontent.com/u/28869550/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc libgnurx libsamplerate libsndfile portaudio pthreads readline
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://jackaudio.org/downloads/' | \
+    $(WGET) -q -O- 'https://jackaudio.org/downloads/' | \
     $(SED) -n 's,.*jack-\([0-9][^"]*\)\.tar.*,\1,p' | \
     head -1
 endef
