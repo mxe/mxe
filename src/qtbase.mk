@@ -4,8 +4,8 @@ PKG             := qtbase
 $(PKG)_WEBSITE  := https://www.qt.io/
 $(PKG)_DESCR    := Qt
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.13.0
-$(PKG)_CHECKSUM := ff6964b3b528cd3b1d21bcf3470006e8e5cbe69591923f982871d886ea0488fe
+$(PKG)_VERSION  := 5.13.1
+$(PKG)_CHECKSUM := 110cd08cdacab26274bf2519d3508046616c0b638f0d2f5e00bc8bad87469eab
 $(PKG)_SUBDIR   := $(PKG)-everywhere-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-everywhere-src-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.qt.io/official_releases/qt/5.13/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
@@ -30,6 +30,7 @@ define $(PKG)_BUILD
         PKG_CONFIG="${TARGET}-pkg-config" \
         PKG_CONFIG_SYSROOT_DIR="/" \
         PKG_CONFIG_LIBDIR="$(PREFIX)/$(TARGET)/lib/pkgconfig" \
+        MAKE=$(MAKE) \
         ./configure \
             -opensource \
             -confirm-license \

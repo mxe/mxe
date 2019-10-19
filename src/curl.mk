@@ -4,12 +4,12 @@ PKG             := curl
 $(PKG)_WEBSITE  := https://curl.haxx.se/libcurl/
 $(PKG)_DESCR    := cURL
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 7.65.1
-$(PKG)_CHECKSUM := f6c22074877f235aebc7c53057dbc7ee82358f8ae58bfb767e955c18c859a77a
+$(PKG)_VERSION  := 7.66.0
+$(PKG)_CHECKSUM := dbb48088193016d079b97c5c3efde8efa56ada2ebf336e8a97d04eb8e2ed98c1
 $(PKG)_SUBDIR   := curl-$($(PKG)_VERSION)
 $(PKG)_FILE     := curl-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://curl.haxx.se/download/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc gnutls libidn2 libssh2 pthreads
+$(PKG)_DEPS     := cc libidn2 libssh2 pthreads
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://curl.haxx.se/download/?C=M;O=D' | \
@@ -20,7 +20,7 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
-        --with-gnutls \
+	--with-winssl \
         --without-ssl \
         --with-libidn2 \
         --enable-sspi \
