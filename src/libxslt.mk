@@ -8,7 +8,6 @@ $(PKG)_CHECKSUM := 8e36605144409df979cab43d835002f63988f3dc94d5d3537c12796db90e3
 $(PKG)_SUBDIR   := libxslt-$($(PKG)_VERSION)
 $(PKG)_FILE     := libxslt-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://xmlsoft.org/sources/$($(PKG)_FILE)
-$(PKG)_URL_2    := ftp://xmlsoft.org/libxslt/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc libgcrypt libxml2
 
 define $(PKG)_UPDATE
