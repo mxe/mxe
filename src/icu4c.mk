@@ -33,12 +33,20 @@ define $(PKG)_BUILD_COMMON
         --with-cross-build='$(PREFIX)/$(BUILD)/$(PKG)' \
         CFLAGS=-DU_USING_ICU_NAMESPACE=0 \
         CXXFLAGS='--std=gnu++0x' \
-        SHELL=bash \
+        SHELL=$(SHELL) \
+        LIBS='-lstdc++' \
         $($(PKG)_CONFIGURE_OPTS)
 
-    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
-    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install VERBOSE=1
     ln -sf '$(PREFIX)/$(TARGET)/bin/icu-config' '$(PREFIX)/bin/$(TARGET)-icu-config'
+endef
+
+define $(PKG)_BUILD_TEST
+    '$(TARGET)-gcc' \
+        -W -Wall -Werror -ansi -pedantic \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
+        `'$(TARGET)-pkg-config' icu-uc icu-io --cflags --libs`
 endef
 
 define $(PKG)_BUILD_SHARED
@@ -46,10 +54,11 @@ define $(PKG)_BUILD_SHARED
     # icu4c installs its DLLs to lib/. Move them to bin/.
     mv -fv $(PREFIX)/$(TARGET)/lib/icu*.dll '$(PREFIX)/$(TARGET)/bin/'
     # add symlinks icu*<version>.dll.a to icu*.dll.a
-    for lib in `ls '$(PREFIX)/$(TARGET)/lib/' | grep 'icu.*\.dll\.a' | cut -d '.' -f 1 | tr '\n' ' '`; \
+    for lib in $$(ls '$(PREFIX)/$(TARGET)/lib/' | grep 'icu.*\.dll\.a' | cut -d '.' -f 1 | tr '\n' ' '); \
     do \
         ln -fs "$(PREFIX)/$(TARGET)/lib/$${lib}.dll.a" "$(PREFIX)/$(TARGET)/lib/$${lib}$($(PKG)_MAJOR).dll.a"; \
     done
+    $($(PKG)_BUILD_TEST)
 endef
 
 define $(PKG)_BUILD
@@ -57,4 +66,5 @@ define $(PKG)_BUILD
     # Static libs are prefixed with an `s` but the config script
     # doesn't detect it properly, despite the STATIC_PREFIX="s" line
     $(SED) -i 's,ICUPREFIX="icu",ICUPREFIX="sicu",' '$(PREFIX)/$(TARGET)/bin/icu-config'
+    $($(PKG)_BUILD_TEST)
 endef
