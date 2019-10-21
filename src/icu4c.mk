@@ -4,35 +4,40 @@ PKG             := icu4c
 $(PKG)_WEBSITE  := https://github.com/unicode-org/icu
 $(PKG)_DESCR    := ICU4C
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 56.1
+$(PKG)_VERSION  := 65.1
 $(PKG)_MAJOR    := $(word 1,$(subst ., ,$($(PKG)_VERSION)))
-$(PKG)_CHECKSUM := 3a64e9105c734dcf631c0b3ed60404531bce6c0f5a64bfe1a6402a4cc2314816
+$(PKG)_CHECKSUM := 53e37466b3d6d6d01ead029e3567d873a43a5d1c668ed2278e253b683136d948
+$(PKG)_GH_CONF  := unicode-org/icu/releases/latest,release-,,,-
 $(PKG)_SUBDIR   := icu
-$(PKG)_FILE     := $(PKG)-$(subst .,_,$($(PKG)_VERSION))-src.tgz
-$(PKG)_URL      := https://sourceforge.net/projects/icu/files/ICU4C/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc
+$(PKG)_URL      := $($(PKG)_WEBSITE)/releases/download/release-$(subst .,-,$($(PKG)_VERSION))/icu4c-$(subst .,_,$($(PKG)_VERSION))-src.tgz
+$(PKG)_DEPS     := cc $(BUILD)~$(PKG)
 
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://sourceforge.net/projects/icu/files/ICU4C/' | \
-    $(SED) -n 's,.*/projects/.*/.*/.*/\([0-9]\+[^"]*\)/".*,\1,p' | \
-    $(SORT) -Vr | \
-    head -1
+$(PKG)_TARGETS       := $(BUILD) $(MXE_TARGETS)
+$(PKG)_DEPS_$(BUILD) :=
+
+define $(PKG)_BUILD_$(BUILD)
+    # cross build requires artefacts from native build tree
+    rm -rf '$(PREFIX)/$(BUILD)/$(PKG)'
+    $(INSTALL) -d '$(PREFIX)/$(BUILD)/$(PKG)'
+    cd '$(PREFIX)/$(BUILD)/$(PKG)' && '$(SOURCE_DIR)/source/configure' \
+        CC=$(BUILD_CC) \
+        CXX=$(BUILD_CXX) \
+        --enable-tests=no \
+        --enable-samples=no
+    $(MAKE) -C '$(PREFIX)/$(BUILD)/$(PKG)' -j '$(JOBS)'
 endef
 
 define $(PKG)_BUILD_COMMON
-    cd '$(1)/source' && autoreconf -fi
-    mkdir '$(1).native' && cd '$(1).native' && '$(1)/source/configure' \
-        CC=$(BUILD_CC) CXX=$(BUILD_CXX)
-    $(MAKE) -C '$(1).native' -j '$(JOBS)'
-
-    mkdir '$(1).cross' && cd '$(1).cross' && '$(1)/source/configure' \
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/source/configure' \
         $(MXE_CONFIGURE_OPTS) \
-        --with-cross-build='$(1).native' \
+        --with-cross-build='$(PREFIX)/$(BUILD)/$(PKG)' \
         CFLAGS=-DU_USING_ICU_NAMESPACE=0 \
         CXXFLAGS='--std=gnu++0x' \
-        SHELL=bash
+        SHELL=bash \
+        $($(PKG)_CONFIGURE_OPTS)
 
-    $(MAKE) -C '$(1).cross' -j '$(JOBS)' install
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
     ln -sf '$(PREFIX)/$(TARGET)/bin/icu-config' '$(PREFIX)/bin/$(TARGET)-icu-config'
 endef
 
