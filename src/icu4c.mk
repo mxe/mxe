@@ -10,7 +10,7 @@ $(PKG)_CHECKSUM := 53e37466b3d6d6d01ead029e3567d873a43a5d1c668ed2278e253b683136d
 $(PKG)_GH_CONF  := unicode-org/icu/releases/latest,release-,,,-
 $(PKG)_SUBDIR   := icu
 $(PKG)_URL      := $($(PKG)_WEBSITE)/releases/download/release-$(subst .,-,$($(PKG)_VERSION))/icu4c-$(subst .,_,$($(PKG)_VERSION))-src.tgz
-$(PKG)_DEPS     := cc $(BUILD)~$(PKG)
+$(PKG)_DEPS     := cc $(BUILD)~$(PKG) pe-util
 
 $(PKG)_TARGETS       := $(BUILD) $(MXE_TARGETS)
 $(PKG)_DEPS_$(BUILD) :=
@@ -28,6 +28,7 @@ define $(PKG)_BUILD_$(BUILD)
 endef
 
 define $(PKG)_BUILD_COMMON
+    rm -fv $(shell echo "$(PREFIX)/$(TARGET)"/{bin,lib}/{lib,libs,}icu'*'.{a,dll,dll.a})
     cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/source/configure' \
         $(MXE_CONFIGURE_OPTS) \
         --with-cross-build='$(PREFIX)/$(BUILD)/$(PKG)' \
@@ -53,12 +54,24 @@ define $(PKG)_BUILD_SHARED
     $($(PKG)_BUILD_COMMON)
     # icu4c installs its DLLs to lib/. Move them to bin/.
     mv -fv $(PREFIX)/$(TARGET)/lib/icu*.dll '$(PREFIX)/$(TARGET)/bin/'
+
+    # stub data is icudt.dll, actual data is libicudt.dll - prefer actual
+    mv -fv '$(PREFIX)/$(TARGET)/lib/libicudt$($(PKG)_MAJOR).dll' '$(PREFIX)/$(TARGET)/bin/icudt$($(PKG)_MAJOR).dll'
+
     # add symlinks icu*<version>.dll.a to icu*.dll.a
-    for lib in $$(ls '$(PREFIX)/$(TARGET)/lib/' | grep 'icu.*\.dll\.a' | cut -d '.' -f 1 | tr '\n' ' '); \
+    # needed since *.pc files use versioned libs
+    for lib in $$(ls '$(PREFIX)/$(TARGET)/lib/' | grep 'libicu.*\.dll\.a' | cut -d '.' -f 1 | tr '\n' ' '); \
     do \
         ln -fs "$(PREFIX)/$(TARGET)/lib/$${lib}.dll.a" "$(PREFIX)/$(TARGET)/lib/$${lib}$($(PKG)_MAJOR).dll.a"; \
     done
     $($(PKG)_BUILD_TEST)
+
+    # bundle test to verify deployment
+    rm -rfv '$(PREFIX)/$(TARGET)/bin/test-$(PKG)' '$(PREFIX)/$(TARGET)/bin/test-$(PKG).zip'
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/bin/test-$(PKG)'
+    cp $$($(TARGET)-peldd --all '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe') '$(PREFIX)/$(TARGET)/bin/test-$(PKG)'
+    cd '$(PREFIX)/$(TARGET)/bin' && zip -r test-$(PKG).zip test-$(PKG)
+    rm -rfv '$(PREFIX)/$(TARGET)/bin/test-$(PKG)'
 endef
 
 define $(PKG)_BUILD
