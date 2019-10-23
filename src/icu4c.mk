@@ -32,15 +32,14 @@ define $(PKG)_BUILD_COMMON
     cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/source/configure' \
         $(MXE_CONFIGURE_OPTS) \
         --with-cross-build='$(PREFIX)/$(BUILD)/$(PKG)' \
-        CFLAGS=-DU_USING_ICU_NAMESPACE=0 \
+        --enable-icu-config=no \
         CXXFLAGS='--std=gnu++0x' \
         SHELL=$(SHELL) \
         LIBS='-lstdc++' \
         $($(PKG)_CONFIGURE_OPTS)
 
-    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1
-    $(MAKE) -C '$(BUILD_DIR)' -j 1 install VERBOSE=1
-    ln -sf '$(PREFIX)/$(TARGET)/bin/icu-config' '$(PREFIX)/bin/$(TARGET)-icu-config'
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1 SO_TARGET_VERSION_SUFFIX=
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install VERBOSE=1 SO_TARGET_VERSION_SUFFIX=
 endef
 
 define $(PKG)_BUILD_TEST
@@ -58,12 +57,6 @@ define $(PKG)_BUILD_SHARED
     # stub data is icudt.dll, actual data is libicudt.dll - prefer actual
     mv -fv '$(PREFIX)/$(TARGET)/lib/libicudt$($(PKG)_MAJOR).dll' '$(PREFIX)/$(TARGET)/bin/icudt$($(PKG)_MAJOR).dll'
 
-    # add symlinks icu*<version>.dll.a to icu*.dll.a
-    # needed since *.pc files use versioned libs
-    for lib in $$(ls '$(PREFIX)/$(TARGET)/lib/' | grep 'libicu.*\.dll\.a' | cut -d '.' -f 1 | tr '\n' ' '); \
-    do \
-        ln -fs "$(PREFIX)/$(TARGET)/lib/$${lib}.dll.a" "$(PREFIX)/$(TARGET)/lib/$${lib}$($(PKG)_MAJOR).dll.a"; \
-    done
     $($(PKG)_BUILD_TEST)
 
     # bundle test to verify deployment
@@ -76,8 +69,5 @@ endef
 
 define $(PKG)_BUILD
     $($(PKG)_BUILD_COMMON)
-    # Static libs are prefixed with an `s` but the config script
-    # doesn't detect it properly, despite the STATIC_PREFIX="s" line
-    $(SED) -i 's,ICUPREFIX="icu",ICUPREFIX="sicu",' '$(PREFIX)/$(TARGET)/bin/icu-config'
     $($(PKG)_BUILD_TEST)
 endef
