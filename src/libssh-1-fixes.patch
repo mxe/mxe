@@ -26,7 +26,7 @@ diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
 index 1111111..2222222 100644
 --- a/src/CMakeLists.txt
 +++ b/src/CMakeLists.txt
-@@ -285,6 +285,7 @@ include_directories(
+@@ -303,6 +303,7 @@ include_directories(
  # Set the path to the default map file
  set(MAP_PATH "${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.map")
  
@@ -34,10 +34,10 @@ index 1111111..2222222 100644
  if (WITH_SYMBOL_VERSIONING AND HAVE_LD_VERSION_SCRIPT AND ABIMAP_FOUND)
      # Get the list of header files
      get_file_list(dev_header_list
-@@ -362,6 +363,7 @@ install(
-   ARCHIVE DESTINATION ${LIB_INSTALL_DIR}
-   COMPONENT libraries
- )
+@@ -382,6 +383,7 @@ install(TARGETS ${LIBSSH_SHARED_LIBRARY}
+ 
+ install(EXPORT libssh-config
+         DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
 +endif (WITH_SHARED_LIB)
  
  if (BUILD_STATIC_LIB)
