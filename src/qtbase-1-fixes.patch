@@ -1,6 +1,6 @@
 This file is part of MXE. See LICENSE.md for licensing information.
 
-From 2ff7d50d0f701915d810569d19e1413674aec79d Mon Sep 17 00:00:00 2001
+From bb59f5ad55cf935a20cb5406c020293a3ae91281 Mon Sep 17 00:00:00 2001
 From: Ray Donnelly <mingw.android@gmail.com>
 Date: Wed, 26 Aug 2015 12:45:43 +0100
 Subject: [PATCH 1/4] cmake: Rearrange STATIC vs INTERFACE targets
@@ -12,10 +12,10 @@ Source: https://git.io/vzWJz
 See also: https://github.com/mxe/mxe/issues/1185
 
 diff --git a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
-index d4fd057682..600c8273f1 100644
+index f4a34d6e48..f9e2987564 100644
 --- a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
 +++ b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
-@@ -323,6 +323,9 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
+@@ -327,6 +327,9 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
      list(APPEND _Qt5$${CMAKE_MODULE_NAME}_LIB_DEPENDENCIES \"$${CMAKE_INTERFACE_QT5_MODULE_DEPS}\")
  !!ENDIF
  
@@ -25,7 +25,7 @@ index d4fd057682..600c8273f1 100644
  !!IF !isEmpty(CMAKE_STATIC_TYPE)
      if(NOT Qt5_EXCLUDE_STATIC_DEPENDENCIES)
  !!IF !isEmpty(CMAKE_DEBUG_TYPE)
-@@ -360,9 +363,6 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
+@@ -364,9 +367,6 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
  
      add_library(Qt5::$${CMAKE_MODULE_NAME} STATIC IMPORTED)
      set_property(TARGET Qt5::$${CMAKE_MODULE_NAME} PROPERTY IMPORTED_LINK_INTERFACE_LANGUAGES "CXX")
@@ -39,7 +39,7 @@ index d4fd057682..600c8273f1 100644
 2.20.1
 
 
-From 7c3a397e8cc07ac4dad174dc6a0f4e02834b1f72 Mon Sep 17 00:00:00 2001
+From b3d2613f24be55ee494646a0b84074a3308de264 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Sat, 16 Jul 2016 20:31:07 +1000
 Subject: [PATCH 2/4] Fix pkgconfig file and library naming
@@ -108,7 +108,7 @@ index 46687f262e..4b2980a1a8 100644
 2.20.1
 
 
-From a4fe5af173b82d95c741df30d151576b2bc4e0b7 Mon Sep 17 00:00:00 2001
+From 109719a9699166747203bef1d2516c9ace183125 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 11 Jun 2017 00:27:41 +0200
 Subject: [PATCH 3/4] use pkg-config for harfbuzz
@@ -133,39 +133,33 @@ index 6280b4dfa2..e094ee12e6 100644
 2.20.1
 
 
-From 033d4a71054d41f48d38027f091edc76526b8911 Mon Sep 17 00:00:00 2001
+From 3e4cc37443c0269e0b0be655c670926e7198c135 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
-Date: Thu, 23 Nov 2017 11:28:47 +0200
-Subject: [PATCH 4/4] disable qt_random_cpu for i686-w64-mingw32
+Date: Thu, 31 Oct 2019 22:35:28 +0100
+Subject: [PATCH 4/4] Revert "configure: Do use pkg-config --libs for static
+ libs"
 
-Workaround for gcc internal error compiling for mingw32:
-    global/qrandom.cpp: In function 'qsizetype qt_random_cpu(void*, qsizetype)':
-    global/qrandom.cpp:123:1: internal compiler error: in
-    ix86_compute_frame_layout, at config/i386/i386.c:10145
+This change broke dbus detection in MXE. Smells fishy too.
+
+This reverts commit a1ea49878927dfe267416c795b50f3d5bdfa0b84.
+
+Change-Id: I66e4fe1e7a4d53c19f0d5dadf1e041565467f270
+
+diff --git a/mkspecs/features/qt_configure.prf b/mkspecs/features/qt_configure.prf
+index 81110e9f6d..9be4fb6f1f 100644
+--- a/mkspecs/features/qt_configure.prf
++++ b/mkspecs/features/qt_configure.prf
+@@ -825,7 +825,9 @@ defineTest(qtConfLibrary_pkgConfig) {
+     !qtConfResolveLibs($${1}.libs, $$libs): \
+         return(false)
+     contains($${1}.libs, ".*\\.$${QMAKE_EXTENSION_STATICLIB}$") {
+-        qtRunLoggedCommand("$$pkg_config --static --libs $$args", libs)|return(false)
++        qtRunLoggedCommand("$$pkg_config --static --libs-only-L $$args", libpaths)|return(false)
++        qtRunLoggedCommand("$$pkg_config --static --libs-only-l $$args", libs)|return(false)
++        eval(libs = $$libpaths $$libs)
+         !qtConfResolveLibs($${1}.libs, $$libs): \
+             return(false)
      }
-     ^
-
-    global/qrandom.cpp:123:1: internal compiler error: Segmentation fault
-    i686-w64-mingw32.static-g++: internal compiler error: Segmentation fault
-    (program cc1plus)
-
-Based on https://codereview.qt-project.org/#/c/212360/
-
-Change-Id: Ia1c902e7b147bdda2b8d7904b40a3b968b8d0369
-
-diff --git a/src/corelib/global/qrandom.cpp b/src/corelib/global/qrandom.cpp
-index bf01b7ae2a..26bcaf0326 100644
---- a/src/corelib/global/qrandom.cpp
-+++ b/src/corelib/global/qrandom.cpp
-@@ -90,7 +90,7 @@ DECLSPEC_IMPORT BOOLEAN WINAPI SystemFunction036(PVOID RandomBuffer, ULONG Rando
- 
- QT_BEGIN_NAMESPACE
- 
--#if defined(Q_PROCESSOR_X86) && QT_COMPILER_SUPPORTS_HERE(RDRND)
-+#if defined(Q_PROCESSOR_X86) && !defined(Q_PROCESSOR_X86_32) && QT_COMPILER_SUPPORTS_HERE(RDRND)
- static qsizetype qt_random_cpu(void *buffer, qsizetype count) Q_DECL_NOTHROW;
- 
- #  ifdef Q_PROCESSOR_X86_64
 -- 
 2.20.1
 
