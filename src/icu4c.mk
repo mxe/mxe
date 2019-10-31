@@ -54,9 +54,6 @@ define $(PKG)_BUILD_SHARED
     # icu4c installs its DLLs to lib/. Move them to bin/.
     mv -fv $(PREFIX)/$(TARGET)/lib/icu*.dll '$(PREFIX)/$(TARGET)/bin/'
 
-    # stub data is icudt.dll, actual data is libicudt.dll - prefer actual
-    mv -fv '$(PREFIX)/$(TARGET)/lib/libicudt$($(PKG)_MAJOR).dll' '$(PREFIX)/$(TARGET)/bin/icudt$($(PKG)_MAJOR).dll'
-
     $($(PKG)_BUILD_TEST)
 
     # bundle test to verify deployment
