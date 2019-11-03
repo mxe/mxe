@@ -43,7 +43,10 @@ define $(PKG)_BUILD_$(BUILD)
     cd '$(BUILD_DIR)' && cmake '$(SOURCE_DIR)' \
         -DCMAKE_INSTALL_PREFIX='$(PREFIX)/$(TARGET)' \
         -DBOOST_ROOT='$(PREFIX)/$(TARGET)' \
+        -DBOOST_INCLUDEDIR='$(PREFIX)/$(TARGET)/include' \
+        -DBOOST_LIBRARYDIR='$(PREFIX)/$(TARGET)/lib' \
         -DBoost_NO_SYSTEM_PATHS=ON \
+        -DBoost_NO_BOOST_CMAKE=ON \
         -DCMAKE_CXX_FLAGS='-I$(PREFIX)/$(TARGET)/include'
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
