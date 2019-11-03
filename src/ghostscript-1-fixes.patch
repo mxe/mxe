@@ -57,7 +57,7 @@ index 1111111..2222222 100644
 +
 +#ifdef __MINGW32__
 +int
-+gp_local_arg_encoding_get_codepoint(FILE *file, const char **astr)
++gp_local_arg_encoding_get_codepoint(gp_file *file, const char **astr)
 +{
 +    int len;
 +    int c;
