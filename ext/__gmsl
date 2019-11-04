@@ -5,7 +5,7 @@
 # A library of functions to be used with GNU Make's $(call) that
 # provides functionality not available in standard GNU Make.
 #
-# Copyright (c) 2005-2014 John Graham-Cumming
+# Copyright (c) 2005-2018 John Graham-Cumming
 #
 # This file is part of GMSL
 #
@@ -42,7 +42,7 @@
 # This is the GNU Make Standard Library version number as a list with
 # three items: major, minor, revision
 
-gmsl_version := 1 1 7
+gmsl_version := 1 1 8
 
 __gmsl_name := GNU Make Standard Library
 
@@ -510,7 +510,7 @@ set_equal = $(__gmsl_tr2)$(call seq,$1,$2)
 # Returns:   Returns the integer for human consumption that is represented
 #            by the string of x's
 # ----------------------------------------------------------------------------
-int_decode = $(__gmsl_tr1)$(words $1)
+int_decode = $(__gmsl_tr1)$(if $1,$(if $(call seq,$(word 1,$1),x),$(words $1),$1),0)
 
 # ----------------------------------------------------------------------------
 # Function:  int_encode
@@ -602,8 +602,7 @@ multiply = $(__gmsl_tr2)$(call __gmsl_int_wrap,int_multiply,$1,$2)
 #            by argument 2 in x's representation
 # ----------------------------------------------------------------------------
 int_divide = $(__gmsl_tr2)$(strip $(if $1,$(if $2,                         \
-                 $(if $(call int_gte,$1,$2),                               \
-                     x $(call int_divide,$(call int_subtract,$1,$2),$2),), \
+                 $(subst M,x,$(filter-out x,$(subst $2,M,$1))),            \
                  $(call __gmsl_error,Division by zero))))
 
 # ----------------------------------------------------------------------------
@@ -613,6 +612,26 @@ int_divide = $(__gmsl_tr2)$(strip $(if $1,$(if $2,                         \
 # Returns:   Returns the integer division of the first argument by the second
 # ----------------------------------------------------------------------------
 divide = $(__gmsl_tr2)$(call __gmsl_int_wrap,int_divide,$1,$2)
+
+# ----------------------------------------------------------------------------
+# Function:  int_modulo
+# Arguments: 1: A number in x's representation
+#            2: Another number in x's represntation
+# Returns:   Returns the remainder of integer division of argument 1 divided 
+#            by argument 2 in x's representation
+# ----------------------------------------------------------------------------
+int_modulo = $(__gmsl_tr2)$(strip $(if $1,$(if $2,                         \
+                 $(filter-out M,$(subst $2,M,$1)),                         \
+                 $(call __gmsl_error,Division by zero))))
+
+# ----------------------------------------------------------------------------
+# Function:  modulo (wrapped version of int_modulo)
+# Arguments: 1: An integer
+#            2: Another integer
+# Returns:   Returns the remainder of integer division of the first argument
+#            by the second
+# ----------------------------------------------------------------------------
+modulo = $(__gmsl_tr2)$(call __gmsl_int_wrap,int_modulo,$1,$2)
 
 # ----------------------------------------------------------------------------
 # Function:  int_max, int_min
