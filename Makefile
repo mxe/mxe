@@ -51,7 +51,7 @@ WGET        = $(WGET_TOOL) --user-agent='$(or $($(1)_UA),$(DEFAULT_UA))' -t 2 --
 REQUIREMENTS := autoconf automake autopoint bash bison bzip2 flex \
                 $(BUILD_CC) $(BUILD_CXX) gperf intltoolize $(LIBTOOL) \
                 $(LIBTOOLIZE) lzip $(MAKE) $(OPENSSL) $(PATCH) $(PERL) python \
-                ruby $(SED) $(SORT) unzip wget xz 7za gdk-pixbuf-csource
+                ruby $(SED) $(SORT) unzip wget xz 7za gdk-pixbuf-csource zip
 
 PREFIX     := $(PWD)/usr
 LOG_DIR    := $(PWD)/log
