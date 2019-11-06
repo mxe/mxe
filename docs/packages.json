@@ -327,7 +327,7 @@
     "pdcurses": {"version": "3.4", "website": "https://pdcurses.sourceforge.io/", "description": "PDcurses"},
     "pdflib_lite": {"version": "7.0.5p3", "website": "https://www.pdflib.com/download/free-software/pdflib-lite-7/", "description": "PDFlib Lite"},
     "pe-parse": {"version": "64989f6", "website": "https://github.com/trailofbits/pe-parse", "description": "Principled, lightweight C/C++ PE parser"},
-    "pe-util": {"version": "04f9475", "website": "https://github.com/gsauthof/pe-util", "description": "List shared object dependencies of a portable executable (PE)"},
+    "pe-util": {"version": "5b07cb3", "website": "https://github.com/gsauthof/pe-util", "description": "List shared object dependencies of a portable executable (PE)"},
     "pfstools": {"version": "2.0.4", "website": "https://pfstools.sourceforge.io/", "description": ""},
     "physfs": {"version": "3.0.2", "website": "https://icculus.org/physfs/", "description": ""},
     "picomodel": {"version": "1142ad8", "website": "https://code.google.com/p/picomodel/", "description": ""},
