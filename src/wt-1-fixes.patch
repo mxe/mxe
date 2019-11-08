@@ -157,3 +157,16 @@ index 1111111..2222222 100644
  SET(ODBC_LIBRARIES ${ODBC_LIBRARY})
  SET(ODBC_INCLUDE "")
  SET(ODBC_FOUND TRUE)
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -559,7 +559,7 @@ IF(HAVE_SSL)
+   TARGET_LINK_LIBRARIES(wt PRIVATE ${OPENSSL_LIBRARIES})
+   INCLUDE_DIRECTORIES(${OPENSSL_INCLUDE_DIR})
+   IF(WIN32)
+-    TARGET_LINK_LIBRARIES(wt PRIVATE Crypt32.lib)
++    TARGET_LINK_LIBRARIES(wt PRIVATE crypt32.lib)
+   ENDIF(WIN32)
+ ELSE(HAVE_SSL)
+   MESSAGE("** Disabling crypto support (Auth::SHA1HashFunction, HTTPS support): requires OpenSSL.")
