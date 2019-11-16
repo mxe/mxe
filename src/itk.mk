@@ -4,8 +4,8 @@ PKG             := itk
 $(PKG)_WEBSITE  := https://www.itk.org/
 $(PKG)_DESCR    := Insight Segmentation and Registration Toolkit (ITK)
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.13.1
-$(PKG)_CHECKSUM := b352060d8b7289916a3cb033dfdbcf423423ba474643b79706966e679268e3d7
+$(PKG)_VERSION  := 5.0.1
+$(PKG)_CHECKSUM := c6b3c33ecc73104c906e0e1a1bfaa41a09af24bf53a4ec5e5c265d7e82bdf69f
 $(PKG)_GH_CONF  := InsightSoftwareConsortium/ITK/releases/latest, v
 $(PKG)_DEPS     := cc expat hdf5 jpeg libpng tiff zlib
 

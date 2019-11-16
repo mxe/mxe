@@ -37,5 +37,6 @@ define $(PKG)_BUILD_STATIC
         -p packages \
         -t '$(PREFIX)/$(TARGET)/qt5/bin/installerbase.exe' \
         '/tmp/test-$(PKG)-tutorialinstaller.exe' && \
-    mv '/tmp/test-$(PKG)-tutorialinstaller.exe'* '$(PREFIX)/$(TARGET)/bin/'
+    rm -rf '$(PREFIX)/$(TARGET)/bin/test-$(PKG)-tutorialinstaller.exe'* && \
+    mv -fv '/tmp/test-$(PKG)-tutorialinstaller.exe'* '$(PREFIX)/$(TARGET)/bin/'
 endef

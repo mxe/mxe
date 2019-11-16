@@ -208,6 +208,16 @@ define AUTOTOOLS_BUILD
     $(AUTOTOOLS_MAKE)
 endef
 
+define CMAKE_TEST
+    # test cmake
+    mkdir '$(BUILD_DIR).test-cmake'
+    cd '$(BUILD_DIR).test-cmake' && '$(TARGET)-cmake' \
+        -DPKG=$(PKG) \
+        -DPKG_VERSION=$($(PKG)_VERSION) \
+        '$(PWD)/src/cmake/test'
+    $(MAKE) -C '$(BUILD_DIR).test-cmake' -j 1 install
+endef
+
 # include github related functions
 include $(PWD)/mxe.github.mk
 

@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sat, 15 Dec 2018 16:51:30 +0100
-Subject: [PATCH 1/2] more tolerant parsing for mingw in host triplet
+Subject: [PATCH 1/4] more tolerant parsing for mingw in host triplet
 
 
 diff --git a/src/mkheader.c b/src/mkheader.c
@@ -25,7 +25,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Wed, 24 Apr 2019 23:18:54 +1000
-Subject: [PATCH 2/2] awk: Prepare for Gawk 5.0.
+Subject: [PATCH 2/4] awk: Prepare for Gawk 5.0.
 
 taken from:
 https://dev.gnupg.org/rE7865041c77f4f7005282f10f9b6666b19072fbdf
@@ -157,3 +157,65 @@ index 1111111..2222222 100644
    print "{";
    print "  return (0 ? 0";
  
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Wed, 6 Nov 2019 19:00:10 +1100
+Subject: [PATCH 3/4] avoid whitespace in gpg-error.def linker script for
+ mingw32
+
+https://lists.gnupg.org/pipermail/gnupg-devel/2016-February/030798.html
+
+diff --git a/src/gpg-error.def.in b/src/gpg-error.def.in
+index 1111111..2222222 100644
+--- a/src/gpg-error.def.in
++++ b/src/gpg-error.def.in
+@@ -24,7 +24,6 @@
+  */
+ 
+ #include <config.h>
+-
+ EXPORTS
+  gpg_strerror                 @1
+  gpg_strerror_r               @2
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Wed, 6 Nov 2019 19:11:35 +1100
+Subject: [PATCH 4/4] fix for automake < 1.12
+
+
+diff --git a/configure.ac b/configure.ac
+index 1111111..2222222 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -62,9 +62,28 @@ VERSION_NUMBER=m4_esyscmd(printf "0x%02x%02x00" mym4_major mym4_minor)
+ AC_SUBST(VERSION_NUMBER)
+ 
+ AC_CONFIG_AUX_DIR([build-aux])
+-AM_INIT_AUTOMAKE([serial-tests dist-bzip2])
+ AM_MAINTAINER_MODE
+ AC_CONFIG_SRCDIR([src/err-sources.h.in])
++
++
++dnl Initialize automake.  automake < 1.12 didn't have serial-tests and
++dnl gives an error if it sees this, but for automake >= 1.13
++dnl serial-tests is required so we have to include it.  Solution is to
++dnl test for the version of automake (by running an external command)
++dnl and provide it if necessary.  Note we have to do this entirely using
++dnl m4 macros since automake queries this macro by running
++dnl 'autoconf --trace ...'.
++m4_define([serial_tests], [
++    m4_esyscmd([automake --version |
++                head -1 |
++                awk '{split ($NF,a,"."); if (a[1] == 1 && a[2] >= 12) { '\
++                    'print "serial-tests" }}'
++    ])
++])
++dnl NB: Do not [quote] this parameter.
++AM_INIT_AUTOMAKE(serial_tests dist-bzip2)
++
++
+ AC_CONFIG_HEADER([config.h])
+ AC_CONFIG_MACRO_DIR([m4])
+ AM_SILENT_RULES

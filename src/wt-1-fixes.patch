@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
 Date: Sat, 1 Apr 2017 15:17:43 +0200
-Subject: [PATCH 1/4] Wt fixes
+Subject: [PATCH 1/5] Wt fixes
 
 
 diff --git a/cmake/WtFindGm.txt b/cmake/WtFindGm.txt
@@ -58,7 +58,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Wed, 15 Aug 2018 13:28:31 +1000
-Subject: [PATCH 2/4] fix w32 build posix threads enabled
+Subject: [PATCH 2/5] fix w32 build posix threads enabled
 
 
 diff --git a/src/http/Reply.C b/src/http/Reply.C
@@ -85,7 +85,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 17 Sep 2018 23:31:42 +0200
-Subject: [PATCH 3/4] fix missing gmtime_r definition
+Subject: [PATCH 3/5] fix missing gmtime_r definition
 
 
 diff --git a/src/http/Reply.C b/src/http/Reply.C
@@ -104,7 +104,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sat, 6 Jul 2019 17:25:06 +0200
-Subject: [PATCH 4/4] fix build on case senstive filesystem
+Subject: [PATCH 4/5] fix build on case senstive filesystem
 
 
 diff --git a/src/Wt/Dbo/backend/MySQL.C b/src/Wt/Dbo/backend/MySQL.C
@@ -137,3 +137,36 @@ index 1111111..2222222 100644
  #endif // WT_WIN32
  
  #include "Wt/Dbo/backend/Postgres.h"
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sat, 9 Nov 2019 01:33:27 +1100
+Subject: [PATCH 5/5] fix build on case senstive filesystem
+
+
+diff --git a/cmake/WtFindOdbc.txt b/cmake/WtFindOdbc.txt
+index 1111111..2222222 100644
+--- a/cmake/WtFindOdbc.txt
++++ b/cmake/WtFindOdbc.txt
+@@ -6,7 +6,7 @@
+ # - ODBC_PREFIX
+ 
+ IF(WIN32)
+-SET(ODBC_LIBRARY Odbc32)
++SET(ODBC_LIBRARY odbc32)
+ SET(ODBC_LIBRARIES ${ODBC_LIBRARY})
+ SET(ODBC_INCLUDE "")
+ SET(ODBC_FOUND TRUE)
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -559,7 +559,7 @@ IF(HAVE_SSL)
+   TARGET_LINK_LIBRARIES(wt PRIVATE ${OPENSSL_LIBRARIES})
+   INCLUDE_DIRECTORIES(${OPENSSL_INCLUDE_DIR})
+   IF(WIN32)
+-    TARGET_LINK_LIBRARIES(wt PRIVATE Crypt32.lib)
++    TARGET_LINK_LIBRARIES(wt PRIVATE crypt32.lib)
+   ENDIF(WIN32)
+ ELSE(HAVE_SSL)
+   MESSAGE("** Disabling crypto support (Auth::SHA1HashFunction, HTTPS support): requires OpenSSL.")
