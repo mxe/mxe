@@ -1,0 +1,196 @@
+diff -r 9f0c2f2016d0 -r 0f169b655bd4 ompi/contrib/vt/wrappers/mpic++-vt-wrapper-data.txt
+--- a/ompi/contrib/vt/wrappers/mpic++-vt-wrapper-data.txt	Thu Mar 07 19:12:09 2013 -0500
++++ b/ompi/contrib/vt/wrappers/mpic++-vt-wrapper-data.txt	Thu Mar 07 19:22:38 2013 -0500
+@@ -13,9 +13,9 @@
+ compiler=vtcxx
+ extra_includes=
+ preprocessor_flags=
+-compiler_flags=-pthread 
++compiler_flags= 
+ linker_flags=    
+-libs=-lmpi_cxx -lmpi -lopen-rte -lopen-pal   -ldl  -lm -lnuma  -Wl,--export-dynamic -lrt -lnsl -lutil -lm -ldl 
++libs=-lmpi_cxx -lmpi -lopen-rte -lopen-pal     -lm -lgdi32  -Wl,--export-all-symbols 
+ required_file=
+ includedir=${includedir}
+ libdir=${libdir}
+diff -r 9f0c2f2016d0 -r 0f169b655bd4 ompi/contrib/vt/wrappers/mpicc-vt-wrapper-data.txt
+--- a/ompi/contrib/vt/wrappers/mpicc-vt-wrapper-data.txt	Thu Mar 07 19:12:09 2013 -0500
++++ b/ompi/contrib/vt/wrappers/mpicc-vt-wrapper-data.txt	Thu Mar 07 19:22:38 2013 -0500
+@@ -13,9 +13,9 @@
+ compiler=vtcc
+ extra_includes=
+ preprocessor_flags=
+-compiler_flags=-pthread 
++compiler_flags= 
+ linker_flags=    
+-libs=-lmpi -lopen-rte -lopen-pal   -ldl  -lm -lnuma  -Wl,--export-dynamic -lrt -lnsl -lutil -lm -ldl 
++libs=-lmpi -lopen-rte -lopen-pal     -lm -lgdi32  -Wl,--export-all-symbols 
+ required_file=
+ includedir=${includedir}
+ libdir=${libdir}
+diff -r 9f0c2f2016d0 -r 0f169b655bd4 ompi/contrib/vt/wrappers/mpif77-vt-wrapper-data.txt
+--- a/ompi/contrib/vt/wrappers/mpif77-vt-wrapper-data.txt	Thu Mar 07 19:12:09 2013 -0500
++++ b/ompi/contrib/vt/wrappers/mpif77-vt-wrapper-data.txt	Thu Mar 07 19:22:38 2013 -0500
+@@ -13,9 +13,9 @@
+ compiler=vtf77
+ extra_includes=
+ preprocessor_flags=
+-compiler_flags=-pthread 
++compiler_flags= 
+ linker_flags=    
+-libs=-lmpi_f77 -lmpi -lopen-rte -lopen-pal   -ldl  -lm -lnuma  -Wl,--export-dynamic -lrt -lnsl -lutil -lm -ldl 
+-required_file=
++libs=-lmpi_f77 -lmpi -lopen-rte -lopen-pal     -lm -lgdi32  -Wl,--export-all-symbols 
++required_file=not supported
+ includedir=${includedir}
+ libdir=${libdir}
+diff -r 9f0c2f2016d0 -r 0f169b655bd4 ompi/contrib/vt/wrappers/mpif90-vt-wrapper-data.txt
+--- a/ompi/contrib/vt/wrappers/mpif90-vt-wrapper-data.txt	Thu Mar 07 19:12:09 2013 -0500
++++ b/ompi/contrib/vt/wrappers/mpif90-vt-wrapper-data.txt	Thu Mar 07 19:22:38 2013 -0500
+@@ -11,12 +11,12 @@
+ language=Fortran 90
+ compiler_flags_env=FCFLAGS
+ compiler=vtf90
+-module_option=-I
++module_option=
+ extra_includes=
+ preprocessor_flags=
+-compiler_flags=-pthread  
++compiler_flags=  
+ linker_flags=    
+-libs=-lmpi_f90 -lmpi_f77 -lmpi -lopen-rte -lopen-pal   -ldl  -lm -lnuma  -Wl,--export-dynamic -lrt -lnsl -lutil -lm -ldl 
+-required_file=
++libs=-lmpi_f90 -lmpi_f77 -lmpi -lopen-rte -lopen-pal     -lm -lgdi32  -Wl,--export-all-symbols 
++required_file=not supported
+ includedir=${includedir}
+ libdir=${libdir}
+diff -r 9f0c2f2016d0 -r 0f169b655bd4 ompi/tools/wrappers/mpic++-wrapper-data.txt
+--- a/ompi/tools/wrappers/mpic++-wrapper-data.txt	Thu Mar 07 19:12:09 2013 -0500
++++ b/ompi/tools/wrappers/mpic++-wrapper-data.txt	Thu Mar 07 19:22:38 2013 -0500
+@@ -11,12 +11,12 @@
+ language=C++
+ compiler_env=CXX
+ compiler_flags_env=CXXFLAGS
+-compiler=g++
++compiler=i686-pc-mingw32-g++
+ extra_includes=
+ preprocessor_flags=
+-compiler_flags=-pthread 
++compiler_flags= 
+ linker_flags=    
+-libs=-lmpi_cxx -lmpi   -ldl  -lm -lnuma  -Wl,--export-dynamic -lrt -lnsl -lutil -lm -ldl 
++libs=-lmpi_cxx -lmpi     -lm -lgdi32  -Wl,--export-all-symbols 
+ required_file=
+ includedir=${includedir}
+ libdir=${libdir}
+diff -r 9f0c2f2016d0 -r 0f169b655bd4 ompi/tools/wrappers/mpicc-wrapper-data.txt
+--- a/ompi/tools/wrappers/mpicc-wrapper-data.txt	Thu Mar 07 19:12:09 2013 -0500
++++ b/ompi/tools/wrappers/mpicc-wrapper-data.txt	Thu Mar 07 19:22:38 2013 -0500
+@@ -11,12 +11,12 @@
+ language=C
+ compiler_env=CC
+ compiler_flags_env=CFLAGS
+-compiler=gcc
++compiler=i686-pc-mingw32-gcc
+ extra_includes=
+ preprocessor_flags=
+-compiler_flags=-pthread 
++compiler_flags= 
+ linker_flags=    
+-libs=-lmpi   -ldl  -lm -lnuma  -Wl,--export-dynamic -lrt -lnsl -lutil -lm -ldl 
++libs=-lmpi     -lm -lgdi32  -Wl,--export-all-symbols 
+ required_file=
+ includedir=${includedir}
+ libdir=${libdir}
+diff -r 9f0c2f2016d0 -r 0f169b655bd4 ompi/tools/wrappers/mpif77-wrapper-data.txt
+--- a/ompi/tools/wrappers/mpif77-wrapper-data.txt	Thu Mar 07 19:12:09 2013 -0500
++++ b/ompi/tools/wrappers/mpif77-wrapper-data.txt	Thu Mar 07 19:22:38 2013 -0500
+@@ -11,12 +11,12 @@
+ language=Fortran 77
+ compiler_env=F77
+ compiler_flags_env=FFLAGS
+-compiler=gfortran
++compiler=no
+ extra_includes=
+ preprocessor_flags=
+-compiler_flags=-pthread 
++compiler_flags= 
+ linker_flags=    
+-libs=-lmpi_f77 -lmpi   -ldl  -lm -lnuma  -Wl,--export-dynamic -lrt -lnsl -lutil -lm -ldl 
+-required_file=
++libs=-lmpi_f77 -lmpi     -lm -lgdi32  -Wl,--export-all-symbols 
++required_file=not supported
+ includedir=${includedir}
+ libdir=${libdir}
+diff -r 9f0c2f2016d0 -r 0f169b655bd4 ompi/tools/wrappers/mpif90-wrapper-data.txt
+--- a/ompi/tools/wrappers/mpif90-wrapper-data.txt	Thu Mar 07 19:12:09 2013 -0500
++++ b/ompi/tools/wrappers/mpif90-wrapper-data.txt	Thu Mar 07 19:22:38 2013 -0500
+@@ -11,13 +11,13 @@
+ language=Fortran 90
+ compiler_env=FC
+ compiler_flags_env=FCFLAGS
+-compiler=gfortran
+-module_option=-I
++compiler=no
++module_option=
+ extra_includes=
+ preprocessor_flags=
+-compiler_flags=-pthread  
++compiler_flags=  
+ linker_flags=    
+-libs=-lmpi_f90 -lmpi_f77 -lmpi   -ldl  -lm -lnuma  -Wl,--export-dynamic -lrt -lnsl -lutil -lm -ldl 
+-required_file=
++libs=-lmpi_f90 -lmpi_f77 -lmpi     -lm -lgdi32  -Wl,--export-all-symbols 
++required_file=not supported
+ includedir=${includedir}
+ libdir=${libdir}
+diff -r 9f0c2f2016d0 -r 0f169b655bd4 opal/win32/win_compat.h
+--- a/opal/win32/win_compat.h	Thu Mar 07 19:12:09 2013 -0500
++++ b/opal/win32/win_compat.h	Thu Mar 07 19:22:38 2013 -0500
+@@ -90,7 +90,7 @@
+ #define STDOUT_FILENO 1
+ #define STDERR_FILENO 2
+ typedef unsigned short mode_t;
+-typedef long ssize_t;
++//typedef long ssize_t;
+ typedef DWORD in_port_t;
+ typedef char* caddr_t;
+ typedef unsigned int uint;
+diff -r 9f0c2f2016d0 -r 0f169b655bd4 orte/tools/wrappers/ortec++-wrapper-data.txt
+--- a/orte/tools/wrappers/ortec++-wrapper-data.txt	Thu Mar 07 19:12:09 2013 -0500
++++ b/orte/tools/wrappers/ortec++-wrapper-data.txt	Thu Mar 07 19:22:38 2013 -0500
+@@ -11,12 +11,12 @@
+ language=C++
+ compiler_env=CXX
+ compiler_flags_env=CXXFLAGS
+-compiler=g++
++compiler=i686-pc-mingw32-g++
+ extra_includes=
+ preprocessor_flags=
+-compiler_flags=-pthread 
++compiler_flags= 
+ linker_flags=   
+-libs=-lopen-rte  -ldl  -lm -lnuma  -Wl,--export-dynamic -lrt -lnsl -lutil -lm -ldl 
++libs=-lopen-rte    -lm -lgdi32  -Wl,--export-all-symbols 
+ required_file=
+ includedir=${includedir}
+ libdir=${libdir}
+diff -r 9f0c2f2016d0 -r 0f169b655bd4 orte/tools/wrappers/ortecc-wrapper-data.txt
+--- a/orte/tools/wrappers/ortecc-wrapper-data.txt	Thu Mar 07 19:12:09 2013 -0500
++++ b/orte/tools/wrappers/ortecc-wrapper-data.txt	Thu Mar 07 19:22:38 2013 -0500
+@@ -11,12 +11,12 @@
+ language=C
+ compiler_env=CC
+ compiler_flags_env=CFLAGS
+-compiler=gcc
++compiler=i686-pc-mingw32-gcc
+ extra_includes=
+ preprocessor_flags=
+-compiler_flags=-pthread 
++compiler_flags= 
+ linker_flags=   
+-libs=-lopen-rte  -ldl  -lm -lnuma  -Wl,--export-dynamic -lrt -lnsl -lutil -lm -ldl 
++libs=-lopen-rte    -lm -lgdi32  -Wl,--export-all-symbols 
+ required_file=
+ includedir=${includedir}
+ libdir=${libdir}

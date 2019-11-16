@@ -9,10 +9,10 @@ $(PKG)_SUBDIR   := libb64-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).zip
 $(PKG)_URL      := https://sourceforge.net/projects/$(PKG)/files/$(PKG)/$(PKG)/$($(PKG)_FILE)
 
-$(PKG)_DEPS     := cc
+$(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://sourceforge.net/projects/libb64/files/' | \
+    $(WGET) -q -O- 'http://sourceforge.net/projects/libb64/files/' | \
     $(SED) -n 's_.*libb64-\([0-9]\.[0-9]\.[0-9]\).*zip_\1_ip' | \
     head -1
 endef

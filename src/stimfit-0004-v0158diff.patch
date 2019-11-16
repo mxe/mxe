@@ -1,0 +1,2775 @@
+diff --git a/Makefile.static b/Makefile.static
+index 1e45833d..f7c480ec 100644
+--- a/Makefile.static
++++ b/Makefile.static
+@@ -214,7 +214,17 @@ CFLAGS    = $(DEFINES) $(shell $(WXCONF) --cflags) -fstack-protector -O2
+ CPPFLAGS  = $(DEFINES) $(shell $(WXCONF) --cppflags) -std=gnu++11 -fstack-protector -O2
+ CXXFLAGS  = $(DEFINES) $(shell $(WXCONF) --cxxflags) -std=gnu++11 -fstack-protector -O2
+ LIBS     += $(shell $(WXCONF) --libs net,adv,aui,core,base)
+-PREFIX   ?= /usr
++
++
++prefix       ?= $(PREFIX)
++exec_prefix   = ${prefix}
++datarootdir   = ${prefix}/share
++datadir       = ${datarootdir}
++libdir        = ${exec_prefix}/lib
++includedir    = ${prefix}/include
++bindir        = ${exec_prefix}/bin
++mandir        = ${datarootdir}/man
++
+ PKGCONF  ?= $(CROSS)pkg-config
+ 
+ ifeq (5,$(shell $(CXX) -v 2>&1 | awk '/gcc version / {print substr($$3,1,1)}' ))
+@@ -231,17 +241,17 @@ ifneq ($(CROSS),)
+ else
+ ifneq ($(wildcard /usr/lib/libhdf5*),)
+   ## Debian/Wheezy
+-  CPPFLAGS += -I$(PREFIX)/include
++  CPPFLAGS += -I$(includedir)
+   LIBS   += -lhdf5_hl -lhdf5
+-else ifneq ($(wildcard $(PREFIX)/$(TARGET)/lib/libhdf5*),)
+-  CPPFLAGS += -I$(PREFIX)/$(TARGET)/include
+-  CXXFLAGS += -I$(PREFIX)/$(TARGET)/include
+-  LDFLAGS  += -L$(PREFIX)/$(TARGET)/lib
++else ifneq ($(wildcard $(prefix)/$(TARGET)/lib/libhdf5*),)
++  CPPFLAGS += -I$(prefix)/$(TARGET)/include
++  CXXFLAGS += -I$(prefix)/$(TARGET)/include
++  LDFLAGS  += -L$(prefix)/$(TARGET)/lib
+   LIBS     += -lhdf5_hl -lhdf5
+-else ifneq ($(wildcard $(PREFIX)/lib/libhdf5*),)
+-  CPPFLAGS += -I$(PREFIX)/include
+-  CXXFLAGS += -I$(PREFIX)/include
+-  LDFLAGS  += -L$(PREFIX)/lib
++else ifneq ($(wildcard $(libdir)/libhdf5*),)
++  CPPFLAGS += -I$(includedir)
++  CXXFLAGS += -I$(includedir)
++  LDFLAGS  += -L$(libdir)
+   LIBS     += -lhdf5_hl -lhdf5
+ else
+   PLATFORM = $(shell dpkg-architecture -q DEB_TARGET_MULTIARCH)
+@@ -258,7 +268,7 @@ endif
+ 
+ ## BIOSIG related stuff ##
+ ifneq (,$(findstring WITH_BIOSIG2, $(DEFINES)))
+-  LIBS  += -lbiosig2
++  LIBS  += -lbiosig
+ else 
+   ifneq (,$(findstring WITH_BIOSIG, $(DEFINES)))
+     LIBS  += -lbiosig
+@@ -275,6 +285,7 @@ ifeq (mingw,$(findstring mingw, $(WXCONF)))
+   LIBS   += -lgfortran -lquadmath
+   LIBS   += -liberty -liconv
+ endif
++LIBS   += -liconv -ltinyxml -lstdc++
+ 
+ 
+ ##############################################################
+@@ -307,8 +318,8 @@ clean:
+ 	rm -f stimfit
+ 
+ install: $(TARGET)
+-	install $(TARGET) $(PREFIX)/bin/
++	install $(TARGET) $(bindir)
+ 
+ uninstall:
+-	rm $(PREFIX)/bin/stimfit
++	rm $(bindir)/stimfit
+ 
+diff --git a/configure.ac b/configure.ac
+index dfb3642e..1f8c58f5 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -147,7 +147,7 @@ AM_CONDITIONAL(WITH_BIOSIGLITE, test "$with_biosiglite" = "yes")
+ 
+ if test "$with_biosig2" = "yes" ; then
+     CPPFLAGS="${CPPFLAGS} -DWITH_BIOSIG2"
+-    LIBBIOSIG_LDFLAGS="-lbiosig2 -lcholmod"
++    LIBBIOSIG_LDFLAGS="-lbiosig -lcholmod"
+ elif test "$with_biosig" = "yes" ; then
+     CPPFLAGS="${CPPFLAGS} -DWITH_BIOSIG"
+     LIBBIOSIG_LDFLAGS="-lbiosig -lcholmod"
+diff --git a/dist/debian/changelog b/dist/debian/changelog
+index 01694f5e..30d23ca8 100644
+--- a/dist/debian/changelog
++++ b/dist/debian/changelog
+@@ -1,3 +1,10 @@
++stimfit (0.15.8-1) unstable; urgency=low
++
++  * Address wx-gtk2 / wxpython-gtk3 incompatibility issue on bionic
++    (LP: #1778433)
++
++ -- Christoph Schmidt-Hieber <christsc@gmx.de>  Fri, 29 Jun 2018 09:18:39 +0200
++
+ stimfit (0.15.6-1) unstable; urgency=low
+ 
+   * Adress shared library renaming error during debian packaging.
+diff --git a/dist/debian/control b/dist/debian/control
+index c3cee00e..d25e8611 100644
+--- a/dist/debian/control
++++ b/dist/debian/control
+@@ -3,7 +3,7 @@ Section: science
+ Priority: optional
+ Maintainer: Christoph Schmidt-Hieber <christsc@gmx.de>
+ Uploaders: Yaroslav Halchenko <debian@onerussian.com>
+-Build-Depends: debhelper (>= 9), dh-python, libboost-dev (>= 1.40.0), python-all-dev (>= 2.6.6-3), python-numpy, libhdf5-dev, swig, python-wxgtk3.0 | python-wxgtk2.8 (>= 2.8.9), python-wxgtk3.0-dev | libwxgtk2.8-dev (>= 2.8.9), libwxgtk3.0-dev | libwxgtk2.8-dev (>= 2.8.9), libfftw3-dev, liblapack-dev, chrpath, help2man, libsuitesparse-dev, zlib1g-dev, dh-autoreconf, pkg-config
++Build-Depends: debhelper (>= 9), dh-python, libboost-dev (>= 1.40.0), python-all-dev (>= 2.6.6-3), python-numpy, libhdf5-dev, swig, python-wxgtk3.0 | python-wxgtk2.8 (>= 2.8.9), python-wxgtk3.0-dev | libwxgtk2.8-dev (>= 2.8.9), libwxgtk3.0-gtk3-dev | libwxgtk3.0-dev | libwxgtk2.8-dev (>= 2.8.9), libfftw3-dev, liblapack-dev, chrpath, help2man, libsuitesparse-dev, zlib1g-dev, dh-autoreconf, pkg-config
+ Standards-Version: 3.9.8
+ Homepage: http://www.stimfit.org
+ 
+diff --git a/dist/debian/rules b/dist/debian/rules
+index 544c043f..4180f5a6 100755
+--- a/dist/debian/rules
++++ b/dist/debian/rules
+@@ -9,6 +9,8 @@ export DH_VERBOSE=1
+ 
+ DEBPREFIX=$(CURDIR)/debian/tmp/usr
+ PYVER   := $(shell pyversions -vd)
++# Whenever libwxgtk3.0-gtk3-dev installed and wx-config present, need custom opts
++WXCONFIG_OPTS=$(shell wx-config --toolkit=gtk3 2>/dev/null 1>&2 && echo '--with-wx-config="wx-config --toolkit=gtk3"' || echo '')
+ 
+ ifneq (,$(filter parallel=%,$(DEB_BUILD_OPTIONS)))
+ 	NUMJOBS = $(patsubst parallel=%,%,$(filter parallel=%,$(DEB_BUILD_OPTIONS)))
+@@ -45,14 +47,14 @@ clean:
+ 
+ install: build
+ 	dh_autoreconf
+-	./configure --enable-python --enable-debian --with-biosiglite --prefix=$(DEBPREFIX)
++	./configure --enable-python --enable-debian --with-biosiglite --prefix=$(DEBPREFIX) $(WXCONFIG_OPTS)
+ 	$(MAKE)
+ ifeq (,$(filter nocheck,$(DEB_BUILD_OPTIONS)))
+ 	$(MAKE) check
+ endif
+ 	$(MAKE) install
+ 
+-	./configure --enable-module --enable-debian --with-biosiglite --prefix=$(DEBPREFIX)
++	./configure --enable-module --enable-debian --with-biosiglite --prefix=$(DEBPREFIX) $(WXCONFIG_OPTS)
+ 	$(MAKE)
+ 	$(MAKE) install
+ 
+diff --git a/dist/macosx/macports/insert_checksums.sh b/dist/macosx/macports/insert_checksums.sh
+index af5dd9e4..eb841cf5 100755
+--- a/dist/macosx/macports/insert_checksums.sh
++++ b/dist/macosx/macports/insert_checksums.sh
+@@ -42,3 +42,5 @@ sudo port uninstall py35-stfio
+ sudo port clean --all py35-stfio
+ sudo port uninstall py36-stfio
+ sudo port clean --all py36-stfio
++sudo port uninstall py37-stfio
++sudo port clean --all py37-stfio
+diff --git a/dist/macosx/macports/python/py-stfio/Portfile b/dist/macosx/macports/python/py-stfio/Portfile
+index 20be989d..20f518f8 100644
+--- a/dist/macosx/macports/python/py-stfio/Portfile
++++ b/dist/macosx/macports/python/py-stfio/Portfile
+@@ -1,31 +1,31 @@
+ # -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+ # $Id$
+-
+ PortSystem          1.0
+ PortGroup           python 1.0
+ 
+ name                py-stfio
+-version             0.15.4
++version             0.15.8
+ categories          python science
+ platforms           darwin
+ license             GPL-2
+-maintainers         gmx.de:christsc
++maintainers         {gmx.de:christsc @neurodroid}
+ description         Electrophysiology file support for Python
+ long_description    A Python module to read common electrophysiology file formats.
+ homepage            http://www.stimfit.org
+ master_sites        ${homepage}
+ distname            stimfit-${version}
+ 
+-checksums           rmd160  683df46ed12543bd4e0b668e92d1d91156b61881 \
+-                    sha256  aa7d5adc97c60e5f3748c807b98184daeeeac1149ae94281105fed128b910fe0
++checksums           rmd160  960efd2fa4f88aba153af560cc49adc40090995b \
++                    sha256  0fc6b0f52057d9c45107557e615f314179ac92e180123ed9d1da98e7f812df8b
+ 
+-python.versions     27 35 36
++python.versions     27 35 36 37
+ 
+ if { ${name} ne ${subport} } {
+     depends_build   port:swig-python
+ 
+     depends_lib     port:boost \
+                     port:hdf5 \
++                    port:py${python.version}-cvxopt \
+                     port:py${python.version}-matplotlib \
+                     port:py${python.version}-numpy
+ 
+@@ -38,7 +38,7 @@ if { ${name} ne ${subport} } {
+ 
+     use_configure   yes
+     build.cmd       make
+-    build.target    
++    build.target
+     destroot.cmd    make
+     destroot.destdir \
+                     DESTDIR=${destroot}
+diff --git a/dist/macosx/macports/python/py-stfio/Portfile.in b/dist/macosx/macports/python/py-stfio/Portfile.in
+index e2c84aaf..1cee9371 100644
+--- a/dist/macosx/macports/python/py-stfio/Portfile.in
++++ b/dist/macosx/macports/python/py-stfio/Portfile.in
+@@ -1,6 +1,5 @@
+ # -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+ # $Id$
+-
+ PortSystem          1.0
+ PortGroup           python 1.0
+ 
+@@ -9,7 +8,7 @@ version             STFVERSION
+ categories          python science
+ platforms           darwin
+ license             GPL-2
+-maintainers         gmx.de:christsc
++maintainers         {gmx.de:christsc @neurodroid}
+ description         Electrophysiology file support for Python
+ long_description    A Python module to read common electrophysiology file formats.
+ homepage            http://www.stimfit.org
+@@ -19,13 +18,14 @@ distname            stimfit-${version}
+ checksums           rmd160  RMD160 \
+                     sha256  SHA256
+ 
+-python.versions     27 35 36
++python.versions     27 35 36 37
+ 
+ if { ${name} ne ${subport} } {
+     depends_build   port:swig-python
+ 
+     depends_lib     port:boost \
+                     port:hdf5 \
++                    port:py${python.version}-cvxopt \
+                     port:py${python.version}-matplotlib \
+                     port:py${python.version}-numpy
+ 
+@@ -38,7 +38,7 @@ if { ${name} ne ${subport} } {
+ 
+     use_configure   yes
+     build.cmd       make
+-    build.target    
++    build.target
+     destroot.cmd    make
+     destroot.destdir \
+                     DESTDIR=${destroot}
+diff --git a/dist/macosx/macports/science/stimfit/Portfile b/dist/macosx/macports/science/stimfit/Portfile
+index caefdea8..69c858c0 100644
+--- a/dist/macosx/macports/science/stimfit/Portfile
++++ b/dist/macosx/macports/science/stimfit/Portfile
+@@ -1,22 +1,21 @@
+ # -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+ # $Id$
+-
+ PortSystem          1.0
+ PortGroup           wxWidgets 1.0
+ 
+ name                stimfit
+-version             0.15.4
++version             0.15.8
+ categories          science
+ platforms           darwin
+ license             GPL-2
+-maintainers         gmx.de:christsc
++maintainers         {gmx.de:christsc @neurodroid}
+ description         Electrophysiology analysis suite
+ long_description    A program for viewing and analyzing electrophysiological data
+ homepage            http://www.stimfit.org
+ master_sites        ${homepage}
+ 
+-checksums           rmd160  683df46ed12543bd4e0b668e92d1d91156b61881 \
+-                    sha256  aa7d5adc97c60e5f3748c807b98184daeeeac1149ae94281105fed128b910fe0
++checksums           rmd160  960efd2fa4f88aba153af560cc49adc40090995b \
++                    sha256  0fc6b0f52057d9c45107557e615f314179ac92e180123ed9d1da98e7f812df8b
+ 
+ wxWidgets.use       wxPython-3.0
+ 
+@@ -39,7 +38,8 @@ variant python27 description {Build with Python shell.} {
+         port:python27 \
+         port:py27-wxpython-3.0 \
+         port:py27-numpy \
+-        port:py27-matplotlib
++        port:py27-matplotlib \
++        port:py27-cvxopt
+ 
+     configure.python \
+         ${prefix}/bin/python2.7
+@@ -76,7 +76,7 @@ configure.ldflags-append \
+                     -headerpad_max_install_names
+ 
+ # Commented out for now; will be required when wxpython gets available for Python 3.x
+-# if {![variant_isset python27]} { 
++# if {![variant_isset python27]} {
+ default_variants    +python27
+ # }
+ default_variants-append \
+diff --git a/dist/macosx/macports/science/stimfit/Portfile.in b/dist/macosx/macports/science/stimfit/Portfile.in
+index 7b1e602a..f4fc5d60 100644
+--- a/dist/macosx/macports/science/stimfit/Portfile.in
++++ b/dist/macosx/macports/science/stimfit/Portfile.in
+@@ -1,6 +1,5 @@
+ # -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+ # $Id$
+-
+ PortSystem          1.0
+ PortGroup           wxWidgets 1.0
+ 
+@@ -9,7 +8,7 @@ version             STFVERSION
+ categories          science
+ platforms           darwin
+ license             GPL-2
+-maintainers         gmx.de:christsc
++maintainers         {gmx.de:christsc @neurodroid}
+ description         Electrophysiology analysis suite
+ long_description    A program for viewing and analyzing electrophysiological data
+ homepage            http://www.stimfit.org
+@@ -39,7 +38,8 @@ variant python27 description {Build with Python shell.} {
+         port:python27 \
+         port:py27-wxpython-3.0 \
+         port:py27-numpy \
+-        port:py27-matplotlib
++        port:py27-matplotlib \
++        port:py27-cvxopt
+ 
+     configure.python \
+         ${prefix}/bin/python2.7
+@@ -76,7 +76,7 @@ configure.ldflags-append \
+                     -headerpad_max_install_names
+ 
+ # Commented out for now; will be required when wxpython gets available for Python 3.x
+-# if {![variant_isset python27]} { 
++# if {![variant_isset python27]} {
+ default_variants    +python27
+ # }
+ default_variants-append \
+diff --git a/dist/windows/VS2008/Stimfit/Stimfit.suo b/dist/windows/VS2008/Stimfit/Stimfit.suo
+index e9ee1d87..792b2552 100755
+Binary files a/dist/windows/VS2008/Stimfit/Stimfit.suo and b/dist/windows/VS2008/Stimfit/Stimfit.suo differ
+diff --git a/dist/windows/nsis/installer.nsi b/dist/windows/nsis/installer.nsi
+index 6166a50f..13f55450 100755
+--- a/dist/windows/nsis/installer.nsi
++++ b/dist/windows/nsis/installer.nsi
+@@ -144,8 +144,8 @@ Section "Python ${PY_VERSION}" 0
+   ExecWait 'cd "${PYEMFDIR}"; "c:\python${PY_MAJOR_SHORT}\python.exe" setup.py install'
+   RMDir /r "${PYEMFDIR}"
+ 
+-  ; Install / upgrade numpy, scipy, matplotlib
+-  ExecWait '"c:\Python${PY_MAJOR_SHORT}\Scripts\pip.exe" install --upgrade numpy scipy matplotlib'
++  ; Install / upgrade numpy, scipy, matplotlib, nptdms
++  ExecWait '"c:\Python${PY_MAJOR_SHORT}\Scripts\pip.exe" install --upgrade numpy scipy matplotlib nptdms'
+ 
+ SectionEnd
+ !endif
+diff --git a/doc/sphinx/conf.py b/doc/sphinx/conf.py
+index 5f01492a..b0ec2fe7 100644
+--- a/doc/sphinx/conf.py
++++ b/doc/sphinx/conf.py
+@@ -49,7 +49,7 @@ master_doc = 'contents'
+ 
+ # General information about the project.
+ project = u'Stimfit'
+-copyright = u'2015, Christoph Schmidt-Hieber'
++copyright = u'2018, Christoph Schmidt-Hieber'
+ 
+ # The version info for the project you're documenting, acts as replacement for
+ # |version| and |release|, also used in various other places throughout the
+diff --git a/doc/sphinx/linux_install_guide/moduleonly.rst b/doc/sphinx/linux_install_guide/moduleonly.rst
+index b4c1c909..3e6d0db0 100644
+--- a/doc/sphinx/linux_install_guide/moduleonly.rst
++++ b/doc/sphinx/linux_install_guide/moduleonly.rst
+@@ -18,7 +18,7 @@ Then, you need the `Stimfit <http://www.stimfit.org>`_ source code:
+     $ cd $HOME
+     $ git clone https://github.com/neurodroid/stimfit.git
+ 
+-This will download the code to a directory called *stimfit*.
++It will download the code to a directory called *stimfit*.
+ 
+ Next, you need to generate the build system:
+ 
+@@ -38,10 +38,17 @@ Now you can configure. I strongly recommend building in a separate directory.
+     $ cd module
+     $ ../../configure --enable-module
+ 
+-Remember to add the argument *--with-biosig* to the configure script 
+-if you want to have extra biomedical fileformats for stfio. 
++We recommend to use BioSig to read extra biomedical fileformats (see :ref:`BioSigBuild`) :
+ 
+-If you want to install the *stfio* module for a non-default Python distribution, such as **Anaconda Python**, use the argument *--prefix=* to specify the installation path as where your favorite Python distribution is installed. The following example will install *stfio* for Anaconda Python 2.7:
++::
++
++    $ ../../configure --enable-module --with-biosig
++
++===================================================
++Building stfio for non-default Python distributions
++===================================================
++
++To install the *stfio* module in distributions such as **Anaconda Python**, use the argument *--prefix=* to specify the path where the Python distribution is installed. For example, to install *stfio* for Anaconda Python 2.7 use:
+ 
+ ::
+ 
+@@ -53,6 +60,11 @@ If using virtual environment, try something like this:
+ 
+     $ ../../configure --enable-module --prefix=$HOME/anaconda/envs/py36
+ 
++Other Python versions are also possible. For example, to install the module in your local Python version, you could use:
++
++::
++
++    $ ../../configure --enable-module --prefix=$HOME/.local/lib/python2.7
+ 
+ Then, build and install:
+ 
+diff --git a/doc/sphinx/linux_install_guide/requirement.rst b/doc/sphinx/linux_install_guide/requirement.rst
+index 3185ee4f..c2e392d6 100644
+--- a/doc/sphinx/linux_install_guide/requirement.rst
++++ b/doc/sphinx/linux_install_guide/requirement.rst
+@@ -5,7 +5,7 @@ Building Stimfit
+ :Author: Jose Guzman, Christoph Schmidt-Hieber
+ :Date:    |today|
+ 
+-This document describes how to install `Stimfit <http://www.stimfit.org>`_ |version| under GNU/Linux. The installation was tested on a GNU/Debian testing/unstable system, with a 2.6-based kernel and with support for Python 2.5. and Python 2.6. It should work on other Debian-based systems (e.g Ubuntu) aswith newer version of Stimfit as well. I assume that you have the GNU C compiler (gcc) and the GNU C++ compiler (g++) already installed in your system. Please, check that both versions match. For our installation we will use gcc-4.2.4 and the same version of g++.
++This document describes how to install `Stimfit <http://www.stimfit.org>`_ |version| under GNU/Linux. The installation was tested on a GNU/Debian testing/unstable with support for Python 2.*. It should work on other Debian-based systems (e.g. Ubuntu) as with newer version of Stimfit as well. I assume that you have the GNU C compiler (gcc) and the GNU C++ compiler (g++) and that both versions match. For this installation, we tested 4.2.4 versions.
+ 
+ ============================
+ What we need before we start
+@@ -36,19 +36,22 @@ For the impatient, here are all `Stimfit <http://www.stimfit.org>`_ build depend
+ 
+ This will get you, amongst others:
+ 
++* [wxWidgets]_: C++ graphical user interface toolkit (version >= 2.8; tested with 2.8.12 and 3.0.4)
++* [wxPython]_: GUI toolkit for the Python language.
+ * [boost]_: C++ library that is mainly used for its shared pointers.
+ * [Lapack]_: A linear algebra library.
+ * [fftw]_:  Library for computing Fourier transformations.
+-* [NumPy]_: To handle multidimensional arrays and perform more complex numerical computations with Python.
+-* [HDF5]_: This is the hierarchical Data Format 5 (HDF5) to manage large amount of data.
++* [NumPy]_: To handle numerical computations with Python (use version >=1.7.1).
++* [HDF5]_: Hierarchical Data Format 5 (HDF5) to manage large amount of data.
++* [Matplotlib]_: Plotting library for Python (use version >= 1.5.1)
+ 
+-In addition, you can install doxygen, python-sphinx and graphviz if you want to build yourself the documentation.
++In addition, you can install doxygen, python-sphinx (with graphviz and Latex) if you want to build the documentation.
+ 
+ =======================
+ Optional: PyEMF
+ =======================
+ 
+-[PyEMF]_ is needed to export figures to the windows meta file format (WMF/EMF). EMF is a vector graphics format and can be imported in different Office software including LibreOffice. In order to install it, do:
++[PyEMF]_ is needed to export figures to the windows meta file format (WMF/EMF). EMF is a vector graphics format and can be imported in different Office software including LibreOffice. To install it, do:
+ 
+ ::
+ 
+@@ -82,16 +85,16 @@ Go to the stimfit directory (in our example $HOME/stimfit) and type:
+ 
+ ::
+ 
++    $ cd $HOME/stimfit
+     $ ./autogen.sh
+ 
+ to generate the configure script. Remember that we need Autoconf, Automake and LibTool to use autogen. After that, you can call it with
+ 
+ ::
+ 
+-    $ ./configure --enable-python
+-
+-The **--enable-python** option is absolutely necessary to install `Stimfit <http://www.stimfit.org>`_ since some of the functionality depends on Python. The configure script has some additional options. For example, we may want to use `IPython <http://www.scipy.org>`_  instead of the default embedded python shell with the option **---enable-ipython**  (note that the `IPython <http://www.scipy.org>`_ shell is only available under GNU/Linux and it is still very experimental). 
++    $ ./configure
+ 
++The **--enable-python** option is activated as a default.
+ 
+ 
+ Finally, after running configure, you can type
+@@ -112,32 +115,45 @@ where [N] is the number of parallel builds you want to start. And finally:
+     If you want to install Stimfit as local user (e.g in ~/.local) with a local version of Python (e.g ~/.local/lib/python2.6) you have to add the following argument to configure
+     script:
+ 
+-    $ ./configure --prefix= $HOME/.local PYTHON = $HOME/.local/lib/python2.6 --enable-python
++::
++
++    $ PYTHON=$HOME/.local/lib/python2.6 ./configure --prefix=$HOME/.local
++
++and after that call **make** and **make install** as normal user. The Stimfit executable will be now in $HOME/.local
+ 
+-    and after that call **make** and **make install** as normal user. The Stimfit executable will be now in $HOME/.local
++.. _BioSigBuild:
+ 
+ ==========================================
+ Building Stimfit with BioSig import filter
+ ==========================================
+ 
+-It is recommended to build `Stimfit <http://www.stimfit.org>`_  with the `BioSig <http://biosig.sourceforge.net>`_ import the file filters to read HEKA files or to have the possibility import some other file formats used biomedical signal processing. To do it, follow this instructions:
++We recommend to build `Stimfit <http://www.stimfit.org>`_  with the `BioSig library <http://biosig.sourceforge.net>`_  to import files in from different biomedical disciplines. It is necessary to read files acquired with `HEKA amplifiers <http://www.heka.com>`_ or with `Signal <http://ced.co.uk/products/sigovin>`_ from CED. To do it, follow this instructions:
+ 
+-1. It is first recommended to install libsuitesparse and libz libraries:
++Install libsuitesparse and libz libraries:
+ 
+ ::
+ 
+     sudo apt-get install libsuitesparse-dev libz-dev gawk
+ 
+-2. Download BioSig sources: you can obtain the latest BioSig version in `BioSig downloads <http://biosig.sourceforge.net/download.html>`_ . Choose BioSig for C/C++, libbiosig (v1.5.6 or higher is recommended). Alternatively, you can obtain the latest developmental version from the git repository:
++To avoid ABI incompatibilities, we recommend building Stimfit with the version of biosig that ships with the Stimfit source:
++
++::
++
++    $ ./configure --with-biosiglite
++
++Alternatively, get the full version of biosig: you can obtain the latest BioSig version in `BioSig downloads <http://biosig.sourceforge.net/download.html>`_ . Choose BioSig for C/C++, libbiosig (v1.5.6 or higher is recommended). Alternatively, you can obtain the latest developmental version from the git repository:
+ 
+ ::
+ 
+-    git clone git://git.code.sf.net/p/biosig/code biosig-code
++    git clone https://git.code.sf.net/p/biosig/code biosig-code
+ 
+-3. Compile and install the sources: enter the directory **biosig4c++** and type: 
++Enter the directory **biosig4c++** and compile and install the sources: 
+ 
+ ::
+ 
++    cd biosig-code/biosig4c++
++    autoconf # needed first time after getting repository
++    ./configure
+     make 
+     sudo make install
+ 
+@@ -147,19 +163,19 @@ After that you can enter the option --with-biosig in the configure script of `St
+ Building documentation
+ ======================
+ 
+-The manual of `Stimfit <http://www.stimfit.org>`_ including the documentation is accessible on-line in http://www.stimfit.org/doc/sphix/. To have your own local copy of the documentation, you will need to install sphinx:
++The manual of `Stimfit <http://www.stimfit.org>`_ including the documentation is accessible on-line in http://www.stimfit.org/doc/sphix/. To have your local copy, you will need to install sphinx version 1.7 or older:
+ 
+ ::
+ 
+     sudo apt-get install python-sphinx
+ 
+-It is possible to build a local copy of the documentation there by calling:
++To build a local copy call:
+ 
+ ::
+ 
+-    sphinx-build $HOME/Stimfit/doc/sphinx/ <destinyFolder> 
++    sphinx-build $HOME/Stimfit/doc/sphinx/ <destination> # destination folder could be $HOME/tmp/stf/doc/
+ 
+-The html documentation will be located in <destinyFolder>/index.html 
++The html documentation will be located in <destination>/index.html 
+ 
+ Additionally, the source code is documented with [Doxygen]_ and is also accessible on-line in http://www.stimfit.org/doc/doxygen/html/. If you want to have a local copy of the documentation, you will need to install the doxygen and gravphvix:
+ 
+@@ -171,6 +187,7 @@ Enter a directory called **doc** inside Stimfit (e.g $HOME/stimfit/doc) and type
+ 
+ ::
+ 
++    cd $HOME/stimfit/doc
+     doxygen DoxyFile
+ 
+ The local documentation of the source code will be in $HOME/stimfit/doc/doxygen/html
+@@ -181,6 +198,7 @@ The local documentation of the source code will be in $HOME/stimfit/doc/doxygen/
+ .. [Lapack] http://www.netlib.org/lapack/
+ .. [HDF5] http://www.hdfgroup.org/HDF5/
+ .. [NumPy] http://www.numpy.org
+-.. [PyEMF] http://http://pyemf.sourceforge.net
++.. [PyEMF] http://pyemf.sourceforge.net
+ .. [fftw] http://www.fftw.org
+ .. [Doxygen] http://www.doxygen.org
++.. [Matplotlib] https://matplotlib.org
+diff --git a/doc/sphinx/manual/python.rst b/doc/sphinx/manual/python.rst
+index 5bdc2611..1e08187a 100644
+--- a/doc/sphinx/manual/python.rst
++++ b/doc/sphinx/manual/python.rst
+@@ -158,7 +158,7 @@ You can pass a 2D-NumPy array to :func:`stf.new_window_matrix()`. The first dime
+     >>> numpy_matrix[1] = np.sqrt( np.abs(get_trace()) )
+     >>> new_window_matrix(numpy_matrix)
+ 
+-In this example, np is the NumPy namespace. Typing np. at the command prompt will show you all available NumPy functions. :func:`stf.get_size_trace()` will be explained later on.
++In this example, np is the [NumPy]_ namespace. Typing np. at the command prompt will show you all available [NumPy]_ functions. :func:`stf.get_size_trace()` will be explained later on.
+ 
+ * **new_window_list()**
+ 
+@@ -394,7 +394,7 @@ Cutting traces is best done using the squared braked operators ([]) to slice a [
+     >>> new_window(a[:100])
+     >>> new_window(a[100:])
+ 
+-In this example, a[:100] refers to a sliced NumPy array that comprises all sampling points from index 0 to index 99, and a[100:] refers to an array from index 100 to the last sampling point.
++In this example, a[:100] refers to a sliced [NumPy]_ array that comprises all sampling points from index 0 to index 99, and a[100:] refers to an array from index 100 to the last sampling point.
+ 
+ * **cut_traces(pt)** and **cut_traces_multi(pt_list)**
+ 
+@@ -452,5 +452,4 @@ will cut the selected traces at every 100th sampling point, starting with the 10
+ 
+ .. [Python-tutorial] http://docs.python.org/tut/
+ .. [Python-website]  http://www.python.org/doc/
+-.. [NumPy] http://numpy.scipy.org/
+ .. [SciPy] http://www.scipy.org/
+diff --git a/doc/sphinx/references/index.rst b/doc/sphinx/references/index.rst
+index 23d4142b..67ca079c 100644
+--- a/doc/sphinx/references/index.rst
++++ b/doc/sphinx/references/index.rst
+@@ -11,6 +11,36 @@ References
+ 
+ `Stimfit <http://www.stimfit.org>`_ has been used for data analysis in the following publications. If you miss a reference to your publication, please let us know `here <https://groups.google.com/forum/#!forum/stimfit>`_.
+ 
++====
++2018
++====
++
++    * Rothman, J. S., & Silver, R. A. (2018). NeuroMatic: an integrated open-source software toolkit for acquisition, analysis and simulation of electrophysiological data. Frontiers in neuroinformatics, 12, 14.
++
++    * Parras, A., Anta, H., Santos-Galindo, M., Swarup, V., Elorza, A., Nieto-González, J. L., ... & Rodolosse, A. (2018). Autism-like phenotype and risk gene mRNA deadenylation by CPEB4 mis-splicing. Nature, 560(7719), 441.
++
++    * Scheib, U., Broser, M., Constantin, O. M., Yang, S., Gao, S., Mukherjee, S., ... & Hegemann, P. (2018). Rhodopsin-cyclases for photocontrol of cGMP/cAMP and 2.3 Å structure of the adenylyl cyclase domain. Nature communications, 9(1), 2046.
++
++    * Hu, H., Roth, F. C., Vandael, D., & Jonas, P. (2018). Complementary tuning of Na+ and K+ channel gating underlies fast and energy-efficient action potentials in GABAergic interneuron axons. Neuron, 98(1), 156-165.
++
++    * Marshall, J. J., Xu, J., & Contractor, A. (2018). Kainate receptors inhibit glutamate release via mobilization of endocannabinoids in striatal direct pathway spiny projection neurons. Journal of Neuroscience, 38(16), 3901-3910.
++
++    * Espinoza, C., Guzman, S. J., Zhang, X., & Jonas, P. (2018). Parvalbumin+ interneurons obey unique connectivity rules and establish a powerful lateral-inhibition microcircuit in dentate gyrus. Nature communications, 9(1), 4605.
++
++    * Rifkin, R. A., Huyghe, D., Li, X., Parakala, M., Aisenberg, E., Moss, S. J., & Slesinger, P. A. (2018). GIRK currents in VTA dopamine neurons control the sensitivity of mice to cocaine-induced locomotor sensitization. Proceedings of the National Academy of Sciences, 115(40), E9479-E9488.
++
++    * Grimm, C., Silapetere, A., Vogt, A., Sierra, Y. A. B., & Hegemann, P. (2018). Electrical properties, substrate specificity and optogenetic potential of the engineered light-driven sodium pump eKR2. Scientific reports, 8(1), 9316.
++
++    * Schulz, J. M., Knoflach, F., Hernandez, M. C., & Bischofberger, J. (2018). Dendrite-targeting interneurons control synaptic NMDA-receptor activation via nonlinear α5-GABA A receptors. Nature communications, 9(1), 3576.
++
++    * Booker, S. A., Domanski, A. P., Dando, O. R., Jackson, A. D., Isaac, J. T., Hardingham, G. E., ... & Kind, P. C. (2018). Altered dendritic spine function and integration in a mouse model of Fragile X Syndrome. bioRxiv, 396986.
++
++    * Kim, S., Kim, Y., Lee, S. H., & Ho, W. K. (2018). Dendritic spikes in hippocampal granule cells are necessary for long-term potentiation at the perforant path synapse. eLife, 7, e35269.
++
++    * Ortega‐de San Luis, C., Sanchez‐Garcia, M. A., Nieto‐Gonzalez, J. L., García‐Junco‐Clemente, P., Montero‐Sanchez, A., Fernandez‐Chacon, R., & Pascual, A. (2018). Substantia nigra dopaminergic neurons and striatal interneurons are engaged in three parallel but interdependent postnatal neurotrophic circuits. Aging cell, 17(5), e12821.
++
++    * Turko, P., Groberman, K., Browa, F., Cobb, S., & Vida, I. (2018). Differential Dependence of GABAergic and Glutamatergic Neurons on Glia for the Establishment of Synaptic Transmission. Cerebral Cortex, 29(3), 1230-1243.
++
+ ====
+ 2017
+ ====
+diff --git a/doc/sphinx/requirements.txt b/doc/sphinx/requirements.txt
+index f3b6d814..01f90a9a 100644
+--- a/doc/sphinx/requirements.txt
++++ b/doc/sphinx/requirements.txt
+@@ -1 +1 @@
+-sphinx>=1.4.3
++sphinx>=1.7
+diff --git a/doc/sphinx/upload.sh b/doc/sphinx/upload.sh
+index de3c8d28..02509eb2 100644
+--- a/doc/sphinx/upload.sh
++++ b/doc/sphinx/upload.sh
+@@ -1,3 +1,3 @@
+ #! /bin/sh
+ 
+-rsync -av ./.build/html/ $1@schmidt-hieber.de:/kunden/homepages/32/d34288459/htdocs/StimfitJ/doc/sphinx
++rsync -av ./.build/html/ $1@home34288459.1and1-data.host:/kunden/homepages/32/d34288459/htdocs/StimfitJ/doc/sphinx
+diff --git a/manuscript/events.py b/manuscript/events.py
+new file mode 100644
+index 00000000..276740be
+--- /dev/null
++++ b/manuscript/events.py
+@@ -0,0 +1,626 @@
++from __future__ import print_function
++
++import sys
++import os
++
++import numpy as np
++np.random.seed(42)
++import matplotlib.pyplot as plt
++import matplotlib.gridspec as gridspec
++from matplotlib.patches import ConnectionPatch
++from scipy.optimize import leastsq
++
++import stfio
++import stfio_plot
++
++try:
++    import spectral
++except ImportError:
++    pass
++
++class Bardata(object):
++    def __init__(self, mean, err=None, data=None, title="", color='k'):
++        self.mean = mean
++        self.err = err
++        self.data = data
++        self.title = title
++        self.color = color
++
++def bargraph(datasets, ax, ylabel=None, labelpos=0, ylim=None, paired=False):
++
++    if paired:
++        assert(len(datasets)==2)
++        assert(datasets[0].data is not None and datasets[1].data is not None)
++        assert(len(datasets[0].data)==len(datasets[0].data))
++
++    ax.axis["right"].set_visible(False)
++    ax.axis["top"].set_visible(False)
++    ax.axis["bottom"].set_visible(False)
++
++    bar_width = 0.6
++    gap2 = 0.15         # gap between series
++    pos = 0
++    xys = []
++    for data in datasets:
++        pos += gap2
++        ax.bar(pos, data.mean, width=bar_width, color=data.color, edgecolor='k')
++        if data.data is not None:
++            ax.plot([pos+bar_width/2.0 for dat in data.data], 
++                    data.data, 'o', ms=15, mew=0, lw=1.0, alpha=0.5, mfc='grey', color='grey')#grey')
++            if paired:
++                xys.append([[pos+bar_width/2.0, dat] for dat in data.data])
++
++        if data.err is not None:
++            yerr_offset = data.err/2.0
++            if data.mean < 0:
++                sign=-1
++            else:
++                sign=1
++            erb = ax.errorbar(pos+bar_width/2.0, data.mean+sign*yerr_offset, yerr=sign*data.err/2.0, fmt=None, ecolor='k', capsize=6)
++            if data.err==0:
++                for erbs in erb[1]:
++                    erbs.set_visible(False)
++            erb[1][0].set_visible(False) # make lower error cap invisible
++
++        ax.text(pos+bar_width, labelpos, data.title, ha='right', va='top', rotation=20)
++
++        pos += bar_width+gap2
++
++    if paired:
++        for nxy in range(len(datasets[0].data)):
++            ax.plot([xys[0][nxy][0],xys[1][nxy][0]], [xys[0][nxy][1],xys[1][nxy][1]], '-k')#grey')
++
++    if ylabel is not None:
++        ax.set_ylabel(ylabel)
++    if ylim is not None:
++        ax.set_ylim(ylim)
++
++def leastsq_helper(p,y,lsfunc,x):
++    return y - lsfunc(p,x)
++
++def fexpbde(p, x):
++    offset, delay, tau1, amp, tau2 = p
++
++    if delay < 0:
++        return np.ones(x.shape) * 1e9
++    e1 = np.exp((delay-x)/tau1);
++    e2 = np.exp((delay-x)/tau2);
++    y = amp*e1 - amp*e2 + offset;
++    y[x<delay] = offset
++
++    return y
++
++def find_peaks(data, dt, threshold, min_interval=None):
++    """
++    Finds peaks in data that are above a threshold.
++
++    Arguments:
++    data --          1D NumPy array
++    dt --            Sampling interval
++    threshold --     Threshold for peak detection
++    min_interval --  Minimal interval between peaks
++
++    Returns:
++    Peak indices within data.
++    """
++    peak_start_i = np.where(np.diff((data > threshold)*1.0)==1)[0]
++    peak_end_i = np.where(np.diff(
++        (data[peak_start_i[0]:] > threshold)*1.0)==-1)[0] + peak_start_i[0]
++    peak_i = np.array([
++        np.argmax(data[peak_start_i[ni]:peak_end_i[ni]])+peak_start_i[ni]
++        for ni, psi in enumerate(peak_start_i[:len(peak_end_i)])])
++    if min_interval is not None:
++        while np.any(np.diff(peak_i)*dt <= min_interval):
++            peak_i = peak_i[np.diff(peak_i)*dt > min_interval]
++
++    return peak_i
++
++def correct_peaks(data, peak_i, i_before, i_after):
++    """
++    Finds and corrects misplaced peak indices.
++
++    Arguments:
++    data --          1D NumPy array
++    peak_i --        Peak indices
++    i_before --      Sampling points to be considered before the peak
++    i_before --      Sampling points to be considered after the peak
++
++    Returns:
++    Corrected peak indices within data.
++    """
++    new_peak_i = []
++    for pi in peak_i:
++        old_pi = pi
++        real_pi = np.argmax(data[pi-i_before:
++                                        pi+i_after])+pi-i_before
++        while real_pi != old_pi:
++            old_pi = real_pi
++            real_pi = np.argmax(data[real_pi-i_before:
++                                     real_pi+i_after])+real_pi-i_before
++
++        new_peak_i.append(real_pi)
++    # Remove duplicates
++    new_peak_i = np.array(list(set(new_peak_i)))
++
++    return new_peak_i
++
++def generate_events(t, mean_f):
++    dt = t[1]-t[0]
++    assert(np.sum(np.diff(t)-dt) < 1e-15)
++
++    prob_per_dt = mean_f * dt
++    event_prob = np.random.uniform(0, 1, (len(t)))
++    event_times_i = np.where(event_prob < prob_per_dt)[0]
++    assert(np.all(np.diff(event_times_i)))
++
++    return event_times_i * dt
++
++def ball_and_stick(h):
++    soma = h.Section()
++    soma.L = 20.0
++    soma.diam = 20.0
++    soma.nseg = 5
++
++    dend = h.Section()
++    dend.L = 500.0
++    dend.diam = 5.0
++    dend.nseg = 31
++
++    dend.connect(soma)
++
++    for sec in [soma, dend]:
++        sec.insert('pas')
++        sec.Ra = 150.0
++        for seg in sec:
++            seg.pas.e = -80.0
++            seg.pas.g = 1.0/25000.0
++
++    soma.push()
++
++    return soma, dend
++
++def add_noise(data, dt, mean_amp, snr=5.0):
++    sigma = mean_amp/snr
++    noise = np.random.normal(0, sigma, data.shape[0])
++    std_orig = noise.std()
++    noise = spectral.lowpass(spectral.Timeseries(noise, dt), 1.0)
++    std_new = noise.data.std()
++    noise.data *= std_orig/std_new
++    return data+noise.data
++
++def run(dt_nrn, tstop, mean_f):
++
++    module_dir = os.path.dirname(__file__)
++    if os.path.exists("%s/dat/events.h5" % module_dir):
++        rec = stfio.read("%s/dat/events.h5" % module_dir)
++        spiketimes = np.load("%s/dat/spiketimes.npy" % module_dir)
++        return rec, spiketimes
++
++    if os.path.exists("%s/dat/events_nonoise.npy" % module_dir):
++        mrec = np.load("%s/dat/events_nonoise.npy" % module_dir)
++        spiketimes = np.load("%s/dat/spiketimes.npy" % module_dir)
++    else:
++        from neuron import h
++        h.load_file('stdrun.hoc')
++
++        soma, dend = ball_and_stick(h)
++        h.tstop = tstop
++
++        trange = np.arange(0, tstop+dt_nrn, dt_nrn)
++        spiketimes = generate_events(trange, mean_f)
++        np.save("%s/dat/spiketimes.npy" % module_dir, spiketimes)
++
++        syn_AMPA, spiketimes_nrn, vecstim, netcon = [], [], [], []
++        for spike in spiketimes:
++            loc = 0.8 * np.random.normal(1.0, 0.03)
++            if loc < 0:
++                loc = 0
++            if loc > 1:
++                loc = 1
++            syn_AMPA.append(h.Exp2Syn(dend(loc), sec=dend))
++            spiketimes_nrn.append(h.Vector([spike]))
++            vecstim.append(h.VecStim())
++            netcon.append(h.NetCon(vecstim[-1], syn_AMPA[-1]))
++
++            syn_AMPA[-1].tau1 = 0.2 * np.random.normal(1.0, 0.3)
++            if syn_AMPA[-1].tau1 < 0.05:
++                syn_AMPA[-1].tau1 = 0.05
++            syn_AMPA[-1].tau2 = 2.5 * np.random.normal(1.0, 0.3)
++            if syn_AMPA[-1].tau2 < syn_AMPA[-1].tau1*1.5:
++                syn_AMPA[-1].tau2 = syn_AMPA[-1].tau1 * 1.5
++            syn_AMPA[-1].e = 0
++
++            vecstim[-1].play(spiketimes_nrn[-1])
++            netcon[-1].weight[0] = np.random.normal(1.0e-3, 1.0e-4)
++            if netcon[-1].weight[0] < 0:
++                netcon[-1].weight[0] = 0
++            netcon[-1].threshold = 0.0
++
++        vclamp = h.SEClamp(soma(0.5), sec=soma)
++        vclamp.dur1 = tstop
++        vclamp.amp1 = -80.0
++        vclamp.rs = 5.0
++        mrec = h.Vector()
++        mrec.record(vclamp._ref_i)
++
++        h.dt = dt_nrn # ms
++        h.steps_per_ms = 1.0/h.dt
++        h.v_init = -80.0
++        h.run()
++
++        mrec = np.array(mrec)
++        np.save("%s/dat/events_nonoise.npy" % module_dir, mrec)
++
++    plt.plot(np.arange(len(mrec), dtype=np.float) * dt_nrn, mrec)
++
++    peak_window_i = 20.0 / dt_nrn
++    amps_i = np.array([int(np.argmin(mrec[onset_i:onset_i+peak_window_i])+onset_i)
++                       for onset_i in spiketimes/dt_nrn], dtype=np.int)
++
++    plt.plot(amps_i * dt_nrn, mrec[amps_i], 'o')
++
++    mean_amp = np.abs(mrec[amps_i].mean())
++    print(mean_amp)
++    mrec = add_noise(mrec, dt_nrn, mean_amp)
++    plt.plot(np.arange(len(mrec), dtype=np.float) * dt_nrn, mrec)
++
++    seclist = [stfio.Section(mrec),]
++    chlist = [stfio.Channel(seclist),]
++    chlist[0].yunits = "pA"
++    rec = stfio.Recording(chlist)
++    rec.dt = dt_nrn
++    rec.xunits = "ms"
++    rec.write("%s/dat/events.h5" % module_dir)
++
++    return rec, spiketimes
++
++def template(pre_event=5.0, post_event=15.0, sd_factor=4.0, min_interval=5.0,
++             tau1_guess=0.5, tau2_guess=3.0):
++
++    module_dir = os.path.dirname(__file__)
++
++    if os.path.exists("%s/dat/template.npy" % module_dir):
++        return np.load("%s/dat/template.npy" % module_dir), \
++            np.load("%s/dat/template_epscs.npy" % module_dir), \
++            np.load("%s/dat/spiketimes.npy" % module_dir)
++
++    rec, spiketimes = run(0.01, 60000.0, 0.005)
++    
++    i_before = int(pre_event/rec.dt)
++    i_after = int(post_event/rec.dt)
++
++    # Find large peaks:
++    trace = -np.array(rec[0][0])
++    print(trace.mean(), trace.min(), trace.max())
++    rec_threshold = trace.mean() + trace.std()*sd_factor
++    peak_i = find_peaks(trace, rec.dt, rec_threshold, min_interval)
++
++    # Correct for wrongly placed peaks after min_interval check:
++    peak_i = correct_peaks(trace, peak_i, i_before, i_after)
++
++    print("    Aligning events... ", end="")
++    sys.stdout.flush()
++    # offset, delay, tau1, amp, tau2 = p
++
++    epscs = []
++    for pi in peak_i:
++        # Fit a function to each event to estimate its timing
++        epsc = trace[pi-i_before:pi+i_after]
++        t_epsc = np.arange(len(epsc)) * rec.dt
++        p0 = [0, pre_event, tau1_guess, np.max(epsc)*4.0, tau2_guess]
++        try:
++            plsq = leastsq(leastsq_helper, p0, 
++                           args = (epsc, fexpbde, t_epsc))
++        except RuntimeWarning:
++            pass
++        delay_i = int(plsq[0][1]/rec.dt+pi-i_before)
++        new_epsc = trace[delay_i-i_before:delay_i+i_after]
++        # Reject badly fitted events:
++        if np.argmax(new_epsc)*rec.dt > 0.8*pre_event:
++            epscs.append(new_epsc)
++
++    epscs = np.array(epscs)
++    print("done")
++
++    print("    Computing mean epsc ... ", end="")
++    sys.stdout.flush()
++    mean_epsc = np.mean(epscs, axis=0)
++    p0 = [0, pre_event, tau1_guess, np.max(mean_epsc)*4.0, tau2_guess]
++    plsq = leastsq(leastsq_helper, p0, 
++                   args = (mean_epsc, fexpbde, t_epsc))
++
++    sys.stdout.write(" done\n")
++
++    templ = fexpbde(plsq[0], t_epsc)[plsq[0][1]/rec.dt:]
++    np.save("%s/dat/template.npy" % module_dir, templ)
++    np.save("%s/dat/template_epscs.npy" % module_dir, epscs)
++
++    print("done")
++
++    return templ, epscs, spiketimes
++
++def figure():
++    sd_factor=5.0
++    # to yield a low total number of false positive and negative events:
++    deconv_th=4.0
++    matching_th=2.5
++    deconv_min_int=5.0
++    matching_min_int=5.0
++
++    module_dir = os.path.dirname(__file__)
++
++    import stf
++    if not stf.file_open("%s/dat/events.h5" % module_dir):
++        sys.stderr.write("Couldn't open %s/dat/events.h5; aborting now.\n" % 
++                         module_dir)
++        return
++    dt = stf.get_sampling_interval()
++    trace = stf.get_trace() * 1e3
++    plot_start_t = 55310.0
++    plot_end_t = 55640.0
++    plot_hi_start_t = 55489.0
++    plot_hi_end_t = 55511.0
++    plot_start_i = int(plot_start_t/dt)
++    plot_end_i = int(plot_end_t/dt)
++    plot_hi_start_i = int(plot_hi_start_t/dt)
++    plot_hi_end_i = int(plot_hi_end_t/dt)
++    plot_trace = trace[plot_start_i:plot_end_i]
++    plot_hi_trace = trace[plot_hi_start_i:plot_hi_end_i]
++    trange = np.arange(len(plot_trace)) * dt
++    trange_hi = np.arange(len(plot_hi_trace)) * dt
++    templ, templ_epscs, spiketimes = template(sd_factor=sd_factor)
++    plot_templ = templ * 1e3
++    templ_epscs *= 1e3
++    rec_threshold = trace.mean() - trace.std()*sd_factor
++    t_templ = np.arange(templ_epscs.shape[1]) * dt
++
++    # subtract baseline and normalize template:
++    templ -= templ[0]
++    if np.abs(templ.min()) > np.abs(templ.max()):
++        templ /= np.abs(templ.min())
++    else:
++        templ /= templ.max()
++    deconv_amps, deconv_onsets, deconv_crit, \
++        matching_amps, matching_onsets, matching_crit = \
++        events(-templ, deconv_th=deconv_th, matching_th=matching_th, 
++               deconv_min_int=deconv_min_int, matching_min_int=matching_min_int)
++
++    theoretical_ieis = np.diff(spiketimes)
++    theoretical_peaks_t = spiketimes # + np.argmax(templ)*dt
++    theoretical_peaks_t_plot = theoretical_peaks_t[
++        (theoretical_peaks_t > plot_start_i*dt) & 
++        (theoretical_peaks_t < plot_end_i*dt)] - plot_start_i*dt + 1.0
++    theoretical_peaks_t_plot_hi = theoretical_peaks_t[
++        (theoretical_peaks_t > plot_hi_start_i*dt) & 
++        (theoretical_peaks_t < plot_hi_end_i*dt)] - plot_hi_start_i*dt + 1.0
++
++    deconv_peaks_t = deconv_onsets# + np.argmax(templ)*dt
++    deconv_peaks_t_plot = deconv_peaks_t[
++        (deconv_peaks_t > plot_start_i*dt) & 
++        (deconv_peaks_t < plot_end_i*dt)] - plot_start_i*dt
++    deconv_peaks_t_plot_hi = deconv_peaks_t[
++        (deconv_peaks_t > plot_hi_start_i*dt) & 
++        (deconv_peaks_t < plot_hi_end_i*dt)] - plot_hi_start_i*dt
++    matching_peaks_t = matching_onsets# + np.argmax(templ)*dt
++    matching_peaks_t_plot = matching_peaks_t[
++        (matching_peaks_t > plot_start_i*dt) & 
++        (matching_peaks_t < plot_end_i*dt)] - plot_start_i*dt
++    matching_peaks_t_plot_hi = matching_peaks_t[
++        (matching_peaks_t > plot_hi_start_i*dt) & 
++        (matching_peaks_t < plot_hi_end_i*dt)] - plot_hi_start_i*dt
++
++    deconv_correct = np.zeros((deconv_peaks_t.shape[0]))
++    matching_correct = np.zeros((matching_peaks_t.shape[0]))
++    for theor in theoretical_peaks_t:
++        if (np.abs(deconv_peaks_t-theor)).min() < deconv_min_int:
++            deconv_correct[(np.abs(deconv_peaks_t-theor)).argmin()] = True
++        if (np.abs(matching_peaks_t-theor)).min() < matching_min_int:
++            matching_correct[(np.abs(matching_peaks_t-theor)).argmin()] = True
++
++    total_events = spiketimes.shape[0]
++    deconv_TP = deconv_correct.sum()/deconv_correct.shape[0]
++    deconv_FP = (deconv_correct.shape[0]-deconv_correct.sum())/deconv_correct.shape[0]
++    deconv_FN = (total_events - deconv_correct.sum())/total_events
++    sys.stdout.write("True positives deconv: %.2f\n" % (deconv_TP*100.0))
++    sys.stdout.write("False positives deconv: %.2f\n" % (deconv_FP*100.0))
++    sys.stdout.write("False negatives deconv: %.2f\n" % (deconv_FN*100.0))
++    matching_TP = matching_correct.sum()/matching_correct.shape[0]
++    matching_FP = (matching_correct.shape[0]-matching_correct.sum())/matching_correct.shape[0]
++    matching_FN = (total_events - matching_correct.sum())/total_events
++    sys.stdout.write("True positives matching: %.2f\n" % (matching_TP*100.0))
++    sys.stdout.write("False positives matching: %.2f\n" % (matching_FP*100.0))
++    sys.stdout.write("False negatives matching: %.2f\n" % (matching_FN*100.0))
++        
++    gs = gridspec.GridSpec(11, 13)
++    fig = plt.figure(figsize=(16,12))
++
++    ax = stfio_plot.StandardAxis(fig, gs[:5,:6], hasx=False, hasy=False)
++    ax.plot(trange, plot_trace, '-k', lw=2)
++    ax.plot(theoretical_peaks_t_plot, 
++            theoretical_peaks_t_plot**0*np.max(plot_trace), 
++            'v', ms=12, mew=2.0, mec='k', mfc='None')
++    ax.axhline(rec_threshold, ls='--', color='r', lw=2.0)
++    stfio_plot.plot_scalebars(ax, xunits="ms", yunits="pA")
++
++    ax_templ = stfio_plot.StandardAxis(fig, gs[:5,7:], hasx=False, hasy=False, sharey=ax)
++    for epsc in templ_epscs:
++        ax_templ.plot(t_templ, -epsc, '-', color='0.5', alpha=0.5)
++    ax_templ.plot(t_templ, -templ_epscs.mean(axis=0), '-k', lw=2)
++    ax_templ.plot(t_templ[-plot_templ.shape[0]:], -plot_templ, '-r', lw=4, alpha=0.5)
++    stfio_plot.plot_scalebars(ax_templ, xunits="ms", yunits="pA", sb_yoff=0.1)
++
++    ax_matching = stfio_plot.StandardAxis(fig, gs[5:7,:6], hasx=False, hasy=False, 
++                                          sharex=ax)
++    ax_matching.plot(trange, matching_crit[plot_start_i:plot_end_i], '-g')
++    stfio_plot.plot_scalebars(ax_matching, xunits="ms", yunits="SD", nox=True)
++    ax_matching.axhline(matching_th, ls='--', color='r', lw=2.0)
++    ax_matching.plot(theoretical_peaks_t_plot, 
++                     theoretical_peaks_t_plot**0*1.25*np.max(
++                         matching_crit[plot_start_i:plot_end_i]), 
++                     'v', ms=12, mew=2.0, mec='k', mfc='None')
++    ax_matching.plot(matching_peaks_t_plot, 
++                     matching_peaks_t_plot**0*np.max(
++                         matching_crit[plot_start_i:plot_end_i]), 
++                     'v', ms=12, mew=2.0, mec='g', mfc='None')
++    ax_matching.set_ylim(None, 1.37*np.max(
++        matching_crit[plot_start_i:plot_end_i]))
++    ax_matching.set_title(r"Template matching")
++
++    ax_deconv = stfio_plot.StandardAxis(fig, gs[7:9,:6], hasx=False, hasy=False, 
++                                          sharex=ax)
++    ax_deconv.plot(trange, deconv_crit[plot_start_i:plot_end_i], '-b')
++    stfio_plot.plot_scalebars(ax_deconv, xunits="ms", yunits="SD")
++    ax_deconv.axhline(deconv_th, ls='--', color='r', lw=2.0)
++    ax_deconv.plot(theoretical_peaks_t_plot, 
++                     theoretical_peaks_t_plot**0*1.2*np.max(
++                         deconv_crit[plot_start_i:plot_end_i]), 
++                     'v', ms=12, mew=2.0, mec='k', mfc='None')
++    ax_deconv.plot(deconv_peaks_t_plot, 
++                     deconv_peaks_t_plot**0*np.max(
++                         deconv_crit[plot_start_i:plot_end_i]), 
++                     'v', ms=12, mew=2.0, mec='b', mfc='None')
++    ax_deconv.set_ylim(None, 1.3*np.max(
++        deconv_crit[plot_start_i:plot_end_i]))
++    ax_deconv.set_title(r"Deconvolution")
++
++    ax_hi = stfio_plot.StandardAxis(fig, gs[9:11,2:5], hasx=False, hasy=False)
++    ax_hi.plot(trange_hi, plot_hi_trace, '-k', lw=2)
++    ax_hi.plot(theoretical_peaks_t_plot_hi, 
++               theoretical_peaks_t_plot_hi*0 + 30.0, 
++               'v', ms=12, mew=2.0, mec='k', mfc='None')
++    ax_hi.plot(matching_peaks_t_plot_hi, 
++               matching_peaks_t_plot_hi*0 + 20.0,
++               'v', ms=12, mew=2.0, mec='g', mfc='None')
++    ax_hi.plot(deconv_peaks_t_plot_hi, 
++               deconv_peaks_t_plot_hi*0 + 10.0, 
++               'v', ms=12, mew=2.0, mec='b', mfc='None')
++    stfio_plot.plot_scalebars(ax_hi, xunits="ms", yunits="pA")
++
++    xA = plot_hi_start_t - plot_start_t
++    yA = deconv_crit[plot_start_i:plot_end_i].min()
++    con = ConnectionPatch(xyA=(xA, yA), xyB=(0, 1.0),
++                          coordsA="data", coordsB="axes fraction", 
++                          axesA=ax_deconv, axesB=ax_hi,
++                          arrowstyle="-", linewidth=1, color="k")
++    ax_deconv.add_artist(con)
++    xA += (plot_hi_end_t - plot_hi_start_t) * 0.9
++    con = ConnectionPatch(xyA=(xA, yA), xyB=(0.9, 1.0),
++                          coordsA="data", coordsB="axes fraction", 
++                          axesA=ax_deconv, axesB=ax_hi,
++                          arrowstyle="-", linewidth=1, color="k")
++    ax_deconv.add_artist(con)
++
++    ax_bars_matching = stfio_plot.StandardAxis(fig, gs[5:10,7:9])
++    matching_bars_FP = Bardata(matching_FP*1e2, title="False positives", color='g')
++    matching_bars_FN = Bardata(matching_FN*1e2, title="False negatives", color='g')
++    bargraph([matching_bars_FP, matching_bars_FN], ax_bars_matching, 
++             ylabel=r'Rate ($\%$)')
++    ax_bars_matching.set_title(r"Template matching")
++
++    ax_bars_deconv = stfio_plot.StandardAxis(fig, gs[5:10,10:12], hasy=False, sharey=ax_bars_matching)
++    deconv_bars_FP = Bardata(deconv_FP*1e2, title="False positives", color='b')
++    deconv_bars_FN = Bardata(deconv_FN*1e2, title="False negatives", color='b')
++    bargraph([deconv_bars_FP, deconv_bars_FN], ax_bars_deconv, 
++             ylabel=r'Error rate $\%$')
++    ax_bars_deconv.set_title(r"Deconvolution")
++    
++    fig.text(0.09, 0.9, "A", size='x-large', weight='bold', ha='left', va='top')
++    fig.text(0.53, 0.9, "B", size='x-large', weight='bold', ha='left', va='top')
++    fig.text(0.09, 0.58, "C", size='x-large', weight='bold', ha='left', va='top')
++    fig.text(0.53, 0.58, "D", size='x-large', weight='bold', ha='left', va='top')
++
++    plt.savefig("%s/../../manuscript/figures/Fig5/Fig5.svg" % module_dir)
++    
++    fig = plt.figure()
++    ieis_ax = fig.add_subplot(111)
++    ieis_ax.hist([np.diff(deconv_onsets), np.diff(matching_onsets), 
++                  theoretical_ieis], 
++                 bins=len(theoretical_ieis)/1.0, 
++                 cumulative=True, normed=True, histtype='step')
++    ieis_ax.set_xlabel("Interevent intervals (ms)")
++    ieis_ax.set_ylabel("Cumulative probability")
++    ieis_ax.set_xlim(0,800.0)
++    ieis_ax.set_ylim(0,1.0)
++
++def events(template, deconv_th=4.5, matching_th=3.0, deconv_min_int=5.0,
++           matching_min_int=5.0):
++    """
++    Detects events using both deconvolution and template matching. Requires
++    an arbitrary template waveform as input. Thresholds and minimal intervals
++    between events can be adjusted for both algorithms. Plots cumulative 
++    distribution functions.
++    """
++
++    module_dir = os.path.dirname(__file__)
++
++    if os.path.exists("%s/dat/deconv_amps.npy" % module_dir):
++        return np.load("%s/dat/deconv_amps.npy" % module_dir), \
++            np.load("%s/dat/deconv_onsets.npy" % module_dir), \
++            np.load("%s/dat/deconv_crit.npy" % module_dir), \
++            np.load("%s/dat/matching_amps.npy" % module_dir), \
++            np.load("%s/dat/matching_onsets.npy" % module_dir), \
++            np.load("%s/dat/matching_crit.npy" % module_dir)
++
++    # Compute criteria
++    deconv_amps, deconv_onsets, deconv_crit = \
++        detect(template, "deconvolution", deconv_th, 
++               deconv_min_int)
++    matching_amps, matching_onsets, matching_crit = \
++        detect(template, "criterion", matching_th, 
++               matching_min_int)
++
++    fig = plt.figure()
++
++    amps_ax = fig.add_subplot(121)
++    amps_ax.hist([deconv_amps, matching_amps], bins=50, cumulative=True, 
++                 normed=True, histtype='step')
++    amps_ax.set_xlabel("Amplitudes (pA)")
++    amps_ax.set_ylabel("Cumulative probability")
++
++    ieis_ax = fig.add_subplot(122)
++    ieis_ax.hist([np.diff(deconv_onsets), np.diff(matching_onsets)], bins=50, 
++                 cumulative=True, normed=True, histtype='step')
++    ieis_ax.set_xlabel("Interevent intervals (ms)")
++    ieis_ax.set_ylabel("Cumulative probability")
++
++    np.save("%s/dat/deconv_amps.npy" % module_dir, deconv_amps)
++    np.save("%s/dat/deconv_onsets.npy" % module_dir, deconv_onsets)
++    np.save("%s/dat/deconv_crit.npy" % module_dir, deconv_crit)
++    np.save("%s/dat/matching_amps.npy" % module_dir, matching_amps)
++    np.save("%s/dat/matching_onsets.npy" % module_dir, matching_onsets)
++    np.save("%s/dat/matching_crit.npy" % module_dir, matching_crit)
++
++    return deconv_amps, deconv_onsets, deconv_crit, \
++        matching_amps, matching_onsets, matching_crit
++
++def detect(template, mode, th, min_int):
++    """
++    Detect events using the given template and the algorithm specified in
++    'mode' with a threshold 'th' and a minimal interval of 'min_int' between
++    events. Returns amplitudes and interevent intervals.
++    """
++    import stf
++
++    # Compute criterium
++    crit = stf.detect_events(template, mode=mode, norm=False, lowpass=0.1, 
++                             highpass=0.001)
++
++    dt = stf.get_sampling_interval()
++
++    # Find event onset times (corresponding to peaks in criteria)
++    onsets_i = stf.peak_detection(crit, th, int(min_int/dt))
++
++    trace = stf.get_trace()
++
++    # Use event onset times to find event amplitudes (negative for epscs)
++    peak_window_i = min_int / dt
++    amps_i = np.array([int(np.argmin(trace[onset_i:onset_i+peak_window_i])+onset_i)
++                       for onset_i in onsets_i], dtype=np.int)
++
++    amps = trace[amps_i]
++    onsets = onsets_i * dt
++
++    return amps, onsets, crit
++
++if __name__=="__main__":
++    figure()
+diff --git a/src/libbiosiglite/Makefile.am b/src/libbiosiglite/Makefile.am
+index b47f857d..2ab83606 100644
+--- a/src/libbiosiglite/Makefile.am
++++ b/src/libbiosiglite/Makefile.am
+@@ -26,12 +26,13 @@ libbiosiglite_la_SOURCES = \
+   biosig4c++/test0/sandbox.c \
+   biosig4c++/biosig.c \
+   biosig4c++/biosig2.c \
+-  biosig4c++/biosig-network.c \
+   biosig4c++/biosig-HL7aECG-stub.c \
+   biosig4c++/gdftime.c \
+   biosig4c++/mdc_ecg_codes.c \
+   biosig4c++/physicalunits.c
+ 
++  # biosig4c++/biosig-network.c
++
+ libbiosiglite_la_CPPFLAGS = -DWITH_BIOSIG2 -DWITH_ZLIB -DWITH_CHOLMOD -DWITHOUT_NETWORK
+ libbiosiglite_la_LDFLAGS = 
+ libbiosiglite_la_LIBADD = $(LIBSTF_LDFLAGS) -lz -lcholmod
+diff --git a/src/libbiosiglite/biosig4c++/biosig-dev.h b/src/libbiosiglite/biosig4c++/biosig-dev.h
+index 69ec99fa..b89fa98c 100755
+--- a/src/libbiosiglite/biosig4c++/biosig-dev.h
++++ b/src/libbiosiglite/biosig4c++/biosig-dev.h
+@@ -30,18 +30,12 @@
+ #include <stdarg.h>
+ #include <stdio.h>
+ #include <string.h>
+-#if !defined(_MSC_VER)
++#if defined(__MINGW32__)
+ #include <sys/param.h>
+ #endif
+ #include <time.h>
+ #include "physicalunits.h"
+ 
+-#ifdef __cplusplus
+-#define EXTERN_C extern "C"
+-#else
+-#define EXTERN_C
+-#endif
+-
+ 
+ #ifdef __cplusplus
+ extern "C" {
+@@ -114,7 +108,7 @@ char *getlogin (void);
+ 
+ #define BIOSIG_VERSION_MAJOR 1
+ #define BIOSIG_VERSION_MINOR 9
+-#define BIOSIG_PATCHLEVEL    0
++#define BIOSIG_PATCHLEVEL    3
+ // for backward compatibility
+ #define BIOSIG_VERSION_STEPPING BIOSIG_PATCHLEVEL
+ #define BIOSIG_VERSION (BIOSIG_VERSION_MAJOR * 10000 + BIOSIG_VERSION_MINOR * 100 + BIOSIG_PATCHLEVEL)
+@@ -143,7 +137,7 @@ char *getlogin (void);
+ #include "gdftime.h"
+ 
+ /*
+- * pack structures to fullfil following requirements:
++ * pack structures to fulfil following requirements:
+  * (1) Matlab v7.3+ requires 8 byte alignment
+  * (2) in order to use mingw-compiled libbiosig with MS' VisualStudio,
+  *     the structurs must be packed in a MS compatible way.
+@@ -232,7 +226,8 @@ enum FileFormat {
+ 	TDMS, TIFF, TMS32, TMSiLOG, TRC, UNIPRO, VRML, VTK,
+ 	WAV, WCP, WG1, WinEEG, WMF, XML, XPM,
+ 	Z, ZIP, ZIP2, RHD2000,
+-	invalid=0xffff
++	EBNEURO, SigViewerEventsCSV, XDF,
++	LastPlaceHolder, invalid=0xffff
+ };
+ 
+ 
+@@ -578,9 +573,9 @@ extern const struct FileFormatStringTable_t FileFormatStringTable [];
+ #  define bswap_64(x) __builtin_bswap64(x)
+ 
+ #	include <winsock2.h>
+-#   if !defined(_MSC_VER)
++#	if defined(__MINGW32__)
+ #	    include <sys/param.h>
+-#   endif
++#	endif
+ #	if BYTE_ORDER == LITTLE_ENDIAN
+ #		define htobe16(x) htons(x)
+ #		define htole16(x) (x)
+@@ -593,15 +588,15 @@ extern const struct FileFormatStringTable_t FileFormatStringTable [];
+ #		define le32toh(x) (x)
+ 
+ #		define htole64(x) (x)
+-#       if !defined(_MSC_VER)
+-#           define htobe64(x) __builtin_bswap64(x)
+-#           define be64toh(x) __builtin_bswap64(x)
+-#       else
+-#           define ntohll(x) (((_int64)(ntohl((int)((x << 32) >> 32))) << 32) | (unsigned int)ntohl(((int)(x >> 32))))
+-#           define htonll(x) ntohll(x)
+-#           define htobe64(x) htonll(x)
+-#           define be64toh(x) ntohll(x)
+-#       endif
++#		if defined(__MINGW32__)
++#       	    define htobe64(x) __builtin_bswap64(x)
++#       	    define be64toh(x) __builtin_bswap64(x)
++#       	else
++#       	    define ntohll(x) (((_int64)(ntohl((int)((x << 32) >> 32))) << 32) | (unsigned int)ntohl(((int)(x >> 32))))
++#       	    define htonll(x) ntohll(x)
++#       	    define htobe64(x) htonll(x)
++#       	    define be64toh(x) ntohll(x)
++#       	endif
+ #		define le64toh(x) (x)
+ 
+ #	elif BYTE_ORDER == BIG_ENDIAN
+@@ -930,9 +925,6 @@ static inline void bef64a(  double i, void* r) {
+ #ifndef isfinite
+ # define isfinite(a) (-INFINITY < (a) && (a) < INFINITY)
+ #endif
+-#ifndef isnan
+-# define isnan(a) ((a)!=(a))
+-#endif
+ 
+ /*
+     The macro IS_SET() can be used to test for defines in 
+diff --git a/src/libbiosiglite/biosig4c++/biosig-network.c b/src/libbiosiglite/biosig4c++/biosig-network.c
+index fdc38704..b4b18945 100644
+--- a/src/libbiosiglite/biosig4c++/biosig-network.c
++++ b/src/libbiosiglite/biosig4c++/biosig-network.c
+@@ -27,8 +27,6 @@
+ 
+ #include "biosig-network.h"
+ 
+-#define min(a,b)        (((a) < (b)) ? (a) : (b))
+-
+ #ifdef _WIN32
+ #define TC (char*)	// WINSOCK's send and recv require (char*)buf 
+ 
+diff --git a/src/libbiosiglite/biosig4c++/biosig-network.h b/src/libbiosiglite/biosig4c++/biosig-network.h
+index c46d1fe0..30e958f4 100644
+--- a/src/libbiosiglite/biosig4c++/biosig-network.h
++++ b/src/libbiosiglite/biosig4c++/biosig-network.h
+@@ -38,6 +38,8 @@
+ #define socklen_t int
+ #endif
+ 
++/* mingw/include/errno.h */
++#ifndef _INC_ERRNO
+ #define EALREADY      WSAEALREADY    
+ #define ECONNABORTED  WSAECONNABORTED
+ #define ECONNREFUSED  WSAECONNREFUSED
+@@ -58,6 +60,7 @@
+ #define EMSGSIZE      WSAEMSGSIZE
+ #define EADDRNOTAVAIL WSAEADDRNOTAVAIL
+ #define EPROTONOSUPPORT WSAEPROTONOSUPPORT
++#endif
+ 
+ #if 0 //!__linux__
+ // needed by MinGW on Windows
+diff --git a/src/libbiosiglite/biosig4c++/biosig.c b/src/libbiosiglite/biosig4c++/biosig.c
+index 52147816..52dc1eba 100644
+--- a/src/libbiosiglite/biosig4c++/biosig.c
++++ b/src/libbiosiglite/biosig4c++/biosig.c
+@@ -51,16 +51,17 @@
+ #include <errno.h>
+ #include <float.h>
+ #include <locale.h>
++#include <math.h>      // define macro isnan()
+ #include <stdlib.h>
+ #include <sys/stat.h>
+ 
++
+ #ifdef WITH_CURL
+ #  include <curl/curl.h>
+ #endif 
+ 
+ int VERBOSE_LEVEL = 0;		// this variable is always available, but only used without NDEBUG 
+ 
+-#include "config.h"
+ #include "biosig.h"
+ #include "biosig-network.h"
+ 
+@@ -1219,16 +1220,10 @@ HDRTYPE* constructHDR(const unsigned NS, const unsigned N_EVENT)
+    #endif
+ #else	
+ 	char *username = NULL;
+-/* TODO: check whether memory leak in glibc's getpwuid is fixed. 
+-	for details see: http://sourceware.org/bugzilla/show_bug.cgi?id=14122
+-
+-	struct passwd *p = NULL; //getpwuid(geteuid());
++	struct passwd *p = getpwuid(geteuid());
+ 	if (p != NULL)
+-		username = p->pw_gecos;
+-*/
+-	if (username == NULL) 
+-		username = getlogin(); 
+-	if (username) 
++		username = p->pw_name;
++	if (username)
+ 		hdr->ID.Technician = strdup(username); 
+ 		
+ #endif 
+@@ -1718,6 +1713,8 @@ HDRTYPE* getfiletype(HDRTYPE* hdr)
+     	}
+ 	else if (*(uint32_t*)(Header1) == htobe32(0x7f454c46))
+ 	    	hdr->TYPE = ELF;
++	else if ( (hdr->HeadLen > 64) && !memcmp(Header1+0x30,"GALNT EEG DATA",14))
++		hdr->TYPE = EBNEURO;
+     	else if ( (hdr->HeadLen > 14) && !memcmp(Header1,"Embla data file",15))
+ 	    	hdr->TYPE = EMBLA;
+     	else if ( (hdr->HeadLen > 4) && ( !memcmp(Header1,"PBJ",3) || !memcmp(Header1,"BPC",3) ) )
+@@ -1878,7 +1875,7 @@ HDRTYPE* getfiletype(HDRTYPE* hdr)
+ 	// general SCP
+ 	else if (  (hdr->HeadLen>32) && 
+                    ( MAGIC_EN1064_Section0Length    >  120)
+-		&& ( MAGIC_EN1064_Section0Length    <  250)
++		&& ( MAGIC_EN1064_Section0Length    <  16+10*1024)
+ 		&& ((MAGIC_EN1064_Section0Length%10)== 6)
+ 		&& (*(uint16_t*)(hdr->AS.Header+ 8) == 0x0000)
+ 		&& (leu32p(hdr->AS.Header+10) == leu32p(hdr->AS.Header+24))
+@@ -1961,6 +1958,8 @@ HDRTYPE* getfiletype(HDRTYPE* hdr)
+ 		hdr->TYPE = STATA;
+ 	else if (!memcmp(Header1,"IAvSFo",6))
+ 		hdr->TYPE = SIGIF;
++	else if (!memcmp(Header1,"position,duration,channel,type,name\n",35))
++		hdr->TYPE = SigViewerEventsCSV;
+ 	else if ((hdr->HeadLen>23) && !memcmp(Header1,"SQLite format 3\000",16) && Header1[21]==64 && Header1[22]==32 && Header1[23]==32 )
+ 		hdr->TYPE = SQLite;
+ 	else if ((hdr->HeadLen>23) && !memcmp(Header1,"\"Snap-Master Data File\"",24))
+@@ -2015,6 +2014,10 @@ HDRTYPE* getfiletype(HDRTYPE* hdr)
+ 		hdr->TYPE = ZIP;
+ 	else if (!strncmp(Header1,"!<arch>\n",8))
+ 		hdr->TYPE = MSVCLIB;
++/*
++	else if (!strncmp(Header1,"XDF",3))
++		hdr->TYPE = XDF;
++ */
+ 	else if (!strncmp(Header1,"ZIP2",4))
+ 		hdr->TYPE = ZIP2;
+ 	else if ((hdr->HeadLen>13) && !memcmp(Header1,"<?xml version",13))
+@@ -2106,6 +2109,7 @@ const struct FileFormatStringTable_t FileFormatStringTable[] = {
+ 	{ CTF,    	"CTF" },
+ 	{ DEMG,    	"DEMG" },
+ 	{ DICOM,    	"DICOM" },
++	{ EBNEURO,	"EBNEURO"},
+ 	{ EBS,    	"EBS" },
+ 	{ EDF,    	"EDF" },
+ 	{ EEG1100,    	"EEG1100" },
+@@ -2165,6 +2169,7 @@ const struct FileFormatStringTable_t FileFormatStringTable[] = {
+ 	{ SCP_ECG,    	"SCP" },
+ 	{ SIGIF,    	"SIGIF" },
+ 	{ Sigma,    	"Sigma" },
++	{ SigViewerEventsCSV, "SigViewer's CSV event table"},
+ 	{ SMA,    	"SMA" },
+ 	{ SMR,    	"SON/SMR" },
+ 	{ SND,    	"SND" },
+@@ -2185,6 +2190,7 @@ const struct FileFormatStringTable_t FileFormatStringTable[] = {
+ 	{ WCP,    	"WCP" },
+ 	{ WG1,    	"Walter Graphtek" },
+ 	{ WMF,    	"WMF" },
++	{ XDF,    	"XDF" },
+ 	{ XML,    	"XML" },
+ 	{ ZIP,    	"ZIP" },
+ 	{ ZIP2,    	"ZIP2" },
+@@ -2390,7 +2396,15 @@ void struct2gdfbin(HDRTYPE *hdr)
+ 
+ 		if (VERBOSE_LEVEL>7) fprintf(stdout,"%s (line %i) %i %i %i\n", __func__, __LINE__, 1, hdr->HeadLen, TagNLen[1]);
+ 
+-	    	hdr->AS.Header = (uint8_t*) realloc(hdr->AS.Header, hdr->HeadLen);
++		if (hdr->SCP.Section7 || hdr->SCP.Section8 || hdr->SCP.Section9 || hdr->SCP.Section10 || hdr->SCP.Section11) {
++			// use auxillary pointer in order to keep SCP sections in memory
++			if (hdr->aECG) free(hdr->aECG);
++			hdr->aECG = hdr->AS.Header;
++			hdr->AS.Header = (uint8_t*) realloc(NULL, hdr->HeadLen);
++		}
++		else {
++			hdr->AS.Header = (uint8_t*) realloc(hdr->AS.Header, hdr->HeadLen);
++		}
+ 	    	if (hdr->AS.Header == NULL) {
+ 	    		biosigERROR(hdr, B4C_MEMORY_ALLOCATION_FAILED, "Memory allocation failed");
+ 			return; 
+@@ -2526,10 +2540,12 @@ void struct2gdfbin(HDRTYPE *hdr)
+ 		if (hdr->CHANNEL[k].OnOff)
+ 		{
+ 			const char *tmpstr;
+-			if (hdr->CHANNEL[k].LeadIdCode)
+-				tmpstr = LEAD_ID_TABLE[hdr->CHANNEL[k].LeadIdCode];
++			CHANNEL_TYPE *hc = hdr->CHANNEL+k;
++
++			if ( (0 < hc->LeadIdCode) && (hc->LeadIdCode * sizeof(&LEAD_ID_TABLE[0]) < sizeof(LEAD_ID_TABLE) ) )
++				tmpstr = LEAD_ID_TABLE[hc->LeadIdCode];
+ 			else
+-				tmpstr = hdr->CHANNEL[k].Label;
++				tmpstr = hc->Label;
+ 
+ 			len = strlen(tmpstr)+1;
+ 		     	memcpy(Header2+16*k2,tmpstr,min(len,16));
+@@ -2538,7 +2554,7 @@ void struct2gdfbin(HDRTYPE *hdr)
+ 		     	len = strlen(hdr->CHANNEL[k].Transducer);
+ 		     	memcpy(Header2+80*k2 + 16*NS, hdr->CHANNEL[k].Transducer, min(len,80));
+ 			Header2[80*k2 + min(len,80) + 16*NS] = 0; 
+-		     	
++
+ 			tmpstr = PhysDim3(hdr->CHANNEL[k].PhysDimCode);
+ 			len = strlen(tmpstr)+1;
+ 		     	if (hdr->VERSION < 1.9)
+@@ -2588,8 +2604,7 @@ void struct2gdfbin(HDRTYPE *hdr)
+ 
+ 		if (errno==34) errno = 0; // reset numerical overflow error
+ 
+-		if (VERBOSE_LEVEL>7)
+-			fprintf(stdout,"GDFw 444 %i %s\n", errno, strerror(errno));
++		if (VERBOSE_LEVEL>7) fprintf(stdout,"%s (line %d)  %d %s\n", __func__, __LINE__, errno, strerror(errno));
+ 
+ 	     	/***** 
+ 	     	 *	This is the 2nd scan of Header3 - memory is allocated, now H3 is filled in with content 
+@@ -2689,6 +2704,7 @@ void struct2gdfbin(HDRTYPE *hdr)
+ 		if (TagNLen[tag]>0) {
+ 			leu32a(tag + (TagNLen[tag]<<8), Header2); 	// Tag=9 & Length of Tag 9
+ 			memcpy((char*)(Header2+4),hdr->SCP.Section7, TagNLen[tag]);		/* Flawfinder: ignore *** memory is allocated after 1st H3 scan above */
++			hdr->SCP.Section7 = Header2+4;
+ 			Header2 += 4+TagNLen[tag];
+ 		}
+ 		tag = 10;
+@@ -2696,6 +2712,7 @@ void struct2gdfbin(HDRTYPE *hdr)
+ 		if (TagNLen[tag]>0) {
+ 			leu32a(tag + (TagNLen[tag]<<8), Header2); 	// Tag=10 & Length of Tag 10
+ 			memcpy((char*)(Header2+4),hdr->SCP.Section8, TagNLen[tag]);		/* Flawfinder: ignore *** memory is allocated after 1st H3 scan above */
++			hdr->SCP.Section8 = Header2+4;
+ 			Header2 += 4+TagNLen[tag];
+ 		}
+ 		tag = 11;
+@@ -2703,6 +2720,7 @@ void struct2gdfbin(HDRTYPE *hdr)
+ 		if (TagNLen[tag]>0) {
+ 			leu32a(tag + (TagNLen[tag]<<8), Header2); 	// Tag=11 & Length of Tag 11
+ 			memcpy((char*)(Header2+4),hdr->SCP.Section9, TagNLen[tag]);		/* Flawfinder: ignore *** memory is allocated after 1st H3 scan above */
++			hdr->SCP.Section9 = Header2+4;
+ 			Header2 += 4+TagNLen[tag];
+ 		}
+ 		tag = 12;
+@@ -2710,6 +2728,7 @@ void struct2gdfbin(HDRTYPE *hdr)
+ 		if (TagNLen[tag]>0) {
+ 			leu32a(tag + (TagNLen[tag]<<8), Header2); 	// Tag=12 & Length of Tag 12
+ 			memcpy((char*)(Header2+4),hdr->SCP.Section10, TagNLen[tag]);		/* Flawfinder: ignore *** memory is allocated after 1st H3 scan above */
++			hdr->SCP.Section10 = Header2+4;
+ 			Header2 += 4+TagNLen[tag];
+ 		}
+ 		tag = 13;
+@@ -2717,6 +2736,7 @@ void struct2gdfbin(HDRTYPE *hdr)
+ 		if (TagNLen[tag]>0) {
+ 			leu32a(tag + (TagNLen[tag]<<8), Header2); 	// Tag=13 & Length of Tag 13
+ 			memcpy((char*)(Header2+4),hdr->SCP.Section11, TagNLen[tag]);		/* Flawfinder: ignore *** memory is allocated after 1st H3 scan above */
++			hdr->SCP.Section11 = Header2+4;
+ 			Header2 += 4+TagNLen[tag];
+ 		}
+ #endif
+@@ -2725,6 +2745,10 @@ void struct2gdfbin(HDRTYPE *hdr)
+ 			*Header2 = 0;
+ 			 Header2++;
+ 		}
++		if (hdr->aECG) {
++			free(hdr->aECG);
++			hdr->aECG=NULL;
++		}
+ 
+ 		if (VERBOSE_LEVEL>8) fprintf(stdout,"GDFw [339] %p %p\n", Header1,Header2);
+ }
+@@ -3820,6 +3844,7 @@ else if (!strncmp(MODE,"r",1)) {
+ 		count = ifread(hdr->AS.Header, 1, PAGESIZE, hdr);
+ 		hdr->AS.Header[count]=0;
+ 
++		if (VERBOSE_LEVEL>7) fprintf(stdout,"%s (line %i) count=%i\n", __func__, __LINE__,(int)count);
+ 
+ 		if (!memcmp(Header1,MAGIC_NUMBER_GZIP,strlen(MAGIC_NUMBER_GZIP))) {
+ #ifdef ZLIB_H
+@@ -3848,6 +3873,10 @@ else if (!strncmp(MODE,"r",1)) {
+ 		;
+     	else if (!memcmp(Header1,FileName,strspn(FileName,".")) && (!strcmp(FileExt,"HEA") || !strcmp(FileExt,"hea") ))
+ 	    	hdr->TYPE = MIT;
++	else if (count < 512) {
++		biosigERROR(hdr, B4C_FORMAT_UNSUPPORTED, "Error SOPEN(READ): file is too short\n");
++		return(hdr);
++	}
+ #endif //ONLYGDF
+ 
+     	if (hdr->TYPE == unknown) {
+@@ -4629,9 +4658,9 @@ fprintf(stdout,"ACQ EVENT: %i POS: %i\n",k,POS);
+ 		hdr = ifopen(hdr,"rb");
+ 		count = 0;
+ 		while (!ifeof(hdr)) {
+-			size_t bufsiz = 4096;
+-		    	hdr->AS.Header = (uint8_t*)realloc(hdr->AS.Header,count+bufsiz+1);
+-		    	count  += ifread(hdr->AS.Header+count,1,bufsiz,hdr);
++			size_t bufsiz = max(2*count, PAGESIZE);
++			hdr->AS.Header = (uint8_t*)realloc(hdr->AS.Header, bufsiz+1);
++			count  += ifread(hdr->AS.Header+count, 1, bufsiz-count, hdr);
+ 		}
+ 		hdr->AS.Header[count]=0;
+ 		hdr->HeadLen = count;
+@@ -5139,7 +5168,7 @@ fprintf(stdout,"ACQ EVENT: %i POS: %i\n",k,POS);
+ 				if (!strncmp(line,"0x",2)) {
+ 
+ 					if (hdr->EVENT.N+1 >= N) {
+-						N = max(4096, 2*N);
++						N = max(PAGESIZE, 2*N);
+ 						if (N != reallocEventTable(hdr, N)) {
+ 							biosigERROR(hdr, B4C_MEMORY_ALLOCATION_FAILED, "Allocating memory for event table failed.");
+ 							return (hdr);
+@@ -5663,9 +5692,9 @@ if (VERBOSE_LEVEL>8)
+ 	else if (hdr->TYPE==BrainVisionMarker) {
+ 
+ 		while (!ifeof(hdr)) {
+-			size_t bufsiz  = 4096;
+-		    	hdr->AS.Header = (uint8_t*)realloc(hdr->AS.Header,count+bufsiz+1);
+-		    	count += ifread(hdr->AS.Header+count,1,bufsiz,hdr);
++			size_t bufsiz  = max(count*2, PAGESIZE);
++			hdr->AS.Header = (uint8_t*)realloc(hdr->AS.Header,bufsiz+1);
++			count += ifread(hdr->AS.Header+count,1,bufsiz-count,hdr);
+ 		}
+ 		hdr->AS.Header[count]=0;
+ 		hdr->HeadLen = count;
+@@ -5773,9 +5802,9 @@ if (VERBOSE_LEVEL>8)
+ 		char* ext = strrchr((char*)hdr->FileName,'.')+1;
+ 
+ 		while (!ifeof(hdr)) {
+-			size_t bufsiz = 4096;
+-		    	hdr->AS.Header = (uint8_t*)realloc(hdr->AS.Header,count+bufsiz+1);
+-		    	count  += ifread(hdr->AS.Header+count,1,bufsiz,hdr);
++			size_t bufsiz = max(2*count, PAGESIZE);
++			hdr->AS.Header = (uint8_t*)realloc(hdr->AS.Header, bufsiz+1);
++			count  += ifread(hdr->AS.Header+count, 1, bufsiz-count, hdr);
+ 		}
+ 		hdr->AS.Header[count]=0;
+ 		hdr->HeadLen = count;
+@@ -6137,13 +6166,14 @@ if (VERBOSE_LEVEL>8)
+ 
+ 	else if (hdr->TYPE==CNT) {
+ 
+-		if (VERBOSE_LEVEL>7)
+-			fprintf(stdout,"SOPEN: Neuroscan format \n");
++		if (VERBOSE_LEVEL>7) fprintf(stdout, "%s: Neuroscan format (count=%d)\n",__func__, (int)count);
+ 
+ 		// TODO: fix handling of AVG and EEG files
+-	    	hdr->AS.Header = (uint8_t*)realloc(hdr->AS.Header, 900);
+-	    	hdr->VERSION = atof((char*)hdr->AS.Header + 8);
+-	    	count  += ifread(hdr->AS.Header+count, 1, 900-count, hdr);
++		if (count < 900) {
++			hdr->AS.Header = (uint8_t*)realloc(hdr->AS.Header, 900);
++			count  += ifread(hdr->AS.Header+count, 1, 900-count, hdr);
++		}
++		hdr->VERSION = atof((char*)hdr->AS.Header + 8);
+ 
+ 		int8_t FLAG_CNT32 = 0;
+ 		uint16_t gdftyp = 0;
+@@ -6152,7 +6182,7 @@ if (VERBOSE_LEVEL>8)
+ 	    	uint32_t nextfilepos = leu32p(hdr->AS.Header+12);
+ 
+ 		if (VERBOSE_LEVEL > 7)
+-			fprintf(stdout,"SOPEN: Neuroscan format: minor revision %i eventtablepos: %i nextfilepos: %i\n", minor_revision, (unsigned)eventtablepos, nextfilepos);
++			fprintf(stdout,"%s: Neuroscan format: minor revision %i eventtablepos: %i nextfilepos: %i\n", __func__, minor_revision, (unsigned)eventtablepos, nextfilepos);
+ 
+ 		/* make base of filename */
+ 		size_t i=0, j=0;
+@@ -6196,12 +6226,12 @@ if (VERBOSE_LEVEL>8)
+ 			struct stat FileBuf;
+ 
+ 			if (VERBOSE_LEVEL>7)
+-				fprintf(stdout,"SOPEN: Neuroscan format: minor rev=%i bpb2:%i bpb4:%i\n", minor_revision, (unsigned)hdr->AS.bpb, (unsigned)bpb4);
++				fprintf(stdout,"%s (line %d): Neuroscan format: minor rev=%i bpb2:%i bpb4:%i\n", __func__,__LINE__, minor_revision, (unsigned)hdr->AS.bpb, (unsigned)bpb4);
+ 
+ 		    	switch (minor_revision) {
+ 		    	case 9:
+ 		    		// TODO: FIXME
+-    				fprintf(stderr,"Warning biosig/sopen (CNT/EEG): minor revision %i is experimental\n", minor_revision);
++				fprintf(stderr,"Warning biosig/%s (line %d) (CNT/EEG): minor revision %i is experimental\n", __func__,__LINE__, minor_revision);
+ 		    		gdftyp = 3;
+ 		    		hdr->FILE.LittleEndian = 0;
+ 				stat(hdr->FileName,&FileBuf);
+@@ -6216,11 +6246,11 @@ if (VERBOSE_LEVEL>8)
+ 		    		break;
+ 
+ 		    	default:
+-	    			if (minor_revision != 16)
+-	    				fprintf(stderr,"Warning biosig/sopen (CNT/EEG): minor revision %i not tested\n", minor_revision);
++				if (minor_revision != 16)
++					fprintf(stderr,"Warning biosig/%s (line %d) sopen (CNT/EEG): minor revision %i not tested\n", __func__,__LINE__, minor_revision);
+ 
+ 				if (VERBOSE_LEVEL>7)
+-		    			fprintf(stdout,"biosig/sopen (CNT/EEG):  %i %i %i %i %i %i \n", (int)hdr->NRec, hdr->SPR, hdr->NS, (int)eventtablepos, (int)(hdr->AS.bpb * hdr->NRec + hdr->HeadLen), (int)(bpb4 * hdr->NRec + hdr->HeadLen));
++					fprintf(stdout,"biosig/%s (line %d) (CNT/EEG):  %i %i %i %i %i %i \n", __func__,__LINE__, (int)hdr->NRec, hdr->SPR, hdr->NS, (int)eventtablepos, (int)(hdr->AS.bpb * hdr->NRec + hdr->HeadLen), (int)(bpb4 * hdr->NRec + hdr->HeadLen));
+ 
+ 	    			if ((size_t)(hdr->AS.bpb * hdr->NRec + hdr->HeadLen) == eventtablepos)
+ 	    				gdftyp = 3;
+@@ -6249,11 +6279,13 @@ if (VERBOSE_LEVEL>8)
+ 			hdr->NRec   = (eventtablepos - hdr->HeadLen) / hdr->AS.bpb;
+ 
+ 			if (VERBOSE_LEVEL > 7)
+-	    			fprintf(stdout,"biosig/sopen (CNT):  %i %i %i %i %i \n", (int)hdr->NRec, hdr->SPR, hdr->NS, (int)eventtablepos, (int)(hdr->AS.bpb * hdr->NRec + hdr->HeadLen) );
++				fprintf(stdout,"biosig/%s (line %d) (CNT):  %i %i %i %i %i \n", __func__,__LINE__, (int)hdr->NRec, hdr->SPR, hdr->NS, (int)eventtablepos, (int)(hdr->AS.bpb * hdr->NRec + hdr->HeadLen) );
+ 		}
+ 
+-	    	hdr->AS.Header = (uint8_t*) realloc(Header1,hdr->HeadLen);
+-	    	count  += ifread(Header1+900, 1, hdr->NS*75, hdr);
++		if (count < hdr->HeadLen) {
++			hdr->AS.Header = (uint8_t*) realloc(Header1, hdr->HeadLen);
++			count  += ifread(Header1+count, 1, hdr->HeadLen-count, hdr);
++		}
+ 
+ 	    	hdr->CHANNEL = (CHANNEL_TYPE*) realloc(hdr->CHANNEL, hdr->NS * sizeof(CHANNEL_TYPE));
+ 	    	size_t bi = 0;
+@@ -6263,7 +6295,12 @@ if (VERBOSE_LEVEL>8)
+ 			hc->Transducer[0] = '\0';
+ 		    	hc->GDFTYP 	= gdftyp;
+ 		    	hc->SPR 	= hdr->SPR; // *(int32_t*)(Header1+56);
++
++
+ 		    	const size_t len = min(10, MAX_LENGTH_LABEL);
++
++if (VERBOSE_LEVEL > 7) fprintf(stdout,"biosig/%s (line %d): #%d label <%s>\n", __func__,__LINE__,(int)k, (char*) Header2 );
++
+ 		    	strncpy(hc->Label, (char*)Header2, len);
+ 		    	hc->Label[len]  = 0;
+ 		    	hc->LeadIdCode  = 0;
+@@ -6313,12 +6350,14 @@ if (VERBOSE_LEVEL>8)
+ 				return (hdr);
+ 			};
+ 
++			hdr->EVENT.DUR=NULL;
++			hdr->EVENT.CHN=NULL;
+ 			for  (k = 0; k < hdr->EVENT.N; k++) {
+ 				hdr->EVENT.TYP[k] = leu16p(buf+k*fieldsize);	// stimulus type
+ 				uint8_t tmp8 = buf[k*fieldsize+3];
+ 				if (tmp8>0) {
+ 					if (hdr->EVENT.TYP[k]>0)
+-						fprintf(stdout,"Warning SOPEN(CNT) event %i: both, stimulus and response, codes (%i/%i) are non-zero. response code is ignored.\n",(int)k+1,hdr->EVENT.TYP[k],tmp8);
++						fprintf(stdout,"Warning %s (line %d) event %i: both, stimulus and response, codes (%i/%i) are non-zero. response code is ignored.\n",__func__,__LINE__, (int)k+1,hdr->EVENT.TYP[k],tmp8);
+ 					else
+ 						hdr->EVENT.TYP[k] |= tmp8 | 0x80;	// response type
+ 				}
+@@ -6337,10 +6376,8 @@ if (VERBOSE_LEVEL>8)
+ 
+ 	else if (hdr->TYPE==CTF) {
+ 
+-		if (VERBOSE_LEVEL>7) fprintf(stdout,"CTF[101]: %s\n",hdr->FileName);
++		if (VERBOSE_LEVEL>7) fprintf(stdout,"%s: CTF[101]: %s\n", __func__, hdr->FileName);
+ 
+-		hdr->AS.Header  = (uint8_t*)realloc(hdr->AS.Header,1844);
+-		hdr->HeadLen    = 1844;
+ 		char *f0        = hdr->FileName;
+ 		char *f1 	= (char*)malloc(strlen(f0)+6);
+ 		strcpy(f1, f0);				// Flawfinder: ignore
+@@ -6356,7 +6393,11 @@ if (VERBOSE_LEVEL>8)
+ 			count = 0;
+ 		}
+ 
+-		count += ifread(hdr->AS.Header+count,1,hdr->HeadLen-count,hdr);
++		hdr->HeadLen = 1844;
++		if (count < hdr->HeadLen) {
++			hdr->AS.Header  = (uint8_t*)realloc(hdr->AS.Header,hdr->HeadLen);
++			count += ifread(hdr->AS.Header+count,1,hdr->HeadLen-count,hdr);
++		}
+ 
+ 		if (VERBOSE_LEVEL>8) fprintf(stdout,"CTF[104]: %i %s\n\t%s\n",(int)count,f0,f1);
+ 
+@@ -6375,11 +6416,17 @@ if (VERBOSE_LEVEL>8)
+ 		int32_t CTF_RunSize  = bei32p(hdr->AS.Header+1836);
+ 		//int32_t CTF_RunSize2 = bei32p(hdr->AS.Header+1844);
+ 
+-		hdr->AS.Header = (uint8_t*)realloc(hdr->AS.Header,1844+CTF_RunSize+2);
+-		count += ifread(hdr->AS.Header+count,1,CTF_RunSize+2,hdr);
++		hdr->HeadLen=1844+CTF_RunSize+2;
++		if (count < hdr->HeadLen) {
++			hdr->AS.Header  = (uint8_t*)realloc(hdr->AS.Header,hdr->HeadLen);
++			count += ifread(hdr->AS.Header+count,1,hdr->HeadLen-count,hdr);
++		}
+ 		int16_t CTF_NumberOfFilters = bei16p(hdr->AS.Header+1844+CTF_RunSize);
+-		hdr->AS.Header = (uint8_t*)realloc(hdr->AS.Header,count+CTF_NumberOfFilters*26+hdr->NS*(32+48+1280));
+-		count += ifread(hdr->AS.Header+count,1,CTF_NumberOfFilters*26+hdr->NS*(32+48+1280),hdr);
++		hdr->HeadLen = 1844+CTF_RunSize+2+CTF_NumberOfFilters*26+hdr->NS*(32+48+1280);
++		if (count < hdr->HeadLen) {
++			hdr->AS.Header  = (uint8_t*)realloc(hdr->AS.Header,hdr->HeadLen);
++			count += ifread(hdr->AS.Header+count,1,hdr->HeadLen-count,hdr);
++		}
+ 		ifclose(hdr);
+ 
+ 		size_t pos = 1846+CTF_RunSize+CTF_NumberOfFilters*26;
+@@ -6433,12 +6480,12 @@ if (VERBOSE_LEVEL>8)
+ 		hdr->FileName = f2;
+        		hdr = ifopen(hdr,"rb");
+ 	    	if (hdr->FILE.OPEN) {
+-			size_t bufsiz = 4096;
+ 			count = 0;
+ 	    		char *vmrk=NULL;
+ 			while (!ifeof(hdr)) {
+-			    	vmrk   = (char*)realloc(vmrk,count+bufsiz+1);
+-			    	count += ifread(vmrk+count,1,bufsiz,hdr);
++				size_t bufsiz = max(2*count, PAGESIZE);
++				vmrk   = (char*)realloc(vmrk, bufsiz+1);
++				count += ifread(vmrk+count, 1, bufsiz-count, hdr);
+ 			}
+ 		    	vmrk[count] = 0;	// add terminating \0 character
+ 			ifclose(hdr);
+@@ -6790,7 +6837,7 @@ if (VERBOSE_LEVEL>8)
+ 				count = 0;
+ 
+ 			 	while (!feof(fid)) {
+-					size_t r = max(count*2,1024);
++					size_t r = max(count*2, PAGESIZE);
+ 					LOG = (char*) realloc(LOG,r+1);
+ 					count += fread(LOG+count,1,r-count,fid);
+ 			 	}
+@@ -7380,9 +7427,10 @@ if (VERBOSE_LEVEL>8)
+ 		
+ 		hdr->NS = (uint8_t)hdr->AS.Header[3];
+ 		hdr->HeadLen = 1024 + hdr->NS*512; 
+-	    	hdr->AS.Header = (uint8_t*)realloc(hdr->AS.Header, hdr->HeadLen);
+-		count  += ifread(hdr->AS.Header+count, 1, hdr->HeadLen-count, hdr);
+-
++		if (count < hdr->HeadLen) {
++			hdr->AS.Header = (uint8_t*)realloc(hdr->AS.Header, hdr->HeadLen);
++			count  += ifread(hdr->AS.Header+count, 1, hdr->HeadLen-count, hdr);
++		}
+ 		if (count < hdr->HeadLen) {
+ 			biosigERROR(hdr, B4C_INCOMPLETE_FILE, "EMSA file corrupted"); 
+ 		}
+@@ -7750,6 +7798,76 @@ if (VERBOSE_LEVEL>8)
+ 		hdr->T0 = tm_time2gdf_time(&t); 
+ 	}
+ 
++	else if (hdr->TYPE==SigViewerEventsCSV) {
++		while (!ifeof(hdr)) {
++			size_t bufsiz = max(2*count,1<<16);
++			hdr->AS.Header = (uint8_t*)realloc(hdr->AS.Header, bufsiz+1);
++			count  += ifread(hdr->AS.Header+count, 1, bufsiz-count, hdr);
++		}
++		hdr->AS.Header[count]=0;
++		hdr->HeadLen = count;
++		ifclose(hdr);
++
++		// position,duration,channel,type,name
++		size_t N_EVENT=0,N=0;
++		char *nextLine=NULL;
++		char *line = strtok_r(hdr->AS.Header, "\n\r", &nextLine);	// skip first line
++		while (line != NULL) {
++			line = strtok_r(NULL, "\n\r" ,&nextLine);
++			if (line==NULL) break;
++
++			char *nextToken=NULL;
++			char *tok1 = strtok_r(line, ",", &nextToken);
++			char *tok2 = strtok_r(NULL, ",", &nextToken);
++			char *tok3 = strtok_r(NULL, ",", &nextToken);
++			char *tok4 = strtok_r(NULL, ",", &nextToken);
++			char *tok5 = strtok_r(NULL, ",", &nextToken);
++
++			if (VERBOSE_LEVEL>7) fprintf(stdout,"%s (line %d): <%s> <%s> <%s> <%s> <%s>\n",__FILE__,__LINE__, tok1,tok2,tok3,tok4,tok5);
++
++			if (!tok1 || !tok2 || !tok3 || !tok4) continue;
++
++			if (N_EVENT <= N) {
++				N_EVENT = reallocEventTable(hdr, max(256,N_EVENT*2));
++				if (N_EVENT == SIZE_MAX) {
++					biosigERROR(hdr, B4C_MEMORY_ALLOCATION_FAILED, "Allocating memory for event table failed.");
++					return (hdr);
++				};
++			}
++
++			hdr->EVENT.POS[N] = (uint32_t)atol(tok1);
++			hdr->EVENT.DUR[N] = (uint32_t)atol(tok2);
++
++			int CHN = atoi(tok3);
++			hdr->EVENT.CHN[N] = (CHN < 0) ? 0 : CHN+1;
++			if (hdr->NS < CHN) hdr->NS = CHN+1;
++
++			uint16_t TYP = (uint16_t)atoi(tok4);
++			hdr->EVENT.TYP[N] = TYP;
++
++			// read free text event description
++			if ((0 < TYP) && (TYP < 255)) {
++				if (hdr->EVENT.LenCodeDesc==0) {
++					// allocate memory
++					hdr->EVENT.LenCodeDesc = 257;
++					hdr->EVENT.CodeDesc = (typeof(hdr->EVENT.CodeDesc)) realloc(hdr->EVENT.CodeDesc,257*sizeof(*hdr->EVENT.CodeDesc));
++					hdr->EVENT.CodeDesc[0] = "";	// typ==0, is always empty
++					for (k=0; k<=256; k++)
++						hdr->EVENT.CodeDesc[k] = NULL;
++				}
++				if (hdr->EVENT.CodeDesc[TYP]==NULL)
++					hdr->EVENT.CodeDesc[TYP] = tok5;
++			}
++			if (TYP>0) N++;		// skip events with TYP==0
++		}
++		hdr->AS.auxBUF=hdr->AS.Header;
++		hdr->AS.Header=NULL;
++		hdr->EVENT.SampleRate = NAN;
++		hdr->EVENT.N = N;
++		hdr->TYPE    = EVENT;
++		hdr->NS      = 0;
++	}
++
+     	else if (hdr->TYPE==ET_MEG) {
+ 		biosigERROR(hdr, B4C_FORMAT_UNSUPPORTED, "FLT/ET-MEG format not supported");
+ 	}
+@@ -9775,10 +9893,10 @@ if (VERBOSE_LEVEL>2)
+ 		hdr->VERSION = hdr->AS.Header[6]+hdr->AS.Header[7]/100;
+ 		hdr->HeadLen = leu16p(hdr->AS.Header+8);
+ 		if (count < hdr->HeadLen) {
+-			hdr->AS.Header = (uint8_t*)realloc(hdr->AS.Header,hdr->HeadLen+1);
++			hdr->AS.Header = (uint8_t*)realloc(hdr->AS.Header, hdr->HeadLen+1);
+ 			count += ifread(hdr->AS.Header + count, 1, hdr->HeadLen - count, hdr);
+ 		}
+-		hdr->AS.Header[hdr->HeadLen]=0;
++		hdr->AS.Header[count]=0;
+ 
+ 		hdr->NS=1;
+ 		hdr->SPR=0;
+@@ -9867,12 +9985,12 @@ if (VERBOSE_LEVEL>2)
+ 
+     	else if (hdr->TYPE==Persyst) {
+ 
+-		if (VERBOSE_LEVEL>7) fprintf(stdout,"SOPEN (Persyst) [225]\n"); 		
++		if (VERBOSE_LEVEL>7) fprintf(stdout,"%s (line %d) (Persyst) [225]\n", __func__,__LINE__);
+ 
+-		int c=1;	
++		size_t c=1;
+ 		while (~ifeof(hdr) && c) {
+ 
+-		if (VERBOSE_LEVEL>7) fprintf(stdout,"SOPEN (Persyst) [25] %d\n",(int)count);
++		if (VERBOSE_LEVEL>7) fprintf(stdout,"%s (line %d) (Persyst) [25] %d\n",__func__,__LINE__,(int)count);
+ 
+ 			hdr->AS.Header = (uint8_t*)realloc(hdr->AS.Header,count*2+1);
+ 		    	c = ifread(hdr->AS.Header + count, 1, count, hdr);
+@@ -10296,8 +10414,10 @@ if (VERBOSE_LEVEL>2)
+ 
+ 	else if (hdr->TYPE==SCP_ECG) {
+ 		hdr->HeadLen   = leu32p(hdr->AS.Header+2);
+-		hdr->AS.Header = (uint8_t*)realloc(hdr->AS.Header,hdr->HeadLen);
+-		count += ifread(hdr->AS.Header+count, 1, hdr->HeadLen-count, hdr);
++		if (count < hdr->HeadLen) {
++			hdr->AS.Header = (uint8_t*)realloc(hdr->AS.Header,hdr->HeadLen);
++			count += ifread(hdr->AS.Header+count, 1, hdr->HeadLen-count, hdr);
++		}
+ 		uint16_t crc   = CRCEvaluate(hdr->AS.Header+2,hdr->HeadLen-2);
+ 		if ( leu16p(hdr->AS.Header) != crc) {
+ 			biosigERROR(hdr, B4C_CRC_ERROR, "Warning SOPEN(SCP-READ): Bad CRC!");
+@@ -10313,9 +10433,11 @@ if (VERBOSE_LEVEL>2)
+ 
+ 	else if (hdr->TYPE==Sigma) {  /********* Sigma PLpro ************/
+ 		hdr->HeadLen = leu32p(hdr->AS.Header+16);
+-	    	hdr->AS.Header = (uint8_t*) realloc(hdr->AS.Header,hdr->HeadLen+1);
+-    		count += ifread(Header1+count, 1, hdr->HeadLen-count, hdr);
+-		hdr->AS.Header[hdr->HeadLen]=0;
++		if (count < hdr->HeadLen) {
++			hdr->AS.Header = (uint8_t*) realloc(hdr->AS.Header,hdr->HeadLen+1);
++			count += ifread(Header1+count, 1, hdr->HeadLen-count, hdr);
++		}
++		hdr->AS.Header[count]=0;
+ 
+ 		struct tm t;
+ 		char *tag, *val;
+@@ -10610,10 +10732,9 @@ if (VERBOSE_LEVEL>2)
+ 		/* read header
+ 		      docu says HeadLen = 141+275*NS, but our example has 135+277*NS;
+ 		 */
+-		int bufsiz = 16384;
+ 		while (!ifeof(hdr)) {
+-			hdr->AS.Header = (uint8_t*)realloc(hdr->AS.Header, count+bufsiz+1);
+-		    	count += ifread(hdr->AS.Header+count, 1, bufsiz, hdr);
++			hdr->AS.Header = (uint8_t*)realloc(hdr->AS.Header,count*2+1);
++			count += ifread(hdr->AS.Header + count, 1, count, hdr);
+ 		}
+ 	    	ifclose(hdr);
+ 	    	hdr->AS.Header[count] = 0;
+@@ -12485,6 +12606,8 @@ size_t sread(biosig_data_type* data, size_t start, size_t length, HDRTYPE* hdr)
+ 	}
+ #endif
+ 
++	if ((ssize_t)start < 0) start=hdr->FILE.POS;
++
+ 	if (start >= (size_t)hdr->NRec) return(0);
+ 
+ 	switch (hdr->TYPE) {
+diff --git a/src/libbiosiglite/biosig4c++/physicalunits.c b/src/libbiosiglite/biosig4c++/physicalunits.c
+index fc6e4674..bca63736 100644
+--- a/src/libbiosiglite/biosig4c++/physicalunits.c
++++ b/src/libbiosiglite/biosig4c++/physicalunits.c
+@@ -1,10 +1,9 @@
+ /*
+ 
+-    Copyright (C) 2005-2012 Alois Schloegl <alois.schloegl@gmail.com>
++    Copyright (C) 2005-2019 Alois Schloegl <alois.schloegl@gmail.com>
+     This file is part of the "BioSig for C/C++" repository
+     (biosig4c++) at http://biosig.sf.net/
+ 
+-
+     BioSig is free software; you can redistribute it and/or
+     modify it under the terms of the GNU General Public License
+     as published by the Free Software Foundation; either version 3
+diff --git a/src/libbiosiglite/biosig4c++/physicalunits.h b/src/libbiosiglite/biosig4c++/physicalunits.h
+index 4200141b..1efdd19a 100644
+--- a/src/libbiosiglite/biosig4c++/physicalunits.h
++++ b/src/libbiosiglite/biosig4c++/physicalunits.h
+@@ -1,8 +1,7 @@
+ /*
+-% Copyright (C) 2005-2012,2015 Alois Schloegl <alois.schloegl@ist.ac.at>
+-% This file is part of the "BioSig for C/C++" repository
+-% (biosig4c++) at http://biosig.sf.net/
+-
++    Copyright (C) 2005-2019 Alois Schloegl <alois.schloegl@ist.ac.at>
++    This file is part of the "BioSig for C/C++" repository
++    (biosig4c++) at http://biosig.sf.net/
+ 
+     This program is free software; you can redistribute it and/or
+     modify it under the terms of the GNU General Public License
+diff --git a/src/libbiosiglite/biosig4c++/t210/sopen_abf_read.c b/src/libbiosiglite/biosig4c++/t210/sopen_abf_read.c
+index e695a4b5..fdbf2e49 100644
+--- a/src/libbiosiglite/biosig4c++/t210/sopen_abf_read.c
++++ b/src/libbiosiglite/biosig4c++/t210/sopen_abf_read.c
+@@ -29,7 +29,7 @@
+ #include <stdlib.h>
+ #include <string.h>
+ 
+-#include "../biosig-dev.h"
++#include "../biosig.h"
+ 
+ #define ABFLONG int32_t
+ #include "axon_structs.h"	// ABF2
+diff --git a/src/libbiosiglite/biosig4c++/t210/sopen_cfs_read.c b/src/libbiosiglite/biosig4c++/t210/sopen_cfs_read.c
+index 139995cb..a5cc6cb7 100644
+--- a/src/libbiosiglite/biosig4c++/t210/sopen_cfs_read.c
++++ b/src/libbiosiglite/biosig4c++/t210/sopen_cfs_read.c
+@@ -1,9 +1,9 @@
+ /*
+ 
+-    Copyright (C) 2010,2011,2012,2015,2016 Alois Schloegl <alois.schloegl@ist.ac.at>
++    Copyright (C) 2010-2019 Alois Schloegl <alois.schloegl@ist.ac.at>
+ 
+     This file is part of the "BioSig for C/C++" repository
+-    (biosig4c++) at http://biosig.sf.net/
++    (biosig4c++) at http://biosig.sourceforge.io/
+ 
+     BioSig is free software; you can redistribute it and/or
+     modify it under the terms of the GNU General Public License
+@@ -26,7 +26,7 @@
+ #include <stddef.h>
+ #include <stdlib.h>
+ #include <string.h>
+-#include "../biosig-dev.h"
++#include "../biosig.h"
+ 
+ #define min(a,b)        (((a) < (b)) ? (a) : (b))
+ 
+@@ -305,6 +305,10 @@ else if (VERBOSE_LEVEL>7)
+ 				lei16a(i,e+6);
+ 			}
+ 		}
++		hdr->ID.Manufacturer.Name = "CED - Cambridge Electronic Devices";
++		hdr->ID.Manufacturer.Model = NULL;
++		hdr->ID.Manufacturer.Version = NULL;
++		hdr->ID.Manufacturer.SerialNumber = NULL;
+ 
+ 		if (VERBOSE_LEVEL>7) fprintf(stdout,"\n******* Data Section variable information (n=%i,%i)*********\n", d,NumberOfDataSections);
+ 		datapos = LastDataSectionHeaderOffset; //H1LEN + H2LEN*hdr->NS + n*36;
+diff --git a/src/libbiosiglite/biosig4c++/t210/sopen_igor.c b/src/libbiosiglite/biosig4c++/t210/sopen_igor.c
+index 8c5eca33..83fcac47 100644
+--- a/src/libbiosiglite/biosig4c++/t210/sopen_igor.c
++++ b/src/libbiosiglite/biosig4c++/t210/sopen_igor.c
+@@ -27,6 +27,7 @@
+ #include <stddef.h>
+ */
+ #include <ctype.h>
++#include <math.h>      // define macro isnan()
+ #include <stdlib.h>
+ #include <string.h>
+ #include "../biosig-dev.h"
+@@ -896,12 +897,12 @@ void sopen_itx_read (HDRTYPE* hdr) {
+ 		}
+ 
+                 if (VERBOSE_LEVEL>7)
+-                        fprintf(stdout,"%s (line %i): scaning %s,v%4.2f format (supported: %i)\n",__FILE__,__LINE__,GetFileTypeString(hdr->TYPE),hdr->VERSION,flagSupported);
++                        fprintf(stdout,"%s (line %i): scanning %s,v%4.2f format (supported: %i)\n",__FILE__,__LINE__,GetFileTypeString(hdr->TYPE),hdr->VERSION,flagSupported);
+ 
+ 		if (!flagSupported) {
+ 			clear_sweepnames(sweepname_list);
+ 			biosigERROR(hdr, hdr->AS.B4C_ERRNUM,
+- "This ITX format is not supported. Possible reasons: not generated by Heka-Patchmaster, corrupted, physical units do not match between sweeos, or do not fullfil some other requirements");
++ "This ITX format is not supported. Possible reasons: not generated by Heka-Patchmaster, corrupted, physical units do not match between sweeps, or do not fulfil some other requirements");
+ 			return;
+ 		}
+ 
+diff --git a/src/libbiosiglite/biosig4c++/t210/sopen_scp_read.c b/src/libbiosiglite/biosig4c++/t210/sopen_scp_read.c
+index c0bc3a94..673404bb 100644
+--- a/src/libbiosiglite/biosig4c++/t210/sopen_scp_read.c
++++ b/src/libbiosiglite/biosig4c++/t210/sopen_scp_read.c
+@@ -617,7 +617,7 @@ int sopen_SCP_read(HDRTYPE* hdr) {
+ 
+ 	/**** SECTION 0 ****/
+ 	len = leu32p(PtrCurSect+4); 
+-	NSections = min((len-16)/10,_NUM_SECTION);
++	NSections = (len-16)/10;
+ 
+ 	if (memcmp(ptr+16, "SCPECG\0\0", 8)) {
+ 		fprintf(stderr,"Warning SOPEN (SCP): Bytes 11-16 of Section 0 do not contain SCPECG - this violates ISO/DIS 11073-91064 Section 5.3.2.\n" );
+@@ -632,18 +632,25 @@ int sopen_SCP_read(HDRTYPE* hdr) {
+ 		section[K].index  = 0;
+ 	}
+ 
+-	for (K=1; K<NSections; K++)	{
++	for (K = 1; K < NSections; K++)	{
+ 		// this is needed because fields are not always sorted
+ 		curSect = leu32p(ptr+6+16+K*10);
++		len     = leu32p(ptr+6+16+K*10+2);
++
++		if (VERBOSE_LEVEL > 7)
++			fprintf(stdout,"%s (line %i): #%d section %d/%d %d %d\n",__FILE__,__LINE__,K,curSect,NSections,leu32p(ptr+6+16+K*10+2),leu32p(ptr+6+16+K*10+6)-1);
++
+ 		if (curSect < _NUM_SECTION) {
+ 			if (section[curSect].ID >= 0) {
+ 				biosigERROR(hdr, B4C_FORMAT_UNSUPPORTED, "SCP Section must not be defined twice");
+ 				return -1;
+ 			}
+ 			section[curSect].ID 	= curSect;
+-			section[curSect].length = leu32p(ptr+6+16+K*10+2);
++			section[curSect].length = len;
+ 			section[curSect].index  = leu32p(ptr+6+16+K*10+6)-1;
+ 		}
++		else if (len > 0)
++			fprintf(stderr,"Warning SOPEN (SCP) : vendor specific section %d is not supported\n",curSect);
+ 	}
+ 
+ 	if (section[1].length) {
+@@ -678,7 +685,7 @@ int sopen_SCP_read(HDRTYPE* hdr) {
+ 			}
+ 	}
+ 
+-	for (K=1; K<NSections; K++)	{
++	for (K=1; K<_NUM_SECTION; K++)	{
+ 
+ 		curSect           = section[K].ID;
+ 		len		  = section[K].length;
+@@ -731,7 +738,7 @@ int sopen_SCP_read(HDRTYPE* hdr) {
+ 			t0.tm_hour = 0;
+ 			t0.tm_min  = 0;
+ 			t0.tm_sec  = 0;
+-			t0.tm_isdst= -1; // daylight savings time - unknown 
++			t0.tm_isdst= -1; // daylight savings time - unknown
+ 			hdr->T0    = 0;
+ 			hdr->Patient.Birthday = 0;
+ 			uint32_t len1;
+@@ -740,7 +747,7 @@ int sopen_SCP_read(HDRTYPE* hdr) {
+ 				tag = *(PtrCurSect+curSectPos);
+ 				len1 = leu16p(PtrCurSect+curSectPos+1);
+ 				if (VERBOSE_LEVEL > 7)
+-					fprintf(stdout,"SCP(r): Section 1 Tag %i Len %i\n",tag,len1); 
++					fprintf(stdout,"SCP(r): Section 1 Tag %i Len %i <%s>\n",tag,len1, (char*)PtrCurSect+curSectPos);
+ 
+ 				curSectPos += 3;
+ 				if (curSectPos+len1 > len) {
+@@ -901,8 +908,6 @@ int sopen_SCP_read(HDRTYPE* hdr) {
+ 					}
+ 					if (VERBOSE_LEVEL>7)
+ 						fprintf(stdout,"%s (line %i): Version %i\n",__FILE__,__LINE__,aECG->Section1.Tag14.VERSION);
+-
+-
+ 					
+ 				}
+ 				else if (tag==15) {
+@@ -1043,6 +1048,9 @@ int sopen_SCP_read(HDRTYPE* hdr) {
+ 
+ 			NHT = leu16p(PtrCurSect+curSectPos);
+ 			curSectPos += 2;
++
++			if (VERBOSE_LEVEL > 7) fprintf(stdout,"SCP(r): Section 2 NHT=%d\n", NHT);
++
+ 			if (NHT==19999) {
+ 				en1064.FLAG.HUFFMAN = 1;
+ 				Huffman = (huffman_t*)malloc(sizeof(huffman_t));
+@@ -1054,7 +1062,8 @@ int sopen_SCP_read(HDRTYPE* hdr) {
+ #ifndef ANDROID
+ 				if (VERBOSE_LEVEL==9)
+ 					for (k1=0; k1<Huffman[k2].NCT; k1++)
+-					fprintf(stdout,"%3i: %2i %2i %1i %3i %6u \n",k1,Huffman[k2].Table[k1].PrefixLength,Huffman[k2].Table[k1].CodeLength,Huffman[k2].Table[k1].TableModeSwitch,Huffman[k2].Table[k1].BaseValue,Huffman[k2].Table[k1].BaseCode); 
++					fprintf(stdout,"%3i: %2i %2i %1i %3i %6u \n",k1,Huffman[k2].Table[k1].PrefixLength,Huffman[k2].Table[k1].CodeLength,Huffman[k2].Table[k1].TableModeSwitch,Huffman[k2].Table[k1].BaseValue,Huffman[k2].Table[k1].BaseCode);
++
+ 				if (!checkTree(HTrees[0])) // ### OPTIONAL, not needed ###
+ 					fprintf(stderr,"Warning: invalid Huffman Tree\n");
+ #endif 
+@@ -1125,6 +1134,9 @@ int sopen_SCP_read(HDRTYPE* hdr) {
+ 				}
+ 
+ 				hdr->CHANNEL[i].SPR 	= en1064.Section3.lead[i].end - en1064.Section3.lead[i].start + 1;
++
++	if (VERBOSE_LEVEL>7)
++		fprintf(stdout,"%s (line %i): SCP Section %i   #%i SPR=%d/%d [%d..%d]\n",__FILE__,__LINE__,curSect, i, hdr->CHANNEL[i].SPR, hdr->SPR, en1064.Section3.lead[i].end,  en1064.Section3.lead[i].start );
+ 				hdr->SPR 		= lcm(hdr->SPR,hdr->CHANNEL[i].SPR);
+ 				hdr->CHANNEL[i].LeadIdCode = LeadIdCode;
+ 				hdr->CHANNEL[i].Label[0]= 0;
+@@ -1259,6 +1271,8 @@ int sopen_SCP_read(HDRTYPE* hdr) {
+ 			en1064.Section6.dT_us	= leu16p(PtrCurSect+curSectPos+2);
+ 			aECG->FLAG.DIFF 	= *(PtrCurSect+curSectPos+4);
+ 
++	if (VERBOSE_LEVEL>7) fprintf(stdout, "%s (line %i) Compression(Diff=%i Huffman=%i RefBeat=%i Bimodal=%i)\n", __func__, __LINE__, aECG->FLAG.DIFF, aECG->FLAG.HUFFMAN, aECG->FLAG.REF_BEAT, aECG->FLAG.BIMODAL);
++
+ 			if ((section[5].length>4) &&  en1064.Section5.dT_us)
+ 				dT_us = en1064.Section5.dT_us;
+ 			else
+@@ -1480,6 +1494,9 @@ int sopen_SCP_read(HDRTYPE* hdr) {
+ #if (BIOSIG_VERSION >= 10500)
+ 			hdr->SCP.Section8Length = leu32p(PtrCurSect+4)-curSectPos;
+ 			hdr->SCP.Section8 = PtrCurSect+curSectPos;
++
++		if (VERBOSE_LEVEL>7) fprintf(stdout,"%s (line %i) %p %d %d %d\n", __func__, __LINE__, hdr->AS.Header, hdr->SCP.Section8Length, (int)curSectPos, (int)(hdr->SCP.Section8-hdr->AS.Header));
++
+ #else
+ 			aECG->Section8.Confirmed = *(char*)(PtrCurSect+curSectPos);
+ 			aECG->Section8.t.tm_year = leu16p(PtrCurSect+curSectPos+1)-1900;
+@@ -1707,7 +1724,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ 	*/
+ 
+ #ifndef ANDROID
+-	fprintf(stdout, "\nUse SCP_DECODE (Huffman=%i RefBeat=%i Bimodal=%i)\n", aECG->FLAG.HUFFMAN, aECG->FLAG.REF_BEAT, aECG->FLAG.BIMODAL);
++	if (VERBOSE_LEVEL > 7)
++		fprintf(stdout, "\nUse SCP_DECODE (Diff=%i Huffman=%i RefBeat=%i Bimodal=%i)\n", aECG->FLAG.DIFF, aECG->FLAG.HUFFMAN, aECG->FLAG.REF_BEAT, aECG->FLAG.BIMODAL);
+ #endif
+ 
+ 	textual.des.acquiring.protocol_revision_number = aECG->Section1.Tag14.VERSION;
+diff --git a/src/libbiosiglite/biosig4c++/test0/sandbox.c b/src/libbiosiglite/biosig4c++/test0/sandbox.c
+index 672fb644..eed47b7f 100644
+--- a/src/libbiosiglite/biosig4c++/test0/sandbox.c
++++ b/src/libbiosiglite/biosig4c++/test0/sandbox.c
+@@ -28,20 +28,23 @@
+ #include <string.h>
+ #include <sys/stat.h>
+ 
+-#include "../biosig-dev.h"
+ #include "../biosig.h"
+ 
+-// these functions are stubs
+ 
++/*************************************************************************
++ use DCMTK for reading DICOM files 
++ *************************************************************************/
+ #ifdef WITH_DCMTK
+-#undef WITH_DICOM
+-#undef WITH_GDCM
++#undef WITH_DICOM	// disable internal DICOM implementation
++#undef WITH_GDCM	// disable interface to GDCM
+ 
+-EXTERN_C int sopen_dicom_read(HDRTYPE* hdr) {
+-	fprintf(stdout,"DCMTK is used to read dicom files.\n");
++extern "C" int sopen_dcmtk_read(HDRTYPE* hdr);
++
++extern "C" int sopen_dicom_read(HDRTYPE* hdr) {
++	return sopen_dcmtk_read(hdr);
+ }
+ 
+-#endif
++#endif  // DCMTK
+ 
+ #ifdef HAVE_HDF
+ #include <hdf5.h>
+@@ -51,6 +54,9 @@ EXTERN_C int sopen_dicom_read(HDRTYPE* hdr) {
+ #endif
+ 
+ 
++/*************************************************************************
++ use GDCM for reading DICOM files
++ *************************************************************************/
+ #ifdef WITH_GDCM
+ #undef WITH_DICOM
+ 
+@@ -98,7 +104,7 @@ EXTERN_C int sopen_dicom_read(HDRTYPE* hdr) {
+ 
+ EXTERN_C int sopen_dicom_read(HDRTYPE* hdr) {
+ 
+-	fprintf(stdout,"GDCM is used to read dicom files.\n");
++	fprintf(stdout,"%s ( line %d): GDCM is used to read dicom files.\n",__func__,__LINE__);
+ 
+ 	gdcm::Reader reader;
+         const gdcm::DataElement *de;
+@@ -375,6 +381,9 @@ int sopen_unipro_read(HDRTYPE* hdr) {
+ }
+ 
+ 
++/*************************************************************************
++ use internal implementation for reading DICOM files
++ *************************************************************************/
+ #ifdef WITH_DICOM
+ int sopen_dicom_read(HDRTYPE* hdr) {
+ 
+diff --git a/src/stimfit/gui/dlgs/eventdlg.cpp b/src/stimfit/gui/dlgs/eventdlg.cpp
+index 75e59e4d..5386c148 100755
+--- a/src/stimfit/gui/dlgs/eventdlg.cpp
++++ b/src/stimfit/gui/dlgs/eventdlg.cpp
+@@ -7,10 +7,20 @@
+ 
+ #include "./../../stf.h"
+ #include "./eventdlg.h"
++#include "./../app.h"
+ 
+-enum {wxID_COMBOTEMPLATES};
++enum {
++    wxID_COMBOTEMPLATES,
++    wxID_CRITERIA,
++    wxDETECTIONCLEMENTS,
++    wxDETECTIONJONAS,
++    wxDETECTIONPERNIA
++};
+ 
+ BEGIN_EVENT_TABLE( wxStfEventDlg, wxDialog )
++EVT_RADIOBUTTON( wxDETECTIONCLEMENTS, wxStfEventDlg::OnClements )
++EVT_RADIOBUTTON( wxDETECTIONJONAS,   wxStfEventDlg::OnJonas )
++EVT_RADIOBUTTON( wxDETECTIONPERNIA,  wxStfEventDlg::OnPernia )
+ END_EVENT_TABLE()
+ 
+ wxStfEventDlg::wxStfEventDlg(wxWindow* parent, const std::vector<stf::SectionPointer>& templateSections,
+@@ -58,7 +68,7 @@ wxDialog( parent, id, title, pos, size, style ), m_threshold(4.0), m_mode(stf::c
+ 
+         wxStaticText* staticTextThr;
+         staticTextThr =
+-            new wxStaticText( this, wxID_ANY, wxT("Threshold:"), wxDefaultPosition, wxDefaultSize, 0 );
++            new wxStaticText( this, wxID_CRITERIA, wxT("Threshold:"), wxDefaultPosition, wxDefaultSize, 0 );
+         gridSizer->Add( staticTextThr, 0, wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL | wxALL, 2 );
+         wxString def; def << m_threshold;
+         m_textCtrlThr =
+@@ -77,16 +87,30 @@ wxDialog( parent, id, title, pos, size, style ), m_threshold(4.0), m_mode(stf::c
+ 
+         topSizer->Add( gridSizer, 0, wxALIGN_CENTER | wxALL, 5 );
+ 
++        //*** Radio options for event detection methods ***//
++        m_radioBox = new wxStaticBoxSizer( wxVERTICAL, this, wxT("Detection method"));
++
+         wxString m_radioBoxChoices[] = {
+-                wxT("Use template scaling (Clements && Bekkers)"),
+-                wxT("Use correlation coefficient (Jonas et al.)"),
+-                wxT("Use deconvolution (Pernia-Andrade et al.)")
++                wxT("Template scaling (Clements && Bekkers)"),
++                wxT("Correlation coefficient (Jonas et al.)"),
++                wxT("Deconvolution (Pernia-Andrade et al.)")
+         };
+-        int m_radioBoxNChoices = sizeof( m_radioBoxChoices ) / sizeof( wxString );
+-        m_radioBox =
+-            new wxRadioBox( this, wxID_ANY, wxT("Select method"), wxDefaultPosition, wxDefaultSize,
+-                            m_radioBoxNChoices, m_radioBoxChoices, 0, wxRA_SPECIFY_ROWS );
+-        m_radioBox->SetSelection(0);
++
++
++        wxRadioButton* wxRadioClements = new wxRadioButton(this, wxDETECTIONCLEMENTS, m_radioBoxChoices[0],
++            wxDefaultPosition, wxDefaultSize, wxRB_GROUP);
++
++        wxRadioButton* wxRadioJonas = new wxRadioButton(this, wxDETECTIONJONAS, m_radioBoxChoices[1],
++            wxDefaultPosition, wxDefaultSize);
++
++        wxRadioButton* wxRadioPernia = new wxRadioButton(this, wxDETECTIONPERNIA, m_radioBoxChoices[2],
++            wxDefaultPosition, wxDefaultSize);
++
++        m_radioBox->Add(wxRadioClements, 0, wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL | wxALL, 2);
++        m_radioBox->Add(wxRadioJonas,   0, wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL | wxALL, 2);
++        m_radioBox->Add(wxRadioPernia,  0, wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL | wxALL, 2);
++        //m_radioBox->SetSelection(0);
++
+         topSizer->Add( m_radioBox, 0, wxALIGN_CENTER | wxALL, 5 );
+     }
+ 
+@@ -103,18 +127,29 @@ wxDialog( parent, id, title, pos, size, style ), m_threshold(4.0), m_mode(stf::c
+ }
+ 
+ void wxStfEventDlg::EndModal(int retCode) {
++    wxCommandEvent unusedEvent;
+     // similar to overriding OnOK in MFC (I hope...)
+-    if (retCode==wxID_OK) {
++    switch( retCode) {
++
++    case wxID_OK:
+         if (!OnOK()) {
++            wxLogMessage(wxT("Select a detection method"));
+             return;
+         }
++        break;
++
++    case wxID_CANCEL:
++        break;
++
++    default:
++        return;
+     }
+     wxDialog::EndModal(retCode);
+ }
+ 
+ bool wxStfEventDlg::OnOK() {
+     // Read template:
+-    m_template=m_comboBoxTemplates->GetCurrentSelection();
++    m_template = m_comboBoxTemplates->GetCurrentSelection();
+     if (m_template<0) {
+         wxLogMessage(wxT("Please select a valid template"));
+         return false;
+@@ -125,7 +160,22 @@ bool wxStfEventDlg::OnOK() {
+         long tempLong;
+         m_textCtrlDist->GetValue().ToLong( &tempLong );
+         m_minDistance = (int)tempLong;
+-        switch (m_radioBox->GetSelection()) {
++
++        wxRadioButton* wxRadioClements = (wxRadioButton*)FindWindow(wxDETECTIONCLEMENTS);
++        wxRadioButton* wxRadioJonas = (wxRadioButton*)FindWindow(wxDETECTIONJONAS);
++        wxRadioButton* wxRadioPernia = (wxRadioButton*)FindWindow(wxDETECTIONPERNIA);
++
++        if ( wxRadioClements->GetValue() ) 
++            m_mode = stf::criterion;
++        else if ( wxRadioJonas->GetValue() ) 
++            m_mode = stf::correlation;
++        else if ( wxRadioPernia->GetValue() )
++            m_mode = stf::deconvolution;
++        else
++            return false;
++
++        
++        /*switch (m_radioBox->GetSelection()) {
+          case 0:
+              m_mode = stf::criterion;
+              break;
+@@ -135,7 +185,7 @@ bool wxStfEventDlg::OnOK() {
+          case 2:
+              m_mode = stf::deconvolution;
+              break;
+-        }
++        }*/
+         if (m_mode==stf::correlation && (m_threshold<0 || m_threshold>1)) {
+             wxLogMessage(wxT("Please select a value between 0 and 1 for the correlation coefficient"));
+             return false;
+@@ -143,3 +193,45 @@ bool wxStfEventDlg::OnOK() {
+     }
+     return true;
+ }
++
++void wxStfEventDlg::OnClements( wxCommandEvent& event) {
++    event.Skip();
++    
++    wxRadioButton* wxRadioClements = (wxRadioButton*)FindWindow(wxDETECTIONCLEMENTS);
++    wxStaticText* staticTextThr = (wxStaticText*)FindWindow(wxID_CRITERIA);
++
++    if (wxRadioClements == NULL || staticTextThr == NULL){
++        wxGetApp().ErrorMsg(wxT("Null pointer in wxStfEvenDlg::OnClements()"));
++        return;
++    }
++    staticTextThr->SetLabel(wxT("Threshold:"));
++    
++}
++
++void wxStfEventDlg::OnJonas( wxCommandEvent& event) {
++    event.Skip();
++    
++    wxRadioButton* wxRadioJonas = (wxRadioButton*)FindWindow(wxDETECTIONJONAS);
++    wxStaticText* staticTextThr = (wxStaticText*)FindWindow(wxID_CRITERIA);
++
++    if (wxRadioJonas == NULL || staticTextThr == NULL){
++        wxGetApp().ErrorMsg(wxT("Null pointer in wxStfEvenDlg::OnJonas()"));
++        return;
++    }
++    staticTextThr->SetLabel(wxT("Correlation:"));
++    
++}
++
++void wxStfEventDlg::OnPernia( wxCommandEvent& event) {
++    event.Skip();
++    
++    wxRadioButton* wxRadioPernia = (wxRadioButton*)FindWindow(wxDETECTIONPERNIA);
++    wxStaticText* staticTextThr = (wxStaticText*)FindWindow(wxID_CRITERIA);
++
++    if (wxRadioPernia == NULL || staticTextThr == NULL){
++        wxGetApp().ErrorMsg(wxT("Null pointer in wxStfEvenDlg::OnPernia()"));
++        return;
++    }
++    staticTextThr->SetLabel( wxT("Standard deviation:") );
++    
++}
+diff --git a/src/stimfit/gui/dlgs/eventdlg.h b/src/stimfit/gui/dlgs/eventdlg.h
+index 7198f66b..56b80cd8 100755
+--- a/src/stimfit/gui/dlgs/eventdlg.h
++++ b/src/stimfit/gui/dlgs/eventdlg.h
+@@ -42,9 +42,19 @@ private:
+     int m_template;
+     wxStdDialogButtonSizer* m_sdbSizer;
+     wxTextCtrl *m_textCtrlThr, *m_textCtrlDist;
+-    wxRadioBox* m_radioBox;
++    wxStaticBoxSizer* m_radioBox;
+     wxComboBox* m_comboBoxTemplates;
+ 
++    wxStaticText* staticTextThr;
++
++    wxRadioButton* wxRadioClements;
++    wxRadioButton* wxRadioJonas;
++    wxRadioButton* wxRadioPernia;
++
++    void OnClements( wxCommandEvent & event );
++    void OnJonas( wxCommandEvent & event );
++    void OnPernia( wxCommandEvent & event );
++
+     //! Only called when a modal dialog is closed with the OK button.
+     /*! \return true if all dialog entries could be read successfully
+      */
+diff --git a/src/stimfit/gui/doc.cpp b/src/stimfit/gui/doc.cpp
+index b8d1bbe0..5f17e4bd 100755
+--- a/src/stimfit/gui/doc.cpp
++++ b/src/stimfit/gui/doc.cpp
+@@ -3336,6 +3336,13 @@ void wxStfDoc::SetIsIntegrated(std::size_t nchannel, std::size_t nsection, bool
+ }
+ 
+ void wxStfDoc::ClearEvents(std::size_t nchannel, std::size_t nsection) {
++    wxStfView* pView=(wxStfView*)GetFirstView();
++    if (pView!=NULL) {
++        wxStfGraph* pGraph = pView->GetGraph();
++        if (pGraph != NULL) {
++            pGraph->ClearEvents();
++        }
++    }
+     try {
+         sec_attr.at(nchannel).at(nsection).eventList.clear();
+     }
+diff --git a/src/stimfit/gui/graph.cpp b/src/stimfit/gui/graph.cpp
+index b9b20692..f7ee24ec 100755
+--- a/src/stimfit/gui/graph.cpp
++++ b/src/stimfit/gui/graph.cpp
+@@ -574,6 +574,19 @@ void wxStfGraph::PlotEvents(wxDC& DC) {
+     SetFocus();
+ }
+ 
++void wxStfGraph::ClearEvents() {
++    stf::SectionAttributes sec_attr;
++    try {
++        sec_attr = Doc()->GetCurrentSectionAttributes();
++    }
++    catch (const std::out_of_range& e) {
++        return;
++    }
++    for (event_it it2 = sec_attr.eventList.begin(); it2 != sec_attr.eventList.end(); ++it2) {
++        it2->GetCheckBox()->Destroy();
++    }
++}
++
+ void wxStfGraph::DrawCrosshair( wxDC& DC, const wxPen& pen, const wxPen& printPen, int crosshairSize, double xch, double ych) {
+     if (isnan(xch) || isnan(ych)) {
+         return;
+diff --git a/src/stimfit/gui/graph.h b/src/stimfit/gui/graph.h
+index fed17868..df6d1187 100755
+--- a/src/stimfit/gui/graph.h
++++ b/src/stimfit/gui/graph.h
+@@ -210,6 +210,9 @@ public:
+      */
+     void Fittowindow(bool refresh);
+ 
++    //! Destroys all event check boxes
++    void ClearEvents();
++
+     //! Set to true if the graph is drawn on a printer.
+     /*! \param value boolean determining whether the graph is printed.
+      */
+diff --git a/src/stimfit/gui/unopt.cpp b/src/stimfit/gui/unopt.cpp
+index 71d11f9b..99e8d572 100644
+--- a/src/stimfit/gui/unopt.cpp
++++ b/src/stimfit/gui/unopt.cpp
+@@ -655,7 +655,7 @@ bool wxStfDoc::LoadTDMS(const std::string& filename, Recording& ReturnData) {
+     PyObject* data_list = PyTuple_GetItem(stf_tdms_res, 0);
+     PyObject* py_dt = PyTuple_GetItem(stf_tdms_res, 1);
+     double dt = PyFloat_AsDouble(py_dt);
+-    Py_DECREF(py_dt);
++    // Py_DECREF(py_dt);
+ 
+     Py_ssize_t nchannels = PyList_Size(data_list);
+     ReturnData.resize(nchannels);
+@@ -673,15 +673,15 @@ bool wxStfDoc::LoadTDMS(const std::string& filename, Recording& ReturnData) {
+                 double* data = (double*)PyArray_DATA(np_array);
+                 std::copy(&data[0], &data[nsamples], &sec.get_w()[0]);
+                 ch.InsertSection(sec, ns);
+-                Py_DECREF(np_array);
++                // Py_DECREF(np_array);
+             }
+             ReturnData.InsertChannel(ch, nc);
+             nchannels_nonempty++;
+         }
+-        Py_DECREF(section_list);
++        // Py_DECREF(section_list);
+     }
+-    Py_DECREF(data_list);
+-    Py_DECREF(stf_tdms_res);
++    // Py_DECREF(data_list);
++    // Py_DECREF(stf_tdms_res);
+     ReturnData.resize(nchannels_nonempty);
+     ReturnData.SetXScale(dt);
+     wxPyEndBlockThreads(blocked);
+diff --git a/src/stimfit/py/minidemo.py b/src/stimfit/py/minidemo.py
+index 9cf44065..702e64fd 100755
+--- a/src/stimfit/py/minidemo.py
++++ b/src/stimfit/py/minidemo.py
+@@ -1,43 +1,69 @@
+-"""Performs fits as decribed in the manual to create 
+-preliminary and final templates from minis.dat.
+-last revision: May 09, 2008
++"""
++minidemo.py
++
++This script sets base, peak and fit cursors to
++perform events detection as decribed in the Stimfit manual [1]
++It creates a preliminary and final templates from a file 'minis.dat'.
++
++You can download the file here: http://stimfit.org/tutorial/minis.dat
++
++last revision:  Wed Sep  5 09:38:41 CEST 2018
++
+ C. Schmidt-Hieber
++
++[1] https://neurodroid.github.io/stimfit/manual/event_extraction.html
+ """
+ 
+ import stf
++from wx import MessageBox
++
++if stf.get_filename()[-9:] != 'minis.dat':
++    MessageBox('Use minis.dat for this demo.', 'Warning')
++
++
+ def preliminary():
+-    """Creates a preliminary template"""
+-    stf.set_peak_start(209900)
+-    stf.set_peak_end(210500)
+-    stf.set_fit_start(209900)
+-    stf.set_fit_end(210400)
++    """
++    Sets peak, base and fit cursors around a synaptic event
++    and performs a biexponential fit to create the preliminary template
++    for event detection.
++    """
++    stf.base.cursor_index = (209600, 209900)
++    stf.peak.cursor_index = (209900, 210500)
++    stf.fit.cursor_index = (209900, 210400)
++
+     stf.set_peak_mean(3)
+-    stf.set_base_start(209600)
+-    stf.set_base_end(209900)
+-    stf.measure()
++
++    stf.measure()  # update cursors
++
+     return stf.leastsq(5)
+ 
++
+ def final():
+-    """Creates a final template"""
+-    stf.set_peak_start(100)
+-    stf.set_peak_end(599)
+-    stf.set_fit_start(100)
+-    stf.set_fit_end(599)
++    """
++    Sets peak, base and fit cursors around a synaptic event
++    and performs a biexponetial fit to create the final template
++    for event detection.
++    """
++    stf.base.cursor_index = (000, 100)
++    stf.peak.cursor_index = (100, 599)
++    stf.fit.cursor_index = (100, 599)
++
+     stf.set_peak_mean(3)
+-    stf.set_base_start(0)
+-    stf.set_base_end(100)
+-    stf.measure()
++
++    stf.measure()  # update cursors
++
+     return stf.leastsq(5)
+ 
++
+ def batch_cursors():
+-    """Sets appropriate cursor positions for analysing
+-    the extracted events."""
+-    stf.set_peak_start(100)
+-    stf.set_peak_end(598)
+-    stf.set_fit_start(120)
+-    stf.set_fit_end(598)
++    """
++    Sets peak, base and fit cursors around a synaptic event
++    for the batch analysis of the extracted events.
++    """
++    stf.base.cursor_index = (000, 100)
++    stf.peak.cursor_index = (100, 598)
++    stf.fit.cursor_index = (120, 598)
++
+     stf.set_peak_mean(3)
+-    stf.set_base_start(0)
+-    stf.set_base_end(100)
+-    stf.measure()
+ 
++    stf.measure()  # update cursors

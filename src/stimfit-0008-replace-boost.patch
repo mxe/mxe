@@ -1,0 +1,545 @@
+diff --git a/Makefile.static b/Makefile.static
+index f7c480ec..3f4758c0 100644
+--- a/Makefile.static
++++ b/Makefile.static
+@@ -51,6 +51,8 @@ endif
+ endif
+ 
+ DEFINES += -DWITH_BIOSIG2
++#DEFINES += -DWITH_LIBLEVMAR
++#DEFINES += -DWITH_OPENBLAS
+ DEFINES += -DHAVE_LAPACK
+ #DEFINES += -DWITHOUT_ABF
+ #DEFINES += -DWITHOUT_AXG
+@@ -75,19 +77,20 @@ PY_VERSION := 2.7
+ 
+ vpath %.cpp ./src/stimfit:./src/stimfit/gui:./src/stimfit/gui/dlgs:./src/stimfit/gui/usrdlg:./src/libstfnum:./src/libstfio/:./src/libstfio/cfs/:./src/libstfio/atf/:./src/libstfio/abf/:./src/libstfio/abf/axon2:./src/libstfio/abf/axon/Common:./src/libstfio/abf/axon/AxAbfFio32:./src/libstfio/abf/axon/AxAtfFio32/:./src/libstfio/biosig/:./src/libstfio/hdf5/:./src/libstfio/heka/:./src/libstfio/igor:./src/libstfio/ascii/:./src/libstfio/axg/
+ 
+-vpath %.c ./src/libstfnum/levmar/:./src/libstfio/igor/:./src/libstfio/cfs/
+-vpath %.cpp ./src/libstfnum/:./src/libstfnum/levmar/:./src/stimfit/gui/:./src/stimfit/gui/dlgs/:./src/libstfio/:./src/libstfio/biosig/:./src/libstfio/igor/:./src/libstfio/cfs/
++ifeq (,$(findstring WITH_LIBLEVMAR, $(DEFINES)))
++  vpath %.c ./src/libstfnum/levmar/:./src/libstfio/igor/:./src/libstfio/cfs/
++  vpath %.cpp ./src/libstfnum/:./src/libstfnum/levmar/:./src/stimfit/gui/:./src/stimfit/gui/dlgs/:./src/libstfio/:./src/libstfio/biosig/:./src/libstfio/igor/:./src/libstfio/cfs/
++else
++  vpath %.c ./src/libstfio/igor/:./src/libstfio/cfs/
++  vpath %.cpp ./src/libstfnum/:./src/stimfit/gui/:./src/stimfit/gui/dlgs/:./src/libstfio/:./src/libstfio/biosig/:./src/libstfio/igor/:./src/libstfio/cfs/
++endif
++
+ 
+ SOURCES = ./src/stimfit/stf.cpp \
+ 	./src/libstfnum/stfnum.cpp \
+ 	./src/libstfnum/funclib.cpp \
+ 	./src/libstfnum/measure.cpp \
+ 	./src/libstfnum/fit.cpp \
+-	./src/libstfnum/levmar/lm.c \
+-	./src/libstfnum/levmar/Axb.c \
+-	./src/libstfnum/levmar/misc.c \
+-	./src/libstfnum/levmar/lmbc.c \
+-	./src/libstfnum/levmar/lmlec.c \
+ 	./src/stimfit/gui/doc.cpp \
+ 	./src/stimfit/gui/zoom.cpp \
+ 	./src/stimfit/gui/childframe.cpp \
+@@ -120,6 +123,12 @@ SOURCES = ./src/stimfit/stf.cpp \
+ 	./src/libstfio/igor/CrossPlatformFileIO.c \
+ 	./src/libstfio/cfs/cfs.c 
+ 
++SOURCES_LEVMAR = ./src/libstfnum/levmar/lm.c \
++	./src/libstfnum/levmar/Axb.c \
++	./src/libstfnum/levmar/misc.c \
++	./src/libstfnum/levmar/lmbc.c \
++	./src/libstfnum/levmar/lmlec.c \
++
+ SOURCES_OPTIONAL = \
+ 	./src/libstfio/heka/hekalib.cpp \
+ 
+@@ -174,8 +183,20 @@ SOURCES_AXG = ./src/libstfio/axg/axglib.cpp \
+ 	./src/libstfio/axg/byteswap.cpp \
+ 
+ ### DEPENDENCIES ###
+-ifneq (,$(findstring HAVE_LAPACK, $(DEFINES)))
+-  LIBS   += -llapack -lblas
++ifeq (,$(findstring WITH_LIBLEVMAR, $(DEFINES)))
++	SOURCES += $(SOURCES_LEVMAR)
++else
++	LIBS  += -llevmar
++endif
++
++ifneq (,$(findstring WITH_OPENBLAS, $(DEFINES)))
++  LIBS   += -lopenblas -lgomp -lpthread -lm
++  DEFINES += -I/usr/include/openblas
++  LDFLAGS += -L/usr/lib/openblas
++else
++  ifneq (,$(findstring HAVE_LAPACK, $(DEFINES)))
++    LIBS   += -llapack -lblas
++  endif
+ endif
+ 
+ ifeq (,$(findstring WITHOUT_ABF, $(DEFINES)))
+@@ -211,8 +232,8 @@ endif
+ CC       ?= $(shell $(WXCONF) --cc)
+ CXX      ?= $(shell $(WXCONF) --cxx)
+ CFLAGS    = $(DEFINES) $(shell $(WXCONF) --cflags) -fstack-protector -O2
+-CPPFLAGS  = $(DEFINES) $(shell $(WXCONF) --cppflags) -std=gnu++11 -fstack-protector -O2
+-CXXFLAGS  = $(DEFINES) $(shell $(WXCONF) --cxxflags) -std=gnu++11 -fstack-protector -O2
++CPPFLAGS  = $(DEFINES) $(shell $(WXCONF) --cppflags) -std=gnu++17 -fstack-protector -O2
++CXXFLAGS  = $(DEFINES) $(shell $(WXCONF) --cxxflags) -std=gnu++17 -fstack-protector -O2
+ LIBS     += $(shell $(WXCONF) --libs net,adv,aui,core,base)
+ 
+ 
+@@ -227,11 +248,6 @@ mandir        = ${datarootdir}/man
+ 
+ PKGCONF  ?= $(CROSS)pkg-config
+ 
+-ifeq (5,$(shell $(CXX) -v 2>&1 | awk '/gcc version / {print substr($$3,1,1)}' ))
+-  # g++-5 changes default ABI, if WX was compiled with an earlier compiler
+-  CXXFLAGS += -fabi-version=2
+-endif
+-
+ CPPFLAGS  += -I$(WXDIR)
+ 
+ ## HDF5 related stuff ##
+@@ -261,7 +277,7 @@ else
+     LDFLAGS  += -L/usr/lib/$(PLATFORM)
+     LIBS     += -lhdf5_serial_hl -lhdf5_serial
+   else
+-    LIBS     += -lhdf5_hl -lhdf5
++    LIBS     += -lhdf5_hl -lhdf5 -lz
+   endif
+ endif
+ endif
+@@ -283,9 +299,8 @@ LIBS     += -lfftw3
+ 
+ ifeq (mingw,$(findstring mingw, $(WXCONF)))
+   LIBS   += -lgfortran -lquadmath
+-  LIBS   += -liberty -liconv
+ endif
+-LIBS   += -liconv -ltinyxml -lstdc++
++LIBS   += -ltinyxml -lstdc++
+ 
+ 
+ ##############################################################
+diff --git a/configure.ac b/configure.ac
+index 1f8c58f5..8f70fc5a 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -5,6 +5,7 @@ AM_SILENT_RULES([yes])
+ AC_CONFIG_MACRO_DIR([m4])
+ 
+ AC_PROG_CC
++AC_PROG_CC_STDC
+ AC_PROG_INSTALL
+ 
+ _LT_SET_OPTION([LT_INIT],[dlopen])
+@@ -179,6 +180,8 @@ if test "$LAPACKLIB" = ""; then
+         LIBLAPACK_LDFLAGS="/usr/lib/liblapack.dylib -framework Accelerate"
+         CPPFLAGS="${CPPFLAGS} -DHAVE_LAPACK -DHAVE_LAPACK_SUFFIX" 
+     else
++      AC_CHECK_LIB([openblas], [dgemm_], HAVE_OPENBLAS="yes",, [-lgomp -lpthread -lm])
++      if test "${HAVE_OPENBLAS}" != "yes" ; then
+         AC_CHECK_LIB([lapack], [dgemm_], HAVE_LAPACKX="yes")
+         if test "${HAVE_LAPACKX}" != "yes" ; then
+             AC_CHECK_LIB([lapack3], [dgemm_], HAVE_LAPACK3="yes")
+@@ -186,15 +189,11 @@ if test "$LAPACKLIB" = ""; then
+                 AC_CHECK_LIB([lapack-3], [dgemm_], HAVE_LAPACK_3="yes")
+                     if test "${HAVE_LAPACK_3}" != "yes" ; then
+                         AC_CHECK_LIB([blas], [dgemm_], HAVE_ATLAS="yes")
+-                        if test "${HAVE_ATLAS}" != "yes" ; then
+-                            AC_MSG_ERROR([Couldn't find lapack.])
+-                        else
+-                            LIBLAPACK_LDFLAGS="-llapack -lblas"
+-                            CPPFLAGS="${CPPFLAGS} -DHAVE_LAPACK " 
+-                        fi
++                        LIBLAPACK_LDFLAGS="-llapack -lblas"
++                        CPPFLAGS="${CPPFLAGS} -DHAVE_LAPACK "
+                     else
+                         LIBLAPACK_LDFLAGS="-llapack-3"
+-                        CPPFLAGS="${CPPFLAGS} -DHAVE_LAPACK " 
++                        CPPFLAGS="${CPPFLAGS} -DHAVE_LAPACK "
+                     fi
+             else
+                 LIBLAPACK_LDFLAGS=-llapack3
+@@ -204,6 +203,10 @@ if test "$LAPACKLIB" = ""; then
+             LIBLAPACK_LDFLAGS="-llapack -lblas"
+             CPPFLAGS="${CPPFLAGS} -DHAVE_LAPACK " 
+         fi
++      else
++        LIBLAPACK_LDFLAGS="-lopenblas"
++        CPPFLAGS="${CPPFLAGS} -DWITH_OPENBLAS -DHAVE_LAPACK"
++      fi
+     fi
+ fi
+ AC_SUBST(LIBLAPACK_LDFLAGS)
+@@ -326,14 +329,10 @@ fi
+ 
+ AC_CHECK_HEADER([hdf5.h], [], [AC_MSG_ERROR([Couldn't find hdf5 header])])
+ AC_CHECK_LIB([hdf5],[H5Fopen],HAVE_HDF5="yes")
+-if test "${HAVE_HDF5}" != "yes" ; then
+-    AC_MSG_ERROR([Couldn't find hdf5 libraries.])
+-else
+     if test "${HDF5_CFLAGS}" = ""; then
+         CPPFLAGS="${CPPFLAGS} -DH5_USE_16_API"
+         LIBHDF5_LDFLAGS="-lhdf5 -lhdf5_hl"
+     fi
+-fi
+ AC_SUBST(LIBHDF5_LDFLAGS)
+ 
+ AC_ARG_ENABLE([debug],
+diff --git a/src/libstfio/abf/axon/Common/ArrayPtr.hpp b/src/libstfio/abf/axon/Common/ArrayPtr.hpp
+index 8584824a..65fecd9b 100755
+--- a/src/libstfio/abf/axon/Common/ArrayPtr.hpp
++++ b/src/libstfio/abf/axon/Common/ArrayPtr.hpp
+@@ -14,7 +14,11 @@
+ 
+ #pragma once
+ #include <stdlib.h> 
+-#include <boost/shared_array.hpp>
++#if (__cplusplus < 201402L)
++#  include <boost/shared_array.hpp>
++#else
++#  include <memory>
++#endif
+ 
+ #if defined(__UNIX__) || defined(__STF__)
+ 	#define max(a,b)   (((a) > (b)) ? (a) : (b))
+@@ -29,7 +33,11 @@ template<class ITEM>
+ class CArrayPtr
+ {
+ private:    // Private data.
++#if (__cplusplus <  201402L)
+    boost::shared_array<ITEM> m_pArray;
++#else
++   std::shared_ptr<ITEM> m_pArray;
++#endif
+ 
+ private:    // Prevent copy constructors and operator=().
+    CArrayPtr(const CArrayPtr &);
+diff --git a/src/libstfio/abf/axon/Common/FileReadCache.hpp b/src/libstfio/abf/axon/Common/FileReadCache.hpp
+index 86b52ebc..8f3cdadc 100755
+--- a/src/libstfio/abf/axon/Common/FileReadCache.hpp
++++ b/src/libstfio/abf/axon/Common/FileReadCache.hpp
+@@ -13,7 +13,11 @@
+ #define INC_FILEREADCACHE_HPP
+ 
+ #include "./../Common/FileIO.hpp"
+-#include <boost/shared_array.hpp>
++#if (__cplusplus < 201402L)
++#  include <boost/shared_array.hpp>
++#else
++#  include <memory>
++#endif
+ //-----------------------------------------------------------------------------------------------
+ // CFileReadCache class definition
+ 
+@@ -27,7 +31,11 @@ private:
+    UINT     m_uCacheSize;
+    UINT     m_uCacheStart;
+    UINT     m_uCacheCount;
++#if (__cplusplus <  201402L)
+    boost::shared_array<BYTE>    m_pItemCache;
++#else
++   std::shared_ptr<BYTE>    m_pItemCache;
++#endif
+ 
+ private:    // Unimplemented default member functions.
+    // Declare but don't define copy constructors to prevent use of defaults.
+diff --git a/src/libstfio/abf/axon2/ProtocolReaderABF2.hpp b/src/libstfio/abf/axon2/ProtocolReaderABF2.hpp
+index 85205cb9..d44a22c8 100644
+--- a/src/libstfio/abf/axon2/ProtocolReaderABF2.hpp
++++ b/src/libstfio/abf/axon2/ProtocolReaderABF2.hpp
+@@ -16,6 +16,8 @@
+ #include "../axon/AxAbfFio32/filedesc.hpp"
+ #if (__cplusplus < 201103)
+     #include <boost/shared_ptr.hpp>
++#else
++    #include <memory>
+ #endif
+ 
+ //===============================================================================================
+diff --git a/src/libstfio/stfio.h b/src/libstfio/stfio.h
+index 4b5aaa70..64bd2cf0 100644
+--- a/src/libstfio/stfio.h
++++ b/src/libstfio/stfio.h
+@@ -25,7 +25,12 @@
+ #define _STFIO_H_
+ 
+ #include <iostream>
+-#include <boost/function.hpp>
++#if (__cplusplus < 201103)
++#  include <boost/function.hpp>
++#else
++#  include <algorithm>
++#  include <functional>
++#endif
+ #include <vector>
+ #include <deque>
+ #include <map>
+diff --git a/src/libstfnum/fit.cpp b/src/libstfnum/fit.cpp
+index a2d4e119..3d6cf0a3 100755
+--- a/src/libstfnum/fit.cpp
++++ b/src/libstfnum/fit.cpp
+@@ -13,7 +13,11 @@
+ // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ 
+ #include "./fit.h"
+-#include "./levmar/levmar.h"
++#if defined(WITH_LIBLEVMAR)
++  #include <levmar.h>
++#else
++  #include "./levmar/levmar.h"
++#endif
+ 
+ #include <float.h>
+ #include <cmath>
+@@ -154,7 +158,6 @@ Vector_double stfnum::get_scale(Vector_double& data, double oldx) {
+     xyscale[1] = 0;
+     xyscale[2] = 1.0/amp;
+     xyscale[3] = off;
+-    
+     return xyscale;
+ }
+ 
+@@ -191,7 +194,8 @@ double stfnum::lmFit( const Vector_double& data, double dt,
+             constrains_lm_ub[n_p] = DBL_MAX;
+         }
+         if ( can_scale ) {
+-            if (fitFunc.pInfo[n_p].scale == stfnum::noscale) {
++            //if (fitFunc.pInfo[n_p].scale == stfnum::noscale) {
++            if (!fitFunc.pInfo[n_p].scale) {
+                 can_scale = false;
+             }
+         }
+diff --git a/src/libstfnum/funclib.cpp b/src/libstfnum/funclib.cpp
+index 7757c2eb..8db0856e 100755
+--- a/src/libstfnum/funclib.cpp
++++ b/src/libstfnum/funclib.cpp
+@@ -44,11 +44,11 @@ std::vector< stfnum::storedFunc > stfnum::GetFuncLib() {
+     // Biexponential function, free fit:
+     std::vector<stfnum::parInfo> parInfoBExp=getParInfoExp(2);
+     funcList.push_back(stfnum::storedFunc(
+-                                       "Biexponential",parInfoBExp,fexp,fexp_init,fexp_jac,true,outputWTau));
++                                       "Biexponential A(1-exp(-t/Tau_0)exp(-t/Tau_1)",parInfoBExp,fexp,fexp_init,fexp_jac,true,outputWTau));
+ 
+     // Biexponential function, offset fixed to baseline:
+     parInfoBExp[4].toFit=false;
+-    funcList.push_back(stfnum::storedFunc("Biexponential, offset fixed to baseline",
++    funcList.push_back(stfnum::storedFunc("Biexponential, offset fixed to baseline A(1-exp(-t/Tau_0)exp(-t/Tau_1)+Baseline",
+                                          parInfoBExp,fexp,fexp_init,fexp_jac,true,outputWTau));
+ 
+     // Biexponential function, starting with a delay, start fixed to baseline:
+@@ -62,7 +62,7 @@ std::vector< stfnum::storedFunc > stfnum::GetFuncLib() {
+     parInfoBExpDe[4].toFit=true;  parInfoBExpDe[4].desc="tau2"; parInfoBExpDe[4].scale=stfnum::xscale; parInfoBExpDe[4].unscale=stfnum::xunscale;
+     // parInfoBExpDe[4].constrained = true; parInfoBExpDe[4].constr_lb = 1.0e-16; parInfoBExpDe[4].constr_ub = DBL_MAX;
+     funcList.push_back(stfnum::storedFunc(
+-                                       "Biexponential with delay, start fixed to baseline, delay constrained to > 0",
++                                       "Biexponential with delay, start fixed to baseline, delay constrained to > 0; A(1-exp(-(t-Delay)/Tau_0)exp(-(t-Delay)/Tau_1)+Baseline",
+                                        parInfoBExpDe,fexpbde,fexpbde_init,stfnum::nojac,false));
+ 
+     // Triexponential function, free fit:
+@@ -153,8 +153,8 @@ Vector_double stfnum::fexp_jac(double x, const Vector_double& p) {
+ void stfnum::fexp_init(const Vector_double& data, double base, double peak, double RTLoHi, double HalfWidth, double dt, Vector_double& pInit ) {
+     // Find out direction:
+     bool increasing = data[0] < data[data.size()-1];
+-    Vector_double::const_iterator max_el = std::max_element(data.begin(), data.end());
+-    Vector_double::const_iterator min_el = std::min_element(data.begin(), data.end());
++    Vector_double::const_iterator max_el = std::max(data.begin(), data.end());
++    Vector_double::const_iterator min_el = std::min(data.begin(), data.end());
+     double floor = (increasing ? (*max_el+1.0e-9) : (*min_el-1.0e-9));
+     Vector_double peeled( stfio::vec_scal_minus(data, floor));
+     if (increasing) peeled = stfio::vec_scal_mul(peeled, -1.0);
+diff --git a/src/libstfnum/stfnum.cpp b/src/libstfnum/stfnum.cpp
+index 9809d20b..9743843c 100755
+--- a/src/libstfnum/stfnum.cpp
++++ b/src/libstfnum/stfnum.cpp
+@@ -709,10 +709,10 @@ stfnum::deconvolve(const Vector_double& dataIn, const Vector_double& templ,
+                 int SR, double hipass, double lopass, stfio::ProgressInfo& progDlg)
+ {
+ 	// Normalize data
+-    double fmax = *std::max_element(dataIn.begin(), dataIn.end());
+-    double fmin = *std::min_element(dataIn.begin(), dataIn.end());
+-    Vector_double data = stfio::vec_scal_minus(dataIn, fmin);
+-    data = stfio::vec_scal_div(data, fmax-fmin);
++    double fmax = *std::max_element(dataIn.begin(), dataIn.end());
++    double fmin = *std::min_element(dataIn.begin(), dataIn.end());
++    Vector_double data = stfio::vec_scal_minus(dataIn, fmin);
++    data = stfio::vec_scal_div(data, fmax-fmin);
+ 
+     bool skipped = false;
+     progDlg.Update( 0, "Starting deconvolution...", &skipped );
+diff --git a/src/libstfnum/stfnum.h b/src/libstfnum/stfnum.h
+index 3ac112ba..9225cb65 100755
+--- a/src/libstfnum/stfnum.h
++++ b/src/libstfnum/stfnum.h
+@@ -33,7 +33,15 @@
+ #include <vector>
+ #include <complex>
+ #include <deque>
+-#include <boost/function.hpp>
++
++#if (__cplusplus < 201103)
++#  include <boost/function.hpp>
++#else
++#  include <algorithm>
++#  include <cassert>
++#  include <functional>
++#endif
++
+ #ifdef _OPENMP
+ #include <omp.h>
+ #endif
+@@ -42,8 +50,8 @@
+ #ifdef _MSC_VER
+ #define INFINITY (DBL_MAX+DBL_MAX)
+ #ifndef NAN
+-        static const unsigned long __nan[2] = {0xffffffff, 0x7fffffff};
+-        #define NAN (*(const float *) __nan)
++        static const unsigned long __nan[2] = {0xffffffff, 0x7fffffff};
++        #define NAN (*(const float *) __nan)
+ #endif
+ #endif
+ 
+@@ -61,6 +69,8 @@ namespace stfnum {
+  *  that takes a double (the x-value) and a vector of parameters and returns 
+  *  the function's result (the y-value).
+  */
++#if (__cplusplus < 201103)
++
+ typedef boost::function<double(double, const Vector_double&)> Func;
+ 
+ //! The jacobian of a stfnum::Func.
+@@ -69,6 +79,17 @@ typedef boost::function<Vector_double(double, const Vector_double&)> Jac;
+ //! Scaling function for fit parameters
+ typedef boost::function<double(double, double, double, double, double)> Scale;
+ 
++#else
++
++typedef std::function<double(double, const Vector_double&)> Func;
++
++//! The jacobian of a stfnum::Func.
++typedef std::function<Vector_double(double, const Vector_double&)> Jac;
++
++//! Scaling function for fit parameters
++typedef std::function<double(double, double, double, double, double)> Scale;
++
++#endif
+ //! Dummy function, serves as a placeholder to initialize functions without a Jacobian.
+ Vector_double nojac( double x, const Vector_double& p);
+ 
+@@ -203,16 +224,29 @@ private:
+     std::vector< std::string > colLabels;
+ };
+ 
++#if (__cplusplus < 201103)
+ //! Print the output of a fit into a stfnum::Table.
+ typedef boost::function<Table(const Vector_double&,const std::vector<stfnum::parInfo>,double)> Output;
+  
+ //! Default fit output function, constructing a stfnum::Table from the parameters, their description and chisqr.
+-Table defaultOutput(const Vector_double& pars, 
++Table defaultOutput(const Vector_double& pars,
+                     const std::vector<parInfo>& parsInfo,
+                     double chisqr);
+ 
+ //! Initialising function for the parameters in stfnum::Func to start a fit.
+ typedef boost::function<void(const Vector_double&, double, double, double, double, double, Vector_double&)> Init;
++#else
++//! Print the output of a fit into a stfnum::Table.
++typedef std::function<Table(const Vector_double&,const std::vector<stfnum::parInfo>,double)> Output;
++
++//! Default fit output function, constructing a stfnum::Table from the parameters, their description and chisqr.
++Table defaultOutput(const Vector_double& pars,
++                    const std::vector<parInfo>& parsInfo,
++                    double chisqr);
++
++//! Initialising function for the parameters in stfnum::Func to start a fit.
++typedef std::function<void(const Vector_double&, double, double, double, double, double, Vector_double&)> Init;
++#endif
+ 
+ //! Function used for least-squares fitting.
+ /*! Objects of this class are used for fitting functions 
+diff --git a/src/stimfit/gui/parentframe.cpp b/src/stimfit/gui/parentframe.cpp
+index 3d54c153..94246c96 100755
+--- a/src/stimfit/gui/parentframe.cpp
++++ b/src/stimfit/gui/parentframe.cpp
+@@ -69,7 +69,11 @@
+ 
+ #include "./childframe.h"
+ #include "./parentframe.h"
+-#include "./../../libstfnum/levmar/levmar.h"
++#if defined(WITH_LIBLEVMAR)
++  #include <levmar.h>
++#else
++  #include "./../../libstfnum/levmar/levmar.h"
++#endif
+ 
+ #include "./../res/16-em-down.xpm"
+ #include "./../res/16-em-open.xpm"
+diff --git a/src/stimfit/stf.h b/src/stimfit/stf.h
+index f44aeb8b..adb4156d 100644
+--- a/src/stimfit/stf.h
++++ b/src/stimfit/stf.h
+@@ -27,6 +27,9 @@
+ #ifndef _WINDOWS
+ #if (__cplusplus < 201103)
+     #include <boost/function.hpp>
++#else
++    #include <algorithm>
++    #include <memory>
+ #endif
+ #endif
+ 
+diff --git a/stfconf.h b/stfconf.h
+index 47eb76dc..7989b512 100644
+--- a/stfconf.h
++++ b/stfconf.h
+@@ -1,6 +1,45 @@
++/* stfconf.h.  Generated from stfconf.h.in by configure.  */
++/* stfconf.h.in.  Generated from configure.ac by autoheader.  */
++
++/* Define to 1 if you have the <dlfcn.h> header file. */
++#define HAVE_DLFCN_H 1
++
++/* Define to 1 if you have the <inttypes.h> header file. */
++#define HAVE_INTTYPES_H 1
++
++/* Define to 1 if you have the <memory.h> header file. */
++#define HAVE_MEMORY_H 1
++
++/* Define to 1 if you have the <stdint.h> header file. */
++#define HAVE_STDINT_H 1
++
++/* Define to 1 if you have the <stdlib.h> header file. */
++#define HAVE_STDLIB_H 1
++
++/* Define to 1 if you have the <strings.h> header file. */
++#define HAVE_STRINGS_H 1
++
++/* Define to 1 if you have the <string.h> header file. */
++#define HAVE_STRING_H 1
++
++/* Define to 1 if you have the <sys/stat.h> header file. */
++#define HAVE_SYS_STAT_H 1
++
++/* Define to 1 if you have the <sys/types.h> header file. */
++#define HAVE_SYS_TYPES_H 1
++
++/* Define to 1 if you have the <unistd.h> header file. */
++#define HAVE_UNISTD_H 1
++
++/* Define to the sub-directory where libtool stores uninstalled libraries. */
++#define LT_OBJDIR ".libs/"
++
+ /* Name of package */
+ #define PACKAGE "stimfit"
+ 
++/* Define to the address where bug reports for this package should be sent. */
++#define PACKAGE_BUGREPORT ""
++
+ /* Define to the full name of this package. */
+ #define PACKAGE_NAME "stimfit"
+ 
+@@ -18,3 +57,6 @@
+ 
+ /* Define to 1 if you have the ANSI C header files. */
+ #define STDC_HEADERS 1
++
++/* Version number of package */
++#define VERSION "0.15.8"

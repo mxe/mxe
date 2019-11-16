@@ -1,0 +1,11 @@
+--- Python-3.3.0/Include/pyport.h	2013-01-14 14:24:26.000000000 +0100
++++ Python-3.3.0/Include/pyport.h	2013-01-14 14:26:12.000000000 +0100
+@@ -243,7 +243,7 @@
+ #       define PY_FORMAT_SIZE_T "l"
+ #   elif defined(MS_WINDOWS)
+ #       define PY_FORMAT_SIZE_T "I"
+-#   elif defined(__MINGW32__) && defined(__USE_MINGW_ANSI_STDIO)
++#   elif defined(__MINGW32__)
+ #       define PY_FORMAT_SIZE_T "z"
+ #   else
+ #       error "This platform's pyconfig.h needs to define PY_FORMAT_SIZE_T"

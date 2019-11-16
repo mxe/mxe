@@ -3,8 +3,8 @@
 PKG             := x265
 $(PKG)_WEBSITE  := http://x265.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.4
-$(PKG)_CHECKSUM := 9c2aa718d78f6fecdd783f08ab83b98d3169e5f670404da4c16439306907d729
+$(PKG)_VERSION  := 2.5
+$(PKG)_CHECKSUM := 2e53259b504a7edb9b21b9800163b1ff4c90e60c74e23e7001d423c69c5d3d17
 $(PKG)_SUBDIR   := x265_$($(PKG)_VERSION)
 $(PKG)_FILE     := x265_$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://bitbucket.org/multicoreware/x265/downloads/$($(PKG)_FILE)
