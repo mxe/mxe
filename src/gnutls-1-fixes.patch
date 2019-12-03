@@ -60,7 +60,7 @@ diff --git a/configure.ac b/configure.ac
 index 1111111..2222222 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -532,26 +532,19 @@ idna_support=no
+@@ -549,26 +549,19 @@ idna_support=no
  with_libidn2=no
  
  if test "$try_libidn2" = yes;then
@@ -123,7 +123,7 @@ diff --git a/configure.ac b/configure.ac
 index 1111111..2222222 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -997,17 +997,6 @@ AC_DEFINE_UNQUOTED([INI_START_COMMENT_PREFIXES], [";#"], [The comment prefixes])
+@@ -1023,17 +1023,6 @@ AC_DEFINE_UNQUOTED([INI_START_COMMENT_PREFIXES], [";#"], [The comment prefixes])
  AC_CONFIG_FILES([guile/pre-inst-guile], [chmod +x guile/pre-inst-guile])
  AC_CONFIG_FILES([
    Makefile
