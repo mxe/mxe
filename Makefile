@@ -295,7 +295,9 @@ ESCAPE_PKG = \
 BACKUP_DOWNLOAD = \
     (echo "MXE Warning! Downloading $(1) from backup." >&2 && \
     ($(foreach SITE,$(MIRROR_SITES), \
-        $(WGET) -O '$(TMP_FILE)' $($(SITE))/`$(call ESCAPE_PKG,$(1))`_$($(1)_CHECKSUM) || ) false))
+        rm -f '$(TMP_FILE)' && \
+        $(WGET) -O '$(TMP_FILE)' $($(SITE))/`$(call ESCAPE_PKG,$(1))`_$($(1)_CHECKSUM) && \
+        $(call CHECK_PKG_ARCHIVE,$(1),'$(TMP_FILE)') || ) false))
 
 DOWNLOAD_PKG_ARCHIVE = \
     $(eval TMP_FILE := $(PKG_DIR)/.tmp-$($(1)_FILE)) \
@@ -303,10 +305,12 @@ DOWNLOAD_PKG_ARCHIVE = \
         true\
     $(else),\
         mkdir -p '$(PKG_DIR)' && ( \
-            ($(WGET) -T 30 -t 3 -O '$(TMP_FILE)' '$($(1)_URL)' && \
+            (rm -f '$(TMP_FILE)' && \
+             $(WGET) -T 30 -t 3 -O '$(TMP_FILE)' '$($(1)_URL)' && \
              $(call CHECK_PKG_ARCHIVE,$(1),'$(TMP_FILE)')) \
             $(if $($(1)_URL_2), \
                 || (echo "MXE Warning! Downloading $(1) from second URL." >&2 && \
+                    rm -f '$(TMP_FILE)' && \
                     $(WGET) -T 30 -t 3 -O '$(TMP_FILE)' '$($(1)_URL_2)' && \
                     $(call CHECK_PKG_ARCHIVE,$(1),'$(TMP_FILE)'))) \
             $(if $(MXE_NO_BACKUP_DL),, \
