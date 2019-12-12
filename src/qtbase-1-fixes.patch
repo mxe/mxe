@@ -1,9 +1,9 @@
 This file is part of MXE. See LICENSE.md for licensing information.
 
-From bb59f5ad55cf935a20cb5406c020293a3ae91281 Mon Sep 17 00:00:00 2001
+From 7c5ba14d5b42334edb6a70239cf231f847f508ef Mon Sep 17 00:00:00 2001
 From: Ray Donnelly <mingw.android@gmail.com>
 Date: Wed, 26 Aug 2015 12:45:43 +0100
-Subject: [PATCH 1/4] cmake: Rearrange STATIC vs INTERFACE targets
+Subject: [PATCH 1/2] cmake: Rearrange STATIC vs INTERFACE targets
 
 Otherwise we attempt to add_library(Qt5::UiPlugin STATIC IMPORTED)
 for header-only modules when building Qt5 statically.
@@ -12,10 +12,10 @@ Source: https://git.io/vzWJz
 See also: https://github.com/mxe/mxe/issues/1185
 
 diff --git a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
-index f4a34d6e48..f9e2987564 100644
+index 364c23e750..c90dd302cf 100644
 --- a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
 +++ b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
-@@ -327,6 +327,9 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
+@@ -343,6 +343,9 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
      list(APPEND _Qt5$${CMAKE_MODULE_NAME}_LIB_DEPENDENCIES \"$${CMAKE_INTERFACE_QT5_MODULE_DEPS}\")
  !!ENDIF
  
@@ -25,7 +25,7 @@ index f4a34d6e48..f9e2987564 100644
  !!IF !isEmpty(CMAKE_STATIC_TYPE)
      if(NOT Qt5_EXCLUDE_STATIC_DEPENDENCIES)
  !!IF !isEmpty(CMAKE_DEBUG_TYPE)
-@@ -364,9 +367,6 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
+@@ -380,9 +383,6 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
  
      add_library(Qt5::$${CMAKE_MODULE_NAME} STATIC IMPORTED)
      set_property(TARGET Qt5::$${CMAKE_MODULE_NAME} PROPERTY IMPORTED_LINK_INTERFACE_LANGUAGES "CXX")
@@ -39,87 +39,18 @@ index f4a34d6e48..f9e2987564 100644
 2.20.1
 
 
-From b3d2613f24be55ee494646a0b84074a3308de264 Mon Sep 17 00:00:00 2001
-From: Tony Theodore <tonyt@logyst.com>
-Date: Sat, 16 Jul 2016 20:31:07 +1000
-Subject: [PATCH 2/4] Fix pkgconfig file and library naming
-
-See: https://codereview.qt-project.org/#/c/165394/
-     https://bugreports.qt.io/browse/QTBUG-30898
-
-Currently, *.pc files are generated with debug suffix `d` in `-release`
-mode and without the suffix in `-debug` or `-debug-and-release`. This
-can be worked around by `CONIFG-=debug_and_release`, however, a more
-predictable and consistent naming approach would be preferable.
-
-This change mimics the *.prl file and lib conventions:
-
-  -release: creates normal *.pc files and lib names
-  -release -force-debug-info: normal as above
-  -debug: creates *d.pc and *d lib names
-  -debug-and-release: creates both
-  -default: creates both (default link: debug)
-
-and should be unsurprising to users of `pkg-config`. At very least,
-it's deterministic and easily incorporated into build systems.
-
-Task-number: 30898
-Change-Id: If75336ec7d21a7ec0cb6d245fe87c64afcb5a644
-
-diff --git a/mkspecs/features/qt_module.prf b/mkspecs/features/qt_module.prf
-index 46687f262e..4b2980a1a8 100644
---- a/mkspecs/features/qt_module.prf
-+++ b/mkspecs/features/qt_module.prf
-@@ -268,6 +268,10 @@ load(qt_installs)
- 
- load(qt_targets)
- 
-+# Set TARGET towards the end but before pkgconfig setup to keep naming
-+# conventions consistent with *prl files
-+TARGET = $$qt5LibraryTarget($$TARGET$$QT_LIBINFIX)
-+
- # this builds on top of qt_common
- !internal_module:if(unix|mingw) {
-     CONFIG += create_pc
-@@ -283,12 +287,12 @@ load(qt_targets)
-         QMAKE_PKGCONFIG_INCDIR = $$[QT_INSTALL_HEADERS/raw]
-         QMAKE_PKGCONFIG_CFLAGS = -D$$MODULE_DEFINE -I${includedir}/$$MODULE_INCNAME
-     }
--    QMAKE_PKGCONFIG_NAME = $$replace(TARGET, ^Qt, "Qt$$QT_MAJOR_VERSION ")
--    QMAKE_PKGCONFIG_FILE = $$replace(TARGET, ^Qt, Qt$$QT_MAJOR_VERSION)
-+    QMAKE_PKGCONFIG_NAME = $$replace(TARGET, ^Qt$$QT_MAJOR_VERSION, "Qt$$QT_MAJOR_VERSION ")
-+    QMAKE_PKGCONFIG_FILE = $$TARGET
-     for(i, MODULE_DEPENDS): \
--        QMAKE_PKGCONFIG_REQUIRES += $$replace(QT.$${i}.name, ^Qt, Qt$$section(QT.$${i}.VERSION, ., 0, 0))
-+        QMAKE_PKGCONFIG_REQUIRES += $$replace(QT.$${i}.name, ^Qt, Qt$$section(QT.$${i}.VERSION, ., 0, 0))$$qtPlatformTargetSuffix()
-     isEmpty(QMAKE_PKGCONFIG_DESCRIPTION): \
--        QMAKE_PKGCONFIG_DESCRIPTION = $$replace(TARGET, ^Qt, "Qt ") module
-+        QMAKE_PKGCONFIG_DESCRIPTION = $$replace(TARGET, ^Qt$$QT_MAJOR_VERSION, "Qt ") module
-     !isEmpty(lib_replace0.match) {
-         pclib_replace0.match = $$lib_replace0.match
-         pclib_replace0.replace = $$QMAKE_PKGCONFIG_LIBDIR/
-@@ -334,5 +338,3 @@ win32 {
-     # On other platforms, Qt's own compilation goes needs to compile the Qt 5.0 API
-     DEFINES *= QT_DISABLE_DEPRECATED_BEFORE=0x050000
- }
--
--TARGET = $$qt5LibraryTarget($$TARGET$$QT_LIBINFIX)  # Do this towards the end
--- 
-2.20.1
-
-
-From 109719a9699166747203bef1d2516c9ace183125 Mon Sep 17 00:00:00 2001
+From 798ab219ef98856dc4281559192e631f65bbb657 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 11 Jun 2017 00:27:41 +0200
-Subject: [PATCH 3/4] use pkg-config for harfbuzz
+Subject: [PATCH 2/2] use pkg-config for harfbuzz
 
 Change-Id: Ia65cbb90fd180f1bc10ce077a9a8323a48e51421
 
 diff --git a/src/gui/configure.json b/src/gui/configure.json
-index 6280b4dfa2..e094ee12e6 100644
+index 19312d245d..0164f9b49b 100644
 --- a/src/gui/configure.json
 +++ b/src/gui/configure.json
-@@ -303,7 +303,8 @@
+@@ -304,7 +304,8 @@
              },
              "headers": "harfbuzz/hb.h",
              "sources": [
@@ -129,37 +60,6 @@ index 6280b4dfa2..e094ee12e6 100644
              ]
          },
          "imf": {
--- 
-2.20.1
-
-
-From 3e4cc37443c0269e0b0be655c670926e7198c135 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Thu, 31 Oct 2019 22:35:28 +0100
-Subject: [PATCH 4/4] Revert "configure: Do use pkg-config --libs for static
- libs"
-
-This change broke dbus detection in MXE. Smells fishy too.
-
-This reverts commit a1ea49878927dfe267416c795b50f3d5bdfa0b84.
-
-Change-Id: I66e4fe1e7a4d53c19f0d5dadf1e041565467f270
-
-diff --git a/mkspecs/features/qt_configure.prf b/mkspecs/features/qt_configure.prf
-index 81110e9f6d..9be4fb6f1f 100644
---- a/mkspecs/features/qt_configure.prf
-+++ b/mkspecs/features/qt_configure.prf
-@@ -825,7 +825,9 @@ defineTest(qtConfLibrary_pkgConfig) {
-     !qtConfResolveLibs($${1}.libs, $$libs): \
-         return(false)
-     contains($${1}.libs, ".*\\.$${QMAKE_EXTENSION_STATICLIB}$") {
--        qtRunLoggedCommand("$$pkg_config --static --libs $$args", libs)|return(false)
-+        qtRunLoggedCommand("$$pkg_config --static --libs-only-L $$args", libpaths)|return(false)
-+        qtRunLoggedCommand("$$pkg_config --static --libs-only-l $$args", libs)|return(false)
-+        eval(libs = $$libpaths $$libs)
-         !qtConfResolveLibs($${1}.libs, $$libs): \
-             return(false)
-     }
 -- 
 2.20.1
 

@@ -4,11 +4,11 @@ PKG             := qtbase
 $(PKG)_WEBSITE  := https://www.qt.io/
 $(PKG)_DESCR    := Qt
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.13.2
-$(PKG)_CHECKSUM := 26b6b686d66a7ad28eaca349e55e2894e5a735f3831e45f2049e93b1daa92121
+$(PKG)_VERSION  := 5.14.0
+$(PKG)_CHECKSUM := 4ef921c0f208a1624439801da8b3f4344a3793b660ce1095f2b7f5c4246b9463
 $(PKG)_SUBDIR   := $(PKG)-everywhere-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-everywhere-src-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := https://download.qt.io/official_releases/qt/5.13/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
+$(PKG)_URL      := https://download.qt.io/official_releases/qt/5.14/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc dbus fontconfig freetds freetype harfbuzz jpeg libmysqlclient libpng openssl pcre2 postgresql sqlite zlib zstd
 $(PKG)_DEPS_$(BUILD) :=
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
@@ -76,8 +76,8 @@ define $(PKG)_BUILD
 
     mkdir            '$(1)/test-qt'
     cd               '$(1)/test-qt' && '$(PREFIX)/$(TARGET)/qt5/bin/qmake' '$(PWD)/src/qt-test.pro'
-    $(MAKE)       -C '$(1)/test-qt' -j '$(JOBS)' $(BUILD_TYPE)
-    $(INSTALL) -m755 '$(1)/test-qt/$(BUILD_TYPE)/test-qt5.exe' '$(PREFIX)/$(TARGET)/bin/'
+    $(MAKE)       -C '$(1)/test-qt' -j '$(JOBS)'
+    $(INSTALL) -m755 '$(1)/test-qt/test-qt5.exe' '$(PREFIX)/$(TARGET)/bin/'
 
     # build test the manual way
     mkdir '$(1)/test-$(PKG)-pkgconfig'

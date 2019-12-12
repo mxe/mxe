@@ -10,58 +10,27 @@ diff --git a/src/imageformats/configure.json b/src/imageformats/configure.json
 index 1111111..2222222 100644
 --- a/src/imageformats/configure.json
 +++ b/src/imageformats/configure.json
-@@ -51,9 +51,6 @@
-                         "stdio.h",
-                         "libmng.h"
-                     ],
--                    "qmake": [
--                        "LIBS += -lmng"
--                    ],
-                     "main": [
-                         "mng_handle hMNG;",
-                         "mng_cleanup(&hMNG);",
-@@ -67,6 +64,7 @@
-                 }
+@@ -55,6 +55,7 @@
+                 ]
              },
              "sources": [
 +                { "type": "pkgConfig", "args": "libmng" },
                  "-lmng"
              ]
          },
-@@ -77,10 +75,6 @@
-                 "type": "compile",
-                 "test": {
-                     "include": "tiffio.h",
--                    "qmake": [
--                        "unix|mingw: LIBS += -ltiff",
--                        "else:win32: LIBS += libtiff.lib"
--                    ],
-                     "main": [
-                         "#if !defined(TIFF_VERSION) && defined(TIFF_VERSION_CLASSIC)",
-                         "// libtiff 4.0 splits it into TIFF_VERSION_CLASSIC and TIFF_VERSION_BIG",
-@@ -105,6 +99,7 @@
-                 }
+@@ -82,6 +83,7 @@
+                 ]
              },
              "sources": [
 +                { "type": "pkgConfig", "args": "libtiff-4" },
                  "-ltiff"
              ]
          },
-@@ -119,9 +114,6 @@
-                         "webp/encode.h",
-                         "webp/demux.h"
-                     ],
--                    "qmake": [
--                        "LIBS += -lwebp -lwebpdemux"
--                    ],
-                     "main": [
-                         "#if WEBP_ABI_IS_INCOMPATIBLE(WEBP_DECODER_ABI_VERSION, 0x0203) || WEBP_ABI_IS_INCOMPATIBLE(WEBP_ENCODER_ABI_VERSION, 0x0202)",
-                         "#error \"Incompatible libwebp version\"",
-@@ -144,6 +136,7 @@
-                 }
+@@ -112,6 +114,7 @@
+                 ]
              },
              "sources": [
-+                { "type": "pkgConfig", "args": "libwebp libwebpdemux" },
-                 "-lwebp -lwebpdemux"
++                { "type": "pkgConfig", "args": "libwebp libwebpdemux libwebpmux" },
+                 "-lwebp -lwebpdemux -lwebpmux"
              ]
          }
