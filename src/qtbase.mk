@@ -41,7 +41,7 @@ define $(PKG)_BUILD
             -force-pkg-config \
             -no-use-gold-linker \
             -release \
-            -static \
+            $(if $(BUILD_STATIC), -static,)$(if $(BUILD_SHARED), -shared,) \
             -prefix '$(PREFIX)/$(TARGET)/qt5' \
             -no-icu \
             -opengl desktop \
@@ -114,10 +114,6 @@ define $(PKG)_BUILD
         $(SED) -i 's^set(_Qt5Widgets_LIB_DEPENDENCIES \"Qt5::Gui;Qt5::Core\")^set(_Qt5Widgets_LIB_DEPENDENCIES \"Qt5::Gui;Qt5::Core;gdi32;comdlg32;oleaut32;imm32;opengl32;png16;harfbuzz;ole32;uuid;ws2_32;advapi32;shell32;user32;kernel32;mpr;version;winmm;z;pcre2-16;shell32;uxtheme;dwmapi\")^g' '$(PREFIX)/$(TARGET)/qt5/lib/cmake/Qt5Widgets/Qt5WidgetsConfig.cmake',
     )
 endef
-
-
-$(PKG)_BUILD_SHARED = $(subst -static ,-shared ,\
-                      $($(PKG)_BUILD))
 
 define $(PKG)_BUILD_$(BUILD)
     cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
