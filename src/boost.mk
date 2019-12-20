@@ -4,8 +4,8 @@ PKG             := boost
 $(PKG)_WEBSITE  := https://www.boost.org/
 $(PKG)_DESCR    := Boost C++ Library
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.60.0
-$(PKG)_CHECKSUM := 686affff989ac2488f79a97b9479efb9f2abae035b5ed4d8226de6857933fd3b
+$(PKG)_VERSION  := 1.72.0
+$(PKG)_CHECKSUM := 59c9b274bc451cf91a9ba1dd2c7fdcaf5d60b1b3aa83f2c9fa143417cc660722
 $(PKG)_SUBDIR   := boost_$(subst .,_,$($(PKG)_VERSION))
 $(PKG)_FILE     := boost_$(subst .,_,$($(PKG)_VERSION)).tar.bz2
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/boost/boost/$($(PKG)_VERSION)/$($(PKG)_FILE)
@@ -72,11 +72,10 @@ define $(PKG)_BUILD
         -W -Wall -Werror -ansi -U__STRICT_ANSI__ -pedantic \
         '$(PWD)/src/$(PKG)-test.cpp' -o '$(PREFIX)/$(TARGET)/bin/test-boost.exe' \
         -DBOOST_THREAD_USE_LIB \
-        -lboost_serialization-mt \
-        -lboost_thread_win32-mt \
-        -lboost_system-mt \
-        -lboost_chrono-mt \
-        -lboost_context-mt
+        -lboost_serialization-mt-x32 \
+        -lboost_system-mt-x32 \
+        -lboost_chrono-mt-x32 \
+        -lboost_context-mt-x32
 
     # test cmake
     mkdir '$(1).test-cmake'
