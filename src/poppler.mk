@@ -3,8 +3,8 @@
 PKG             := poppler
 $(PKG)_WEBSITE  := https://poppler.freedesktop.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.83.0
-$(PKG)_CHECKSUM := 685c650d9771e1c340ea222b57c8bd3f7502e2191ccfe8adeb9e638dcb0b799b
+$(PKG)_VERSION  := 0.84.0
+$(PKG)_CHECKSUM := c7a130da743b38a548f7a21fe5940506fb1949f4ebdd3209f0e5b302fa139731
 $(PKG)_SUBDIR   := poppler-$($(PKG)_VERSION)
 $(PKG)_FILE     := poppler-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://poppler.freedesktop.org/$($(PKG)_FILE)
@@ -48,7 +48,7 @@ define $(PKG)_BUILD
 
     # compile test
     '$(TARGET)-g++' \
-        -W -Wall -Werror -ansi -pedantic \
+        -W -Wall -Werror -ansi -pedantic -std=c++11 \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
         `'$(TARGET)-pkg-config' poppler-cpp --cflags --libs`
 endef
