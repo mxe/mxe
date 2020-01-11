@@ -18,9 +18,15 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_CONFIGURE_OPTS
-        $(MXE_CONFIGURE_OPTS) \
+       --host='$(TARGET)' \
+       --build='$(BUILD)' \
+       --prefix='$(PREFIX)/$(TARGET)' \
+       $(if $(BUILD_STATIC), \
+          --disable-shared , \
+          --enable-shared )  \
         --enable-gui \
         --disable-stl \
+        --disable-gtktest \
         --enable-threads \
         --disable-universal \
         --with-themes=all \
@@ -34,20 +40,11 @@ define $(PKG)_CONFIGURE_OPTS
         --with-expat=sys \
         --with-sdl \
         --without-gtk \
-        --without-motif \
-        --without-mac \
         --without-macosx-sdk \
-        --without-cocoa \
-        --without-wine \
-        --without-pm \
-        --without-microwin \
         --without-libxpm \
         --without-libmspack \
-        --without-gnomeprint \
         --without-gnomevfs \
-        --without-hildon \
         --without-dmalloc \
-        --without-odbc \
         LIBS=" `'$(TARGET)-pkg-config' --libs-only-l libtiff-4`" \
         CXXFLAGS='-std=gnu++11' \
         CXXCPP='$(TARGET)-g++ -E -std=gnu++11'
