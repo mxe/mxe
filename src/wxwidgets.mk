@@ -28,6 +28,7 @@ define $(PKG)_CONFIGURE_OPTS
         --disable-stl \
         --disable-gtktest \
         --enable-threads \
+        --enable-backtrace \
         --disable-universal \
         --with-themes=all \
         --with-msw \
