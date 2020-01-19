@@ -3,25 +3,17 @@
 PKG             := quazip
 $(PKG)_WEBSITE  := https://github.com/stachenov/quazip
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.7.6
-$(PKG)_CHECKSUM := 4118a830a375a81211956611cc34b1b5b4ddc108c126287b91b40c2493046b70
-$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_GH_CONF  := stachenov/quazip/tags
+$(PKG)_VERSION  := 0.8.1
+$(PKG)_CHECKSUM := 4fda4d4248e08015b5090d0369ef9e68bdc4475aa12494f7c0f6d79e43270d14
+$(PKG)_GH_CONF  := stachenov/quazip/tags,v
 $(PKG)_DEPS     := cc qtbase zlib
-
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://github.com/stachenov/quazip/tags' | \
-    grep '<a href="/stachenov/quazip/archive/' | \
-    $(SED) -n 's,.*href="/stachenov/quazip/archive/\([0-9][^"_]*\)\.tar.*,\1,p' | \
-    head -1
-endef
 
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && '$(PREFIX)/$(TARGET)/qt5/bin/qmake' '$(SOURCE_DIR)' \
         'static:CONFIG += staticlib' \
         PREFIX=$(PREFIX)/$(TARGET) \
         -after \
+        'SUBDIRS = quazip' \
         'win32:LIBS_PRIVATE += -lz' \
         'CONFIG -= dll' \
         'CONFIG += create_prl no_install_prl create_pc' \
