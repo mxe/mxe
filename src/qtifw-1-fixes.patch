@@ -1,7 +1,15 @@
 This file is part of MXE. See LICENSE.md for licensing information.
 
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sun, 19 Jan 2020 13:27:42 +1100
+Subject: [PATCH 1/2] fixes
+
+
 diff --git a/installerfw.pro b/installerfw.pro
-index 10414ad5..1cec9c6a 100644
+index 1111111..2222222 100644
 --- a/installerfw.pro
 +++ b/installerfw.pro
 @@ -2,8 +2,6 @@ TEMPLATE = subdirs
@@ -14,10 +22,10 @@ index 10414ad5..1cec9c6a 100644
  include (doc/doc.pri)
  
 diff --git a/src/libs/7zip/win/CPP/Windows/SecurityUtils.h b/src/libs/7zip/win/CPP/Windows/SecurityUtils.h
-index 715de250..bfb65a34 100644
+index 1111111..2222222 100644
 --- a/src/libs/7zip/win/CPP/Windows/SecurityUtils.h
 +++ b/src/libs/7zip/win/CPP/Windows/SecurityUtils.h
-@@ -2,7 +2,7 @@
+@@ -3,7 +3,7 @@
  #ifndef __WINDOWS_SECURITY_UTILS_H
  #define __WINDOWS_SECURITY_UTILS_H
  
@@ -26,21 +34,8 @@ index 715de250..bfb65a34 100644
  
  #include "Defs.h"
  
-diff --git a/src/libs/installer/createshortcutoperation.cpp b/src/libs/installer/createshortcutoperation.cpp
-index 2c2e96ef..36f97b0c 100644
---- a/src/libs/installer/createshortcutoperation.cpp
-+++ b/src/libs/installer/createshortcutoperation.cpp
-@@ -41,7 +41,7 @@ using namespace QInstaller;
- #ifdef Q_OS_WIN
- #include <qt_windows.h>
- #include <shlobj.h>
--#include <Intshcut.h>
-+#include <intshcut.h>
- 
- #ifndef PIDLIST_ABSOLUTE
- typedef ITEMIDLIST *PIDLIST_ABSOLUTE;
 diff --git a/src/libs/installer/binaryformat.h b/src/libs/installer/binaryformat.h
-index 3bd8a6aa..87d5e323 100644
+index 1111111..2222222 100644
 --- a/src/libs/installer/binaryformat.h
 +++ b/src/libs/installer/binaryformat.h
 @@ -33,7 +33,7 @@
@@ -61,8 +56,21 @@ index 3bd8a6aa..87d5e323 100644
      QByteArray m_name;
      Range<qint64> m_segment;
  };
+diff --git a/src/libs/installer/createshortcutoperation.cpp b/src/libs/installer/createshortcutoperation.cpp
+index 1111111..2222222 100644
+--- a/src/libs/installer/createshortcutoperation.cpp
++++ b/src/libs/installer/createshortcutoperation.cpp
+@@ -41,7 +41,7 @@ using namespace QInstaller;
+ #ifdef Q_OS_WIN
+ #include <qt_windows.h>
+ #include <shlobj.h>
+-#include <Intshcut.h>
++#include <intshcut.h>
+ 
+ #ifndef PIDLIST_ABSOLUTE
+ typedef ITEMIDLIST *PIDLIST_ABSOLUTE;
 diff --git a/src/libs/installer/extractarchiveoperation_p.h b/src/libs/installer/extractarchiveoperation_p.h
-index f333da36..9f528b6a 100644
+index 1111111..2222222 100644
 --- a/src/libs/installer/extractarchiveoperation_p.h
 +++ b/src/libs/installer/extractarchiveoperation_p.h
 @@ -37,6 +37,8 @@
@@ -74,3 +82,34 @@ index f333da36..9f528b6a 100644
  
  namespace QInstaller {
  
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sun, 19 Jan 2020 13:28:53 +1100
+Subject: [PATCH 2/2] fixes for Qt 5.14 update
+
+
+diff --git a/src/libs/installer/component.cpp b/src/libs/installer/component.cpp
+index 1111111..2222222 100644
+--- a/src/libs/installer/component.cpp
++++ b/src/libs/installer/component.cpp
+@@ -50,7 +50,6 @@
+ 
+ #include <QtUiTools/QUiLoader>
+ 
+-#include <private/qv8engine_p.h>
+ #include <private/qv4scopedvalue_p.h>
+ #include <private/qv4object_p.h>
+ 
+diff --git a/src/libs/installer/extractarchiveoperation.cpp b/src/libs/installer/extractarchiveoperation.cpp
+index 1111111..2222222 100644
+--- a/src/libs/installer/extractarchiveoperation.cpp
++++ b/src/libs/installer/extractarchiveoperation.cpp
+@@ -30,6 +30,7 @@
+ 
+ #include "constants.h"
+ 
++#include <QDataStream>
+ #include <QEventLoop>
+ #include <QThreadPool>
+ #include <QFileInfo>
