@@ -16,4 +16,11 @@ add_executable(${TGT} ${CMAKE_CURRENT_LIST_DIR}/qt-test.cpp)
 
 target_link_libraries(${TGT} Qt5::Widgets)
 
+# reduce size of static binary by excluding unnecessary plugins
+# https://doc.qt.io/qt-5/qtcore-cmake-qt5-import-plugins.html
+qt5_import_plugins(${TGT}
+    INCLUDE_BY_TYPE platforms
+    EXCLUDE_BY_TYPE imageformats
+    EXCLUDE_BY_TYPE sqldrivers)
+
 install(TARGETS ${TGT} DESTINATION bin)
