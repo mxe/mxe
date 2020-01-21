@@ -13,11 +13,11 @@ index 1111111..2222222 100644
 --- a/lib/gnutls.pc.in
 +++ b/lib/gnutls.pc.in
 @@ -19,6 +19,6 @@ Description: Transport Security Layer implementation for the GNU system
- URL: http://www.gnutls.org/
+ URL: https://www.gnutls.org/
  Version: @VERSION@
  Libs: -L${libdir} -lgnutls
--Libs.private: @LIBINTL@ @LIBSOCKET@ @LIBNSL@ @LIBPTHREAD@ @LIB_SELECT@ @TSS_LIBS@ @GMP_LIBS@ @LIBUNISTRING@ @LIBIDN2_LIBS@
-+Libs.private: @LIBINTL@ @LIBSOCKET@ @LIBNSL@ @LIBPTHREAD@ @LIB_SELECT@ @TSS_LIBS@ @GMP_LIBS@ @LIBUNISTRING@ @LIBIDN2_LIBS@ -lcrypt32
+-Libs.private: @LIBINTL@ @LIBSOCKET@ @INET_PTON_LIB@ @LIBPTHREAD@ @LIB_SELECT@ @TSS_LIBS@ @GMP_LIBS@ @LIBUNISTRING@ @LIBIDN2_LIBS@ @LIBATOMIC_LIBS@
++Libs.private: @LIBINTL@ @LIBSOCKET@ @INET_PTON_LIB@ @LIBPTHREAD@ @LIB_SELECT@ @TSS_LIBS@ @GMP_LIBS@ @LIBUNISTRING@ @LIBIDN2_LIBS@ @LIBATOMIC_LIBS@ -lcrypt32
  @GNUTLS_REQUIRES_PRIVATE@
  Cflags: -I${includedir}
 
@@ -30,25 +30,25 @@ Follow-up to 492c2b937ab66134d0b37499a6f3a747e19bc31a
 
 Signed-off-by: Mark Brand <mabrand@mabrand.nl>
 
-taken from: http://lists.gnutls.org/pipermail/gnutls-devel/2014-November/007250.html
+taken from: https://lists.gnupg.org/pipermail/gnutls-devel/2014-November/007250.html
 
 diff --git a/lib/x509/ip.c b/lib/x509/ip.c
 index 1111111..2222222 100644
 --- a/lib/x509/ip.c
 +++ b/lib/x509/ip.c
-@@ -26,7 +26,11 @@
+@@ -24,7 +24,11 @@
+ #include "gnutls_int.h"
+ #include "ip.h"
  #include <gnutls/x509.h>
- 
- #ifdef HAVE_INET_NTOP
--# include <arpa/inet.h>
-+# ifdef _WIN32
-+#  include <ws2tcpip.h>
-+# else
-+#  include <arpa/inet.h>
-+# endif
- #endif
+-#include <arpa/inet.h>
++#ifdef _WIN32
++# include <ws2tcpip.h>
++#else
++# include <arpa/inet.h>
++#endif
  
  /*-
+  * _gnutls_mask_to_prefix:
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
@@ -60,11 +60,12 @@ diff --git a/configure.ac b/configure.ac
 index 1111111..2222222 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -517,24 +517,19 @@ idna_support=no
+@@ -549,26 +549,19 @@ idna_support=no
  with_libidn2=no
  
  if test "$try_libidn2" = yes;then
--  AC_SEARCH_LIBS(idn2_lookup_u8, idn2, [
+-    save_LIBS=$LIBS
+-    AC_SEARCH_LIBS(idn2_lookup_u8, idn2, [
 -      with_libidn2=yes;
 -      idna_support="IDNA 2008 (libidn2)"
 -      AC_DEFINE([HAVE_LIBIDN2], 1, [Define if IDNA 2008 support is enabled.])
@@ -80,8 +81,9 @@ index 1111111..2222222 100644
 -      with_libidn2=no;
 -      AC_MSG_WARN(*** LIBIDN2 was not found. You will not be able to use IDN2008 support)
 -    ])
+-    LIBS=$save_LIBS
 -else
--    with_libidn2=no
+-  with_libidn2=no
 +  PKG_CHECK_MODULES(LIBIDN2, libidn2, [with_libidn2=yes], [with_libidn2=no])
 +  if test "$with_libidn2" != "no";then
 +    idna_support="IDNA 2008 (libidn2)"
@@ -103,11 +105,11 @@ index 1111111..2222222 100644
 --- a/lib/gnutls.pc.in
 +++ b/lib/gnutls.pc.in
 @@ -19,6 +19,6 @@ Description: Transport Security Layer implementation for the GNU system
- URL: http://www.gnutls.org/
+ URL: https://www.gnutls.org/
  Version: @VERSION@
  Libs: -L${libdir} -lgnutls
--Libs.private: @LIBINTL@ @LIBSOCKET@ @LIBNSL@ @LIBPTHREAD@ @LIB_SELECT@ @TSS_LIBS@ @GMP_LIBS@ @LIBUNISTRING@ @LIBIDN2_LIBS@ -lcrypt32
-+Libs.private: @LIBINTL@ @LIBSOCKET@ @LIBNSL@ @LIBPTHREAD@ @LIB_SELECT@ @TSS_LIBS@ @GMP_LIBS@ @LIBUNISTRING@ -lcrypt32
+-Libs.private: @LIBINTL@ @LIBSOCKET@ @INET_PTON_LIB@ @LIBPTHREAD@ @LIB_SELECT@ @TSS_LIBS@ @GMP_LIBS@ @LIBUNISTRING@ @LIBIDN2_LIBS@ @LIBATOMIC_LIBS@ -lcrypt32
++Libs.private: @LIBINTL@ @LIBSOCKET@ @INET_PTON_LIB@ @LIBPTHREAD@ @LIB_SELECT@ @TSS_LIBS@ @GMP_LIBS@ @LIBUNISTRING@ @LIBATOMIC_LIBS@ -lcrypt32
  @GNUTLS_REQUIRES_PRIVATE@
  Cflags: -I${includedir}
 
@@ -121,7 +123,7 @@ diff --git a/configure.ac b/configure.ac
 index 1111111..2222222 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -955,18 +955,6 @@ AC_SUBST([YEAR], $YEAR)
+@@ -1023,17 +1023,6 @@ AC_DEFINE_UNQUOTED([INI_START_COMMENT_PREFIXES], [";#"], [The comment prefixes])
  AC_CONFIG_FILES([guile/pre-inst-guile], [chmod +x guile/pre-inst-guile])
  AC_CONFIG_FILES([
    Makefile
@@ -129,7 +131,6 @@ index 1111111..2222222 100644
 -  doc/credentials/Makefile
 -  doc/credentials/srp/Makefile
 -  doc/credentials/x509/Makefile
--  doc/cyclo/Makefile
 -  doc/doxygen/Doxyfile
 -  doc/examples/Makefile
 -  doc/latex/Makefile

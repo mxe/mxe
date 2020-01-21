@@ -2,7 +2,7 @@
  * This file is part of MXE. See LICENSE.md for licensing information.
  *
  * This file is a test program for glm, adapted from the code sample at
- * http://glm.g-truc.net/0.9.7/index.html.
+ * https://glm.g-truc.net/0.9.7/index.html.
  */
 
 #define GLM_ENABLE_EXPERIMENTAL // for string_cast

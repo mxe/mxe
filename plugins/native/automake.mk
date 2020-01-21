@@ -2,8 +2,8 @@
 
 PKG             := automake
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.15
-$(PKG)_CHECKSUM := 7946e945a96e28152ba5a6beb0625ca715c6e32ac55f2e353ef54def0c8ed924
+$(PKG)_VERSION  := 1.16.1
+$(PKG)_CHECKSUM := 608a97523f97db32f1f5d5615c98ca69326ced2054c9f82e65bade7fc4c9dea8
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://ftp.gnu.org/gnu/automake/$($(PKG)_FILE)
@@ -12,6 +12,8 @@ $(PKG)_WEBSITE  := https://www.gnu.org/software/automake
 $(PKG)_OWNER    := https://github.com/tonytheodore
 $(PKG)_TARGETS  := $(BUILD)
 $(PKG)_DEPS     := autoconf
+
+REQUIREMENTS := $(filter-out $(PKG), $(REQUIREMENTS))
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://ftp.gnu.org/gnu/automake/?C=M;O=D' | \

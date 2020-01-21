@@ -3,8 +3,8 @@
 PKG             := physfs
 $(PKG)_WEBSITE  := https://icculus.org/physfs/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.0.1
-$(PKG)_CHECKSUM := b77b9f853168d9636a44f75fca372b363106f52d789d18a2f776397bf117f2f1
+$(PKG)_VERSION  := 3.0.2
+$(PKG)_CHECKSUM := 304df76206d633df5360e738b138c94e82ccf086e50ba84f456d3f8432f9f863
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.bz2
 $(PKG)_URL      := https://icculus.org/physfs/downloads/$($(PKG)_FILE)

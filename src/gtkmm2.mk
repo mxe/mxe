@@ -12,9 +12,8 @@ $(PKG)_URL      := https://download.gnome.org/sources/gtkmm/$(call SHORT_PKG_VER
 $(PKG)_DEPS     := cc atkmm cairomm gtk2 libsigc++ pangomm
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://git.gnome.org/browse/gtkmm/refs/tags' | \
-    grep '<a href=' | \
-    $(SED) -n 's,.*<a[^>]*>\([0-9]*\.[0-9]*[02468]\.[^<]*\)<.*,\1,p' | \
+    $(WGET) -q -O- 'https://gitlab.gnome.org/GNOME/gtkmm/tags' | \
+    $(SED) -n "s,.*<a [^>]\+>v\?\([0-9]\+\.[0-9.]\+\)<.*,\1,p" | \
     grep -v '^2\.9' | \
     grep '^2\.' | \
     head -1

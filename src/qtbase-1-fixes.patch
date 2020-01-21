@@ -1,9 +1,9 @@
 This file is part of MXE. See LICENSE.md for licensing information.
 
-From f1dbf592c625533c9f8a704e4d5f12f3111a1fb3 Mon Sep 17 00:00:00 2001
+From 7c5ba14d5b42334edb6a70239cf231f847f508ef Mon Sep 17 00:00:00 2001
 From: Ray Donnelly <mingw.android@gmail.com>
 Date: Wed, 26 Aug 2015 12:45:43 +0100
-Subject: [PATCH 1/6] cmake: Rearrange STATIC vs INTERFACE targets
+Subject: [PATCH 1/2] cmake: Rearrange STATIC vs INTERFACE targets
 
 Otherwise we attempt to add_library(Qt5::UiPlugin STATIC IMPORTED)
 for header-only modules when building Qt5 statically.
@@ -12,10 +12,10 @@ Source: https://git.io/vzWJz
 See also: https://github.com/mxe/mxe/issues/1185
 
 diff --git a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
-index 3ed6dd5889..cc5bc9dc16 100644
+index 364c23e750..c90dd302cf 100644
 --- a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
 +++ b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
-@@ -214,12 +214,12 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
+@@ -343,6 +343,9 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
      list(APPEND _Qt5$${CMAKE_MODULE_NAME}_LIB_DEPENDENCIES \"$${CMAKE_INTERFACE_QT5_MODULE_DEPS}\")
  !!ENDIF
  
@@ -23,6 +23,10 @@ index 3ed6dd5889..cc5bc9dc16 100644
 +    add_library(Qt5::$${CMAKE_MODULE_NAME} INTERFACE IMPORTED)
 +!!ELSE
  !!IF !isEmpty(CMAKE_STATIC_TYPE)
+     if(NOT Qt5_EXCLUDE_STATIC_DEPENDENCIES)
+ !!IF !isEmpty(CMAKE_DEBUG_TYPE)
+@@ -380,9 +383,6 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
+ 
      add_library(Qt5::$${CMAKE_MODULE_NAME} STATIC IMPORTED)
      set_property(TARGET Qt5::$${CMAKE_MODULE_NAME} PROPERTY IMPORTED_LINK_INTERFACE_LANGUAGES "CXX")
 -!!ELSE
@@ -32,133 +36,23 @@ index 3ed6dd5889..cc5bc9dc16 100644
      add_library(Qt5::$${CMAKE_MODULE_NAME} SHARED IMPORTED)
  !!ENDIF
 -- 
-2.19.1
+2.20.1
 
 
-From b822f7ff799d10297b0b36408e7cfa44fd416118 Mon Sep 17 00:00:00 2001
-From: Tony Theodore <tonyt@logyst.com>
-Date: Sat, 16 Jul 2016 20:31:07 +1000
-Subject: [PATCH 2/6] Fix pkgconfig file and library naming
-
-See: https://codereview.qt-project.org/#/c/165394/
-     https://bugreports.qt.io/browse/QTBUG-30898
-
-Currently, *.pc files are generated with debug suffix `d` in `-release`
-mode and without the suffix in `-debug` or `-debug-and-release`. This
-can be worked around by `CONIFG-=debug_and_release`, however, a more
-predictable and consistent naming approach would be preferable.
-
-This change mimics the *.prl file and lib conventions:
-
-  -release: creates normal *.pc files and lib names
-  -release -force-debug-info: normal as above
-  -debug: creates *d.pc and *d lib names
-  -debug-and-release: creates both
-  -default: creates both (default link: debug)
-
-and should be unsurprising to users of `pkg-config`. At very least,
-it's deterministic and easily incorporated into build systems.
-
-Task-number: 30898
-Change-Id: If75336ec7d21a7ec0cb6d245fe87c64afcb5a644
-
-diff --git a/mkspecs/features/qt_module.prf b/mkspecs/features/qt_module.prf
-index 51b5bde67a..faba17aedd 100644
---- a/mkspecs/features/qt_module.prf
-+++ b/mkspecs/features/qt_module.prf
-@@ -263,6 +263,10 @@ load(qt_installs)
- 
- load(qt_targets)
- 
-+# Set TARGET towards the end but before pkgconfig setup to keep naming
-+# conventions consistent with *prl files
-+TARGET = $$qt5LibraryTarget($$TARGET$$QT_LIBINFIX)
-+
- # this builds on top of qt_common
- !internal_module:if(unix|mingw) {
-     CONFIG += create_pc
-@@ -278,12 +282,12 @@ load(qt_targets)
-         QMAKE_PKGCONFIG_INCDIR = $$[QT_INSTALL_HEADERS/raw]
-         QMAKE_PKGCONFIG_CFLAGS = -D$$MODULE_DEFINE -I${includedir}/$$MODULE_INCNAME
-     }
--    QMAKE_PKGCONFIG_NAME = $$replace(TARGET, ^Qt, "Qt$$QT_MAJOR_VERSION ")
--    QMAKE_PKGCONFIG_FILE = $$replace(TARGET, ^Qt, Qt$$QT_MAJOR_VERSION)
-+    QMAKE_PKGCONFIG_NAME = $$replace(TARGET, ^Qt$$QT_MAJOR_VERSION, "Qt$$QT_MAJOR_VERSION ")
-+    QMAKE_PKGCONFIG_FILE = $$TARGET
-     for(i, MODULE_DEPENDS): \
--        QMAKE_PKGCONFIG_REQUIRES += $$replace(QT.$${i}.name, ^Qt, Qt$$section(QT.$${i}.VERSION, ., 0, 0))
-+        QMAKE_PKGCONFIG_REQUIRES += $$replace(QT.$${i}.name, ^Qt, Qt$$section(QT.$${i}.VERSION, ., 0, 0))$$qtPlatformTargetSuffix()
-     isEmpty(QMAKE_PKGCONFIG_DESCRIPTION): \
--        QMAKE_PKGCONFIG_DESCRIPTION = $$replace(TARGET, ^Qt, "Qt ") module
-+        QMAKE_PKGCONFIG_DESCRIPTION = $$replace(TARGET, ^Qt$$QT_MAJOR_VERSION, "Qt ") module
-     pclib_replace.match = $$lib_replace.match
-     !isEmpty(lib_replace.replace): \
-         pclib_replace.replace = $$QMAKE_PKGCONFIG_LIBDIR
-@@ -317,5 +321,3 @@ win32 {
-     # On other platforms, Qt's own compilation goes needs to compile the Qt 5.0 API
-     DEFINES *= QT_DISABLE_DEPRECATED_BEFORE=0x050000
- }
--
--TARGET = $$qt5LibraryTarget($$TARGET$$QT_LIBINFIX)  # Do this towards the end
--- 
-2.19.1
-
-
-From 7773e45dfdd82ede2415a6818332de3e36e7c824 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Sun, 29 Jan 2017 13:02:16 +0100
-Subject: [PATCH 3/6] reenable fontconfig for win32 (MXE-specific)
-
-Change-Id: I05b036366bd402e43309742412bcf8ca91fe125f
-
-diff --git a/src/gui/configure.json b/src/gui/configure.json
-index 0332631ec8..e2d87e77b3 100644
---- a/src/gui/configure.json
-+++ b/src/gui/configure.json
-@@ -1003,7 +1003,7 @@
-         "fontconfig": {
-             "label": "Fontconfig",
-             "autoDetect": "!config.darwin",
--            "condition": "!config.win32 && features.system-freetype && libs.fontconfig",
-+            "condition": "features.system-freetype && libs.fontconfig",
-             "output": [ "privateFeature", "feature" ]
-         },
-         "gbm": {
-diff --git a/src/plugins/platforms/minimal/qminimalintegration.cpp b/src/plugins/platforms/minimal/qminimalintegration.cpp
-index 0c04608fca..a26e02fbf3 100644
---- a/src/plugins/platforms/minimal/qminimalintegration.cpp
-+++ b/src/plugins/platforms/minimal/qminimalintegration.cpp
-@@ -161,7 +161,11 @@ QPlatformFontDatabase *QMinimalIntegration::fontDatabase() const
- 
-         if (!m_fontDatabase) {
- #if QT_CONFIG(fontconfig)
--            m_fontDatabase = new QGenericUnixFontDatabase;
-+#ifdef Q_OS_WIN
-+        m_fontDatabase = new QFreeTypeFontDatabase;
-+#else
-+        m_fontDatabase = new QGenericUnixFontDatabase;
-+#endif
- #else
-             m_fontDatabase = QPlatformIntegration::fontDatabase();
- #endif
--- 
-2.19.1
-
-
-From 82d08b0378db0a30007ca5ee965ffa034859af5c Mon Sep 17 00:00:00 2001
+From 798ab219ef98856dc4281559192e631f65bbb657 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 11 Jun 2017 00:27:41 +0200
-Subject: [PATCH 4/6] use pkg-config for harfbuzz
+Subject: [PATCH 2/2] use pkg-config for harfbuzz
 
 Change-Id: Ia65cbb90fd180f1bc10ce077a9a8323a48e51421
 
 diff --git a/src/gui/configure.json b/src/gui/configure.json
-index e2d87e77b3..4eb37aea17 100644
+index 19312d245d..0164f9b49b 100644
 --- a/src/gui/configure.json
 +++ b/src/gui/configure.json
-@@ -224,7 +224,8 @@
-                 ]
+@@ -304,7 +304,8 @@
              },
+             "headers": "harfbuzz/hb.h",
              "sources": [
 -                "-lharfbuzz"
 +               { "type": "pkgConfig", "args": "harfbuzz" },
@@ -167,104 +61,104 @@ index e2d87e77b3..4eb37aea17 100644
          },
          "imf": {
 -- 
-2.19.1
+2.20.1
 
 
-From 8ea9633854e8c2ad94df00866a9b9e3a4394d161 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Thu, 23 Nov 2017 11:28:47 +0200
-Subject: [PATCH 5/6] disable qt_random_cpu for i686-w64-mingw32
+From b8fd37d8cd7642599b3b022e4d8fa1aff8f68a1e Mon Sep 17 00:00:00 2001
+From: Artem Pisarenko <artem.k.pisarenko@gmail.com>
+Date: Thu, 16 Jan 2020 14:47:00 +0600
+Subject: [PATCH] Fix win32 support for linking against static builds in CMake
 
-Workaround for gcc internal error compiling for mingw32:
-    global/qrandom.cpp: In function 'qsizetype qt_random_cpu(void*, qsizetype)':
-    global/qrandom.cpp:123:1: internal compiler error: in
-    ix86_compute_frame_layout, at config/i386/i386.c:10145
+CMake mkspec feature sets CMAKE_PRL_FILE_LOCATION_* values inconsistent
+with actual .prl file names being generated/installed, causing
+dependency extraction mechanism in Qt5BasicConfig.cmake.in to not work
+(function _qt5_$${CMAKE_MODULE_NAME}_process_prl_file silently fails
+to find file at given location and skips filling libs deps).
+
+[ChangeLog][CMake][Windows] Fixed linking with Qt static build
+
+Fixes: QTBUG-81401
+Change-Id: I5861cc0c42163d898ba55ad83cbad1994dcb1db2
+---
+ mkspecs/features/create_cmake.prf | 41 +++++++++++++--------------------------
+ 1 file changed, 13 insertions(+), 28 deletions(-)
+
+diff --git a/mkspecs/features/create_cmake.prf b/mkspecs/features/create_cmake.prf
+index 346fbf2..0d93597 100644
+--- a/mkspecs/features/create_cmake.prf
++++ b/mkspecs/features/create_cmake.prf
+@@ -212,21 +212,17 @@ contains(CONFIG, plugin) {
+     CMAKE_PLUGIN_TYPE_ESCAPED = $$replace(PLUGIN_TYPE, [-/], _)
+ 
+     win32 {
++        CMAKE_PRL_FILE_LOCATION_RELEASE = $$PLUGIN_TYPE/$${CMAKE_QT_STEM}.prl
++        CMAKE_PRL_FILE_LOCATION_DEBUG = $$PLUGIN_TYPE/$${CMAKE_QT_STEM}d.prl
+         isEmpty(CMAKE_STATIC_TYPE) {
+             CMAKE_PLUGIN_LOCATION_RELEASE = $$PLUGIN_TYPE/$${CMAKE_QT_STEM}.dll
+             CMAKE_PLUGIN_LOCATION_DEBUG = $$PLUGIN_TYPE/$${CMAKE_QT_STEM}d.dll
+-            CMAKE_PRL_FILE_LOCATION_RELEASE = $$PLUGIN_TYPE/$${CMAKE_QT_STEM}.prl
+-            CMAKE_PRL_FILE_LOCATION_DEBUG = $$PLUGIN_TYPE/$${CMAKE_QT_STEM}d.prl
+         } else:mingw {
+             CMAKE_PLUGIN_LOCATION_RELEASE = $$PLUGIN_TYPE/lib$${CMAKE_QT_STEM}.a
+             CMAKE_PLUGIN_LOCATION_DEBUG = $$PLUGIN_TYPE/lib$${CMAKE_QT_STEM}d.a
+-            CMAKE_PRL_FILE_LOCATION_RELEASE = $$PLUGIN_TYPE/lib$${CMAKE_QT_STEM}.prl
+-            CMAKE_PRL_FILE_LOCATION_DEBUG = $$PLUGIN_TYPE/lib$${CMAKE_QT_STEM}d.prl
+         } else {                         # MSVC static
+             CMAKE_PLUGIN_LOCATION_RELEASE = $$PLUGIN_TYPE/$${CMAKE_QT_STEM}.lib
+             CMAKE_PLUGIN_LOCATION_DEBUG = $$PLUGIN_TYPE/$${CMAKE_QT_STEM}d.lib
+-            CMAKE_PRL_FILE_LOCATION_RELEASE = $$PLUGIN_TYPE/$${CMAKE_QT_STEM}.prl
+-            CMAKE_PRL_FILE_LOCATION_DEBUG = $$PLUGIN_TYPE/$${CMAKE_QT_STEM}d.prl
+         }
+     } else {
+         mac {
+@@ -316,36 +312,25 @@ mac {
+     CMAKE_LIB_FILE_LOCATION_DEBUG = $${CMAKE_QT_STEM}d.dll
+     CMAKE_LIB_FILE_LOCATION_RELEASE = $${CMAKE_QT_STEM}.dll
+ 
++    !isEmpty(CMAKE_STATIC_TYPE) {
++        CMAKE_STATIC_WINDOWS_BUILD = "true"
++
++        CMAKE_PRL_FILE_LOCATION_DEBUG = $${CMAKE_QT_STEM}d.prl
++        CMAKE_PRL_FILE_LOCATION_RELEASE = $${CMAKE_QT_STEM}.prl
++    }
++
+     mingw {
+         CMAKE_WINMAIN_FILE_LOCATION_DEBUG = libqtmain$${QT_LIBINFIX}d.a
+         CMAKE_WINMAIN_FILE_LOCATION_RELEASE = libqtmain$${QT_LIBINFIX}.a
+ 
+-        !isEmpty(CMAKE_STATIC_TYPE) {
+-            CMAKE_STATIC_WINDOWS_BUILD = "true"
+-            CMAKE_IMPLIB_FILE_LOCATION_DEBUG = lib$${CMAKE_QT_STEM}d.a
+-            CMAKE_IMPLIB_FILE_LOCATION_RELEASE = lib$${CMAKE_QT_STEM}.a
+-
+-            CMAKE_PRL_FILE_LOCATION_DEBUG = lib$${CMAKE_QT_STEM}d.prl
+-            CMAKE_PRL_FILE_LOCATION_RELEASE = lib$${CMAKE_QT_STEM}.prl
+-        } else {
+-            CMAKE_IMPLIB_FILE_LOCATION_DEBUG = lib$${CMAKE_QT_STEM}d.a
+-            CMAKE_IMPLIB_FILE_LOCATION_RELEASE = lib$${CMAKE_QT_STEM}.a
+-        }
++        CMAKE_IMPLIB_FILE_LOCATION_DEBUG = lib$${CMAKE_QT_STEM}d.a
++        CMAKE_IMPLIB_FILE_LOCATION_RELEASE = lib$${CMAKE_QT_STEM}.a
+     } else {
+         CMAKE_WINMAIN_FILE_LOCATION_DEBUG = qtmain$${QT_LIBINFIX}d.lib
+         CMAKE_WINMAIN_FILE_LOCATION_RELEASE = qtmain$${QT_LIBINFIX}.lib
+ 
+-        !isEmpty(CMAKE_STATIC_TYPE) {
+-            CMAKE_STATIC_WINDOWS_BUILD = "true"
+-            CMAKE_IMPLIB_FILE_LOCATION_DEBUG = $${CMAKE_QT_STEM}d.lib
+-            CMAKE_IMPLIB_FILE_LOCATION_RELEASE = $${CMAKE_QT_STEM}.lib
+-
+-            CMAKE_PRL_FILE_LOCATION_DEBUG = $${CMAKE_QT_STEM}d.prl
+-            CMAKE_PRL_FILE_LOCATION_RELEASE = $${CMAKE_QT_STEM}.prl
+-        } else {
+-            CMAKE_IMPLIB_FILE_LOCATION_DEBUG = $${CMAKE_QT_STEM}d.lib
+-            CMAKE_IMPLIB_FILE_LOCATION_RELEASE = $${CMAKE_QT_STEM}.lib
+-        }
++        CMAKE_IMPLIB_FILE_LOCATION_DEBUG = $${CMAKE_QT_STEM}d.lib
++        CMAKE_IMPLIB_FILE_LOCATION_RELEASE = $${CMAKE_QT_STEM}.lib
      }
-     ^
-
-    global/qrandom.cpp:123:1: internal compiler error: Segmentation fault
-    i686-w64-mingw32.static-g++: internal compiler error: Segmentation fault
-    (program cc1plus)
-
-Based on https://codereview.qt-project.org/#/c/212360/
-
-Change-Id: Ia1c902e7b147bdda2b8d7904b40a3b968b8d0369
-
-diff --git a/src/corelib/global/qrandom.cpp b/src/corelib/global/qrandom.cpp
-index 23e5e499b2..d0b3159c0d 100644
---- a/src/corelib/global/qrandom.cpp
-+++ b/src/corelib/global/qrandom.cpp
-@@ -90,7 +90,7 @@ DECLSPEC_IMPORT BOOLEAN WINAPI SystemFunction036(PVOID RandomBuffer, ULONG Rando
- 
- QT_BEGIN_NAMESPACE
- 
--#if defined(Q_PROCESSOR_X86) && QT_COMPILER_SUPPORTS_HERE(RDRND)
-+#if defined(Q_PROCESSOR_X86) && !defined(Q_PROCESSOR_X86_32) && QT_COMPILER_SUPPORTS_HERE(RDRND)
- static qsizetype qt_random_cpu(void *buffer, qsizetype count) Q_DECL_NOTHROW;
- 
- #  ifdef Q_PROCESSOR_X86_64
+ } else {
+     !isEmpty(CMAKE_STATIC_TYPE) {
 -- 
-2.19.1
-
-
-From ef8e04865ce94182a04c5ce9c08e3e648b8ee39e Mon Sep 17 00:00:00 2001
-From: Ville Voutilainen <ville.voutilainen@qt.io>
-Date: Wed, 21 Nov 2018 14:07:18 +0200
-Subject: [PATCH 6/6] Fix compilation of qendian's qswap specializations on gcc
- 4.8
-
-Task-number: QTBUG-71945
-Change-Id: Icf2b75c72946f57ebffc880c9238531dea13ab5b
-Reviewed-by: Ivan Komissarov <ABBAPOH@gmail.com>
-Reviewed-by: Simon Hausmann <simon.hausmann@qt.io>
-(cherry picked from commit 1eeebae7e3b5eb8dda37755b32aafe6719b5cf7b)
-
-diff --git a/src/corelib/global/qendian.h b/src/corelib/global/qendian.h
-index 0e67a1ab8e..f2e5833468 100644
---- a/src/corelib/global/qendian.h
-+++ b/src/corelib/global/qendian.h
-@@ -162,17 +162,17 @@ Float qbswapFloatHelper(Float source)
-     return qFromUnaligned<Float>(&temp);
- }
- 
--template <> inline qfloat16 qbswap<qfloat16>(qfloat16 source)
-+inline qfloat16 qbswap(qfloat16 source)
- {
-     return qbswapFloatHelper(source);
- }
- 
--template <> inline float qbswap<float>(float source)
-+inline float qbswap(float source)
- {
-     return qbswapFloatHelper(source);
- }
- 
--template <> inline double qbswap<double>(double source)
-+inline double qbswap(double source)
- {
-     return qbswapFloatHelper(source);
- }
-@@ -185,7 +185,7 @@ template <> inline double qbswap<double>(double source)
- */
- template <typename T> inline void qbswap(const T src, void *dest)
- {
--    qToUnaligned<T>(qbswap<T>(src), dest);
-+    qToUnaligned<T>(qbswap(src), dest);
- }
- 
- template <int Size> void *qbswap(const void *source, qsizetype count, void *dest) noexcept;
-@@ -223,9 +223,9 @@ template <typename T> inline void qFromLittleEndian(const void *source, qsizetyp
- #else // Q_LITTLE_ENDIAN
- 
- template <typename T> inline Q_DECL_CONSTEXPR T qToBigEndian(T source)
--{ return qbswap<T>(source); }
-+{ return qbswap(source); }
- template <typename T> inline Q_DECL_CONSTEXPR T qFromBigEndian(T source)
--{ return qbswap<T>(source); }
-+{ return qbswap(source); }
- template <typename T> inline Q_DECL_CONSTEXPR T qToLittleEndian(T source)
- { return source; }
- template <typename T> inline Q_DECL_CONSTEXPR T qFromLittleEndian(T source)
--- 
-2.19.1
+2.7.4
 

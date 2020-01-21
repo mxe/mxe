@@ -10,7 +10,7 @@ int main()
 {
     QWidget w;
     qtsparkle::Updater* updater = new qtsparkle::Updater(
-        QUrl("http://www.example.com/sparkle.xml"), &w);
+        QUrl("https://www.example.com/sparkle.xml"), &w);
     updater->SetVersion("1.0");
 
     return 0;

@@ -93,7 +93,7 @@ define $(PKG)_BUILD_SHARED
      echo 'echo "== Using MXE wrapper: $(PREFIX)/$(TARGET)/bin/luarocks"'; \
      echo '# Creating a directory is an atomic operation, that is why'; \
      echo '# it can be used as a mutex.'; \
-     echo '# See http://wiki.bash-hackers.org/howto/mutex'; \
+     echo '# See https://wiki.bash-hackers.org/howto/mutex'; \
      echo 'while ( ! mkdir "$(PREFIX)/$(TARGET)/lib/luarocks/lock.dir" ); do'; \
      echo '    echo "Waiting for $(PREFIX)/$(TARGET)/lib/luarocks/lock.dir to lock"'; \
      echo '    sleep 5'; \

@@ -4,12 +4,12 @@ PKG             := tiff
 $(PKG)_WEBSITE  := http://simplesystems.org/libtiff/
 $(PKG)_DESCR    := LibTIFF
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.0.10
-$(PKG)_CHECKSUM := 2c52d11ccaf767457db0c46795d9c7d1a8d8f76f68b0b800a3dfe45786b996e4
+$(PKG)_VERSION  := 4.1.0
+$(PKG)_CHECKSUM := 5d29f32517dadb6dbcd1255ea5bbc93a2b54b94fbf83653b4d65c7d6775b8634
 $(PKG)_SUBDIR   := tiff-$($(PKG)_VERSION)
 $(PKG)_FILE     := tiff-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://download.osgeo.org/libtiff/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc jpeg xz zlib
+$(PKG)_DEPS     := cc jpeg libwebp xz zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://simplesystems.org/libtiff/' | \

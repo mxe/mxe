@@ -3,10 +3,10 @@
 PKG             := freetype
 $(PKG)_WEBSITE  := https://www.freetype.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.9.1
-$(PKG)_CHECKSUM := db8d87ea720ea9d5edc5388fc7a0497bb11ba9fe972245e0f7f4c7e8b1e1e84d
+$(PKG)_VERSION  := 2.10.1
+$(PKG)_CHECKSUM := 16dbfa488a21fe827dc27eaf708f42f7aa3bb997d745d31a19781628c36ba26f
 $(PKG)_SUBDIR   := freetype-$($(PKG)_VERSION)
-$(PKG)_FILE     := freetype-$($(PKG)_VERSION).tar.bz2
+$(PKG)_FILE     := freetype-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/freetype/freetype2/$(shell echo '$($(PKG)_VERSION)' | cut -d . -f 1,2,3)/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc bzip2 harfbuzz libpng zlib
 

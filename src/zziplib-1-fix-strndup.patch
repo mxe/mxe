@@ -1,0 +1,31 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Hopper262 <hopper@whpress.com>
+Date: Sat, 23 Mar 2019 23:08:00 -0400
+Subject: [PATCH 1/1] Port ab78bba from gdraheim/zziplib
+
+
+diff --git a/zzip/__string.h b/zzip/__string.h
+index 1111111..2222222 100644
+--- a/zzip/__string.h
++++ b/zzip/__string.h
+@@ -31,6 +31,7 @@ _zzip_strnlen(const char *p, size_t maxlen)
+ #if defined ZZIP_HAVE_STRNDUP || defined strndup
+ #define _zzip_strndup strndup
+ #else
++#include <stdlib.h>
+ 
+ /* if your system does not have strndup: */
+ zzip__new__ static char *
+@@ -42,7 +43,7 @@ _zzip_strndup(char const *p, size_t maxlen)
+     } else 
+     {
+         size_t len = _zzip_strnlen(p, maxlen);
+-        char* r = malloc(len + 1);
++        char* r = (char *)malloc(len + 1);
+         if (r == NULL)
+             return NULL; /* errno = ENOMEM */
+         r[len] = '\0';

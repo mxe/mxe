@@ -14,201 +14,66 @@ diff --git a/DefineOptions.cmake b/DefineOptions.cmake
 index 1111111..2222222 100644
 --- a/DefineOptions.cmake
 +++ b/DefineOptions.cmake
-@@ -3,6 +3,7 @@ option(WITH_ZLIB "Build with ZLIB support" ON)
- option(WITH_SSH1 "Build with SSH1 support" OFF)
+@@ -2,6 +2,7 @@ option(WITH_GSSAPI "Build with GSSAPI support" ON)
+ option(WITH_ZLIB "Build with ZLIB support" ON)
  option(WITH_SFTP "Build with SFTP support" ON)
  option(WITH_SERVER "Build with SSH server support" ON)
 +option(WITH_SHARED_LIB "Build with a shared library" ON)
  option(WITH_STATIC_LIB "Build with a static library" OFF)
  option(WITH_DEBUG_CRYPTO "Build with cryto debug output" OFF)
- option(WITH_DEBUG_CALLTRACE "Build with calltrace debug output" ON)
+ option(WITH_DEBUG_PACKET "Build with packet debug output" OFF)
 diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
 index 1111111..2222222 100644
 --- a/src/CMakeLists.txt
 +++ b/src/CMakeLists.txt
-@@ -225,6 +225,7 @@ include_directories(
-   ${LIBSSH_PRIVATE_INCLUDE_DIRS}
- )
+@@ -303,6 +303,7 @@ include_directories(
+ # Set the path to the default map file
+ set(MAP_PATH "${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.map")
  
 +if (WITH_SHARED_LIB)
- add_library(${LIBSSH_SHARED_LIBRARY} SHARED ${libssh_SRCS})
+ if (WITH_SYMBOL_VERSIONING AND HAVE_LD_VERSION_SCRIPT AND ABIMAP_FOUND)
+     # Get the list of header files
+     get_file_list(dev_header_list
+@@ -382,6 +383,7 @@ install(TARGETS ${LIBSSH_SHARED_LIBRARY}
  
- target_link_libraries(${LIBSSH_SHARED_LIBRARY} ${LIBSSH_LINK_LIBRARIES})
-@@ -259,6 +260,7 @@ install(
-   ARCHIVE DESTINATION ${LIB_INSTALL_DIR}
-   COMPONENT libraries
- )
+ install(EXPORT libssh-config
+         DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
 +endif (WITH_SHARED_LIB)
  
- if (WITH_STATIC_LIB)
+ if (BUILD_STATIC_LIB)
    add_library(${LIBSSH_STATIC_LIBRARY} STATIC ${libssh_SRCS})
-diff --git a/src/threads/CMakeLists.txt b/src/threads/CMakeLists.txt
-index 1111111..2222222 100644
---- a/src/threads/CMakeLists.txt
-+++ b/src/threads/CMakeLists.txt
-@@ -59,6 +59,7 @@ include_directories(
- if (libssh_threads_SRCS)
-     set(LIBSSH_THREADS ON CACHE "libssh threads lib" INTERNAL)
- 
-+    if (WITH_SHARED_LIB)
-     add_library(${LIBSSH_THREADS_SHARED_LIBRARY} SHARED ${libssh_threads_SRCS})
- 
-     target_link_libraries(${LIBSSH_THREADS_SHARED_LIBRARY} ${LIBSSH_THREADS_LINK_LIBRARIES})
-@@ -88,6 +89,7 @@ if (libssh_threads_SRCS)
-       ARCHIVE DESTINATION ${LIB_INSTALL_DIR}
-       COMPONENT libraries
-     )
-+    endif (WITH_SHARED_LIB)
- 
-     if (WITH_STATIC_LIB)
-       add_library(${LIBSSH_THREADS_STATIC_LIBRARY} STATIC ${libssh_threads_SRCS})
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Tony Theodore <tonyt@logyst.com>
-Date: Sun, 29 Oct 2017 00:45:55 +1100
-Subject: [PATCH 2/2] add indentation for shared lib hunks
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Tue, 20 Aug 2019 21:39:19 +0200
+Subject: [PATCH 2/2] remove unwanted dependencies from example program
 
-Taken from:
-https://www.libssh.org/archive/libssh/2017-10/0000012.html
 
-diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+diff --git a/examples/knownhosts.c b/examples/knownhosts.c
 index 1111111..2222222 100644
---- a/src/CMakeLists.txt
-+++ b/src/CMakeLists.txt
-@@ -226,40 +226,40 @@ include_directories(
- )
+--- a/examples/knownhosts.c
++++ b/examples/knownhosts.c
+@@ -17,14 +17,11 @@ The goal is to show the API in action. It's not a reference on how terminal
+ clients must be made or how a client should react.
+  */
  
- if (WITH_SHARED_LIB)
--add_library(${LIBSSH_SHARED_LIBRARY} SHARED ${libssh_SRCS})
+-#include "config.h"
 -
--target_link_libraries(${LIBSSH_SHARED_LIBRARY} ${LIBSSH_LINK_LIBRARIES})
--
--set_target_properties(
--  ${LIBSSH_SHARED_LIBRARY}
--    PROPERTIES
--      VERSION
--        ${LIBRARY_VERSION}
--      SOVERSION
--        ${LIBRARY_SOVERSION}
--      OUTPUT_NAME
--        ssh
--      DEFINE_SYMBOL
--        LIBSSH_EXPORTS
--)
-+  add_library(${LIBSSH_SHARED_LIBRARY} SHARED ${libssh_SRCS})
-+
-+  target_link_libraries(${LIBSSH_SHARED_LIBRARY} ${LIBSSH_LINK_LIBRARIES})
-+
-+  set_target_properties(
-+    ${LIBSSH_SHARED_LIBRARY}
-+      PROPERTIES
-+        VERSION
-+          ${LIBRARY_VERSION}
-+        SOVERSION
-+          ${LIBRARY_SOVERSION}
-+        OUTPUT_NAME
-+          ssh
-+        DEFINE_SYMBOL
-+          LIBSSH_EXPORTS
-+  )
+ #include <errno.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
  
--if (WITH_VISIBILITY_HIDDEN)
--  set_target_properties(${LIBSSH_SHARED_LIBRARY} PROPERTIES COMPILE_FLAGS "-fvisibility=hidden")
--endif (WITH_VISIBILITY_HIDDEN)
-+  if (WITH_VISIBILITY_HIDDEN)
-+    set_target_properties(${LIBSSH_SHARED_LIBRARY} PROPERTIES COMPILE_FLAGS "-fvisibility=hidden")
-+  endif (WITH_VISIBILITY_HIDDEN)
+-#include "libssh/priv.h"
+ #include <libssh/libssh.h>
+ #include "examples_common.h"
  
--if (MINGW)
--    set_target_properties(${LIBSSH_SHARED_LIBRARY} PROPERTIES LINK_FLAGS "-Wl,--enable-stdcall-fixup")
--endif ()
-+  if (MINGW)
-+      set_target_properties(${LIBSSH_SHARED_LIBRARY} PROPERTIES LINK_FLAGS "-Wl,--enable-stdcall-fixup")
-+  endif ()
- 
- 
--install(
--  TARGETS
--    ${LIBSSH_SHARED_LIBRARY}
--  RUNTIME DESTINATION ${BIN_INSTALL_DIR}
--  LIBRARY DESTINATION ${LIB_INSTALL_DIR}
--  ARCHIVE DESTINATION ${LIB_INSTALL_DIR}
--  COMPONENT libraries
--)
-+  install(
-+    TARGETS
-+      ${LIBSSH_SHARED_LIBRARY}
-+    RUNTIME DESTINATION ${BIN_INSTALL_DIR}
-+    LIBRARY DESTINATION ${LIB_INSTALL_DIR}
-+    ARCHIVE DESTINATION ${LIB_INSTALL_DIR}
-+    COMPONENT libraries
-+  )
- endif (WITH_SHARED_LIB)
- 
- if (WITH_STATIC_LIB)
-diff --git a/src/threads/CMakeLists.txt b/src/threads/CMakeLists.txt
-index 1111111..2222222 100644
---- a/src/threads/CMakeLists.txt
-+++ b/src/threads/CMakeLists.txt
-@@ -60,35 +60,35 @@ if (libssh_threads_SRCS)
-     set(LIBSSH_THREADS ON CACHE "libssh threads lib" INTERNAL)
- 
-     if (WITH_SHARED_LIB)
--    add_library(${LIBSSH_THREADS_SHARED_LIBRARY} SHARED ${libssh_threads_SRCS})
--
--    target_link_libraries(${LIBSSH_THREADS_SHARED_LIBRARY} ${LIBSSH_THREADS_LINK_LIBRARIES})
--
--    set_target_properties(
--      ${LIBSSH_THREADS_SHARED_LIBRARY}
--        PROPERTIES
--          VERSION
--            ${LIBRARY_VERSION}
--          SOVERSION
--            ${LIBRARY_SOVERSION}
--          OUTPUT_NAME
--            ssh_threads
--          DEFINE_SYMBOL
--            LIBSSH_EXPORTS
--    )
-+      add_library(${LIBSSH_THREADS_SHARED_LIBRARY} SHARED ${libssh_threads_SRCS})
- 
--    if (WITH_VISIBILITY_HIDDEN)
--      set_target_properties(${LIBSSH_THREADS_SHARED_LIBRARY} PROPERTIES COMPILE_FLAGS "-fvisibility=hidden")
--    endif (WITH_VISIBILITY_HIDDEN)
-+      target_link_libraries(${LIBSSH_THREADS_SHARED_LIBRARY} ${LIBSSH_THREADS_LINK_LIBRARIES})
- 
--    install(
--      TARGETS
-+      set_target_properties(
-         ${LIBSSH_THREADS_SHARED_LIBRARY}
--      RUNTIME DESTINATION ${BIN_INSTALL_DIR}
--      LIBRARY DESTINATION ${LIB_INSTALL_DIR}
--      ARCHIVE DESTINATION ${LIB_INSTALL_DIR}
--      COMPONENT libraries
--    )
-+          PROPERTIES
-+            VERSION
-+              ${LIBRARY_VERSION}
-+            SOVERSION
-+              ${LIBRARY_SOVERSION}
-+            OUTPUT_NAME
-+              ssh_threads
-+            DEFINE_SYMBOL
-+              LIBSSH_EXPORTS
-+      )
-+
-+      if (WITH_VISIBILITY_HIDDEN)
-+        set_target_properties(${LIBSSH_THREADS_SHARED_LIBRARY} PROPERTIES COMPILE_FLAGS "-fvisibility=hidden")
-+      endif (WITH_VISIBILITY_HIDDEN)
-+
-+      install(
-+        TARGETS
-+          ${LIBSSH_THREADS_SHARED_LIBRARY}
-+        RUNTIME DESTINATION ${BIN_INSTALL_DIR}
-+        LIBRARY DESTINATION ${LIB_INSTALL_DIR}
-+        ARCHIVE DESTINATION ${LIB_INSTALL_DIR}
-+        COMPONENT libraries
-+      )
-     endif (WITH_SHARED_LIB)
- 
-     if (WITH_STATIC_LIB)
+@@ -74,7 +71,7 @@ int verify_knownhost(ssh_session session)
+         fprintf(stderr,"Could not find known host file. If you accept the host key here,\n");
+         fprintf(stderr,"the file will be automatically created.\n");
+         /* fallback to SSH_SERVER_NOT_KNOWN behavior */
+-        FALL_THROUGH;
++        /* FALL_THROUGH; */
+     case SSH_SERVER_NOT_KNOWN:
+         fprintf(stderr,
+                 "The server is unknown. Do you trust the host key (yes/no)?\n");

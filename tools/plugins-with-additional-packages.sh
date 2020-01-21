@@ -6,4 +6,5 @@
 # as opposed to customisation plugins.
 # See plugins/README.md for more information.
 
+# gcc plugins override each other and end up with errors
 echo plugins/{apps,go,luarocks,native,tcl.tk}

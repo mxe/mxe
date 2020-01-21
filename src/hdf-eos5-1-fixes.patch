@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Thomas Danckaert <thomas.danckaert@gmail.com>
 Date: Fri, 27 May 2016 17:39:23 +0200
-Subject: [PATCH 1/2] fixes
+Subject: [PATCH 1/1] fixes
 
 
 diff --git a/configure.ac b/configure.ac
@@ -125,33 +125,3 @@ index 1111111..2222222 100644
  
    if test ${he5_cv_hdf5_szip_can_encode} = "yes"; then
      AC_DEFINE(HAVE_HDF5_SZIP_ENCODER, 1,
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Thomas Danckaert <thomas.danckaert@gmail.com>
-Date: Fri, 27 May 2016 17:49:30 +0200
-Subject: [PATCH 2/2] Fix compilation without SZIP.
-
-A wrongly placed #endif causes a missing symbol 'HE5_EHHEisHE5' when
-compiling without szip.  Bug & fix reported upstream.
-
-diff --git a/src/EHapi.c b/src/EHapi.c
-index 1111111..2222222 100755
---- a/src/EHapi.c
-+++ b/src/EHapi.c
-@@ -11379,6 +11379,7 @@ int HE5_szip_can_encode(void )
-   return(-1);
- }
- 
-+#endif /* H5_HAVE_FILTER_SZIP */
- 
- 
- /*----------------------------------------------------------------------------|
-@@ -11509,8 +11510,6 @@ HE5_EHHEisHE5(char *filename)
-     }
- }
- 
--#endif /* H5_HAVE_FILTER_SZIP */
--
- 
- #ifndef __cplusplus
- 

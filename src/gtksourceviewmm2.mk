@@ -12,12 +12,10 @@ $(PKG)_URL      := https://download.gnome.org/sources/gtksourceviewmm/$(call SHO
 $(PKG)_DEPS     := cc gtkmm2 gtksourceview
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://git.gnome.org/cgit/gtksourceviewmm/refs/tags' | \
-    grep '<a href=' | \
-    $(SED) -n "s,.*<a href='[^']*/tag/?h=gtksourceviewmm-\\([0-9][^']*\\)'.*,\\1,p" | \
-    grep -v '^2\.9[0-9]\.' | \
-    grep '^2\.' | \
-    head -1
+    $(WGET) -q -O- 'https://gitlab.gnome.org/GNOME/gtksourceviewmm/tags' | \
+    $(SED) -n "s,.*<a [^>]\+>gtksourceviewmm-\(2\.10[0-9.]\+\)<.*,\1,p" | \
+    sort -V | \
+    tail -1
 endef
 
 define $(PKG)_BUILD

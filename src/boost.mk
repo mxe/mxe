@@ -16,7 +16,7 @@ $(PKG)_DEPS_$(BUILD) := zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://www.boost.org/users/download/' | \
-    $(SED) -n 's,.*/boost/\([0-9][^"/]*\)/".*,\1,p' | \
+    $(SED) -n 's,.*/release/\([0-9][^"/]*\)/.*,\1,p' | \
     grep -v beta | \
     head -1
 endef
@@ -103,22 +103,24 @@ define $(PKG)_BUILD_$(BUILD)
     # --without-mpi \
     # --without-python \
 
-    cd '$(SOURCE_DIR)' && ./tools/build/b2 \
-        -a \
-        -q \
-        -j '$(JOBS)' \
-        --ignore-site-config \
-        variant=release \
-        link=static \
-        threading=multi \
-        runtime-link=static \
-        --disable-icu \
-        --with-system \
-        --with-filesystem \
-        --build-dir='$(BUILD_DIR)' \
-        --prefix='$(PREFIX)/$(TARGET)' \
-        --exec-prefix='$(PREFIX)/$(TARGET)/bin' \
-        --libdir='$(PREFIX)/$(TARGET)/lib' \
-        --includedir='$(PREFIX)/$(TARGET)/include' \
-        install
+    cd '$(SOURCE_DIR)' && \
+        $(if $(call seq,darwin,$(OS_SHORT_NAME)),PATH=/usr/bin:$$PATH) \
+        ./tools/build/b2 \
+            -a \
+            -q \
+            -j '$(JOBS)' \
+            --ignore-site-config \
+            variant=release \
+            link=static \
+            threading=multi \
+            runtime-link=static \
+            --disable-icu \
+            --with-system \
+            --with-filesystem \
+            --build-dir='$(BUILD_DIR)' \
+            --prefix='$(PREFIX)/$(TARGET)' \
+            --exec-prefix='$(PREFIX)/$(TARGET)/bin' \
+            --libdir='$(PREFIX)/$(TARGET)/lib' \
+            --includedir='$(PREFIX)/$(TARGET)/include' \
+            install
 endef

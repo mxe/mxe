@@ -1,14 +1,14 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := isl
-$(PKG)_WEBSITE  := http://isl.gforge.inria.fr/
+$(PKG)_WEBSITE  := https://isl.gforge.inria.fr/
 $(PKG)_DESCR    := Integer Set Library
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.15
 $(PKG)_CHECKSUM := 8ceebbf4d9a81afa2b4449113cee4b7cb14a687d7a549a963deb5e2a41458b6b
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := http://isl.gforge.inria.fr/$($(PKG)_FILE)
+$(PKG)_URL      := https://isl.gforge.inria.fr/$($(PKG)_FILE)
 $(PKG)_URL_2    := https://gcc.gnu.org/pub/gcc/infrastructure/$($(PKG)_FILE)
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 $(PKG)_DEPS     := cc gmp

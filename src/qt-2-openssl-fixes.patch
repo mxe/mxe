@@ -18,7 +18,7 @@ https://aur.archlinux.org/cgit/aur.git/tree/qt4-openssl-1.1.patch?h=lib32-qt4&id
    src/network/ssl/qsslsocket_openssl_symbols.cpp)
 Author: Gert Wollny  <gw.fossdev@gmail.com>
 Last-Update: 2016-06-28
-Bug-Debian: http://bugs.debian.org/828522
+Bug-Debian: https://bugs.debian.org/828522
 
 diff --git a/src/network/ssl/qsslcertificate.cpp b/src/network/ssl/qsslcertificate.cpp
 index 0f2314e2..96f6de43 100644

@@ -208,7 +208,7 @@ According to Debian patch of py3cairo which also uses waf [1],
 > storing the pickle seems to have no adverse effects on the build, while
 > avoiding the observed traceback.
 
-[1] http://sources.debian.net/patches/summary/py3cairo/1.10.0+dfsg-5/
+[1] https://sources.debian.org/patches/summary/py3cairo/1.10.0+dfsg-5/
 
 diff --git a/waf b/waf
 index 1111111..2222222 100755

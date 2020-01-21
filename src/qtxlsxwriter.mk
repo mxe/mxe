@@ -1,11 +1,11 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := qtxlsxwriter
-$(PKG)_WEBSITE  := https://github.com/dbzhang800/QtXlsxWriter/
+$(PKG)_WEBSITE  := https://github.com/VSRonin/QtXlsxWriter/
 $(PKG)_DESCR    := QtXlsxWriter
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 06911c4
-$(PKG)_CHECKSUM := 3fc1a529b740c1d9ebcc4cde20bb9c22b88769e3f378bcef0679b4b44e8acc81
+$(PKG)_VERSION  := d3bd83b
+$(PKG)_CHECKSUM := 2191a30a99588befe5237add95393cbc5de60f8d4f184399cfc6d3e6b9843302
 $(PKG)_GH_CONF  := VSRonin/QtXlsxWriter/branches/master
 $(PKG)_DEPS     := cc qtbase
 

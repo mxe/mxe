@@ -3,21 +3,21 @@
 PKG             := vcdimager
 $(PKG)_WEBSITE  := https://www.gnu.org/software/vcdimager/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.7.24
-$(PKG)_CHECKSUM := 075d7a67353ff3004745da781435698b6bc4a053838d0d4a3ce0516d7d974694
+$(PKG)_VERSION  := 2.0.1
+$(PKG)_CHECKSUM := 67515fefb9829d054beae40f3e840309be60cda7d68753cafdd526727758f67a
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://ftp.gnu.org/gnu/vcdimager/$(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_DEPS     := cc libcdio libxml2 popt
 
 define $(PKG)_UPDATE
-    echo 'TODO: Updates for package vcdimager need to be written.' >&2;
-    echo $(vcdimager_VERSION)
+    $(call GET_LATEST_VERSION, https://ftp.gnu.org/gnu/vcdimager)
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && autoconf
-    cd '$(1)' && ./configure \
+    # build and install the library
+    cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
         $(MXE_CONFIGURE_OPTS)
-    $(MAKE) -C '$(1)' -j 1 install
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(MXE_DISABLE_PROGRAMS) $(if $(BUILD_SHARED),LDFLAGS=-no-undefined)
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install $(MXE_DISABLE_PROGRAMS)
 endef

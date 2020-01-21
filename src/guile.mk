@@ -13,7 +13,7 @@ $(PKG)_DEPS     := cc gc gettext gmp libffi libgnurx libiconv libltdl libunistri
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://git.savannah.gnu.org/gitweb/?p=guile.git;a=tags' | \
-    grep '<a class="list subject"' | \
+    grep '<a [^>]*class="list subject"' | \
     $(SED) -n 's,.*<a[^>]*>[^0-9>]*\([0-9][^< ]*\)\.<.*,\1,p' | \
     grep -v 2.* | \
     $(SORT) -Vr | \

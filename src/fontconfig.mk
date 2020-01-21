@@ -13,6 +13,7 @@ $(PKG)_DEPS     := cc expat freetype-bootstrap gettext
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://fontconfig.org/release/' | \
     $(SED) -n 's,.*fontconfig-\([0-9][^>]*\)\.tar.*,\1,p' | \
+    grep -v '\([0-9]\+\.\)\{2\}9[0-9]' | \
     tail -1
 endef
 

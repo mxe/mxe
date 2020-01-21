@@ -21,6 +21,7 @@
         <li><a href="#download"         >Download</a></li>
         <li><a href="https://lists.nongnu.org/mailman/listinfo/mingw-cross-env-list">Mailing List</a></li>
         <li><a href="https://github.com/mxe/mxe/issues">Issue Tracker</a></li>
+        <li><a href="https://mxe.zulipchat.com/">Async Chat (Trial)</a></li>
     </ul>
     <ul>
         <li><a href="#requirements"     >Requirements</a></li>
@@ -41,7 +42,7 @@
 <h2 id="introduction">Introduction</h2>
 
     <p>
-    MXE (M cross environment) is a Makefile that
+    MXE (M cross environment) is a GNU Makefile that
     compiles a cross compiler and cross compiles
     many free libraries such as SDL and Qt. Thus,
     it provides a nice cross compiling environment
@@ -84,6 +85,10 @@
         whenever possible
     </li>
     <li>
+        bundles <a href="https://ccache.samba.org">ccache</a> to speed
+        up repeated builds
+    </li>
+    <li>
         integrates well with <a href="#tutorial-5a">autotools</a>,
         <a href="#tutorial-5b">cmake</a>, <a href="#tutorial-5c">qmake</a>,
         and <a href="#tutorial-5d">hand-written makefiles</a>
@@ -93,7 +98,7 @@
         and is <a href="#used-by">used by several projects</a>
     </li>
     <li>
-        has <a href="http://pkg.mxe.cc/">pre-compiled binaries</a>
+        has <a href="https://pkg.mxe.cc/">pre-compiled binaries</a>
         that <a href="https://github.com/zer0main/battleship">can be used
         in Continuous Integration systems</a>
     </li>
@@ -161,6 +166,27 @@
         and pthreads (<a href="https://mingw-w64.sourceforge.io/">winpthreads</a>)
         are always available.
     </p>
+    <p>
+        When building shared libraries, there are several approaches to
+        recursively finding DLL dependencies (alphabetical list):
+    </p>
+        <ul>
+        <li>
+            <a href="https://github.com/desertbit/gml/blob/master/cmd/gml-copy-dlls/main.go">
+            go script</a>
+        </li>
+        <li>
+            <a href="https://github.com/gsauthof/pe-util">pe-util</a>
+            packaged with
+            <a href="https://github.com/mxe/mxe/blob/master/src/pe-util.mk">mxe</a>
+        </li>
+        <li>
+            <a href="https://github.com/mxe/mxe/blob/master/tools/copydlldeps.py">python script</a>
+        </li>
+        <li>
+            <a href="https://github.com/mxe/mxe/blob/master/tools/copydlldeps.md">shell script</a>
+        </li>
+        </ul>
     <p>
         Experimental support for GCC with posix threads was
         added in <a href="https://github.com/mxe/mxe/pull/958">November 2015</a>. Since <a href="https://github.com/mxe/mxe/pull/2263">January 2019</a> it is used by default.
@@ -317,13 +343,14 @@ exit</pre>
     Instead of building MXE packages from source, you can
     download precompiled packages. There are two options:
     tar archives and Debian packages.
-    See <a href="http://pkg.mxe.cc/">pkg.mxe.cc</a>.
+    See <a href="https://pkg.mxe.cc/">pkg.mxe.cc</a>.
     </p>
 
     <h3 id="tutorial-4">Step 4: Environment Variables</h3>
 
     <p>
-    Edit your .bashrc script in order to change $PATH:
+    Edit the appropriate config script (.bashrc, .cshrc, .profile, .zshrc, etc.)
+    for your shell in order to change $PATH:
     </p>
     <pre>export PATH=/<em>where MXE is installed</em>/usr/bin:$PATH</pre>
 
@@ -424,9 +451,7 @@ make</pre>
     <a href="https://qt-project.org/doc/qt-4.8/plugins-howto.html#static-plugins">Qt documentation about static plugins</a>.
     </p>
     <p>
-    Note the sql drivers (-qt-sql-*)
-    and the image handlers for jpeg, tiff, gif and mng
-    are built-in, <em>not</em> plugins.
+    Qt 4 only: Sql drivers (-qt-sql-*) and image handlers for jpeg, tiff, gif and mng are built-in, <em>not</em> plugins.
     </p>
 
     <h3 id="tutorial-5d">Step 5d: Cross compile your Project (Makefile)</h3>
@@ -622,7 +647,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         <td>≥ 2.2</td>
     </tr>
     <tr>
-        <td><a href="http://lzip.nongnu.org/">Lzip</a></td>
+        <td><a href="https://nongnu.org/lzip/">Lzip</a></td>
         <td></td>
     </tr>
     <tr>
@@ -728,7 +753,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <p>
     You can install a precompiled MXE via Debian packages.
-    See <a href="http://pkg.mxe.cc/">pkg.mxe.cc</a>.
+    See <a href="https://pkg.mxe.cc/">pkg.mxe.cc</a>.
     </p>
 
     <h3 id="requirements-fedora">Fedora/Red Hat/Centos</h3>
@@ -928,18 +953,14 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     then run:
     </p>
     <!-- https://www.macports.org/ports.php -->
-    <pre>sudo port install \
-    autoconf \
-    automake \
+    <pre>sudo port -N install \
     coreutils \
     gdk-pixbuf2 \
     gnutar \
     gsed \
     intltool \
-    libtool \
     lzip \
     p7zip \
-    pkgconfig \
     wget \
     xz</pre>
 
@@ -1193,6 +1214,13 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         build all packages with 4 inter-package parallel
         jobs and continue as much as possible after an error
         (short option "-j 4 -k")
+        </dd>
+
+    <dt>make foo bar MXE_USE_CCACHE=</dt>
+
+        <dd>
+        disables use of <a href="https://ccache.samba.org">ccache</a>
+        to eliminate potential error sources when debugging
         </dd>
 
     <dt>make EXCLUDE_PKGS='foo bar'</dt>
@@ -1843,7 +1871,7 @@ endef</pre>
 </div>
 
 <div class="section">
-<h2 id="copyright">Copyright © <span class="years">2007–2015</span></h2>
+<h2 id="copyright">Copyright © <span class="years">2007–2019</span></h2>
 
     <ul id="authors-list" class="compact-list">
     <li>Volker Diels-Grabsch</li>
@@ -2907,7 +2935,7 @@ endef</pre>
         <a href="https://github.com/mxe/mxe">Project on GitHub</a>
     </li>
     <li>
-        <a href="http://pkg.mxe.cc/">Binary distribution of packages</a>
+        <a href="https://pkg.mxe.cc/">Binary distribution of packages</a>
     </li>
     <li>
         <a href="https://www.openhub.net/p/mxe">Entry on Open Hub</a>
@@ -2981,7 +3009,7 @@ endef</pre>
         Win32 ports of many free software packages
     </li>
     <li>
-        <a href="http://www.sandroid.org/imcross/">IMCROSS</a>
+        <a href="https://www.sandroid.org/imcross/">IMCROSS</a>
         <br>
         Another project with similar goal
     </li>
@@ -3027,7 +3055,7 @@ endef</pre>
         <a href="https://biosig.sourceforge.io/">BioSig</a>
     </li>
     <li>
-        <a href="http://en.cataclysmdda.com/">Cataclysm: Dark Days Ahead</a>
+        <a href="https://cataclysmdda.org/">Cataclysm: Dark Days Ahead</a>
     </li>
     <li>
         <a href="https://cvtool.sourceforge.io/">cvtool</a>
@@ -3037,6 +3065,9 @@ endef</pre>
     </li>
     <li>
         <a href="https://www.digikam.org/">digiKam</a>
+    </li>
+    <li>
+        <a href="https://github.com/juzzlin/DustRacing2D">Dust Racing 2D</a>
     </li>
     <li>
         <a href="https://github.com/eiskaltdcpp/eiskaltdcpp">EiskaltDC++</a>
@@ -3058,6 +3089,9 @@ endef</pre>
     </li>
     <li>
         <a href="https://www.gnu.org/software/freedink/">GNU FreeDink</a>
+    </li>
+    <li>
+        <a href="https://github.com/juzzlin/Heimer">Heimer</a>
     </li>
     <li>
         <a href="http://ifwiki.org/index.php/Hugor">Hugor</a>
@@ -3105,13 +3139,16 @@ endef</pre>
         <a href="https://qtads.sourceforge.io/">QTads</a>
     </li>
     <li>
+        <a href="https://github.com/scummvm/scummvm">ScummVM</a>
+    </li>
+    <li>
         <a href="https://github.com/sibuserv/sibuserv">Sibuserv</a>
     </li>
     <li>
         <a href="https://sigrok.org/">sigrok</a>
     </li>
     <li>
-        <a href="http://spek-project.org/">Spek</a>
+        <a href="http://spek.cc/">Spek</a>
     </li>
     <li>
         <a href="https://springrts.com/">Spring RTS</a>
@@ -3142,6 +3179,9 @@ endef</pre>
     </li>
     <li>
         <a href="https://ufoai.org/">UFO: Alien Invasion</a>
+    </li>
+    <li>
+        <a href="https://vcmi.eu/">VCMI Engine</a>
     </li>
     <li>
         <a href="https://violetland.github.io/">Violetland</a>

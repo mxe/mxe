@@ -12,10 +12,9 @@ $(PKG)_URL      := https://download.gnome.org/sources/atk/$(call SHORT_PKG_VERSI
 $(PKG)_DEPS     := cc gettext glib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://git.gnome.org/browse/atk/refs/tags' | \
-    grep '<a href=' | \
-    $(SED) -n "s,.*<a href='[^']*/tag/?h=ATK_\\([0-9]*_[0-9]*[02468]_[^<]*\\)'.*,\\1,p" | \
-    $(SED) 's,_,.,g' | \
+    $(WGET) -q -O- 'https://gitlab.gnome.org/GNOME/atk/tags' | \
+    $(SED) -n "s,.*<a [^>]\+>ATK_\([0-9]\+_[0-9_]\+\)<.*,\1,p" | \
+    $(SED) "s,_,.,g;" | \
     head -1
 endef
 

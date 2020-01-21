@@ -3,10 +3,10 @@
 PKG             := gettext
 $(PKG)_WEBSITE  := https://www.gnu.org/software/gettext/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.19.8.1
-$(PKG)_CHECKSUM := ff942af0e438ced4a8b0ea4b0b6e0d6d657157c5e2364de57baa279c1c125c43
+$(PKG)_VERSION  := 0.20.1
+$(PKG)_CHECKSUM := 53f02fbbec9e798b0faaf7c73272f83608e835c6288dd58be6c9bb54624a3800
 $(PKG)_SUBDIR   := gettext-$($(PKG)_VERSION)
-$(PKG)_FILE     := gettext-$($(PKG)_VERSION).tar.gz
+$(PKG)_FILE     := gettext-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://ftp.gnu.org/gnu/gettext/$($(PKG)_FILE)
 $(PKG)_URL_2    := https://ftpmirror.gnu.org/gettext/$($(PKG)_FILE)
 # native gettext isn't technically required, but downstream
@@ -25,38 +25,22 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)/gettext-runtime' && ./configure \
+    cd '$(SOURCE_DIR)' && autoreconf -fi
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/gettext-runtime/configure' \
         $(MXE_CONFIGURE_OPTS) \
         --enable-threads=win32 \
         --without-libexpat-prefix \
         --without-libxml2-prefix \
         CONFIG_SHELL=$(SHELL)
-    $(MAKE) -C '$(1)/gettext-runtime/intl' -j '$(JOBS)' install
+    $(MAKE) -C '$(BUILD_DIR)/intl' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)/intl' -j 1 install
 endef
 
-define $(PKG)_BUILD_NATIVE
+define $(PKG)_BUILD_$(BUILD)
+    cd '$(SOURCE_DIR)' && autoreconf -fi
     # build and install the library
     cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
         $(MXE_CONFIGURE_OPTS)
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(MXE_DISABLE_DOCS)
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install $(MXE_DISABLE_DOCS)
-endef
-
-define $(PKG)_BUILD_DARWIN
-    # causes issues with other packages so use different prefix
-    # but install *.m4 files and bins to standard location
-    cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
-        $(MXE_CONFIGURE_OPTS) \
-        --with-included-libcroco \
-        --prefix='$(PREFIX)/$(TARGET).gnu' \
-        --bindir='$(PREFIX)/$(TARGET)/bin' \
-        --datarootdir='$(PREFIX)/$(TARGET)/share'
-    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(MXE_DISABLE_DOCS)
-    $(MAKE) -C '$(BUILD_DIR)' -j 1 install $(MXE_DISABLE_DOCS)
-endef
-
-define $(PKG)_BUILD_$(BUILD)
-    $(if $(findstring darwin, $(BUILD)), \
-        $($(PKG)_BUILD_DARWIN), \
-        $($(PKG)_BUILD_NATIVE))
 endef

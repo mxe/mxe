@@ -20,12 +20,18 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    # will likely break again soon so use sed instead of patches
+    $(SED) -i 's,mmacosx-version-min=10.[0-9],mmacosx-version-min=10.9,g' '$(1)/mkspecs//common/g++-macx.conf'
+    $(SED) -i 's,mmacosx-version-min=10.[0-9],mmacosx-version-min=10.9,g' '$(1)/configure'
+    $(SED) -i 's,MACOSX_DEPLOYMENT_TARGET = 10.[0-9],MACOSX_DEPLOYMENT_TARGET = 10.9,g' '$(1)/configure'
+    $(SED) -i 's,QMAKE_MACOSX_DEPLOYMENT_TARGET 10.[0-9],QMAKE_MACOSX_DEPLOYMENT_TARGET 10.9,g' '$(1)/configure'
     cd '$(1)' && QTDIR='$(1)' ./bin/syncqt
     cd '$(1)' && \
         OPENSSL_LIBS="`'$(TARGET)-pkg-config' --libs-only-l openssl`" \
         PSQL_LIBS="-lpq -lsecur32 `'$(TARGET)-pkg-config' --libs-only-l openssl pthreads` -lws2_32" \
         SYBASE_LIBS="-lsybdb `'$(TARGET)-pkg-config' --libs-only-l openssl` -liconv -lws2_32" \
         CXXFLAGS="-std=gnu++98" \
+        MAKE=$(MAKE) \
         ./configure \
         -opensource \
         -confirm-license \
@@ -136,7 +142,7 @@ define $(PKG)_BUILD
     echo 'set(QT_QMAKE_EXECUTABLE $(PREFIX)/$(TARGET)/qt/bin/qmake CACHE FILEPATH "Qt4 qmake executable")' > '$(CMAKE_TOOLCHAIN_DIR)/$(PKG).cmake'
     # fix static linking errors of QtGui to missing lcms2 and lzma
     # introduced by poor libmng linking
-    echo 'set(MNG_LIBRARY mng lcms2 lzma)' >> '$(CMAKE_TOOLCHAIN_DIR)/$(PKG).cmake'
+    echo "set(MNG_LIBRARY `$(TARGET)-pkg-config --libs-only-l libmng`)" >> '$(CMAKE_TOOLCHAIN_DIR)/$(PKG).cmake'
 
     # test cmake
     mkdir '$(1).test-cmake'

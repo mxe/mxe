@@ -11,9 +11,8 @@ $(PKG)_URL      := https://download.gnome.org/sources/libgee/$(call SHORT_PKG_VE
 $(PKG)_DEPS     := cc glib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://git.gnome.org/browse/libgee/refs/tags' | \
-    grep '<a href=' | \
-    $(SED) -n "s,.*libgee-\([0-9]\+\.[0-9]*[02468]\.[^']*\)\.tar.*,\1,p" | \
+    $(WGET) -q -O- 'https://gitlab.gnome.org/GNOME/libgee/tags' | \
+    $(SED) -n "s,.*<a [^>]\+>v\?\([0-9]\+\.[0-9.]\+\)<.*,\1,p" | \
     $(SORT) -Vr | \
     head -1
 endef

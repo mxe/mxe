@@ -8,7 +8,7 @@ Date: Tue, 20 Jul 2010 14:05:26 -0700
 Subject: [PATCH 1/2] x86: Fix cpuid function on x86-64
 
 Taken from:
-http://cgit.freedesktop.org/liboil/commit/?id=705916007fba0a845229a02dc6474cb523eff150
+https://cgit.freedesktop.org/liboil/commit/?id=705916007fba0a845229a02dc6474cb523eff150
 
 diff --git a/liboil/liboilcpu-x86.c b/liboil/liboilcpu-x86.c
 index 1111111..2222222 100644
