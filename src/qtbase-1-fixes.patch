@@ -1,9 +1,9 @@
 This file is part of MXE. See LICENSE.md for licensing information.
 
-From 7c5ba14d5b42334edb6a70239cf231f847f508ef Mon Sep 17 00:00:00 2001
+From ab2ae2ab4828740cbad27a5782b705eda5a3e394 Mon Sep 17 00:00:00 2001
 From: Ray Donnelly <mingw.android@gmail.com>
 Date: Wed, 26 Aug 2015 12:45:43 +0100
-Subject: [PATCH 1/2] cmake: Rearrange STATIC vs INTERFACE targets
+Subject: [PATCH 1/3] cmake: Rearrange STATIC vs INTERFACE targets
 
 Otherwise we attempt to add_library(Qt5::UiPlugin STATIC IMPORTED)
 for header-only modules when building Qt5 statically.
@@ -12,10 +12,10 @@ Source: https://git.io/vzWJz
 See also: https://github.com/mxe/mxe/issues/1185
 
 diff --git a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
-index 364c23e750..c90dd302cf 100644
+index 50364765fb..7bfc7430fe 100644
 --- a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
 +++ b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
-@@ -343,6 +343,9 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
+@@ -371,6 +371,9 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
      list(APPEND _Qt5$${CMAKE_MODULE_NAME}_LIB_DEPENDENCIES \"$${CMAKE_INTERFACE_QT5_MODULE_DEPS}\")
  !!ENDIF
  
@@ -25,7 +25,7 @@ index 364c23e750..c90dd302cf 100644
  !!IF !isEmpty(CMAKE_STATIC_TYPE)
      if(NOT Qt5_EXCLUDE_STATIC_DEPENDENCIES)
  !!IF !isEmpty(CMAKE_DEBUG_TYPE)
-@@ -380,9 +383,6 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
+@@ -408,9 +411,6 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
  
      add_library(Qt5::$${CMAKE_MODULE_NAME} STATIC IMPORTED)
      set_property(TARGET Qt5::$${CMAKE_MODULE_NAME} PROPERTY IMPORTED_LINK_INTERFACE_LANGUAGES "CXX")
@@ -39,15 +39,15 @@ index 364c23e750..c90dd302cf 100644
 2.20.1
 
 
-From 798ab219ef98856dc4281559192e631f65bbb657 Mon Sep 17 00:00:00 2001
+From bb53c3e1135a63cbf645c28e4b3cd17251e260f7 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 11 Jun 2017 00:27:41 +0200
-Subject: [PATCH 2/2] use pkg-config for harfbuzz
+Subject: [PATCH 2/3] use pkg-config for harfbuzz
 
 Change-Id: Ia65cbb90fd180f1bc10ce077a9a8323a48e51421
 
 diff --git a/src/gui/configure.json b/src/gui/configure.json
-index 19312d245d..0164f9b49b 100644
+index 0202f17b21..1418a3bbee 100644
 --- a/src/gui/configure.json
 +++ b/src/gui/configure.json
 @@ -304,7 +304,8 @@
@@ -64,10 +64,11 @@ index 19312d245d..0164f9b49b 100644
 2.20.1
 
 
-From b8fd37d8cd7642599b3b022e4d8fa1aff8f68a1e Mon Sep 17 00:00:00 2001
+From 531b48dbc01fafba2f4b4c750bd40f7010055237 Mon Sep 17 00:00:00 2001
 From: Artem Pisarenko <artem.k.pisarenko@gmail.com>
 Date: Thu, 16 Jan 2020 14:47:00 +0600
-Subject: [PATCH] Fix win32 support for linking against static builds in CMake
+Subject: [PATCH 3/3] Fix win32 support for linking against static builds in
+ CMake
 
 CMake mkspec feature sets CMAKE_PRL_FILE_LOCATION_* values inconsistent
 with actual .prl file names being generated/installed, causing
@@ -79,86 +80,89 @@ to find file at given location and skips filling libs deps).
 
 Fixes: QTBUG-81401
 Change-Id: I5861cc0c42163d898ba55ad83cbad1994dcb1db2
----
- mkspecs/features/create_cmake.prf | 41 +++++++++++++--------------------------
- 1 file changed, 13 insertions(+), 28 deletions(-)
 
 diff --git a/mkspecs/features/create_cmake.prf b/mkspecs/features/create_cmake.prf
-index 346fbf2..0d93597 100644
+index 4aa5dad467..fc60ed4e4c 100644
 --- a/mkspecs/features/create_cmake.prf
 +++ b/mkspecs/features/create_cmake.prf
-@@ -212,21 +212,17 @@ contains(CONFIG, plugin) {
-     CMAKE_PLUGIN_TYPE_ESCAPED = $$replace(PLUGIN_TYPE, [-/], _)
- 
+@@ -214,21 +214,17 @@ contains(CONFIG, plugin) {
      win32 {
+         !mingw|qtConfig(debug_and_release): debug_suffix="d"
+ 
 +        CMAKE_PRL_FILE_LOCATION_RELEASE = $$PLUGIN_TYPE/$${CMAKE_QT_STEM}.prl
-+        CMAKE_PRL_FILE_LOCATION_DEBUG = $$PLUGIN_TYPE/$${CMAKE_QT_STEM}d.prl
++        CMAKE_PRL_FILE_LOCATION_DEBUG = $$PLUGIN_TYPE/$${CMAKE_QT_STEM}$${debug_suffix}.prl
          isEmpty(CMAKE_STATIC_TYPE) {
              CMAKE_PLUGIN_LOCATION_RELEASE = $$PLUGIN_TYPE/$${CMAKE_QT_STEM}.dll
-             CMAKE_PLUGIN_LOCATION_DEBUG = $$PLUGIN_TYPE/$${CMAKE_QT_STEM}d.dll
+             CMAKE_PLUGIN_LOCATION_DEBUG = $$PLUGIN_TYPE/$${CMAKE_QT_STEM}$${debug_suffix}.dll
 -            CMAKE_PRL_FILE_LOCATION_RELEASE = $$PLUGIN_TYPE/$${CMAKE_QT_STEM}.prl
--            CMAKE_PRL_FILE_LOCATION_DEBUG = $$PLUGIN_TYPE/$${CMAKE_QT_STEM}d.prl
+-            CMAKE_PRL_FILE_LOCATION_DEBUG = $$PLUGIN_TYPE/$${CMAKE_QT_STEM}$${debug_suffix}.prl
          } else:mingw {
              CMAKE_PLUGIN_LOCATION_RELEASE = $$PLUGIN_TYPE/lib$${CMAKE_QT_STEM}.a
-             CMAKE_PLUGIN_LOCATION_DEBUG = $$PLUGIN_TYPE/lib$${CMAKE_QT_STEM}d.a
+             CMAKE_PLUGIN_LOCATION_DEBUG = $$PLUGIN_TYPE/lib$${CMAKE_QT_STEM}$${debug_suffix}.a
 -            CMAKE_PRL_FILE_LOCATION_RELEASE = $$PLUGIN_TYPE/lib$${CMAKE_QT_STEM}.prl
--            CMAKE_PRL_FILE_LOCATION_DEBUG = $$PLUGIN_TYPE/lib$${CMAKE_QT_STEM}d.prl
+-            CMAKE_PRL_FILE_LOCATION_DEBUG = $$PLUGIN_TYPE/lib$${CMAKE_QT_STEM}$${debug_suffix}.prl
          } else {                         # MSVC static
              CMAKE_PLUGIN_LOCATION_RELEASE = $$PLUGIN_TYPE/$${CMAKE_QT_STEM}.lib
-             CMAKE_PLUGIN_LOCATION_DEBUG = $$PLUGIN_TYPE/$${CMAKE_QT_STEM}d.lib
+             CMAKE_PLUGIN_LOCATION_DEBUG = $$PLUGIN_TYPE/$${CMAKE_QT_STEM}$${debug_suffix}.lib
 -            CMAKE_PRL_FILE_LOCATION_RELEASE = $$PLUGIN_TYPE/$${CMAKE_QT_STEM}.prl
--            CMAKE_PRL_FILE_LOCATION_DEBUG = $$PLUGIN_TYPE/$${CMAKE_QT_STEM}d.prl
+-            CMAKE_PRL_FILE_LOCATION_DEBUG = $$PLUGIN_TYPE/$${CMAKE_QT_STEM}$${debug_suffix}.prl
          }
      } else {
          mac {
-@@ -316,36 +312,25 @@ mac {
-     CMAKE_LIB_FILE_LOCATION_DEBUG = $${CMAKE_QT_STEM}d.dll
-     CMAKE_LIB_FILE_LOCATION_RELEASE = $${CMAKE_QT_STEM}.dll
+@@ -317,6 +313,13 @@ mac {
+ 
+     !mingw|qtConfig(debug_and_release): debug_suffix="d"
  
 +    !isEmpty(CMAKE_STATIC_TYPE) {
 +        CMAKE_STATIC_WINDOWS_BUILD = "true"
 +
-+        CMAKE_PRL_FILE_LOCATION_DEBUG = $${CMAKE_QT_STEM}d.prl
++        CMAKE_PRL_FILE_LOCATION_DEBUG = $${CMAKE_QT_STEM}$${debug_suffix}.prl
 +        CMAKE_PRL_FILE_LOCATION_RELEASE = $${CMAKE_QT_STEM}.prl
 +    }
 +
      mingw {
-         CMAKE_WINMAIN_FILE_LOCATION_DEBUG = libqtmain$${QT_LIBINFIX}d.a
+         CMAKE_LIB_FILE_LOCATION_DEBUG = $${CMAKE_QT_STEM}$${debug_suffix}.dll
+         CMAKE_LIB_FILE_LOCATION_RELEASE = $${CMAKE_QT_STEM}.dll
+@@ -324,17 +327,8 @@ mac {
+         CMAKE_WINMAIN_FILE_LOCATION_DEBUG = libqtmain$${QT_LIBINFIX}$${debug_suffix}.a
          CMAKE_WINMAIN_FILE_LOCATION_RELEASE = libqtmain$${QT_LIBINFIX}.a
  
 -        !isEmpty(CMAKE_STATIC_TYPE) {
 -            CMAKE_STATIC_WINDOWS_BUILD = "true"
--            CMAKE_IMPLIB_FILE_LOCATION_DEBUG = lib$${CMAKE_QT_STEM}d.a
+-            CMAKE_IMPLIB_FILE_LOCATION_DEBUG = lib$${CMAKE_QT_STEM}$${debug_suffix}.a
 -            CMAKE_IMPLIB_FILE_LOCATION_RELEASE = lib$${CMAKE_QT_STEM}.a
 -
--            CMAKE_PRL_FILE_LOCATION_DEBUG = lib$${CMAKE_QT_STEM}d.prl
+-            CMAKE_PRL_FILE_LOCATION_DEBUG = lib$${CMAKE_QT_STEM}$${debug_suffix}.prl
 -            CMAKE_PRL_FILE_LOCATION_RELEASE = lib$${CMAKE_QT_STEM}.prl
 -        } else {
--            CMAKE_IMPLIB_FILE_LOCATION_DEBUG = lib$${CMAKE_QT_STEM}d.a
+-            CMAKE_IMPLIB_FILE_LOCATION_DEBUG = lib$${CMAKE_QT_STEM}$${debug_suffix}.a
 -            CMAKE_IMPLIB_FILE_LOCATION_RELEASE = lib$${CMAKE_QT_STEM}.a
 -        }
-+        CMAKE_IMPLIB_FILE_LOCATION_DEBUG = lib$${CMAKE_QT_STEM}d.a
++        CMAKE_IMPLIB_FILE_LOCATION_DEBUG = lib$${CMAKE_QT_STEM}$${debug_suffix}.a
 +        CMAKE_IMPLIB_FILE_LOCATION_RELEASE = lib$${CMAKE_QT_STEM}.a
      } else {
-         CMAKE_WINMAIN_FILE_LOCATION_DEBUG = qtmain$${QT_LIBINFIX}d.lib
+         CMAKE_LIB_FILE_LOCATION_DEBUG = $${CMAKE_QT_STEM}$${debug_suffix}.dll
+         CMAKE_LIB_FILE_LOCATION_RELEASE = $${CMAKE_QT_STEM}.dll
+@@ -342,17 +336,8 @@ mac {
+         CMAKE_WINMAIN_FILE_LOCATION_DEBUG = qtmain$${QT_LIBINFIX}$${debug_suffix}.lib
          CMAKE_WINMAIN_FILE_LOCATION_RELEASE = qtmain$${QT_LIBINFIX}.lib
  
 -        !isEmpty(CMAKE_STATIC_TYPE) {
 -            CMAKE_STATIC_WINDOWS_BUILD = "true"
--            CMAKE_IMPLIB_FILE_LOCATION_DEBUG = $${CMAKE_QT_STEM}d.lib
+-            CMAKE_IMPLIB_FILE_LOCATION_DEBUG = $${CMAKE_QT_STEM}$${debug_suffix}.lib
 -            CMAKE_IMPLIB_FILE_LOCATION_RELEASE = $${CMAKE_QT_STEM}.lib
 -
--            CMAKE_PRL_FILE_LOCATION_DEBUG = $${CMAKE_QT_STEM}d.prl
+-            CMAKE_PRL_FILE_LOCATION_DEBUG = $${CMAKE_QT_STEM}$${debug_suffix}.prl
 -            CMAKE_PRL_FILE_LOCATION_RELEASE = $${CMAKE_QT_STEM}.prl
 -        } else {
--            CMAKE_IMPLIB_FILE_LOCATION_DEBUG = $${CMAKE_QT_STEM}d.lib
+-            CMAKE_IMPLIB_FILE_LOCATION_DEBUG = $${CMAKE_QT_STEM}$${debug_suffix}.lib
 -            CMAKE_IMPLIB_FILE_LOCATION_RELEASE = $${CMAKE_QT_STEM}.lib
 -        }
-+        CMAKE_IMPLIB_FILE_LOCATION_DEBUG = $${CMAKE_QT_STEM}d.lib
++        CMAKE_IMPLIB_FILE_LOCATION_DEBUG = $${CMAKE_QT_STEM}$${debug_suffix}.lib
 +        CMAKE_IMPLIB_FILE_LOCATION_RELEASE = $${CMAKE_QT_STEM}.lib
      }
  } else {
      !isEmpty(CMAKE_STATIC_TYPE) {
 -- 
-2.7.4
+2.20.1
 
