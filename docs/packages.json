@@ -322,7 +322,7 @@
     "pango": {"version": "1.37.4", "website": "https://www.pango.org/", "description": "Pango"},
     "pangomm": {"version": "2.34.0", "website": "https://www.pango.org/", "description": "Pangomm"},
     "pcl": {"version": "1.9.1", "website": "http://www.pointclouds.org/", "description": "PCL (Point Cloud Library)"},
-    "pcre": {"version": "8.43", "website": "https://www.pcre.org/", "description": "PCRE"},
+    "pcre": {"version": "8.44", "website": "https://www.pcre.org/", "description": "PCRE"},
     "pcre2": {"version": "10.34", "website": "https://www.pcre.org/", "description": "PCRE2"},
     "pdcurses": {"version": "3.4", "website": "https://pdcurses.sourceforge.io/", "description": "PDcurses"},
     "pdflib_lite": {"version": "7.0.5p3", "website": "https://www.pdflib.com/download/free-software/pdflib-lite-7/", "description": "PDFlib Lite"},
