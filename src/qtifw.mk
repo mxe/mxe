@@ -6,7 +6,7 @@ $(PKG)_DESCR    := Qt Installer Framework
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.2.0
 $(PKG)_CHECKSUM := 7cd0d7b86fbe63b101f263b6532485df3a2d336cc0026b47eb866dae134e319f
-$(PKG)_FILE     := qtifw-$($(PKG)_VERSION).tar.gz
+$(PKG)_FILE     := qtifw-$($(PKG)_VERSION).tar
 $(PKG)_URL      := https://download.qt.io/official_releases/qt-installer-framework/$($(PKG)_VERSION)/qt-installer-framework-opensource-src-$($(PKG)_VERSION).tar.gz
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 
