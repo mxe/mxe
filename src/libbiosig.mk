@@ -4,9 +4,8 @@
 PKG             := libbiosig
 $(PKG)_WEBSITE  := http://biosig.sf.net/
 $(PKG)_DESCR    := libbiosig
-$(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.9.5
-$(PKG)_CHECKSUM := 20e72a5a07d1bf8baa649efe437b4d3ed99944f0e4dfc1fbe23bfbe4d9749ed5
+$(PKG)_VERSION  := 2.0.0
+$(PKG)_CHECKSUM := 8149ca41f33ec8a03ae33601aa4381ac5a19c97990528d657dea2a6198451316
 $(PKG)_SUBDIR   := biosig4c++-$($(PKG)_VERSION)
 $(PKG)_FILE     := biosig4c++-$($(PKG)_VERSION).src.tar.gz
 $(PKG)_URL      := http://sourceforge.net/projects/biosig/files/BioSig%20for%20C_C%2B%2B/src/$($(PKG)_FILE)
@@ -31,11 +30,8 @@ define $(PKG)_BUILD_PRE
     $(SED) -i '/NDEBUG/ s|#||g' '$(1)'/Makefile
 
     ### disables declaration of sopen from io.h (imported through unistd.h)
-    $(SED) -i '/ sopen/ s#^/*#//#g' $(PREFIX)/$(TARGET)/include/io.h
 
-    #$(SED) -i 's| -fstack-protector | |g' '$(1)'/Makefile
-    #$(SED) -i 's| -D_FORTIFY_SOURCE=2 | |g' '$(1)'/Makefile
-    #$(SED) -i 's| -lssp | |g' '$(1)'/Makefile
+    $(SED) -i '/ sopen/ s|^/*|//|g' $(PREFIX)/$(TARGET)/include/io.h
 
     TARGET='$(TARGET)' $(MAKE) -C '$(1)' clean
     TARGET='$(TARGET)' $(MAKE) -C '$(1)' -j '$(JOBS)' \
