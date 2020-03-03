@@ -15,7 +15,7 @@ diff --git a/poppler/GlobalParamsWin.cc b/poppler/GlobalParamsWin.cc
 index 1111111..2222222 100644
 --- a/poppler/GlobalParamsWin.cc
 +++ b/poppler/GlobalParamsWin.cc
-@@ -408,7 +408,7 @@ void GlobalParams::setupBaseFonts(char * dir)
+@@ -407,7 +407,7 @@ void GlobalParams::setupBaseFonts(const char * dir)
  
          GooString  *fontName = new GooString(displayFontTab[i].name);
  
@@ -48,7 +48,7 @@ diff --git a/poppler/GlobalParams.cc b/poppler/GlobalParams.cc
 index 1111111..2222222 100644
 --- a/poppler/GlobalParams.cc
 +++ b/poppler/GlobalParams.cc
-@@ -104,6 +104,7 @@ GlobalParams *globalParams = nullptr;
+@@ -103,6 +103,7 @@ std::unique_ptr<GlobalParams> globalParams;
  
  static HMODULE hmodule;
  
@@ -56,7 +56,7 @@ index 1111111..2222222 100644
  extern "C" {
    /* Provide declaration to squelch -Wmissing-declarations warning */
    BOOL WINAPI
-@@ -125,6 +126,7 @@ extern "C" {
+@@ -124,6 +125,7 @@ extern "C" {
      return TRUE;
    }
  }
@@ -128,7 +128,7 @@ index 1111111..2222222 100644
  option(ENABLE_SPLASH "Build the Splash graphics backend." ON)
  option(ENABLE_UTILS "Compile poppler command line utils." ON)
  option(ENABLE_CPP "Compile poppler cpp wrapper." ON)
-@@ -678,7 +679,9 @@ endif()
+@@ -711,7 +712,9 @@ endif()
  if(ENABLE_GLIB)
    add_subdirectory(glib)
  endif()
