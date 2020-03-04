@@ -21,7 +21,7 @@ define $(PKG)_BUILD
 
     $(MAKE) -C '$(1)'
     
-    $(INSTALL) '$(1)/release/edfbrowser.exe' '$(PREFIX)/$(TARGET)/bin/'
+    $(INSTALL) '$(1)/edfbrowser.exe' '$(PREFIX)/$(TARGET)/bin/'
 
 endef
 
