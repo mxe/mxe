@@ -1,2 +1,8 @@
-If a package fails to build, upload the log file to
-https://gist.github.com/ and put the link here.
+Please ensure all terminal or log output is correctly enclosed with
+triple back-ticks. See the github markdown guide for more details:
+    https://guides.github.com/features/mastering-markdown/
+
+If a package fails to build, please upload the entire log file to:
+    https://gist.github.com/
+    or your pastebin of choice
+and put the link here.

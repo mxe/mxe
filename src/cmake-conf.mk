@@ -5,7 +5,7 @@ $(PKG)_VERSION := 1
 $(PKG)_UPDATE  := echo 1
 $(PKG)_TARGETS := $(BUILD) $(MXE_TARGETS)
 $(PKG)_DEPS    := $(BUILD)~$(PKG)
-$(PKG)_FILE_DEPS := $(wildcard $(PWD)/src/cmake/conf/*)
+$(PKG)_FILE_DEPS := $(wildcard $(PWD)/src/cmake/*/*)
 $(PKG)_DEPS_$(BUILD) := cmake
 
 # ensure conf is also built for a minimal `make cc cmake`

@@ -22,7 +22,7 @@ include the GMSL in your Makefile do<br>
 you have the right version of <span style="font-family: monospace;">gmsl</span>
 use the <span style="font-family: monospace;">gmsl_compatible</span>
 function (see
-below). The current version is <span style="font-family: monospace;">1 1 7</span>.<br>
+below). The current version is <span style="font-family: monospace;">1 1 6</span>.<br>
 <br>
 The GMSL package also includes a test suite for GMSL.&nbsp; Just run <span style="font-family: monospace;">make -f gmsl-tests</span>.<br>
 <h2>Logical Operators</h2>GMSL has boolean $(true) (a non-empty string)
@@ -393,6 +393,25 @@ integer<br>
 Returns:&nbsp;&nbsp;&nbsp;Returns the integer division of the first
 argument by the second<br>
 </span>
+<hr><b>int_modulo</b><br>
+<br>
+<span style="font-family: monospace;">Arguments: 1: A number in x's
+representation<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2: Another
+number in x's represntation<br>
+Returns:&nbsp;&nbsp;&nbsp;Returns the remainder of integer division of
+argument 1 divided<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; by
+argument 2 in x's representation<br>
+</span>
+<hr><b>modulo (wrapped version of int_modulo)</b><br>
+<br>
+<span style="font-family: monospace;">Arguments: 1: An integer<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2: Another
+integer<br>
+Returns:&nbsp;&nbsp;&nbsp;Returns the remainder of integer division of the first
+argument by the second<br>
+</span>
 <hr><b>int_max, int_min</b><br>
 <br>
 <span style="font-family: monospace;">Arguments: 1: A number in x's
@@ -696,7 +715,7 @@ result in name and arguments being traced.<br>
 </table>
 <span style="font-family: monospace;"></span><br>
 <hr>
-Copyright (c) 2005-2014 <a href="http://www.jgc.org/">John Graham-Cumming</a>.<br>
+Copyright (c) 2005-2018 <a href="http://www.jgc.org/">John Graham-Cumming</a>.<br>
 <hr style="width: 100%; height: 2px;">
 <table style="width: 100%; text-align: left;" border="0" cellpadding="2" cellspacing="2">
   <tbody>
