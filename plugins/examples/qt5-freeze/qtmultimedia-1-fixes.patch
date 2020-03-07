@@ -1,0 +1,70 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Pek <tehnick-8@yandex.ru>
+Date: Tue, 29 Oct 2019 01:41:03 +0300
+Subject: [PATCH 1/1] mingw-w64 6.x fixed (see QTBUG-63905, QTBUG-70630,
+ QTBUG-70655)
+
+
+diff --git a/src/plugins/common/evr/evrdefs.h b/src/plugins/common/evr/evrdefs.h
+index f898209b..4f3dd832 100644
+--- a/src/plugins/common/evr/evrdefs.h
++++ b/src/plugins/common/evr/evrdefs.h
+@@ -83,7 +83,8 @@ HRESULT WINAPI Direct3DCreate9Ex(UINT SDKVersion, IDirect3D9Ex**);
+ #define MF_E_TRANSFORM_NEED_MORE_INPUT ((HRESULT)0xC00D6D72L)
+ #endif
+ 
+-#ifdef __GNUC__
++#if defined(__GNUC__) && !defined(_MFVideoNormalizedRect_)
++#define _MFVideoNormalizedRect_
+ typedef struct MFVideoNormalizedRect {
+     float left;
+     float top;
+diff --git a/src/plugins/directshow/directshow.pro b/src/plugins/directshow/directshow.pro
+index 117b02ad..27bb3abb 100644
+--- a/src/plugins/directshow/directshow.pro
++++ b/src/plugins/directshow/directshow.pro
+@@ -1,23 +1,31 @@
+ TARGET = dsengine
+-win32:!qtHaveModule(opengl)|contains(QT_CONFIG,dynamicgl) {
++QT += multimedia-private
++
++win32:!qtHaveModule(opengl)|qtConfig(dynamicgl) {
+     LIBS_PRIVATE += -lgdi32 -luser32
+ }
+ 
+-QT += multimedia-private
+-
+ HEADERS += dsserviceplugin.h
+ SOURCES += dsserviceplugin.cpp
+ 
+-!config_wmsdk: DEFINES += QT_NO_WMSDK
++# Remove WINVER/_WIN32_WINNT definitions added to qt_build_config.prf
++# by qtbase/d57a7c41712f8627a462d893329dc3f0dbb52d32 since the multimedia
++# headers of MinGW 5.3/7.1 are too broken to compile with 0x0601.
++mingw {
++    DEFINES -= WINVER=0x0601 _WIN32_WINNT=0x0601
++    DEFINES += NO_DSHOW_STRSAFE
++}
+ 
+-mingw: DEFINES += NO_DSHOW_STRSAFE
++mingw {
++    LIBS_PRIVATE += -lamstrmid
++}
+ 
+-!config_wmf: include(player/player.pri)
+-!wince: include(camera/camera.pri)
++include(common/common.pri)
++include(player/player.pri)
++include(camera/camera.pri)
+ 
+ OTHER_FILES += \
+-    directshow.json \
+-    directshow_camera.json
++    directshow.json
+ 
+ PLUGIN_TYPE = mediaservice
+ PLUGIN_CLASS_NAME = DSServicePlugin

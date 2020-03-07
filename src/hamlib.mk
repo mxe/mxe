@@ -1,9 +1,9 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
-# visit http://hamlib.org or https://github.com/N0NB/hamlib
+# visit https://hamlib.github.io/ or https://github.com/N0NB/hamlib
 # 2016-12-24 Lars Holger Engelhard DL5RCW
 
 PKG             := hamlib
-$(PKG)_WEBSITE  := http://www.hamlib.org/
+$(PKG)_WEBSITE  := https://hamlib.github.io/
 $(PKG)_DESCR    := HamLib
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.3

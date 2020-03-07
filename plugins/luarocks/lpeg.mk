@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := lpeg
-$(PKG)_WEBSITE  := http://www.inf.puc-rio.br/~roberto/lpeg/lpeg.html
+$(PKG)_WEBSITE  := http://www.inf.puc-rio.br/~roberto/lpeg/
 $(PKG)_OWNER    := https://github.com/starius
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.0.1
