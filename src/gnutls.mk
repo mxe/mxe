@@ -3,8 +3,8 @@
 PKG             := gnutls
 $(PKG)_WEBSITE  := https://www.gnu.org/software/gnutls/
 $(PKG)_DESCR    := GnuTLS
-$(PKG)_VERSION  := 3.6.9
-$(PKG)_CHECKSUM := 4331fca55817ecdd74450b908a6c29b4f05bb24dd13144c6284aa34d872e1fcb
+$(PKG)_VERSION  := 3.6.12
+$(PKG)_CHECKSUM := bfacf16e342949ffd977a9232556092c47164bd26e166736cf3459a870506c4b
 $(PKG)_SUBDIR   := gnutls-$($(PKG)_VERSION)
 $(PKG)_FILE     := gnutls-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://gnupg.org/ftp/gcrypt/gnutls/v3.6/$($(PKG)_FILE)
@@ -13,7 +13,7 @@ $(PKG)_DEPS     := cc gettext gmp libidn2 libtasn1 libunistring nettle zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- https://gnupg.org/ftp/gcrypt/gnutls/v3.6/ | \
-    $(SED) -n 's,.*gnutls-\([1-9]\+\.[0-9]\+.[0-9]\+\)\..*,\1,p' | \
+    $(SED) -n 's,.*gnutls-\([1-9]\+\(\.[0-9]\+\)\+\)\..*,\1,p' | \
     $(SORT) -V | \
     tail -1
 endef

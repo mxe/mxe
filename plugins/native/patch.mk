@@ -13,6 +13,8 @@ $(PKG)_OWNER    := https://github.com/tonytheodore
 $(PKG)_TARGETS  := $(BUILD)
 $(PKG)_DEPS     :=
 
+REQUIREMENTS := $(filter-out $(PKG), $(REQUIREMENTS))
+
 # recursive variable so always use literal instead of $(PKG)
 MXE_REQS_PKGS   += $(BUILD)~patch
 

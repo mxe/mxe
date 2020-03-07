@@ -13,6 +13,8 @@ $(PKG)_OWNER    := https://github.com/tonytheodore
 $(PKG)_TARGETS  := $(BUILD)
 $(PKG)_DEPS     :=
 
+REQUIREMENTS := $(filter-out $(PKG), $(REQUIREMENTS))
+
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://ftp.gnu.org/gnu/m4/?C=M;O=D' | \
     $(SED) -n 's,.*<a href="m4-\([0-9][^"]*\)\.tar.*,\1,p' | \

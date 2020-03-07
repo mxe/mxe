@@ -19,17 +19,20 @@ endef
 
 define $(PKG)_BUILD
     $(if $(BUILD_STATIC),\
-        echo "QWT_CONFIG -= QwtDll" >> '$(1)/qwtconfig.pri')
+        echo "QWT_CONFIG -= QwtDll" >> '$(SOURCE_DIR)/qwtconfig.pri')
 
-    # build
-    cd '$(1)/src' && $(PREFIX)/$(TARGET)/$($(PKG)_QT_DIR)/bin/qmake
-    $(MAKE) -C '$(1)/src' -f 'Makefile.Release' -j '$(JOBS)' install
+    # doesn't support out-of-source build
+    cd '$(SOURCE_DIR)' && $(PREFIX)/$(TARGET)/$($(PKG)_QT_DIR)/bin/qmake \
+        -after \
+        'SUBDIRS -= doc designer' \
+        'CONFIG -= debug_and_release'
+    $(MAKE) -C '$(SOURCE_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(SOURCE_DIR)' -j 1 install
 
     #build sinusplot example to test linkage
-    cd '$(1)/examples/sinusplot' && $(PREFIX)/$(TARGET)/$($(PKG)_QT_DIR)/bin/qmake
-    $(MAKE) -C '$(1)/examples/sinusplot' -f 'Makefile.Release' -j '$(JOBS)'
+    cd '$(SOURCE_DIR)/examples/sinusplot' && $(PREFIX)/$(TARGET)/$($(PKG)_QT_DIR)/bin/qmake
+    $(MAKE) -C '$(SOURCE_DIR)/examples/sinusplot' -f 'Makefile.Release' -j '$(JOBS)'
 
     # install
-    $(INSTALL) -m755 '$(1)/examples/bin/sinusplot.exe' '$(PREFIX)/$(TARGET)/bin/test-qwt.exe'
+    $(INSTALL) -m755 '$(SOURCE_DIR)/examples/bin/sinusplot.exe' '$(PREFIX)/$(TARGET)/bin/test-qwt.exe'
 endef
-
