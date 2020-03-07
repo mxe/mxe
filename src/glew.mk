@@ -4,8 +4,8 @@ PKG             := glew
 $(PKG)_WEBSITE  := https://glew.sourceforge.io/
 $(PKG)_DESCR    := GLEW
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.12.0
-$(PKG)_CHECKSUM := af58103f4824b443e7fa4ed3af593b8edac6f3a7be3b30911edbc7344f48e4bf
+$(PKG)_VERSION  := 2.1.0
+$(PKG)_CHECKSUM := 04de91e7e6763039bc11940095cd9c7f880baba82196a7765f727ac05a993c95
 $(PKG)_SUBDIR   := glew-$($(PKG)_VERSION)
 $(PKG)_FILE     := glew-$($(PKG)_VERSION).tgz
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/glew/glew/$($(PKG)_VERSION)/$($(PKG)_FILE)
@@ -18,41 +18,37 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    echo 'mxe: lib $(if $(BUILD_STATIC), lib/$$(LIB.STATIC) lib/$$(LIB.STATIC.MX), lib/$$(LIB.SHARED) lib/$$(LIB.SHARED.MX))' >> '$(1)/Makefile'
+    echo 'mxe: lib $(if $(BUILD_STATIC), lib/$$(LIB.STATIC), lib/$$(LIB.SHARED))' >> '$(1)/Makefile'
 
-    # GCC 4.8.2 seems to miscompile the shared DLL with -O2
     $(MAKE) -C '$(1)' \
         GLEW_DEST=$(PREFIX)/$(TARGET) \
         SYSTEM=linux-mingw32 \
         CC=$(TARGET)-gcc \
         LD=$(TARGET)-ld \
         NAME=GLEW \
-        $(if $(BUILD_SHARED),POPT=-O0) \
-        mxe glew.pc glewmx.pc
+        mxe glew.pc
 
     $(if $(BUILD_STATIC),
         $(TARGET)-ranlib '$(1)/lib/libGLEW.a'
-        $(TARGET)-ranlib '$(1)/lib/libGLEWmx.a'
-        $(SED) -i -e "s|Cflags:|Cflags: -DGLEW_STATIC|g" '$(1)'/glew.pc '$(1)'/glewmx.pc
-        $(SED) -i -e "s|Requires:|Requires: gl|g"        '$(1)'/glew.pc '$(1)'/glewmx.pc
+        $(SED) -i -e "s|Cflags:|Cflags: -DGLEW_STATIC|g" '$(1)'/glew.pc
+        $(SED) -i -e "s|Requires:|Requires: gl|g"        '$(1)'/glew.pc
     )
-    $(SED) -i -e "s|prefix=/usr|prefix=$(PREFIX)/$(TARGET)|g" '$(1)'/glew.pc '$(1)'/glewmx.pc
+    $(SED) -i -e "s|prefix=/usr|prefix=$(PREFIX)/$(TARGET)|g" '$(1)'/glew.pc
 
     # Install
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib'
     $(if $(BUILD_STATIC),
-        $(INSTALL) -m644 '$(1)/lib/libGLEW.a' '$(1)/lib/libGLEWmx.a' '$(PREFIX)/$(TARGET)/lib/'
+        $(INSTALL) -m644 '$(1)/lib/libGLEW.a' '$(PREFIX)/$(TARGET)/lib/'
         $(INSTALL) -m644 '$(1)/lib/libGLEW.a' '$(PREFIX)/$(TARGET)/lib/libglew32s.a'
         $(INSTALL) -m644 '$(1)/lib/libGLEW.a' '$(PREFIX)/$(TARGET)/lib/libglew32.a'
     ,
-        $(INSTALL) -m644 '$(1)/lib/GLEW.dll' '$(1)/lib/GLEWmx.dll' '$(PREFIX)/$(TARGET)/bin/'
-        $(INSTALL) -m644 '$(1)/lib/libGLEW.dll.a' '$(1)/lib/libGLEWmx.dll.a' '$(PREFIX)/$(TARGET)/lib/'
+        $(INSTALL) -m644 '$(1)/lib/GLEW.dll' '$(PREFIX)/$(TARGET)/bin/'
+        $(INSTALL) -m644 '$(1)/lib/libGLEW.dll.a' '$(PREFIX)/$(TARGET)/lib/'
         $(INSTALL) -m644 '$(1)/lib/libGLEW.dll.a' '$(PREFIX)/$(TARGET)/lib/libglew32s.dll.a'
         $(INSTALL) -m644 '$(1)/lib/libGLEW.dll.a' '$(PREFIX)/$(TARGET)/lib/libglew32.dll.a'
     )
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
     $(INSTALL) -m644 '$(1)/glew.pc' '$(PREFIX)/$(TARGET)/lib/pkgconfig/'
-    $(INSTALL) -m644 '$(1)/glewmx.pc' '$(PREFIX)/$(TARGET)/lib/pkgconfig/'
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/include'
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/include/GL'
     $(INSTALL) -m644 '$(1)/include/GL/glew.h' '$(1)/include/GL/wglew.h' '$(PREFIX)/$(TARGET)/include/GL/'
@@ -63,9 +59,4 @@ define $(PKG)_BUILD
         `'$(TARGET)-pkg-config' glew --cflags` \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-glew.exe' \
         `'$(TARGET)-pkg-config' glew --libs`
-    '$(TARGET)-gcc' \
-        -W -Wall -Werror -ansi -pedantic \
-        `'$(TARGET)-pkg-config' glewmx --cflags` \
-        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-glewmx.exe' \
-        `'$(TARGET)-pkg-config' glewmx --libs`
 endef

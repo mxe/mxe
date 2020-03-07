@@ -12,7 +12,7 @@ $(PKG)_DEPS     := cc fontconfig freetype-bootstrap glib libpng lzo pixman zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://cairographics.org/releases/?C=M;O=D' | \
-    $(SED) -n 's,.*"cairo-\([0-9][^"]*\)\.tar.*,\1,p' | \
+    $(SED) -n 's,.*"cairo-\([0-9]\.[0-9][^"]*\)\.tar.*,\1,p' | \
     head -1
 endef
 

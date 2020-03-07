@@ -1,0 +1,215 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sun, 8 Sep 2019 18:22:33 +1000
+Subject: [PATCH 1/4] Allow optional build of bins, docs, and tests
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -74,6 +74,11 @@ option ( enable-pulseaudio "compile PulseAudio support (if it is available)" on
+ option ( enable-readline "compile readline lib line editing (if it is available)" on )
+ option ( enable-threads "enable multi-threading support (such as parallel voice synthesis)" on )
+ 
++# Options for build components
++option ( build-bins "build binary programs" on )
++option ( build-docs "build docs" on )
++option ( build-tests "build tests" on )
++
+ # Platform specific options
+ if ( CMAKE_SYSTEM MATCHES "Linux|FreeBSD|DragonFly" )
+     option ( enable-lash "compile LASH support (if it is available)" on )
+@@ -632,8 +637,12 @@ link_directories (
+ 
+ # Process subdirectories
+ add_subdirectory ( src )
+-add_subdirectory ( test )
+-add_subdirectory ( doc )
++if ( build-tests )
++    add_subdirectory ( test )
++endif ()
++if ( build-docs )
++    add_subdirectory ( doc )
++endif ()
+ 
+ # pkg-config support
+ set ( prefix "${CMAKE_INSTALL_PREFIX}" )
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -331,32 +331,34 @@ target_link_libraries ( libfluidsynth
+ )
+ 
+ # ************ CLI program ************
++if ( build-bins )
++    set ( fluidsynth_bin "fluidsynth" )
++    set ( fluidsynth_SOURCES fluidsynth.c )
+ 
+-set ( fluidsynth_SOURCES fluidsynth.c )
+-
+-add_executable ( fluidsynth
+-    ${fluidsynth_SOURCES}
+-)
++    add_executable ( fluidsynth
++        ${fluidsynth_SOURCES}
++    )
+ 
+-if ( FLUID_CPPFLAGS )
+-  set_target_properties ( fluidsynth
+-    PROPERTIES COMPILE_FLAGS ${FLUID_CPPFLAGS} )
+-endif ( FLUID_CPPFLAGS )
++    if ( FLUID_CPPFLAGS )
++      set_target_properties ( fluidsynth
++        PROPERTIES COMPILE_FLAGS ${FLUID_CPPFLAGS} )
++    endif ( FLUID_CPPFLAGS )
+ 
+-target_link_libraries ( fluidsynth
+-    libfluidsynth
+-    ${SYSTEMD_LIBRARIES}
+-    ${FLUID_LIBS}
+-)
++    target_link_libraries ( fluidsynth
++        libfluidsynth
++        ${SYSTEMD_LIBRARIES}
++        ${FLUID_LIBS}
++    )
++endif ()
+ 
+ if ( MACOSX_FRAMEWORK )
+-  install ( TARGETS fluidsynth libfluidsynth
++  install ( TARGETS ${fluidsynth_bin} libfluidsynth
+     RUNTIME DESTINATION ${BIN_INSTALL_DIR}
+     FRAMEWORK DESTINATION ${FRAMEWORK_INSTALL_DIR}
+     ARCHIVE DESTINATION ${FRAMEWORK_INSTALL_DIR}
+ )
+ else ( MACOSX_FRAMEWORK )
+-  install ( TARGETS fluidsynth libfluidsynth
++  install ( TARGETS ${fluidsynth_bin} libfluidsynth
+     RUNTIME DESTINATION ${BIN_INSTALL_DIR}
+     LIBRARY DESTINATION ${LIB_INSTALL_DIR}
+     ARCHIVE DESTINATION ${LIB_INSTALL_DIR}
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sun, 8 Sep 2019 18:24:56 +1000
+Subject: [PATCH 2/4] Set *.pc libs/requires based on detected features
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -221,6 +221,7 @@ if ( WIN32 )
+ 
+   if ( enable-dsound AND HAVE_DSOUND_H )
+     set ( WINDOWS_LIBS "${WINDOWS_LIBS};dsound" )
++    set ( PC_LIBS "${PC_LIBS} -ldsound" )
+     set ( DSOUND_SUPPORT 1 )
+   endif ()
+ 
+@@ -465,6 +466,7 @@ else(NOT enable-pkgconfig)
+ 
+     # Mandatory libraries: glib and gthread
+     pkg_check_modules ( GLIB REQUIRED glib-2.0>=2.6.5 gthread-2.0>=2.6.5 )
++    set ( PC_REQUIRES "${PC_REQUIRES} glib-2.0 gthread-2.0")
+ 
+     if ( GLIB_glib-2.0_VERSION AND GLIB_glib-2.0_VERSION VERSION_LESS "2.26.0" )
+         message ( WARNING "Your version of glib is very old. This may cause problems with fluidsynth's sample cache on Windows. Consider updating to glib 2.26 or newer!" )
+@@ -481,6 +483,7 @@ else(NOT enable-pkgconfig)
+     if ( LIBSNDFILE_SUPPORT )
+         pkg_check_modules ( LIBSNDFILE_VORBIS sndfile>=1.0.18 )
+         set ( LIBSNDFILE_HASVORBIS ${LIBSNDFILE_VORBIS_FOUND} )
++        set ( PC_REQUIRES "${PC_REQUIRES} sndfile")
+     endif ( LIBSNDFILE_SUPPORT )
+     else ( enable-libsndfile )
+     unset_pkg_config ( LIBSNDFILE )
+@@ -507,6 +510,9 @@ else(NOT enable-pkgconfig)
+     if ( enable-portaudio )
+     pkg_check_modules ( PORTAUDIO portaudio-2.0>=19 )
+     set ( PORTAUDIO_SUPPORT ${PORTAUDIO_FOUND} )
++    if ( PORTAUDIO_SUPPORT )
++      set ( PC_REQUIRES "${PC_REQUIRES} portaudio-2.0")
++    endif ()
+     else ( enable-portaudio )
+     unset_pkg_config ( PORTAUDIO )
+     endif ( enable-portaudio )
+@@ -515,6 +521,9 @@ else(NOT enable-pkgconfig)
+     if ( enable-jack )
+     pkg_check_modules ( JACK jack )
+     set ( JACK_SUPPORT ${JACK_FOUND} )
++    if ( JACK_SUPPORT )
++        set ( PC_REQUIRES "${PC_REQUIRES} jack")
++    endif ()
+     else ( enable-jack )
+     unset_pkg_config ( JACK )
+     endif ( enable-jack )
+@@ -543,6 +552,9 @@ else(NOT enable-pkgconfig)
+     if ( enable-dbus )
+     pkg_check_modules ( DBUS dbus-1>=1.0.0 )
+     set ( DBUS_SUPPORT ${DBUS_FOUND} )
++    if ( DBUS_SUPPORT )
++        set ( PC_REQUIRES "${PC_REQUIRES} dbus-1")
++    endif ()
+     else ( enable-dbus )
+     unset_pkg_config ( DBUS )
+     endif ( enable-dbus )
+diff --git a/fluidsynth.pc.in b/fluidsynth.pc.in
+index 1111111..2222222 100644
+--- a/fluidsynth.pc.in
++++ b/fluidsynth.pc.in
+@@ -6,5 +6,6 @@ includedir=@includedir@
+ Name: FluidSynth
+ Description: Software SoundFont synth
+ Version: @VERSION@
+-Libs: -L${libdir} -lfluidsynth
++Requires: @PC_REQUIRES@
++Libs: -L${libdir} -lfluidsynth @PC_LIBS@
+ Cflags: -I${includedir}
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sat, 14 Sep 2019 12:09:14 +1000
+Subject: [PATCH 3/4] use detected mman libs
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -261,6 +261,11 @@ if ( WIN32 )
+   if ( MINGW )
+     set ( MINGW32 1 )
+     add_compile_options ( -mms-bitfields )
++    # mman-win32
++    if ( HAVE_SYS_MMAN_H )
++        set ( WINDOWS_LIBS "${WINDOWS_LIBS};mman" )
++        set ( PC_LIBS "${PC_LIBS} -lmman" )
++    endif ()
+   endif  ( MINGW )
+ else ( WIN32 )
+ # Check PThreads, but not in Windows
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sun, 13 Oct 2019 00:32:36 +1100
+Subject: [PATCH 4/4] add readline to PC_REQUIRES when detected
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -606,6 +606,7 @@ if ( enable-readline )
+   if ( HAVE_READLINE )
+     set ( WITH_READLINE 1 )
+     set ( READLINE_LIBS ${READLINE_LIBRARIES} )
++    set ( PC_REQUIRES "${PC_REQUIRES} readline")
+   endif ( HAVE_READLINE )
+ else ( enable-readline )
+   unset ( READLINE_LIBS CACHE )
