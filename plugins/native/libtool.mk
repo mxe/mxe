@@ -3,6 +3,8 @@
 PKG                  := libtool
 $(PKG)_DEPS_$(BUILD) := autoconf automake
 
+REQUIREMENTS := $(filter-out $(PKG), $(REQUIREMENTS))
+
 define $(PKG)_BUILD_$(BUILD)
     mkdir '$(1).build'
     cd    '$(1).build' && '$(1)/configure' \

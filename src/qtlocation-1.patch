@@ -1,15 +1,17 @@
-From 59c9b6ace8c06c3aa8a74abf9e3e3b02b5687cd2 Mon Sep 17 00:00:00 2001
+This file is part of MXE. See LICENSE.md for licensing information.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Fri, 2 Jun 2017 18:23:20 +0200
-Subject: [PATCH] disable mapboxgl for MXE
+Subject: [PATCH 1/1] disable mapboxgl for MXE
 
 
 diff --git a/src/plugins/geoservices/geoservices.pro b/src/plugins/geoservices/geoservices.pro
-index 0810d392..de781ed1 100644
+index 1111111..2222222 100644
 --- a/src/plugins/geoservices/geoservices.pro
 +++ b/src/plugins/geoservices/geoservices.pro
-@@ -10,7 +10,8 @@ qtConfig(c++14):!win32|mingw:!qnx {
-     !exists(../../3rdparty/mapbox-gl-native/CMakeLists.txt) {
+@@ -12,7 +12,8 @@ qtConfig(geoservices_mapboxgl) {
+     !exists(../../3rdparty/mapbox-gl-native/mapbox-gl-native.pro) {
          warning("Submodule mapbox-gl-native does not exist. Run 'git submodule update --init' on qtlocation.")
      } else {
 -        SUBDIRS += mapboxgl ../../3rdparty/mapbox-gl-native
@@ -19,6 +21,3 @@ index 0810d392..de781ed1 100644
 +	message(MXE: mapboxgl disabled)
      }
  }
--- 
-2.11.0
-

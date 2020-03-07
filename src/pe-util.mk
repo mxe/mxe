@@ -4,8 +4,8 @@ PKG             := pe-util
 $(PKG)_WEBSITE  := https://github.com/gsauthof/pe-util
 $(PKG)_DESCR    := List shared object dependencies of a portable executable (PE)
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 04f9475
-$(PKG)_CHECKSUM := d3f9f713fa9af3d43d3a25b803525752ac75353b2da343af0b82a4fcd318b78a
+$(PKG)_VERSION  := 5b07cb3
+$(PKG)_CHECKSUM := 7bc06495a5be6f2b175a28b87c1ab1d16e63b031db2bcfd4760cadc2743c1d68
 $(PKG)_GH_CONF  := gsauthof/pe-util/branches/master
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 $(PKG)_DEPS     := cc boost pe-parse $(BUILD)~$(PKG)
@@ -31,6 +31,10 @@ define $(PKG)_BUILD
          echo 'exec "$(PREFIX)/$(BUILD)/bin/peldd" \
                     --clear-path \
                     --path "$(PREFIX)/$(TARGET)/bin" \
+                    --path "$(PREFIX)/$(TARGET)/qt5/bin" \
+                    --wlist uxtheme.dll \
+                    --wlist opengl32.dll \
+                    --wlist userenv.dll \
                     "$$@"') \
                  > '$(PREFIX)/bin/$(TARGET)-peldd'
         chmod 0755 '$(PREFIX)/bin/$(TARGET)-peldd'
@@ -42,6 +46,11 @@ define $(PKG)_BUILD_$(BUILD)
     # build and install the binary
     cd '$(BUILD_DIR)' && cmake '$(SOURCE_DIR)' \
         -DCMAKE_INSTALL_PREFIX='$(PREFIX)/$(TARGET)' \
+        -DBOOST_ROOT='$(PREFIX)/$(TARGET)' \
+        -DBOOST_INCLUDEDIR='$(PREFIX)/$(TARGET)/include' \
+        -DBOOST_LIBRARYDIR='$(PREFIX)/$(TARGET)/lib' \
+        -DBoost_NO_SYSTEM_PATHS=ON \
+        -DBoost_NO_BOOST_CMAKE=ON \
         -DCMAKE_CXX_FLAGS='-I$(PREFIX)/$(TARGET)/include'
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install

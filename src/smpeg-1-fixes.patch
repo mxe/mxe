@@ -1,0 +1,29 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Thu, 20 Feb 2020 13:41:29 +1100
+Subject: [PATCH 1/1] fix missing declaration
+
+
+diff --git a/MPEGaudio.h b/MPEGaudio.h
+index 1111111..2222222 100644
+--- a/MPEGaudio.h
++++ b/MPEGaudio.h
+@@ -149,6 +149,14 @@ private:
+ };
+ 
+ /* The actual MPEG audio class */
++
++class MPEGaudio;
++void Play_MPEGaudioSDL(void *udata, Uint8 *stream, int len);
++int Play_MPEGaudio(MPEGaudio *audio, Uint8 *stream, int len);
++#ifdef THREADED_AUDIO
++int Decode_MPEGaudio(void *udata);
++#endif
++
+ class MPEGaudio : public MPEGerror, public MPEGaudioaction {
+ 
+     friend void Play_MPEGaudioSDL(void *udata, Uint8 *stream, int len);
