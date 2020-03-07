@@ -18,4 +18,8 @@ endef
 
 define $(PKG)_BUILD
     $(QMAKE_MAKE_INSTALL)
+    
+    # Workaround for fixing build of current version of QtWebkit with Qt 5.7.1
+    cp $(PWD)/plugins/examples/qt5-freeze/Qt5QuickConfig.cmake \
+       $(PREFIX)/$(TARGET)/qt5/lib/cmake/Qt5Quick/
 endef

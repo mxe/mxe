@@ -26,7 +26,7 @@ define $(PKG)_BUILD
         'greaterThan(QT_GCC_MAJOR_VERSION, 8): QMAKE_CXXFLAGS_WARN_ON += -Wno-deprecated-copy' \
         '$(PWD)/src/qca-test.pro'
     $(MAKE) -C '$(BUILD_DIR).test-qmake' -j 1
-    $(INSTALL) -m755 '$(BUILD_DIR).test-qmake/$(BUILD_TYPE)/test-qca-qmake.exe' '$(PREFIX)/$(TARGET)/bin/'
+    $(INSTALL) -m755 '$(BUILD_DIR).test-qmake/test-qca-qmake.exe' '$(PREFIX)/$(TARGET)/bin/'
 
     # build test as cmake project
     mkdir '$(BUILD_DIR).test-cmake'

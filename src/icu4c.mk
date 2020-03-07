@@ -1,56 +1,74 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := icu4c
-$(PKG)_WEBSITE  := https://ssl.icu-project.org/
+$(PKG)_WEBSITE  := https://github.com/unicode-org/icu
 $(PKG)_DESCR    := ICU4C
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 56.1
+$(PKG)_VERSION  := 65.1
 $(PKG)_MAJOR    := $(word 1,$(subst ., ,$($(PKG)_VERSION)))
-$(PKG)_CHECKSUM := 3a64e9105c734dcf631c0b3ed60404531bce6c0f5a64bfe1a6402a4cc2314816
+$(PKG)_CHECKSUM := 53e37466b3d6d6d01ead029e3567d873a43a5d1c668ed2278e253b683136d948
+$(PKG)_GH_CONF  := unicode-org/icu/releases/latest,release-,,,-
 $(PKG)_SUBDIR   := icu
-$(PKG)_FILE     := $(PKG)-$(subst .,_,$($(PKG)_VERSION))-src.tgz
-$(PKG)_URL      := https://ssl.icu-project.org/files/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc
+$(PKG)_URL      := $($(PKG)_WEBSITE)/releases/download/release-$(subst .,-,$($(PKG)_VERSION))/icu4c-$(subst .,_,$($(PKG)_VERSION))-src.tgz
+$(PKG)_DEPS     := cc $(BUILD)~$(PKG) pe-util
 
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://bugs.icu-project.org/trac/browser/icu/tags' | \
-    $(SED) -n 's,.*release-\([0-9-]*\)<.*,\1,p' | \
-    tr '-' '.' | \
-    $(SORT) -V | \
-    tail -1
+$(PKG)_TARGETS       := $(BUILD) $(MXE_TARGETS)
+$(PKG)_DEPS_$(BUILD) :=
+
+define $(PKG)_BUILD_$(BUILD)
+    # cross build requires artefacts from native build tree
+    rm -rf '$(PREFIX)/$(BUILD)/$(PKG)'
+    $(INSTALL) -d '$(PREFIX)/$(BUILD)/$(PKG)'
+    cd '$(PREFIX)/$(BUILD)/$(PKG)' && '$(SOURCE_DIR)/source/configure' \
+        CC=$(BUILD_CC) \
+        CXX=$(BUILD_CXX) \
+        --enable-tests=no \
+        --enable-samples=no
+    $(MAKE) -C '$(PREFIX)/$(BUILD)/$(PKG)' -j '$(JOBS)'
 endef
 
 define $(PKG)_BUILD_COMMON
-    cd '$(1)/source' && autoreconf -fi
-    mkdir '$(1).native' && cd '$(1).native' && '$(1)/source/configure' \
-        CC=$(BUILD_CC) CXX=$(BUILD_CXX)
-    $(MAKE) -C '$(1).native' -j '$(JOBS)'
-
-    mkdir '$(1).cross' && cd '$(1).cross' && '$(1)/source/configure' \
+    rm -fv $(shell echo "$(PREFIX)/$(TARGET)"/{bin,lib}/{lib,libs,}icu'*'.{a,dll,dll.a})
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/source/configure' \
         $(MXE_CONFIGURE_OPTS) \
-        --with-cross-build='$(1).native' \
-        CFLAGS=-DU_USING_ICU_NAMESPACE=0 \
+        --with-cross-build='$(PREFIX)/$(BUILD)/$(PKG)' \
+        --enable-icu-config=no \
         CXXFLAGS='--std=gnu++0x' \
-        SHELL=bash
+        SHELL=$(SHELL) \
+        LIBS='-lstdc++' \
+        $($(PKG)_CONFIGURE_OPTS)
 
-    $(MAKE) -C '$(1).cross' -j '$(JOBS)' install
-    ln -sf '$(PREFIX)/$(TARGET)/bin/icu-config' '$(PREFIX)/bin/$(TARGET)-icu-config'
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1 SO_TARGET_VERSION_SUFFIX=
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install VERBOSE=1 SO_TARGET_VERSION_SUFFIX=
+endef
+
+define $(PKG)_BUILD_TEST
+    '$(TARGET)-gcc' \
+        -W -Wall -Werror -ansi -pedantic \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
+        `'$(TARGET)-pkg-config' icu-uc icu-io --cflags --libs`
 endef
 
 define $(PKG)_BUILD_SHARED
     $($(PKG)_BUILD_COMMON)
     # icu4c installs its DLLs to lib/. Move them to bin/.
     mv -fv $(PREFIX)/$(TARGET)/lib/icu*.dll '$(PREFIX)/$(TARGET)/bin/'
-    # add symlinks icu*<version>.dll.a to icu*.dll.a
-    for lib in `ls '$(PREFIX)/$(TARGET)/lib/' | grep 'icu.*\.dll\.a' | cut -d '.' -f 1 | tr '\n' ' '`; \
-    do \
-        ln -fs "$(PREFIX)/$(TARGET)/lib/$${lib}.dll.a" "$(PREFIX)/$(TARGET)/lib/$${lib}$($(PKG)_MAJOR).dll.a"; \
-    done
+
+    # stub data is icudt.dll, actual data is libicudt.dll - prefer actual
+    test ! -e '$(PREFIX)/$(TARGET)/lib/libicudt$($(PKG)_MAJOR).dll' \
+        || mv -fv '$(PREFIX)/$(TARGET)/lib/libicudt$($(PKG)_MAJOR).dll' '$(PREFIX)/$(TARGET)/bin/icudt$($(PKG)_MAJOR).dll'
+
+    $($(PKG)_BUILD_TEST)
+
+    # bundle test to verify deployment
+    rm -rfv '$(PREFIX)/$(TARGET)/bin/test-$(PKG)' '$(PREFIX)/$(TARGET)/bin/test-$(PKG).zip'
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/bin/test-$(PKG)'
+    cp $$($(TARGET)-peldd --all '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe') '$(PREFIX)/$(TARGET)/bin/test-$(PKG)'
+    cd '$(PREFIX)/$(TARGET)/bin' && 7za a -tzip test-$(PKG).zip test-$(PKG)
+    rm -rfv '$(PREFIX)/$(TARGET)/bin/test-$(PKG)'
 endef
 
 define $(PKG)_BUILD
     $($(PKG)_BUILD_COMMON)
-    # Static libs are prefixed with an `s` but the config script
-    # doesn't detect it properly, despite the STATIC_PREFIX="s" line
-    $(SED) -i 's,ICUPREFIX="icu",ICUPREFIX="sicu",' '$(PREFIX)/$(TARGET)/bin/icu-config'
+    $($(PKG)_BUILD_TEST)
 endef

@@ -13,6 +13,8 @@ $(PKG)_OWNER    := https://github.com/tonytheodore
 $(PKG)_TARGETS  := $(BUILD)
 $(PKG)_DEPS     := m4
 
+REQUIREMENTS := $(filter-out $(PKG), $(REQUIREMENTS))
+
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://ftp.gnu.org/gnu/autoconf/?C=M;O=D' | \
     $(SED) -n 's,.*<a href="autoconf-\([0-9][^"]*\)\.tar.*,\1,p' | \

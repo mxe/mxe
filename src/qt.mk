@@ -31,6 +31,7 @@ define $(PKG)_BUILD
         PSQL_LIBS="-lpq -lsecur32 `'$(TARGET)-pkg-config' --libs-only-l openssl pthreads` -lws2_32" \
         SYBASE_LIBS="-lsybdb `'$(TARGET)-pkg-config' --libs-only-l openssl` -liconv -lws2_32" \
         CXXFLAGS="-std=gnu++98" \
+        MAKE=$(MAKE) \
         ./configure \
         -opensource \
         -confirm-license \

@@ -20,15 +20,25 @@ endef
 
 define $(PKG)_BUILD
     # configure script is ancient and lacks cross-compiling support
-    cd '$(1)' && autoreconf -fi
-    cd '$(1)' && ./configure \
+    cd '$(SOURCE_DIR)' && autoreconf -fi
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS)
-    $(MAKE) -C '$(1)' -j '$(JOBS)' \
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' \
         AR='$(TARGET)-ar' \
         oldincludedir= \
         install
 
+    # create pkg-config file
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
+    (echo 'Name: $(PKG)'; \
+     echo 'Version: $($(PKG)_VERSION)'; \
+     echo 'Description: $($(PKG)_DESCR)'; \
+     echo 'Requires:'; \
+     echo 'Libs: -l$(PKG)'; \
+     echo 'Cflags.private:';) \
+     > '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG).pc'
+
     # no shared support in configure/Makefile
     $(if $(BUILD_SHARED), \
-        $(MAKE_SHARED_FROM_STATIC) '$(1)/libtermcap.a')
+        $(MAKE_SHARED_FROM_STATIC) '$(BUILD_DIR)/libtermcap.a')
 endef
