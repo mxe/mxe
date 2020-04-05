@@ -28,8 +28,8 @@ define $(PKG)_BUILD
         --disable-tests \
         --enable-local-libopts \
         --without-p11-kit \
-        --disable-silent-rules
-        ac_cv_prog_AR='$(TARGET)-ar'
+        --disable-silent-rules \
+        CFLAGS='-D_WIN32_WINNT=0x0600'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 
     '$(TARGET)-gcc' \
