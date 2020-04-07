@@ -18,6 +18,7 @@ define $(PKG)_BUILD
     cd '$(BUILD_DIR).test-cmake' && '$(TARGET)-cmake' \
         -DPKG=$(PKG) \
         -DPKG_VERSION=$($(PKG)_VERSION) \
+        -DCMAKE_CXX_FLAGS='-fstack-protector' \
         '$(PWD)/src/cmake/test'
     $(MAKE) -C '$(BUILD_DIR).test-cmake' -j 1 install
 endef
