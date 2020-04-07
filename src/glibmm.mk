@@ -22,6 +22,7 @@ define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
         CXX='$(TARGET)-g++' \
+        CXXFLAGS='-Wno-deprecated-declarations -Wno-deprecated' \
         PKG_CONFIG='$(PREFIX)/bin/$(TARGET)-pkg-config' \
         GLIB_COMPILE_SCHEMAS='$(PREFIX)/$(TARGET)/bin/glib-compile-schemas' \
         $(shell [ `uname -s` == Darwin ] && echo "PERL=/usr/bin/perl") \
