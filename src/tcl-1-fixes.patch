@@ -13,10 +13,10 @@ diff --git a/win/Makefile.in b/win/Makefile.in
 index 1111111..2222222 100644
 --- a/win/Makefile.in
 +++ b/win/Makefile.in
-@@ -146,9 +146,8 @@ REG_DLL_FILE		= tclreg$(REGVER)${DLLSUFFIX}
- REG_LIB_FILE		= @LIBPREFIX@tclreg$(REGVER)${LIBSUFFIX}
- TEST_DLL_FILE		= tcltest$(VER)${DLLSUFFIX}
- TEST_LIB_FILE		= @LIBPREFIX@tcltest$(VER)${LIBSUFFIX}
+@@ -153,9 +153,8 @@ TEST_LOAD_PRMS		= package ifneeded dde 1.4.2 [list load [file normalize ${DDE_DL
+ 			  package ifneeded registry 1.3.4 [list load [file normalize ${REG_DLL_FILE}] registry]
+ TEST_LOAD_FACILITIES	= package ifneeded Tcltest ${VERSION}@TCL_PATCH_LEVEL@ [list load [file normalize ${TEST_DLL_FILE}] Tcltest];\
+ 			  $(TEST_LOAD_PRMS)
 -ZLIB_DLL_FILE		= zlib1.dll
  
 -SHARED_LIBRARIES 	= $(TCL_DLL_FILE) @ZLIB_DLL_FILE@
@@ -24,7 +24,7 @@ index 1111111..2222222 100644
  STATIC_LIBRARIES	= $(TCL_LIB_FILE)
  
  TCLSH			= tclsh$(VER)${EXESUFFIX}
-@@ -411,7 +410,7 @@ ZLIB_OBJS = \
+@@ -416,7 +415,7 @@ ZLIB_OBJS = \
  	uncompr.$(OBJEXT) \
  	zutil.$(OBJEXT)
  
@@ -33,18 +33,9 @@ index 1111111..2222222 100644
  
  TCL_DOCS = "$(ROOT_DIR_NATIVE)"/doc/*.[13n]
  
-@@ -446,7 +445,7 @@ ${TCL_STUB_LIB_FILE}: ${STUB_OBJS}
- 	@MAKE_STUB_LIB@ ${STUB_OBJS}
- 	@POST_MAKE_LIB@
- 
--${TCL_DLL_FILE}: ${TCL_OBJS} tcl.$(RES) @ZLIB_DLL_FILE@
-+${TCL_DLL_FILE}: ${TCL_OBJS} tcl.$(RES)
- 	@$(RM) ${TCL_DLL_FILE} $(TCL_LIB_FILE)
- 	@MAKE_DLL@ ${TCL_OBJS} tcl.$(RES) $(SHLIB_LD_LIBS)
- 	@VC_MANIFEST_EMBED_DLL@
-@@ -466,14 +465,6 @@ ${TEST_DLL_FILE}: ${TCL_STUB_LIB_FILE} ${TCLTEST_OBJS}
- 	@$(RM) ${TEST_DLL_FILE} ${TEST_LIB_FILE}
- 	@MAKE_DLL@ ${TCLTEST_OBJS} $(TCL_STUB_LIB_FILE) $(SHLIB_LD_LIBS)
+@@ -511,14 +510,6 @@ ${TEST_EXE_FILE}: ${TCL_STUB_LIB_FILE} ${TCLTEST_OBJS} tclTestMain.${OBJEXT}
+         tclsh.$(RES) $(CC_EXENAME) $(LDFLAGS_CONSOLE)
+ 	$(COPY) tclsh.exe.manifest ${TEST_EXE_FILE}.manifest
  
 -# use pre-built zlib1.dll
 -${ZLIB_DLL_FILE}: ${TCL_STUB_LIB_FILE}
@@ -57,7 +48,7 @@ index 1111111..2222222 100644
  # Add the object extension to the implicit rules. By default .obj is not
  # automatically added.
  
-@@ -579,7 +570,7 @@ install-binaries: binaries
+@@ -633,7 +624,7 @@ install-binaries: binaries
  		else true; \
  		fi; \
  	    done;
@@ -70,7 +61,7 @@ diff --git a/win/configure.in b/win/configure.in
 index 1111111..2222222 100644
 --- a/win/configure.in
 +++ b/win/configure.in
-@@ -126,20 +126,8 @@ AS_IF([test "${enable_shared+set}" = "set"], [
+@@ -140,20 +140,8 @@ AS_IF([test "${enable_shared+set}" = "set"], [
  ], [
    tcl_ok=yes
  ])
