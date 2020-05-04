@@ -28,7 +28,7 @@ define $(PKG)_BUILD
 
     cd '$(SOURCE_DIR)/example' && '$(PREFIX)/$(TARGET)/$($(PKG)_QT_DIR)/bin/qmake' example.pro
     $(MAKE) -C '$(SOURCE_DIR)/example' -j '$(JOBS)'
-    $(INSTALL) -m755 '$(SOURCE_DIR)/example/opencsgexample.exe' '$(PREFIX)/$(TARGET)/bin/test-opencsg.exe'
+    $(INSTALL) -m755 '$(SOURCE_DIR)/example/$(BUILD_TYPE)/opencsgexample.exe' '$(PREFIX)/$(TARGET)/bin/test-opencsg.exe'
 endef
 
 $(PKG)_BUILD_SHARED =

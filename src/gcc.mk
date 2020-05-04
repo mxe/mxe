@@ -60,6 +60,7 @@ define $(PKG)_BUILD_mingw-w64
     cd '$(BUILD_DIR).headers' && '$(BUILD_DIR)/$(mingw-w64_SUBDIR)/mingw-w64-headers/configure' \
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \
+        --with-default-msvcrt=msvcrt \
         --enable-sdk=all \
         --enable-idl \
         --enable-secure-api \

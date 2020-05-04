@@ -4,8 +4,8 @@ PKG             := grantlee
 $(PKG)_WEBSITE  := https://github.com/steveire/grantlee
 $(PKG)_DESCR    := Grantlee is a set of Free Software libraries written using the Qt framework
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.1.0
-$(PKG)_CHECKSUM := 3836572fe5e49d28a1d99186c6d96f88ff839644b4bc77b73b6d8208f6ccc9d1
+$(PKG)_VERSION  := 5.2.0
+$(PKG)_CHECKSUM := 139acee5746b957bdf1327ec0d97c604d4c0b9be42aec5d584297cb5ed6a990a
 $(PKG)_GH_CONF  := steveire/grantlee/tags,v
 $(PKG)_DEPS     := cc qtbase
 

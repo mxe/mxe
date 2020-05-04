@@ -1,0 +1,21 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Tue, 7 Apr 2020 15:58:15 +0200
+Subject: [PATCH 1/1] fix missing indirection
+
+
+diff --git a/glib/glibmm/threads.h b/glib/glibmm/threads.h
+index 1111111..2222222 100644
+--- a/glib/glibmm/threads.h
++++ b/glib/glibmm/threads.h
+@@ -608,7 +608,7 @@ public:
+    */
+   inline void replace(T* data);
+ 
+-  GPrivate* gobj() { return gobject_; }
++  GPrivate* gobj() { return &gobject_; }
+ 
+ private:
+   GPrivate gobject_;
