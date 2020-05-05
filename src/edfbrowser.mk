@@ -5,9 +5,9 @@ PKG             := edfbrowser
 $(PKG)_WEBSITE  := https://www.teuniz.net/edfbrowser/
 $(PKG)_DESCR    := EDFbrowser
 $(PKG)_IGNORE   := 
-$(PKG)_VERSION  := 1.72
-$(PKG)_CHECKSUM := 665c08062640904c21fa68f600423085d2bfc0227ea6ba24ffc2e2507fd00c2d
-$(PKG)_SUBDIR   := edfbrowser_172_source
+$(PKG)_VERSION  := 1.75
+$(PKG)_CHECKSUM := 158d147d255ec19d7f206d929170ef099017ba16239f6960c1926feec75c813c
+$(PKG)_SUBDIR   := edfbrowser_175_source
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_URL      := https://www.teuniz.net/edfbrowser/$($(PKG)_FILE)
                    https://gitlab.com/Teuniz/EDFbrowser/releases
@@ -21,7 +21,7 @@ define $(PKG)_BUILD
 
     $(MAKE) -C '$(1)'
     
-    $(INSTALL) '$(1)/edfbrowser.exe' '$(PREFIX)/$(TARGET)/bin/'
+    $(INSTALL) '$(1)/release/edfbrowser.exe' '$(PREFIX)/$(TARGET)/bin/'
 
 endef
 
