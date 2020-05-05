@@ -9,7 +9,7 @@ $(PKG)_SUBDIR   := sigviewer-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_URL      := https://github.com/cbrnr/$(PKG)/archive/v$($(PKG)_VERSION).tar.gz
 $(PKG)_QT_DIR   := qt5
-$(PKG)_DEPS     := libbiosig libxdf qtbase
+$(PKG)_DEPS     := biosig libxdf qtbase
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://biosig.sourceforge.net/download.html' | \
