@@ -24,3 +24,43 @@ index 1111111..2222222 100755
      check_header stdint.h
      check_header pthread.h
 
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Thu, 5 Sep 2013 14:28:28 -0700
+Subject: [PATCH 2/2] Fix /bin/bash
+
+Signed-off-by: Timothy Gu <timothygu99@gmail.com>
+
+diff --git a/build/make/gen_msvs_def.sh b/build/make/gen_msvs_def.sh
+index 1111111..2222222 100755
+--- a/build/make/gen_msvs_def.sh
++++ b/build/make/gen_msvs_def.sh
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/usr/bin/env bash
+ ##
+ ##  Copyright (c) 2010 The WebM project authors. All Rights Reserved.
+ ##
+
+diff --git a/build/make/gen_msvs_vcxproj.sh b/build/make/gen_msvs_vcxproj.sh
+index 1111111..2222222 100755
+--- a/build/make/gen_msvs_vcxproj.sh
++++ b/build/make/gen_msvs_vcxproj.sh
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/usr/bin/env bash
+ ##
+ ##  Copyright (c) 2010 The WebM project authors. All Rights Reserved.
+ ##
+ 
+diff --git a/build/make/gen_msvs_sln.sh b/build/make/gen_msvs_sln.sh
+index 1111111..2222222 100755
+--- a/build/make/gen_msvs_sln.sh
++++ b/build/make/gen_msvs_sln.sh
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/usr/bin/env bash
+ ##
+ ##  Copyright (c) 2010 The WebM project authors. All Rights Reserved.
+ ##
