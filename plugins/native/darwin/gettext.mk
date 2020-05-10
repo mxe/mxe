@@ -3,6 +3,7 @@
 PKG := gettext
 
 define $(PKG)_BUILD_$(BUILD)
+    cd '$(SOURCE_DIR)' && autoreconf -fi
     # causes issues with other packages so use different prefix
     # but install *.m4 files and bins to standard location
     cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
