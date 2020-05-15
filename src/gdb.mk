@@ -24,7 +24,8 @@ define $(PKG)_BUILD
         --disable-gdbtk \
         --disable-tui \
         host_configargs="LIBS=\"`$(TARGET)-pkg-config --libs dlfcn` -lmman\"" \
-        CONFIG_SHELL=$(SHELL)
+        CONFIG_SHELL=$(SHELL) \
+        LDFLAGS='-Wl,--allow-multiple-definition'
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
 
     # executables are always static and we don't want the rest
