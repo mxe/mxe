@@ -12,7 +12,7 @@ diff --git a/configure b/configure
 index 1111111..2222222 100755
 --- a/configure
 +++ b/configure
-@@ -5133,8 +5133,8 @@ case "${host}" in
+@@ -5132,8 +5132,8 @@ case "${host}" in
  			;;
  	*-*-cygwin*)	platform=CYGWIN ;;
  	*-*-mingw*)	platform=MINGW
@@ -34,7 +34,7 @@ diff --git a/gsoap++.pc.in b/gsoap++.pc.in
 index 1111111..2222222 100644
 --- a/gsoap++.pc.in
 +++ b/gsoap++.pc.in
-@@ -9,4 +9,4 @@ Version: 2.8.100
+@@ -9,4 +9,4 @@ Version: 2.8.102
  Requires:
  Libs: -L${libdir} -lgsoap++
  Libs.private: @SAMPLE_EXTRA_LIBS@
@@ -44,7 +44,7 @@ diff --git a/gsoap.pc.in b/gsoap.pc.in
 index 1111111..2222222 100644
 --- a/gsoap.pc.in
 +++ b/gsoap.pc.in
-@@ -9,4 +9,4 @@ Version: 2.8.100
+@@ -9,4 +9,4 @@ Version: 2.8.102
  Requires:
  Libs: -L${libdir} -lgsoap
  Libs.private: @SAMPLE_EXTRA_LIBS@
@@ -54,7 +54,7 @@ diff --git a/gsoapck++.pc.in b/gsoapck++.pc.in
 index 1111111..2222222 100644
 --- a/gsoapck++.pc.in
 +++ b/gsoapck++.pc.in
-@@ -9,4 +9,4 @@ Version: 2.8.100
+@@ -9,4 +9,4 @@ Version: 2.8.102
  Requires:
  Libs: -L${libdir} -lgsoapck++
  Libs.private: @SAMPLE_EXTRA_LIBS@
@@ -64,7 +64,7 @@ diff --git a/gsoapck.pc.in b/gsoapck.pc.in
 index 1111111..2222222 100644
 --- a/gsoapck.pc.in
 +++ b/gsoapck.pc.in
-@@ -9,4 +9,4 @@ Version: 2.8.100
+@@ -9,4 +9,4 @@ Version: 2.8.102
  Requires:
  Libs: -L${libdir} -lgsoapck
  Libs.private: @SAMPLE_EXTRA_LIBS@
@@ -74,7 +74,7 @@ diff --git a/gsoapssl++.pc.in b/gsoapssl++.pc.in
 index 1111111..2222222 100644
 --- a/gsoapssl++.pc.in
 +++ b/gsoapssl++.pc.in
-@@ -9,4 +9,4 @@ Version: 2.8.100
+@@ -9,4 +9,4 @@ Version: 2.8.102
  Requires:
  Libs: -L${libdir} -lgsoapssl++
  Libs.private: @SAMPLE_SSL_LIBS@ @SAMPLE_EXTRA_LIBS@
@@ -84,7 +84,7 @@ diff --git a/gsoapssl.pc.in b/gsoapssl.pc.in
 index 1111111..2222222 100644
 --- a/gsoapssl.pc.in
 +++ b/gsoapssl.pc.in
-@@ -9,4 +9,4 @@ Version: 2.8.100
+@@ -9,4 +9,4 @@ Version: 2.8.102
  Requires:
  Libs: -L${libdir} -lgsoapssl
  Libs.private: @SAMPLE_SSL_LIBS@ @SAMPLE_EXTRA_LIBS@
