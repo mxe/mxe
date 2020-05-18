@@ -66,7 +66,7 @@
     "fontconfig": {"version": "2.13.1", "website": "https://fontconfig.org/", "description": ""},
     "freeglut": {"version": "3.0.0", "website": "https://freeglut.sourceforge.io/", "description": ""},
     "freeimage": {"version": "3.15.4", "website": "https://freeimage.sourceforge.io/", "description": "FreeImage"},
-    "freetds": {"version": "1.1.36", "website": "https://www.freetds.org/", "description": "FreeTDS"},
+    "freetds": {"version": "1.1.39", "website": "https://www.freetds.org/", "description": "FreeTDS"},
     "freetype": {"version": "2.10.2", "website": "https://www.freetype.org/", "description": ""},
     "freetype-bootstrap": {"version": "2.10.2", "website": "https://www.freetype.org/", "description": "freetype (without harfbuzz)"},
     "freexl": {"version": "1.0.5", "website": "https://www.gaia-gis.it/fossil/freexl/index", "description": "FreeXL"},
