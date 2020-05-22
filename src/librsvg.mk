@@ -19,7 +19,8 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
-        --disable-pixbuf-loader \
+        $(if $(BUILD_STATIC), \
+          --disable-pixbuf-loader,) \
         --disable-gtk-doc \
         --enable-introspection=no
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
