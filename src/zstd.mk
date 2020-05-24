@@ -4,8 +4,8 @@ PKG             := zstd
 $(PKG)_WEBSITE  := https://github.com/facebook/zstd
 $(PKG)_DESCR    := Zstandard is a fast lossless compression algorithm
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.4.4
-$(PKG)_CHECKSUM := a364f5162c7d1a455cc915e8e3cf5f4bd8b75d09bc0f53965b0c9ca1383c52c8
+$(PKG)_VERSION  := 1.4.5
+$(PKG)_CHECKSUM := 734d1f565c42f691f8420c8d06783ad818060fc390dee43ae0a89f86d0a4f8c2
 $(PKG)_GH_CONF  := facebook/zstd/tags,v
 $(PKG)_DEPS     := cc
 
