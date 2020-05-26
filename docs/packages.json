@@ -435,7 +435,7 @@
     "speex": {"version": "1.2.0", "website": "https://speex.org/", "description": "Speex"},
     "speexdsp": {"version": "1.2rc3", "website": "https://speex.org/", "description": "SpeexDSP"},
     "sqlcipher": {"version": "3.4.2", "website": "https://www.zetetic.net/sqlcipher/", "description": "SQLite extension that provides 256 bit AES encryption of database files"},
-    "sqlite": {"version": "3320000", "website": "https://www.sqlite.org/", "description": "SQLite"},
+    "sqlite": {"version": "3320100", "website": "https://www.sqlite.org/", "description": "SQLite"},
     "subversion": {"version": "1.9.7", "website": "https://subversion.apache.org/", "description": ""},
     "suitesparse": {"version": "4.5.6", "website": "http://faculty.cse.tamu.edu/davis/suitesparse.html", "description": "SuiteSparse"},
     "t4k_common": {"version": "0.1.1", "website": "https://tux4kids.alioth.debian.org/", "description": ""},
