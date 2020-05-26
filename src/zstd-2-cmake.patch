@@ -1,0 +1,15 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+This patch has been taken from:
+https://github.com/facebook/zstd/issues/2160
+
+--- a/build/cmake/lib/CMakeLists.txt.orig	2020-05-22 10:40:55.970834800 +0200
++++ b/build/cmake/lib/CMakeLists.txt	2020-05-22 10:42:57.880424500 +0200
+@@ -160,6 +160,7 @@
+ 
+ install(TARGETS ${library_targets}
+     EXPORT zstdExports
++    RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
+     INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+     ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+     LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}" 
