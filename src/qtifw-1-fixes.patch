@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Sun, 19 Jan 2020 13:27:42 +1100
-Subject: [PATCH 1/2] fixes
+Subject: [PATCH 1/1] fixes
 
 
 diff --git a/installerfw.pro b/installerfw.pro
@@ -82,34 +82,3 @@ index 1111111..2222222 100644
  
  namespace QInstaller {
  
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Tony Theodore <tonyt@logyst.com>
-Date: Sun, 19 Jan 2020 13:28:53 +1100
-Subject: [PATCH 2/2] fixes for Qt 5.14 update
-
-
-diff --git a/src/libs/installer/component.cpp b/src/libs/installer/component.cpp
-index 1111111..2222222 100644
---- a/src/libs/installer/component.cpp
-+++ b/src/libs/installer/component.cpp
-@@ -50,7 +50,6 @@
- 
- #include <QtUiTools/QUiLoader>
- 
--#include <private/qv8engine_p.h>
- #include <private/qv4scopedvalue_p.h>
- #include <private/qv4object_p.h>
- 
-diff --git a/src/libs/installer/extractarchiveoperation.cpp b/src/libs/installer/extractarchiveoperation.cpp
-index 1111111..2222222 100644
---- a/src/libs/installer/extractarchiveoperation.cpp
-+++ b/src/libs/installer/extractarchiveoperation.cpp
-@@ -30,6 +30,7 @@
- 
- #include "constants.h"
- 
-+#include <QDataStream>
- #include <QEventLoop>
- #include <QThreadPool>
- #include <QFileInfo>
