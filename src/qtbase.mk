@@ -117,7 +117,7 @@ define $(PKG)_BUILD_$(BUILD)
         -confirm-license \
         -no-dbus \
         -no-{eventfd,glib,icu,openssl} \
-        -no-sql-{db2,ibase,mysql,oci,odbc,psql,sqlite,sqlite2,tds} \
+        -no-sql-{db2,ibase,mysql,oci,odbc,psql,sqlite2,tds} \
         -no-use-gold-linker \
         -nomake examples \
         -nomake tests \
