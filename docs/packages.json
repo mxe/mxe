@@ -277,7 +277,7 @@
     "minizip": {"version": "68a48aa", "website": "https://www.winimage.com/zLibDll/minizip.html", "description": ""},
     "mman-win32": {"version": "9f115ad", "website": "https://code.google.com/p/mman-win32/", "description": "MMA-Win32"},
     "mpc": {"version": "1.1.0", "website": "http://www.multiprecision.org/", "description": "GNU MPC"},
-    "mpfr": {"version": "3.1.5", "website": "https://www.mpfr.org/", "description": ""},
+    "mpfr": {"version": "4.0.2", "website": "https://www.mpfr.org/", "description": ""},
     "mpg123": {"version": "1.26.0", "website": "https://www.mpg123.de/", "description": ""},
     "muparser": {"version": "2.2.5", "website": "https://beltoforion.de/article.php?a=muparser", "description": "muParser"},
     "muparserx": {"version": "4.0.7", "website": "https://beltoforion.de/article.php?a=muparserx", "description": "muParserX"},
