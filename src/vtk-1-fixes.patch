@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Martin=20M=C3=BCllenhaupt?= <mm+mxe.cc@netlair.de>
 Date: Wed, 20 Feb 2019 23:04:57 +1100
-Subject: [PATCH 1/3] fix glew static linking
+Subject: [PATCH 1/4] fix glew static linking
 
 
 diff --git a/Rendering/OpenGL2/CMakeLists.txt b/Rendering/OpenGL2/CMakeLists.txt
@@ -28,7 +28,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: jan <jan@linux-a9ex>
 Date: Mon, 18 May 2020 22:38:26 +0200
-Subject: [PATCH 2/3] ODR fix: use unique names for dummy symbols.
+Subject: [PATCH 2/4] ODR fix: use unique names for dummy symbols.
 
 
 diff --git a/ThirdParty/exodusII/vtkexodusII/src/ex_create_par.c b/ThirdParty/exodusII/vtkexodusII/src/ex_create_par.c
@@ -57,7 +57,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: jan <jan@linux-a9ex>
 Date: Mon, 18 May 2020 22:38:07 +0200
-Subject: [PATCH 3/3] Added missing export to __declspec(dllexport).
+Subject: [PATCH 3/4] Added missing export to __declspec(dllexport).
 
 
 diff --git a/ThirdParty/libxml2/vtklibxml2/include/libxml/xmlexports.h b/ThirdParty/libxml2/vtklibxml2/include/libxml/xmlexports.h
@@ -73,3 +73,47 @@ index 1111111..2222222 100644
    #else
      #define XMLPUBFUN
      #if !defined(LIBXML_STATIC)
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Wed, 27 May 2020 18:23:33 +0200
+Subject: [PATCH 4/4] add missing include for QPainterPath
+
+Qt 5.15 compatibility
+
+diff --git a/GUISupport/Qt/QVTKPaintEngine.h b/GUISupport/Qt/QVTKPaintEngine.h
+index 1111111..2222222 100644
+--- a/GUISupport/Qt/QVTKPaintEngine.h
++++ b/GUISupport/Qt/QVTKPaintEngine.h
+@@ -14,6 +14,7 @@
+ 
+ #include "QVTKWin32Header.h"
+ #include <QPaintEngine>
++#include <QPainterPath>
+ #include <vtkSetGet.h>
+ class QVTKWidget;
+ class QVTKPaintEngineInternal;
+diff --git a/Rendering/Qt/vtkQtLabelRenderStrategy.cxx b/Rendering/Qt/vtkQtLabelRenderStrategy.cxx
+index 1111111..2222222 100644
+--- a/Rendering/Qt/vtkQtLabelRenderStrategy.cxx
++++ b/Rendering/Qt/vtkQtLabelRenderStrategy.cxx
+@@ -41,6 +41,7 @@
+ #include <QImage>
+ #include <QMap>
+ #include <QPainter>
++#include <QPainterPath>
+ #include <QPair>
+ #include <QPixmap>
+ #include <QTextDocument>
+diff --git a/Rendering/Qt/vtkQtStringToImage.cxx b/Rendering/Qt/vtkQtStringToImage.cxx
+index 1111111..2222222 100644
+--- a/Rendering/Qt/vtkQtStringToImage.cxx
++++ b/Rendering/Qt/vtkQtStringToImage.cxx
+@@ -31,6 +31,7 @@
+ #include <QFontMetrics>
+ #include <QImage>
+ #include <QPainter>
++#include <QPainterPath>
+ #include <QPixmap>
+ #include <QTextDocument>
+ #include <QTextStream>
