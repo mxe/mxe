@@ -13,3 +13,5 @@
 /mxe-*.deb*
 /wheezy
 /jessie
+/.cproject
+/.project
