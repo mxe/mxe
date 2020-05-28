@@ -3,10 +3,10 @@
 PKG             := minizip
 $(PKG)_WEBSITE  := https://www.winimage.com/zLibDll/minizip.html
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 68a48aa
-$(PKG)_CHECKSUM := 3fca5754b6e9f96fc907bb6755a1daef72f869cee172a4e687611c47ee693ada
+$(PKG)_VERSION  := 2aa369c
+$(PKG)_CHECKSUM := 165afc71c29863f41c4d1cf9d3a2b1333b863e3d66e5e05b9e1e41c5af8b8a44
 $(PKG)_GH_CONF  := nmoinvaz/minizip/branches/master
-$(PKG)_DEPS     := cc zlib
+$(PKG)_DEPS     := cc bzip2 zlib
 
 define $(PKG)_BUILD
     # build and install the library
@@ -19,6 +19,7 @@ define $(PKG)_BUILD
     # compile test
     '$(TARGET)-gcc' \
         -W -Wall -Werror \
-        '$(SOURCE_DIR)/src/minizip.c' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
+        -DHAVE_STDINT_H -DHAVE_INTTYPES_H \
+        '$(SOURCE_DIR)/minizip.c' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
         `'$(TARGET)-pkg-config' $(PKG) --libs-only-l`
 endef
