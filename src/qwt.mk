@@ -23,6 +23,7 @@ define $(PKG)_BUILD
 
     # doesn't support out-of-source build
     cd '$(SOURCE_DIR)' && $(PREFIX)/$(TARGET)/$($(PKG)_QT_DIR)/bin/qmake \
+        'QMAKE_CXXFLAGS_WARN_ON += -Wno-deprecated-declarations' \
         -after \
         'SUBDIRS -= doc designer' \
         'CONFIG -= debug_and_release'
