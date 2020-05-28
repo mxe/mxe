@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Sun, 13 Oct 2019 16:21:22 +1100
-Subject: [PATCH 1/1] fix *.pc libs
+Subject: [PATCH 1/2] fix *.pc libs
 
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
@@ -20,3 +20,44 @@ index 1111111..2222222 100644
          ENDIF()
      ENDIF()
  
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Thu, 28 May 2020 13:50:18 +0200
+Subject: [PATCH 2/2] gcc 10 compatibility: add missing "extern"
+
+Related to:
+        Default to -fno-common
+        https://gcc.gnu.org/gcc-10/porting_to.html
+
+diff --git a/Alc/bformatdec.c b/Alc/bformatdec.c
+index 1111111..2222222 100644
+--- a/Alc/bformatdec.c
++++ b/Alc/bformatdec.c
+@@ -10,6 +10,9 @@
+ #include "threads.h"
+ #include "almalloc.h"
+ 
++const ALfloat N3D2N3DScale[MAX_AMBI_COEFFS];
++const ALfloat SN3D2N3DScale[MAX_AMBI_COEFFS];
++const ALfloat FuMa2N3DScale[MAX_AMBI_COEFFS];
+ 
+ /* NOTE: These are scale factors as applied to Ambisonics content. Decoder
+  * coefficients should be divided by these values to get proper N3D scalings.
+diff --git a/Alc/bformatdec.h b/Alc/bformatdec.h
+index 1111111..2222222 100644
+--- a/Alc/bformatdec.h
++++ b/Alc/bformatdec.h
+@@ -24,9 +24,9 @@
+ /* NOTE: These are scale factors as applied to Ambisonics content. Decoder
+  * coefficients should be divided by these values to get proper N3D scalings.
+  */
+-const ALfloat N3D2N3DScale[MAX_AMBI_COEFFS];
+-const ALfloat SN3D2N3DScale[MAX_AMBI_COEFFS];
+-const ALfloat FuMa2N3DScale[MAX_AMBI_COEFFS];
++extern const ALfloat N3D2N3DScale[MAX_AMBI_COEFFS];
++extern const ALfloat SN3D2N3DScale[MAX_AMBI_COEFFS];
++extern const ALfloat FuMa2N3DScale[MAX_AMBI_COEFFS];
+ 
+ 
+ struct AmbDecConf;
