@@ -274,7 +274,7 @@
     "metis": {"version": "5.1.0", "website": "glaros.dtc.umn.edu", "description": "metis"},
     "mingw-w64": {"version": "6.0.0", "website": "https://mingw-w64.sourceforge.io/", "description": "MinGW-w64 Runtime"},
     "miniupnpc": {"version": "2.0", "website": "http://miniupnp.free.fr/", "description": ""},
-    "minizip": {"version": "68a48aa", "website": "https://www.winimage.com/zLibDll/minizip.html", "description": ""},
+    "minizip": {"version": "2aa369c", "website": "https://www.winimage.com/zLibDll/minizip.html", "description": ""},
     "mman-win32": {"version": "9f115ad", "website": "https://code.google.com/p/mman-win32/", "description": "MMA-Win32"},
     "mpc": {"version": "1.1.0", "website": "http://www.multiprecision.org/", "description": "GNU MPC"},
     "mpfr": {"version": "4.0.2", "website": "https://www.mpfr.org/", "description": ""},
