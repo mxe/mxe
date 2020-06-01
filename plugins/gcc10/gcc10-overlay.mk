@@ -33,3 +33,6 @@ db_PATCHES := $(TOP_DIR)/src/db-1-fix-including-winioctl-h-lowcase.patch
 libssh_EXTRA_WARNINGS = -Wno-error=implicit-fallthrough
 gtkimageview_EXTRA_WARNINGS = -Wno-error=misleading-indentation
 guile_EXTRA_WARNINGS = -Wno-error=misleading-indentation
+gtkmm2_EXTRA_WARNINGS = -Wno-error=cast-function-type
+gtkmm3_EXTRA_WARNINGS = -Wno-error=cast-function-type
+gtkglextmm_EXTRA_WARNINGS = -Wno-error=cast-function-type
