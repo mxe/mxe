@@ -32,6 +32,7 @@ define $(PKG)_BUILD_COMMON
 
     $(TARGET)-g++ \
         -W -Wall -Werror -std=c++11 -pedantic \
+        -Wno-deprecated-copy \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
         `$(TARGET)-pkg-config qtsparkle@qtsparkle_version_suffix@ --cflags --libs`
 endef

@@ -26,6 +26,7 @@ define $(PKG)_BUILD
     # compile test
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
+        -Wl,--allow-multiple-definition \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-fluidsynth.exe' \
         `'$(TARGET)-pkg-config' --cflags --libs fluidsynth`
 endef

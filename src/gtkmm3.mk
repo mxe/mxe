@@ -29,6 +29,7 @@ define $(PKG)_BUILD
     '$(TARGET)-g++' \
         -W -Wall -Wno-deprecated-declarations -Werror -pedantic -std=c++11 \
         -Wno-error=deprecated \
+        $($(PKG)_EXTRA_WARNINGS) \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-gtkmm3.exe' \
         `'$(TARGET)-pkg-config' gtkmm-3.0 --cflags --libs`
 endef

@@ -1,0 +1,162 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Tue, 9 Dec 2014 20:10:47 +1100
+Subject: [PATCH 1/2] fix install prefix
+
+
+diff --git a/qwtconfig.pri b/qwtconfig.pri
+index 1111111..2222222 100644
+--- a/qwtconfig.pri
++++ b/qwtconfig.pri
+@@ -24,7 +24,7 @@ unix {
+ }
+ 
+ win32 {
+-    QWT_INSTALL_PREFIX    = C:/Qwt-$$QWT_VERSION
++    # QWT_INSTALL_PREFIX    = C:/Qwt-$$QWT_VERSION
+     # QWT_INSTALL_PREFIX = C:/Qwt-$$QWT_VERSION-qt-$$QT_VERSION
+ }
+ 
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Fri, 29 May 2020 00:25:54 +0200
+Subject: [PATCH 2/2] add missing include for QPainterPath
+
+
+diff --git a/src/qwt_compass_rose.cpp b/src/qwt_compass_rose.cpp
+index 1111111..2222222 100644
+--- a/src/qwt_compass_rose.cpp
++++ b/src/qwt_compass_rose.cpp
+@@ -11,6 +11,7 @@
+ #include "qwt_point_polar.h"
+ #include "qwt_painter.h"
+ #include <qpainter.h>
++#include <qpainterpath.h>
+ 
+ static QPointF qwtIntersection(
+     QPointF p11, QPointF p12, QPointF p21, QPointF p22 )
+diff --git a/src/qwt_dial_needle.cpp b/src/qwt_dial_needle.cpp
+index 1111111..2222222 100644
+--- a/src/qwt_dial_needle.cpp
++++ b/src/qwt_dial_needle.cpp
+@@ -13,6 +13,7 @@
+ #include "qwt_painter.h"
+ #include <qapplication.h>
+ #include <qpainter.h>
++#include <qpainterpath.h>
+ 
+ #if QT_VERSION < 0x040601
+ #define qFastSin(x) qSin(x)
+diff --git a/src/qwt_null_paintdevice.cpp b/src/qwt_null_paintdevice.cpp
+index 1111111..2222222 100644
+--- a/src/qwt_null_paintdevice.cpp
++++ b/src/qwt_null_paintdevice.cpp
+@@ -9,6 +9,7 @@
+ 
+ #include "qwt_null_paintdevice.h"
+ #include <qpaintengine.h>
++#include <qpainterpath.h>
+ #include <qpixmap.h>
+ 
+ class QwtNullPaintDevice::PrivateData
+diff --git a/src/qwt_painter.cpp b/src/qwt_painter.cpp
+index 1111111..2222222 100644
+--- a/src/qwt_painter.cpp
++++ b/src/qwt_painter.cpp
+@@ -19,6 +19,7 @@
+ #include <qpainter.h>
+ #include <qpalette.h>
+ #include <qpaintdevice.h>
++#include <qpainterpath.h>
+ #include <qpixmap.h>
+ #include <qstyle.h>
+ #include <qtextdocument.h>
+diff --git a/src/qwt_painter_command.h b/src/qwt_painter_command.h
+index 1111111..2222222 100644
+--- a/src/qwt_painter_command.h
++++ b/src/qwt_painter_command.h
+@@ -12,6 +12,7 @@
+ 
+ #include "qwt_global.h"
+ #include <qpaintengine.h>
++#include <qpainterpath.h>
+ #include <qpixmap.h>
+ #include <qimage.h>
+ #include <qpolygon.h>
+diff --git a/src/qwt_plot_canvas.cpp b/src/qwt_plot_canvas.cpp
+index 1111111..2222222 100644
+--- a/src/qwt_plot_canvas.cpp
++++ b/src/qwt_plot_canvas.cpp
+@@ -13,6 +13,7 @@
+ #include "qwt_math.h"
+ #include "qwt_plot.h"
+ #include <qpainter.h>
++#include <qpainterpath.h>
+ #include <qstyle.h>
+ #include <qstyleoption.h>
+ #include <qpaintengine.h>
+diff --git a/src/qwt_plot_glcanvas.cpp b/src/qwt_plot_glcanvas.cpp
+index 1111111..2222222 100644
+--- a/src/qwt_plot_glcanvas.cpp
++++ b/src/qwt_plot_glcanvas.cpp
+@@ -12,6 +12,7 @@
+ #include "qwt_painter.h"
+ #include <qevent.h>
+ #include <qpainter.h>
++#include <qpainterpath.h>
+ #include <qdrawutil.h>
+ #include <qstyle.h>
+ #include <qstyleoption.h>
+diff --git a/src/qwt_plot_glcanvas.h b/src/qwt_plot_glcanvas.h
+index 1111111..2222222 100644
+--- a/src/qwt_plot_glcanvas.h
++++ b/src/qwt_plot_glcanvas.h
+@@ -13,6 +13,7 @@
+ #include "qwt_global.h"
+ #include <qframe.h>
+ #include <qgl.h>
++#include <qpainterpath.h>
+ 
+ class QwtPlot;
+ 
+diff --git a/src/qwt_plot_panner.cpp b/src/qwt_plot_panner.cpp
+index 1111111..2222222 100644
+--- a/src/qwt_plot_panner.cpp
++++ b/src/qwt_plot_panner.cpp
+@@ -12,6 +12,7 @@
+ #include "qwt_plot.h"
+ #include "qwt_painter.h"
+ #include <qbitmap.h>
++#include <qpainterpath.h>
+ #include <qstyle.h>
+ #include <qstyleoption.h>
+ 
+diff --git a/src/qwt_plot_renderer.cpp b/src/qwt_plot_renderer.cpp
+index 1111111..2222222 100644
+--- a/src/qwt_plot_renderer.cpp
++++ b/src/qwt_plot_renderer.cpp
+@@ -20,6 +20,7 @@
+ #include "qwt_math.h"
+ 
+ #include <qpainter.h>
++#include <qpainterpath.h>
+ #include <qtransform.h>
+ #include <qprinter.h>
+ #include <qfiledialog.h>
+diff --git a/src/qwt_widget_overlay.cpp b/src/qwt_widget_overlay.cpp
+index 1111111..2222222 100644
+--- a/src/qwt_widget_overlay.cpp
++++ b/src/qwt_widget_overlay.cpp
+@@ -10,6 +10,7 @@
+ #include "qwt_widget_overlay.h"
+ #include "qwt_painter.h"
+ #include <qpainter.h>
++#include <qpainterpath.h>
+ #include <qpaintengine.h>
+ #include <qimage.h>
+ #include <qevent.h>

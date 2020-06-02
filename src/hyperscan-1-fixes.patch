@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
 Date: Thu, 25 Aug 2016 10:28:30 +0200
-Subject: [PATCH 1/3] update preprocessor conditions
+Subject: [PATCH 1/4] update preprocessor conditions
 
 Add macro NATIVE_WIN32 = Windows && !MinGW.
 Replace _WIN32 with NATIVE_WIN32 where it failed.
@@ -327,7 +327,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
 Date: Wed, 18 May 2016 07:38:29 +0200
-Subject: [PATCH 2/3] cmake: replace WIN32 with WIN32 AND NOT MINGW
+Subject: [PATCH 2/4] cmake: replace WIN32 with WIN32 AND NOT MINGW
 
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
@@ -391,7 +391,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
 Date: Wed, 18 May 2016 07:55:44 +0200
-Subject: [PATCH 3/3] add compile flag "-posix" to fix printf %llu
+Subject: [PATCH 3/4] add compile flag "-posix" to fix printf %llu
 
 See https://lists.nongnu.org/archive/html/mingw-cross-env-list/2013-04/msg00024.html
 The similar problem occurred in examples/simplegrep.c
@@ -422,3 +422,23 @@ index 1111111..2222222 100644
  Libs.private: @PRIVATE_LIBS@
 -Cflags: -I${includedir}/hs
 +Cflags: -I${includedir}/hs -posix
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Thu, 28 May 2020 17:25:43 +0200
+Subject: [PATCH 4/4] fix gcc version check
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -183,7 +183,7 @@ else()
+                      ARGS ${CMAKE_CXX_COMPILER_ARG1} --version
+                      OUTPUT_VARIABLE _GXX_OUTPUT)
+         # is the following too fragile?
+-        string(REGEX REPLACE ".* ([0-9]\\.[0-9](\\.[0-9])?)( |\n).*" "\\1"
++        string(REGEX REPLACE ".* ([0-9]+\\.[0-9](\\.[0-9])?)( |\n).*" "\\1"
+                GNUCXX_VERSION "${_GXX_OUTPUT}")
+         message(STATUS "g++ version ${GNUCXX_VERSION}")
+         if (GNUCXX_VERSION VERSION_LESS ${GNUCXX_MINVER})

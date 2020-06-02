@@ -4,19 +4,10 @@ PKG             := wxwidgets
 $(PKG)_WEBSITE  := https://www.wxwidgets.org/
 $(PKG)_DESCR    := wxWidgets
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.0.2
-$(PKG)_CHECKSUM := 346879dc554f3ab8d6da2704f651ecb504a22e9d31c17ef5449b129ed711585d
-$(PKG)_SUBDIR   := wxWidgets-$($(PKG)_VERSION)
-$(PKG)_FILE     := wxWidgets-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/wxwindows/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_VERSION  := 3.0.5.1
+$(PKG)_CHECKSUM := bae4d9f289e33a05fb8553fcc580564d30efe6a882ff08e3d4e09ef01f5f6578
+$(PKG)_GH_CONF  := wxWidgets/wxWidgets/releases/downloads,v
 $(PKG)_DEPS     := cc expat jpeg libiconv libpng sdl tiff zlib
-
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://sourceforge.net/projects/wxwindows/files/' | \
-    $(SED) -n 's,.*/projects/.*/\([0-9][^"]*\)/".*,\1,p' | \
-    sort -V | \
-    tail -1
-endef
 
 define $(PKG)_CONFIGURE_OPTS
         $(MXE_CONFIGURE_OPTS) \
@@ -73,6 +64,7 @@ define $(PKG)_BUILD
     # build test program
     '$(TARGET)-g++' \
         -W -Wall -Werror -Wno-error=unused-local-typedefs -pedantic -std=gnu++0x \
+        -Wno-deprecated-copy -Wno-cast-function-type \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-wxwidgets.exe' \
         `'$(TARGET)-wx-config' --cflags --libs`
 endef

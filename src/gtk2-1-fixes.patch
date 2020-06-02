@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Fri, 24 Sep 2010 14:43:43 +0200
-Subject: [PATCH 01/10] s,DllMain,static _disabled_DllMain,
+Subject: [PATCH 01/12] s,DllMain,static _disabled_DllMain,
 
 
 diff --git a/gdk/win32/gdkmain-win32.c b/gdk/win32/gdkmain-win32.c
@@ -38,7 +38,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Fri, 24 Sep 2010 14:46:20 +0200
-Subject: [PATCH 02/10] s,__declspec(dllimport),,
+Subject: [PATCH 02/12] s,__declspec(dllimport),,
 
 
 diff --git a/gdk/gdktypes.h b/gdk/gdktypes.h
@@ -97,7 +97,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Fri, 24 Sep 2010 15:03:28 +0200
-Subject: [PATCH 03/10] s,__declspec(dllexport),,
+Subject: [PATCH 03/12] s,__declspec(dllexport),,
 
 
 diff --git a/gdk/gdktypes.h b/gdk/gdktypes.h
@@ -156,7 +156,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Fri, 24 Sep 2010 14:17:22 +0200
-Subject: [PATCH 04/10] fix gtk+-2.0.pc.in
+Subject: [PATCH 04/12] fix gtk+-2.0.pc.in
 
 
 diff --git a/gtk+-2.0.pc.in b/gtk+-2.0.pc.in
@@ -174,7 +174,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Fri, 24 Sep 2010 14:48:31 +0200
-Subject: [PATCH 05/10] disable gtkbuiltincache
+Subject: [PATCH 05/12] disable gtkbuiltincache
 
 
 diff --git a/gtk/Makefile.in b/gtk/Makefile.in
@@ -194,7 +194,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Fri, 24 Sep 2010 14:49:50 +0200
-Subject: [PATCH 06/10] disable test-inline-pixbufs.h
+Subject: [PATCH 06/12] disable test-inline-pixbufs.h
 
 
 diff --git a/demos/Makefile.in b/demos/Makefile.in
@@ -214,7 +214,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Fri, 24 Sep 2010 14:51:04 +0200
-Subject: [PATCH 07/10] permit static building
+Subject: [PATCH 07/12] permit static building
 
 
 diff --git a/configure b/configure
@@ -312,7 +312,7 @@ index 1111111..2222222 100755
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Fri, 24 Sep 2010 14:53:18 +0200
-Subject: [PATCH 08/10] no -Wl
+Subject: [PATCH 08/12] no -Wl
 
 
 diff --git a/configure b/configure
@@ -332,7 +332,7 @@ index 1111111..2222222 100755
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Fri, 24 Sep 2010 14:54:15 +0200
-Subject: [PATCH 09/10] gio not gio-unix
+Subject: [PATCH 09/12] gio not gio-unix
 
 
 diff --git a/configure b/configure
@@ -355,7 +355,7 @@ index 1111111..2222222 100755
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Fri, 24 Sep 2010 15:30:49 +0200
-Subject: [PATCH 10/10] removed duplicate _gtk_marshal_OBJECT__VOID()
+Subject: [PATCH 10/12] removed duplicate _gtk_marshal_OBJECT__VOID()
 
 
 diff --git a/perf/marshalers.c b/perf/marshalers.c
@@ -406,3 +406,164 @@ index 1111111..2222222 100644
  /* VOID:ENUM,OBJECT,DOUBLE (./marshalers.list:2) */
  void
  _gtk_marshal_VOID__ENUM_OBJECT_DOUBLE (GClosure     *closure,
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Thu, 28 May 2020 18:22:19 +0200
+Subject: [PATCH 11/12] gcc 10 compatibility: add missing "extern"
+
+Related to:
+    Default to -fno-common
+    https://gcc.gnu.org/gcc-10/porting_to.html
+
+diff --git a/gdk/gdk.h b/gdk/gdk.h
+index 1111111..2222222 100644
+--- a/gdk/gdk.h
++++ b/gdk/gdk.h
+@@ -186,11 +186,11 @@ void gdk_notify_startup_complete_with_id (const gchar* startup_id);
+  */
+ 
+ #if !defined (GDK_DISABLE_DEPRECATED) || defined (GDK_COMPILATION)
+-GDKVAR GMutex *gdk_threads_mutex; /* private */
++extern GMutex *gdk_threads_mutex; /* private */
+ #endif
+ 
+-GDKVAR GCallback gdk_threads_lock;
+-GDKVAR GCallback gdk_threads_unlock;
++extern GCallback gdk_threads_lock;
++extern GCallback gdk_threads_unlock;
+ 
+ void     gdk_threads_enter                    (void);
+ void     gdk_threads_leave                    (void);
+diff --git a/gtk/gtkdebug.h b/gtk/gtkdebug.h
+index 1111111..2222222 100644
+--- a/gtk/gtkdebug.h
++++ b/gtk/gtkdebug.h
+@@ -62,17 +62,7 @@ typedef enum {
+ 
+ #endif /* G_ENABLE_DEBUG */
+ 
+-#ifdef G_OS_WIN32
+-#  ifdef GTK_COMPILATION
+-#    define GTKVAR 
+-#  else
+-#    define GTKVAR extern 
+-#  endif
+-#else
+-#  define GTKVAR extern
+-#endif
+-
+-GTKVAR guint gtk_debug_flags;
++extern guint gtk_debug_flags;
+ 
+ G_END_DECLS
+ 
+diff --git a/gtk/gtkmain.h b/gtk/gtkmain.h
+index 1111111..2222222 100644
+--- a/gtk/gtkmain.h
++++ b/gtk/gtkmain.h
+@@ -65,21 +65,12 @@ typedef gint	(*GtkKeySnoopFunc)	    (GtkWidget	  *grab_widget,
+ 
+ /* Gtk version.
+  */
+-#ifdef G_PLATFORM_WIN32
+-#ifdef GTK_COMPILATION
+-#define GTKMAIN_C_VAR 
+-#else
+-#define GTKMAIN_C_VAR extern 
+-#endif
+-#else
+-#define GTKMAIN_C_VAR extern
+-#endif
+ 
+-GTKMAIN_C_VAR const guint gtk_major_version;
+-GTKMAIN_C_VAR const guint gtk_minor_version;
+-GTKMAIN_C_VAR const guint gtk_micro_version;
+-GTKMAIN_C_VAR const guint gtk_binary_age;
+-GTKMAIN_C_VAR const guint gtk_interface_age;
++extern const guint gtk_major_version;
++extern const guint gtk_minor_version;
++extern const guint gtk_micro_version;
++extern const guint gtk_binary_age;
++extern const guint gtk_interface_age;
+ const gchar* gtk_check_version (guint	required_major,
+ 			        guint	required_minor,
+ 			        guint	required_micro);
+diff --git a/gtk/gtktexttypes.h b/gtk/gtktexttypes.h
+index 1111111..2222222 100644
+--- a/gtk/gtktexttypes.h
++++ b/gtk/gtktexttypes.h
+@@ -42,16 +42,6 @@ typedef struct _GtkTextMarkBody GtkTextMarkBody;
+  * Declarations for variables shared among the text-related files:
+  */
+ 
+-#ifdef G_OS_WIN32
+-#ifdef GTK_COMPILATION
+-#define VARIABLE 
+-#else
+-#define VARIABLE extern 
+-#endif
+-#else
+-#define VARIABLE extern
+-#endif
+-
+ /* In gtktextbtree.c */
+ extern const GtkTextLineSegmentClass gtk_text_char_type;
+ extern const GtkTextLineSegmentClass gtk_text_toggle_on_type;
+@@ -70,7 +60,7 @@ extern const GtkTextLineSegmentClass gtk_text_child_type;
+  */
+ 
+ #define GTK_TEXT_UNKNOWN_CHAR 0xFFFC
+-VARIABLE const gchar gtk_text_unknown_char_utf8[];
++extern const gchar gtk_text_unknown_char_utf8[];
+ 
+ gboolean gtk_text_byte_begins_utf8_char (const gchar *byte);
+ 
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Thu, 28 May 2020 19:45:12 +0200
+Subject: [PATCH 12/12] remove unnecessary parentheses
+
+..which break build of gtkmm2 using gcc 10.
+
+diff --git a/gtk/gtkfilechooserbutton.h b/gtk/gtkfilechooserbutton.h
+index 1111111..2222222 100644
+--- a/gtk/gtkfilechooserbutton.h
++++ b/gtk/gtkfilechooserbutton.h
+@@ -56,13 +56,13 @@ struct _GtkFileChooserButtonClass
+ 
+   void (* file_set) (GtkFileChooserButton *fc);
+ 
+-  void (*__gtk_reserved1);
+-  void (*__gtk_reserved2);
+-  void (*__gtk_reserved3);
+-  void (*__gtk_reserved4);
+-  void (*__gtk_reserved5);
+-  void (*__gtk_reserved6);
+-  void (*__gtk_reserved7);
++  void *__gtk_reserved1;
++  void *__gtk_reserved2;
++  void *__gtk_reserved3;
++  void *__gtk_reserved4;
++  void *__gtk_reserved5;
++  void *__gtk_reserved6;
++  void *__gtk_reserved7;
+ };
+ 
+ 
+diff --git a/gtk/gtkstatusicon.h b/gtk/gtkstatusicon.h
+index 1111111..2222222 100644
+--- a/gtk/gtkstatusicon.h
++++ b/gtk/gtkstatusicon.h
+@@ -73,8 +73,8 @@ struct _GtkStatusIconClass
+                                      gboolean        keyboard_mode,
+                                      GtkTooltip     *tooltip);
+ 
+-  void (*__gtk_reserved1);
+-  void (*__gtk_reserved2);
++  void *__gtk_reserved1;
++  void *__gtk_reserved2;
+ };
+ 
+ GType                 gtk_status_icon_get_type           (void) G_GNUC_CONST;

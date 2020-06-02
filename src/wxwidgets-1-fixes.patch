@@ -3,47 +3,16 @@ This file is part of MXE. See LICENSE.md for licensing information.
 Contains ad hoc patches for cross building.
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Boris Pek <tehnick-8@mail.ru>
-Date: Thu, 5 May 2016 19:11:19 +0300
-Subject: [PATCH 1/2] fix build with GCC >= 6.x
-
-
-diff --git a/src/stc/scintilla/src/Editor.cxx b/src/stc/scintilla/src/Editor.cxx
-index 1111111..2222222 100644
---- a/src/stc/scintilla/src/Editor.cxx
-+++ b/src/stc/scintilla/src/Editor.cxx
-@@ -10,6 +10,7 @@
- #include <stdio.h>
- #include <ctype.h>
- #include <assert.h>
-+#include <math.h>
- 
- #include <string>
- #include <vector>
-@@ -5841,9 +5842,9 @@ void Editor::GoToLine(int lineNo) {
- }
- 
- static bool Close(Point pt1, Point pt2) {
--	if (abs(pt1.x - pt2.x) > 3)
-+	if (fabs(pt1.x - pt2.x) > 3)
- 		return false;
--	if (abs(pt1.y - pt2.y) > 3)
-+	if (fabs(pt1.y - pt2.y) > 3)
- 		return false;
- 	return true;
- }
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: darealshinji <djcj@gmx.de>
 Date: Fri, 26 May 2017 09:33:22 +0200
-Subject: [PATCH 2/2] make it possible to install DLLs into $(libdir)/../bin
+Subject: [PATCH 1/2] make it possible to install DLLs into $(libdir)/../bin
 
 
 diff --git a/Makefile.in b/Makefile.in
 index 1111111..2222222 100644
 --- a/Makefile.in
 +++ b/Makefile.in
-@@ -15501,7 +15501,7 @@ distclean: clean
+@@ -15523,7 +15523,7 @@ distclean: clean
  @COND_MONOLITHIC_1_SHARED_1@install_monodll: $(__monodll___depname)
  @COND_MONOLITHIC_1_SHARED_1@	$(INSTALL_DIR) $(DESTDIR)$(libdir)
  @COND_MONOLITHIC_1_SHARED_1@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX) $(DESTDIR)$(libdir)
@@ -52,7 +21,7 @@ index 1111111..2222222 100644
  @COND_MONOLITHIC_1_SHARED_1@	(cd $(DESTDIR)$(libdir) ; $(__monodll___so_symlinks_inst_cmd))
  
  @COND_MONOLITHIC_1_SHARED_1@uninstall_monodll: 
-@@ -15536,7 +15536,7 @@ distclean: clean
+@@ -15558,7 +15558,7 @@ distclean: clean
  @COND_MONOLITHIC_0_SHARED_1@install_basedll: $(__basedll___depname)
  @COND_MONOLITHIC_0_SHARED_1@	$(INSTALL_DIR) $(DESTDIR)$(libdir)
  @COND_MONOLITHIC_0_SHARED_1@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX) $(DESTDIR)$(libdir)
@@ -61,7 +30,7 @@ index 1111111..2222222 100644
  @COND_MONOLITHIC_0_SHARED_1@	(cd $(DESTDIR)$(libdir) ; $(__basedll___so_symlinks_inst_cmd))
  
  @COND_MONOLITHIC_0_SHARED_1@uninstall_basedll: 
-@@ -15573,7 +15573,7 @@ distclean: clean
+@@ -15595,7 +15595,7 @@ distclean: clean
  @COND_MONOLITHIC_0_SHARED_1@install_netdll: $(__netdll___depname)
  @COND_MONOLITHIC_0_SHARED_1@	$(INSTALL_DIR) $(DESTDIR)$(libdir)
  @COND_MONOLITHIC_0_SHARED_1@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX) $(DESTDIR)$(libdir)
@@ -70,7 +39,7 @@ index 1111111..2222222 100644
  @COND_MONOLITHIC_0_SHARED_1@	(cd $(DESTDIR)$(libdir) ; $(__netdll___so_symlinks_inst_cmd))
  
  @COND_MONOLITHIC_0_SHARED_1@uninstall_netdll: 
-@@ -15610,7 +15610,7 @@ distclean: clean
+@@ -15632,7 +15632,7 @@ distclean: clean
  @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@install_coredll: $(__coredll___depname)
  @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@	$(INSTALL_DIR) $(DESTDIR)$(libdir)
  @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX) $(DESTDIR)$(libdir)
@@ -79,7 +48,7 @@ index 1111111..2222222 100644
  @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@	(cd $(DESTDIR)$(libdir) ; $(__coredll___so_symlinks_inst_cmd))
  
  @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@uninstall_coredll: 
-@@ -15647,7 +15647,7 @@ distclean: clean
+@@ -15669,7 +15669,7 @@ distclean: clean
  @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@install_advdll: $(__advdll___depname)
  @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@	$(INSTALL_DIR) $(DESTDIR)$(libdir)
  @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX) $(DESTDIR)$(libdir)
@@ -88,7 +57,7 @@ index 1111111..2222222 100644
  @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@	(cd $(DESTDIR)$(libdir) ; $(__advdll___so_symlinks_inst_cmd))
  
  @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@uninstall_advdll: 
-@@ -15684,7 +15684,7 @@ distclean: clean
+@@ -15706,7 +15706,7 @@ distclean: clean
  @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_MEDIA_1@install_mediadll: $(__mediadll___depname)
  @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_MEDIA_1@	$(INSTALL_DIR) $(DESTDIR)$(libdir)
  @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_MEDIA_1@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_media-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX) $(DESTDIR)$(libdir)
@@ -97,7 +66,7 @@ index 1111111..2222222 100644
  @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_MEDIA_1@	(cd $(DESTDIR)$(libdir) ; $(__mediadll___so_symlinks_inst_cmd))
  
  @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_MEDIA_1@uninstall_mediadll: 
-@@ -15721,7 +15721,7 @@ distclean: clean
+@@ -15743,7 +15743,7 @@ distclean: clean
  @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_HTML_1@install_htmldll: $(__htmldll___depname)
  @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_HTML_1@	$(INSTALL_DIR) $(DESTDIR)$(libdir)
  @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_HTML_1@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX) $(DESTDIR)$(libdir)
@@ -106,7 +75,7 @@ index 1111111..2222222 100644
  @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_HTML_1@	(cd $(DESTDIR)$(libdir) ; $(__htmldll___so_symlinks_inst_cmd))
  
  @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_HTML_1@uninstall_htmldll: 
-@@ -15758,7 +15758,7 @@ distclean: clean
+@@ -15780,7 +15780,7 @@ distclean: clean
  @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_WEBVIEW_1@install_webviewdll: $(__webviewdll___depname)
  @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_WEBVIEW_1@	$(INSTALL_DIR) $(DESTDIR)$(libdir)
  @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_WEBVIEW_1@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_webview-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX) $(DESTDIR)$(libdir)
@@ -115,7 +84,7 @@ index 1111111..2222222 100644
  @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_WEBVIEW_1@	(cd $(DESTDIR)$(libdir) ; $(__webviewdll___so_symlinks_inst_cmd))
  
  @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_WEBVIEW_1@uninstall_webviewdll: 
-@@ -15795,7 +15795,7 @@ distclean: clean
+@@ -15817,7 +15817,7 @@ distclean: clean
  @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_QA_1@install_qadll: $(__qadll___depname)
  @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_QA_1@	$(INSTALL_DIR) $(DESTDIR)$(libdir)
  @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_QA_1@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_qa-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX) $(DESTDIR)$(libdir)
@@ -124,7 +93,7 @@ index 1111111..2222222 100644
  @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_QA_1@	(cd $(DESTDIR)$(libdir) ; $(__qadll___so_symlinks_inst_cmd))
  
  @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_QA_1@uninstall_qadll: 
-@@ -15832,7 +15832,7 @@ distclean: clean
+@@ -15854,7 +15854,7 @@ distclean: clean
  @COND_MONOLITHIC_0_SHARED_1@install_xmldll: $(__xmldll___depname)
  @COND_MONOLITHIC_0_SHARED_1@	$(INSTALL_DIR) $(DESTDIR)$(libdir)
  @COND_MONOLITHIC_0_SHARED_1@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX) $(DESTDIR)$(libdir)
@@ -133,7 +102,7 @@ index 1111111..2222222 100644
  @COND_MONOLITHIC_0_SHARED_1@	(cd $(DESTDIR)$(libdir) ; $(__xmldll___so_symlinks_inst_cmd))
  
  @COND_MONOLITHIC_0_SHARED_1@uninstall_xmldll: 
-@@ -15869,7 +15869,7 @@ distclean: clean
+@@ -15891,7 +15891,7 @@ distclean: clean
  @COND_MONOLITHIC_0_SHARED_1_USE_XRC_1@install_xrcdll: $(__xrcdll___depname)
  @COND_MONOLITHIC_0_SHARED_1_USE_XRC_1@	$(INSTALL_DIR) $(DESTDIR)$(libdir)
  @COND_MONOLITHIC_0_SHARED_1_USE_XRC_1@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xrc-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX) $(DESTDIR)$(libdir)
@@ -142,7 +111,7 @@ index 1111111..2222222 100644
  @COND_MONOLITHIC_0_SHARED_1_USE_XRC_1@	(cd $(DESTDIR)$(libdir) ; $(__xrcdll___so_symlinks_inst_cmd))
  
  @COND_MONOLITHIC_0_SHARED_1_USE_XRC_1@uninstall_xrcdll: 
-@@ -15906,7 +15906,7 @@ distclean: clean
+@@ -15928,7 +15928,7 @@ distclean: clean
  @COND_MONOLITHIC_0_SHARED_1_USE_AUI_1@install_auidll: $(__auidll___depname)
  @COND_MONOLITHIC_0_SHARED_1_USE_AUI_1@	$(INSTALL_DIR) $(DESTDIR)$(libdir)
  @COND_MONOLITHIC_0_SHARED_1_USE_AUI_1@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_aui-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX) $(DESTDIR)$(libdir)
@@ -151,7 +120,7 @@ index 1111111..2222222 100644
  @COND_MONOLITHIC_0_SHARED_1_USE_AUI_1@	(cd $(DESTDIR)$(libdir) ; $(__auidll___so_symlinks_inst_cmd))
  
  @COND_MONOLITHIC_0_SHARED_1_USE_AUI_1@uninstall_auidll: 
-@@ -15943,7 +15943,7 @@ distclean: clean
+@@ -15965,7 +15965,7 @@ distclean: clean
  @COND_MONOLITHIC_0_SHARED_1_USE_RIBBON_1@install_ribbondll: $(__ribbondll___depname)
  @COND_MONOLITHIC_0_SHARED_1_USE_RIBBON_1@	$(INSTALL_DIR) $(DESTDIR)$(libdir)
  @COND_MONOLITHIC_0_SHARED_1_USE_RIBBON_1@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_ribbon-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX) $(DESTDIR)$(libdir)
@@ -160,7 +129,7 @@ index 1111111..2222222 100644
  @COND_MONOLITHIC_0_SHARED_1_USE_RIBBON_1@	(cd $(DESTDIR)$(libdir) ; $(__ribbondll___so_symlinks_inst_cmd))
  
  @COND_MONOLITHIC_0_SHARED_1_USE_RIBBON_1@uninstall_ribbondll: 
-@@ -15980,7 +15980,7 @@ distclean: clean
+@@ -16002,7 +16002,7 @@ distclean: clean
  @COND_MONOLITHIC_0_SHARED_1_USE_PROPGRID_1@install_propgriddll: $(__propgriddll___depname)
  @COND_MONOLITHIC_0_SHARED_1_USE_PROPGRID_1@	$(INSTALL_DIR) $(DESTDIR)$(libdir)
  @COND_MONOLITHIC_0_SHARED_1_USE_PROPGRID_1@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_propgrid-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX) $(DESTDIR)$(libdir)
@@ -169,7 +138,7 @@ index 1111111..2222222 100644
  @COND_MONOLITHIC_0_SHARED_1_USE_PROPGRID_1@	(cd $(DESTDIR)$(libdir) ; $(__propgriddll___so_symlinks_inst_cmd))
  
  @COND_MONOLITHIC_0_SHARED_1_USE_PROPGRID_1@uninstall_propgriddll: 
-@@ -16017,7 +16017,7 @@ distclean: clean
+@@ -16039,7 +16039,7 @@ distclean: clean
  @COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1@install_richtextdll: $(__richtextdll___depname)
  @COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1@	$(INSTALL_DIR) $(DESTDIR)$(libdir)
  @COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_richtext-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX) $(DESTDIR)$(libdir)
@@ -178,7 +147,7 @@ index 1111111..2222222 100644
  @COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1@	(cd $(DESTDIR)$(libdir) ; $(__richtextdll___so_symlinks_inst_cmd))
  
  @COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1@uninstall_richtextdll: 
-@@ -16054,7 +16054,7 @@ distclean: clean
+@@ -16076,7 +16076,7 @@ distclean: clean
  @COND_MONOLITHIC_0_SHARED_1_USE_STC_1@install_stcdll: $(__stcdll___depname)
  @COND_MONOLITHIC_0_SHARED_1_USE_STC_1@	$(INSTALL_DIR) $(DESTDIR)$(libdir)
  @COND_MONOLITHIC_0_SHARED_1_USE_STC_1@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_stc-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX) $(DESTDIR)$(libdir)
@@ -187,7 +156,7 @@ index 1111111..2222222 100644
  @COND_MONOLITHIC_0_SHARED_1_USE_STC_1@	(cd $(DESTDIR)$(libdir) ; $(__stcdll___so_symlinks_inst_cmd))
  
  @COND_MONOLITHIC_0_SHARED_1_USE_STC_1@uninstall_stcdll: 
-@@ -16091,7 +16091,7 @@ distclean: clean
+@@ -16113,7 +16113,7 @@ distclean: clean
  @COND_SHARED_1_USE_GUI_1_USE_OPENGL_1@install_gldll: $(__gldll___depname)
  @COND_SHARED_1_USE_GUI_1_USE_OPENGL_1@	$(INSTALL_DIR) $(DESTDIR)$(libdir)
  @COND_SHARED_1_USE_GUI_1_USE_OPENGL_1@	$(INSTALL_DATA) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX) $(DESTDIR)$(libdir)
@@ -196,3 +165,28 @@ index 1111111..2222222 100644
  @COND_SHARED_1_USE_GUI_1_USE_OPENGL_1@	(cd $(DESTDIR)$(libdir) ; $(__gldll___so_symlinks_inst_cmd))
  
  @COND_SHARED_1_USE_GUI_1_USE_OPENGL_1@uninstall_gldll: 
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Maarten Bent <MaartenBent@users.noreply.github.com>
+Date: Thu, 16 Aug 2018 20:08:56 +0200
+Subject: [PATCH 2/2] Fix c++11-narrowing error when using clang on Windows
+
+Case value 0xfffffd9f results in the following error:
+error: case value evaluates to 4294966687, which cannot be narrowed to type
+'DISPID' (aka 'long') [-Wc++11-narrowing]
+
+diff --git a/src/msw/mediactrl_am.cpp b/src/msw/mediactrl_am.cpp
+index 1111111..2222222 100644
+--- a/src/msw/mediactrl_am.cpp
++++ b/src/msw/mediactrl_am.cpp
+@@ -2179,7 +2179,9 @@ void wxAMMediaBackend::Move(int WXUNUSED(x), int WXUNUSED(y),
+ //---------------------------------------------------------------------------
+ void wxAMMediaEvtHandler::OnActiveX(wxActiveXEvent& event)
+ {
+-    switch(event.GetDispatchId())
++    // cast to unsigned long to fix narrowing error with case 0xfffffd9f
++    // when using clang
++    switch (static_cast<unsigned long>(event.GetDispatchId()))
+     {
+ #ifndef __WXWINCE__
+     case 0x00000001: // statechange in IActiveMovie

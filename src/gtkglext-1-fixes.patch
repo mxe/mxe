@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Fri, 1 Oct 2010 14:43:15 +0200
-Subject: [PATCH 1/4] remove pangox dependency
+Subject: [PATCH 1/5] remove pangox dependency
 
 
 diff --git a/configure.in b/configure.in
@@ -33,7 +33,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Fri, 1 Oct 2010 14:44:37 +0200
-Subject: [PATCH 2/4] use correct glib mkenums patch
+Subject: [PATCH 2/5] use correct glib mkenums patch
 
 This patch has been taken from:
 https://bugzilla.gnome.org/show_bug.cgi?id=618599
@@ -86,7 +86,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Fri, 1 Oct 2010 14:47:30 +0200
-Subject: [PATCH 3/4] don't use deprecated functions
+Subject: [PATCH 3/5] don't use deprecated functions
 
 This patch has been taken from:
 https://bugzilla.gnome.org/show_bug.cgi?id=618601
@@ -173,7 +173,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Fri, 1 Oct 2010 14:50:25 +0200
-Subject: [PATCH 4/4] removed import declarations
+Subject: [PATCH 4/5] removed import declarations
 
 
 diff --git a/gdk/gdkgldefs.h b/gdk/gdkgldefs.h
@@ -208,3 +208,36 @@ index 1111111..2222222 100644
  #  endif
  #else
  #  define GTK_GL_VAR extern
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Thu, 28 May 2020 19:31:55 +0200
+Subject: [PATCH 5/5] fix missing extern for gcc 10
+
+
+diff --git a/gdk/gdkgldebug.h b/gdk/gdkgldebug.h
+index 1111111..2222222 100644
+--- a/gdk/gdkgldebug.h
++++ b/gdk/gdkgldebug.h
+@@ -66,7 +66,7 @@ typedef enum {
+ 
+ #endif /* G_ENABLE_DEBUG */
+ 
+-GDK_GL_VAR guint gdk_gl_debug_flags;
++extern guint gdk_gl_debug_flags;
+ 
+ G_END_DECLS
+ 
+diff --git a/gtk/gtkgldebug.h b/gtk/gtkgldebug.h
+index 1111111..2222222 100644
+--- a/gtk/gtkgldebug.h
++++ b/gtk/gtkgldebug.h
+@@ -60,7 +60,7 @@ typedef enum {
+ 
+ #endif /* G_ENABLE_DEBUG */
+ 
+-GTK_GL_VAR guint gtk_gl_debug_flags;
++extern guint gtk_gl_debug_flags;
+ 
+ G_END_DECLS
+ 
