@@ -1,0 +1,44 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+This patch has been taken from:
+https://github.com/qtwebkit/qtwebkit/commit/41a05f881cf1af7bfe9197b2d833fdcd515e33dc
+
+diff --git a/Source/WebKit/PlatformQt.cmake b/Source/WebKit/PlatformQt.cmake
+index 9aed9906e364..9c44d43fc0c6 100644
+--- a/Source/WebKit/PlatformQt.cmake
++++ b/Source/WebKit/PlatformQt.cmake
+@@ -289,10 +289,9 @@ if (ENABLE_GEOLOCATION)
+ endif ()
+ 
+ if (USE_QT_MULTIMEDIA)
+-    qt_wrap_cpp(WebKit WebKit_SOURCES
+-        qt/Api/qwebfullscreenvideohandler.h
+-    )
+     list(APPEND WebKit_SOURCES
++        qt/Api/qwebfullscreenvideohandler.h
++
+         qt/WebCoreSupport/FullScreenVideoQt.cpp
+     )
+ endif ()
+diff --git a/Tools/QtTestBrowser/CMakeLists.txt b/Tools/QtTestBrowser/CMakeLists.txt
+index 19827fd02cac..e4c5d442d6ff 100644
+--- a/Tools/QtTestBrowser/CMakeLists.txt
++++ b/Tools/QtTestBrowser/CMakeLists.txt
+@@ -25,6 +25,7 @@ set(QtTestBrowser_SOURCES
+     qttestbrowser.cpp
+     urlloader.cpp
+     utils.cpp
++    webinspector.h
+     webpage.cpp
+     webview.cpp
+ )
+@@ -44,10 +45,6 @@ set(QtTestBrowser_LIBRARIES
+     ${STATIC_LIB_DEPENDENCIES}
+ )
+ 
+-qt_wrap_cpp(WebKit QtTestBrowser_SOURCES
+-    webinspector.h
+-)
+-
+ qt5_add_resources(QtTestBrowser_SOURCES
+     QtTestBrowser.qrc 
