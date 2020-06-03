@@ -1,5 +1,6 @@
 {
     "a52dec": {"version": "0.7.4", "website": "https://liba52.sourceforge.io/", "description": "a52dec (aka. liba52)"},
+    "adwaita-icon-theme": {"version": "3.36.1", "website": "https://gtk.org/", "description": "GTK+"},
     "agg": {"version": "2.5", "website": "https://antigrain.com/", "description": "Anti-Grain Geometry"},
     "alure": {"version": "1.2", "website": "https://kcat.strangesoft.net/alure.html", "description": ""},
     "apr": {"version": "1.5.2", "website": "https://apr.apache.org/", "description": "APR"},
@@ -61,7 +62,7 @@
     "file": {"version": "5.24", "website": "https://www.darwinsys.com/file/", "description": ""},
     "flac": {"version": "1.3.3", "website": "https://www.xiph.org/flac/", "description": "FLAC"},
     "flann": {"version": "1.8.4", "website": "https://www.cs.ubc.ca/~mariusm/index.php/FLANN/FLANN", "description": "FLANN"},
-    "fltk": {"version": "1.3.4-2", "website": "https://www.fltk.org/", "description": "FLTK"},
+    "fltk": {"version": "1.3.5", "website": "https://www.fltk.org/", "description": "FLTK"},
     "fluidsynth": {"version": "2.0.7", "website": "http://fluidsynth.org/", "description": "FluidSynth - a free software synthesizer based on the SoundFont 2 specifications"},
     "fontconfig": {"version": "2.13.1", "website": "https://fontconfig.org/", "description": ""},
     "freeglut": {"version": "3.2.1", "website": "https://freeglut.sourceforge.io/", "description": ""},
