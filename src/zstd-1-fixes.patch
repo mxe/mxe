@@ -4,10 +4,12 @@ Contains ad hoc patches for cross building.
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
-Date: Mon, 2 Jul 2018 08:03:47 +1000
-Subject: [PATCH 1/1] install .pc file on mingw
+Date: Tue, 2 Jun 2020 18:18:40 +1000
+Subject: [PATCH 1/2] Install pkg-config file on MINGW also
 
-see: https://github.com/facebook/zstd/pull/1203
+Mingw follows unix conventions and often expects pkg-config files to be present.
+
+see: https://github.com/facebook/zstd/pull/2183
 
 diff --git a/build/cmake/lib/CMakeLists.txt b/build/cmake/lib/CMakeLists.txt
 index 1111111..2222222 100644
@@ -22,3 +24,25 @@ index 1111111..2222222 100644
      # pkg-config
      set(PREFIX "${CMAKE_INSTALL_PREFIX}")
      set(LIBDIR "${CMAKE_INSTALL_LIBDIR}")
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Tue, 2 Jun 2020 19:23:40 +1000
+Subject: [PATCH 2/2] Install runtime components (i.e. DLLs) to BINDIR
+
+The convention on windows-based systems (including mingw and cygwin) is to install DLLs in a `.../bin` directory. These [cmake target types](https://cmake.org/cmake/help/latest/command/install.html#installing-targets) handle the various shared, static, and import libraries across systems in a predictable way.
+
+see: https://github.com/facebook/zstd/pull/2185
+
+diff --git a/build/cmake/lib/CMakeLists.txt b/build/cmake/lib/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/build/cmake/lib/CMakeLists.txt
++++ b/build/cmake/lib/CMakeLists.txt
+@@ -163,6 +163,7 @@ install(TARGETS ${library_targets}
+     INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+     ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+     LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
++    RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
+     )
+ 
+ # uninstall target
