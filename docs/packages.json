@@ -254,7 +254,7 @@
     "libusb": {"version": "1.2.6.0", "website": "https://libusb-win32.sourceforge.io/", "description": "LibUsb"},
     "libusb1": {"version": "1.0.23", "website": "https://libusb.info/", "description": "LibUsb-1.0"},
     "libuv": {"version": "1.30.1", "website": "https://libuv.org", "description": ""},
-    "libvpx": {"version": "1.5.0", "website": "https://www.webmproject.org/code/", "description": "vpx"},
+    "libvpx": {"version": "1.8.2", "website": "https://www.webmproject.org/code/", "description": "vpx"},
     "libwebp": {"version": "1.0.3", "website": "https://developers.google.com/speed/webp/", "description": ""},
     "libwebsockets": {"version": "2.4.2", "website": "https://libwebsockets.org/", "description": ""},
     "libxml++": {"version": "2.40.1", "website": "https://libxmlplusplus.sourceforge.io/", "description": "libxml2"},
