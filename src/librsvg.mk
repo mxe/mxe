@@ -2,8 +2,8 @@
 
 PKG             := librsvg
 $(PKG)_WEBSITE  := https://wiki.gnome.org/Projects/LibRsvg
-$(PKG)_VERSION  := 2.46.0
-$(PKG)_CHECKSUM := 96c81e52cb81450f3b2e915e6409fd7d1e3c01e4661974b3a98c09a7c45743d1
+$(PKG)_VERSION  := 2.46.4
+$(PKG)_CHECKSUM := b45b9ee3b64c58baaf800bcdff5fcd04d79930dba4c56e46e0d3b0aead40cc29
 $(PKG)_SUBDIR   := librsvg-$($(PKG)_VERSION)
 $(PKG)_FILE     := librsvg-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.gnome.org/sources/librsvg/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
