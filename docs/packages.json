@@ -260,6 +260,7 @@
     "libxml++": {"version": "2.40.1", "website": "https://libxmlplusplus.sourceforge.io/", "description": "libxml2"},
     "libxml2": {"version": "2.9.10", "website": "http://xmlsoft.org/", "description": ""},
     "libxslt": {"version": "1.1.34", "website": "http://xmlsoft.org/XSLT/", "description": ""},
+    "libyaml": {"version": "0.2.5", "website": "https://github.com/yaml/libyaml", "description": "A C library for parsing and emitting YAML."},
     "libzip": {"version": "1.5.2", "website": "https://libzip.org/", "description": ""},
     "libzmq": {"version": "d2293da", "website": "https://github.com/zeromq/libzmq", "description": "ZeroMQ core engine in C++, implements ZMTP/3.0"},
     "llvm": {"version": "10.0.0", "website": "https://llvm.org/", "description": ""},
