@@ -4,126 +4,15 @@ Contains ad hoc patches for cross building.
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
-Date: Mon, 4 Feb 2013 16:11:12 +0100
-Subject: [PATCH 1/4] add missing private lib to pc file
-
-
-diff --git a/lib/gnutls.pc.in b/lib/gnutls.pc.in
-index 1111111..2222222 100644
---- a/lib/gnutls.pc.in
-+++ b/lib/gnutls.pc.in
-@@ -19,6 +19,6 @@ Description: Transport Security Layer implementation for the GNU system
- URL: https://www.gnutls.org/
- Version: @VERSION@
- Libs: -L${libdir} -lgnutls
--Libs.private: @LIBINTL@ @LIBSOCKET@ @INET_PTON_LIB@ @LIBPTHREAD@ @LIB_SELECT@ @TSS_LIBS@ @GMP_LIBS@ @LIBUNISTRING@ @LIBIDN2_LIBS@ @LIBATOMIC_LIBS@
-+Libs.private: @LIBINTL@ @LIBSOCKET@ @INET_PTON_LIB@ @LIBPTHREAD@ @LIB_SELECT@ @TSS_LIBS@ @GMP_LIBS@ @LIBUNISTRING@ @LIBIDN2_LIBS@ @LIBATOMIC_LIBS@ -lcrypt32
- @GNUTLS_REQUIRES_PRIVATE@
- Cflags: -I${includedir}
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Mon, 24 Nov 2014 08:56:48 +0100
-Subject: [PATCH 2/4] windows build fix: ws2tcpip.h supplies inet_ntop
-
-Follow-up to 492c2b937ab66134d0b37499a6f3a747e19bc31a
-
-Signed-off-by: Mark Brand <mabrand@mabrand.nl>
-
-taken from: https://lists.gnupg.org/pipermail/gnutls-devel/2014-November/007250.html
-
-diff --git a/lib/x509/ip.c b/lib/x509/ip.c
-index 1111111..2222222 100644
---- a/lib/x509/ip.c
-+++ b/lib/x509/ip.c
-@@ -24,7 +24,11 @@
- #include "gnutls_int.h"
- #include "ip.h"
- #include <gnutls/x509.h>
--#include <arpa/inet.h>
-+#ifdef _WIN32
-+# include <ws2tcpip.h>
-+#else
-+# include <arpa/inet.h>
-+#endif
- 
- /*-
-  * _gnutls_mask_to_prefix:
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Sun, 7 May 2017 20:17:13 +0200
-Subject: [PATCH 3/4] let gnutls configure detect libidn2
-
-
-diff --git a/configure.ac b/configure.ac
-index 1111111..2222222 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -559,26 +559,19 @@ idna_support=no
- with_libidn2=no
- 
- if test "$try_libidn2" = yes;then
--    save_LIBS=$LIBS
--    AC_SEARCH_LIBS(idn2_lookup_u8, idn2, [
--      with_libidn2=yes;
--      idna_support="IDNA 2008 (libidn2)"
--      AC_DEFINE([HAVE_LIBIDN2], 1, [Define if IDNA 2008 support is enabled.])
--      AC_SUBST([LIBIDN2_CFLAGS], [])
--      AC_SUBST([LIBIDN2_LIBS], [-lidn2]) dnl used in gnutls.pc.in
--dnl enable once libidn2.pc is widespread; and remove LIBIDN2_LIBS from gnutls.pc.in (Libs.private)
--dnl      if test "x$GNUTLS_REQUIRES_PRIVATE" = "x"; then
--dnl        GNUTLS_REQUIRES_PRIVATE="Requires.private: libidn2"
--dnl      else
--dnl        GNUTLS_REQUIRES_PRIVATE="${GNUTLS_REQUIRES_PRIVATE}, libidn2"
--dnl      fi
--    ],[
--      with_libidn2=no;
--      AC_MSG_WARN(*** LIBIDN2 was not found. You will not be able to use IDN2008 support)
--    ])
--    LIBS=$save_LIBS
--else
--  with_libidn2=no
-+  PKG_CHECK_MODULES(LIBIDN2, libidn2, [with_libidn2=yes], [with_libidn2=no])
-+  if test "$with_libidn2" != "no";then
-+    idna_support="IDNA 2008 (libidn2)"
-+
-+    AC_DEFINE([HAVE_LIBIDN2], 1, [Define if IDNA 2008 support is enabled.])
-+    if test "x$GNUTLS_REQUIRES_PRIVATE" = "x"; then
-+      GNUTLS_REQUIRES_PRIVATE="Requires.private: libidn2"
-+    else
-+      GNUTLS_REQUIRES_PRIVATE="${GNUTLS_REQUIRES_PRIVATE}, libidn2"
-+    fi
-+  else
-+    AC_MSG_WARN(*** LIBIDN2 was not found. You will not be able to use IDN2008 support)
-+ fi
- fi
- 
- AM_CONDITIONAL(HAVE_LIBIDN2, test "$with_libidn2" != "no")
-diff --git a/lib/gnutls.pc.in b/lib/gnutls.pc.in
-index 1111111..2222222 100644
---- a/lib/gnutls.pc.in
-+++ b/lib/gnutls.pc.in
-@@ -19,6 +19,6 @@ Description: Transport Security Layer implementation for the GNU system
- URL: https://www.gnutls.org/
- Version: @VERSION@
- Libs: -L${libdir} -lgnutls
--Libs.private: @LIBINTL@ @LIBSOCKET@ @INET_PTON_LIB@ @LIBPTHREAD@ @LIB_SELECT@ @TSS_LIBS@ @GMP_LIBS@ @LIBUNISTRING@ @LIBIDN2_LIBS@ @LIBATOMIC_LIBS@ -lcrypt32
-+Libs.private: @LIBINTL@ @LIBSOCKET@ @INET_PTON_LIB@ @LIBPTHREAD@ @LIB_SELECT@ @TSS_LIBS@ @GMP_LIBS@ @LIBUNISTRING@ @LIBATOMIC_LIBS@ -lcrypt32
- @GNUTLS_REQUIRES_PRIVATE@
- Cflags: -I${includedir}
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 6 Dec 2018 10:36:30 +0100
-Subject: [PATCH 4/4] remove docs from configure.ac: avoid GTK_DOC dependencies
+Subject: [PATCH 1/1] remove docs from configure.ac: avoid GTK_DOC dependencies
 
 
 diff --git a/configure.ac b/configure.ac
 index 1111111..2222222 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -1062,17 +1062,6 @@ AC_DEFINE_UNQUOTED([INI_START_COMMENT_PREFIXES], [";#"], [The comment prefixes])
+@@ -1145,17 +1145,6 @@ AC_DEFINE_UNQUOTED([INI_START_COMMENT_PREFIXES], [";#"], [The comment prefixes])
  AC_CONFIG_FILES([guile/pre-inst-guile], [chmod +x guile/pre-inst-guile])
  AC_CONFIG_FILES([
    Makefile
