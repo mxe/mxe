@@ -13,7 +13,7 @@ define $(PKG)_BUILD
     # build and install the library
     cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \
         -DBUILD_TESTS=OFF \
-        -DCMAKE_CXX_FLAGS='-D_WIN32_WINNT=0x0600 -fstack-protector' \
+        -DCMAKE_CXX_FLAGS='-D_WIN32_WINNT=0x0600' \
         -DWITH_DOC=OFF \
         -DWITH_LIBSODIUM=ON \
         -DWITH_PERF_TOOL=OFF
@@ -28,7 +28,7 @@ define $(PKG)_BUILD
      echo 'Requires: libsodium'; \
      echo 'Libs: -lzmq'; \
      echo 'Libs.private: -lws2_32 -lrpcrt4 -liphlpapi'; \
-     echo 'Cflags.private: -DZMQ_STATIC -fstack-protector';) \
+     echo 'Cflags.private: -DZMQ_STATIC';) \
      > '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG).pc'
 
     # test pkg-config
@@ -42,7 +42,6 @@ define $(PKG)_BUILD
     cd '$(BUILD_DIR).test-cmake' && '$(TARGET)-cmake' \
         -DPKG=$(PKG) \
         -DPKG_VERSION=$($(PKG)_VERSION) \
-        -DCMAKE_CXX_FLAGS='-fstack-protector' \
         '$(PWD)/src/cmake/test'
     $(MAKE) -C '$(BUILD_DIR).test-cmake' -j 1 install
 endef
