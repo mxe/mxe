@@ -41,6 +41,7 @@ define $(PKG)_CONFIGURE
         --disable-win32-registry \
         --enable-threads=$(MXE_GCC_THREADS) \
         $(MXE_GCC_EXCEPTION_OPTS) \
+        --enable-default-ssp \
         --enable-libgomp \
         --with-gmp='$(PREFIX)/$(BUILD)' \
         --with-isl='$(PREFIX)/$(BUILD)' \
@@ -64,6 +65,7 @@ define $(PKG)_BUILD_mingw-w64
         --enable-sdk=all \
         --enable-idl \
         --enable-secure-api \
+        --with-default-msvcrt=msvcrt \
         $(mingw-w64-headers_CONFIGURE_OPTS)
     $(MAKE) -C '$(BUILD_DIR).headers' install
 
@@ -78,7 +80,8 @@ define $(PKG)_BUILD_mingw-w64
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)' \
         --with-default-msvcrt=msvcrt \
-        @gcc-crt-config-opts@
+        @gcc-crt-config-opts@ \
+        $(mingw-w64-crt_CONFIGURE_OPTS)
     $(MAKE) -C '$(BUILD_DIR).crt' -j '$(JOBS)' || $(MAKE) -C '$(BUILD_DIR).crt' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR).crt' -j 1 $(INSTALL_STRIP_TOOLCHAIN)
 
@@ -123,9 +126,15 @@ define $(PKG)_POST_BUILD
     $(MAKE) -C '$(BUILD_DIR)/libcc1' -j 1 install cc1libdir='$(PREFIX)/lib/gcc/$(TARGET)/$($(PKG)_VERSION)'
     -rm -f '$(PREFIX)/lib/'libcc1*
 
+    # overwrite default specs to mimic stack protector handling of glibc
+    # ./configure above doesn't do this
+    '$(TARGET)-gcc' -dumpspecs > '$(PREFIX)/lib/gcc/$(TARGET)/$($(PKG)_VERSION)/specs'
+    $(SED) -i 's,-lmingwex,-lmingwex -lssp_nonshared -lssp,' '$(PREFIX)/lib/gcc/$(TARGET)/$($(PKG)_VERSION)/specs'
+
     # compile test
     cd '$(PREFIX)/$(TARGET)/bin' && '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
+        -D_FORTIFY_SOURCE=2 \
         --coverage -fprofile-dir=. -v \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe'
 endef
