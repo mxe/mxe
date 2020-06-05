@@ -26,7 +26,7 @@ define $(PKG)_BUILD
         host_configargs="LIBS=\"`$(TARGET)-pkg-config --libs dlfcn` -lmman\"" \
         CONFIG_SHELL=$(SHELL) \
         LDFLAGS='-Wl,--allow-multiple-definition'
-    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' MAKEINFO='/usr/bin/env true'
 
     # executables are always static and we don't want the rest
      $(INSTALL) -m755 '$(BUILD_DIR)/gdb/gdb.exe'                 '$(PREFIX)/$(TARGET)/bin/'
