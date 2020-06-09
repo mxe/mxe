@@ -51,7 +51,7 @@ define $(PKG)_CONFIGURE
         --with-ld='$(PREFIX)/bin/$(TARGET)-ld' \
         --with-nm='$(PREFIX)/bin/$(TARGET)-nm' \
         $(shell [ `uname -s` == Darwin ] && echo "LDFLAGS='-Wl,-no_pie'") \
-        $($(PKG)_CONFIGURE_OPTS)
+        $(PKG_CONFIGURE_OPTS)
 endef
 
 define $(PKG)_BUILD_mingw-w64
