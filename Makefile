@@ -507,9 +507,9 @@ PKG_DEPS = \
                       $(filter $($($(DEP)_PKG)_TYPE),$(BUILD_PKG_TYPES))), \
                 $($(DEP)_TGT)/installed/$($(DEP)_PKG))))
 
-# order-only package deps unlikely to need target lookup
+# order-only package deps - needs target lookup for e.g. zstd native case
 PKG_OO_DEPS = \
-    $(foreach DEP,$($(PKG)_OO_DEPS), \
+    $(foreach DEP,$(value $(call LOOKUP_PKG_RULE,$(PKG),OO_DEPS,$(TARGET))), \
         $(if $(filter $(DEP),$(PKGS)), \
             $(if $(or $(value $(call LOOKUP_PKG_RULE,$(DEP),BUILD,$(TARGET))), \
                       $(filter $($(DEP)_TYPE),$(BUILD_PKG_TYPES))), \
@@ -569,7 +569,7 @@ $(foreach TARGET,$(MXE_TARGETS),\
     $(eval $(TARGET)_UC_LIB_TYPE := $(if $(findstring shared,$(TARGET)),SHARED,STATIC)))
 
 # finds a package rule defintion
-RULE_TYPES := BUILD DEPS FILE MESSAGE URL
+RULE_TYPES := BUILD DEPS FILE MESSAGE OO_DEPS URL
 # by truncating the target elements then looking for STAIC|SHARED rules:
 #
 # foo_BUILD_i686-w64-mingw32.static.win32.dw2
