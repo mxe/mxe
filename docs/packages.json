@@ -476,7 +476,7 @@
     "wxwidgets": {"version": "3.0.5.1", "website": "https://www.wxwidgets.org/", "description": "wxWidgets"},
     "x264": {"version": "20180806-2245", "website": "https://www.videolan.org/developers/x264.html", "description": ""},
     "x265": {"version": "2.4", "website": "http://x265.org/", "description": ""},
-    "xapian-core": {"version": "1.4.15", "website": "https://xapian.org/", "description": "Xapian-Core"},
+    "xapian-core": {"version": "1.4.16", "website": "https://xapian.org/", "description": "Xapian-Core"},
     "xerces": {"version": "3.1.4", "website": "https://xerces.apache.org/xerces-c/", "description": "Xerces-C++"},
     "xmlrpc-c": {"version": "d4364f4", "website": "https://xmlrpc-c.sourceforge.io/", "description": ""},
     "xmlsec": {"version": "1.2.29", "website": "https://www.aleksey.com/xmlsec/", "description": ""},
