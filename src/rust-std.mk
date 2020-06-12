@@ -9,7 +9,7 @@ $(PKG)_DEPS             := cc $(BUILD)~cargo $(BUILD)~rustc $(BUILD)~rust-std-bo
 ifneq (, $(findstring darwin,$(BUILD)))
     BUILD_TRIPLET = $(firstword $(call split,-,$(BUILD)))-apple-darwin
 else
-    ifneq (, $(findstring ibm-linux,$(BUILD)))
+    ifneq (, $(findstring linux,$(BUILD)))
         BUILD_TRIPLET = $(firstword $(call split,-,$(BUILD)))-unknown-linux-gnu
     else
         BUILD_TRIPLET = $(BUILD)
