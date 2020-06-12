@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Tue, 12 Jun 2012 17:05:49 +0200
-Subject: [PATCH 1/1] automake 1.12 compatibility fix
+Subject: [PATCH 1/2] automake 1.12 compatibility fix
 
 
 diff --git a/configure.in b/configure.in
@@ -20,3 +20,25 @@ index 1111111..2222222 100644
  if test "x$U" != "x"; then
    AC_MSG_ERROR(Compiler not ANSI compliant)
  fi
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Norbert Nemec <norbert.nemec@native-instruments.de>
+Date: Thu, 27 Mar 2014 21:22:56 +0100
+Subject: [PATCH 2/2] comment out non-const accessor to const member
+
+taken from:
+https://github.com/NNemec/antigrain/commit/24d4ee2c82aa13bc2cad0e5a0637d584a0982294
+
+diff --git a/include/agg_renderer_outline_aa.h b/include/agg_renderer_outline_aa.h
+index 1111111..2222222 100644
+--- a/include/agg_renderer_outline_aa.h
++++ b/include/agg_renderer_outline_aa.h
+@@ -1375,7 +1375,7 @@ namespace agg
+         //---------------------------------------------------------------------
+         void profile(const line_profile_aa& prof) { m_profile = &prof; }
+         const line_profile_aa& profile() const { return *m_profile; }
+-        line_profile_aa& profile() { return *m_profile; }
++//        line_profile_aa& profile() { return *m_profile; }
+ 
+         //---------------------------------------------------------------------
+         int subpixel_width() const { return m_profile->subpixel_width(); }

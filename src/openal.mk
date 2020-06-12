@@ -22,7 +22,7 @@ define $(PKG)_BUILD
         -DALSOFT_EXAMPLES=FALSE \
         -DALSOFT_TESTS=FALSE \
         -DALSOFT_UTILS=FALSE
-    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' || $(MAKE) -C '$(BUILD_DIR)' -j 1
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
     '$(TARGET)-gcc' \

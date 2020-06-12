@@ -1,0 +1,91 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Thu, 28 May 2020 13:42:05 +0200
+Subject: [PATCH 1/4] fix format string
+
+
+diff --git a/minizip.c b/minizip.c
+index 1111111..2222222 100644
+--- a/minizip.c
++++ b/minizip.c
+@@ -237,7 +237,7 @@ int32_t minizip_add_progress_cb(void *handle, void *userdata, mz_zip_file *file_
+ 
+     /* Print the progress of the current compress operation */
+     if (options->verbose)
+-        printf("%s - %" PRId64 " / %" PRId64 " (%.02f%%)\n", file_info->filename, position,
++        printf("%s - %" PRId64 " / %" PRId64 " (%0.2f%%)\n", file_info->filename, position,
+             file_info->uncompressed_size, progress);
+     return MZ_OK;
+ }
+@@ -363,7 +363,7 @@ int32_t minizip_extract_progress_cb(void *handle, void *userdata, mz_zip_file *f
+ 
+     /* Print the progress of the current extraction */
+     if (options->verbose)
+-        printf("%s - %" PRId64 " / %" PRId64 " (%.02f%%)\n", file_info->filename, position,
++        printf("%s - %" PRId64 " / %" PRId64 " (%0.2f%%)\n", file_info->filename, position,
+             file_info->uncompressed_size, progress);
+ 
+     return MZ_OK;
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Thu, 28 May 2020 14:33:19 +0200
+Subject: [PATCH 2/4] fix bzip2 library name
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -134,7 +134,7 @@ if(MZ_BZIP2)
+         message(STATUS "Using BZIP2 ${BZIP2_VERSION_STRING}")
+         list(APPEND MINIZIP_INC ${BZIP2_INCLUDE_DIRS})
+         list(APPEND MINIZIP_DEF -DHAVE_BZIP2)
+-        set(PC_PRIVATE_LIBS "${PC_PRIVATE_LIBS} -lbzip2")
++        set(PC_PRIVATE_LIBS "${PC_PRIVATE_LIBS} -lbz2")
+     endif()
+ endif()
+ 
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Thu, 28 May 2020 14:52:00 +0200
+Subject: [PATCH 3/4] fix output library name
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -652,7 +652,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
+ 
+ if(WIN32)
+     # VS debugger has problems when executable and static library are named the same
+-    set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME lib${PROJECT_NAME})
++    set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME ${PROJECT_NAME})
+ endif()
+ if(NOT RISCOS)
+     set_target_properties(${PROJECT_NAME} PROPERTIES POSITION_INDEPENDENT_CODE 1)
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Thu, 28 May 2020 15:04:20 +0200
+Subject: [PATCH 4/4] add missing private libcrypt32
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -257,6 +257,7 @@ if(WIN32)
+     if (MZ_PKCRYPT OR MZ_WZAES)
+         if (NOT MZ_OPENSSL AND NOT OPENSSL_FOUND AND NOT MZ_BRG)
+             list(APPEND MINIZIP_SRC "mz_crypt_win32.c")
++            set(PC_PRIVATE_LIBS "${PC_PRIVATE_LIBS} -lcrypt32")
+         endif()
+     endif()
+ endif()

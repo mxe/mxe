@@ -1,6 +1,6 @@
 This file is part of MXE. See LICENSE.md for licensing information.
 
-From 103d3ed73e50968846786b78db241f9904b92538 Mon Sep 17 00:00:00 2001
+From 2c59523387b10937ff7d085bc34ec3df68805fea Mon Sep 17 00:00:00 2001
 From: Ray Donnelly <mingw.android@gmail.com>
 Date: Wed, 26 Aug 2015 12:45:43 +0100
 Subject: [PATCH 1/2] cmake: Rearrange STATIC vs INTERFACE targets
@@ -12,10 +12,10 @@ Source: https://git.io/vzWJz
 See also: https://github.com/mxe/mxe/issues/1185
 
 diff --git a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
-index 1099a761ce..d03ebff899 100644
+index 309798a767..18156cac9e 100644
 --- a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
 +++ b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
-@@ -371,6 +371,9 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
+@@ -370,6 +370,9 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
      list(APPEND _Qt5$${CMAKE_MODULE_NAME}_LIB_DEPENDENCIES \"$${CMAKE_INTERFACE_QT5_MODULE_DEPS}\")
  !!ENDIF
  
@@ -25,10 +25,10 @@ index 1099a761ce..d03ebff899 100644
  !!IF !isEmpty(CMAKE_STATIC_TYPE)
      if(NOT Qt5_EXCLUDE_STATIC_DEPENDENCIES)
  !!IF !isEmpty(CMAKE_DEBUG_TYPE)
-@@ -408,9 +411,6 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
- 
+@@ -411,9 +414,6 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
      add_library(Qt5::$${CMAKE_MODULE_NAME} STATIC IMPORTED)
      set_property(TARGET Qt5::$${CMAKE_MODULE_NAME} PROPERTY IMPORTED_LINK_INTERFACE_LANGUAGES "CXX")
+ !!ENDIF
 -!!ELSE
 -!!IF equals(TEMPLATE, aux)
 -    add_library(Qt5::$${CMAKE_MODULE_NAME} INTERFACE IMPORTED)
@@ -36,10 +36,10 @@ index 1099a761ce..d03ebff899 100644
      add_library(Qt5::$${CMAKE_MODULE_NAME} SHARED IMPORTED)
  !!ENDIF
 -- 
-2.20.1
+2.25.1
 
 
-From 56f0aad866df2439d8d3b2f1651ae2dd02f52354 Mon Sep 17 00:00:00 2001
+From c3fa97702a080eb1a931fd1f41f7a1dd5b775523 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 11 Jun 2017 00:27:41 +0200
 Subject: [PATCH 2/2] use pkg-config for harfbuzz
@@ -47,10 +47,10 @@ Subject: [PATCH 2/2] use pkg-config for harfbuzz
 Change-Id: Ia65cbb90fd180f1bc10ce077a9a8323a48e51421
 
 diff --git a/src/gui/configure.json b/src/gui/configure.json
-index 0202f17b21..1418a3bbee 100644
+index 5ebcdb99b5..2553cb5cf6 100644
 --- a/src/gui/configure.json
 +++ b/src/gui/configure.json
-@@ -304,7 +304,8 @@
+@@ -303,7 +303,8 @@
              },
              "headers": "harfbuzz/hb.h",
              "sources": [
@@ -61,5 +61,5 @@ index 0202f17b21..1418a3bbee 100644
          },
          "imf": {
 -- 
-2.20.1
+2.25.1
 

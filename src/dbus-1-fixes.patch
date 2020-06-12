@@ -12,7 +12,7 @@ diff --git a/dbus/dbus-sysdeps-thread-win.c b/dbus/dbus-sysdeps-thread-win.c
 index 1111111..2222222 100644
 --- a/dbus/dbus-sysdeps-thread-win.c
 +++ b/dbus/dbus-sysdeps-thread-win.c
-@@ -69,6 +69,8 @@ _dbus_win_get_dll_hmodule (void)
+@@ -70,6 +70,8 @@ _dbus_win_get_dll_hmodule (void)
  #define hinst_t HINSTANCE
  #endif
  
@@ -21,7 +21,7 @@ index 1111111..2222222 100644
  BOOL WINAPI DllMain (hinst_t, DWORD, LPVOID);
  
  /* We need this to free the TLS events on thread exit */
-@@ -107,6 +109,8 @@ DllMain (hinst_t hinstDLL,
+@@ -108,6 +110,8 @@ DllMain (hinst_t hinstDLL,
    return TRUE;
  }
  

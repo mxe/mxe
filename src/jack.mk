@@ -24,7 +24,7 @@ define $(PKG)_BUILD
         CC='$(TARGET)-gcc'                        \
         CXX='$(TARGET)-g++'                       \
         PKGCONFIG='$(TARGET)-pkg-config'          \
-        ./waf configure build install             \
+        $(PYTHON2) waf configure build install    \
             -j '$(JOBS)'                          \
             --prefix='$(PREFIX)/$(TARGET)'        \
             --dist-target=mingw

@@ -4,8 +4,8 @@ PKG             := xapian-core
 $(PKG)_WEBSITE  := https://xapian.org/
 $(PKG)_DESCR    := Xapian-Core
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.2.21
-$(PKG)_CHECKSUM := 63f48758fbd13fa8456dd4cf9bf3ec35a096e4290f14a51ac7df23f78c162d3f
+$(PKG)_VERSION  := 1.4.16
+$(PKG)_CHECKSUM := 4937f2f49ff27e39a42150e928c8b45877b0bf456510f0785f50159a5cb6bf70
 $(PKG)_SUBDIR   := xapian-core-$($(PKG)_VERSION)
 $(PKG)_FILE     := xapian-core-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://oligarchy.co.uk/xapian/$($(PKG)_VERSION)/$($(PKG)_FILE)
@@ -18,8 +18,8 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && ./configure \
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS)
-    $(MAKE) -C '$(1)' -j '$(JOBS)'
-    $(MAKE) -C '$(1)' -j 1 install
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(MXE_DISABLE_CRUFT)
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install $(MXE_DISABLE_CRUFT)
 endef

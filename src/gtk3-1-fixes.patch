@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
 Date: Sun, 29 Jan 2017 21:47:39 +0100
-Subject: [PATCH 1/4] These were adapted from the gtk2 patchset.
+Subject: [PATCH 1/5] These were adapted from the gtk2 patchset.
 
 
 diff --git a/gdk/win32/gdkmain-win32.c b/gdk/win32/gdkmain-win32.c
@@ -49,7 +49,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
 Date: Sun, 29 Jan 2017 21:50:48 +0100
-Subject: [PATCH 2/4] Not sure what happens when this line is commented out
+Subject: [PATCH 2/5] Not sure what happens when this line is commented out
 
 
 diff --git a/gtk/a11y/gtkaccessibility.c b/gtk/a11y/gtkaccessibility.c
@@ -67,7 +67,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
 Date: Sun, 29 Jan 2017 22:50:45 +0100
-Subject: [PATCH 3/4] disable gtk-update-icon-cache
+Subject: [PATCH 3/5] disable gtk-update-icon-cache
 
 The error: https://gist.github.com/b3030a43a325ee7646a2bda2864465b5
 
@@ -99,7 +99,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Gerardo Ballabio <gerardo.ballabio@gmail.com>
 Date: Fri, 10 Nov 2017 08:22:39 +1100
-Subject: [PATCH 4/4] restore built-in icons from 3.12
+Subject: [PATCH 4/5] restore built-in icons from 3.12
 
 https://lists.nongnu.org/archive/html/mingw-cross-env-list/2017-11/msg00000.html
 
@@ -107,7 +107,7 @@ See https://github.com/mxe/mxe/pull/1972#issuecomment-343415791
 
 diff --git a/gtk/gtkbuiltincache.h b/gtk/gtkbuiltincache.h
 new file mode 100644
-index 1111111..2222222
+index 0000000..48d2492
 --- /dev/null
 +++ b/gtk/gtkbuiltincache.h
 @@ -0,0 +1,35868 @@
@@ -36129,3 +36129,49 @@ index 1111111..2222222 100644
      }
  
    if (min_dir)
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Thu, 28 May 2020 20:29:53 +0200
+Subject: [PATCH 5/5] remove unnecessary parentheses
+
+..which break build of gtkmm using gcc 10.
+
+diff --git a/gtk/deprecated/gtkstatusicon.h b/gtk/deprecated/gtkstatusicon.h
+index 1111111..2222222 100644
+--- a/gtk/deprecated/gtkstatusicon.h
++++ b/gtk/deprecated/gtkstatusicon.h
+@@ -71,10 +71,10 @@ struct _GtkStatusIconClass
+                                      gboolean        keyboard_mode,
+                                      GtkTooltip     *tooltip);
+ 
+-  void (*__gtk_reserved1);
+-  void (*__gtk_reserved2);
+-  void (*__gtk_reserved3);
+-  void (*__gtk_reserved4);
++  void *__gtk_reserved1;
++  void *__gtk_reserved2;
++  void *__gtk_reserved3;
++  void *__gtk_reserved4;
+ };
+ 
+ GDK_AVAILABLE_IN_ALL
+diff --git a/gtk/gtkfilechooserbutton.h b/gtk/gtkfilechooserbutton.h
+index 1111111..2222222 100644
+--- a/gtk/gtkfilechooserbutton.h
++++ b/gtk/gtkfilechooserbutton.h
+@@ -63,10 +63,10 @@ struct _GtkFileChooserButtonClass
+   /*< private >*/
+ 
+   /* Padding for future expansion */
+-  void (*__gtk_reserved1);
+-  void (*__gtk_reserved2);
+-  void (*__gtk_reserved3);
+-  void (*__gtk_reserved4);
++  void *__gtk_reserved1;
++  void *__gtk_reserved2;
++  void *__gtk_reserved3;
++  void *__gtk_reserved4;
+ };
+ 
+ 

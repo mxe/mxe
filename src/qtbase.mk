@@ -4,12 +4,12 @@ PKG             := qtbase
 $(PKG)_WEBSITE  := https://www.qt.io/
 $(PKG)_DESCR    := Qt
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.14.2
-$(PKG)_CHECKSUM := 48b9e79220941665a9dd827548c6428f7aa3052ccba8f4f7e039a94aa1d2b28a
+$(PKG)_VERSION  := 5.15.0
+$(PKG)_CHECKSUM := 9e7af10aece15fa9500369efde69cb220eee8ec3a6818afe01ce1e7d484824c5
 $(PKG)_SUBDIR   := $(PKG)-everywhere-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-everywhere-src-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := https://download.qt.io/official_releases/qt/5.14/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc dbus fontconfig freetds freetype harfbuzz jpeg libmysqlclient libpng openssl pcre2 postgresql sqlite zlib zstd
+$(PKG)_URL      := https://download.qt.io/official_releases/qt/5.15/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
+$(PKG)_DEPS     := cc dbus fontconfig freetds freetype harfbuzz jpeg libmysqlclient libpng openssl pcre2 postgresql sqlite zlib zstd $(BUILD)~zstd
 $(PKG)_DEPS_$(BUILD) :=
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 
@@ -117,7 +117,7 @@ define $(PKG)_BUILD_$(BUILD)
         -confirm-license \
         -no-dbus \
         -no-{eventfd,glib,icu,openssl} \
-        -no-sql-{db2,ibase,mysql,oci,odbc,psql,sqlite,sqlite2,tds} \
+        -no-sql-{db2,ibase,mysql,oci,odbc,psql,sqlite2,tds} \
         -no-use-gold-linker \
         -nomake examples \
         -nomake tests \

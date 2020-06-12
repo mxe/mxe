@@ -1,0 +1,69 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sun, 10 May 2020 15:06:47 +1000
+Subject: [PATCH 1/2] allow native cpu detection when building with clang
+
+function was disabled for non-gcc5 in:
+https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=b587c12551143c14f023860a1dbdf7316ae71f27;hp=43096b526a9f23008b9769372f11475ae63487bc
+
+clang can build it correctly and this should probably be a feature test
+
+diff --git a/gcc/config/i386/driver-i386.c b/gcc/config/i386/driver-i386.c
+index 1111111..2222222 100644
+--- a/gcc/config/i386/driver-i386.c
++++ b/gcc/config/i386/driver-i386.c
+@@ -26,7 +26,7 @@ along with GCC; see the file COPYING3.  If not see
+ 
+ const char *host_detect_local_cpu (int argc, const char **argv);
+ 
+-#if defined(__GNUC__) && (__GNUC__ >= 5 || !defined(__PIC__))
++#if defined(__GNUC__) && (__GNUC__ >= 5 || !defined(__PIC__)) || defined(__clang__)
+ #include "cpuid.h"
+ 
+ struct cache_desc
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sun, 10 May 2020 15:09:58 +1000
+Subject: [PATCH 2/2] remove hard-coded mingw from paths
+
+
+diff --git a/gcc/config.gcc b/gcc/config.gcc
+index 1111111..2222222 100644
+--- a/gcc/config.gcc
++++ b/gcc/config.gcc
+@@ -2169,7 +2169,7 @@ i[34567]86-*-mingw* | x86_64-*-mingw*)
+ 			tmake_file="${tmake_file} i386/t-mingw-w32"
+ 			;;
+ 	esac
+-        native_system_header_dir=/mingw/include
++        native_system_header_dir=/include
+ 	target_gtfiles="$target_gtfiles \$(srcdir)/config/i386/winnt.c"
+ 	extra_options="${extra_options} i386/cygming.opt i386/mingw.opt"
+ 	case ${target} in
+diff --git a/gcc/config/i386/mingw32.h b/gcc/config/i386/mingw32.h
+index 1111111..2222222 100644
+--- a/gcc/config/i386/mingw32.h
++++ b/gcc/config/i386/mingw32.h
+@@ -186,7 +186,7 @@ along with GCC; see the file COPYING3.  If not see
+ 
+ /* Override startfile prefix defaults.  */
+ #ifndef STANDARD_STARTFILE_PREFIX_1
+-#define STANDARD_STARTFILE_PREFIX_1 "/mingw/lib/"
++#define STANDARD_STARTFILE_PREFIX_1 "/lib/"
+ #endif
+ #ifndef STANDARD_STARTFILE_PREFIX_2
+ #define STANDARD_STARTFILE_PREFIX_2 ""
+@@ -195,7 +195,7 @@ along with GCC; see the file COPYING3.  If not see
+ /* For native mingw-version we need to take care that NATIVE_SYSTEM_HEADER_DIR
+    macro contains POSIX-style path.  See bug 52947.  */
+ #undef NATIVE_SYSTEM_HEADER_DIR
+-#define NATIVE_SYSTEM_HEADER_DIR "/mingw/include"
++#define NATIVE_SYSTEM_HEADER_DIR "/include"
+ 
+ /* Output STRING, a string representing a filename, to FILE.
+    We canonicalize it to be in Unix format (backslashes are replaced

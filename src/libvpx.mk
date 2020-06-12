@@ -4,19 +4,10 @@ PKG             := libvpx
 $(PKG)_WEBSITE  := https://www.webmproject.org/code/
 $(PKG)_DESCR    := vpx
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.6.1
-$(PKG)_CHECKSUM := 1c2c0c2a97fba9474943be34ee39337dee756780fc12870ba1dc68372586a819
-$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := https://storage.googleapis.com/downloads.webmproject.org/releases/webm/$($(PKG)_FILE)
+$(PKG)_VERSION  := 1.8.2
+$(PKG)_CHECKSUM := 8735d9fcd1a781ae6917f28f239a8aa358ce4864ba113ea18af4bb2dc8b474ac
+$(PKG)_GH_CONF  := webmproject/libvpx/tags,v
 $(PKG)_DEPS     := cc pthreads yasm
-
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://storage.googleapis.com/downloads.webmproject.org/releases/webm/index.html' | \
-    $(SED) -n 's,.*libvpx-\([0-9][^>]*\)\.tar.*,\1,p' | \
-    $(SORT) -Vr | \
-    head -1
-endef
 
 define $(PKG)_BUILD
     $(SED) -i 's,yasm[ $$],$(TARGET)-yasm ,g' '$(1)/build/make/configure.sh'

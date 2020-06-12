@@ -1,0 +1,31 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Sun, 29 Mar 2015 14:36:38 +0200
+Subject: [PATCH 1/1] workaround for -isystem flag messing up include order
+
+https://bugzilla.redhat.com/show_bug.cgi?id=843436
+
+diff --git a/mingw-w64-headers/crt/float.h b/mingw-w64-headers/crt/float.h
+index 1111111..2222222 100644
+--- a/mingw-w64-headers/crt/float.h
++++ b/mingw-w64-headers/crt/float.h
+@@ -114,6 +114,15 @@
+ 	#define DBL_MAX_10_EXP	__DBL_MAX_10_EXP__
+ 	#define LDBL_MAX_10_EXP	__LDBL_MAX_10_EXP__
+ 
++    /* The difference between 1 and the least value greater than 1 that is
++    representable in the given floating point type, b**1-p.  */
++    #undef FLT_EPSILON
++    #undef DBL_EPSILON
++    #undef LDBL_EPSILON
++    #define FLT_EPSILON __FLT_EPSILON__
++    #define DBL_EPSILON __DBL_EPSILON__
++    #define LDBL_EPSILON    __LDBL_EPSILON__
++
+ 	/* Addition rounds to 0: zero, 1: nearest, 2: +inf, 3: -inf, -1: unknown.  */
+ 	/* ??? This is supposed to change with calls to fesetround in <fenv.h>.  */
+ 	#undef FLT_ROUNDS

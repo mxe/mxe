@@ -128,7 +128,7 @@ index 1111111..2222222 100644
  option(ENABLE_SPLASH "Build the Splash graphics backend." ON)
  option(ENABLE_UTILS "Compile poppler command line utils." ON)
  option(ENABLE_CPP "Compile poppler cpp wrapper." ON)
-@@ -711,7 +712,9 @@ endif()
+@@ -713,7 +714,9 @@ endif()
  if(ENABLE_GLIB)
    add_subdirectory(glib)
  endif()

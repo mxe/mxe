@@ -1,0 +1,24 @@
+See: https://gitlab.gnome.org/GNOME/glib/-/merge_requests/1428
+
+--- a/glib/gtypes.h	2016-10-22 07:21:52.000000000 +0200
++++ b/glib/gtypes.h	2020-05-17 11:13:49.369639688 +0200
+@@ -522,7 +522,7 @@
+ #    else /* !GLIB_STATIC_COMPILATION */
+ #      ifdef GLIB_COMPILATION
+ #        ifdef DLL_EXPORT
+-#          define GLIB_VAR __declspec(dllexport)
++#          define GLIB_VAR extern __declspec(dllexport)
+ #        else /* !DLL_EXPORT */
+ #          define GLIB_VAR extern
+ #        endif /* !DLL_EXPORT */
+--- a/gobject/gparamspecs.h	2016-10-22 07:22:21.000000000 +0200
++++ b/gobject/gparamspecs.h	2020-05-17 11:16:37.803281391 +0200
+@@ -1144,7 +1144,7 @@
+ #    else /* !GOBJECT_STATIC_COMPILATION */
+ #      ifdef GOBJECT_COMPILATION
+ #        ifdef DLL_EXPORT
+-#          define GOBJECT_VAR __declspec(dllexport)
++#          define GOBJECT_VAR extern __declspec(dllexport)
+ #        else /* !DLL_EXPORT */
+ #          define GOBJECT_VAR extern
+ #        endif /* !DLL_EXPORT */

@@ -131,6 +131,7 @@ define $(PKG)_BUILD
     '$(PREFIX)/$(TARGET)/qt/bin/rcc' -name qt-test -o '$(1)/test-$(PKG)-pkgconfig/qrc_qt-test.cpp' '$(TOP_DIR)/src/qt-test.qrc'
     '$(TARGET)-g++' \
         -W -Wall -Werror -std=c++0x -pedantic \
+        -Wno-deprecated-copy \
         '$(TOP_DIR)/src/qt-test.cpp' \
         '$(1)/test-$(PKG)-pkgconfig/moc_qt-test.cpp' \
         '$(1)/test-$(PKG)-pkgconfig/qrc_qt-test.cpp' \
