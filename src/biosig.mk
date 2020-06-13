@@ -50,32 +50,31 @@ endef
 
 define $(PKG)_BUILD_POST
 
-    $(INSTALL) -m644 '$(1)/biosig4c++/biosig.h'             '$(PREFIX)/$(TARGET)/include/'
-    $(INSTALL) -m644 '$(1)/biosig4c++/biosig2.h'            '$(PREFIX)/$(TARGET)/include/'
-    $(INSTALL) -m644 '$(1)/biosig4c++/gdftime.h'            '$(PREFIX)/$(TARGET)/include/'
-    $(INSTALL) -m644 '$(1)/biosig4c++/biosig-dev.h'         '$(PREFIX)/$(TARGET)/include/'
+    $(INSTALL) -m644 '$(1)/biosig4c++/biosig.h'			'$(PREFIX)/$(TARGET)/include/'
+    $(INSTALL) -m644 '$(1)/biosig4c++/biosig2.h'		'$(PREFIX)/$(TARGET)/include/'
+    $(INSTALL) -m644 '$(1)/biosig4c++/gdftime.h'		'$(PREFIX)/$(TARGET)/include/'
+    $(INSTALL) -m644 '$(1)/biosig4c++/biosig-dev.h'		'$(PREFIX)/$(TARGET)/include/'
 
-    $(INSTALL) -m644 '$(1)/biosig4c++/libbiosig.a'          '$(PREFIX)/$(TARGET)/lib/'
-    $(INSTALL) -m644 '$(1)/biosig4c++/libbiosig.def' 	 '$(PREFIX)/$(TARGET)/lib/'
-    $(INSTALL) -m644 '$(1)/biosig4c++/libbiosig.dll.a' 	 '$(PREFIX)/$(TARGET)/lib/'
-    $(INSTALL) -m644 '$(1)/biosig4c++/libbiosig.dll' 	 '$(PREFIX)/$(TARGET)/bin/'
+    $(INSTALL) -m644 '$(1)/biosig4c++/libbiosig.a'		'$(PREFIX)/$(TARGET)/lib/'
+    $(INSTALL) -m644 '$(1)/biosig4c++/libbiosig.def'		'$(PREFIX)/$(TARGET)/lib/'
+    # $(INSTALL) -m644 '$(1)/biosig4c++/libbiosig.dll.a'	'$(PREFIX)/$(TARGET)/lib/'
+    $(INSTALL) -m644 '$(1)/biosig4c++/libbiosig.dll'		'$(PREFIX)/$(TARGET)/bin/'
 
-    $(INSTALL) -m644 '$(1)/biosig4c++/libgdf.a'             '$(PREFIX)/$(TARGET)/lib/'
-    $(INSTALL) -m644 '$(1)/biosig4c++/libgdf.def' 		 '$(PREFIX)/$(TARGET)/lib/'
-    $(INSTALL) -m644 '$(1)/biosig4c++/libgdf.dll.a' 	 '$(PREFIX)/$(TARGET)/lib/'
-    $(INSTALL) -m644 '$(1)/biosig4c++/libgdf.dll'	 	 '$(PREFIX)/$(TARGET)/bin/'
+    $(INSTALL) -m644 '$(1)/biosig4c++/libgdf.a'			'$(PREFIX)/$(TARGET)/lib/'
+    $(INSTALL) -m644 '$(1)/biosig4c++/libgdf.def'		'$(PREFIX)/$(TARGET)/lib/'
+    # $(INSTALL) -m644 '$(1)/biosig4c++/libgdf.dll.a'		'$(PREFIX)/$(TARGET)/lib/'
+    $(INSTALL) -m644 '$(1)/biosig4c++/libgdf.dll'		'$(PREFIX)/$(TARGET)/bin/'
 
+    $(INSTALL) -m644 '$(1)/biosig4c++/physicalunits.h'		'$(PREFIX)/$(TARGET)/include/'
+    $(INSTALL) -m644 '$(1)/biosig4c++/libphysicalunits.a'	'$(PREFIX)/$(TARGET)/lib/'
+    $(INSTALL) -m644 '$(1)/biosig4c++/libphysicalunits.def'	'$(PREFIX)/$(TARGET)/lib/'
+    # $(INSTALL) -m644 '$(1)/biosig4c++/libphysicalunits.dll.a'	'$(PREFIX)/$(TARGET)/lib/'
+    $(INSTALL) -m644 '$(1)/biosig4c++/libphysicalunits.dll'	'$(PREFIX)/$(TARGET)/bin/'
 
-    $(INSTALL) -m644 '$(1)/biosig4c++/physicalunits.h'      '$(PREFIX)/$(TARGET)/include/'
-    $(INSTALL) -m644 '$(1)/biosig4c++/libphysicalunits.a'   '$(PREFIX)/$(TARGET)/lib/'
-    $(INSTALL) -m644 '$(1)/biosig4c++/libphysicalunits.def' '$(PREFIX)/$(TARGET)/lib/'
-    $(INSTALL) -m644 '$(1)/biosig4c++/libphysicalunits.dll.a' '$(PREFIX)/$(TARGET)/lib/'
-    $(INSTALL) -m644 '$(1)/biosig4c++/libphysicalunits.dll' '$(PREFIX)/$(TARGET)/bin/'
+    $(INSTALL) -m644 '$(1)/biosig4c++/libbiosig.pc'		'$(PREFIX)/$(TARGET)/lib/pkgconfig/'
 
-    $(INSTALL) -m644 '$(1)/biosig4c++/libbiosig.pc'         '$(PREFIX)/$(TARGET)/lib/pkgconfig/'
-
-    $(INSTALL) -m644 '$(1)/biosig4c++/save2gdf.exe' '$(PREFIX)/$(TARGET)/bin/'
-    $(INSTALL) -m644 '$(1)/biosig4c++/biosig_fhir.exe' '$(PREFIX)/$(TARGET)/bin/'
+    $(INSTALL) -m644 '$(1)/biosig4c++/save2gdf.exe'		'$(PREFIX)/$(TARGET)/bin/'
+    $(INSTALL) -m644 '$(1)/biosig4c++/biosig_fhir.exe'		'$(PREFIX)/$(TARGET)/bin/'
 
     ### make release file
     rm -f $(PREFIX)/$($(PKG)_SUBDIR).$(TARGET).zip
@@ -97,10 +96,15 @@ define $(PKG)_BUILD_POST
 
     mkdir -p $(PREFIX)/release/$(TARGET)/lib/
     cd $(PREFIX)/$(TARGET) && cp -r \
-		lib/libbiosig.a lib/libbiosig.def bin/libbiosig.dll lib/libbiosig.dll.a \
-		lib/libgdf.a lib/libgdf.def bin/libgdf.dll lib/libgdf.dll.a \
+		lib/libbiosig.a lib/libbiosig.def bin/libbiosig.dll \
+		lib/libgdf.a lib/libgdf.def bin/libgdf.dll \
 		lib/libz.a lib/libcholmod.a lib/liblapack.a lib/libiconv.a lib/libiberty.a  \
-		lib/libphysicalunits.a lib/libphysicalunits.def bin/libphysicalunits.dll lib/libphysicalunits.dll.a \
+		lib/libphysicalunits.a lib/libphysicalunits.def bin/libphysicalunits.dll \
+		$(PREFIX)/release/$(TARGET)/lib/
+    -cd $(PREFIX)/$(TARGET) && cp -r \
+		lib/libbiosig.dll.a \
+		lib/libgdf.dll.a \
+		lib/libphysicalunits.dll.a \
 		$(PREFIX)/release/$(TARGET)/lib/
 
     mkdir -p $(PREFIX)/release/$(TARGET)/bin/
