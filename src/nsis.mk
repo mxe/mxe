@@ -42,4 +42,6 @@ define $(PKG)_BUILD
     cd '$(SOURCE_DIR)' && $(SCONS_LOCAL) $($(PKG)_SCONS_OPTS) -j 1 install
 
     $(INSTALL) -m755 '$(PREFIX)/$(TARGET)/bin/makensis' '$(PREFIX)/bin/$(TARGET)-makensis'
+    '$(TARGET)-makensis' '$(SOURCE_DIR)/Examples/bigtest.nsi'
+    $(INSTALL) -m755 '$(SOURCE_DIR)/Examples/bigtest.exe' '$(PREFIX)/$(TARGET)/bin/test-nsis.exe'
 endef
