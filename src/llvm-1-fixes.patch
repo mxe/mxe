@@ -5,22 +5,9 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Wed, 24 Apr 2019 22:53:20 +1000
-Subject: [PATCH 1/2] fix shared build and install
+Subject: [PATCH 1/2] disable tests
 
 
-diff --git a/cmake/modules/AddLLVM.cmake b/cmake/modules/AddLLVM.cmake
-index 1111111..2222222 100644
---- a/cmake/modules/AddLLVM.cmake
-+++ b/cmake/modules/AddLLVM.cmake
-@@ -670,7 +670,7 @@ macro(add_llvm_library name)
- 
-       install(TARGETS ${name}
-               ${export_to_llvmexports}
--              ${install_type} DESTINATION ${install_dir}
-+              DESTINATION lib RUNTIME DESTINATION bin
-               COMPONENT ${name})
- 
-       if (NOT LLVM_ENABLE_IDE)
 diff --git a/lib/Testing/CMakeLists.txt b/lib/Testing/CMakeLists.txt
 index 1111111..2222222 100644
 --- a/lib/Testing/CMakeLists.txt
@@ -33,20 +20,19 @@ index 1111111..2222222 100644
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
-Date: Wed, 24 Apr 2019 22:55:01 +1000
-Subject: [PATCH 2/2] fix case
+Date: Wed, 3 Jun 2020 16:29:21 +1000
+Subject: [PATCH 2/2] Fix building with -DBUILD_SHARED_LIBS=ON on mingw
 
+see: https://github.com/llvm/llvm-project/commit/609ef948387ba40e3693c2bd693d82ca34dcdc02
 
-diff --git a/utils/benchmark/src/CMakeLists.txt b/utils/benchmark/src/CMakeLists.txt
+diff --git a/utils/TableGen/GlobalISel/CMakeLists.txt b/utils/TableGen/GlobalISel/CMakeLists.txt
 index 1111111..2222222 100644
---- a/utils/benchmark/src/CMakeLists.txt
-+++ b/utils/benchmark/src/CMakeLists.txt
-@@ -36,7 +36,7 @@ endif()
+--- a/utils/TableGen/GlobalISel/CMakeLists.txt
++++ b/utils/TableGen/GlobalISel/CMakeLists.txt
+@@ -1,5 +1,6 @@
+ set(LLVM_LINK_COMPONENTS
+   Support
++  TableGen
+   )
  
- # We need extra libraries on Windows
- if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
--  target_link_libraries(benchmark Shlwapi)
-+  target_link_libraries(benchmark shlwapi)
- endif()
- 
- # We need extra libraries on Solaris
+ llvm_add_library(LLVMTableGenGlobalISel STATIC DISABLE_LLVM_LINK_LLVM_DYLIB

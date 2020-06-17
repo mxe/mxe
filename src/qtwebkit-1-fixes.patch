@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Fri, 11 Jan 2019 18:02:55 +1100
-Subject: [PATCH 1/4] ad hoc fixes
+Subject: [PATCH 1/5] ad hoc fixes
 
 
 diff --git a/Source/JavaScriptCore/jsc.cpp b/Source/JavaScriptCore/jsc.cpp
@@ -183,7 +183,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Konstantin Tokarev <annulen@yandex.ru>
 Date: Fri, 3 Nov 2017 18:59:25 +0300
-Subject: [PATCH 2/4] Install private headers for WK2 and private .pri modules
+Subject: [PATCH 2/5] Install private headers for WK2 and private .pri modules
 
 Change-Id: Ie2f52c600180fd31cc5fac2f5d30952df28ea9d6
 
@@ -191,7 +191,7 @@ diff --git a/Source/WebKit/PlatformQt.cmake b/Source/WebKit/PlatformQt.cmake
 index 1111111..2222222 100644
 --- a/Source/WebKit/PlatformQt.cmake
 +++ b/Source/WebKit/PlatformQt.cmake
-@@ -418,7 +418,7 @@ install(
+@@ -419,7 +419,7 @@ install(
      COMPONENT Data
  )
  
@@ -200,7 +200,7 @@ index 1111111..2222222 100644
  install(
      FILES
          ${WebKit_PRIVATE_HEADERS}
-@@ -510,7 +510,7 @@ if (NOT MACOS_BUILD_FRAMEWORKS)
+@@ -512,7 +512,7 @@ if (NOT MACOS_BUILD_FRAMEWORKS)
      install(FILES ${WebKit_PKGCONFIG_FILENAME} DESTINATION ${ECM_PKGCONFIG_INSTALL_DIR} COMPONENT Data)
  endif ()
  
@@ -209,7 +209,7 @@ index 1111111..2222222 100644
      set(WebKit_PRI_ARGUMENTS
          BIN_INSTALL_DIR "$$QT_MODULE_BIN_BASE"
          LIB_INSTALL_DIR "$$QT_MODULE_LIB_BASE"
-@@ -734,7 +734,7 @@ if (NOT MACOS_BUILD_FRAMEWORKS)
+@@ -737,7 +737,7 @@ if (NOT MACOS_BUILD_FRAMEWORKS)
      install(FILES ${WebKitWidgets_PKGCONFIG_FILENAME} DESTINATION ${ECM_PKGCONFIG_INSTALL_DIR} COMPONENT Data)
  endif ()
  
@@ -235,7 +235,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Pek <tehnick-8@yandex.ru>
 Date: Fri, 11 Jan 2019 18:06:01 +1100
-Subject: [PATCH 3/4] cmake: fix Cflags sections in pkg-config files
+Subject: [PATCH 3/5] cmake: fix Cflags sections in pkg-config files
 
 
 diff --git a/Source/cmake/ECMGeneratePkgConfigFile.cmake b/Source/cmake/ECMGeneratePkgConfigFile.cmake
@@ -254,7 +254,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Pek <tehnick-8@yandex.ru>
 Date: Fri, 11 Jan 2019 18:07:10 +1100
-Subject: [PATCH 4/4] Fix cross-compilation using MinGW
+Subject: [PATCH 4/5] Fix cross-compilation using MinGW
 
 with USE_MEDIA_FOUNDATION=ON. (Part 1)
 
@@ -294,3 +294,58 @@ index 1111111..2222222 100644
  
  namespace WebCore {
  
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Konstantin Tokarev <annulen@yandex.ru>
+Date: Wed, 4 Mar 2020 19:51:10 +0300
+Subject: [PATCH 5/5] Get rid of qt_wrap_cpp()
+
+AUTOMOC can handle them better.
+
+Taken from:
+https://github.com/qtwebkit/qtwebkit/commit/41a05f881cf1af7bfe9197b2d833fdcd515e33dc.patch
+
+via:
+https://github.com/Vitozz/mxe/commit/e87a8b636ea11708260d5f39df7a621f0ce84e99
+Change-Id: Id930570fb587930e98b9979b6359ff5006941237
+
+diff --git a/Source/WebKit/PlatformQt.cmake b/Source/WebKit/PlatformQt.cmake
+index 1111111..2222222 100644
+--- a/Source/WebKit/PlatformQt.cmake
++++ b/Source/WebKit/PlatformQt.cmake
+@@ -289,10 +289,9 @@ if (ENABLE_GEOLOCATION)
+ endif ()
+ 
+ if (USE_QT_MULTIMEDIA)
+-    qt_wrap_cpp(WebKit WebKit_SOURCES
+-        qt/Api/qwebfullscreenvideohandler.h
+-    )
+     list(APPEND WebKit_SOURCES
++        qt/Api/qwebfullscreenvideohandler.h
++
+         qt/WebCoreSupport/FullScreenVideoQt.cpp
+     )
+ endif ()
+diff --git a/Tools/QtTestBrowser/CMakeLists.txt b/Tools/QtTestBrowser/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/Tools/QtTestBrowser/CMakeLists.txt
++++ b/Tools/QtTestBrowser/CMakeLists.txt
+@@ -25,6 +25,7 @@ set(QtTestBrowser_SOURCES
+     qttestbrowser.cpp
+     urlloader.cpp
+     utils.cpp
++    webinspector.h
+     webpage.cpp
+     webview.cpp
+ )
+@@ -44,10 +45,6 @@ set(QtTestBrowser_LIBRARIES
+     ${STATIC_LIB_DEPENDENCIES}
+ )
+ 
+-qt_wrap_cpp(WebKit QtTestBrowser_SOURCES
+-    webinspector.h
+-)
+-
+ qt5_add_resources(QtTestBrowser_SOURCES
+     QtTestBrowser.qrc
+ )

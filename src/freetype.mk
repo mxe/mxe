@@ -3,8 +3,8 @@
 PKG             := freetype
 $(PKG)_WEBSITE  := https://www.freetype.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.10.1
-$(PKG)_CHECKSUM := 16dbfa488a21fe827dc27eaf708f42f7aa3bb997d745d31a19781628c36ba26f
+$(PKG)_VERSION  := 2.10.2
+$(PKG)_CHECKSUM := 1543d61025d2e6312e0a1c563652555f17378a204a61e99928c9fcef030a2d8b
 $(PKG)_SUBDIR   := freetype-$($(PKG)_VERSION)
 $(PKG)_FILE     := freetype-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/freetype/freetype2/$(shell echo '$($(PKG)_VERSION)' | cut -d . -f 1,2,3)/$($(PKG)_FILE)

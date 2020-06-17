@@ -132,7 +132,7 @@ endef
 # called with owner/repo/releases[/latest],tag prefix, tag suffix, filter-out, version sep
 define MXE_GET_GH_RELEASE
     $(WGET) -q -O- 'https://github.com/$(strip $(1))' \
-    | $(SED) -n 's,.*releases/tag/\([^"&]*\)".*,\1,p' \
+    | $(SED) -n 's,.*releases/tag/\([^"&;]*\)".*,\1,p' \
     | $(if $(4),grep -vi '$(strip $(4))') \
     | $(SED) -n 's,^$(strip $(2))\([^"]*\)$(strip $(3))$$,\1,p' \
     | tr '$(strip $(5))' '.' \

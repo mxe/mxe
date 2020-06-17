@@ -3,12 +3,12 @@
 PKG             := llvm
 $(PKG)_WEBSITE  := https://llvm.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 8.0.0
-$(PKG)_CHECKSUM := 8872be1b12c61450cacc82b3d153eab02be2546ef34fa3580ed14137bb26224c
-$(PKG)_GH_CONF  := llvm/llvm-project/tags, llvmorg-
+$(PKG)_VERSION  := 10.0.0
+$(PKG)_CHECKSUM := df83a44b3a9a71029049ec101fb0077ecbbdf5fe41e395215025779099a98fdf
+$(PKG)_GH_CONF  := llvm/llvm-project/releases/latest, llvmorg-
 $(PKG)_SUBDIR   := llvm-$($(PKG)_VERSION).src
 $(PKG)_FILE     := llvm-$($(PKG)_VERSION).src.tar.xz
-$(PKG)_URL      := https://releases.llvm.org/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := https://github.com/llvm/llvm-project/releases/download/llvmorg-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc $(BUILD)~$(PKG)
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 $(PKG)_DEPS_$(BUILD) := cmake

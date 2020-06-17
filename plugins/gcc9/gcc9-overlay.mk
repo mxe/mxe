@@ -17,8 +17,8 @@ $(PKG)_URL      := https://isl.gforge.inria.fr/$($(PKG)_FILE)
 $(PKG)_URL_2    := https://gcc.gnu.org/pub/gcc/infrastructure/$($(PKG)_FILE)
 
 PKG             := gcc
-$(PKG)_VERSION  := 9.2.0
-$(PKG)_CHECKSUM := ea6ef08f121239da5695f76c9b33637a118dcf63e24164422231917fa61fb206
+$(PKG)_VERSION  := 9.3.0
+$(PKG)_CHECKSUM := 71e197867611f6054aa1119b13a0c0abac12834765fe2d81f35ac57f84f742d1
 $(PKG)_SUBDIR   := gcc-$($(PKG)_VERSION)
 $(PKG)_FILE     := gcc-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://ftp.gnu.org/gnu/gcc/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
@@ -33,3 +33,6 @@ db_PATCHES := $(TOP_DIR)/src/db-1-fix-including-winioctl-h-lowcase.patch
 libssh_EXTRA_WARNINGS = -Wno-error=implicit-fallthrough
 gtkimageview_EXTRA_WARNINGS = -Wno-error=misleading-indentation
 guile_EXTRA_WARNINGS = -Wno-error=misleading-indentation
+gtkmm2_EXTRA_WARNINGS = -Wno-error=cast-function-type
+gtkmm3_EXTRA_WARNINGS = -Wno-error=cast-function-type
+gtkglextmm_EXTRA_WARNINGS = -Wno-error=cast-function-type

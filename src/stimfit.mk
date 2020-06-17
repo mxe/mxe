@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 8a5330612245d3f442ed640b0df91028aa4798301bb6844eaf1cf9b463dfc
 $(PKG)_SUBDIR   := stimfit-$($(PKG)_VERSION)windows
 $(PKG)_FILE     := stimfit-$($(PKG)_VERSION)windows.tar.gz
 $(PKG)_URL      := https://github.com/neurodroid/$(PKG)/archive/v$($(PKG)_VERSION)windows.tar.gz
-$(PKG)_DEPS     := cc libbiosig wxwidgets hdf5 tinyxml fftw levmar openblas
+$(PKG)_DEPS     := cc biosig wxwidgets hdf5 tinyxml fftw levmar openblas
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://github.com/neurodroid/stimfit/releases' | \

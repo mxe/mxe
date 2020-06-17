@@ -3,8 +3,8 @@
 PKG             := gnutls
 $(PKG)_WEBSITE  := https://www.gnu.org/software/gnutls/
 $(PKG)_DESCR    := GnuTLS
-$(PKG)_VERSION  := 3.6.10
-$(PKG)_CHECKSUM := b1f3ca67673b05b746a961acf2243eaae0ffe658b6a6494265c648e7c7812293
+$(PKG)_VERSION  := 3.6.14
+$(PKG)_CHECKSUM := 5630751adec7025b8ef955af4d141d00d252a985769f51b4059e5affa3d39d63
 $(PKG)_SUBDIR   := gnutls-$($(PKG)_VERSION)
 $(PKG)_FILE     := gnutls-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://gnupg.org/ftp/gcrypt/gnutls/v3.6/$($(PKG)_FILE)
@@ -13,13 +13,14 @@ $(PKG)_DEPS     := cc gettext gmp libidn2 libtasn1 libunistring nettle zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- https://gnupg.org/ftp/gcrypt/gnutls/v3.6/ | \
-    $(SED) -n 's,.*gnutls-\([1-9]\+\.[0-9]\+.[0-9]\+\)\..*,\1,p' | \
+    $(SED) -n 's,.*gnutls-\([1-9]\+\(\.[0-9]\+\)\+\)\..*,\1,p' | \
     $(SORT) -V | \
     tail -1
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && autoreconf -fi && ./configure \
+    cd '$(SOURCE_DIR)' && autoreconf -fi
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)'/configure \
         $(MXE_CONFIGURE_OPTS) \
         --disable-rpath \
         --disable-nls \
@@ -28,9 +29,10 @@ define $(PKG)_BUILD
         --disable-tests \
         --enable-local-libopts \
         --without-p11-kit \
-        --disable-silent-rules
-        ac_cv_prog_AR='$(TARGET)-ar'
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install
+        --disable-silent-rules \
+        CFLAGS='-D_WIN32_WINNT=0x0600'
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \

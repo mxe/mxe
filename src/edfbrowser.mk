@@ -5,9 +5,9 @@ PKG             := edfbrowser
 $(PKG)_WEBSITE  := https://www.teuniz.net/edfbrowser/
 $(PKG)_DESCR    := EDFbrowser
 $(PKG)_IGNORE   := 
-$(PKG)_VERSION  := 1.70
-$(PKG)_CHECKSUM := 206a19e47416c278fa161c6d9bd78a3a7dd5f2c2b88deb270fb3495ffd3f659d
-$(PKG)_SUBDIR   := edfbrowser_170_source
+$(PKG)_VERSION  := 1.75
+$(PKG)_CHECKSUM := 158d147d255ec19d7f206d929170ef099017ba16239f6960c1926feec75c813c
+$(PKG)_SUBDIR   := edfbrowser_175_source
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_URL      := https://www.teuniz.net/edfbrowser/$($(PKG)_FILE)
                    https://gitlab.com/Teuniz/EDFbrowser/releases
