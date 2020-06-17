@@ -13,10 +13,8 @@ $(PKG)_DEPS     := cc suitesparse zlib libiberty libiconv libb64 lapack dcmtk ti
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://biosig.sourceforge.io/download.html' | \
-        $(GREP) biosig4c | \
         $(SED) -n 's_.*>v\([0-9]\.[0-9]\.[0-9]\)<.*_\1_p' | \
-        $(SORT) -V | \
-        tail -1
+        head -1
 endef
 
 define $(PKG)_BUILD_PRE
