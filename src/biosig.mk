@@ -4,12 +4,11 @@
 PKG             := biosig
 $(PKG)_WEBSITE  := http://biosig.sf.net/
 $(PKG)_DESCR    := biosig
-$(PKG)_VERSION  := ab653353dd80b4cc2a8affb1fd7523e9c052ecd8
-$(PKG)_CHECKSUM := 8c41eb44dad8e4ba4aec08f3178e4747219b3fdcb610feabfccf8a4254e6bd7c
-$(PKG)_SUBDIR   := biosig-code-$($(PKG)_VERSION)
-$(PKG)_FILE     := biosig-code-$($(PKG)_VERSION).zip
-$(PKG)_URL      := https://sourceforge.net/code-snapshots/git/b/bi/biosig/code.git/biosig-code-ab653353dd80b4cc2a8affb1fd7523e9c052ecd8.zip
-# http://sourceforge.net/projects/biosig/files/BioSig%20for%20C_C%2B%2B/src/$($(PKG)_FILE)
+$(PKG)_VERSION  := 2.0.3
+$(PKG)_CHECKSUM := 9b072345d2ee4b5c399c3338bb080ecb82a2980c2e2ecf6df8da053d71d281d4
+$(PKG)_SUBDIR   := biosig-$($(PKG)_VERSION)
+$(PKG)_FILE     := biosig-$($(PKG)_VERSION).src.tar.gz
+$(PKG)_URL      := https://sourceforge.net/projects/biosig/files/BioSig%20for%20C_C%2B%2B/src/$($(PKG)_SUBDDIR).src.tar.gz
 $(PKG)_DEPS     := cc suitesparse zlib libiberty libiconv libb64 lapack dcmtk tinyxml
 
 define $(PKG)_UPDATE
@@ -22,12 +21,7 @@ endef
 
 define $(PKG)_BUILD_PRE
 
-    #rm -rf '$(1)'
-    #rsync -avL  ~/src/biosig-code/biosig4c++/* '$(1)/'
-
     cd '$(1)' && autoreconf -fi
-
-    #echo $(MXE_CONFIGURE_OPTS)
 
     cd '$(1)' && ./configure \
         ac_cv_func_malloc_0_nonnull=yes \
@@ -37,14 +31,8 @@ define $(PKG)_BUILD_PRE
     # make sure NDEBUG is defined
     $(SED) -i '/NDEBUG/ s|#||g' '$(1)'/biosig4c++/Makefile
 
-    ### disables declaration of sopen from io.h (imported through unistd.h)
-
-    $(SED) -i '/ sopen/ s|^/*|//|g' $(PREFIX)/$(TARGET)/include/io.h
-
     TARGET='$(TARGET)' $(MAKE) -C '$(1)' clean
     TARGET='$(TARGET)' $(MAKE) -C '$(1)' -j '$(JOBS)' lib tools
-	#	libbiosig.a libgdf.a  libphysicalunits.a \
-	#	libbiosig.dll libgdf.dll libphysicalunits.dll
 
 endef
 
