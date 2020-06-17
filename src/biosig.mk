@@ -8,7 +8,7 @@ $(PKG)_VERSION  := 2.0.3
 $(PKG)_CHECKSUM := 9b072345d2ee4b5c399c3338bb080ecb82a2980c2e2ecf6df8da053d71d281d4
 $(PKG)_SUBDIR   := biosig-$($(PKG)_VERSION)
 $(PKG)_FILE     := biosig-$($(PKG)_VERSION).src.tar.gz
-$(PKG)_URL      := https://sourceforge.net/projects/biosig/files/BioSig%20for%20C_C%2B%2B/src/$($(PKG)_SUBDDIR).src.tar.gz
+$(PKG)_URL      := https://sourceforge.net/projects/biosig/files/BioSig%20for%20C_C%2B%2B/src/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc suitesparse zlib libiberty libiconv libb64 lapack dcmtk tinyxml
 
 define $(PKG)_UPDATE
