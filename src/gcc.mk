@@ -55,6 +55,14 @@ define $(PKG)_CONFIGURE
 endef
 
 define $(PKG)_BUILD_mingw-w64
+    # `configure`'s libdl detection:
+    #   - bypasses the gcc/mingw use of `LoadLibrary`
+    #   - adds unnecessary dependency
+    #   - causes unexpected linking errors
+    #   - can't be reliably disabled in all subdirs
+    # safe option is `make clean`, but we don't want to enforce that
+    -rm -v '$(PREFIX)/$(TARGET)'/{lib,bin}/libdl.*
+
     # install mingw-w64 headers
     $(call PREPARE_PKG_SOURCE,mingw-w64,$(BUILD_DIR))
     mkdir '$(BUILD_DIR).headers'
