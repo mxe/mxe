@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 128b467c4ed03264c187405172a4e83049342cc8cc2f655f53a2d0ee9d377
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://caca.zoy.org/files/$(PKG)/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc freeglut ncurses zlib
+$(PKG)_DEPS     := cc dlfcn-win32 freeglut ncurses zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'http://caca.zoy.org/wiki/libcaca' | \
