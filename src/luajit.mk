@@ -25,6 +25,7 @@ define $(PKG)_BUILD
         FILE_T=luajit.exe \
         INSTALL_TNAME=luajit-$($(PKG)_VERSION).exe \
         INSTALL_TSYMNAME=luajit.exe \
+        Q= \
         install
     $(if $(BUILD_SHARED),\
         $(INSTALL) -m644 '$(SOURCE_DIR)/src/$($(PKG)_DLLNAME)' '$(PREFIX)/$(TARGET)/bin/')
