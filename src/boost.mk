@@ -21,20 +21,17 @@ define $(PKG)_UPDATE
     head -1
 endef
 
-$(PKG)_ENABLE_CMAKE_SUPPORT := $(shell [ \( $($(PKG)_VERSION_MAJOR) -eq 1 -a $($(PKG)_VERSION_MINOR) -ge 72 \) -o $($(PKG)_VERSION_MAJOR) -ge 2 ] && echo true)
-
 define $(PKG)_BUILD
     # old version appears to interfere
     rm -rf '$(PREFIX)/$(TARGET)/include/boost/'
     rm -f "$(PREFIX)/$(TARGET)/lib/libboost"*
+    rm -rf "$(PREFIX)/$(TARGET)/lib/cmake/boost_"*
     rm -f "$(PREFIX)/$(TARGET)/bin/libboost"*
     # create user-config
     echo 'using gcc : mxe : $(TARGET)-g++ : <rc>$(TARGET)-windres <archiver>$(TARGET)-ar <ranlib>$(TARGET)-ranlib ;' > '$(1)/user-config.jam'
 
     # compile boost build (b2)
     cd '$(1)/tools/build/' && ./bootstrap.sh
-$(PKG)_VERSION_MAJOR := $(shell echo $($(PKG)_VERSION) | cut -f1 -d.)
-$(PKG)_VERSION_MINOR := $(shell echo $($(PKG)_VERSION) | cut -f2 -d.)
 
     # cross-build, see b2 options at:
     # https://www.boost.org/build/doc/html/bbv2/overview/invocation.html
@@ -89,7 +86,7 @@ $(PKG)_VERSION_MINOR := $(shell echo $($(PKG)_VERSION) | cut -f2 -d.)
     printf "set(Boost_THREADAPI "$(if $(findstring posix,$(MXE_GCC_THREADS)),pthread,win32)")\\n\
     set (Boost_USE_STATIC_LIBS $(if $(BUILD_SHARED),OFF,ON))\\n\
     set (Boost_USE_MULTITHREADED ON)\\n\
-    set (Boost_NO_BOOST_CMAKE $(if $($(PKG)_ENABLE_CMAKE_SUPPORT),OFF,ON))\\n\
+    set (Boost_NO_BOOST_CMAKE OFF)\\n\
     set (Boost_USE_STATIC_RUNTIME $(if $(BUILD_SHARED),OFF,ON))\\n" > '$(CMAKE_TOOLCHAIN_DIR)/$(PKG).cmake'
 
     '$(TARGET)-g++' \
@@ -149,9 +146,4 @@ define $(PKG)_BUILD_$(BUILD)
             --libdir='$(PREFIX)/$(TARGET)/lib' \
             --includedir='$(PREFIX)/$(TARGET)/include' \
             install
-# setup cmake toolchain
-#     printf "set (Boost_USE_STATIC_LIBS ON)\\n\
-#     set (Boost_USE_MULTITHREADED ON)\\n\
-#     set (Boost_NO_BOOST_CMAKE $(if $($(PKG)_ENABLE_CMAKE_SUPPORT),OFF,ON))\\n\
-#     set (Boost_USE_STATIC_RUNTIME ON)\\n" > '$(CMAKE_TOOLCHAIN_DIR)/$(PKG).cmake'
 endef
