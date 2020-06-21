@@ -1082,6 +1082,17 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <h3 id="requirements-wsl">Windows Subsystem for Linux</h3>
 
     <p>
+    <a href="https://docs.microsoft.com/en-us/windows/wsl/install-win10">
+    Install the Windows Subsystem for Linux</a>, noting that WSL1
+    does not support 32-bit code execution.
+    </p>
+
+    <p>If mixing WSL1 and WSL2,
+    <a href="https://docs.microsoft.com/en-us/windows/wsl/install-win10#set-your-distribution-version-to-wsl-1-or-wsl-2">
+    ensure the distro-specific or global defaults are set.</a>
+    </p>
+
+    <p>
     Requirements should match the Debian, Fedora, openSUSE etc. sections
     above, but care should be taken to ensure MXE is installed in the
     Linux subsystem under <code>/</code> instead of the mounted Windows
