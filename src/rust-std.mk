@@ -17,7 +17,7 @@ else
 endif
 
 define DEP_TARGET
-$(shell [[ -f $(MXE_TMP)/get-target-triplet.txt ]] && cat $(MXE_TMP)/get-target-triplet.txt || echo ERROR)
+$(shell [ -f "$(MXE_TMP)/get-target-triplet.txt" ] && cat "$(MXE_TMP)/get-target-triplet.txt" || echo ERROR)
 endef
 
 TARGET_TRIPLET          = $(firstword $(call split,-,$(DEP_TARGET)))-pc-windows-gnu
