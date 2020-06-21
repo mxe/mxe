@@ -230,6 +230,7 @@
     "libplist": {"version": "2.0.0", "website": "https://github.com/libimobiledevice/libplist", "description": ""},
     "libpng": {"version": "1.6.37", "website": "http://www.libpng.org/", "description": ""},
     "libqrencode": {"version": "4.0.2", "website": "https://fukuchi.org/works/qrencode/", "description": "a fast and compact QR Code encoding library"},
+    "libraw": {"version": "0.19.5", "website": "https://libraw.org", "description": "A library for reading RAW files obtained from digital photo cameras"},
     "librosco": {"version": "0.1.11", "website": "https://github.com/colinbourassa/librosco/", "description": ""},
     "librsvg": {"version": "2.40.5", "website": "https://librsvg.sourceforge.io/", "description": ""},
     "librtmp": {"version": "fa8646d", "website": "https://rtmpdump.mplayerhq.hu/", "description": ""},
