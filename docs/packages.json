@@ -122,7 +122,7 @@
     "guile": {"version": "1.8.8", "website": "https://www.gnu.org/software/guile/", "description": "GNU Guile"},
     "gumbo": {"version": "0.10.1", "website": "https://github.com/google/gumbo-parser", "description": "Gumbo, an HTML5 parsing library"},
     "hamlib": {"version": "3.3", "website": "https://hamlib.github.io/", "description": "HamLib"},
-    "harfbuzz": {"version": "2.6.7", "website": "https://wiki.freedesktop.org/www/Software/HarfBuzz/", "description": "HarfBuzz"},
+    "harfbuzz": {"version": "2.6.8", "website": "https://wiki.freedesktop.org/www/Software/HarfBuzz/", "description": "HarfBuzz"},
     "hdf-eos2": {"version": "20v1.00", "website": "https://hdfeos.org/software/library.php", "description": "HDF-EOS2"},
     "hdf-eos5": {"version": "1.16", "website": "https://hdfeos.org/software/library.php", "description": "HDF-EOS5"},
     "hdf4": {"version": "4.2.10", "website": "https://www.hdfgroup.org/hdf4/", "description": "HDF4"},
