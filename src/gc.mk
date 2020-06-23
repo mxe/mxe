@@ -14,7 +14,7 @@ define $(PKG)_BUILD
     # build and install the library
     cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
         $(MXE_CONFIGURE_OPTS) \
-        --enable-threads=$(if $(findstring posix,$(MXE_GCC_THREADS)),pthreads,win32) \
+        --enable-threads=$(if $(POSIX_THREADS),pthreads,win32) \
         --enable-cplusplus
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install

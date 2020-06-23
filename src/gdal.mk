@@ -70,7 +70,7 @@ define $(PKG)_BUILD
         --with-sde=no \
         --with-spatialite=yes \
         --with-sqlite3='$(PREFIX)/$(TARGET)' \
-        --with-threads=$(if $(MXE_GCC_THREADS),yes,no) \
+        --with-threads=$(if $(or $(POSIX_THREADS),$(WIN32_THREADS)),yes,no) \
         --with-xerces=no \
         --with-xml2='$(PREFIX)/$(TARGET)/bin/xml2-config' \
         --with-pg='$(PREFIX)/$(TARGET)/bin/pg_config' \

@@ -48,7 +48,7 @@ define $(PKG)_BUILD
         link=$(if $(BUILD_STATIC),static,shared) \
         runtime-link=$(if $(BUILD_STATIC),static,shared) \
         target-os=windows \
-        threadapi=$(if $(findstring posix,$(MXE_GCC_THREADS)),pthread,win32) \
+        threadapi=$(if $(POSIX_THREADS),pthread,win32) \
         threading=multi \
         variant=release \
         toolset=gcc-mxe \

@@ -20,7 +20,7 @@ endef
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
         $(MXE_CONFIGURE_OPTS) \
-        --enable-threads=$(if $(findstring win32,$(MXE_GCC_THREADS)),vista,posix) \
+        --enable-threads=$(if $(POSIX_THREADS),posix,vista) \
         --disable-nls
     $(MAKE) -C '$(BUILD_DIR)' src/liblzma -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' src/liblzma -j 1 install
