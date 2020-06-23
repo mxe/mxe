@@ -11,12 +11,6 @@ $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_DEPS     := cc eigen ffmpeg jasper jpeg libpng libwebp \
                    openblas openexr protobuf tiff xz zlib
 
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://sourceforge.net/projects/opencvlibrary/files/opencv-unix/' | \
-    $(SED) -n 's,.*/projects/.*/\([0-9][^"]*\)/".*,\1,p' | \
-    head -1
-endef
-
 # -DCMAKE_CXX_STANDARD=98 required for non-posix gcc7 build
 
 define $(PKG)_BUILD

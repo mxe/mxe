@@ -8,13 +8,6 @@ $(PKG)_CHECKSUM := 9f3536ab2bb7781dbafabc6a61e0b34b17edd16bd6c2eaf2ae71bc63078f9
 $(PKG)_GH_CONF  := kcat/openal-soft/releases,openal-soft-
 $(PKG)_DEPS     := cc portaudio
 
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://openal-soft.org/openal-releases/?C=M;O=D' | \
-    $(SED) -n 's,.*"openal-soft-\([0-9][^"]*\)\.tar.*,\1,p' | \
-    $(SORT) -V | \
-    tail -1
-endef
-
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && '$(TARGET)-cmake' '$(SOURCE_DIR)' \
         -DALSOFT_EXAMPLES=FALSE \

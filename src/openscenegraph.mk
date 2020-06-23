@@ -11,13 +11,6 @@ $(PKG)_DEPS     := cc boost curl dcmtk freetype gdal giflib gstreamer \
                    gta jasper jpeg libpng openal openexr openthreads poppler \
                    tiff zlib
 
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://www.openscenegraph.org/index.php/download-section/stable-releases' | \
-    $(SED) -n 's,.*OpenSceneGraph/tree/OpenSceneGraph-\([0-9]*\.[0-9]*[02468]\.[^<]*\)">.*,\1,p' | \
-    $(SORT) -V | \
-    tail -1
-endef
-
 define $(PKG)_BUILD
     $(foreach PKG_PATCH,$(sort $(wildcard $(TOP_DIR)/src/openthreads-*.patch)),
         (cd '$(1)' && $(PATCH) -p1 -u) < $(PKG_PATCH))
