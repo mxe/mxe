@@ -6,222 +6,10 @@ From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Fri, 24 Sep 2010 14:43:43 +0200
 Subject: [PATCH 01/12] s,DllMain,static _disabled_DllMain,
-
-
-diff --git a/gdk/win32/gdkmain-win32.c b/gdk/win32/gdkmain-win32.c
-index 1111111..2222222 100644
---- a/gdk/win32/gdkmain-win32.c
-+++ b/gdk/win32/gdkmain-win32.c
-@@ -65,7 +65,7 @@ const GOptionEntry _gdk_windowing_args[] = {
- };
- 
- int __stdcall
--DllMain (HINSTANCE hinstDLL,
-+gdk_DllMain (HINSTANCE hinstDLL,
- 	 DWORD     dwReason,
- 	 LPVOID    reserved)
- {
-diff --git a/gtk/gtkmain.c b/gtk/gtkmain.c
-index 1111111..2222222 100644
---- a/gtk/gtkmain.c
-+++ b/gtk/gtkmain.c
-@@ -74,7 +74,7 @@
- static HMODULE gtk_dll;
- 
- BOOL WINAPI
--DllMain (HINSTANCE hinstDLL,
-+gtk_DllMain (HINSTANCE hinstDLL,
- 	 DWORD     fdwReason,
- 	 LPVOID    lpvReserved)
- {
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: "fix@me" <fix@me>
-Date: Fri, 24 Sep 2010 14:46:20 +0200
-Subject: [PATCH 02/12] s,__declspec(dllimport),,
-
-
-diff --git a/gdk/gdktypes.h b/gdk/gdktypes.h
-index 1111111..2222222 100644
---- a/gdk/gdktypes.h
-+++ b/gdk/gdktypes.h
-@@ -41,7 +41,7 @@
- #  ifdef GDK_COMPILATION
- #    define GDKVAR __declspec(dllexport)
- #  else
--#    define GDKVAR extern __declspec(dllimport)
-+#    define GDKVAR extern 
- #  endif
- #else
- #  define GDKVAR extern
-diff --git a/gtk/gtkdebug.h b/gtk/gtkdebug.h
-index 1111111..2222222 100644
---- a/gtk/gtkdebug.h
-+++ b/gtk/gtkdebug.h
-@@ -66,7 +66,7 @@ typedef enum {
- #  ifdef GTK_COMPILATION
- #    define GTKVAR __declspec(dllexport)
- #  else
--#    define GTKVAR extern __declspec(dllimport)
-+#    define GTKVAR extern 
- #  endif
- #else
- #  define GTKVAR extern
-diff --git a/gtk/gtkmain.h b/gtk/gtkmain.h
-index 1111111..2222222 100644
---- a/gtk/gtkmain.h
-+++ b/gtk/gtkmain.h
-@@ -69,7 +69,7 @@ typedef gint	(*GtkKeySnoopFunc)	    (GtkWidget	  *grab_widget,
- #ifdef GTK_COMPILATION
- #define GTKMAIN_C_VAR __declspec(dllexport)
- #else
--#define GTKMAIN_C_VAR extern __declspec(dllimport)
-+#define GTKMAIN_C_VAR extern 
- #endif
- #else
- #define GTKMAIN_C_VAR extern
-diff --git a/gtk/gtktexttypes.h b/gtk/gtktexttypes.h
-index 1111111..2222222 100644
---- a/gtk/gtktexttypes.h
-+++ b/gtk/gtktexttypes.h
-@@ -46,7 +46,7 @@ typedef struct _GtkTextMarkBody GtkTextMarkBody;
- #ifdef GTK_COMPILATION
- #define VARIABLE __declspec(dllexport)
- #else
--#define VARIABLE extern __declspec(dllimport)
-+#define VARIABLE extern 
- #endif
- #else
- #define VARIABLE extern
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: "fix@me" <fix@me>
-Date: Fri, 24 Sep 2010 15:03:28 +0200
-Subject: [PATCH 03/12] s,__declspec(dllexport),,
-
-
-diff --git a/gdk/gdktypes.h b/gdk/gdktypes.h
-index 1111111..2222222 100644
---- a/gdk/gdktypes.h
-+++ b/gdk/gdktypes.h
-@@ -39,7 +39,7 @@
- 
- #ifdef G_OS_WIN32
- #  ifdef GDK_COMPILATION
--#    define GDKVAR __declspec(dllexport)
-+#    define GDKVAR 
- #  else
- #    define GDKVAR extern 
- #  endif
-diff --git a/gtk/gtkdebug.h b/gtk/gtkdebug.h
-index 1111111..2222222 100644
---- a/gtk/gtkdebug.h
-+++ b/gtk/gtkdebug.h
-@@ -64,7 +64,7 @@ typedef enum {
- 
- #ifdef G_OS_WIN32
- #  ifdef GTK_COMPILATION
--#    define GTKVAR __declspec(dllexport)
-+#    define GTKVAR 
- #  else
- #    define GTKVAR extern 
- #  endif
-diff --git a/gtk/gtkmain.h b/gtk/gtkmain.h
-index 1111111..2222222 100644
---- a/gtk/gtkmain.h
-+++ b/gtk/gtkmain.h
-@@ -67,7 +67,7 @@ typedef gint	(*GtkKeySnoopFunc)	    (GtkWidget	  *grab_widget,
-  */
- #ifdef G_PLATFORM_WIN32
- #ifdef GTK_COMPILATION
--#define GTKMAIN_C_VAR __declspec(dllexport)
-+#define GTKMAIN_C_VAR 
- #else
- #define GTKMAIN_C_VAR extern 
- #endif
-diff --git a/gtk/gtktexttypes.h b/gtk/gtktexttypes.h
-index 1111111..2222222 100644
---- a/gtk/gtktexttypes.h
-+++ b/gtk/gtktexttypes.h
-@@ -44,7 +44,7 @@ typedef struct _GtkTextMarkBody GtkTextMarkBody;
- 
- #ifdef G_OS_WIN32
- #ifdef GTK_COMPILATION
--#define VARIABLE __declspec(dllexport)
-+#define VARIABLE 
- #else
- #define VARIABLE extern 
- #endif
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: "fix@me" <fix@me>
-Date: Fri, 24 Sep 2010 14:17:22 +0200
-Subject: [PATCH 04/12] fix gtk+-2.0.pc.in
-
-
-diff --git a/gtk+-2.0.pc.in b/gtk+-2.0.pc.in
-index 1111111..2222222 100644
---- a/gtk+-2.0.pc.in
-+++ b/gtk+-2.0.pc.in
-@@ -11,5 +11,5 @@ Name: GTK+
- Description: GTK+ Graphical UI Library (${target} target)
- Version: @VERSION@
- Requires: gdk-${target}-2.0 @GTK_PACKAGES@
--Libs: -L${libdir} -lgtk-${target}-@GTK_API_VERSION@ @GTK_EXTRA_LIBS@
-+Libs: -L${libdir} -lgtk-${target}-@GTK_API_VERSION@ @GTK_DEP_LIBS@ -lwinspool -lcomctl32 -lcomdlg32
- Cflags: -I${includedir}/gtk-2.0 @GTK_EXTRA_CFLAGS@
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: "fix@me" <fix@me>
-Date: Fri, 24 Sep 2010 14:48:31 +0200
-Subject: [PATCH 05/12] disable gtkbuiltincache
-
-
-diff --git a/gtk/Makefile.in b/gtk/Makefile.in
-index 1111111..2222222 100644
---- a/gtk/Makefile.in
-+++ b/gtk/Makefile.in
-@@ -5713,7 +5713,7 @@ stamp-icons: $(STOCK_ICONS)
- 	) done 								\
- 	&& touch stamp-icons
- 
--gtkbuiltincache.h: @REBUILD@ stamp-icons
-+_disabled_gtkbuiltincache.h: @REBUILD@ stamp-icons
- 	$(MAKE) $(AM_MAKEFLAGS) gtk-update-icon-cache$(EXEEXT)
- 	$(gtk_update_icon_cache_program) --force --ignore-theme-index		\
- 	   --include-image-data							\
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: "fix@me" <fix@me>
-Date: Fri, 24 Sep 2010 14:49:50 +0200
-Subject: [PATCH 06/12] disable test-inline-pixbufs.h
-
-
-diff --git a/demos/Makefile.in b/demos/Makefile.in
-index 1111111..2222222 100644
---- a/demos/Makefile.in
-+++ b/demos/Makefile.in
-@@ -529,7 +529,7 @@ LDADDS = \
- 	$(GTK_DEP_LIBS)							\
- 	$(MATH_LIB)
- 
--BUILT_SOURCES = test-inline-pixbufs.h
-+BUILT_SOURCES = 
- testpixbuf_DEPENDENCIES = $(DEPS)
- testpixbuf_drawable_DEPENDENCIES = $(DEPS)
- testpixbuf_save_DEPENDENCIES = $(DEPS)
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: "fix@me" <fix@me>
-Date: Fri, 24 Sep 2010 14:51:04 +0200
-Subject: [PATCH 07/12] permit static building
-
-
-diff --git a/configure b/configure
-index 1111111..2222222 100755
---- a/configure
-+++ b/configure
-@@ -4649,9 +4649,9 @@ if test "${enable_static+set}" = set; then :
+diff -Naur ./configure ./configure
+--- ./configure	2020-06-23 06:17:12.050000000 -0400
++++ ./configure	2020-06-23 06:52:38.670000000 -0400
+@@ -4649,9 +4649,9 @@
    enableval=$enable_static; p=${PACKAGE-default}
      case $enableval in
      yes) enable_static=yes ;;
@@ -233,7 +21,7 @@ index 1111111..2222222 100755
        # Look at the argument we got.  We use all the common list separators.
        lt_save_ifs=$IFS; IFS=$IFS$PATH_SEPARATOR,
        for pkg in $enableval; do
-@@ -4664,7 +4664,7 @@ if test "${enable_static+set}" = set; then :
+@@ -4664,7 +4664,7 @@
        ;;
      esac
  else
@@ -242,7 +30,7 @@ index 1111111..2222222 100755
  fi
  
  
-@@ -5233,15 +5233,15 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
+@@ -5233,15 +5233,15 @@
  
  if test "$os_win32" = "yes"; then
    if test x$enable_static = xyes -o x$enable_static = x; then
@@ -264,7 +52,7 @@ index 1111111..2222222 100755
  fi
  
  enable_win32_dll=yes
-@@ -9265,7 +9265,7 @@ func_stripname_cnf ()
+@@ -9265,7 +9265,7 @@
  if test "${enable_shared+set}" = set; then :
    enableval=$enable_shared; p=${PACKAGE-default}
      case $enableval in
@@ -273,7 +61,7 @@ index 1111111..2222222 100755
      no) enable_shared=no ;;
      *)
        enable_shared=no
-@@ -9274,14 +9274,14 @@ if test "${enable_shared+set}" = set; then :
+@@ -9274,14 +9274,14 @@
        for pkg in $enableval; do
  	IFS=$lt_save_ifs
  	if test "X$pkg" = "X$p"; then
@@ -290,7 +78,7 @@ index 1111111..2222222 100755
  fi
  
  
-@@ -13455,7 +13455,7 @@ $as_echo_n "checking whether to build shared libraries... " >&6; }
+@@ -13455,7 +13455,7 @@
    # are all built from PIC.
    case $host_os in
    aix3*)
@@ -299,7 +87,7 @@ index 1111111..2222222 100755
      if test -n "$RANLIB"; then
        archive_cmds="$archive_cmds~\$RANLIB \$lib"
        postinstall_cmds='$RANLIB $lib'
-@@ -13467,7 +13467,7 @@ $as_echo_n "checking whether to build shared libraries... " >&6; }
+@@ -13467,7 +13467,7 @@
        case $enable_shared,$with_aix_soname,$aix_use_runtimelinking in
        yes,aix,yes) ;;			# shared object as lib.so file only
        yes,svr4,*) ;;			# shared object as lib.so archive member only
@@ -308,18 +96,7 @@ index 1111111..2222222 100755
        esac
      fi
      ;;
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: "fix@me" <fix@me>
-Date: Fri, 24 Sep 2010 14:53:18 +0200
-Subject: [PATCH 08/12] no -Wl
-
-
-diff --git a/configure b/configure
-index 1111111..2222222 100755
---- a/configure
-+++ b/configure
-@@ -24018,7 +24018,7 @@ fi
+@@ -24018,7 +24018,7 @@
  fi
  
  if test "x$gdktarget" = "xwin32"; then
@@ -328,18 +105,7 @@ index 1111111..2222222 100755
     if true; then
    USE_WIN32_TRUE=
    USE_WIN32_FALSE='#'
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: "fix@me" <fix@me>
-Date: Fri, 24 Sep 2010 14:54:15 +0200
-Subject: [PATCH 09/12] gio not gio-unix
-
-
-diff --git a/configure b/configure
-index 1111111..2222222 100755
---- a/configure
-+++ b/configure
-@@ -24250,9 +24250,9 @@ fi
+@@ -24250,9 +24250,9 @@
  CFLAGS="$saved_cflags"
  LDFLAGS="$saved_ldflags"
  
@@ -351,21 +117,425 @@ index 1111111..2222222 100755
  else
    GDK_PACKAGES="$PANGO_PACKAGES gio-2.0 gdk-pixbuf-2.0 cairo-$cairo_backend"
  fi
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: "fix@me" <fix@me>
-Date: Fri, 24 Sep 2010 15:30:49 +0200
-Subject: [PATCH 10/12] removed duplicate _gtk_marshal_OBJECT__VOID()
-
-
-diff --git a/perf/marshalers.c b/perf/marshalers.c
-index 1111111..2222222 100644
---- a/perf/marshalers.c
-+++ b/perf/marshalers.c
-@@ -49,43 +49,6 @@
- #endif /* !G_ENABLE_DEBUG */
+diff -Naur ./demos/Makefile.in ./demos/Makefile.in
+--- ./demos/Makefile.in	2020-06-23 06:17:11.970000000 -0400
++++ ./demos/Makefile.in	2020-06-23 06:48:12.000000000 -0400
+@@ -529,7 +529,7 @@
+ 	$(GTK_DEP_LIBS)							\
+ 	$(MATH_LIB)
+ 
+-BUILT_SOURCES = test-inline-pixbufs.h
++BUILT_SOURCES =
+ testpixbuf_DEPENDENCIES = $(DEPS)
+ testpixbuf_drawable_DEPENDENCIES = $(DEPS)
+ testpixbuf_save_DEPENDENCIES = $(DEPS)
+diff -Naur ./gdk/gdk.h ./gdk/gdk.h
+--- ./gdk/gdk.h	2020-06-23 06:17:11.920000000 -0400
++++ ./gdk/gdk.h	2020-06-23 06:54:38.150000000 -0400
+@@ -186,11 +186,11 @@
+  */
+ 
+ #if !defined (GDK_DISABLE_DEPRECATED) || defined (GDK_COMPILATION)
+-GDKVAR GMutex *gdk_threads_mutex; /* private */
++extern GMutex *gdk_threads_mutex; /* private */
+ #endif
+ 
+-GDKVAR GCallback gdk_threads_lock;
+-GDKVAR GCallback gdk_threads_unlock;
++extern GCallback gdk_threads_lock;
++extern GCallback gdk_threads_unlock;
+ 
+ void     gdk_threads_enter                    (void);
+ void     gdk_threads_leave                    (void);
+diff -Naur ./gdk/gdktypes.h ./gdk/gdktypes.h
+--- ./gdk/gdktypes.h	2020-06-23 06:17:11.920000000 -0400
++++ ./gdk/gdktypes.h	2020-06-23 06:43:09.080000000 -0400
+@@ -39,9 +39,9 @@
+ 
+ #ifdef G_OS_WIN32
+ #  ifdef GDK_COMPILATION
+-#    define GDKVAR __declspec(dllexport)
++#    define GDKVAR
+ #  else
+-#    define GDKVAR extern __declspec(dllimport)
++#    define GDKVAR extern
+ #  endif
+ #else
+ #  define GDKVAR extern
+diff -Naur ./gdk/win32/gdkmain-win32.c ./gdk/win32/gdkmain-win32.c
+--- ./gdk/win32/gdkmain-win32.c	2020-06-23 06:17:11.920000000 -0400
++++ ./gdk/win32/gdkmain-win32.c	2020-06-23 06:33:02.260000000 -0400
+@@ -65,7 +65,7 @@
+ };
+ 
+ int __stdcall
+-DllMain (HINSTANCE hinstDLL,
++gdk_DllMain (HINSTANCE hinstDLL,
+ 	 DWORD     dwReason,
+ 	 LPVOID    reserved)
+ {
+diff -Naur ./gtk/Makefile.in ./gtk/Makefile.in
+--- ./gtk/Makefile.in	2020-06-23 06:17:12.000000000 -0400
++++ ./gtk/Makefile.in	2020-06-23 06:47:39.600000000 -0400
+@@ -5713,7 +5713,7 @@
+ 	) done 								\
+ 	&& touch stamp-icons
+ 
+-gtkbuiltincache.h: @REBUILD@ stamp-icons
++_disabled_gtkbuiltincache.h: @REBUILD@ stamp-icons
+ 	$(MAKE) $(AM_MAKEFLAGS) gtk-update-icon-cache$(EXEEXT)
+ 	$(gtk_update_icon_cache_program) --force --ignore-theme-index		\
+ 	   --include-image-data							\
+diff -Naur ./gtk/gtkdebug.h ./gtk/gtkdebug.h
+--- ./gtk/gtkdebug.h	2020-06-23 06:17:12.000000000 -0400
++++ ./gtk/gtkdebug.h	2020-06-23 06:55:20.340000000 -0400
+@@ -62,17 +62,7 @@
+ 
+ #endif /* G_ENABLE_DEBUG */
+ 
+-#ifdef G_OS_WIN32
+-#  ifdef GTK_COMPILATION
+-#    define GTKVAR __declspec(dllexport)
+-#  else
+-#    define GTKVAR extern __declspec(dllimport)
+-#  endif
+-#else
+-#  define GTKVAR extern
+-#endif
+-
+-GTKVAR guint gtk_debug_flags;
++extern guint gtk_debug_flags;
+ 
+ G_END_DECLS
+ 
+diff -Naur ./gtk/gtkfilechooserbutton.h ./gtk/gtkfilechooserbutton.h
+--- ./gtk/gtkfilechooserbutton.h	2020-06-23 06:17:12.000000000 -0400
++++ ./gtk/gtkfilechooserbutton.h	2020-06-23 06:58:28.090000000 -0400
+@@ -56,13 +56,13 @@
+ 
+   void (* file_set) (GtkFileChooserButton *fc);
+ 
+-  void (*__gtk_reserved1);
+-  void (*__gtk_reserved2);
+-  void (*__gtk_reserved3);
+-  void (*__gtk_reserved4);
+-  void (*__gtk_reserved5);
+-  void (*__gtk_reserved6);
+-  void (*__gtk_reserved7);
++  void *__gtk_reserved1;
++  void *__gtk_reserved2;
++  void *__gtk_reserved3;
++  void *__gtk_reserved4;
++  void *__gtk_reserved5;
++  void *__gtk_reserved6;
++  void *__gtk_reserved7;
+ };
  
  
+diff -Naur ./gtk/gtkmain.c ./gtk/gtkmain.c
+--- ./gtk/gtkmain.c	2020-06-23 06:17:12.000000000 -0400
++++ ./gtk/gtkmain.c	2020-06-23 06:34:08.580000000 -0400
+@@ -74,7 +74,7 @@
+ static HMODULE gtk_dll;
+ 
+ BOOL WINAPI
+-DllMain (HINSTANCE hinstDLL,
++gtk_DllMain (HINSTANCE hinstDLL,
+ 	 DWORD     fdwReason,
+ 	 LPVOID    lpvReserved)
+ {
+diff -Naur ./gtk/gtkmain.h ./gtk/gtkmain.h
+--- ./gtk/gtkmain.h	2020-06-23 06:17:11.990000000 -0400
++++ ./gtk/gtkmain.h	2020-06-23 06:56:12.950000000 -0400
+@@ -65,21 +65,11 @@
+ 
+ /* Gtk version.
+  */
+-#ifdef G_PLATFORM_WIN32
+-#ifdef GTK_COMPILATION
+-#define GTKMAIN_C_VAR __declspec(dllexport)
+-#else
+-#define GTKMAIN_C_VAR extern __declspec(dllimport)
+-#endif
+-#else
+-#define GTKMAIN_C_VAR extern
+-#endif
+-
+-GTKMAIN_C_VAR const guint gtk_major_version;
+-GTKMAIN_C_VAR const guint gtk_minor_version;
+-GTKMAIN_C_VAR const guint gtk_micro_version;
+-GTKMAIN_C_VAR const guint gtk_binary_age;
+-GTKMAIN_C_VAR const guint gtk_interface_age;
++extern const guint gtk_major_version;
++extern const guint gtk_minor_version;
++extern const guint gtk_micro_version;
++extern const guint gtk_binary_age;
++extern const guint gtk_interface_age;
+ const gchar* gtk_check_version (guint	required_major,
+ 			        guint	required_minor,
+ 			        guint	required_micro);
+diff -Naur ./gtk/gtkrc.c ./gtk/gtkrc.c
+--- ./gtk/gtkrc.c	2020-06-23 06:17:12.000000000 -0400
++++ ./gtk/gtkrc.c	2020-06-23 07:03:03.170000000 -0400
+@@ -875,6 +875,40 @@
+     }
+   
+   /* Default RC string */
++#ifdef G_OS_WIN32
++gtk_rc_parse_string ("gtk-icon-sizes = \"gtk-menu=13,13:gtk-small-toolbar=16,16:gtk-large-toolbar=24,24:gtk-dnd=32,32\"\n"
++            "gtk-toolbar-icon-size = small-toolbar\n"
++            "gtk-button-images = 0\n"
++            "gtk-menu-images = 1\n"
++            "gtk-alternative-button-order = 1\n"
++            "gtk-alternative-sort-arrows = 1\n"
++            "gtk-error-bell = 0\n"
++            "style \"msw-default\" {\n"
++            "GtkWidget::interior-focus = 1\n"
++            "GtkOptionMenu::indicator-size = { 9, 5 }\n"
++            "GtkOptionMenu::indicator-spacing = { 7, 5, 2, 2 }\n"
++            "GtkSpinButton::shadow-type = in\n"
++            "GtkComboBox::appears-as-list = 1\n"
++            "GtkComboBox::focus-on-click = 0\n"
++            "GOComboBox::add_tearoffs = 0\n"
++            "GtkTreeView::allow-rules = 0\n"
++            "GtkTreeView::expander-size = 12\n"
++            "GtkExpander::expander-size = 12\n"
++            "GtkScrolledWindow::scrollbar_spacing = 1\n"
++            "GtkSeparatorMenuItem::horizontal-padding = 2\n"
++            "engine \"wimp\" {} }\n"
++            "class \"*\" style \"msw-default\"\n"
++            "binding \"ms-windows-tree-view\" {\n"
++            "bind \"Right\" { \"expand-collapse-cursor-row\" (1,1,0) }\n"
++            "bind \"Left\" { \"expand-collapse-cursor-row\" (1,0,0) } }\n"
++            "class \"GtkTreeView\" binding \"ms-windows-tree-view\"\n"
++            "style \"msw-combobox-thickness\" = \"msw-default\" {\n"
++            "xthickness = 0\n"
++            "ythickness = 0 }\n"
++            "widget_class \"*TreeView*ComboBox*\" style \"msw-combobox-thickness\"\n"
++            "widget_class \"*ComboBox*GtkFrame*\" style \"msw-combobox-thickness\"\n"
++            );
++#else
+   gtk_rc_parse_string ("style \"gtk-default-tooltips-style\" {\n"
+ 		       "  bg[NORMAL] = \"#eee1b3\"\n"
+ 		       "  fg[NORMAL] = \"#000000\"\n"
+@@ -914,6 +948,7 @@
+ 		       "widget_class \"*<GtkMenuBar>*<GtkMenuItem>\" style : gtk \"gtk-default-menu-bar-item-style\"\n"
+                        "class \"GtkLabel\" style : gtk \"gtk-default-label-style\"\n"
+       );
++#endif
+ }
+   
+ static void
+diff -Naur ./gtk/gtkstatusicon.h ./gtk/gtkstatusicon.h
+--- ./gtk/gtkstatusicon.h	2020-06-23 06:17:12.000000000 -0400
++++ ./gtk/gtkstatusicon.h	2020-06-23 06:59:22.930000000 -0400
+@@ -73,8 +73,8 @@
+                                      gboolean        keyboard_mode,
+                                      GtkTooltip     *tooltip);
+ 
+-  void (*__gtk_reserved1);
+-  void (*__gtk_reserved2);
++  void *__gtk_reserved1;
++  void *__gtk_reserved2;
+ };
+ 
+ GType                 gtk_status_icon_get_type           (void) G_GNUC_CONST;
+diff -Naur ./gtk/gtktexttypes.h ./gtk/gtktexttypes.h
+--- ./gtk/gtktexttypes.h	2020-06-23 06:17:11.980000000 -0400
++++ ./gtk/gtktexttypes.h	2020-06-23 06:57:26.500000000 -0400
+@@ -42,16 +42,6 @@
+  * Declarations for variables shared among the text-related files:
+  */
+ 
+-#ifdef G_OS_WIN32
+-#ifdef GTK_COMPILATION
+-#define VARIABLE __declspec(dllexport)
+-#else
+-#define VARIABLE extern __declspec(dllimport)
+-#endif
+-#else
+-#define VARIABLE extern
+-#endif
+-
+ /* In gtktextbtree.c */
+ extern const GtkTextLineSegmentClass gtk_text_char_type;
+ extern const GtkTextLineSegmentClass gtk_text_toggle_on_type;
+@@ -70,7 +60,7 @@
+  */
+ 
+ #define GTK_TEXT_UNKNOWN_CHAR 0xFFFC
+-VARIABLE const gchar gtk_text_unknown_char_utf8[];
++extern const gchar gtk_text_unknown_char_utf8[];
+ 
+ gboolean gtk_text_byte_begins_utf8_char (const gchar *byte);
+ 
+diff -Naur ./gtk/gtkthemes.c ./gtk/gtkthemes.c
+--- ./gtk/gtkthemes.c	2020-06-23 06:17:11.990000000 -0400
++++ ./gtk/gtkthemes.c	2020-06-23 07:08:50.940000000 -0400
+@@ -62,6 +62,10 @@
+ {
+   GtkThemeEngine *engine = GTK_THEME_ENGINE (module);
+   
++#ifdef G_OS_WIN32
++  extern void _gtk_theme_wimp_init (GTypeModule *);
++  _gtk_theme_wimp_init(module);
++#else  
+   gchar *engine_path;
+       
+   engine_path = gtk_rc_find_module_in_path (engine->name);
+@@ -103,6 +107,7 @@
+   /* setup anything it needs to set up. */
+   engine->init (module);
+ 
++#endif
+   return TRUE;
+ }
+ 
+@@ -111,6 +116,10 @@
+ {
+   GtkThemeEngine *engine = GTK_THEME_ENGINE (module);
+ 
++#ifdef G_OS_WIN32
++  extern void _gtk_theme_wimp_exit (void);
++  _gtk_theme_wimp_exit();
++#else
+   engine->exit();
+ 
+   g_module_close (engine->library);
+@@ -119,6 +128,7 @@
+   engine->init = NULL;
+   engine->exit = NULL;
+   engine->create_rc_style = NULL;
++#endif
+ }
+ 
+ static void
+@@ -188,9 +198,33 @@
+ gtk_theme_engine_create_rc_style (GtkThemeEngine *engine)
+ {
+   g_return_val_if_fail (engine != NULL, NULL);
+-
++  
++#ifdef G_OS_WIN32
++  extern GtkRcStyle * _gtk_theme_wimp_create_rc_style (void);
++  return _gtk_theme_wimp_create_rc_style ();
++#else
+   return engine->create_rc_style ();
++#endif
+ }
+ 
++#ifdef G_OS_WIN32
++/* redefine deprected */
++#include "gtknotebook.h"
++GType gtk_clist_get_type (void) G_GNUC_CONST;
++#define GTK_TYPE_CLIST            (gtk_clist_get_type ())
++#define GTK_IS_CLIST(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_CLIST))
++#define GTK_WIDGET_VISIBLE(wid)		  ((GTK_WIDGET_FLAGS (wid) & GTK_VISIBLE) != 0)
++void gtk_notebook_query_tab_label_packing (GtkNotebook *notebook,
++					   GtkWidget   *child,
++					   gboolean    *expand,
++					   gboolean    *fill,
++					   GtkPackType *pack_type);
++
++#include "../modules/engines/ms-windows/msw_rc_style.c"
++#include "../modules/engines/ms-windows/msw_style.c"
++#include "../modules/engines/ms-windows/msw_theme_main.c"
++#include "../modules/engines/ms-windows/xp_theme.c"
++#endif
++
+ #define __GTK_THEMES_C__
+ #include "gtkaliasdef.c"
+diff -Naur ./gtk+-2.0.pc.in ./gtk+-2.0.pc.in
+--- ./gtk+-2.0.pc.in	2020-06-23 06:17:12.000000000 -0400
++++ ./gtk+-2.0.pc.in	2020-06-23 06:46:39.460000000 -0400
+@@ -11,5 +11,5 @@
+ Description: GTK+ Graphical UI Library (${target} target)
+ Version: @VERSION@
+ Requires: gdk-${target}-2.0 @GTK_PACKAGES@
+-Libs: -L${libdir} -lgtk-${target}-@GTK_API_VERSION@ @GTK_EXTRA_LIBS@
++Libs: -L${libdir} -lgtk-${target}-@GTK_API_VERSION@ @GTK_DEP_LIBS@ -lwinspool -lcomctl32 -lcomdlg32
+ Cflags: -I${includedir}/gtk-2.0 @GTK_EXTRA_CFLAGS@
+diff -Naur ./modules/engines/ms-windows/msw_rc_style.c ./modules/engines/ms-windows/msw_rc_style.c
+--- ./modules/engines/ms-windows/msw_rc_style.c	2020-06-23 06:17:12.040000000 -0400
++++ ./modules/engines/ms-windows/msw_rc_style.c	2020-06-23 07:10:23.310000000 -0400
+@@ -27,7 +27,7 @@
+ static void msw_rc_style_class_init (MswRcStyleClass * klass);
+ static GtkStyle *msw_rc_style_create_style (GtkRcStyle * rc_style);
+ 
+-static GtkRcStyleClass *parent_class;
++static GtkRcStyleClass *rcparent_class;
+ 
+ GType msw_type_rc_style = 0;
+ 
+@@ -62,7 +62,7 @@
+ {
+   GtkRcStyleClass *rc_style_class = GTK_RC_STYLE_CLASS (klass);
+ 
+-  parent_class = g_type_class_peek_parent (klass);
++  rcparent_class = g_type_class_peek_parent (klass);
+ 
+   rc_style_class->create_style = msw_rc_style_create_style;
+ }
+diff -Naur ./modules/engines/ms-windows/msw_theme_main.c ./modules/engines/ms-windows/msw_theme_main.c
+--- ./modules/engines/ms-windows/msw_theme_main.c	2020-06-23 06:17:12.040000000 -0400
++++ ./modules/engines/ms-windows/msw_theme_main.c	2020-06-23 07:12:43.020000000 -0400
+@@ -91,8 +91,13 @@
+     }
+ }
+ 
+-G_MODULE_EXPORT void
+-theme_init (GTypeModule * module)
++#ifdef G_OS_WIN32
++#define MODULE_ENTRY(type, function) type _gtk_theme_wimp_ ## function
++#else
++#define MODULE_ENTRY(type, function) G_MODULE_EXPORT type theme_ ## function
++#endif
++
++MODULE_ENTRY (void, init) (GTypeModule * module)
+ {
+   msw_rc_style_register_type (module);
+   msw_style_register_type (module);
+@@ -114,8 +119,7 @@
+   gdk_window_add_filter (hidden_msg_window, global_filter_func, NULL);
+ }
+ 
+-G_MODULE_EXPORT void
+-theme_exit (void)
++MODULE_ENTRY (void, exit) (void)
+ {
+   gdk_window_remove_filter (hidden_msg_window, global_filter_func, NULL);
+   gdk_window_destroy (hidden_msg_window);
+@@ -129,12 +133,12 @@
+     }
+ }
+ 
+-G_MODULE_EXPORT GtkRcStyle *
+-theme_create_rc_style (void)
++MODULE_ENTRY (GtkRcStyle *, create_rc_style) (void)
+ {
+   return g_object_new (MSW_TYPE_RC_STYLE, NULL);
+ }
+ 
++#ifndef G_OS_WIN32
+ /* The following function will be called by GTK+ when the module
+  * is loaded and checks to see if we are compatible with the
+  * version of GTK+ that loads us.
+@@ -144,3 +148,4 @@
+ {
+   return gtk_check_version (2, 0, 0);
+ }
++#endif
+\ No newline at end of file
+diff -Naur ./perf/marshalers.c ./perf/marshalers.c
+--- ./perf/marshalers.c	2020-06-23 06:17:12.000000000 -0400
++++ ./perf/marshalers.c	2020-06-23 06:53:21.290000000 -0400
+@@ -46,45 +46,7 @@
+ #define g_marshal_value_peek_pointer(v)  (v)->data[0].v_pointer
+ #define g_marshal_value_peek_object(v)   (v)->data[0].v_pointer
+ #define g_marshal_value_peek_variant(v)  (v)->data[0].v_pointer
+-#endif /* !G_ENABLE_DEBUG */
+-
+-
 -/* OBJECT:VOID (./marshalers.list:1) */
 -void
 -_gtk_marshal_OBJECT__VOID (GClosure     *closure,
@@ -402,168 +572,7 @@ index 1111111..2222222 100644
 -
 -  g_value_take_object (return_value, v_return);
 -}
--
++#endif /* !G_ENABLE_DEBUG 
+ 
  /* VOID:ENUM,OBJECT,DOUBLE (./marshalers.list:2) */
  void
- _gtk_marshal_VOID__ENUM_OBJECT_DOUBLE (GClosure     *closure,
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Thu, 28 May 2020 18:22:19 +0200
-Subject: [PATCH 11/12] gcc 10 compatibility: add missing "extern"
-
-Related to:
-    Default to -fno-common
-    https://gcc.gnu.org/gcc-10/porting_to.html
-
-diff --git a/gdk/gdk.h b/gdk/gdk.h
-index 1111111..2222222 100644
---- a/gdk/gdk.h
-+++ b/gdk/gdk.h
-@@ -186,11 +186,11 @@ void gdk_notify_startup_complete_with_id (const gchar* startup_id);
-  */
- 
- #if !defined (GDK_DISABLE_DEPRECATED) || defined (GDK_COMPILATION)
--GDKVAR GMutex *gdk_threads_mutex; /* private */
-+extern GMutex *gdk_threads_mutex; /* private */
- #endif
- 
--GDKVAR GCallback gdk_threads_lock;
--GDKVAR GCallback gdk_threads_unlock;
-+extern GCallback gdk_threads_lock;
-+extern GCallback gdk_threads_unlock;
- 
- void     gdk_threads_enter                    (void);
- void     gdk_threads_leave                    (void);
-diff --git a/gtk/gtkdebug.h b/gtk/gtkdebug.h
-index 1111111..2222222 100644
---- a/gtk/gtkdebug.h
-+++ b/gtk/gtkdebug.h
-@@ -62,17 +62,7 @@ typedef enum {
- 
- #endif /* G_ENABLE_DEBUG */
- 
--#ifdef G_OS_WIN32
--#  ifdef GTK_COMPILATION
--#    define GTKVAR 
--#  else
--#    define GTKVAR extern 
--#  endif
--#else
--#  define GTKVAR extern
--#endif
--
--GTKVAR guint gtk_debug_flags;
-+extern guint gtk_debug_flags;
- 
- G_END_DECLS
- 
-diff --git a/gtk/gtkmain.h b/gtk/gtkmain.h
-index 1111111..2222222 100644
---- a/gtk/gtkmain.h
-+++ b/gtk/gtkmain.h
-@@ -65,21 +65,12 @@ typedef gint	(*GtkKeySnoopFunc)	    (GtkWidget	  *grab_widget,
- 
- /* Gtk version.
-  */
--#ifdef G_PLATFORM_WIN32
--#ifdef GTK_COMPILATION
--#define GTKMAIN_C_VAR 
--#else
--#define GTKMAIN_C_VAR extern 
--#endif
--#else
--#define GTKMAIN_C_VAR extern
--#endif
- 
--GTKMAIN_C_VAR const guint gtk_major_version;
--GTKMAIN_C_VAR const guint gtk_minor_version;
--GTKMAIN_C_VAR const guint gtk_micro_version;
--GTKMAIN_C_VAR const guint gtk_binary_age;
--GTKMAIN_C_VAR const guint gtk_interface_age;
-+extern const guint gtk_major_version;
-+extern const guint gtk_minor_version;
-+extern const guint gtk_micro_version;
-+extern const guint gtk_binary_age;
-+extern const guint gtk_interface_age;
- const gchar* gtk_check_version (guint	required_major,
- 			        guint	required_minor,
- 			        guint	required_micro);
-diff --git a/gtk/gtktexttypes.h b/gtk/gtktexttypes.h
-index 1111111..2222222 100644
---- a/gtk/gtktexttypes.h
-+++ b/gtk/gtktexttypes.h
-@@ -42,16 +42,6 @@ typedef struct _GtkTextMarkBody GtkTextMarkBody;
-  * Declarations for variables shared among the text-related files:
-  */
- 
--#ifdef G_OS_WIN32
--#ifdef GTK_COMPILATION
--#define VARIABLE 
--#else
--#define VARIABLE extern 
--#endif
--#else
--#define VARIABLE extern
--#endif
--
- /* In gtktextbtree.c */
- extern const GtkTextLineSegmentClass gtk_text_char_type;
- extern const GtkTextLineSegmentClass gtk_text_toggle_on_type;
-@@ -70,7 +60,7 @@ extern const GtkTextLineSegmentClass gtk_text_child_type;
-  */
- 
- #define GTK_TEXT_UNKNOWN_CHAR 0xFFFC
--VARIABLE const gchar gtk_text_unknown_char_utf8[];
-+extern const gchar gtk_text_unknown_char_utf8[];
- 
- gboolean gtk_text_byte_begins_utf8_char (const gchar *byte);
- 
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Thu, 28 May 2020 19:45:12 +0200
-Subject: [PATCH 12/12] remove unnecessary parentheses
-
-..which break build of gtkmm2 using gcc 10.
-
-diff --git a/gtk/gtkfilechooserbutton.h b/gtk/gtkfilechooserbutton.h
-index 1111111..2222222 100644
---- a/gtk/gtkfilechooserbutton.h
-+++ b/gtk/gtkfilechooserbutton.h
-@@ -56,13 +56,13 @@ struct _GtkFileChooserButtonClass
- 
-   void (* file_set) (GtkFileChooserButton *fc);
- 
--  void (*__gtk_reserved1);
--  void (*__gtk_reserved2);
--  void (*__gtk_reserved3);
--  void (*__gtk_reserved4);
--  void (*__gtk_reserved5);
--  void (*__gtk_reserved6);
--  void (*__gtk_reserved7);
-+  void *__gtk_reserved1;
-+  void *__gtk_reserved2;
-+  void *__gtk_reserved3;
-+  void *__gtk_reserved4;
-+  void *__gtk_reserved5;
-+  void *__gtk_reserved6;
-+  void *__gtk_reserved7;
- };
- 
- 
-diff --git a/gtk/gtkstatusicon.h b/gtk/gtkstatusicon.h
-index 1111111..2222222 100644
---- a/gtk/gtkstatusicon.h
-+++ b/gtk/gtkstatusicon.h
-@@ -73,8 +73,8 @@ struct _GtkStatusIconClass
-                                      gboolean        keyboard_mode,
-                                      GtkTooltip     *tooltip);
- 
--  void (*__gtk_reserved1);
--  void (*__gtk_reserved2);
-+  void *__gtk_reserved1;
-+  void *__gtk_reserved2;
- };
- 
- GType                 gtk_status_icon_get_type           (void) G_GNUC_CONST;
