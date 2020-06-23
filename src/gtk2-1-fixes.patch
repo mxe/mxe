@@ -1,11 +1,6 @@
 This file is part of MXE. See LICENSE.md for licensing information.
 
 Contains ad hoc patches for cross building.
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: "fix@me" <fix@me>
-Date: Fri, 24 Sep 2010 14:43:43 +0200
-Subject: [PATCH 01/12] s,DllMain,static _disabled_DllMain,
 diff -Naur ./configure ./configure
 --- ./configure	2020-06-23 06:17:12.050000000 -0400
 +++ ./configure	2020-06-23 06:52:38.670000000 -0400
