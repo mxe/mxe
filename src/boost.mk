@@ -11,7 +11,6 @@ $(PKG)_FILE     := boost_$(subst .,_,$($(PKG)_VERSION)).tar.gz
 $(PKG)_URL      := https://dl.bintray.com/boostorg/release/$($(PKG)_VERSION)/source/$($(PKG)_FILE)
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 $(PKG)_DEPS     := cc bzip2 expat zlib xz
-
 $(PKG)_DEPS_$(BUILD) := zlib
 
 define $(PKG)_UPDATE
@@ -73,31 +72,25 @@ define $(PKG)_BUILD
         define="BOOST_THREAD_PROVIDES_NESTED_LOCKS" \
         define="BOOST_THREAD_DONT_PROVIDE_ONCE_CXX11" \
         install
-    for lib in `ls "$(PREFIX)/$(TARGET)/lib"/libboost_*.a | tr "\n" " "`; \
-    do \
-    newlib=`echo \`basename $${lib}\` | $(AWK) '{gsub(/-mt-x[0-9]{2}/,"-mt"); gsub(/_pthread/,"")}1'`; \
-    echo ln -sf "$${lib}" "$(PREFIX)/$(TARGET)/lib/$${newlib}"; \
-    ln -sf "$${lib}" "$(PREFIX)/$(TARGET)/lib/$${newlib}"; \
-    done
     $(if $(BUILD_SHARED), \
         mv -fv '$(PREFIX)/$(TARGET)/lib/'libboost_*.dll '$(PREFIX)/$(TARGET)/bin/')
 
     # setup cmake toolchain
-    printf "set(Boost_THREADAPI "$(if $(findstring posix,$(MXE_GCC_THREADS)),pthread,win32)")\\n\
-    set (Boost_USE_STATIC_LIBS $(if $(BUILD_SHARED),OFF,ON))\\n\
-    set (Boost_USE_MULTITHREADED ON)\\n\
-    set (Boost_NO_BOOST_CMAKE OFF)\\n\
-    set (Boost_USE_STATIC_RUNTIME $(if $(BUILD_SHARED),OFF,ON))\\n" > '$(CMAKE_TOOLCHAIN_DIR)/$(PKG).cmake'
+    printf "set(Boost_THREADAPI "$(if $(POSIX_THREADS),pthread,win32)")\\n\
+        set (Boost_USE_STATIC_LIBS $(if $(BUILD_SHARED),OFF,ON))\\n\
+        set (Boost_USE_MULTITHREADED ON)\\n\
+        set (Boost_NO_BOOST_CMAKE OFF)\\n\
+        set (Boost_USE_STATIC_RUNTIME $(if $(BUILD_SHARED),OFF,ON))\\n" > '$(CMAKE_TOOLCHAIN_DIR)/$(PKG).cmake'
 
     '$(TARGET)-g++' \
         -W -Wall -Werror -ansi -pedantic \
         '$(PWD)/src/$(PKG)-test.cpp' -o '$(PREFIX)/$(TARGET)/bin/test-boost.exe' \
         -std='c++11' \
-        -lboost_serialization-mt \
-        -lboost_thread-mt \
-        -lboost_system-mt \
-        -lboost_chrono-mt \
-        -lboost_context-mt \
+        -lboost_serialization-mt$(if $(BUILD_STATIC),-s)-x$(BITS) \
+        -lboost_thread_$(if $(POSIX_THREADS),pthread,win32)-mt$(if $(BUILD_STATIC),-s)-x$(BITS) \
+        -lboost_system-mt$(if $(BUILD_STATIC),-s)-x$(BITS) \
+        -lboost_chrono-mt$(if $(BUILD_STATIC),-s)-x$(BITS) \
+        -lboost_context-mt$(if $(BUILD_STATIC),-s)-x$(BITS) \
         -L'$(PREFIX)/$(TARGET)/lib'
 
     # test cmake
