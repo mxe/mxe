@@ -44,5 +44,5 @@ if ! ( \
     EDITOR=~/mxe/tools/fake-editor ghi open -L bug -- mxe/mxe
 fi
 
-s3cmd sync --acl-public ~/mxe/pkg/* s3://mxe-pkg/
+s3cmd sync --acl-public ~/mxe/pkg/ s3://mxe-pkg/
 rm -rf ~/mxe/tmp-download-log ~/mxe/tmp-url ~/mxe/log
