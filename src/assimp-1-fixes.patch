@@ -1,0 +1,21 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Gregorio Litenstein <g.litenstein@gmail.com>
+Date: Sat, 27 Jun 2020 16:16:55 -0400
+Subject: [PATCH 1/1] Add IrrXML to the pkg-config file.
+
+
+diff --git a/assimp.pc.in b/assimp.pc.in
+index 1111111..2222222 100644
+--- a/assimp.pc.in
++++ b/assimp.pc.in
+@@ -7,5 +7,5 @@ Name: @CMAKE_PROJECT_NAME@
+ Description: Import various well-known 3D model formats in an uniform manner.
+ Version: @PROJECT_VERSION@
+ Libs: -L${libdir} -lassimp@ASSIMP_LIBRARY_SUFFIX@
+-Libs.private: @LIBSTDC++_LIBRARIES@ @ZLIB_LIBRARIES_LINKED@
++Libs.private: @LIBSTDC++_LIBRARIES@ @ZLIB_LIBRARIES_LINKED@ -lIrrXML@ASSIMP_LIBRARY_SUFFIX@
+ Cflags: -I${includedir}
