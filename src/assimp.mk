@@ -11,7 +11,6 @@ $(PKG)_DEPS     := cc boost minizip
 
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && $(TARGET)-cmake \
-        -DASSIMP_ENABLE_BOOST_WORKAROUND=OFF \
         -DASSIMP_BUILD_ASSIMP_TOOLS=OFF \
         -DASSIMP_BUILD_SAMPLES=OFF \
         -DASSIMP_BUILD_TESTS=OFF \
@@ -19,8 +18,8 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
-    '$(TARGET)-gcc' \
-        -W -Wall -Werror -ansi -pedantic \
+    '$(TARGET)-g++' \
+        -W -Wall -Werror -ansi -pedantic -std=c++11 \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-assimp.exe' \
-        `'$(TARGET)-pkg-config' assimp minizip --cflags --libs`
+        `'$(TARGET)-pkg-config' assimp minizip --cflags --libs` -lirrxml
 endef
