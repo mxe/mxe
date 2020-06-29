@@ -15,8 +15,8 @@ index 1111111..2222222 100644
 @@ -1,6 +1,6 @@
  ## Process this file with automake to create Makefile.in.
  
--SUBDIRS= pango pango-view examples docs tools tests build
-+SUBDIRS= pango pango-view examples tools tests build
+-SUBDIRS= pango pango-view examples docs tools tests win32
++SUBDIRS= pango pango-view examples tools tests win32
  
  EXTRA_DIST = 			\
  	autogen.sh		\
