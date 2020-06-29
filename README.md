@@ -8,21 +8,13 @@
 [![Async Chat (Trial))](https://img.shields.io/badge/zulip-join_chat-brightgreen.svg)](https://mxe.zulipchat.com/)
 
 MXE (M cross environment) is a GNU Makefile that compiles a cross
-compiler and cross compiles many free libraries such as SDL and
-Qt. Thus, it provides a nice cross compiling environment for
-various target platforms, which:
-
-  * is designed to run on any Unix system
-  * is easy to adapt and to extend
-  * builds many free libraries in addition to the cross compiler
-  * can also build just a subset of the packages, and automatically builds their dependencies
-  * downloads all needed packages and verifies them by their checksums
-  * is able to update the version numbers of all packages automatically
-  * directly uses source packages, thus ensuring the whole build mechanism is transparent
-  * allows inter-package and intra-package parallel builds whenever possible
-  * bundles [ccache](https://ccache.samba.org) to speed up repeated builds
-  * integrates well with autotools, cmake, qmake, and hand-written makefiles.
-  * has been in continuous development since 2007 and is used by several projects
+compiler and cross compiles many free libraries. This repository is derived from
+[MXE](https://github.com/mxe/mxe), and extended for compiling the following tools:
+ - [libiosig/biosig-tools](http://biosig.sourceforge.net/)
+ - [sigviewer](https://github.com/cbrnr/sigviewer)
+ - [stimfit](https://github.com/neurodroid/stimfit)-lite (without python)
+ - [edfbrowswer](https://www.teuniz.net/edfbrowser/)
+It compiles also required prerequisites, and many other packages.
 
 ## Supported Toolchains
 
@@ -32,7 +24,7 @@ various target platforms, which:
     - `x86_64-w64-mingw32`
   * Packages:
     - static
-    - shared
+    - (shared - not tested here, use https://github.com/mxe instead)
   * GCC Threading Libraries (`winpthreads` is always available):
     - [posix](https://github.com/mxe/mxe/pull/958) [(default)](https://github.com/mxe/mxe/issues/2258)
     - win32 (supported by limited amount packages)

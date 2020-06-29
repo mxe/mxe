@@ -1,8 +1,7 @@
-# This file is part of MXE. See LICENSE.md for licensing information.
+# This file is part of MXE.
+# See index.html for further information.
 
 PKG             := graphicsmagick
-$(PKG)_WEBSITE  := http://www.graphicsmagick.org/
-$(PKG)_DESCR    := GraphicsMagick
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.3.33
 $(PKG)_CHECKSUM := ae86f749815d3039ac431caf9fc4b65acf32bfd140d1817644d3463b6ba9d51c
@@ -21,7 +20,11 @@ define $(PKG)_BUILD
     # This can be removed once the patch "graphicsmagick-1-fix-xml2-config.patch" is accepted by upstream
     cd '$(1)' && autoconf
     cd '$(1)' && ./configure \
-         $(MXE_CONFIGURE_OPTS) \
+        $(HOST_AND_BUILD_CONFIGURE_OPTIONS) \
+        $(ENABLE_SHARED_OR_STATIC) \
+         $(CONFIGURE_CPPFLAGS) $(CONFIGURE_LDFLAGS) \
+        --prefix='$(PREFIX)/$(TARGET)' \
+        --disable-openmp \
         --without-modules \
         --with-threads \
         --with-magick-plus-plus \
@@ -42,14 +45,14 @@ define $(PKG)_BUILD
         --with-xml \
         --with-zlib \
         --without-x \
+       --with-quantum-depth=16 \
         ac_cv_prog_xml2_config='$(PREFIX)/$(TARGET)/bin/xml2-config' \
         ac_cv_path_xml2_config='$(PREFIX)/$(TARGET)/bin/xml2-config' \
-        LIBS='-lgomp -fopenmp'
-    $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS=
-    $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS=
 
-    '$(TARGET)-g++' \
-        -W -Wall -Werror -pedantic -std=gnu++0x \
-        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-graphicsmagick.exe' \
-        `'$(TARGET)-pkg-config' GraphicsMagick++ --cflags --libs` -llzma
+    $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS=
+    $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= DESTDIR='$(3)'
+
+    if [ "$(ENABLE_DEP_DOCS)" == "no" ]; then \
+      rm -rf "$(3)$(PREFIX)/$(TARGET)/share/doc/GraphicsMagick"; \
+    fi
 endef
