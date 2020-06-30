@@ -34,7 +34,7 @@ diff --git a/gsoap++.pc.in b/gsoap++.pc.in
 index 1111111..2222222 100644
 --- a/gsoap++.pc.in
 +++ b/gsoap++.pc.in
-@@ -9,4 +9,4 @@ Version: 2.8.102
+@@ -9,4 +9,4 @@ Version: 2.8.104
  Requires:
  Libs: -L${libdir} -lgsoap++
  Libs.private: @SAMPLE_EXTRA_LIBS@
@@ -44,7 +44,7 @@ diff --git a/gsoap.pc.in b/gsoap.pc.in
 index 1111111..2222222 100644
 --- a/gsoap.pc.in
 +++ b/gsoap.pc.in
-@@ -9,4 +9,4 @@ Version: 2.8.102
+@@ -9,4 +9,4 @@ Version: 2.8.104
  Requires:
  Libs: -L${libdir} -lgsoap
  Libs.private: @SAMPLE_EXTRA_LIBS@
@@ -54,7 +54,7 @@ diff --git a/gsoapck++.pc.in b/gsoapck++.pc.in
 index 1111111..2222222 100644
 --- a/gsoapck++.pc.in
 +++ b/gsoapck++.pc.in
-@@ -9,4 +9,4 @@ Version: 2.8.102
+@@ -9,4 +9,4 @@ Version: 2.8.104
  Requires:
  Libs: -L${libdir} -lgsoapck++
  Libs.private: @SAMPLE_EXTRA_LIBS@
@@ -64,7 +64,7 @@ diff --git a/gsoapck.pc.in b/gsoapck.pc.in
 index 1111111..2222222 100644
 --- a/gsoapck.pc.in
 +++ b/gsoapck.pc.in
-@@ -9,4 +9,4 @@ Version: 2.8.102
+@@ -9,4 +9,4 @@ Version: 2.8.104
  Requires:
  Libs: -L${libdir} -lgsoapck
  Libs.private: @SAMPLE_EXTRA_LIBS@
@@ -74,7 +74,7 @@ diff --git a/gsoapssl++.pc.in b/gsoapssl++.pc.in
 index 1111111..2222222 100644
 --- a/gsoapssl++.pc.in
 +++ b/gsoapssl++.pc.in
-@@ -9,4 +9,4 @@ Version: 2.8.102
+@@ -9,4 +9,4 @@ Version: 2.8.104
  Requires:
  Libs: -L${libdir} -lgsoapssl++
  Libs.private: @SAMPLE_SSL_LIBS@ @SAMPLE_EXTRA_LIBS@
@@ -84,7 +84,7 @@ diff --git a/gsoapssl.pc.in b/gsoapssl.pc.in
 index 1111111..2222222 100644
 --- a/gsoapssl.pc.in
 +++ b/gsoapssl.pc.in
-@@ -9,4 +9,4 @@ Version: 2.8.102
+@@ -9,4 +9,4 @@ Version: 2.8.104
  Requires:
  Libs: -L${libdir} -lgsoapssl
  Libs.private: @SAMPLE_SSL_LIBS@ @SAMPLE_EXTRA_LIBS@
@@ -103,7 +103,7 @@ diff --git a/gsoap/stdsoap2.h b/gsoap/stdsoap2.h
 index 1111111..2222222 100644
 --- a/gsoap/stdsoap2.h
 +++ b/gsoap/stdsoap2.h
-@@ -3644,6 +3644,12 @@ SOAP_FMAC1 int SOAP_FMAC2 soap_putsetcookies(struct soap *soap);
+@@ -3606,6 +3606,12 @@ SOAP_FMAC1 int SOAP_FMAC2 soap_putsetcookies(struct soap *soap);
  SOAP_FMAC1 int SOAP_FMAC2 soap_putcookies(struct soap *soap, const char *domain, const char *path, int secure);
  #endif
  
