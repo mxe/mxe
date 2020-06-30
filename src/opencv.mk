@@ -32,6 +32,8 @@ define $(PKG)_BUILD
       -DBUILD_FAT_JAVA_LIB=OFF \
       -DBUILD_ZLIB=OFF \
       -DBUILD_TIFF=OFF \
+      -DOPENCV_DOWNLOAD_TRIES_LIST="" \
+      -DOPENCV_FFMPEG_SKIP_DOWNLOAD=ON \
       -DBUILD_JASPER=OFF \
       -DBUILD_JPEG=OFF \
       -DBUILD_WEBP=OFF \
@@ -52,9 +54,10 @@ define $(PKG)_BUILD
     $(SED) -i 's,share/OpenCV/3rdparty/,,g' '$(BUILD_DIR)/unix-install/opencv.pc'
 
     $(INSTALL) -m755 '$(BUILD_DIR)/unix-install/opencv.pc' '$(PREFIX)/$(TARGET)/lib/pkgconfig'
-
+    $(if $(BUILD_STATIC), $(INSTALL) -m755 '$(BUILD_DIR)/3rdparty/lib/'*.a \
+        '$(PREFIX)/$(TARGET)/lib/')
     '$(TARGET)-g++' \
         -W -Wall -Werror -ansi \
         '$(SOURCE_DIR)/samples/cpp/fback.cpp' -o '$(PREFIX)/$(TARGET)/bin/test-opencv.exe' \
-        `'$(TARGET)-pkg-config' opencv --cflags --libs`
+        `'$(TARGET)-pkg-config' opencv gnutls --cflags --libs`
 endef
