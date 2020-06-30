@@ -39,7 +39,7 @@ define $(PKG)_BUILD
         --disable-smpegtest \
         SMPEG_CONFIG='$(PREFIX)/$(TARGET)/bin/smpeg2-config' \
         WINDRES='$(TARGET)-windres' \
-        LIBS='-lvorbis -logg'
+        LIBS="`$(TARGET)-pkg-config libmodplug libmpg123 opusfile vorbisfile --libs-only-l`"
     $(MAKE) -C '$(1)' -j '$(JOBS)' install $(MXE_DISABLE_CRUFT)
 
     '$(TARGET)-gcc' \
