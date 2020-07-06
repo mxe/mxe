@@ -3,65 +3,28 @@ This file is part of MXE. See LICENSE.md for licensing information.
 Contains ad hoc patches for cross building.
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?Marius=20Negru=C8=9Biu?= <marius.negrutiu@protonmail.com>
-Date: Mon, 8 Jun 2020 14:08:49 +0300
-Subject: [PATCH 1/1] Fixed memmove() linker error caused by gcc/10.1.0-3
- compiler optimizer
+From: Anders <anders_k@users.sourceforge.net>
+Date: Sat, 27 Jun 2020 23:18:45 +0000
+Subject: [PATCH 1/1] Don't let GCC 10 generate memmove calls (bug #1248)
 
 see:
 https://sourceforge.net/p/nsis/bugs/1248/
 
 taken from:
-https://github.com/negrutiu/nsis/commit/c252106dd8203515706d9240e99a92cd0c7e3acb.patch
+https://github.com/kichik/nsis/commit/6d9cfd3ef8296e3f9c0be9b3dbe01f0f3491b3dd.patch
 
-diff --git a/Source/bzip2/decompress.c b/Source/bzip2/decompress.c
+diff --git a/SCons/Config/gnu b/SCons/Config/gnu
 index 1111111..2222222 100755
---- a/Source/bzip2/decompress.c
-+++ b/Source/bzip2/decompress.c
-@@ -263,7 +263,16 @@ Int32 NSISCALL BZ2_decompress ( DState* s )
-          for (i = 0; i < nSelectors; i++) {
-             v = s->selectorMtf[i];
-             tmp = pos[v];
-+/*
-+            [Marius]
-+            gcc/10.1.0-3 compiler optimizer replace the following line with a msvcrt!memmove() call.
-+            This file is built into projects compiled with the -nostdlib parameter, therefore a linker error will occur.
-+            We'll qualify the destination array as `volatile` to prevent GCC from optimizing it.
-+            Related topic: https://stackoverflow.com/questions/2219829/how-to-prevent-gcc-optimizing-some-statements-in-c
-+            -----------------------------------------
-             while (v > 0) { pos[v] = pos[v-1]; v--; }
-+*/
-+            while (v > 0) { ((volatile UChar*)pos)[v] = pos[v-1]; v--; }
-             pos[0] = tmp;
-             s->selector[i] = tmp;
-          }
-@@ -388,7 +397,14 @@ Int32 NSISCALL BZ2_decompress ( DState* s )
-                   }
-                   */
-                   while (nn > 0) {
-+/*
-+                     [Marius]
-+                     Mark destination array as `volatile` to prevent GCC optimizer to generate msvcrt!memmove() calls.
-+					 See comments above.
-+                     -----------------------------------------
-                      s->mtfa[(pp+nn)] = s->mtfa[(pp+nn)-1]; nn--;
-+*/
-+                     ((volatile UChar*)s->mtfa)[(pp+nn)] = s->mtfa[(pp+nn)-1]; nn--;
-                   };
-                   s->mtfa[pp] = uc;
-                } else {
-@@ -398,7 +414,14 @@ Int32 NSISCALL BZ2_decompress ( DState* s )
-                   pp = s->mtfbase[lno] + off;
-                   uc = s->mtfa[pp];
-                   while (pp > s->mtfbase[lno]) {
-+/*
-+                     [Marius]
-+                     Mark destination array as `volatile` to prevent GCC optimizer to generate msvcrt!memmove() calls.
-+					 See comments above.
-+                     -----------------------------------------
-                      s->mtfa[pp] = s->mtfa[pp-1]; pp--;
-+*/
-+                     ((volatile UChar*)s->mtfa)[pp] = s->mtfa[pp-1]; pp--;
-                   };
-                   s->mtfbase[lno]++;
-                   while (lno > 0) {
+--- a/SCons/Config/gnu
++++ b/SCons/Config/gnu
+@@ -103,6 +103,10 @@ stub_env.Append(LINKFLAGS = ['$NODEFLIBS_FLAG'])    # no standard libraries
+ stub_env.Append(LINKFLAGS = ['$ALIGN_FLAG'])        # 512 bytes align
+ stub_env.Append(LINKFLAGS = ['$MAP_FLAG'])          # generate map file
+ 
++conf = FlagsConfigure(stub_env)
++conf.CheckCompileFlag('-fno-tree-loop-distribute-patterns')  # GCC 10: Don't generate msvcrt!memmove calls (bug #1248)
++conf.Finish()
++
+ stub_uenv = stub_env.Clone()
+ stub_uenv.Append(CPPDEFINES = ['_UNICODE', 'UNICODE'])
+ 
