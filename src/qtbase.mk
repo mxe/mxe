@@ -76,7 +76,7 @@ define $(PKG)_BUILD
 
     mkdir            '$(1)/test-qt'
     cd               '$(1)/test-qt' && '$(PREFIX)/$(TARGET)/qt5/bin/qmake' '$(PWD)/src/qt-test.pro'
-    $(MAKE)       -C '$(1)/test-qt' -j '$(JOBS)'
+    $(MAKE)       -C '$(1)/test-qt' '$(BUILD_TYPE)' -j '$(JOBS)'
     $(INSTALL) -m755 '$(1)/test-qt/$(BUILD_TYPE)/test-qt5.exe' '$(PREFIX)/$(TARGET)/bin/'
 
     # build test the manual way
