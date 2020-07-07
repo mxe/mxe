@@ -67,7 +67,7 @@ diff --git a/configure.ac b/configure.ac
 index 1111111..2222222 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -38,13 +38,10 @@ m4_define(mym4_version_micro, [1])
+@@ -38,13 +38,10 @@ m4_define(mym4_version_micro, [6])
  # processing is done by autoconf and not during the configure run.
  m4_define(mym4_version,
            [mym4_version_major.mym4_version_minor.mym4_version_micro])

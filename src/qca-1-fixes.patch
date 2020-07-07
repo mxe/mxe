@@ -12,7 +12,7 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 1111111..2222222 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -233,7 +233,7 @@ foreach(PATH QCA_PLUGINS_INSTALL_DIR
+@@ -224,7 +224,7 @@ foreach(PATH QCA_PLUGINS_INSTALL_DIR
    endif()
  endforeach()
  
