@@ -8,7 +8,7 @@ $(PKG)_VERSION  := 7.0.8-63
 $(PKG)_CHECKSUM := 5dda18f70662015d7cc89d6d3699cb14def23ad3d5066a43a50ec222e579884f
 $(PKG)_GH_CONF  := ImageMagick/ImageMagick/tags
 $(PKG)_DEPS     := cc bzip2 ffmpeg fftw freetype jasper jpeg lcms \
-                   liblqr-1 libltdl libpng openexr pthreads tiff zlib
+                   liblqr-1 libltdl libpng libraw openexr pthreads tiff zlib
 
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
