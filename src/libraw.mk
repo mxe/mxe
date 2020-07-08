@@ -19,11 +19,12 @@ define $(PKG)_BUILD
         CXXFLAGS='-std=gnu++11 $(if $(BUILD_SHARED),-DLIBRAW_BUILDLIB,-DLIBRAW_NODLL)' \
         LDFLAGS='-lws2_32'
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' install
-    # add missing entries to pkg-config file
+    # add missing entries to pkg-config files
     (echo ''; \
      echo 'Libs.private: -lws2_32 -ljasper'; \
      echo 'Cflags.private: -DLIBRAW_NODLL';) \
-     >> '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG).pc'
+     | tee -a '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG).pc' \
+              '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG)_r.pc'
 
     '$(TARGET)-g++' -Wall -Wextra -std=c++11 \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
