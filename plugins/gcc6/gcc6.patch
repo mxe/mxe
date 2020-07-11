@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Thu, 2 Feb 2017 02:05:50 +1100
-Subject: [PATCH 1/2] allow native cpu detection when building with clang
+Subject: [PATCH 1/4] allow native cpu detection when building with clang
 
 function was disabled for non-gcc5 in:
 https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=b587c12551143c14f023860a1dbdf7316ae71f27;hp=43096b526a9f23008b9769372f11475ae63487bc
@@ -29,14 +29,14 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Fri, 6 Apr 2018 13:40:22 +1000
-Subject: [PATCH 2/2] remove hard-coded mingw from include path
+Subject: [PATCH 2/4] remove hard-coded mingw from include path
 
 
 diff --git a/gcc/config.gcc b/gcc/config.gcc
 index 1111111..2222222 100644
 --- a/gcc/config.gcc
 +++ b/gcc/config.gcc
-@@ -1713,7 +1713,7 @@ i[34567]86-*-mingw* | x86_64-*-mingw*)
+@@ -1765,7 +1765,7 @@ i[34567]86-*-mingw* | x86_64-*-mingw*)
  			tmake_file="${tmake_file} i386/t-mingw-w32"
  			;;
  	esac
@@ -58,3 +58,128 @@ index 1111111..2222222 100644
  
  /* Output STRING, a string representing a filename, to FILE.
     We canonicalize it to be in Unix format (backslashes are replaced
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: uros <uros@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Sun, 11 Nov 2018 17:44:43 +0000
+Subject: [PATCH 3/4] Backport from mainline 2018-11-04 Uros Bizjak
+ <ubizjak@gmail.com>
+
+	PR middle-end/58372
+	* cfgexpand.c (pass_expand::execute): Move the call to
+	finish_eh_generation in front of the call to expand_stack_alignment.
+
+testsuite/ChangeLog:
+
+	Backport from mainline
+	2018-11-04  Uros Bizjak  <ubizjak@gmail.com>
+
+	PR middle-end/58372
+	* g++.dg/pr58372.C: New test.
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-7-branch@266015 138bc75d-0d04-0410-961f-82ee72b054a4
+
+diff --git a/gcc/cfgexpand.c b/gcc/cfgexpand.c
+index 1111111..2222222 100644
+--- a/gcc/cfgexpand.c
++++ b/gcc/cfgexpand.c
+@@ -6445,6 +6445,14 @@ pass_expand::execute (function *fun)
+   sbitmap_free (blocks);
+   purge_all_dead_edges ();
+ 
++  /* After initial rtl generation, call back to finish generating
++     exception support code.  We need to do this before cleaning up
++     the CFG as the code does not expect dead landing pads.  */
++  if (fun->eh->region_tree != NULL)
++    finish_eh_generation ();
++
++  /* Call expand_stack_alignment after finishing all
++     updates to crtl->preferred_stack_boundary.  */
+   expand_stack_alignment ();
+ 
+   /* Fixup REG_EQUIV notes in the prologue if there are tailcalls in this
+@@ -6452,12 +6460,6 @@ pass_expand::execute (function *fun)
+   if (crtl->tail_call_emit)
+     fixup_tail_calls ();
+ 
+-  /* After initial rtl generation, call back to finish generating
+-     exception support code.  We need to do this before cleaning up
+-     the CFG as the code does not expect dead landing pads.  */
+-  if (fun->eh->region_tree != NULL)
+-    finish_eh_generation ();
+-
+   /* Remove unreachable blocks, otherwise we cannot compute dominators
+      which are needed for loop state verification.  As a side-effect
+      this also compacts blocks.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sun, 31 May 2020 18:36:27 +1000
+Subject: [PATCH 4/4] PR c++/66297, DR 1684 - literal class and constexpr
+ member fns
+
+taken from:
+https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=54069e595976eb556b22c231951cb2703e523a22;hp=8ef2b9a7b59418d9f5e644badbc0aade7f83414f
+
+diff --git a/gcc/cp/class.c b/gcc/cp/class.c
+index 1111111..2222222 100644
+--- a/gcc/cp/class.c
++++ b/gcc/cp/class.c
+@@ -5654,7 +5654,9 @@ finalize_literal_type_property (tree t)
+ 	   && !TYPE_HAS_CONSTEXPR_CTOR (t))
+     CLASSTYPE_LITERAL_P (t) = false;
+ 
+-  if (!CLASSTYPE_LITERAL_P (t))
++  /* C++14 DR 1684 removed this restriction.  */
++  if (cxx_dialect < cxx14
++      && !CLASSTYPE_LITERAL_P (t) && !LAMBDA_TYPE_P (t))
+     for (fn = TYPE_METHODS (t); fn; fn = DECL_CHAIN (fn))
+       if (DECL_DECLARED_CONSTEXPR_P (fn)
+ 	  && TREE_CODE (fn) != TEMPLATE_DECL
+@@ -5662,12 +5664,11 @@ finalize_literal_type_property (tree t)
+ 	  && !DECL_CONSTRUCTOR_P (fn))
+ 	{
+ 	  DECL_DECLARED_CONSTEXPR_P (fn) = false;
+-	  if (!DECL_GENERATED_P (fn))
+-	    {
+-	      error ("enclosing class of constexpr non-static member "
+-		     "function %q+#D is not a literal type", fn);
+-	      explain_non_literal_class (t);
+-	    }
++         if (!DECL_GENERATED_P (fn)
++             && pedwarn (DECL_SOURCE_LOCATION (fn), OPT_Wpedantic,
++                         "enclosing class of constexpr non-static member "
++                         "function %q+#D is not a literal type", fn))
++           explain_non_literal_class (t);
+ 	}
+ }
+ 
+diff --git a/gcc/cp/constexpr.c b/gcc/cp/constexpr.c
+index 1111111..2222222 100644
+--- a/gcc/cp/constexpr.c
++++ b/gcc/cp/constexpr.c
+@@ -208,16 +208,17 @@ is_valid_constexpr_fn (tree fun, bool complain)
+ 	    }
+ 	}
+ 
+-      if (DECL_NONSTATIC_MEMBER_FUNCTION_P (fun)
++      /* C++14 DR 1684 removed this restriction.  */
++      if (cxx_dialect < cxx14
++         && DECL_NONSTATIC_MEMBER_FUNCTION_P (fun)
+ 	  && !CLASSTYPE_LITERAL_P (DECL_CONTEXT (fun)))
+ 	{
+ 	  ret = false;
+-	  if (complain)
+-	    {
+-	      error ("enclosing class of constexpr non-static member "
+-		     "function %q+#D is not a literal type", fun);
+-	      explain_non_literal_class (DECL_CONTEXT (fun));
+-	    }
++         if (complain
++             && pedwarn (DECL_SOURCE_LOCATION (fun), OPT_Wpedantic,
++                         "enclosing class of constexpr non-static member "
++                         "function %q+#D is not a literal type", fun))
++           explain_non_literal_class (DECL_CONTEXT (fun));
+ 	}
+     }
+   else if (CLASSTYPE_VBASECLASSES (DECL_CONTEXT (fun)))
