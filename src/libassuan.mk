@@ -14,7 +14,7 @@ $(PKG)_DEPS     := cc gettext libgpg_error
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://gnupg.org/ftp/gcrypt/libassuan/' | \
-    $(SED) -n 's,.*libassuan-\([1-9]\.[1-9][0-9][^>]*\)\.tar.*,\1,p' | \
+    $(SED) -n 's,.*libassuan-\([1-9]\.[1-9]\.[0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef
 
