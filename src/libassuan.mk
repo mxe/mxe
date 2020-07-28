@@ -4,8 +4,8 @@ PKG             := libassuan
 $(PKG)_WEBSITE  := https://www.gnupg.org/related_software/libassuan/
 $(PKG)_DESCR    := libassuan
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.5.1
-$(PKG)_CHECKSUM := 47f96c37b4f2aac289f0bc1bacfa8bd8b4b209a488d3d15e2229cb6cc9b26449
+$(PKG)_VERSION  := 2.5.3
+$(PKG)_CHECKSUM := 91bcb0403866b4e7c4bc1cc52ed4c364a9b5414b3994f718c70303f7f765e702
 $(PKG)_SUBDIR   := libassuan-$($(PKG)_VERSION)
 $(PKG)_FILE     := libassuan-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://gnupg.org/ftp/gcrypt/libassuan/$($(PKG)_FILE)
@@ -19,7 +19,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && ./configure \
+    cd '$(1)' && GPG_ERROR_CONFIG=$(PREFIX)/bin/$(TARGET)-gpg-error-config ./configure \
         $(MXE_CONFIGURE_OPTS) \
         --disable-nls \
         --disable-languages

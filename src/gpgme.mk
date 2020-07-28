@@ -4,8 +4,8 @@ PKG             := gpgme
 $(PKG)_WEBSITE  := https://www.gnupg.org/related_software/gpgme/
 $(PKG)_DESCR    := gpgme
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.12.0
-$(PKG)_CHECKSUM := b4dc951c3743a60e2e120a77892e9e864fb936b2e58e7c77e8581f4d050e8cd8
+$(PKG)_VERSION  := 1.14.0
+$(PKG)_CHECKSUM := cef1f710a6b0d28f5b44242713ad373702d1466dcbe512eb4e754d7f35cd4307
 $(PKG)_SUBDIR   := gpgme-$($(PKG)_VERSION)
 $(PKG)_FILE     := gpgme-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://gnupg.org/ftp/gcrypt/gpgme/$($(PKG)_FILE)
@@ -19,7 +19,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && GPG_ERROR_CONFIG=$(PREFIX)/bin/$(TARGET)-gpg-error-config ./configure \
+    cd '$(1)' && GPG_ERROR_CONFIG=$(PREFIX)/bin/$(TARGET)-gpg-error-config LIBASSUAN_CONFIG='$(PREFIX)/bin/$(TARGET)-libassuan-config' ./configure \
         $(MXE_CONFIGURE_OPTS) \
         --disable-nls \
         --disable-languages
