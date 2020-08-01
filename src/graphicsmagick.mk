@@ -19,8 +19,8 @@ endef
 
 define $(PKG)_BUILD
     # This can be removed once the patch "graphicsmagick-1-fix-xml2-config.patch" is accepted by upstream
-    cd '$(1)' && autoconf
-    cd '$(1)' && ./configure \
+    cd '$(SOURCE_DIR)' && autoconf
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
          $(MXE_CONFIGURE_OPTS) \
         --without-modules \
         --with-threads \
@@ -44,9 +44,10 @@ define $(PKG)_BUILD
         --without-x \
         ac_cv_prog_xml2_config='$(PREFIX)/$(TARGET)/bin/xml2-config' \
         ac_cv_path_xml2_config='$(PREFIX)/$(TARGET)/bin/xml2-config' \
-        LIBS='-lgomp -fopenmp'
-    $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS=
-    $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS=
+        LIBS='-lgomp -fopenmp' \
+        $(PKG_CONFIGURE_OPTS)
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' bin_PROGRAMS=
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install bin_PROGRAMS=
 
     '$(TARGET)-g++' \
         -W -Wall -Werror -pedantic -std=gnu++0x \
