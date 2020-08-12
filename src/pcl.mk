@@ -14,7 +14,7 @@ $(PKG)_DEPS     := cc boost eigen flann vtk
 define $(PKG)_UPDATE
     $(WGET) -q -O- "https://github.com/PointCloudLibrary/pcl/releases" | \
     grep '<a href=.*tar' | \
-    $(SED) -n 's,.*pcl-\([0-9][^>]*\)\.tar.*,\1,p' | \
+    $(SED) -n 's,.*pcl-\([0-9.]\+\)\.tar.*,\1,p' | \
     head -1
 endef
 
