@@ -14,7 +14,7 @@ define $(PKG)_BUILD
     $(SED) -i 's,resources\\\\,./resources/,' '$(SOURCE_DIR)/DevIL/src-IL/msvc/IL.rc'
     cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)/DevIL' \
         -DIL_TESTS=OFF \
-        -DCMAKE_CXX_FLAGS="-D__STDC_LIMIT_MACROS"
+        -DCMAKE_CXX_FLAGS="-D__STDC_LIMIT_MACROS -fpermissive"
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 endef
