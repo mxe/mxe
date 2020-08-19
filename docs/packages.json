@@ -45,7 +45,7 @@
     "cryptopp": {"version": "5.6.3", "website": "https://www.cryptopp.com/", "description": "Crypto++ Library"},
     "crystalhd": {"version": "1", "website": "https://www.broadcom.com/support/crystal_hd/", "description": "Broadcom Crystal HD Headers"},
     "cunit": {"version": "2.1-3", "website": "https://cunit.sourceforge.io/", "description": ""},
-    "curl": {"version": "7.71.1", "website": "https://curl.haxx.se/libcurl/", "description": "cURL"},
+    "curl": {"version": "7.72.0", "website": "https://curl.haxx.se/libcurl/", "description": "cURL"},
     "db": {"version": "6.1.26", "website": "https://www.oracle.com/technetwork/database/database-technologies/berkeleydb/overview/index.html", "description": "Oracle Berkeley DB"},
     "dbus": {"version": "1.13.18", "website": "https://dbus.freedesktop.org/", "description": ""},
     "dcmtk": {"version": "3.6.0", "website": "https://dicom.offis.de/dcmtk.php.en", "description": "DCMTK"},
