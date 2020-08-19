@@ -294,7 +294,7 @@
     "netpbm": {"version": "10.35.96", "website": "https://netpbm.sourceforge.io/", "description": "Netpbm"},
     "nettle": {"version": "3.6", "website": "https://www.lysator.liu.se/~nisse/nettle/", "description": ""},
     "nlopt": {"version": "2.6.1", "website": "https://nlopt.readthedocs.io/en/latest/", "description": "NLopt"},
-    "nsis": {"version": "3.05", "website": "https://nsis.sourceforge.io/", "description": "NSIS"},
+    "nsis": {"version": "3.06.1", "website": "https://nsis.sourceforge.io/", "description": "NSIS"},
     "ocaml-cairo": {"version": "1.2.0", "website": "https://cairographics.org/cairo-ocaml/", "description": "cairo-ocaml"},
     "ocaml-camlimages": {"version": "4.0.1", "website": "http://gallium.inria.fr/camlimages", "description": "camlimages"},
     "ocaml-core": {"version": "4.00.1", "website": "https://caml.inria.fr/", "description": "ocaml"},
