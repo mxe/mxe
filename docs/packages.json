@@ -129,6 +129,7 @@
     "hdf5": {"version": "1.8.12", "website": "https://www.hdfgroup.org/hdf5/", "description": "HDF5"},
     "hidapi": {"version": "a6a622f", "website": "https://github.com/signal11/hidapi/", "description": "HIDAPI"},
     "hunspell": {"version": "1.7.0", "website": "https://hunspell.github.io/", "description": "Hunspell"},
+    "hwloc": {"version": "2.2.0", "website": "https://www.open-mpi.org/projects/hwloc/", "description": "Portable Hardware Locality"},
     "hyperscan": {"version": "4.3.2", "website": "https://01.org/hyperscan", "description": "Hyperscan"},
     "icu4c": {"version": "66.1", "website": "https://github.com/unicode-org/icu", "description": "ICU4C"},
     "id3lib": {"version": "3.8.3", "website": "https://id3lib.sourceforge.io/", "description": ""},
