@@ -22,8 +22,6 @@ define $(PKG)_BUILD
         --disable-io \
         --disable-libxml2 \
         --disable-cairo \
-        --disable-opencl \
-        --disable-opencl \
         CONFIG_SHELL=$(SHELL)
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
