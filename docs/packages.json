@@ -189,7 +189,7 @@
     "libgit2": {"version": "1.0.0", "website": "https://libgit2.github.com/", "description": ""},
     "libglade": {"version": "2.6.4", "website": "https://glade.gnome.org/", "description": "glade"},
     "libgnurx": {"version": "2.6.1", "website": "https://sourceforge.net/projects/mingw/files/UserContributed/regex/", "description": ""},
-    "libgpg_error": {"version": "1.38", "website": "https://www.gnupg.org/related_software/libgpg-error/", "description": "libgpg-error"},
+    "libgpg_error": {"version": "1.39", "website": "https://www.gnupg.org/related_software/libgpg-error/", "description": "libgpg-error"},
     "libgsasl": {"version": "1.8.1", "website": "https://www.gnu.org/software/gsasl/", "description": "Libgsasl"},
     "libgsf": {"version": "1.14.30", "website": "https://developer.gnome.org/gsf/", "description": ""},
     "libharu": {"version": "2.3.0", "website": "http://libharu.org/", "description": ""},
