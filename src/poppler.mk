@@ -3,8 +3,8 @@
 PKG             := poppler
 $(PKG)_WEBSITE  := https://poppler.freedesktop.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 20.08.0
-$(PKG)_CHECKSUM := ae65fef04bbf63259a6352e7b620719115d4fb97f5079b0b8b00a8eb0c86eca5
+$(PKG)_VERSION  := 20.09.0
+$(PKG)_CHECKSUM := 4ed6eb5ddc4c37f2435c9d78ff9c7c4036455aea3507d1ce8400070aab745363
 $(PKG)_SUBDIR   := poppler-$($(PKG)_VERSION)
 $(PKG)_FILE     := poppler-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://poppler.freedesktop.org/$($(PKG)_FILE)

@@ -48,7 +48,7 @@ diff --git a/poppler/GlobalParams.cc b/poppler/GlobalParams.cc
 index 1111111..2222222 100644
 --- a/poppler/GlobalParams.cc
 +++ b/poppler/GlobalParams.cc
-@@ -103,6 +103,7 @@ std::unique_ptr<GlobalParams> globalParams;
+@@ -104,6 +104,7 @@ std::unique_ptr<GlobalParams> globalParams;
  
  static HMODULE hmodule;
  
@@ -56,7 +56,7 @@ index 1111111..2222222 100644
  extern "C" {
  /* Provide declaration to squelch -Wmissing-declarations warning */
  BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved);
-@@ -118,6 +119,7 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
+@@ -119,6 +120,7 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
      return TRUE;
  }
  }
@@ -130,7 +130,7 @@ index 1111111..2222222 100644
  option(ENABLE_SPLASH "Build the Splash graphics backend." ON)
  option(ENABLE_UTILS "Compile poppler command line utils." ON)
  option(ENABLE_CPP "Compile poppler cpp wrapper." ON)
-@@ -733,7 +734,9 @@ endif()
+@@ -727,7 +728,9 @@ endif()
  if(ENABLE_GLIB)
    add_subdirectory(glib)
  endif()
