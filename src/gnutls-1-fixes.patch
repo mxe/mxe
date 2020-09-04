@@ -12,7 +12,7 @@ diff --git a/configure.ac b/configure.ac
 index 1111111..2222222 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -1145,17 +1145,6 @@ AC_DEFINE_UNQUOTED([INI_START_COMMENT_PREFIXES], [";#"], [The comment prefixes])
+@@ -1161,17 +1161,6 @@ AC_DEFINE_UNQUOTED([INI_START_COMMENT_PREFIXES], [";#"], [The comment prefixes])
  AC_CONFIG_FILES([guile/pre-inst-guile], [chmod +x guile/pre-inst-guile])
  AC_CONFIG_FILES([
    Makefile
