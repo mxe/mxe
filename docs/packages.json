@@ -274,6 +274,7 @@
     "lzo": {"version": "2.10", "website": "https://www.oberhumer.com/opensource/lzo/", "description": ""},
     "matio": {"version": "1.5.2", "website": "https://sourceforge.net/projects/matio/", "description": ""},
     "mdbtools": {"version": "0.7.1", "website": "https://sourceforge.net/projects/mdbtools/", "description": ""},
+    "mesa": {"version": "18.3.6", "website": "", "description": ""},
     "metis": {"version": "5.1.0", "website": "glaros.dtc.umn.edu", "description": "metis"},
     "mingw-w64": {"version": "7.0.0", "website": "https://mingw-w64.sourceforge.io/", "description": "MinGW-w64 Runtime"},
     "miniupnpc": {"version": "2.0", "website": "http://miniupnp.free.fr/", "description": ""},
