@@ -22,5 +22,5 @@ define $(PKG)_BUILD
         $(INSTALL) -d "$(PREFIX)/$(TARGET)/include/$$i"; \
         $(INSTALL) -m 644 "$(1)/include/$$i/"* "$(PREFIX)/$(TARGET)/include/$$i/"; \
     done
-    $(INSTALL) -m 755 '$(1)/build/windows-$(MACHINE)/gallium/targets/libgl-gdi/opengl32.dll' '$(PREFIX)/$(TARGET)/bin/'
+    $(INSTALL) -m 755 '$(1)/build/windows-$(if $(findstring x86_64,$(TARGET)),x86_64,x86)/gallium/targets/libgl-gdi/opengl32.dll' '$(PREFIX)/$(TARGET)/bin/'
 endef
