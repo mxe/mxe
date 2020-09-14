@@ -6,12 +6,6 @@ $(PKG)_FILE     := mesa-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := ftp://ftp.freedesktop.org/pub/mesa/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc scons-local
 
-ifeq (,$(findstring x86_64,$(TARGET)))
-    MACHINE=x86_64
-else
-    MACHINE=x86
-endif
-
 define $(PKG)_BUILD
     mkdir -p '$(BUILD_DIR).scons'
     $(call PREPARE_PKG_SOURCE,scons-local,'$(BUILD_DIR).scons')
@@ -19,7 +13,7 @@ define $(PKG)_BUILD
     MINGW_PREFIX='$(TARGET)-' $(SCONS_LOCAL) \
         platform=windows \
         toolchain=crossmingw \
-        machine=$(MACHINE) \
+        machine=$(if $(findstring x86_64,$(TARGET)),x86_64,x86) \
         verbose=1 \
         build=release \
         libgl-gdi
