@@ -48,6 +48,7 @@
     "devil": {"version": "cba359b", "website": "https://openil.sourceforge.io/", "description": "DevIL"},
     "djvulibre": {"version": "3.5.27", "website": "https://djvu.sourceforge.io/", "description": "DjVuLibre"},
     "dlfcn-win32": {"version": "e19bf07", "website": "https://github.com/dlfcn-win32/dlfcn-win32", "description": "POSIX dlfcn wrapper for Windows"},
+    "draco": {"version": "1.3.6", "website": "https://github.com/google/draco/", "description": "Draco 3D Data Compression"},
     "eigen": {"version": "3.2.5", "website": "https://eigen.tuxfamily.org/", "description": ""},
     "exiv2": {"version": "0.25", "website": "http://www.exiv2.org/", "description": "Exiv2"},
     "expat": {"version": "2.2.5", "website": "https://github.com/libexpat/libexpat", "description": "Expat XML Parser"},
