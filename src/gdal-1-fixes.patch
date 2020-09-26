@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Luke Potgieter <fried.roadkill+ght@gmail.com>
 Date: Tue, 29 Aug 2017 16:31:09 +0200
-Subject: [PATCH 1/2] Detect spatialite more effectively than just checking for
+Subject: [PATCH 1/4] Detect spatialite more effectively than just checking for
  headers in the system paths. PostgreSQL detection requires -lpthread when
  building statically.
 
@@ -14,7 +14,7 @@ diff --git a/configure.ac b/configure.ac
 index 1111111..2222222 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -1124,7 +1124,7 @@ else
+@@ -1280,7 +1280,7 @@ else
  
    AC_MSG_RESULT([yes])
  
@@ -23,7 +23,7 @@ index 1111111..2222222 100644
  
    if test "${HAVE_PG}" = "yes" ; then
      LIBS=-L`$PG_CONFIG --libdir`" -lpq $LIBS"
-@@ -3557,16 +3557,21 @@ AC_ARG_WITH(spatialite-soname,
+@@ -3763,16 +3763,21 @@ AC_ARG_WITH(spatialite-soname,
  
  HAVE_SPATIALITE=no
  SPATIALITE_AMALGAMATION=no
@@ -74,14 +74,14 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Luke Potgieter <fried.roadkill+ght@gmail.com>
 Date: Tue, 26 Sep 2017 14:56:19 +0200
-Subject: [PATCH 2/2] Use the new proj dll version number for the latest proj.
+Subject: [PATCH 2/4] Use the new proj dll version number for the latest proj.
 
 
 diff --git a/ogr/ogrct.cpp b/ogr/ogrct.cpp
 index 1111111..2222222 100644
 --- a/ogr/ogrct.cpp
 +++ b/ogr/ogrct.cpp
-@@ -96,9 +96,9 @@ static bool      bProjLocaleSafe = false;
+@@ -118,9 +118,9 @@ static bool      bProjLocaleSafe = false;
  // build) it can be named either way, so use PROJSO environment variable to
  // specify the right library name. By default assume that in Cygwin/MinGW all
  // components were built in the same way.
@@ -93,3 +93,177 @@ index 1111111..2222222 100644
  #elif defined(__APPLE__)
  #  define LIBNAME "libproj.dylib"
  #else
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Gregorio Litenstein <g.litenstein@gmail.com>
+Date: Mon, 7 Oct 2019 00:20:40 -0300
+Subject: [PATCH 3/4] Get rid of wmain; fails with undefined wWinMain@16
+
+
+diff --git a/apps/commonutils.h b/apps/commonutils.h
+index 1111111..2222222 100644
+--- a/apps/commonutils.h
++++ b/apps/commonutils.h
+@@ -34,8 +34,7 @@
+ 
+ #ifdef __cplusplus
+ 
+-#if defined(WIN32) && (defined(_MSC_VER) || defined(SUPPORTS_WMAIN))
+-
++#if defined(WIN32) && (defined(_MSC_VER) || defined(SUPPORTS_WMAIN) && !defined(__MINGW64_VERSION_MAJOR))
+ #include <wchar.h>
+ #include <stdlib.h>
+ #include "cpl_conv.h"
+
+
+diff --git a/apps/commonutils.h b/apps/commonutils.h
+index 1111111..2222222 100644
+--- a/apps/commonutils.h
++++ b/apps/commonutils.h
+@@ -34,7 +34,7 @@
+ 
+ #ifdef __cplusplus
+ 
+-#if defined(WIN32) && (defined(_MSC_VER) || defined(SUPPORTS_WMAIN) && !defined(__MINGW64_VERSION_MAJOR))
++#if defined(WIN32) && ((defined(_MSC_VER) || defined(SUPPORTS_WMAIN)) && !defined(__MINGW64_VERSION_MAJOR))
+ #include <wchar.h>
+ #include <stdlib.h>
+ #include "cpl_conv.h"
+diff --git a/configure b/configure
+index 1111111..2222222 100755
+--- a/configure
++++ b/configure
+@@ -37072,31 +37072,31 @@ fi
+ rm -f testdeprecated.*
+ rm -f testdeprecated
+ 
+-case "${host_os}" in
+-    mingw32*)
+-        { $as_echo "$as_me:${as_lineno-$LINENO}: checking if mingw supports wmain" >&5
+-$as_echo_n "checking if mingw supports wmain... " >&6; }
+-        rm -f testwmain*
+-        echo '#include <wchar.h>' > testwmain.cpp
+-        echo '#include <stdlib.h>' >> testwmain.cpp
+-        echo 'extern "C" int wmain( int argc, wchar_t ** argv_w );' >> testwmain.cpp
+-        echo 'extern "C" int wmain( int , wchar_t **  ) { return 0; } ' >> testwmain.cpp
+-        ${CXX} ${CXXFLAGS} ${CPPFLAGS} ${LDFLAGS} testwmain.cpp -o testwmain.exe -municode 2>/dev/null
+-        RETVAL=$?
+-        rm -f testwmain*
+-        if test $RETVAL -eq 0; then
+-            { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+-$as_echo "yes" >&6; }
+-            CXXFLAGS="$CXXFLAGS -DSUPPORTS_WMAIN"
+-            LDFLAGS="$LDFLAGS -municode"
+-        else
+-            { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+-$as_echo "no" >&6; }
+-        fi
+-        ;;
+-    *)
+-        ;;
+-esac
++# case "${host_os}" in
++#     mingw32*)
++#         { $as_echo "$as_me:${as_lineno-$LINENO}: checking if mingw supports wmain" >&5
++# $as_echo_n "checking if mingw supports wmain... " >&6; }
++#         rm -f testwmain*
++#         echo '#include <wchar.h>' > testwmain.cpp
++#         echo '#include <stdlib.h>' >> testwmain.cpp
++#         echo 'extern "C" int wmain( int argc, wchar_t ** argv_w );' >> testwmain.cpp
++#         echo 'extern "C" int wmain( int , wchar_t **  ) { return 0; } ' >> testwmain.cpp
++#         ${CXX} ${CXXFLAGS} ${CPPFLAGS} ${LDFLAGS} testwmain.cpp -o testwmain.exe -municode 2>/dev/null
++#         RETVAL=$?
++#         rm -f testwmain*
++#         if test $RETVAL -eq 0; then
++#             { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
++# $as_echo "yes" >&6; }
++#             CXXFLAGS="$CXXFLAGS -DSUPPORTS_WMAIN"
++#             LDFLAGS="$LDFLAGS -municode"
++#         else
++#             { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
++# $as_echo "no" >&6; }
++#         fi
++#         ;;
++#     *)
++#         ;;
++# esac
+ 
+ if test "$PROJ_STATIC" = "no" -a "$FGDB_ENABLED" = "yes" -a "$FGDB_HAS_PROJ4" = "yes"; then
+     as_fn_error $? "--without-static-proj and --with-fgdb are both available. There might be some incompatibility between system libproj and the embedded copy within libFileGDBAPI" "$LINENO" 5
+diff --git a/configure.ac b/configure.ac
+index 1111111..2222222 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -5676,29 +5676,29 @@ fi
+ rm -f testdeprecated.*
+ rm -f testdeprecated
+ 
+-dnl Use -municode for mingw
+-case "${host_os}" in
+-    mingw32*)
+-        AC_MSG_CHECKING([if mingw supports wmain])
+-        rm -f testwmain*
+-        echo '#include <wchar.h>' > testwmain.cpp
+-        echo '#include <stdlib.h>' >> testwmain.cpp
+-        echo 'extern "C" int wmain( int argc, wchar_t ** argv_w );' >> testwmain.cpp
+-        echo 'extern "C" int wmain( int , wchar_t **  ) { return 0; } ' >> testwmain.cpp
+-        ${CXX} ${CXXFLAGS} ${CPPFLAGS} ${LDFLAGS} testwmain.cpp -o testwmain.exe -municode 2>/dev/null
+-        RETVAL=$?
+-        rm -f testwmain*
+-        if test $RETVAL -eq 0; then
+-            AC_MSG_RESULT([yes])
+-            CXXFLAGS="$CXXFLAGS -DSUPPORTS_WMAIN"
+-            LDFLAGS="$LDFLAGS -municode"
+-        else
+-            AC_MSG_RESULT([no])
+-        fi
+-        ;;
+-    *)
+-        ;;
+-esac
++# dnl Use -municode for mingw
++# case "${host_os}" in
++#     mingw32*)
++#         AC_MSG_CHECKING([if mingw supports wmain])
++#         rm -f testwmain*
++#         echo '#include <wchar.h>' > testwmain.cpp
++#         echo '#include <stdlib.h>' >> testwmain.cpp
++#         echo 'extern "C" int wmain( int argc, wchar_t ** argv_w );' >> testwmain.cpp
++#         echo 'extern "C" int wmain( int , wchar_t **  ) { return 0; } ' >> testwmain.cpp
++#         ${CXX} ${CXXFLAGS} ${CPPFLAGS} ${LDFLAGS} testwmain.cpp -o testwmain.exe -municode 2>/dev/null
++#         RETVAL=$?
++#         rm -f testwmain*
++#         if test $RETVAL -eq 0; then
++#             AC_MSG_RESULT([yes])
++#             CXXFLAGS="$CXXFLAGS -DSUPPORTS_WMAIN"
++#             LDFLAGS="$LDFLAGS -municode"
++#         else
++#             AC_MSG_RESULT([no])
++#         fi
++#         ;;
++#     *)
++#         ;;
++# esac
+ 
+ dnl FileGDB v1.5
+ if test "$PROJ_STATIC" = "no" -a "$FGDB_ENABLED" = "yes" -a "$FGDB_HAS_PROJ4" = "yes"; then
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Gregorio Litenstein <g.litenstein@gmail.com>
+Date: Mon, 7 Oct 2019 00:36:59 -0300
+Subject: [PATCH 4/4] Fix #include typo
+
+
+diff --git a/apps/gdalasyncread.cpp b/apps/gdalasyncread.cpp
+index 1111111..2222222 100644
+--- a/apps/gdalasyncread.cpp
++++ b/apps/gdalasyncread.cpp
+@@ -29,7 +29,7 @@
+ #include "cpl_vsi.h"
+ #include "cpl_conv.h"
+ #include "cpl_string.h"
+-#include "gdal_version"
++#include "gdal_version.h"
+ #include "gdal_priv.h"
+ #include "ogr_spatialref.h"
+ 

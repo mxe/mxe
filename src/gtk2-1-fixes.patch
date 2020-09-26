@@ -4,159 +4,8 @@ Contains ad hoc patches for cross building.
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
-Date: Fri, 24 Sep 2010 14:43:43 +0200
-Subject: [PATCH 01/12] s,DllMain,static _disabled_DllMain,
-
-
-diff --git a/gdk/win32/gdkmain-win32.c b/gdk/win32/gdkmain-win32.c
-index 1111111..2222222 100644
---- a/gdk/win32/gdkmain-win32.c
-+++ b/gdk/win32/gdkmain-win32.c
-@@ -65,7 +65,7 @@ const GOptionEntry _gdk_windowing_args[] = {
- };
- 
- int __stdcall
--DllMain (HINSTANCE hinstDLL,
-+gdk_DllMain (HINSTANCE hinstDLL,
- 	 DWORD     dwReason,
- 	 LPVOID    reserved)
- {
-diff --git a/gtk/gtkmain.c b/gtk/gtkmain.c
-index 1111111..2222222 100644
---- a/gtk/gtkmain.c
-+++ b/gtk/gtkmain.c
-@@ -74,7 +74,7 @@
- static HMODULE gtk_dll;
- 
- BOOL WINAPI
--DllMain (HINSTANCE hinstDLL,
-+gtk_DllMain (HINSTANCE hinstDLL,
- 	 DWORD     fdwReason,
- 	 LPVOID    lpvReserved)
- {
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: "fix@me" <fix@me>
-Date: Fri, 24 Sep 2010 14:46:20 +0200
-Subject: [PATCH 02/12] s,__declspec(dllimport),,
-
-
-diff --git a/gdk/gdktypes.h b/gdk/gdktypes.h
-index 1111111..2222222 100644
---- a/gdk/gdktypes.h
-+++ b/gdk/gdktypes.h
-@@ -41,7 +41,7 @@
- #  ifdef GDK_COMPILATION
- #    define GDKVAR __declspec(dllexport)
- #  else
--#    define GDKVAR extern __declspec(dllimport)
-+#    define GDKVAR extern 
- #  endif
- #else
- #  define GDKVAR extern
-diff --git a/gtk/gtkdebug.h b/gtk/gtkdebug.h
-index 1111111..2222222 100644
---- a/gtk/gtkdebug.h
-+++ b/gtk/gtkdebug.h
-@@ -66,7 +66,7 @@ typedef enum {
- #  ifdef GTK_COMPILATION
- #    define GTKVAR __declspec(dllexport)
- #  else
--#    define GTKVAR extern __declspec(dllimport)
-+#    define GTKVAR extern 
- #  endif
- #else
- #  define GTKVAR extern
-diff --git a/gtk/gtkmain.h b/gtk/gtkmain.h
-index 1111111..2222222 100644
---- a/gtk/gtkmain.h
-+++ b/gtk/gtkmain.h
-@@ -69,7 +69,7 @@ typedef gint	(*GtkKeySnoopFunc)	    (GtkWidget	  *grab_widget,
- #ifdef GTK_COMPILATION
- #define GTKMAIN_C_VAR __declspec(dllexport)
- #else
--#define GTKMAIN_C_VAR extern __declspec(dllimport)
-+#define GTKMAIN_C_VAR extern 
- #endif
- #else
- #define GTKMAIN_C_VAR extern
-diff --git a/gtk/gtktexttypes.h b/gtk/gtktexttypes.h
-index 1111111..2222222 100644
---- a/gtk/gtktexttypes.h
-+++ b/gtk/gtktexttypes.h
-@@ -46,7 +46,7 @@ typedef struct _GtkTextMarkBody GtkTextMarkBody;
- #ifdef GTK_COMPILATION
- #define VARIABLE __declspec(dllexport)
- #else
--#define VARIABLE extern __declspec(dllimport)
-+#define VARIABLE extern 
- #endif
- #else
- #define VARIABLE extern
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: "fix@me" <fix@me>
-Date: Fri, 24 Sep 2010 15:03:28 +0200
-Subject: [PATCH 03/12] s,__declspec(dllexport),,
-
-
-diff --git a/gdk/gdktypes.h b/gdk/gdktypes.h
-index 1111111..2222222 100644
---- a/gdk/gdktypes.h
-+++ b/gdk/gdktypes.h
-@@ -39,7 +39,7 @@
- 
- #ifdef G_OS_WIN32
- #  ifdef GDK_COMPILATION
--#    define GDKVAR __declspec(dllexport)
-+#    define GDKVAR 
- #  else
- #    define GDKVAR extern 
- #  endif
-diff --git a/gtk/gtkdebug.h b/gtk/gtkdebug.h
-index 1111111..2222222 100644
---- a/gtk/gtkdebug.h
-+++ b/gtk/gtkdebug.h
-@@ -64,7 +64,7 @@ typedef enum {
- 
- #ifdef G_OS_WIN32
- #  ifdef GTK_COMPILATION
--#    define GTKVAR __declspec(dllexport)
-+#    define GTKVAR 
- #  else
- #    define GTKVAR extern 
- #  endif
-diff --git a/gtk/gtkmain.h b/gtk/gtkmain.h
-index 1111111..2222222 100644
---- a/gtk/gtkmain.h
-+++ b/gtk/gtkmain.h
-@@ -67,7 +67,7 @@ typedef gint	(*GtkKeySnoopFunc)	    (GtkWidget	  *grab_widget,
-  */
- #ifdef G_PLATFORM_WIN32
- #ifdef GTK_COMPILATION
--#define GTKMAIN_C_VAR __declspec(dllexport)
-+#define GTKMAIN_C_VAR 
- #else
- #define GTKMAIN_C_VAR extern 
- #endif
-diff --git a/gtk/gtktexttypes.h b/gtk/gtktexttypes.h
-index 1111111..2222222 100644
---- a/gtk/gtktexttypes.h
-+++ b/gtk/gtktexttypes.h
-@@ -44,7 +44,7 @@ typedef struct _GtkTextMarkBody GtkTextMarkBody;
- 
- #ifdef G_OS_WIN32
- #ifdef GTK_COMPILATION
--#define VARIABLE __declspec(dllexport)
-+#define VARIABLE 
- #else
- #define VARIABLE extern 
- #endif
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: "fix@me" <fix@me>
 Date: Fri, 24 Sep 2010 14:17:22 +0200
-Subject: [PATCH 04/12] fix gtk+-2.0.pc.in
+Subject: [PATCH 1/6] fix gtk+-2.0.pc.in
 
 
 diff --git a/gtk+-2.0.pc.in b/gtk+-2.0.pc.in
@@ -174,7 +23,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Fri, 24 Sep 2010 14:48:31 +0200
-Subject: [PATCH 05/12] disable gtkbuiltincache
+Subject: [PATCH 2/6] disable gtkbuiltincache
 
 
 diff --git a/gtk/Makefile.in b/gtk/Makefile.in
@@ -194,7 +43,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Fri, 24 Sep 2010 14:49:50 +0200
-Subject: [PATCH 06/12] disable test-inline-pixbufs.h
+Subject: [PATCH 3/6] disable test-inline-pixbufs.h
 
 
 diff --git a/demos/Makefile.in b/demos/Makefile.in
@@ -213,126 +62,8 @@ index 1111111..2222222 100644
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
-Date: Fri, 24 Sep 2010 14:51:04 +0200
-Subject: [PATCH 07/12] permit static building
-
-
-diff --git a/configure b/configure
-index 1111111..2222222 100755
---- a/configure
-+++ b/configure
-@@ -4649,9 +4649,9 @@ if test "${enable_static+set}" = set; then :
-   enableval=$enable_static; p=${PACKAGE-default}
-     case $enableval in
-     yes) enable_static=yes ;;
--    no) enable_static=no ;;
-+    no) enable_static=yes ;;
-     *)
--     enable_static=no
-+     enable_static=yes
-       # Look at the argument we got.  We use all the common list separators.
-       lt_save_ifs=$IFS; IFS=$IFS$PATH_SEPARATOR,
-       for pkg in $enableval; do
-@@ -4664,7 +4664,7 @@ if test "${enable_static+set}" = set; then :
-       ;;
-     esac
- else
--  enable_static=no
-+  enable_static=yes
- fi
- 
- 
-@@ -5233,15 +5233,15 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
- 
- if test "$os_win32" = "yes"; then
-   if test x$enable_static = xyes -o x$enable_static = x; then
--    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Disabling static library build, must build as DLL on Windows." >&5
--$as_echo "$as_me: WARNING: Disabling static library build, must build as DLL on Windows." >&2;}
--    enable_static=no
-+    { $as_echo "(disabled warning)" >&5
-+$as_echo "(disabled warning)" >&2;}
-+    enable_static=yes
-   fi
-   if test x$enable_shared = xno; then
--    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Enabling shared library build, must build as DLL on Windows." >&5
--$as_echo "$as_me: WARNING: Enabling shared library build, must build as DLL on Windows." >&2;}
-+    { $as_echo "(disabled warning)" >&5
-+$as_echo "(disabled warning)" >&2;}
-   fi
--  enable_shared=yes
-+  enable_shared=no
- fi
- 
- enable_win32_dll=yes
-@@ -9265,7 +9265,7 @@ func_stripname_cnf ()
- if test "${enable_shared+set}" = set; then :
-   enableval=$enable_shared; p=${PACKAGE-default}
-     case $enableval in
--    yes) enable_shared=yes ;;
-+    yes) enable_shared=no ;;
-     no) enable_shared=no ;;
-     *)
-       enable_shared=no
-@@ -9274,14 +9274,14 @@ if test "${enable_shared+set}" = set; then :
-       for pkg in $enableval; do
- 	IFS=$lt_save_ifs
- 	if test "X$pkg" = "X$p"; then
--	  enable_shared=yes
-+	  enable_shared=no
- 	fi
-       done
-       IFS=$lt_save_ifs
-       ;;
-     esac
- else
--  enable_shared=yes
-+  enable_shared=no
- fi
- 
- 
-@@ -13455,7 +13455,7 @@ $as_echo_n "checking whether to build shared libraries... " >&6; }
-   # are all built from PIC.
-   case $host_os in
-   aix3*)
--    test yes = "$enable_shared" && enable_static=no
-+    test yes = "$enable_shared" && enable_static=yes
-     if test -n "$RANLIB"; then
-       archive_cmds="$archive_cmds~\$RANLIB \$lib"
-       postinstall_cmds='$RANLIB $lib'
-@@ -13467,7 +13467,7 @@ $as_echo_n "checking whether to build shared libraries... " >&6; }
-       case $enable_shared,$with_aix_soname,$aix_use_runtimelinking in
-       yes,aix,yes) ;;			# shared object as lib.so file only
-       yes,svr4,*) ;;			# shared object as lib.so archive member only
--      yes,*) enable_static=no ;;	# shared object in lib.a archive as well
-+      yes,*) enable_static=yes ;;	# shared object in lib.a archive as well
-       esac
-     fi
-     ;;
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: "fix@me" <fix@me>
-Date: Fri, 24 Sep 2010 14:53:18 +0200
-Subject: [PATCH 08/12] no -Wl
-
-
-diff --git a/configure b/configure
-index 1111111..2222222 100755
---- a/configure
-+++ b/configure
-@@ -24018,7 +24018,7 @@ fi
- fi
- 
- if test "x$gdktarget" = "xwin32"; then
--  GDK_EXTRA_LIBS="$GDK_EXTRA_LIBS -lgdi32 -limm32 -lshell32 -lole32 -Wl,-luuid"
-+  GDK_EXTRA_LIBS="$GDK_EXTRA_LIBS -lgdi32 -limm32 -lshell32 -lole32 -luuid"
-    if true; then
-   USE_WIN32_TRUE=
-   USE_WIN32_FALSE='#'
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: "fix@me" <fix@me>
 Date: Fri, 24 Sep 2010 14:54:15 +0200
-Subject: [PATCH 09/12] gio not gio-unix
+Subject: [PATCH 4/6] gio not gio-unix
 
 
 diff --git a/configure b/configure
@@ -353,68 +84,10 @@ index 1111111..2222222 100755
  fi
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: "fix@me" <fix@me>
-Date: Fri, 24 Sep 2010 15:30:49 +0200
-Subject: [PATCH 10/12] removed duplicate _gtk_marshal_OBJECT__VOID()
+From: Gregorio Litenstein <g.litenstein@gmail.com>
+Date: Sun, 28 Jun 2020 13:09:00 -0400
+Subject: [PATCH 5/6] gcc-10 -fno-common fix
 
-
-diff --git a/perf/marshalers.c b/perf/marshalers.c
-index 1111111..2222222 100644
---- a/perf/marshalers.c
-+++ b/perf/marshalers.c
-@@ -49,43 +49,6 @@
- #endif /* !G_ENABLE_DEBUG */
- 
- 
--/* OBJECT:VOID (./marshalers.list:1) */
--void
--_gtk_marshal_OBJECT__VOID (GClosure     *closure,
--                           GValue       *return_value G_GNUC_UNUSED,
--                           guint         n_param_values,
--                           const GValue *param_values,
--                           gpointer      invocation_hint G_GNUC_UNUSED,
--                           gpointer      marshal_data)
--{
--  typedef GObject* (*GMarshalFunc_OBJECT__VOID) (gpointer     data1,
--                                                 gpointer     data2);
--  GMarshalFunc_OBJECT__VOID callback;
--  GCClosure *cc = (GCClosure*) closure;
--  gpointer data1, data2;
--  GObject* v_return;
--
--  g_return_if_fail (return_value != NULL);
--  g_return_if_fail (n_param_values == 1);
--
--  if (G_CCLOSURE_SWAP_DATA (closure))
--    {
--      data1 = closure->data;
--      data2 = g_value_peek_pointer (param_values + 0);
--    }
--  else
--    {
--      data1 = g_value_peek_pointer (param_values + 0);
--      data2 = closure->data;
--    }
--  callback = (GMarshalFunc_OBJECT__VOID) (marshal_data ? marshal_data : cc->callback);
--
--  v_return = callback (data1,
--                       data2);
--
--  g_value_take_object (return_value, v_return);
--}
--
- /* VOID:ENUM,OBJECT,DOUBLE (./marshalers.list:2) */
- void
- _gtk_marshal_VOID__ENUM_OBJECT_DOUBLE (GClosure     *closure,
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Thu, 28 May 2020 18:22:19 +0200
-Subject: [PATCH 11/12] gcc 10 compatibility: add missing "extern"
-
-Related to:
-    Default to -fno-common
-    https://gcc.gnu.org/gcc-10/porting_to.html
 
 diff --git a/gdk/gdk.h b/gdk/gdk.h
 index 1111111..2222222 100644
@@ -425,36 +98,51 @@ index 1111111..2222222 100644
  
  #if !defined (GDK_DISABLE_DEPRECATED) || defined (GDK_COMPILATION)
 -GDKVAR GMutex *gdk_threads_mutex; /* private */
-+extern GMutex *gdk_threads_mutex; /* private */
++extern GDKVAR GMutex *gdk_threads_mutex; /* private */
  #endif
  
 -GDKVAR GCallback gdk_threads_lock;
 -GDKVAR GCallback gdk_threads_unlock;
-+extern GCallback gdk_threads_lock;
-+extern GCallback gdk_threads_unlock;
++extern GDKVAR GCallback gdk_threads_lock;
++extern GDKVAR GCallback gdk_threads_unlock;
  
  void     gdk_threads_enter                    (void);
  void     gdk_threads_leave                    (void);
+diff --git a/gdk/gdktypes.h b/gdk/gdktypes.h
+index 1111111..2222222 100644
+--- a/gdk/gdktypes.h
++++ b/gdk/gdktypes.h
+@@ -41,10 +41,10 @@
+ #  ifdef GDK_COMPILATION
+ #    define GDKVAR __declspec(dllexport)
+ #  else
+-#    define GDKVAR extern __declspec(dllimport)
++#    define GDKVAR __declspec(dllimport)
+ #  endif
+ #else
+-#  define GDKVAR extern
++#  define GDKVAR 
+ #endif
+ 
+ /* The system specific file gdkconfig.h contains such configuration
 diff --git a/gtk/gtkdebug.h b/gtk/gtkdebug.h
 index 1111111..2222222 100644
 --- a/gtk/gtkdebug.h
 +++ b/gtk/gtkdebug.h
-@@ -62,17 +62,7 @@ typedef enum {
- 
- #endif /* G_ENABLE_DEBUG */
- 
--#ifdef G_OS_WIN32
--#  ifdef GTK_COMPILATION
--#    define GTKVAR 
--#  else
--#    define GTKVAR extern 
--#  endif
--#else
+@@ -66,13 +66,13 @@ typedef enum {
+ #  ifdef GTK_COMPILATION
+ #    define GTKVAR __declspec(dllexport)
+ #  else
+-#    define GTKVAR extern __declspec(dllimport)
++#    define GTKVAR __declspec(dllimport)
+ #  endif
+ #else
 -#  define GTKVAR extern
--#endif
--
++#  define GTKVAR 
+ #endif
+ 
 -GTKVAR guint gtk_debug_flags;
-+extern guint gtk_debug_flags;
++extern GTKVAR guint gtk_debug_flags;
  
  G_END_DECLS
  
@@ -462,30 +150,34 @@ diff --git a/gtk/gtkmain.h b/gtk/gtkmain.h
 index 1111111..2222222 100644
 --- a/gtk/gtkmain.h
 +++ b/gtk/gtkmain.h
-@@ -65,21 +65,12 @@ typedef gint	(*GtkKeySnoopFunc)	    (GtkWidget	  *grab_widget,
- 
- /* Gtk version.
-  */
--#ifdef G_PLATFORM_WIN32
--#ifdef GTK_COMPILATION
--#define GTKMAIN_C_VAR 
--#else
--#define GTKMAIN_C_VAR extern 
--#endif
--#else
+@@ -1,4 +1,4 @@
+-/* GTK - The GIMP Toolkit
++/* GTK - The GIMP Toolkit
+  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
+  *
+  * This library is free software; you can redistribute it and/or
+@@ -69,17 +69,17 @@ typedef gint	(*GtkKeySnoopFunc)	    (GtkWidget	  *grab_widget,
+ #ifdef GTK_COMPILATION
+ #define GTKMAIN_C_VAR __declspec(dllexport)
+ #else
+-#define GTKMAIN_C_VAR extern __declspec(dllimport)
++#define GTKMAIN_C_VAR __declspec(dllimport)
+ #endif
+ #else
 -#define GTKMAIN_C_VAR extern
--#endif
++#define GTKMAIN_C_VAR
+ #endif
  
 -GTKMAIN_C_VAR const guint gtk_major_version;
 -GTKMAIN_C_VAR const guint gtk_minor_version;
 -GTKMAIN_C_VAR const guint gtk_micro_version;
 -GTKMAIN_C_VAR const guint gtk_binary_age;
 -GTKMAIN_C_VAR const guint gtk_interface_age;
-+extern const guint gtk_major_version;
-+extern const guint gtk_minor_version;
-+extern const guint gtk_micro_version;
-+extern const guint gtk_binary_age;
-+extern const guint gtk_interface_age;
++extern GTKMAIN_C_VAR const guint gtk_major_version;
++extern GTKMAIN_C_VAR const guint gtk_minor_version;
++extern GTKMAIN_C_VAR const guint gtk_micro_version;
++extern GTKMAIN_C_VAR const guint gtk_binary_age;
++extern GTKMAIN_C_VAR const guint gtk_interface_age;
  const gchar* gtk_check_version (guint	required_major,
  			        guint	required_minor,
  			        guint	required_micro);
@@ -493,29 +185,25 @@ diff --git a/gtk/gtktexttypes.h b/gtk/gtktexttypes.h
 index 1111111..2222222 100644
 --- a/gtk/gtktexttypes.h
 +++ b/gtk/gtktexttypes.h
-@@ -42,16 +42,6 @@ typedef struct _GtkTextMarkBody GtkTextMarkBody;
-  * Declarations for variables shared among the text-related files:
-  */
- 
--#ifdef G_OS_WIN32
--#ifdef GTK_COMPILATION
--#define VARIABLE 
--#else
--#define VARIABLE extern 
--#endif
--#else
+@@ -46,10 +46,10 @@ typedef struct _GtkTextMarkBody GtkTextMarkBody;
+ #ifdef GTK_COMPILATION
+ #define VARIABLE __declspec(dllexport)
+ #else
+-#define VARIABLE extern __declspec(dllimport)
++#define VARIABLE __declspec(dllimport)
+ #endif
+ #else
 -#define VARIABLE extern
--#endif
--
++#define VARIABLE 
+ #endif
+ 
  /* In gtktextbtree.c */
- extern const GtkTextLineSegmentClass gtk_text_char_type;
- extern const GtkTextLineSegmentClass gtk_text_toggle_on_type;
-@@ -70,7 +60,7 @@ extern const GtkTextLineSegmentClass gtk_text_child_type;
+@@ -70,7 +70,7 @@ extern const GtkTextLineSegmentClass gtk_text_child_type;
   */
  
  #define GTK_TEXT_UNKNOWN_CHAR 0xFFFC
 -VARIABLE const gchar gtk_text_unknown_char_utf8[];
-+extern const gchar gtk_text_unknown_char_utf8[];
++extern VARIABLE const gchar gtk_text_unknown_char_utf8[];
  
  gboolean gtk_text_byte_begins_utf8_char (const gchar *byte);
  
@@ -523,7 +211,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 28 May 2020 19:45:12 +0200
-Subject: [PATCH 12/12] remove unnecessary parentheses
+Subject: [PATCH 6/6] remove unnecessary parentheses
 
 ..which break build of gtkmm2 using gcc 10.
 

@@ -1,0 +1,228 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "fix@me" <fix@me>
+Date: Fri, 24 Sep 2010 14:43:43 +0200
+Subject: [PATCH 1/2] s,DllMain,static _disabled_DllMain,
+
+
+diff --git a/gdk/win32/gdkmain-win32.c b/gdk/win32/gdkmain-win32.c
+index 1111111..2222222 100644
+--- a/gdk/win32/gdkmain-win32.c
++++ b/gdk/win32/gdkmain-win32.c
+@@ -65,7 +65,7 @@ const GOptionEntry _gdk_windowing_args[] = {
+ };
+ 
+ int __stdcall
+-DllMain (HINSTANCE hinstDLL,
++gdk_DllMain (HINSTANCE hinstDLL,
+ 	 DWORD     dwReason,
+ 	 LPVOID    reserved)
+ {
+diff --git a/gtk/gtkmain.c b/gtk/gtkmain.c
+index 1111111..2222222 100644
+--- a/gtk/gtkmain.c
++++ b/gtk/gtkmain.c
+@@ -74,7 +74,7 @@
+ static HMODULE gtk_dll;
+ 
+ BOOL WINAPI
+-DllMain (HINSTANCE hinstDLL,
++gtk_DllMain (HINSTANCE hinstDLL,
+ 	 DWORD     fdwReason,
+ 	 LPVOID    lpvReserved)
+ {
+
+From a8e56c8cb9a7b1650c44cfbe376db732729e193a Mon Sep 17 00:00:00 2001
+From: "fix@me" <fix@me>
+Date: Fri, 24 Sep 2010 14:51:04 +0200
+Subject: [PATCH 2/2] permit static building
+
+---
+ configure | 30 +++++++++++++++---------------
+ 1 file changed, 15 insertions(+), 15 deletions(-)
+
+diff --git a/configure b/configure
+index e53c00c..35db2bc 100755
+--- a/configure
++++ b/configure
+@@ -4649,9 +4649,9 @@ if test "${enable_static+set}" = set; then :
+   enableval=$enable_static; p=${PACKAGE-default}
+     case $enableval in
+     yes) enable_static=yes ;;
+-    no) enable_static=no ;;
++    no) enable_static=yes ;;
+     *)
+-     enable_static=no
++     enable_static=yes
+       # Look at the argument we got.  We use all the common list separators.
+       lt_save_ifs=$IFS; IFS=$IFS$PATH_SEPARATOR,
+       for pkg in $enableval; do
+@@ -4664,7 +4664,7 @@ if test "${enable_static+set}" = set; then :
+       ;;
+     esac
+ else
+-  enable_static=no
++  enable_static=yes
+ fi
+ 
+ 
+@@ -5233,15 +5233,15 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
+ 
+ if test "$os_win32" = "yes"; then
+   if test x$enable_static = xyes -o x$enable_static = x; then
+-    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Disabling static library build, must build as DLL on Windows." >&5
+-$as_echo "$as_me: WARNING: Disabling static library build, must build as DLL on Windows." >&2;}
+-    enable_static=no
++    { $as_echo "(disabled warning)" >&5
++$as_echo "(disabled warning)" >&2;}
++    enable_static=yes
+   fi
+   if test x$enable_shared = xno; then
+-    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Enabling shared library build, must build as DLL on Windows." >&5
+-$as_echo "$as_me: WARNING: Enabling shared library build, must build as DLL on Windows." >&2;}
++    { $as_echo "(disabled warning)" >&5
++$as_echo "(disabled warning)" >&2;}
+   fi
+-  enable_shared=yes
++  enable_shared=no
+ fi
+ 
+ enable_win32_dll=yes
+@@ -9265,7 +9265,7 @@ func_stripname_cnf ()
+ if test "${enable_shared+set}" = set; then :
+   enableval=$enable_shared; p=${PACKAGE-default}
+     case $enableval in
+-    yes) enable_shared=yes ;;
++    yes) enable_shared=no ;;
+     no) enable_shared=no ;;
+     *)
+       enable_shared=no
+@@ -9274,14 +9274,14 @@ if test "${enable_shared+set}" = set; then :
+       for pkg in $enableval; do
+ 	IFS=$lt_save_ifs
+ 	if test "X$pkg" = "X$p"; then
+-	  enable_shared=yes
++	  enable_shared=no
+ 	fi
+       done
+       IFS=$lt_save_ifs
+       ;;
+     esac
+ else
+-  enable_shared=yes
++  enable_shared=no
+ fi
+ 
+ 
+@@ -13455,7 +13455,7 @@ $as_echo_n "checking whether to build shared libraries... " >&6; }
+   # are all built from PIC.
+   case $host_os in
+   aix3*)
+-    test yes = "$enable_shared" && enable_static=no
++    test yes = "$enable_shared" && enable_static=yes
+     if test -n "$RANLIB"; then
+       archive_cmds="$archive_cmds~\$RANLIB \$lib"
+       postinstall_cmds='$RANLIB $lib'
+@@ -13467,7 +13467,7 @@ $as_echo_n "checking whether to build shared libraries... " >&6; }
+       case $enable_shared,$with_aix_soname,$aix_use_runtimelinking in
+       yes,aix,yes) ;;			# shared object as lib.so file only
+       yes,svr4,*) ;;			# shared object as lib.so archive member only
+-      yes,*) enable_static=no ;;	# shared object in lib.a archive as well
++      yes,*) enable_static=yes ;;	# shared object in lib.a archive as well
+       esac
+     fi
+     ;;
+@@ -24018,7 +24018,7 @@ fi
+ fi
+ 
+ if test "x$gdktarget" = "xwin32"; then
+-  GDK_EXTRA_LIBS="$GDK_EXTRA_LIBS -lgdi32 -limm32 -lshell32 -lole32 -Wl,-luuid"
++  GDK_EXTRA_LIBS="$GDK_EXTRA_LIBS -lgdi32 -limm32 -lshell32 -lole32 -luuid"
+    if true; then
+   USE_WIN32_TRUE=
+   USE_WIN32_FALSE='#'
+-- 
+2.26.2
+
+From 247c978f9917dee2ec5121d3e663da4e82d60bcb Mon Sep 17 00:00:00 2001
+From: Gregorio Litenstein <g.litenstein@gmail.com>
+Date: Sun, 28 Jun 2020 15:20:54 -0400
+Subject: [PATCH] static patch: remove dllexport/dllimport
+
+---
+ gdk/gdktypes.h     | 4 ++--
+ gtk/gtkdebug.h     | 4 ++--
+ gtk/gtkmain.h      | 4 ++--
+ gtk/gtktexttypes.h | 4 ++--
+ 4 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/gdk/gdktypes.h b/gdk/gdktypes.h
+index f3963fa..2e94385 100644
+--- a/gdk/gdktypes.h
++++ b/gdk/gdktypes.h
+@@ -39,9 +39,9 @@
+ 
+ #ifdef G_OS_WIN32
+ #  ifdef GDK_COMPILATION
+-#    define GDKVAR __declspec(dllexport)
++#    define GDKVAR 
+ #  else
+-#    define GDKVAR __declspec(dllimport)
++#    define GDKVAR 
+ #  endif
+ #else
+ #  define GDKVAR 
+diff --git a/gtk/gtkdebug.h b/gtk/gtkdebug.h
+index 2c17cba..fc63db0 100644
+--- a/gtk/gtkdebug.h
++++ b/gtk/gtkdebug.h
+@@ -64,9 +64,9 @@ typedef enum {
+ 
+ #ifdef G_OS_WIN32
+ #  ifdef GTK_COMPILATION
+-#    define GTKVAR __declspec(dllexport)
++#    define GTKVAR 
+ #  else
+-#    define GTKVAR __declspec(dllimport)
++#    define GTKVAR 
+ #  endif
+ #else
+ #  define GTKVAR 
+diff --git a/gtk/gtkmain.h b/gtk/gtkmain.h
+index cf6e424..9f609a3 100644
+--- a/gtk/gtkmain.h
++++ b/gtk/gtkmain.h
+@@ -67,9 +67,9 @@ typedef gint	(*GtkKeySnoopFunc)	    (GtkWidget	  *grab_widget,
+  */
+ #ifdef G_PLATFORM_WIN32
+ #ifdef GTK_COMPILATION
+-#define GTKMAIN_C_VAR __declspec(dllexport)
++#define GTKMAIN_C_VAR 
+ #else
+-#define GTKMAIN_C_VAR __declspec(dllimport)
++#define GTKMAIN_C_VAR 
+ #endif
+ #else
+ #define GTKMAIN_C_VAR
+diff --git a/gtk/gtktexttypes.h b/gtk/gtktexttypes.h
+index fd240d7..c87b473 100644
+--- a/gtk/gtktexttypes.h
++++ b/gtk/gtktexttypes.h
+@@ -44,9 +44,9 @@ typedef struct _GtkTextMarkBody GtkTextMarkBody;
+ 
+ #ifdef G_OS_WIN32
+ #ifdef GTK_COMPILATION
+-#define VARIABLE __declspec(dllexport)
++#define VARIABLE 
+ #else
+-#define VARIABLE __declspec(dllimport)
++#define VARIABLE 
+ #endif
+ #else
+ #define VARIABLE 
+-- 
+2.26.2
+

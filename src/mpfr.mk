@@ -24,8 +24,8 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
-        --enable-threads=win32 \
-        --with-gmp-include='$(PREFIX)/$(TARGET)/include/'
+        --enable-thread-safe \
+        --with-gmp-include='$(PREFIX)/$(TARGET)/include/' \
         --with-gmp-lib='$(PREFIX)/$(TARGET)/lib/'
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install

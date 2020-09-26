@@ -12,7 +12,7 @@ diff --git a/gdk/win32/gdkmain-win32.c b/gdk/win32/gdkmain-win32.c
 index 1111111..2222222 100644
 --- a/gdk/win32/gdkmain-win32.c
 +++ b/gdk/win32/gdkmain-win32.c
-@@ -64,7 +64,7 @@ const GOptionEntry _gdk_windowing_args[] = {
+@@ -67,7 +67,7 @@ const GOptionEntry _gdk_windowing_args[] = {
  };
  
  BOOL WINAPI
@@ -75,7 +75,7 @@ diff --git a/demos/gtk-demo/Makefile.in b/demos/gtk-demo/Makefile.in
 index 1111111..2222222 100644
 --- a/demos/gtk-demo/Makefile.in
 +++ b/demos/gtk-demo/Makefile.in
-@@ -1422,7 +1422,6 @@ uninstall-hook: uninstall-update-icon-cache
+@@ -1428,7 +1428,6 @@ uninstall-hook: uninstall-update-icon-cache
  
  install-update-icon-cache:
  	$(AM_V_at)$(POST_INSTALL)
@@ -87,7 +87,7 @@ diff --git a/demos/widget-factory/Makefile.in b/demos/widget-factory/Makefile.in
 index 1111111..2222222 100644
 --- a/demos/widget-factory/Makefile.in
 +++ b/demos/widget-factory/Makefile.in
-@@ -1161,7 +1161,6 @@ uninstall-hook: uninstall-update-icon-cache
+@@ -1165,7 +1165,6 @@ uninstall-hook: uninstall-update-icon-cache
  
  install-update-icon-cache:
  	$(AM_V_at)$(POST_INSTALL)
@@ -36091,7 +36091,7 @@ index 1111111..2222222 100644
      }
  
    return icon_info;
-@@ -2454,6 +2514,10 @@ gtk_icon_theme_has_icon (GtkIconTheme *icon_theme,
+@@ -2455,6 +2515,10 @@ gtk_icon_theme_has_icon (GtkIconTheme *icon_theme,
          return TRUE;
      }
  
@@ -36102,7 +36102,7 @@ index 1111111..2222222 100644
    if (icon_theme_builtin_icons &&
        g_hash_table_lookup_extended (icon_theme_builtin_icons,
                                      icon_name, NULL, NULL))
-@@ -3046,9 +3110,11 @@ theme_lookup_icon (IconTheme   *theme,
+@@ -3047,9 +3111,11 @@ theme_lookup_icon (IconTheme   *theme,
  
        if (min_difference == 0)
          return icon_info_new_builtin (closest_builtin);
@@ -36116,7 +36116,7 @@ index 1111111..2222222 100644
  
    l = dirs;
    while (l != NULL)
-@@ -3071,6 +3137,12 @@ theme_lookup_icon (IconTheme   *theme,
+@@ -3072,6 +3138,12 @@ theme_lookup_icon (IconTheme   *theme,
          }
  
        l = l->next;
@@ -36131,11 +36131,10 @@ index 1111111..2222222 100644
    if (min_dir)
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Thu, 28 May 2020 20:29:53 +0200
-Subject: [PATCH 5/5] remove unnecessary parentheses
+From: Gregorio Litenstein <g.litenstein@gmail.com>
+Date: Mon, 29 Jun 2020 12:52:34 -0400
+Subject: [PATCH 5/5] Fix unnecessary parentheses.
 
-..which break build of gtkmm using gcc 10.
 
 diff --git a/gtk/deprecated/gtkstatusicon.h b/gtk/deprecated/gtkstatusicon.h
 index 1111111..2222222 100644
@@ -36149,10 +36148,29 @@ index 1111111..2222222 100644
 -  void (*__gtk_reserved2);
 -  void (*__gtk_reserved3);
 -  void (*__gtk_reserved4);
-+  void *__gtk_reserved1;
-+  void *__gtk_reserved2;
-+  void *__gtk_reserved3;
-+  void *__gtk_reserved4;
++  void (*__gtk_reserved1) (void);
++  void (*__gtk_reserved2) (void);
++  void (*__gtk_reserved3) (void);
++  void (*__gtk_reserved4) (void);
+ };
+ 
+ GDK_AVAILABLE_IN_ALL
+diff --git a/gtk/deprecated/gtktrayicon.h b/gtk/deprecated/gtktrayicon.h
+index 1111111..2222222 100644
+--- a/gtk/deprecated/gtktrayicon.h
++++ b/gtk/deprecated/gtktrayicon.h
+@@ -45,10 +45,10 @@ struct _GtkTrayIconClass
+   GtkPlugClass parent_class;
+ 
+   /* Padding for future expansion */
+-  void (*_gtk_reserved1);
+-  void (*_gtk_reserved2);
+-  void (*_gtk_reserved3);
+-  void (*_gtk_reserved4);
++  void (*__gtk_reserved1) (void);
++  void (*__gtk_reserved2) (void);
++  void (*__gtk_reserved3) (void);
++  void (*__gtk_reserved4) (void);
  };
  
  GDK_AVAILABLE_IN_ALL
@@ -36168,10 +36186,10 @@ index 1111111..2222222 100644
 -  void (*__gtk_reserved2);
 -  void (*__gtk_reserved3);
 -  void (*__gtk_reserved4);
-+  void *__gtk_reserved1;
-+  void *__gtk_reserved2;
-+  void *__gtk_reserved3;
-+  void *__gtk_reserved4;
++  void (*__gtk_reserved1) (void);
++  void (*__gtk_reserved2) (void);
++  void (*__gtk_reserved3) (void);
++  void (*__gtk_reserved4) (void);
  };
  
  

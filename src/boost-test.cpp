@@ -1,7 +1,15 @@
 /*
  * This file is part of MXE. See LICENSE.md for licensing information.
  */
+ 
 
+// Boost.Context Example
+//          Copyright Oliver Kowalke 2016.
+// Distributed under the Boost Software License, Version 1.0.
+//    (See accompanying file LICENSE_1_0.txt or copy at
+//          http://www.boost.org/LICENSE_1_0.txt)
+
+#include <cstdlib>
 #include <iostream>
 #include <boost/archive/xml_oarchive.hpp>
 #include <boost/thread/thread.hpp>
@@ -9,33 +17,42 @@
 
 boost::thread_specific_ptr<int> ptr;
 
-// https://www.boost.org/doc/libs/1_60_0/libs/context/doc/html/context/context.html
-#include <boost/context/all.hpp>
-boost::context::fcontext_t fcm,fc1,fc2;
+#include <boost/context/fiber.hpp>
 
+namespace ctx = boost::context;
+
+class moveable {
+public:
+    int     value;
+
+    moveable() :
+        value( -1) {
+        }
+
+    moveable( int v) :
+        value( v) {
+        }
+
+    moveable( moveable && other) {
+        std::swap( value, other.value);
+        }
+
+    moveable & operator=( moveable && other) {
+        if ( this == & other) return * this;
+        value = other.value;
+        other.value = -1;
+        return * this;
+    }
+
+    moveable( moveable const& other) = delete;
+    moveable & operator=( moveable const& other) = delete;
+};
 void test_thread()
 {
     if (ptr.get() == 0) {
         ptr.reset(new int(0));
     }
     std::cout << "Hello, World! from thread" << std::endl;
-}
-
-void f1(intptr_t)
-{
-    std::cout<<"f1: entered"<<std::endl;
-    std::cout<<"f1: call jump_fcontext( & fc1, fc2, 0)"<< std::endl;
-    boost::context::jump_fcontext(&fc1,fc2,0);
-    std::cout<<"f1: return"<<std::endl;
-    boost::context::jump_fcontext(&fc1,fcm,0);
-}
-
-void f2(intptr_t)
-{
-    std::cout<<"f2: entered"<<std::endl;
-    std::cout<<"f2: call jump_fcontext( & fc2, fc1, 0)"<<std::endl;
-    boost::context::jump_fcontext(&fc2,fc1,0);
-    BOOST_ASSERT(false&&!"f2: never returns");
 }
 
 int main(int argc, char *argv[])
@@ -50,15 +67,21 @@ int main(int argc, char *argv[])
     boost::thread thrd(test_thread);
     thrd.join();
 
-    std::size_t size(8192);
-    void* sp1(std::malloc(size));
-    void* sp2(std::malloc(size));
-
-    fc1=boost::context::make_fcontext(sp1,size,f1);
-    fc2=boost::context::make_fcontext(sp2,size,f2);
-
-    std::cout<<"main: call jump_fcontext( & fcm, fc1, 0)"<<std::endl;
-    boost::context::jump_fcontext(&fcm,fc1,0);
-
-    return 0;
+    moveable data{ 1 };
+    ctx::fiber f{ std::allocator_arg, ctx::fixedsize_stack{},
+                     [&data](ctx::fiber && f){
+                        std::cout << "entered first time: " << data.value << std::endl;
+                        data = std::move( moveable{ 3 });
+                        f = std::move( f).resume();
+                        std::cout << "entered second time: " << data.value << std::endl;
+                        data = std::move( moveable{});
+                        return std::move( f);
+                     }};
+    f = std::move( f).resume();
+    std::cout << "returned first time: " << data.value << std::endl;
+    data.value = 5;
+    f = std::move( f).resume();
+    std::cout << "returned second time: " << data.value << std::endl;
+    std::cout << "main: done" << std::endl;
+    return EXIT_SUCCESS;
 }

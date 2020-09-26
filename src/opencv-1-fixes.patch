@@ -4,63 +4,53 @@ Contains ad hoc patches for cross building.
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Gregorio Litenstein <g.litenstein@gmail.com>
-Date: Thu, 31 Aug 2017 18:27:53 -0300
-Subject: [PATCH 1/3] patch-1 for opencv-3.3.0
+Date: Fri, 12 Jun 2020 14:57:38 -0400
+Subject: [PATCH 1/1] Update OpenCV patches.
 
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 1111111..2222222 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -36,7 +36,6 @@ if(NOT DEFINED CMAKE_INSTALL_PREFIX)
+@@ -117,13 +117,11 @@ endif()
+ if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)  # https://cmake.org/cmake/help/latest/variable/CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT.html
    if(NOT CMAKE_TOOLCHAIN_FILE)
-     # it _must_ go before project(OpenCV) in order to work
      if(WIN32)
--      set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/install" CACHE PATH "Installation Directory")
+-      set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/install" CACHE PATH "Installation Directory" FORCE)
      else()
-       set(CMAKE_INSTALL_PREFIX "/usr/local" CACHE PATH "Installation Directory")
+       set(CMAKE_INSTALL_PREFIX "/usr/local" CACHE PATH "Installation Directory" FORCE)
      endif()
-@@ -44,7 +43,6 @@ if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-     #Android: set output folder to ${CMAKE_BINARY_DIR}
-     set( LIBRARY_OUTPUT_PATH_ROOT ${CMAKE_BINARY_DIR} CACHE PATH "root for library output, set this to change where android libs are compiled to" )
-     # any crosscompiling
--    set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/install" CACHE PATH "Installation Directory")
-   endif(NOT CMAKE_TOOLCHAIN_FILE)
+   else()
+     # any cross-compiling
+-    set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/install" CACHE PATH "Installation Directory" FORCE)
+   endif()
  endif()
  
-diff --git a/cmake/OpenCVFindLibsGrfmt.cmake b/cmake/OpenCVFindLibsGrfmt.cmake
-index 1111111..2222222 100644
---- a/cmake/OpenCVFindLibsGrfmt.cmake
-+++ b/cmake/OpenCVFindLibsGrfmt.cmake
-@@ -2,6 +2,11 @@
- #  Detect 3rd-party image IO libraries
- # ----------------------------------------------------------------------------
+@@ -494,7 +492,7 @@ OCV_OPTION(ENABLE_BUILD_HARDENING     "Enable hardening of the resulting binarie
+ OCV_OPTION(ENABLE_LTO                 "Enable Link Time Optimization" OFF IF CV_GCC OR MSVC)
+ OCV_OPTION(ENABLE_THIN_LTO            "Enable Thin LTO" OFF IF CV_CLANG)
+ OCV_OPTION(GENERATE_ABI_DESCRIPTOR    "Generate XML file for abi_compliance_checker tool" OFF IF UNIX)
+-OCV_OPTION(OPENCV_GENERATE_PKGCONFIG  "Generate .pc file for pkg-config build tool (deprecated)" ON IF (UNIX AND NOT MSVC AND NOT IOS AND NOT ANDROID) )
++OCV_OPTION(OPENCV_GENERATE_PKGCONFIG  "Generate .pc file for pkg-config build tool (deprecated)" ON )
+ OCV_OPTION(CV_ENABLE_INTRINSICS       "Use intrinsic-based optimized code" ON )
+ OCV_OPTION(CV_DISABLE_OPTIMIZATION    "Disable explicit optimized code (dispatched code/intrinsics/loop unrolling/etc)" OFF )
+ OCV_OPTION(CV_TRACE                   "Enable OpenCV code trace" ON)
+@@ -548,8 +546,8 @@ endif()
  
-+# --- lzma (required by apps, examples, perf, tests) ---
-+if(BUILD_opencv_apps OR BUILD_EXAMPLES OR BUILD_PERF_TESTS OR BUILD_TESTS)
-+  include(cmake/OpenCVFindLZMA.cmake)
-+endif()
-+
- # --- zlib (required) ---
- if(BUILD_ZLIB)
-   ocv_clear_vars(ZLIB_FOUND)
-@@ -26,6 +31,11 @@ if(NOT ZLIB_FOUND)
-   ocv_parse_header2(ZLIB "${${ZLIB_LIBRARY}_SOURCE_DIR}/zlib.h" ZLIB_VERSION)
- endif()
- 
-+# --- lcms (required by apps, examples, perf, tests) ---
-+if(BUILD_opencv_apps OR BUILD_EXAMPLES OR BUILD_PERF_TESTS OR BUILD_TESTS)
-+  include(cmake/OpenCVFindLCMS.cmake)
-+endif()
-+
- # --- libtiff (optional, should be searched after zlib) ---
- if(WITH_TIFF)
-   if(BUILD_TIFF)
+ if(WIN32)
+   # Postfix of DLLs:
+-  ocv_update(OPENCV_DLLVERSION "${OPENCV_VERSION_MAJOR}${OPENCV_VERSION_MINOR}${OPENCV_VERSION_PATCH}")
+-  ocv_update(OPENCV_DEBUG_POSTFIX d)
++  ocv_update(OPENCV_DLLVERSION "")
++  ocv_update(OPENCV_DEBUG_POSTFIX "")
+ else()
+   # Postfix of so's:
+   ocv_update(OPENCV_DLLVERSION "")
 diff --git a/cmake/OpenCVFindLibsVideo.cmake b/cmake/OpenCVFindLibsVideo.cmake
 index 1111111..2222222 100644
 --- a/cmake/OpenCVFindLibsVideo.cmake
 +++ b/cmake/OpenCVFindLibsVideo.cmake
-@@ -272,15 +272,15 @@ endif(WITH_MSMF)
+@@ -285,15 +285,15 @@ endif()
  
  # --- Extra HighGUI and VideoIO libs on Windows ---
  if(WIN32)
@@ -69,7 +59,7 @@ index 1111111..2222222 100644
    if(HAVE_VFW)
      list(APPEND VIDEOIO_LIBRARIES vfw32)
    endif()
-   if(MINGW64)
+   if(MINGW AND CMAKE_SIZEOF_VOID_P EQUAL 8)
 -    list(APPEND VIDEOIO_LIBRARIES avifil32 avicap32 winmm msvfw32)
 -    list(REMOVE_ITEM VIDEOIO_LIBRARIES vfw32)
 +    list(APPEND VIDEOIO_LIBRARIES -lavifil32 -lavicap32 -lwinmm -lmsvfw32)
@@ -80,6 +70,21 @@ index 1111111..2222222 100644
    endif()
  endif(WIN32)
  
+diff --git a/cmake/OpenCVModule.cmake b/cmake/OpenCVModule.cmake
+index 1111111..2222222 100644
+--- a/cmake/OpenCVModule.cmake
++++ b/cmake/OpenCVModule.cmake
+@@ -528,7 +528,9 @@ function(__ocv_resolve_dependencies)
+   foreach(m ${OPENCV_MODULES_BUILD})
+     set(deps_${m} ${OPENCV_MODULE_${m}_REQ_DEPS})
+     foreach(d ${OPENCV_MODULE_${m}_OPT_DEPS})
+-      if(NOT (";${deps_${m}};" MATCHES ";${d};"))
++      # can't use MATCH because file paths can include regexp special chars
++      string(FIND ";${deps_${m}};" ";${d};" d_offset)
++      if(${d_offset} EQUAL -1)
+         if(HAVE_${d} OR TARGET ${d})
+           list(APPEND deps_${m} ${d})
+         endif()
 diff --git a/cmake/templates/opencv-XXX.pc.in b/cmake/templates/opencv-XXX.pc.in
 index 1111111..2222222 100644
 --- a/cmake/templates/opencv-XXX.pc.in
@@ -97,7 +102,7 @@ diff --git a/modules/core/src/lapack.cpp b/modules/core/src/lapack.cpp
 index 1111111..2222222 100644
 --- a/modules/core/src/lapack.cpp
 +++ b/modules/core/src/lapack.cpp
-@@ -608,7 +608,7 @@ void hal::SVD32f(float* At, size_t astep, float* W, float* U, size_t ustep, floa
+@@ -628,7 +628,7 @@ void hal::SVD32f(float* At, size_t astep, float* W, float* U, size_t ustep, floa
  void hal::SVD64f(double* At, size_t astep, double* W, double* U, size_t ustep, double* Vt, size_t vstep, int m, int n, int n1)
  {
      CALL_HAL(SVD64f, cv_hal_SVD64f, At, astep, W, U, ustep, Vt, vstep, m, n, decodeSVDParameters(U, Vt, m, n, n1))
@@ -110,12 +115,15 @@ diff --git a/modules/core/src/precomp.hpp b/modules/core/src/precomp.hpp
 index 1111111..2222222 100644
 --- a/modules/core/src/precomp.hpp
 +++ b/modules/core/src/precomp.hpp
-@@ -60,7 +60,7 @@
+@@ -60,7 +60,11 @@
  
  #include <assert.h>
  #include <ctype.h>
--#include <float.h>
++#ifdef __cplusplus
 +#include <cfloat>
++#else
+ #include <float.h>
++#endif
  #include <limits.h>
  #include <math.h>
  #include <stdarg.h>
@@ -123,111 +131,12 @@ diff --git a/modules/videoio/CMakeLists.txt b/modules/videoio/CMakeLists.txt
 index 1111111..2222222 100644
 --- a/modules/videoio/CMakeLists.txt
 +++ b/modules/videoio/CMakeLists.txt
-@@ -231,6 +231,10 @@ if(WIN32)
-   include_directories(AFTER SYSTEM "${OpenCV_SOURCE_DIR}/3rdparty/include/ffmpeg_") # for tests
+@@ -80,7 +80,7 @@ endif()
+ if (WIN32 AND HAVE_DSHOW)
+   list(APPEND videoio_srcs ${CMAKE_CURRENT_LIST_DIR}/src/cap_dshow.cpp)
+   list(APPEND videoio_hdrs ${CMAKE_CURRENT_LIST_DIR}/src/cap_dshow.hpp)
+-  if(MINGW AND X86_64)
++  if(MINGW)
+     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DSTRSAFE_NO_DEPRECATE")
+   endif()
  endif()
- 
-+if(WIN32)
-+  add_definitions(-DSTRSAFE_NO_DEPRECATE)
-+endif()
-+
- if(UNIX)
-   #these variables are set by CHECK_MODULE macro
-   foreach(P ${VIDEOIO_INCLUDE_DIRS})
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Gregorio Litenstein <g.litenstein@gmail.com>
-Date: Thu, 31 Aug 2017 18:32:39 -0300
-Subject: [PATCH 2/3] patch 2 for opencv-3.3.0
-
-
-diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 1111111..2222222 100644
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -358,14 +358,7 @@ else()
-   ocv_update(OPENCV_DOC_INSTALL_PATH share/OpenCV/doc)
- endif()
- 
--if(WIN32 AND CMAKE_HOST_SYSTEM_NAME MATCHES Windows)
--  if(DEFINED OpenCV_RUNTIME AND DEFINED OpenCV_ARCH)
--    ocv_update(OpenCV_INSTALL_BINARIES_PREFIX "${OpenCV_ARCH}/${OpenCV_RUNTIME}/")
--  else()
--    message(STATUS "Can't detect runtime and/or arch")
--    ocv_update(OpenCV_INSTALL_BINARIES_PREFIX "")
--  endif()
--elseif(ANDROID)
-+if(ANDROID)
-   ocv_update(OpenCV_INSTALL_BINARIES_PREFIX "sdk/native/")
- else()
-   ocv_update(OpenCV_INSTALL_BINARIES_PREFIX "")
-@@ -413,12 +406,8 @@ else()
-   ocv_update(3P_LIBRARY_OUTPUT_PATH      "${OpenCV_BINARY_DIR}/3rdparty/lib${LIB_SUFFIX}")
- 
-   if(WIN32 AND CMAKE_HOST_SYSTEM_NAME MATCHES Windows)
--    if(OpenCV_STATIC)
--      ocv_update(OPENCV_LIB_INSTALL_PATH   "${OpenCV_INSTALL_BINARIES_PREFIX}staticlib${LIB_SUFFIX}")
--    else()
--      ocv_update(OPENCV_LIB_INSTALL_PATH   "${OpenCV_INSTALL_BINARIES_PREFIX}lib${LIB_SUFFIX}")
--    endif()
--    ocv_update(OPENCV_3P_LIB_INSTALL_PATH  "${OpenCV_INSTALL_BINARIES_PREFIX}staticlib${LIB_SUFFIX}")
-+	ocv_update(OPENCV_LIB_INSTALL_PATH   "${OpenCV_INSTALL_BINARIES_PREFIX}lib${LIB_SUFFIX}")
-+	ocv_update(OPENCV_3P_LIB_INSTALL_PATH  "${OpenCV_INSTALL_BINARIES_PREFIX}lib${LIB_SUFFIX}")
-     ocv_update(OPENCV_SAMPLES_SRC_INSTALL_PATH    samples/native)
-     ocv_update(OPENCV_JAR_INSTALL_PATH java)
-     ocv_update(OPENCV_OTHER_INSTALL_PATH   etc)
-@@ -462,15 +451,9 @@ if(INSTALL_TO_MANGLED_PATHS)
- endif()
- 
- 
--if(WIN32)
--  # Postfix of DLLs:
--  set(OPENCV_DLLVERSION "${OPENCV_VERSION_MAJOR}${OPENCV_VERSION_MINOR}${OPENCV_VERSION_PATCH}")
--  set(OPENCV_DEBUG_POSTFIX d)
--else()
--  # Postfix of so's:
--  set(OPENCV_DLLVERSION "")
--  set(OPENCV_DEBUG_POSTFIX "")
--endif()
-+# Postfix of so's and DLLs:
-+set(OPENCV_DLLVERSION "")
-+set(OPENCV_DEBUG_POSTFIX "")
- 
- if(DEFINED CMAKE_DEBUG_POSTFIX)
-   set(OPENCV_DEBUG_POSTFIX "${CMAKE_DEBUG_POSTFIX}")
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Gregorio Litenstein <g.litenstein@gmail.com>
-Date: Thu, 31 Aug 2017 18:35:23 -0300
-Subject: [PATCH 3/3] patch-3 for opencv-3.3.0
-
-Originally From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Boris Nagaev <bnagaev@gmail.com>
-Date: Sun, 20 Dec 2015 18:14:56 +0300
-Subject: [PATCH] fix CMake error if a directory contains ++
-
-See https://github.com/mxe/mxe/issues/1091
-
-diff --git a/cmake/OpenCVModule.cmake b/cmake/OpenCVModule.cmake
-index 1111111..2222222 100644
---- a/cmake/OpenCVModule.cmake
-+++ b/cmake/OpenCVModule.cmake
-@@ -491,12 +491,16 @@ function(__ocv_resolve_dependencies)
-   # process private deps
-   foreach(m ${OPENCV_MODULES_BUILD})
-     foreach(d ${OPENCV_MODULE_${m}_PRIVATE_REQ_DEPS})
--      if(NOT (";${deps_${m}};" MATCHES ";${d};"))
-+      # can't use MATCH because file paths can include regexp special chars
-+      string(FIND ";${deps_${m}};" ";${d};" d_offset)
-+      if(${d_offset} EQUAL -1)
-         list(APPEND deps_${m} ${d})
-       endif()
-     endforeach()
-     foreach(d ${OPENCV_MODULE_${m}_PRIVATE_OPT_DEPS})
--      if(NOT (";${deps_${m}};" MATCHES ";${d};"))
-+      # can't use MATCH because file paths can include regexp special chars
-+      string(FIND ";${deps_${m}};" ";${d};" d_offset)
-+      if(${d_offset} EQUAL -1)
-         if(HAVE_${d} OR TARGET ${d})
-           list(APPEND deps_${m} ${d})
-         endif()

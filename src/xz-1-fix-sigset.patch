@@ -1,0 +1,67 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+diff --git a/src/common/mythread.h b/src/common/mythread.h
+index 11111111..22222222 100644
+--- a/src/common/mythread.h
++++ b/src/common/mythread.h
+@@ -14,6 +14,11 @@
+ #define MYTHREAD_H
+ 
+ #include "sysdefs.h"
++#include <sys/types.h>
++
++#ifndef sigfillset
++#  define sigfillset(pset)     (*(pset) = (_sigset_t)-1)
++#endif
+ 
+ // If any type of threading is enabled, #define MYTHREAD_ENABLED.
+ #if defined(MYTHREAD_POSIX) || defined(MYTHREAD_WIN95) \
+@@ -84,8 +85,8 @@ do { \
+ #include <signal.h>
+ 
+ static inline void
+-mythread_sigmask(int how, const sigset_t *restrict set,
+-		sigset_t *restrict oset)
++mythread_sigmask(int how, const _sigset_t *restrict set,
++		_sigset_t *restrict oset)
+ {
+ 	int ret = sigprocmask(how, set, oset);
+ 	assert(ret == 0);
+@@ -135,8 +136,8 @@ typedef struct timespec mythread_condtime;
+ // Use pthread_sigmask() to set the signal mask in multi-threaded programs.
+ // Do nothing on OpenVMS since it lacks pthread_sigmask().
+ static inline void
+-mythread_sigmask(int how, const sigset_t *restrict set,
+-		sigset_t *restrict oset)
++mythread_sigmask(int how, const _sigset_t *restrict set,
++		_sigset_t *restrict oset)
+ {
+ #ifdef __VMS
+ 	(void)how;
+@@ -155,8 +156,8 @@ mythread_sigmask(int how, const sigset_t *restrict set,
+ static inline int
+ mythread_create(mythread *thread, void *(*func)(void *arg), void *arg)
+ {
+-	sigset_t old;
+-	sigset_t all;
++	_sigset_t old;
++	_sigset_t all;
+ 	sigfillset(&all);
+ 
+ 	mythread_sigmask(SIG_SETMASK, &all, &old);
+
+diff --git a/src/xz/signals.c b/src/xz/signals.c
+index 5387c424..45005100 100644
+--- a/src/xz/signals.c
++++ b/src/xz/signals.c
+@@ -25,7 +25,7 @@ static volatile sig_atomic_t exit_signal = 0;
+ 
+ /// Mask of signals for which have have established a signal handler to set
+ /// user_abort to true.
+-static sigset_t hooked_signals;
++static _sigset_t hooked_signals;
+ 
+ /// True once signals_init() has finished. This is used to skip blocking
+ /// signals (with uninitialized hooked_signals) if signals_block() and

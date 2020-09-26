@@ -29,7 +29,6 @@ endef
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \
         -DCMAKE_RELEASE_POSTFIX='' \
-        -DBoost_THREADAPI=win32 \
         -DCMAKE_CXX_STANDARD=98
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1 || $(MAKE) -C '$(BUILD_DIR)' -j 1 VERBOSE=1
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install VERBOSE=1

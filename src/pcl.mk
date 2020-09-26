@@ -30,7 +30,6 @@ define $(PKG)_BUILD
         CXXFLAGS="-D__FLOAT_H -DFLT_MAX=__FLT_MAX__ -DFLT_MIN=__FLT_MIN__ -DDBL_MAX=__DBL_MAX__ -DDBL_MIN=__DBL_MIN__ -DDBL_EPSILON=__DBL_EPSILON__" \
         '$(TARGET)-cmake' '$(SOURCE_DIR)' \
         -DCMAKE_RELEASE_POSTFIX='' \
-        -DBoost_THREADAPI=win32 \
         -DPCL_SHARED_LIBS=$(CMAKE_SHARED_BOOL) \
         -DBUILD_TESTS=OFF \
         -DBUILD_apps=OFF \

@@ -24,7 +24,6 @@ define $(PKG)_BUILD
         --enable-win32-relocatable \
         --disable-curses \
         --disable-dlopen \
-        --disable-pthreads \
         CPPFLAGS='-DENABLE_W32_PREFIX=1'
 
     # fix undefined reference to `libintl_dgettext'
