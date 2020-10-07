@@ -86,10 +86,10 @@ Subject: [PATCH 3/4] do not try to use mman.h (package mman-win32)
 fix https://github.com/mxe/mxe/issues/1455
 
 diff --git a/poppler/CairoFontEngine.cc b/poppler/CairoFontEngine.cc
-index 1111111..2222222 100644
+index 1111111..2222222 100755
 --- a/poppler/CairoFontEngine.cc
 +++ b/poppler/CairoFontEngine.cc
-@@ -51,13 +51,6 @@
+@@ -53,13 +53,6 @@
  #include "Gfx.h"
  #include "Page.h"
  
