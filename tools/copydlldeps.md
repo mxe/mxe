@@ -78,6 +78,6 @@ They are NOT recursively copied, only flat. See:
     string=$( find $enforcedDirectory -maxdepth 1 -iregex '.*\(dll\|exe\)' | tr '\n' ' ' )
 ```
 
-If you would remove the `-maxdepth 1`, it would become recoursive.
+If you would remove the `-maxdepth 1`, it would become recursive.
 
 February, 2, 2016. Lars Holger Engelhard aka [DL5RCW](https://github.com/dl5rcw).
