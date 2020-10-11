@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Gregorio Litenstein <g.litenstein@gmail.com>
 Date: Thu, 31 Aug 2017 18:27:53 -0300
-Subject: [PATCH 1/3] patch-1 for opencv-3.3.0
+Subject: [PATCH 1/4] patch-1 for opencv-3.3.0
 
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
@@ -138,7 +138,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Gregorio Litenstein <g.litenstein@gmail.com>
 Date: Thu, 31 Aug 2017 18:32:39 -0300
-Subject: [PATCH 2/3] patch 2 for opencv-3.3.0
+Subject: [PATCH 2/4] patch 2 for opencv-3.3.0
 
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
@@ -199,7 +199,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Gregorio Litenstein <g.litenstein@gmail.com>
 Date: Thu, 31 Aug 2017 18:35:23 -0300
-Subject: [PATCH 3/3] patch-3 for opencv-3.3.0
+Subject: [PATCH 3/4] patch-3 for opencv-3.3.0
 
 Originally From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
@@ -231,3 +231,36 @@ index 1111111..2222222 100644
          if(HAVE_${d} OR TARGET ${d})
            list(APPEND deps_${m} ${d})
          endif()
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Florian Jung <flo@windfis.ch>
+Date: Wed, 29 Jul 2020 18:51:55 +0200
+Subject: [PATCH 4/4] Fix build of grfmt_jpeg2000.cpp
+
+libjasper has recently changed `jas_matrix_get` from a macro to an inline function
+(389951d071 in https://github.com/jasper-software/jasper), causing the build to fail.
+
+See: https://github.com/opencv/opencv/pull/17983
+
+diff --git a/modules/imgcodecs/src/grfmt_jpeg2000.cpp b/modules/imgcodecs/src/grfmt_jpeg2000.cpp
+index 1111111..2222222 100644
+--- a/modules/imgcodecs/src/grfmt_jpeg2000.cpp
++++ b/modules/imgcodecs/src/grfmt_jpeg2000.cpp
+@@ -305,7 +305,7 @@ bool  Jpeg2KDecoder::readComponent8u( uchar *data, void *_buffer,
+ 
+     for( y = 0; y < yend - ystart; )
+     {
+-        jas_seqent_t* pix_row = &jas_matrix_get( buffer, y / ystep, 0 );
++        jas_seqent_t* pix_row = jas_matrix_getref( buffer, y / ystep, 0 );
+         uchar* dst = data + (y - yoffset) * step - xoffset;
+ 
+         if( xstep == 1 )
+@@ -369,7 +369,7 @@ bool  Jpeg2KDecoder::readComponent16u( unsigned short *data, void *_buffer,
+ 
+     for( y = 0; y < yend - ystart; )
+     {
+-        jas_seqent_t* pix_row = &jas_matrix_get( buffer, y / ystep, 0 );
++        jas_seqent_t* pix_row = jas_matrix_getref( buffer, y / ystep, 0 );
+         ushort* dst = data + (y - yoffset) * step - xoffset;
+ 
+         if( xstep == 1 )
