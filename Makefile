@@ -285,7 +285,7 @@ PKG_CHECKSUM = \
 CHECK_PKG_ARCHIVE = \
     $(if $($(1)_SOURCE_TREE),\
         $(PRINTF_FMT) '[local]' '$(1)' '$($(1)_SOURCE_TREE)' | $(RTRIM)\
-    $(else),$(if $(SKIP_CHECHSUM),true, \
+    $(else),$(if $(SKIP_CHECKSUM),true, \
         [ '$($(1)_CHECKSUM)' == "`$$(call PKG_CHECKSUM,$(1),$(2))`" ]\
     ))
 

@@ -71,7 +71,7 @@ check-update-package-%: UPDATE_DRYRUN = true
 check-update-package-%: update-package-% ;
 
 update-checksum-%: MXE_NO_BACKUP_DL = true
-update-checksum-%: SKIP_CHECHSUM = true
+update-checksum-%: SKIP_CHECKSUM = true
 update-checksum-%:
 	$(if $(call set_is_member,$*,$(PKGS)), \
 	    $(call DOWNLOAD_PKG_ARCHIVE,$*) && \
