@@ -14,7 +14,12 @@ $(PKG)_DEPS     := cc
 _march := x86_64
 
 define $(PKG)_BUILD
-    echo "Building in folder $(1) prefix=$(PREFIX)"
-    $(MAKE) -C '$(1)' -j '$(JOBS)' CC=$(TARGET)-gcc AR=$(TARGET)-ar OPTTARGET=$(_march)
-    $(MAKE) -C '$(1)' -j 1 install CC=$(TARGET)-gcc AR=$(TARGET)-ar OPTTARGET=$(_march) PREFIX=$(PREFIX)/$(TARGET)
+    $(MAKE) -C '$(1)' -j '$(JOBS)' CC=$(TARGET)-gcc AR=$(TARGET)-ar KERNEL_NAME=MINGW PREFIX=$(PREFIX)/$(TARGET)
+    $(MAKE) -C '$(1)' -j 1 lib$(PKG).pc CC=$(TARGET)-gcc AR=$(TARGET)-ar KERNEL_NAME=MINGW PREFIX=$(PREFIX)/$(TARGET)
+    $(MAKE) -C '$(1)' -j 1 install CC=$(TARGET)-gcc AR=$(TARGET)-ar KERNEL_NAME=MINGW PREFIX=$(PREFIX)/$(TARGET)
+
+    '$(TARGET)-gcc' \
+        -std=c89 -O3 -Wall -g -Iinclude -Isrc -pthread -march=x86-64  -Wextra -Wno-type-limits \
+        '$(PWD)/src/$(PKG)-test.c' -o '$(PREFIX)/$(TARGET)/bin/test-argon2.exe' \
+         -largon2
 endef
