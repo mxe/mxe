@@ -2,8 +2,8 @@
 
 PKG             := gdb
 $(PKG)_WEBSITE  := https://www.gnu.org/software/gdb/
-$(PKG)_VERSION  := 9.2
-$(PKG)_CHECKSUM := 360cd7ae79b776988e89d8f9a01c985d0b1fa21c767a4295e5f88cb49175c555
+$(PKG)_VERSION  := 10.1
+$(PKG)_CHECKSUM := f82f1eceeec14a3afa2de8d9b0d3c91d5a3820e23e0a01bbb70ef9f0276b62c0
 $(PKG)_SUBDIR   := gdb-$($(PKG)_VERSION)
 $(PKG)_FILE     := gdb-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://ftp.gnu.org/gnu/$(PKG)/$($(PKG)_FILE)
@@ -30,5 +30,5 @@ define $(PKG)_BUILD
 
     # executables are always static and we don't want the rest
      $(INSTALL) -m755 '$(BUILD_DIR)/gdb/gdb.exe'                 '$(PREFIX)/$(TARGET)/bin/'
-     $(INSTALL) -m755 '$(BUILD_DIR)/gdb/gdbserver/gdbserver.exe' '$(PREFIX)/$(TARGET)/bin/'
+     $(INSTALL) -m755 '$(BUILD_DIR)/gdbserver/gdbserver.exe' '$(PREFIX)/$(TARGET)/bin/'
 endef
