@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Thu, 2 Feb 2017 02:05:50 +1100
-Subject: [PATCH 1/2] allow native cpu detection when building with clang
+Subject: [PATCH 1/3] allow native cpu detection when building with clang
 
 function was disabled for non-gcc5 in:
 https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=b587c12551143c14f023860a1dbdf7316ae71f27;hp=43096b526a9f23008b9769372f11475ae63487bc
@@ -29,7 +29,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Fri, 6 Apr 2018 13:40:22 +1000
-Subject: [PATCH 2/2] remove hard-coded mingw from include path
+Subject: [PATCH 2/3] remove hard-coded mingw from include path
 
 
 diff --git a/gcc/config.gcc b/gcc/config.gcc
@@ -58,3 +58,55 @@ index 1111111..2222222 100644
  
  /* Output STRING, a string representing a filename, to FILE.
     We canonicalize it to be in Unix format (backslashes are replaced
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Liu Hao <lh_mouse@126.com>
+Date: Wed, 6 May 2020 21:49:18 +0800
+Subject: [PATCH 3/3] libgomp: Don't hard-code MS printf attributes
+
+Source: https://github.com/msys2/MINGW-packages/blob/9501ee2afc8d01dc7d85383e4b22e91c30d93ca7/mingw-w64-gcc/0020-libgomp-Don-t-hard-code-MS-printf-attributes.patch
+
+Following discussion at https://www.spinics.net/lists/gcchelp/msg51246.html
+
+diff --git a/libgomp/libgomp.h b/libgomp/libgomp.h
+index 1111111..2222222 100644
+--- a/libgomp/libgomp.h
++++ b/libgomp/libgomp.h
+@@ -69,6 +69,14 @@
+ # endif
+ #endif
+ 
++#include <stdio.h>
++#include <stdio.h>
++#ifdef __MINGW_PRINTF_FORMAT
++#define PRINTF_FORMAT __MINGW_PRINTF_FORMAT
++#else
++#define PRINTF_FORMAT printf
++#endif
++
+ #ifdef HAVE_ATTRIBUTE_VISIBILITY
+ # pragma GCC visibility push(hidden)
+ #endif
+@@ -110,7 +118,7 @@ extern void gomp_aligned_free (void *);
+ 
+ extern void gomp_vdebug (int, const char *, va_list);
+ extern void gomp_debug (int, const char *, ...)
+-	__attribute__ ((format (printf, 2, 3)));
++	__attribute__ ((format (PRINTF_FORMAT, 2, 3)));
+ #define gomp_vdebug(KIND, FMT, VALIST) \
+   do { \
+     if (__builtin_expect (gomp_debug_var, 0)) \
+@@ -123,11 +131,11 @@ extern void gomp_debug (int, const char
+   } while (0)
+ extern void gomp_verror (const char *, va_list);
+ extern void gomp_error (const char *, ...)
+-	__attribute__ ((format (printf, 1, 2)));
++	__attribute__ ((format (PRINTF_FORMAT, 1, 2)));
+ extern void gomp_vfatal (const char *, va_list)
+ 	__attribute__ ((noreturn));
+ extern void gomp_fatal (const char *, ...)
+-	__attribute__ ((noreturn, format (printf, 1, 2)));
++	__attribute__ ((noreturn, format (PRINTF_FORMAT, 1, 2)));
+ 
+ struct gomp_task;
+ struct gomp_taskgroup;
