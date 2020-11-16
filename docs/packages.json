@@ -269,7 +269,7 @@
     "lua": {"version": "5.3.3", "website": "https://www.lua.org/", "description": "Lua"},
     "luabind": {"version": "0.9.1", "website": "https://github.com/luabind/luabind", "description": "Luabind"},
     "luajit": {"version": "2.0.5", "website": "https://luajit.org/luajit.html", "description": "LuaJIT"},
-    "lz4": {"version": "1.9.2", "website": "https://github.com/lz4/lz4", "description": "lossless compression algorithm optimized for speed"},
+    "lz4": {"version": "1.9.3", "website": "https://github.com/lz4/lz4", "description": "lossless compression algorithm optimized for speed"},
     "lzma": {"version": "1900", "website": "https://www.7-zip.org/sdk.html", "description": "LZMA SDK"},
     "lzo": {"version": "2.10", "website": "https://www.oberhumer.com/opensource/lzo/", "description": ""},
     "matio": {"version": "1.5.2", "website": "https://sourceforge.net/projects/matio/", "description": ""},
