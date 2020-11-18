@@ -7,14 +7,14 @@ $(PKG)_GH_CONF  := libsndfile/libsndfile/releases,v,,,,.tar.bz2
 $(PKG)_DEPS     := cc flac ogg vorbis
 
 define $(PKG)_BUILD
-    cd '$(1)' && autoreconf -fi -IM4
-    cd '$(1)' && ./configure \
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS) \
         --disable-sqlite \
         --enable-external-libs \
         --disable-octave \
         --disable-alsa \
         --disable-shave \
-        LIBS="`$(TARGET)-pkg-config --libs vorbis ogg`"
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install $(MXE_DISABLE_CRUFT)
+        PKG_CONFIG='$(TARGET)-pkg-config'
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(MXE_DISABLE_CRUFT)
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install $(MXE_DISABLE_CRUFT)
 endef
