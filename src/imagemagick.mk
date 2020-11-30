@@ -19,7 +19,7 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' bin_PROGRAMS=
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install bin_PROGRAMS=
 
-    '$(TARGET)-g++' -Wall -Wextra -std=gnu++0x \
+    '$(TARGET)-g++' -Wall -Wextra -std=c++11 \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-imagemagick.exe' \
         `'$(TARGET)-pkg-config' Magick++ --cflags --libs`
 endef
