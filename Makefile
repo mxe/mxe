@@ -17,6 +17,7 @@ MXE_TARGETS        := i686-w64-mingw32.static
 
 DEFAULT_MAX_JOBS   := 6
 PRINTF_COL_1_WIDTH := 13
+DUMMY_PROXY        := 192.0.2.0
 SOURCEFORGE_MIRROR := downloads.sourceforge.net
 MXE_MIRROR         := https://mirror.mxe.cc/pkg
 PKG_MIRROR         := https://mxe-pkg.s3.amazonaws.com
@@ -684,7 +685,8 @@ ifeq ($(findstring darwin,$(BUILD)),)
     PRELOAD   := LD_PRELOAD='$(NONET_LIB)'
 else
     NONET_LIB := $(PREFIX)/$(BUILD)/lib/nonetwork.dylib
-    PRELOAD   := DYLD_FORCE_FLAT_NAMESPACE=1 DYLD_INSERT_LIBRARIES='$(NONET_LIB)'
+    PRELOAD   := DYLD_FORCE_FLAT_NAMESPACE=1 DYLD_INSERT_LIBRARIES='$(NONET_LIB)' \
+                 http_proxy=$(DUMMY_PROXY) https_proxy=$(DUMMY_PROXY)
     NONET_CFLAGS := -arch x86_64
 endif
 
