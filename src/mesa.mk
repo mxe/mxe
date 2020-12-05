@@ -1,10 +1,18 @@
+# This file is part of MXE. See LICENSE.md for licensing information.
+
 PKG             := mesa
-$(PKG)_VERSION  := 18.3.6
-$(PKG)_CHECKSUM := aaf17638dcf5a90b93b6389e152fdc9ef147768b09598f24d2c5cf482fcfc705
+$(PKG)_WEBSITE  := https://mesa3d.org
+$(PKG)_DESCR    := The Mesa 3D Graphics Library
+$(PKG)_VERSION  := 20.3.0
+$(PKG)_CHECKSUM := 2999738e888731531cd62b27519fa37566cc0ea2cd7d4d97f46abaa3e949c630
 $(PKG)_SUBDIR   := mesa-$($(PKG)_VERSION)
 $(PKG)_FILE     := mesa-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := ftp://ftp.freedesktop.org/pub/mesa/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc scons-local
+$(PKG)_URL      := https://archive.mesa3d.org/$($(PKG)_FILE)
+$(PKG)_DEPS     := cc $(BUILD)~python-mako scons-local
+
+define $(PKG)_UPDATE
+    $(call GET_LATEST_VERSION, https://archive.mesa3d.org, mesa-)
+endef
 
 define $(PKG)_BUILD
     $(SCONS_PREP)
