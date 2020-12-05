@@ -7,9 +7,8 @@ $(PKG)_URL      := ftp://ftp.freedesktop.org/pub/mesa/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc scons-local
 
 define $(PKG)_BUILD
-    mkdir -p '$(BUILD_DIR).scons'
-    $(call PREPARE_PKG_SOURCE,scons-local,'$(BUILD_DIR).scons')
-    cd '$(1)' && \
+    $(SCONS_PREP)
+    cd '$(SOURCE_DIR)' && \
     MINGW_PREFIX='$(TARGET)-' $(SCONS_LOCAL) \
         platform=windows \
         toolchain=crossmingw \
