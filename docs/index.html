@@ -552,8 +552,10 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     <p>
     MXE requires a recent Unix system where
     all components as stated in the table below
-    are installed. It also needs roughly 2 GiB of
-    RAM to link gcc and at least 700 MB of disk
+    are installed. It also needs
+    <a href="https://github.com/mxe/mxe/issues/1381#issuecomment-225459494">
+    roughly 2 GiB of RAM</a> (may fail on 32-bit systems)
+    to link gcc and at least 700 MB of disk
     space per target (counted with only gcc
     built).
     </p>
@@ -639,10 +641,6 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         <td>≥ 0.40</td>
     </tr>
     <tr>
-        <td><a href="https://en.wikipedia.org/wiki/C_standard_library">LibC</a> for 32-bit</td>
-        <td></td>
-    </tr>
-    <tr>
         <td><a href="https://www.gnu.org/software/libtool/">Libtool</a></td>
         <td>≥ 2.2</td>
     </tr>
@@ -708,12 +706,10 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     bzip2 \
     flex \
     g++ \
-    g++-multilib \
     gettext \
     git \
     gperf \
     intltool \
-    libc6-dev-i386 \
     libgdk-pixbuf2.0-dev \
     libltdl-dev \
     libssl-dev \
@@ -731,16 +727,6 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     unzip \
     wget \
     xz-utils</pre>
-
-    <p>
-    On 32-bit installs,
-    <pre>
-    g++-multilib
-    libc6-dev-i386
-    </pre>
-    are not required, however there are potential issues with
-    <a href="#issue-32-bit-systems">32-bit systems</a>.
-    </p>
 
     <p>
     Only the <a href="https://www.debian.org/releases/stable/">latest Debian stable series</a> is supported.
@@ -788,11 +774,6 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     unzip \
     wget \
     xz</pre>
-
-    <p>
-    On 64-bit Fedora,
-    there are <a href="#issue-non-multilib">issues without a 32-bit compiler</a>.
-    </p>
 
     <h3 id="requirements-freebsd">FreeBSD</h3>
 
@@ -848,21 +829,17 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     </p>
     <pre>export PATH=/usr/local/bin:$PATH</pre>
     <p>
-    On 64-bit FreeBSD,
-    there are <a href="#issue-non-multilib">issues without a 32-bit compiler</a>.
-    </p>
-    <p>
     <strong>N.B. FreeBSD is no longer fully supported</strong>
     </p>
     <p>
     to build the remainder of MXE, run:
     </p>
-    <pre>gmake EXCLUDE_PKGS='gtksourceviewmm2 ocaml% openexr pcl qtbase'</pre>
+    <pre>gmake EXCLUDE_PKGS='gtksourceviewmm2 openexr pcl qtbase'</pre>
     <p>
     to see a list of all dependent downstream packages that
     will be excluded, run:
     </p>
-    <pre>gmake show-downstream-deps-'gtksourceviewmm2 ocaml% openexr \
+    <pre>gmake show-downstream-deps-'gtksourceviewmm2 openexr \
                             pcl qtbase'</pre>
 
     <h3 id="requirements-frugalware">Frugalware</h3>
@@ -895,11 +872,6 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     wget \
     xz \
     xz-lzma</pre>
-
-    <p>
-    On 64-bit Frugalware,
-    there are <a href="#issue-non-multilib">issues without a 32-bit compiler</a>.
-    </p>
 
     <h3 id="requirements-gentoo">Gentoo</h3>
 
@@ -1039,19 +1011,6 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     wget \
     xz</pre>
 
-    <p>
-    On 32-bit installs,
-    <pre>
-    gcc-32bit
-    glibc-devel-32bit
-    libgcc46-32bit
-    libgomp46-32bit
-    libstdc++46-devel-32bit
-    </pre>
-    are not required, however there are potential issues with
-    <a href="#issue-32-bit-systems">32-bit systems</a>.
-    </p>
-
     <h3 id="requirements-void">Void</h3>
 
     <!-- https://voidlinux.org/packages/ -->
@@ -1114,25 +1073,6 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     MSDN Blog</a></li>
     </ul>
 
-    <h3 id="issue-32-bit-systems">Issues with 32-bit systems</h3>
-    32-bit systems
-    <a href="https://github.com/mxe/mxe/issues/1381#issuecomment-225459494">
-    may have insufficient virtual memory</a> to build all of MXE.
-
-    <h3 id="issue-non-multilib">Issues without a 32-bit compiler</h3>
-
-    <p>
-    Certain packages contain native tools that are
-    currently 32-bit only. In order to build these on a
-    64-bit system, multi-lib support must be enabled in the
-    compiler toolchain. However, not all operating systems
-    support this.
-    </p>
-    <p>
-    To build the remainder of MXE, specify the affected
-    packages to exclude:
-    </p>
-    <pre>make EXCLUDE_PKGS='ocaml%'</pre>
 </div>
 
 <div class="section">
@@ -1228,7 +1168,7 @@ local-pkg-list: $(LOCAL_PKG_LIST)</pre>
         <dd>
         build all packages excluding foo, bar, and all downstream
         packages that depend on them - mostly used when there are
-        <a href="#issue-non-multilib">known issues</a>
+        known issues
         </dd>
 
     <dt>make foo_SOURCE_TREE=/path/to/local/source</dt>
