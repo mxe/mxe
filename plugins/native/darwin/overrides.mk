@@ -8,11 +8,12 @@ $(foreach PKG,$(filter ocaml%,$(PKGS)),\
     $(foreach TGT,$(MXE_TARGETS),\
         $(eval $(PKG)_BUILD_$(TGT) :=)))
 
+# check-requirements is early in the dep chain
+check-requirements: disable-native-jre cc-wrapper
+
 # silence "install JDK" popups
 # move the rule to main Makefile if other systems abandon java
 # and conditionally include the dependency
-check-requirements: disable-native-jre
-
 .PHONY: disable-native-jre
 disable-native-jre:
 	@mkdir -p '$(PREFIX)/$(BUILD)/bin'
@@ -22,3 +23,14 @@ disable-native-jre:
 	) > '$(PREFIX)/$(BUILD)/bin/java'
 	@chmod 0755 '$(PREFIX)/$(BUILD)/bin/java'
 	@cp '$(PREFIX)/$(BUILD)/bin/java' '$(PREFIX)/$(BUILD)/bin/javac'
+
+# clang 12 has new errors
+.PHONY: cc-wrapper
+cc-wrapper:
+	@mkdir -p '$(PREFIX)/$(BUILD)/bin'
+	@( \
+	 echo '#!/bin/sh'; \
+	 echo '/usr/bin/cc -Wno-implicit-function-declaration "$$@"'; \
+	) > '$(PREFIX)/$(BUILD)/bin/cc'
+	@chmod 0755 '$(PREFIX)/$(BUILD)/bin/cc'
+	@cp '$(PREFIX)/$(BUILD)/bin/cc' '$(PREFIX)/$(BUILD)/bin/gcc'
