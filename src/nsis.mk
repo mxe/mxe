@@ -31,8 +31,7 @@ endef
 define $(PKG)_BUILD
     # scons supports -j option but nsis parallel build fails
     # nsis uses it's own BUILD_PREFIX which isn't user configurable
-    mkdir -p '$(BUILD_DIR).scons'
-    $(call PREPARE_PKG_SOURCE,scons-local,'$(BUILD_DIR).scons')
+    $(SCONS_PREP)
     $(if $(findstring x86_64-w64-mingw32,$(TARGET)),\
         $(SED) -i 's/pei-i386/pei-x86-64/' '$(1)/SCons/Config/linker_script' && \
         $(SED) -i 's/m_target_type=TARGET_X86ANSI/m_target_type=TARGET_AMD64/' '$(SOURCE_DIR)/Source/build.cpp')
