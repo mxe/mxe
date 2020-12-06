@@ -3,223 +3,54 @@ This file is part of MXE. See LICENSE.md for licensing information.
 Contains ad hoc patches for cross building.
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Harry Nakos <xnakos@gmail.com>
-Date: Tue, 16 Jun 2015 21:55:31 +0300
-Subject: [PATCH 1/5] Patch wscript to link to FLAC, vorbis, vorbisenc, and ogg
- libraries
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sun, 6 Dec 2020 13:52:43 +1100
+Subject: [PATCH 1/2] enable build without ASIO
 
-... which libsndfile is dependent on, since libsndfile will most probably
-have not been built statically linked to those libraries.
 
-diff --git a/example-clients/wscript b/example-clients/wscript
+diff --git a/windows/portaudio/JackPortAudioDevices.h b/windows/portaudio/JackPortAudioDevices.h
 index 1111111..2222222 100644
---- a/example-clients/wscript
-+++ b/example-clients/wscript
-@@ -41,6 +41,10 @@ def configure(conf):
-  
-     if conf.is_defined('HAVE_SNDFILE'):
-         conf.env['LIB_SNDFILE'] = ['sndfile']
-+        conf.env['LIB_FLAC'] = ['FLAC']
-+        conf.env['LIB_VORBIS'] = ['vorbis']
-+        conf.env['LIB_VORBISENC'] = ['vorbisenc']
-+        conf.env['LIB_OGG'] = ['ogg']
+--- a/windows/portaudio/JackPortAudioDevices.h
++++ b/windows/portaudio/JackPortAudioDevices.h
+@@ -24,7 +24,10 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ #include <string>
  
-     conf.check_cfg(package='celt', atleast_version='0.5.0', args='--cflags --libs', mandatory=False)
- 
-@@ -124,7 +128,7 @@ def build(bld):
-         if bld.env['IS_SUN']:
-             prog.use += ['RT', 'SNDFILE']
-         if bld.env['IS_WINDOWS']:
--            prog.uselib = ['SNDFILE']
-+            prog.uselib = ['SNDFILE', 'FLAC', 'VORBIS', 'VORBISENC', 'OGG']
-         prog.target = 'jack_rec'
- 
-     if bld.env['IS_LINUX'] or bld.env['IS_MACOSX']:
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Boris Nagaev <bnagaev@gmail.com>
-Date: Mon, 31 Aug 2015 23:39:35 +0200
-Subject: [PATCH 2/5] disable SIGQUIT and SIGHUP
-
-Windows doesn't have them.
-
-Fixed error:
-
-    ../example-clients/transport.c: In function 'main':
-    ../example-clients/transport.c:462:9: error: 'SIGQUIT' undeclared (first use in this function)
-      signal(SIGQUIT, signal_handler);
-             ^
-    ../example-clients/transport.c:462:9: note: each undeclared identifier is reported only once for each function it appears in
-    ../example-clients/transport.c:464:9: error: 'SIGHUP' undeclared (first use in this function)
-      signal(SIGHUP, signal_handler);
-             ^
-
-diff --git a/example-clients/transport.c b/example-clients/transport.c
-index 1111111..2222222 100644
---- a/example-clients/transport.c
-+++ b/example-clients/transport.c
-@@ -459,9 +459,13 @@ int main(int argc, char *argv[])
- 		return 1;
- 	}
- 
-+#ifndef _WIN32
- 	signal(SIGQUIT, signal_handler);
+ #include <portaudio.h>
++#ifdef HAVE_ASIO
+ #include <pa_asio.h>
 +#endif
- 	signal(SIGTERM, signal_handler);
-+#ifndef _WIN32
- 	signal(SIGHUP, signal_handler);
-+#endif
- 	signal(SIGINT, signal_handler);
++
  
- 	jack_on_shutdown(client, jack_shutdown, 0);
+ /*!
+ \brief A PortAudio Devices manager.
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Boris Nagaev <bnagaev@gmail.com>
-Date: Tue, 1 Sep 2015 22:59:47 +0200
-Subject: [PATCH 3/5] link transport.c -lreadline and -ltermcap
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sun, 6 Dec 2020 14:16:02 +1100
+Subject: [PATCH 2/2] disable examples and tools
 
-Fixed error:
 
-src/jack-3-add-lreadline-to-linkflags-of-transport.patch:
-
-    example-clients/transport.c.28.o:transport.c:(.text+0x2e0): undefined reference to `rl_cleanup_after_signal'
-    example-clients/transport.c.28.o:transport.c:(.text+0xa27): undefined reference to `rl_readline_name'
-    example-clients/transport.c.28.o:transport.c:(.text+0xa2d): undefined reference to `rl_completion_entry_function'
-    example-clients/transport.c.28.o:transport.c:(.text+0xa3e): undefined reference to `readline'
-    example-clients/transport.c.28.o:transport.c:(.text+0xa82): undefined reference to `add_history'
-
-diff --git a/example-clients/wscript b/example-clients/wscript
-index 1111111..2222222 100644
---- a/example-clients/wscript
-+++ b/example-clients/wscript
-@@ -49,12 +49,13 @@ def configure(conf):
-     conf.check_cfg(package='celt', atleast_version='0.5.0', args='--cflags --libs', mandatory=False)
- 
-     e = conf.check_cc(lib='readline', define_name="HAVE_READLINE", mandatory=False)
-+    e = conf.check_cc(lib='termcap', define_name="HAVE_TERMCAP", mandatory=False)
- 
-     # define_name="HAVE_READLINE" has no effect, LIB_READLINE is defined if readline is available
-     #if conf.is_defined('HAVE_READLINE'):
-     #    conf.env['LIB_READLINE'] = ['readline']
- 
--    conf.env['BUILD_EXAMPLE_CLIENT_TRANSPORT'] = bool(conf.env['LIB_READLINE'])
-+    conf.env['BUILD_EXAMPLE_CLIENT_TRANSPORT'] = bool(conf.env['LIB_READLINE']) and bool(conf.env['LIB_TERMCAP'])
- 
-     conf.env['BUILD_EXAMPLE_CLIENT_REC'] = conf.is_defined('HAVE_SNDFILE')
- 
-@@ -112,6 +113,7 @@ def build(bld):
-         if bld.env['IS_MACOSX']:
-             prog.use += ['READLINE']
-         prog.target = 'jack_transport'
-+        prog.use += ['READLINE', 'TERMCAP']
- 
-     if bld.env['BUILD_EXAMPLE_CLIENT_REC']:
-         prog = bld(features = 'c cprogram')
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Boris Nagaev <bnagaev@gmail.com>
-Date: Tue, 1 Sep 2015 22:23:51 +0200
-Subject: [PATCH 4/5] install jack libs to lib/jack/ instead of lib/
-
-Some Jack library names collide with other libraries,
-namely portaudio.
-
-When Jack is installed first time, it adds libportaudio.dll.a to
-usr/i686-w64-mingw32.static/lib/. Portaudio has library
-usr/i686-w64-mingw32.static/lib/libportaudio.a. When Jack is compiled
-second time, it uses its own libportaudio.dll.a instead of
-libportaudio.a from portaudio.
-
-Removing usr/i686-w64-mingw32.static/lib/libportaudio.dll.a fixes build of Jack.
-
-For i686-w64-mingw32.shared, this can't be fixed by just removing
-libportaudio.dll.a before building jack, because both portaudio and
-jack have file usr/i686-w64-mingw32.shared/lib/libportaudio.dll.a.
-Two packages must not have same file.
-
-jack's libraries should be installed to subdir of usr/<target>/lib/.
-
-Jack uses waf build system, which unpacks itself from file "waf".
-Installation path for lib*.dll.a (PREFIX + /lib) is hardcoded in waf:
-
-waflib/Tools/ccroot.py:
-
-    self.implib_install_task=self.bld.install_as('${PREFIX}/lib/%s'%implib.name,implib,self.env)
-
-The least ugly way to change subdir I can find is changing
-function do_install in InstallContext class. Other approaches
-either do not work or require changing contents of waflib
-(which is unpacked from "waf" file in run-time).
-
-This patch replaces paths like "lib/libjack.dll.a" with
-"lib/jack/libjack.dll.a", but doesn't replace
-"/lib/pkgconfig/jack.pc".
-
-diff --git a/jack.pc.in b/jack.pc.in
-index 1111111..2222222 100644
---- a/jack.pc.in
-+++ b/jack.pc.in
-@@ -7,5 +7,5 @@ server_libs=-L@LIBDIR@ -l@SERVERLIB@
- Name: jack
- Description: the Jack Audio Connection Kit: a low-latency synchronous callback-based media server
- Version: @JACK_VERSION@
--Libs: -L@LIBDIR@ -ljack
-+Libs: -L@LIBDIR@/jack -ljack
- Cflags: -I@INCLUDEDIR@
 diff --git a/wscript b/wscript
 index 1111111..2222222 100644
 --- a/wscript
 +++ b/wscript
-@@ -378,8 +378,13 @@ def configure(conf):
-             print(Logs.colors.NORMAL, end=' ')
-     print()
+@@ -288,9 +288,6 @@ def configure(conf):
+             conf.env['SYSTEMD_USER_UNIT_DIR'] = None
  
-+class MyInstallContext(InstallContext):
-+    def do_install(self, src, tgt, *args, **kvargs):
-+        tgt = str(tgt).replace('/lib/lib', '/lib/jack/lib')
-+        InstallContext.do_install(self, src, tgt, *args, **kvargs)
-+
- def init(ctx):
--    for y in (BuildContext, CleanContext, InstallContext, UninstallContext):
-+    for y in (BuildContext, CleanContext, MyInstallContext, UninstallContext):
-         name = y.__name__.replace('Context','').lower()
-         class tmp(y):
-             cmd = name + '_' + lib32
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Boris Nagaev <bnagaev@gmail.com>
-Date: Fri, 1 Jan 2016 15:21:46 +0300
-Subject: [PATCH 5/5] waf: disable function causing pickling errors
-
-According to Debian patch of py3cairo which also uses waf [1],
-
-80_fix pickle.patch:
-> during the build process, a context instance is pickled, or at
-> least attempted to be.  This fails because self.node_class is assigned to a
-> class which is nested inside the __init__() method.  Because Python cannot
-> find this class at unpickling time (i.e. it cannot be imported), Python
-> refuses to pickle the Context instance, leading to a FTBFS.  Since there's no
-> obvious reason why the class has to be so nested, moving it to a module
-> global solves the build failure.
-
-81_pickling again.patch:
-> follow up to 80_fix-pickle.patch.  just disable pickling
-> altogether since the previous patch doesn't really fix the problem, and not
-> storing the pickle seems to have no adverse effects on the build, while
-> avoiding the observed traceback.
-
-[1] https://sources.debian.org/patches/summary/py3cairo/1.10.0+dfsg-5/
-
-diff --git a/waf b/waf
-index 1111111..2222222 100755
---- a/waf
-+++ b/waf
-@@ -158,6 +158,8 @@ sys.path.insert(0, wafdir)
- if __name__ == '__main__':
- 	import waflib.extras.compat15
- 	from waflib import Scripting
-+	from waflib import Build
-+	Build.BuildContext.store = lambda self: True
- 	Scripting.waf_entry_point(cwd, VERSION, wafdir)
  
- #==>
+-    conf.recurse('example-clients')
+-    conf.recurse('tools')
+-
+     # test for the availability of ucontext, and how it should be used
+     for t in ['gp_regs', 'uc_regs', 'mc_gregs', 'gregs']:
+         fragment = '#include <ucontext.h>\n'
+@@ -812,9 +809,6 @@ def build(bld):
+ 
+     build_drivers(bld)
+ 
+-    bld.recurse('example-clients')
+-    bld.recurse('tools')
+-
+     if bld.env['IS_LINUX']:
+         bld.recurse('man')
+         bld.recurse('systemd')
