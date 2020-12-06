@@ -138,7 +138,7 @@
     "isl": {"version": "0.15", "website": "https://isl.gforge.inria.fr/", "description": "Integer Set Library"},
     "itk": {"version": "5.0.1", "website": "https://www.itk.org/", "description": "Insight Segmentation and Registration Toolkit (ITK)"},
     "itpp": {"version": "4.3.1", "website": "https://itpp.sourceforge.io/", "description": ""},
-    "jack": {"version": "1.9.10", "website": "https://jackaudio.org/", "description": "JACK Audio Connection Kit"},
+    "jack": {"version": "1.9.16", "website": "https://jackaudio.org/", "description": "JACK Audio Connection Kit"},
     "jansson": {"version": "2.12", "website": "http://www.digip.org/jansson/", "description": "Jansson"},
     "jasper": {"version": "2.0.22", "website": "https://www.ece.uvic.ca/~mdadams/jasper/", "description": "JasPer"},
     "jpeg": {"version": "9d", "website": "https://www.ijg.org/", "description": ""},
