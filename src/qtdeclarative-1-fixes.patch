@@ -1,0 +1,33 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Martchus <martchus@gmx.net>
+Date: Fri, 20 Nov 2020 18:32:31 +0100
+Subject: [PATCH 1/1] Disable d3d12 requiring fxc.exe
+
+* fxc.exe is not provided by WINE or mingw-w64 and hence not available
+  in our build environment
+* The version from https://github.com/mozilla/fxc2 builds but it does
+  not support all CLI options required by Qt's build system
+* The build error looks like this:
+  ```
+  make[5]: Entering directory '/build/mingw-w64-qt5-declarative/src/qtdeclarative-everywhere-src-5.15.2/build-i686-w64-mingw32-shared/src/plugins/scenegraph/d3d12'
+  fxc.exe /nologo /E VS_VertexColor /T vs_5_0 /Fh vs_vertexcolor.hlslh /build/mingw-w64-qt5-declarative/src/qtdeclarative-everywhere-src-5.15.2/src/plugins/scenegraph/d3d12/shaders/vertexcolor.hlsl
+  make[5]: fxc.exe: No such file or directory
+  make[5]: *** [Makefile.Release:233: vs_vertexcolor.hlslh] Error 127
+  ```
+taken from:
+https://aur.archlinux.org/cgit/aur.git/tree/0003-Disable-d3d12-requiring-fxc.exe.patch?h=mingw-w64-qt5-declarative
+
+diff --git a/src/plugins/scenegraph/scenegraph.pro b/src/plugins/scenegraph/scenegraph.pro
+index 1111111..2222222 100644
+--- a/src/plugins/scenegraph/scenegraph.pro
++++ b/src/plugins/scenegraph/scenegraph.pro
+@@ -1,5 +1,4 @@
+ TEMPLATE = subdirs
+ QT_FOR_CONFIG += quick
+-qtConfig(d3d12): SUBDIRS += d3d12
+ qtConfig(openvg): SUBDIRS += openvg
+ 
