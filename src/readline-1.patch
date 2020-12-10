@@ -3,14 +3,14 @@ This file is part of MXE. See LICENSE.md for licensing information.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Timothy Gu <timothygu99@gmail.com>
 Date: Tue, 30 Sep 2014 17:16:32 -0700
-Subject: [PATCH 1/1] Handle missing S_IS* macros more gracefully
+Subject: [PATCH 1/2] Handle missing S_IS* macros more gracefully
 
 
 diff --git a/colors.c b/colors.c
 index 1111111..2222222 100644
 --- a/colors.c
 +++ b/colors.c
-@@ -200,8 +200,10 @@ _rl_print_color_indicator (const char *f)
+@@ -207,8 +207,10 @@ _rl_print_color_indicator (const char *f)
  #endif
            if (is_colored (C_CAP) && 0) //f->has_capability)
              colored_filetype = C_CAP;
@@ -21,7 +21,7 @@ index 1111111..2222222 100644
            else if ((1 < astat.st_nlink) && is_colored (C_MULTIHARDLINK))
              colored_filetype = C_MULTIHARDLINK;
          }
-@@ -215,8 +217,10 @@ _rl_print_color_indicator (const char *f)
+@@ -222,8 +224,10 @@ _rl_print_color_indicator (const char *f)
              colored_filetype = C_STICKY_OTHER_WRITABLE;
            else
  #endif
@@ -94,7 +94,7 @@ index 1111111..2222222 100644
  #endif
  
  /*
-@@ -137,6 +151,8 @@
+@@ -157,6 +171,8 @@
  /* These are non-standard, but are used in builtins.c$symbolic_umask() */
  #define S_IRUGO		(S_IRUSR | S_IRGRP | S_IROTH)
  #define S_IWUGO		(S_IWUSR | S_IWGRP | S_IWOTH)
@@ -103,3 +103,25 @@ index 1111111..2222222 100644
 +#endif
  
  #endif /* _POSIXSTAT_H_ */
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Thu, 10 Dec 2020 10:21:04 +0100
+Subject: [PATCH 2/2] fix for mingw
+
+
+diff --git a/signals.c b/signals.c
+index 1111111..2222222 100644
+--- a/signals.c
++++ b/signals.c
+@@ -266,8 +266,10 @@ _rl_handle_signal (int sig)
+     case SIGQUIT:
+ #endif
+ 
++#if defined (HAVE_POSIX_SIGNALS)
+       if (block_sig)
+ 	sigprocmask (SIG_BLOCK, &set, &oset);
++#endif
+ 
+       rl_echo_signal_char (sig);
+       rl_cleanup_after_signal ();
