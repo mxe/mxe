@@ -7,7 +7,8 @@ $(PKG)_TARGETS := $(BUILD)
 
 PYTHON_SETUP_INSTALL = \
     cd '$(SOURCE_DIR)' && $(BUILD)-python$(PY_XY_VER) setup.py install \
-        --prefix='$(PREFIX)/$(TARGET)'
+        --prefix='$(PREFIX)/$(TARGET)' \
+        --install-lib='$(PREFIX)/$(TARGET)/lib/python$(PY_XY_VER)/site-packages'
 
 define $(PKG)_BUILD_$(BUILD)
     #create python wrapper in a directory which is in PATH
