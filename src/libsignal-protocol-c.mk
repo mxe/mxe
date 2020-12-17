@@ -4,8 +4,8 @@ PKG             := libsignal-protocol-c
 $(PKG)_WEBSITE  := https://github.com/signalapp/libsignal-protocol-c
 $(PKG)_DESCR    := libsignal-protocol-c
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.3.2
-$(PKG)_CHECKSUM := f3826f3045352e14027611c95449bfcfe39bfd3d093d578c70f70eee0c85000d
+$(PKG)_VERSION  := 2.3.3
+$(PKG)_CHECKSUM := c22e7690546e24d46210ca92dd808f17c3102e1344cd2f9a370136a96d22319d
 $(PKG)_GH_CONF  := signalapp/libsignal-protocol-c/tags, v
 $(PKG)_DEPS     := cc pthreads
 
