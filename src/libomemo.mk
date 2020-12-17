@@ -4,8 +4,8 @@ PKG             := libomemo
 $(PKG)_WEBSITE  := https://github.com/gkdr/libomemo
 $(PKG)_DESCR    := Implementation of OMEMO in C
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.6.1
-$(PKG)_CHECKSUM := 26e2ef3df93d9461ed6d62bbb495b8ac6de385ec7a5aa28ff28dd869ba908170
+$(PKG)_VERSION  := 0.7.0
+$(PKG)_CHECKSUM := 50c536546bbe29552b54a82673d47b1b843de20d2ad9861af9bbb520f80d9f57
 $(PKG)_GH_CONF  := gkdr/libomemo/tags, v
 $(PKG)_DEPS     := cc glib libgcrypt mxml sqlite
 
