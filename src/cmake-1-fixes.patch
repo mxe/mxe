@@ -28,7 +28,7 @@ diff --git a/Source/CPack/cmCPackNSISGenerator.cxx b/Source/CPack/cmCPackNSISGen
 index 1111111..2222222 100644
 --- a/Source/CPack/cmCPackNSISGenerator.cxx
 +++ b/Source/CPack/cmCPackNSISGenerator.cxx
-@@ -374,7 +374,9 @@ int cmCPackNSISGenerator::InitializeInternal()
+@@ -411,7 +411,9 @@ int cmCPackNSISGenerator::InitializeInternal()
    }
  #endif
  
