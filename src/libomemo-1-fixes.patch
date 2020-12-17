@@ -1,0 +1,23 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Pek <tehnick-8@yandex.ru>
+Date: Fri, 18 Dec 2020 01:09:24 +0300
+Subject: [PATCH 1/1] Fix LDFLAGS for build with MinGW
+
+
+diff --git a/Makefile b/Makefile
+index 1111111..2222222 100644
+--- a/Makefile
++++ b/Makefile
+@@ -48,7 +48,7 @@ CFLAGS += -std=c11 -Wall -Wextra -Wpedantic -Wstrict-overflow \
+ CPPFLAGS += -D_XOPEN_SOURCE=700 -D_DEFAULT_SOURCE
+ CFLAGS_CONVERSATIONS=$(CFLAGS) -DOMEMO_XMLNS='"eu.siacs.conversations.axolotl"' -DOMEMO_NS_SEPARATOR='"."' -DOMEMO_NS_NOVERSION
+ COVFLAGS = --coverage -O0 -g $(CFLAGS)
+-LDFLAGS += -pthread -ldl -lm $(PKGCFG_L)
++LDFLAGS += -pthread -lm $(PKGCFG_L)
+ TESTFLAGS = -lcmocka $(LDFLAGS)
+ 
+ all: $(BDIR)/libomemo-conversations.a shared
