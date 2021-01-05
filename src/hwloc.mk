@@ -4,8 +4,8 @@ PKG             := hwloc
 $(PKG)_WEBSITE  := https://www.open-mpi.org/projects/hwloc/
 $(PKG)_DESCR    := Portable Hardware Locality (hwloc)
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.2.0
-$(PKG)_CHECKSUM := ff6219c73e25d9930722e8f99ded0c72780a334aa525a8fee1ded0e953bec0fc
+$(PKG)_VERSION  := 2.4.0
+$(PKG)_CHECKSUM := 93dca5271f170ff9726f20042648de651920142ae23618a446a6ac3375b6d004
 $(PKG)_GH_CONF  := open-mpi/hwloc/tags, hwloc-
 $(PKG)_DEPS     := cc
 
