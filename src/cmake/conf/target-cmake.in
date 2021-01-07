@@ -6,7 +6,7 @@ echo "== Using MXE wrapper: @PREFIX@/bin/@TARGET@-cmake"
 POLICIES=(0017,0020)
 
 unset NO_MXE_TOOLCHAIN
-if echo -- "$@" | grep -Ewq "(--build|-E|--system-information)" ; then
+if echo -- "$@" | grep -Ewq "(--build|--install|-E|--system-information)" ; then
     NO_MXE_TOOLCHAIN=1
 fi
 if [[ "$NO_MXE_TOOLCHAIN" == "1" ]]; then
