@@ -1,23 +1,16 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := check
-$(PKG)_WEBSITE  := https://check.sourceforge.io/
+$(PKG)_WEBSITE  := https://libcheck.github.io/check/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.10.0
-$(PKG)_CHECKSUM := f5f50766aa6f8fe5a2df752666ca01a950add45079aa06416b83765b1cf71052
-$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_VERSION  := 0.15.2
+$(PKG)_CHECKSUM := a8de4e0bacfb4d76dd1c618ded263523b53b85d92a146d8835eb1a52932fa20a
+$(PKG)_GH_CONF  := libcheck/check/releases/latest
 $(PKG)_DEPS     := cc
 
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://sourceforge.net/projects/check/files/check/' | \
-    $(SED) -n 's,.*/projects/.*/\([0-9][^"]*\)/".*,\1,p' | \
-    head -1
-endef
-
 define $(PKG)_BUILD
-    cd '$(1)' && ./configure \
-        $(MXE_CONFIGURE_OPTS)
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install
+    cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \
+        -DBUILD_TESTING=OFF
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 endef
