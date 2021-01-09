@@ -20,6 +20,8 @@ endef
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS) \
+        --enable-static \
+        --disable-shared \
         --with-system-readline \
         --disable-gdbtk \
         --disable-tui \
