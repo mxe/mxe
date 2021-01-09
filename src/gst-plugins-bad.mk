@@ -3,8 +3,8 @@
 PKG             := gst-plugins-bad
 $(PKG)_WEBSITE  := https://gstreamer.freedesktop.org/modules/gst-plugins-bad.html
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.16.2
-$(PKG)_CHECKSUM := f1cb7aa2389569a5343661aae473f0a940a90b872001824bc47fa8072a041e74
+$(PKG)_VERSION  := 1.16.3
+$(PKG)_CHECKSUM := 84efe57011658f0a53a5d5b20f64ef109f5105dccb0808c21e069e946673514d
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://gstreamer.freedesktop.org/src/$(PKG)/$($(PKG)_FILE)
@@ -21,7 +21,7 @@ define $(PKG)_BUILD
         --disable-debug \
         --disable-examples \
         --disable-opengl
-    $(MAKE) -C '$(BUILD_DIR)' -j $(JOBS) LDFLAGS='-no-undefined'
+    $(MAKE) -C '$(BUILD_DIR)' -j $(JOBS) LDFLAGS='-no-undefined' CFLAGS='-DHAVE_AUDCLNT_STREAMOPTIONS'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
     # some .dlls are installed to lib - no obvious way to change
