@@ -17,7 +17,7 @@ define $(PKG)_UPDATE
     tail -1
 endef
 
-define $(PKG)_SCONS_OPTS
+define _$(PKG)_SCONS_OPTS
     XGCC_W32_PREFIX='$(TARGET)-' \
     PREFIX='$(PREFIX)/$(TARGET)' \
     `[ -d /usr/local/include ] && echo APPEND_CPPPATH=/usr/local/include` \
@@ -36,9 +36,9 @@ define $(PKG)_BUILD
         $(SED) -i 's/pei-i386/pei-x86-64/' '$(1)/SCons/Config/linker_script' && \
         $(SED) -i 's/m_target_type=TARGET_X86ANSI/m_target_type=TARGET_AMD64/' '$(SOURCE_DIR)/Source/build.cpp')
 
-    cd '$(SOURCE_DIR)' && $(SCONS_LOCAL) $($(PKG)_SCONS_OPTS) -j '$(JOBS)' -k || \
-    cd '$(SOURCE_DIR)' && $(SCONS_LOCAL) $($(PKG)_SCONS_OPTS) -j '$(JOBS)'
-    cd '$(SOURCE_DIR)' && $(SCONS_LOCAL) $($(PKG)_SCONS_OPTS) -j 1 install
+    cd '$(SOURCE_DIR)' && $(SCONS_LOCAL) $(PKG_SCONS_OPTS) -j '$(JOBS)' -k || \
+    cd '$(SOURCE_DIR)' && $(SCONS_LOCAL) $(PKG_SCONS_OPTS) -j '$(JOBS)'
+    cd '$(SOURCE_DIR)' && $(SCONS_LOCAL) $(PKG_SCONS_OPTS) -j 1 install
 
     $(INSTALL) -m755 '$(PREFIX)/$(TARGET)/bin/makensis' '$(PREFIX)/bin/$(TARGET)-makensis'
     '$(TARGET)-makensis' '$(SOURCE_DIR)/Examples/bigtest.nsi'

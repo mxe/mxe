@@ -23,7 +23,8 @@ define $(PKG)_BUILD
         machine=$(if $(findstring x86_64,$(TARGET)),x86_64,x86) \
         verbose=1 \
         build=release \
-        libgl-gdi
+        libgl-gdi \
+        $(PKG_SCONS_OPTS)
 
     for i in EGL GLES GLES2 GLES3 KHR; do \
         $(INSTALL) -d "$(PREFIX)/$(TARGET)/include/$$i"; \

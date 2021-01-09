@@ -24,3 +24,6 @@ SCONS_LOCAL = \
 SCONS_PREP = \
     mkdir -p '$(BUILD_DIR).scons' && \
     $(call PREPARE_PKG_SOURCE,scons-local,'$(BUILD_DIR).scons')
+PKG_SCONS_OPTS = \
+    $(_$(PKG)_SCONS_OPTS) \
+    $($(PKG)_SCONS_OPTS)
