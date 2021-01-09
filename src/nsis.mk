@@ -17,13 +17,15 @@ define $(PKG)_UPDATE
     tail -1
 endef
 
+# extra paths once for freebsd compatibility may no longer be relevant
+#    `[ -d /usr/local/include ] && echo APPEND_CPPPATH=/usr/local/include` \
+#    `[ -d /usr/local/lib ]     && echo APPEND_LIBPATH=/usr/local/lib` \
+
 define _$(PKG)_SCONS_OPTS
     XGCC_W32_PREFIX='$(TARGET)-' \
     PREFIX='$(PREFIX)/$(TARGET)' \
-    `[ -d /usr/local/include ] && echo APPEND_CPPPATH=/usr/local/include` \
-    `[ -d /usr/local/lib ]     && echo APPEND_LIBPATH=/usr/local/lib` \
-    $(if $(findstring x86_64-w64-mingw32,$(TARGET)),\
-        SKIPPLUGINS='System' TARGET_ARCH=amd64) \
+    TARGET_ARCH=$(if $(findstring x86_64,$(TARGET)),amd64,x86) \
+    LINKFLAGS="--oformat pei-$(if $(findstring x86_64,$(TARGET)),x86-64,i386)" \
     SKIPUTILS='MakeLangId,Makensisw,NSIS Menu,zip2exe' \
     NSIS_MAX_STRLEN=8192
 endef
@@ -32,10 +34,9 @@ define $(PKG)_BUILD
     # scons supports -j option but nsis parallel build fails
     # nsis uses it's own BUILD_PREFIX which isn't user configurable
     $(SCONS_PREP)
-    $(if $(findstring x86_64-w64-mingw32,$(TARGET)),\
-        $(SED) -i 's/pei-i386/pei-x86-64/' '$(1)/SCons/Config/linker_script' && \
-        $(SED) -i 's/m_target_type=TARGET_X86ANSI/m_target_type=TARGET_AMD64/' '$(SOURCE_DIR)/Source/build.cpp')
-
+    $(SED) -i 's/m_target_type=TARGET_X86ANSI/$(if $(findstring x86_64-w64,$(TARGET)), \
+         m_target_type=TARGET_AMD64/,m_target_type=TARGET_X86UNICODE/)' \
+         '$(SOURCE_DIR)/Source/build.cpp'
     cd '$(SOURCE_DIR)' && $(SCONS_LOCAL) $(PKG_SCONS_OPTS) -j '$(JOBS)' -k || \
     cd '$(SOURCE_DIR)' && $(SCONS_LOCAL) $(PKG_SCONS_OPTS) -j '$(JOBS)'
     cd '$(SOURCE_DIR)' && $(SCONS_LOCAL) $(PKG_SCONS_OPTS) -j 1 install
