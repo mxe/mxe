@@ -1,0 +1,20 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sun, 10 Jan 2021 11:25:42 +1100
+Subject: [PATCH 1/1] add deps and static flags
+
+
+diff --git a/src/lib/openjp2/libopenjp2.pc.cmake.in b/src/lib/openjp2/libopenjp2.pc.cmake.in
+index 1111111..2222222 100644
+--- a/src/lib/openjp2/libopenjp2.pc.cmake.in
++++ b/src/lib/openjp2/libopenjp2.pc.cmake.in
+@@ -12,3 +12,5 @@ Version: @OPENJPEG_VERSION@
+ Libs: -L${libdir} -lopenjp2
+ Libs.private: -lm
+ Cflags: -I${includedir}
++Cflags.private: -DOPJ_STATIC
++Requires: lcms2 libpng libtiff-4 zlib

@@ -17,4 +17,9 @@ define $(PKG)_BUILD
         -DBUILD_TESTING=OFF
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
+
+    '$(TARGET)-gcc' -Wall -Wextra \
+        '$(SOURCE_DIR)/tests/unit/testempty1.c' \
+        -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
+        `'$(TARGET)-pkg-config' libopenjp2 --cflags --libs`
 endef
