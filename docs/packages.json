@@ -476,7 +476,7 @@
     "vtk": {"version": "8.2.0", "website": "", "description": ""},
     "waf": {"version": "1.8.17", "website": "https://waf.io/", "description": "Waf: the meta build system"},
     "wavpack": {"version": "5.3.0", "website": "http://www.wavpack.com/", "description": "WavPack"},
-    "wget": {"version": "1.21", "website": "https://www.gnu.org/software/wget/", "description": ""},
+    "wget": {"version": "1.21.1", "website": "https://www.gnu.org/software/wget/", "description": ""},
     "widl": {"version": "8.0.0", "website": "https://www.winehq.org/docs/widl/", "description": "Wine IDL Compiler"},
     "winpcap": {"version": "4_1_3", "website": "https://www.winpcap.org/", "description": "WinPcap"},
     "wt": {"version": "4.3.1", "website": "https://www.webtoolkit.eu/", "description": "Wt"},
