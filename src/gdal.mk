@@ -75,7 +75,8 @@ define $(PKG)_BUILD
         --with-xml2='$(PREFIX)/$(TARGET)/bin/xml2-config' \
         --with-pg='$(PREFIX)/$(TARGET)/bin/pg_config' \
         CXXFLAGS='-D_WIN32_WINNT=0x0600' \
-        LIBS="-ljpeg -lsecur32 -lportablexdr `'$(TARGET)-pkg-config' --libs openssl libtiff-4 spatialite freexl armadillo`"
+        LIBS="-ljpeg -lsecur32 -lportablexdr `'$(TARGET)-pkg-config' --libs openssl libtiff-4 spatialite freexl armadillo`" \
+        $(PKG_CONFIGURE_OPTS)
 
     $(MAKE) -C '$(1)'       -j '$(JOBS)' lib-target
     # gdal doesn't have an install-strip target
