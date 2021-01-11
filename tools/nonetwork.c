@@ -5,11 +5,17 @@
 
 #include <errno.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 static void print_message() {
-    fflush(stderr);
-    fprintf(stderr, "\nDon't use network from MXE build rules!\n");
-    fflush(stderr);
+    if(getenv("MXE_SILENT_NO_NETWORK")) {
+    } else {
+        fflush(stderr);
+        fprintf(stderr, "\nDon't use network from MXE build rules!\n");
+        fprintf(stderr, "\tSilent mode for scripts reading stderr into variables:\n");
+        fprintf(stderr, "\t\tMXE_SILENT_NO_NETWORK= make ...\n");
+        fflush(stderr);
+    }
 }
 
 int connect(int sock, const void *addr, unsigned int len) {
