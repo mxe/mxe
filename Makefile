@@ -407,7 +407,7 @@ LIST_NMAX   = $(shell echo '$(strip $(1))' | tr ' ' '\n' | sort -n | tail -1)
 LIST_NMIN   = $(shell echo '$(strip $(1))' | tr ' ' '\n' | sort -n | head -1)
 
 NPROCS := $(shell nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 1)
-JOBS   := $(call LIST_NMIN, $(DEFAULT_MAX_JOBS) $(NPROCS))
+JOBS   ?= $(call LIST_NMIN, $(DEFAULT_MAX_JOBS) $(NPROCS))
 
 # Core packages.
 override MXE_PLUGIN_DIRS := $(realpath $(TOP_DIR)/src) $(MXE_PLUGIN_DIRS)
