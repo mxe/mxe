@@ -11,13 +11,14 @@ $(PKG)_DEPS     := cc bzip2 zlib
 define $(PKG)_BUILD
     # build and install the library
     cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \
+        -DCMAKE_INSTALL_INCLUDEDIR='$(PREFIX)/$(TARGET)/include/$(PKG)' \
         -DENABLE_GNUTLS=OFF \
         -DENABLE_OPENSSL=OFF \
         -DENABLE_COMMONCRYPTO=OFF
     $(MAKE) -C '$(BUILD_DIR)/lib' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)/lib' -j 1 install
 
-    $(INSTALL) -m644 '$(BUILD_DIR)/zipconf.h' '$(PREFIX)/$(TARGET)/include'
+    $(INSTALL) -m644 '$(BUILD_DIR)/zipconf.h' '$(PREFIX)/$(TARGET)/include/$(PKG)'
     $(INSTALL) -m644 '$(BUILD_DIR)/libzip.pc' '$(PREFIX)/$(TARGET)/lib/pkgconfig'
 
     '$(TARGET)-gcc' \
