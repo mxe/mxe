@@ -17,18 +17,24 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && chmod -R ugo+w .
-    cd '$(1)' && autoconf
-    cd '$(1)' && ./configure \
+    # gctp is also present in hdf-eos2 and some headers are also
+    # duplicated, so install to sub-directories
+    cd '$(SOURCE_DIR)' && chmod -R ugo+w .
+    cd '$(SOURCE_DIR)' && autoconf
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS) \
+        --includedir='$(PREFIX)/$(TARGET)/include/$(PKG)' \
+        --libdir='$(PREFIX)/$(TARGET)/lib/$(PKG)' \
         --enable-install-include
 
-    $(MAKE) -C '$(1)' -j '$(JOBS)'
-    $(MAKE) -C '$(1)' -j 1 install
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
     '$(TARGET)-gcc' \
-        -std=c99 -W -Wall -Werror -pedantic \
+        -std=c99 -W -Wall -pedantic \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
+        -I'$(PREFIX)/$(TARGET)/include/$(PKG)' \
+        -L'$(PREFIX)/$(TARGET)/lib/$(PKG)' \
         -lhe5_hdfeos -lhdf5_hl -lhdf5 -lz
 endef
 
