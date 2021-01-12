@@ -11,7 +11,7 @@ $(PKG)_DEPS     := cc bzip2 zlib
 define $(PKG)_BUILD
     # build and install the library
     cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \
-        -DCMAKE_INSTALL_INCLUDEDIR='$(PREFIX)/$(TARGET)/include/$(PKG)' \
+        -DCMAKE_INSTALL_INCLUDEDIR='include/$(PKG)' \
         -DENABLE_GNUTLS=OFF \
         -DENABLE_OPENSSL=OFF \
         -DENABLE_COMMONCRYPTO=OFF
@@ -22,7 +22,7 @@ define $(PKG)_BUILD
     $(INSTALL) -m644 '$(BUILD_DIR)/libzip.pc' '$(PREFIX)/$(TARGET)/lib/pkgconfig'
 
     '$(TARGET)-gcc' \
-        -W -Wall -Werror -ansi -pedantic \
+        -W -Wall -Werror -pedantic \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-libzip.exe' \
         `'$(TARGET)-pkg-config' libzip --cflags --libs`
 endef
