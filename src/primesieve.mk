@@ -22,6 +22,6 @@ define $(PKG)_BUILD
     '$(TARGET)-g++' \
         -W -Wall -Werror -std=c++0x -fopenmp \
         '$(SOURCE_DIR)/examples/cpp/count_primes.cpp' \
-        -o '$(PREFIX)/$(TARGET)/bin/test-fluidsynth.exe' \
+        -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
         `'$(TARGET)-pkg-config' --cflags --libs $(PKG)`
 endef
