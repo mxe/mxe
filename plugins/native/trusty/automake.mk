@@ -1,1 +1,0 @@
-../automake.mk
