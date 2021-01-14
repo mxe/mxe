@@ -11,6 +11,8 @@ $(PKG)_GH_CONF  := GNOME/libsoup/tags,,,pre\|SOUP\|base
 $(PKG)_DEPS     := cc glib libxml2 sqlite
 
 define $(PKG)_BUILD
+    # -fcommon for gcc10, remove at next update
+    # https://gcc.gnu.org/gcc-10/porting_to.html
     cd '$(SOURCE_DIR)' && \
         NOCONFIGURE=1 \
         ACLOCAL_FLAGS=-I'$(PREFIX)/$(TARGET)/share/aclocal' \
@@ -20,6 +22,7 @@ define $(PKG)_BUILD
         --disable-vala \
         --without-apache-httpd \
         --without-gssapi \
+        CFLAGS='-fcommon' \
         $(shell [ `uname -s` == Darwin ] && echo "INTLTOOL_PERL=/usr/bin/perl")
     $(MAKE) -C '$(BUILD_DIR)' -j $(JOBS)
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
