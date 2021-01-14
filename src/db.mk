@@ -4,8 +4,8 @@ PKG             := db
 $(PKG)_WEBSITE  := https://www.oracle.com/technetwork/database/database-technologies/berkeleydb/overview/index.html
 $(PKG)_DESCR    := Oracle Berkeley DB
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 6.1.26
-$(PKG)_CHECKSUM := dd1417af5443f326ee3998e40986c3c60e2a7cfb5bfa25177ef7cadb2afb13a6
+$(PKG)_VERSION  := 18.1.40
+$(PKG)_CHECKSUM := 0cecb2ef0c67b166de93732769abdeba0555086d51de1090df325e18ee8da9c8
 $(PKG)_SUBDIR   := db-$($(PKG)_VERSION)
 $(PKG)_FILE     := db-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://download.oracle.com/berkeley-db/$($(PKG)_FILE)
@@ -18,13 +18,14 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)/build_unix' && ../dist/configure \
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/dist/configure' \
         $(MXE_CONFIGURE_OPTS) \
         --enable-mingw \
         --enable-cxx \
         --enable-cryptography \
-        --disable-replication
-
-    $(MAKE) -C '$(1)/build_unix' -j '$(JOBS)'
-    $(MAKE) -C '$(1)/build_unix' -j 1 install $(MXE_DISABLE_DOCS)
+        --disable-replication \
+        --with-mutex=$(subst i686,x86,$(PROCESSOR))/gcc-assembly \
+        $(PKG_CONFIGURE_OPTS)
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' UTIL_PROGS=
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install_include install_lib
 endef
