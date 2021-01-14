@@ -4,35 +4,29 @@ PKG             := cryptopp
 $(PKG)_WEBSITE  := https://www.cryptopp.com/
 $(PKG)_DESCR    := Crypto++ Library
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.6.3
-$(PKG)_CHECKSUM := 9390670a14170dd0f48a6b6b06f74269ef4b056d4718a1a329f6f6069dc957c9
-$(PKG)_SUBDIR   :=
-$(PKG)_VERSIONF := $(shell echo $($(PKG)_VERSION) | tr -d .)
-$(PKG)_FILE     := $(PKG)$($(PKG)_VERSIONF).zip
-$(PKG)_URL      := $(SOURCEFORGE_MIRROR)/cryptopp/$($(PKG)_FILE)
-$(PKG)_URL_2    := https://www.cryptopp.com/$($(PKG)_FILE)
+$(PKG)_VERSION  := 8.4.0
+$(PKG)_CHECKSUM := 6687dfc1e33b084aeab48c35a8550b239ee5f73a099a3b6a0918d70b8a89e654
+$(PKG)_GH_CONF  := weidai11/cryptopp/tags,CRYPTOPP_,,,_
 $(PKG)_DEPS     := cc
 
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://www.cryptopp.com/' | \
-    $(SED) -n 's,<TITLE>Crypto++ Library \([0-9]\.[0-9]\.[0-9]\).*,\1,p'
-endef
-
 define $(PKG)_BUILD
-    cp '$(1)'config.recommend '$(1)'config.h
-    $(MAKE) -C '$(1)' -j '$(JOBS)' -f GNUmakefile \
+    $(MAKE) -C '$(SOURCE_DIR)' -j '$(JOBS)' -f GNUmakefile \
+        PREFIX='$(PREFIX)/$(TARGET)' \
         CC=$(TARGET)-gcc \
         CXX=$(TARGET)-g++ \
         RANLIB=$(TARGET)-ranlib \
         AR=$(TARGET)-ar \
         LD=$(TARGET)-ld \
         CXXFLAGS='-DNDEBUG -O3 -mtune=native -pipe' \
-        $(if $(BUILD_STATIC),libcryptopp.a,cryptopp.dll)
+        libcryptopp.a
 
-    $(INSTALL) -d '$(PREFIX)'/$(TARGET)/include/cryptopp
-    $(INSTALL) '$(1)'*.h '$(PREFIX)'/$(TARGET)/include/cryptopp
-    $(INSTALL) '$(1)'$(if $(BUILD_STATIC),libcryptopp.a,libcryptopp.dll.a) '$(PREFIX)'/$(TARGET)/lib
-    $(if $(BUILD_STATIC),,$(INSTALL) '$(1)'cryptopp.dll '$(PREFIX)'/$(TARGET)/bin)
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/include/cryptopp'
+    $(INSTALL) '$(SOURCE_DIR)/'*.h '$(PREFIX)/$(TARGET)/include/cryptopp'
+
+    $(if $(BUILD_STATIC),\
+        $(INSTALL) -m644 '$(SOURCE_DIR)/libcryptopp.a' '$(PREFIX)/$(TARGET)/lib/' \
+    $(else), \
+        $(MAKE_SHARED_FROM_STATIC) --ld '$(TARGET)-g++' '$(SOURCE_DIR)/libcryptopp.a')
 
     # create pkg-config file
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
