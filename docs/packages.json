@@ -463,7 +463,7 @@
     "ucl": {"version": "1.03", "website": "https://www.oberhumer.com/opensource/ucl/", "description": "UCL"},
     "unrtf": {"version": "0.21.9", "website": "https://www.gnu.org/software/unrtf/", "description": "unRTF"},
     "unzip": {"version": "6.10b", "website": "https://infozip.sourceforge.io/UnZip.html", "description": "Info-ZIP"},
-    "upx": {"version": "3.91", "website": "https://upx.github.io/", "description": "UPX"},
+    "upx": {"version": "3.96", "website": "https://upx.github.io/", "description": "UPX"},
     "vamp-plugin-sdk": {"version": "2.5", "website": "https://vamp-plugins.org/", "description": "Vamp Plugins SDK"},
     "vc": {"version": "1.3.3", "website": "https://github.com/VcDevel/Vc", "description": "SIMD Vector Classes for C++"},
     "vcdimager": {"version": "2.0.1", "website": "https://www.gnu.org/software/vcdimager/", "description": ""},
