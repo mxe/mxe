@@ -340,11 +340,71 @@ exit</pre>
     <h3 id="tutorial-3b">Step 3b: Install MXE from the binary distribution</h3>
 
     <p>
-    Instead of building MXE packages from source, you can
-    download precompiled packages. There are two options:
-    tar archives and Debian packages.
-    See <a href="https://pkg.mxe.cc/">pkg.mxe.cc</a>.
+    Instead of building MXE packages from source, you can install
+    packages from our APT repository for the following distros:
     </p>
+    <ul>
+    <li>Debian (stable and old stable)</li>
+    <li>Ubuntu LTS (at least two releases supported)</li>
+    </ul>
+    <p>
+    See the
+    <a href="https://pkg.mxe.cc/repos/apt/dists/">distro list</a>
+    for the current codenames.
+    </p>
+    <p>
+    Ensure required tools are available (usually installed by default):
+    </p>
+    <pre>sudo apt-get install \
+    software-properties-common \
+    lsb-release</pre>
+    <p>
+    Add and refresh MXE repository:
+    </p>
+    <pre>sudo apt-key adv \
+    --keyserver keyserver.ubuntu.com \
+    --recv-keys 86B72ED9 && \
+sudo add-apt-repository \
+    "deb [arch=amd64] https://pkg.mxe.cc/repos/apt `lsb_release -sc` main" && \
+sudo apt-get update</pre>
+    <p>
+    Note that all package and target names have underscores replaced with
+    dashes. For example:
+    </p>
+    <pre>apt-cache search mxe.*sdl_net</pre>
+    <p>
+    outputs:
+    </p>
+    <pre>mxe-i686-w64-mingw32.shared-sdl-net - MXE package sdl_net for i686-w64-mingw32.shared
+mxe-i686-w64-mingw32.static-sdl-net - MXE package sdl_net for i686-w64-mingw32.static
+mxe-x86-64-w64-mingw32.shared-sdl-net - MXE package sdl_net for x86_64-w64-mingw32.shared
+mxe-x86-64-w64-mingw32.static-sdl-net - MXE package sdl_net for x86_64-w64-mingw32.static</pre>
+    <p>
+    Install the basic cross-compiler:
+    </p>
+    <pre>sudo apt-get install \
+    mxe-{i686,x86-64}-w64-mingw32.{static,shared}-cc</pre>
+    <p>
+    Confirm installation (note standard MXE target naming for tools):
+    </p>
+    <pre>PATH=/usr/lib/mxe/usr/bin:$PATH \
+    x86_64-w64-mingw32.static-gcc --version</pre>
+    <p>
+    outputs:
+    </p>
+    <pre>x86_64-w64-mingw32.static-gcc (GCC) 5.5.0
+Copyright (C) 2015 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.</pre>
+    <p>
+    See the Lightspark project for examples of:
+    </p>
+    <ul>
+    <li><a href="https://github.com/lightspark/lightspark/blob/86275b12218b7aeaabdeece6d8f8d0c17e2ba843/.travis.yml#L34">
+    integration with CI system</a></li>
+    <li><a href="https://github.com/lightspark/lightspark/blob/86275b12218b7aeaabdeece6d8f8d0c17e2ba843/.travis.yml#L61">
+    adding modified source build to pre-built installation</a></li>
+    </ul>
 
     <h3 id="tutorial-4">Step 4: Environment Variables</h3>
 
@@ -734,10 +794,12 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <p>
     On 32-bit installs,
+    </p>
     <pre>
     g++-multilib
     libc6-dev-i386
     </pre>
+    <p>
     are not required, however there are potential issues with
     <a href="#issue-32-bit-systems">32-bit systems</a>.
     </p>
@@ -1041,6 +1103,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <p>
     On 32-bit installs,
+    </p>
     <pre>
     gcc-32bit
     glibc-devel-32bit
@@ -1048,6 +1111,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     libgomp46-32bit
     libstdc++46-devel-32bit
     </pre>
+    <p>
     are not required, however there are potential issues with
     <a href="#issue-32-bit-systems">32-bit systems</a>.
     </p>
