@@ -4,8 +4,8 @@ PKG             := qtsparkle
 $(PKG)_WEBSITE  := https://github.com/davidsansome/qtsparkle
 $(PKG)_DESCR    := Qt auto-updater lib
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4c852e5
-$(PKG)_CHECKSUM := 10a45b65f259db1c4984223c10e5b287f5d9c6e03bbc5dbea6d4fc44497108b2
+$(PKG)_VERSION  := fde631f
+$(PKG)_CHECKSUM := 54d0b386c2a975380afd31e915bb40e9e4fc943139d3d45b44fb2d74c35d8bc5
 $(PKG)_GH_CONF  := davidsansome/qtsparkle/branches/master
 $(PKG)_DEPS     := cc qttools
 
