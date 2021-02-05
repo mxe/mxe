@@ -4,8 +4,8 @@ PKG             := qca
 $(PKG)_WEBSITE  := https://userbase.kde.org/QCA
 $(PKG)_DESCR    := Qt Cryptographic Architecture
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.3.1
-$(PKG)_CHECKSUM := 4391a544521736986c7f7239168a2deced6a8b2445a8e114c6b47c49658e132d
+$(PKG)_VERSION  := 2.3.2
+$(PKG)_CHECKSUM := 800c7adfcb23c4688e19d2d2db98cd241e25abd61da6503dfbc033d684b12087
 $(PKG)_GH_CONF  := KDE/qca/tags,v
 $(PKG)_DEPS     := cc openssl qtbase
 
