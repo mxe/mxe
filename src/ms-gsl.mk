@@ -11,7 +11,7 @@ $(PKG)_DEPS     := cc
 $(PKG)_SUBDIR   := GSL-$($(PKG)_VERSION)
 
 define $(PKG)_BUILD
-    mkdir '$(1)/build'
-    cd '$1/build' && '$(TARGET)-cmake' -DGSL_TEST=0 .. 
-    $(MAKE) -C '$(1)/build' -j $(JOBS) install
+    '$(TARGET)-cmake' -S $(SOURCE_DIR) -B $(BUILD_DIR) -DGSL_TEST=0
+    $(MAKE) -C '$(BUILD_DIR)' -j $(JOBS)
+    $(MAKE) -C '$(BUILD_DIR)' install
 endef
