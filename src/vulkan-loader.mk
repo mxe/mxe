@@ -10,9 +10,9 @@ $(PKG)_GH_CONF  := KhronosGroup/Vulkan-Loader/releases,v
 $(PKG)_DEPS     := cc vulkan-headers
 
 define $(PKG)_BUILD
-    mkdir '$(1)/build'
-    cd '$1/build' && '$(TARGET)-cmake' .. \
+    '$(TARGET)-cmake' -S $(SOURCE_DIR) -B $(BUILD_DIR) \
         -DUSE_MASM=OFF \
         -DBUILD_TESTS=OFF
-    $(MAKE) -C '$(1)/build' -j $(JOBS) install
+    $(MAKE) -C '$(BUILD_DIR)' -j $(JOBS)
+    $(MAKE) -C '$(BUILD_DIR)' install
 endef
