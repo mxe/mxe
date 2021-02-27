@@ -22,6 +22,8 @@ define $(PKG)_BUILD
 
     # yasm is always static
     # build libyasm and tools
+    # autoreconf to update config.sub etc.
+    cd '$(SOURCE_DIR)' && autoreconf -fi
     cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS) \
         --disable-nls \
