@@ -13,8 +13,8 @@ $(PKG)_DEPS     := cc expat gettext mman-win32 zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://www.exiv2.org/download.html' | \
-    grep 'href="exiv2-' | \
-    $(SED) -n 's,.*exiv2-\([0-9][^>]*\)\.tar.*,\1,p' | \
+    grep 'href="builds/exiv2-' | \
+    $(SED) -n 's,.*exiv2-\([0-9][^>]*\)-Source\.tar.*,\1,p' | \
     head -1
 endef
 
