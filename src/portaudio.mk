@@ -3,8 +3,8 @@
 PKG             := portaudio
 $(PKG)_WEBSITE  := http://www.portaudio.com/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 190600_20161030
-$(PKG)_CHECKSUM := f5a21d7dcd6ee84397446fa1fa1a0675bb2e8a4a6dceb4305a8404698d8d1513
+$(PKG)_VERSION  := 190700_20210406
+$(PKG)_CHECKSUM := 47efbf42c77c19a05d22e627d42873e991ec0c1357219c0d74ce6a2948cb2def
 $(PKG)_SUBDIR   := portaudio
 $(PKG)_FILE     := pa_stable_v$($(PKG)_VERSION).tgz
 $(PKG)_URL      := http://files.portaudio.com/archives/$($(PKG)_FILE)
