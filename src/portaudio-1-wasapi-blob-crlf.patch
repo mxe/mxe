@@ -1,0 +1,38 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+This patch has been taken from:
+https://github.com/PortAudio/portaudio/pull/552
+
+
+From c6178e8592d936e246177a8991b75c9a043ccd00 Mon Sep 17 00:00:00 2001
+From: dmitrykos
+Date: Thu, 15 Apr 2021 11:39:02 +0300
+Subject: [PATCH] wasapi: Fixed compilation with MinGW (W64) when targeting
+ 32-bit platform
+
+
+diff --git a/src/hostapi/wasapi/pa_win_wasapi.c b/src/hostapi/wasapi/pa_win_wasapi.c
+index 23f41a1a..0b19084f 100644
+--- a/src/hostapi/wasapi/pa_win_wasapi.c
++++ b/src/hostapi/wasapi/pa_win_wasapi.c
+@@ -168,12 +168,14 @@
+         #include <oleidl.h>
+         #include <objidl.h>
+     #else
+-        typedef struct _BYTE_BLOB
+-        {
+-            unsigned long clSize;
+-            unsigned char abData[ 1 ];
+-        }     BYTE_BLOB;
+-        typedef /* [unique] */  __RPC_unique_pointer BYTE_BLOB *UP_BYTE_BLOB;
++        #ifndef _BLOB_DEFINED
++            typedef struct _BYTE_BLOB
++            {
++                unsigned long clSize;
++                unsigned char abData[ 1 ];
++            }     BYTE_BLOB;
++            typedef /* [unique] */  __RPC_unique_pointer BYTE_BLOB *UP_BYTE_BLOB;
++        #endif
+         typedef LONGLONG REFERENCE_TIME;
+         #define NONAMELESSUNION
+     #endif
