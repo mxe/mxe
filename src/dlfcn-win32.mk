@@ -4,9 +4,9 @@ PKG             := dlfcn-win32
 $(PKG)_WEBSITE  := https://github.com/dlfcn-win32/dlfcn-win32
 $(PKG)_DESCR    := POSIX dlfcn wrapper for Windows
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 7f1a5e5
-$(PKG)_CHECKSUM := 436e9468ff143472685aac42304e823395e0b358363f37ca92b74266485e3133
-$(PKG)_GH_CONF  := dlfcn-win32/dlfcn-win32/branches/master
+$(PKG)_VERSION  := 1.3.0
+$(PKG)_CHECKSUM := 24c69d43ddc9243fd2639a07495a7e0714278e8d3d0e124afdbab892dbb4a92d
+$(PKG)_GH_CONF  := dlfcn-win32/dlfcn-win32/tags, v
 $(PKG)_DEPS     := cc
 
 define $(PKG)_BUILD
@@ -21,7 +21,7 @@ define $(PKG)_BUILD
             --disable-static --enable-shared )
     $(MAKE) -C '$(SOURCE_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(SOURCE_DIR)' -j 1 install
-    $(MAKE) -C '$(SOURCE_DIR)' -j '$(JOBS)' test.exe testdll.dll
+    $(if $(BUILD_SHARED), $(MAKE) -C '$(SOURCE_DIR)' -j '$(JOBS)' test.exe testdll.dll)
 
     # create pkg-config file - mostly for psapi dependency
     mkdir -p '$(PREFIX)/$(TARGET)/lib/pkgconfig'
