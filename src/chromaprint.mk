@@ -4,17 +4,12 @@ PKG             := chromaprint
 $(PKG)_WEBSITE  := https://acoustid.org/chromaprint
 $(PKG)_DESCR    := Chromaprint
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.4.3
-$(PKG)_CHECKSUM := d4ae6596283aad7a015a5b0445012054c634a4b9329ecb23000cd354b40a283b
+$(PKG)_VERSION  := 1.5.0
+$(PKG)_CHECKSUM := 5c8e0d579cb3478900699110aa961c1552a422a18741cf67dd62136b1b877c7b
 $(PKG)_GH_CONF  := acoustid/chromaprint/tags, v
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_DEPS     := cc ffmpeg
-
-define $(PKG)_UPDATE
-    echo 'TODO: Updates for package chromaprint need to be written.' >&2;
-    echo $(chromaprint_VERSION)
-endef
 
 define $(PKG)_BUILD
     cd '$(1)' && '$(TARGET)-cmake'
