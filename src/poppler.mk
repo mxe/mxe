@@ -27,7 +27,7 @@ define $(PKG)_BUILD
         -DENABLE_CPP=ON \
         -DENABLE_GLIB=ON \
         -DENABLE_GOBJECT_INTROSPECTION=OFF \
-        -ENABLE_GTK_DOC=OFF \
+        -DENABLE_GTK_DOC=OFF \
         -DENABLE_QT5=ON \
         -DENABLE_LIBOPENJPEG=openjpeg2 \
         -DENABLE_CMS=lcms2 \
