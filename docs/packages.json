@@ -53,7 +53,7 @@
     "djvulibre": {"version": "3.5.27", "website": "https://djvu.sourceforge.io/", "description": "DjVuLibre"},
     "dlfcn-win32": {"version": "7f1a5e5", "website": "https://github.com/dlfcn-win32/dlfcn-win32", "description": "POSIX dlfcn wrapper for Windows"},
     "eigen": {"version": "3.3.7", "website": "https://eigen.tuxfamily.org/", "description": ""},
-    "exiv2": {"version": "0.25", "website": "https://www.exiv2.org/", "description": "Exiv2"},
+    "exiv2": {"version": "0.27.3", "website": "https://www.exiv2.org/", "description": "Exiv2"},
     "expat": {"version": "2.3.0", "website": "https://github.com/libexpat/libexpat", "description": "Expat XML Parser"},
     "faad2": {"version": "2.8.8", "website": "https://www.audiocoding.com/", "description": ""},
     "fdk-aac": {"version": "2.0.0", "website": "https://github.com/mstorsjo/fdk-aac", "description": "FDK-AAC"},
