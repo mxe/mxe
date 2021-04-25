@@ -1,0 +1,23 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sun, 25 Apr 2021 19:23:19 +1000
+Subject: [PATCH 1/1] fix windres whitespace handling
+
+
+diff --git a/ffbuild/common.mak b/ffbuild/common.mak
+index 1111111..2222222 100644
+--- a/ffbuild/common.mak
++++ b/ffbuild/common.mak
+@@ -82,7 +82,7 @@ COMPILE_NVCC = $(call COMPILE,NVCC)
+ 	-$(if $(ASMSTRIPFLAGS), $(STRIP) $(ASMSTRIPFLAGS) $@)
+ 
+ %.o: %.rc
+-	$(WINDRES) $(IFLAGS) --preprocessor "$(DEPWINDRES) -E -xc-header -DRC_INVOKED $(CC_DEPFLAGS)" -o $@ $<
++	$(WINDRES) $(IFLAGS) --preprocessor "$(DEPWINDRES)" $(addprefix --preprocessor-arg ,-E -xc-header -DRC_INVOKED $(CC_DEPFLAGS)) -o $@ $<
+ 
+ %.i: %.c
+ 	$(CC) $(CCFLAGS) $(CC_E) $<
