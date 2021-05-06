@@ -4,10 +4,10 @@ PKG             := qtwebkit
 $(PKG)_WEBSITE  := https://github.com/annulen/webkit
 $(PKG)_DESCR    := QtWebKit
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.13.1
-$(PKG)_CHECKSUM := f688e039e2bdc06e2e46680f3ef57715e1b7d6ea69fd76899107605a8f371ea3
-$(PKG)_SUBDIR   := qtwebkit-everywhere-src-$($(PKG)_VERSION)
-$(PKG)_FILE     := qtwebkit-everywhere-src-$($(PKG)_VERSION).tar.xz
+$(PKG)_VERSION  := 5.212
+$(PKG)_CHECKSUM := 10cbdaba60aac79d27016aa05bae9ab3ec7b0aed4df163debfbf8fddd66adc14
+$(PKG)_SUBDIR   := qtwebkit-opensource-src-$($(PKG)_VERSION)
+$(PKG)_FILE     := qtwebkit-opensource-src-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.qt.io/snapshots/ci/qtwebkit/5.212/latest/src/submodules/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc libxml2 libxslt libwebp qtbase qtmultimedia qtquickcontrols \
                    qtsensors qtwebchannel sqlite

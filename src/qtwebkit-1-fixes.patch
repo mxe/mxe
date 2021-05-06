@@ -5,22 +5,9 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Fri, 11 Jan 2019 18:02:55 +1100
-Subject: [PATCH 1/5] ad hoc fixes
+Subject: [PATCH 1/4] ad hoc fixes
 
 
-diff --git a/Source/JavaScriptCore/jsc.cpp b/Source/JavaScriptCore/jsc.cpp
-index 1111111..2222222 100644
---- a/Source/JavaScriptCore/jsc.cpp
-+++ b/Source/JavaScriptCore/jsc.cpp
-@@ -1714,7 +1714,7 @@ int main(int argc, char** argv)
-     fesetenv( &env );
- #endif
- 
--#if OS(WINDOWS) && (defined(_M_X64) || defined(__x86_64__))
-+#if OS(WINDOWS) && (defined(_M_X64) || defined(__x86_64__)) && !COMPILER(GCC)
-     // The VS2013 runtime has a bug where it mis-detects AVX-capable processors
-     // if the feature has been disabled in firmware. This causes us to crash
-     // in some of the math functions. For now, we disable those optimizations
 diff --git a/Source/JavaScriptCore/llint/LLIntOfflineAsmConfig.h b/Source/JavaScriptCore/llint/LLIntOfflineAsmConfig.h
 index 1111111..2222222 100644
 --- a/Source/JavaScriptCore/llint/LLIntOfflineAsmConfig.h
@@ -54,46 +41,6 @@ index 1111111..2222222 100644
      // I think that this does the equivalent of a dummy interlocked instruction,
      // instead of using the 'mfence' instruction, at least according to MSDN. I
      // know that it is equivalent for our purposes, but it would be good to
-diff --git a/Source/WTF/wtf/CurrentTime.cpp b/Source/WTF/wtf/CurrentTime.cpp
-index 1111111..2222222 100644
---- a/Source/WTF/wtf/CurrentTime.cpp
-+++ b/Source/WTF/wtf/CurrentTime.cpp
-@@ -91,6 +91,35 @@ static double lowResUTCTime()
- 
- #if USE(QUERY_PERFORMANCE_COUNTER)
- 
-+#if defined(_WIN32) && (defined(__x86_64__) || defined(_AMD64_)) && _WIN32_WINNT < 0x0600
-+/* GetTickCount64() is not available on XP. */
-+ULONGLONG GetTickCount64 ()
-+{
-+    static ULONGLONG (CALLBACK *DynGetTickCount64)() = (ULONGLONG (*)(void))-1;
-+    static DWORD last_ticks = 0;
-+    static DWORD n_overflow = 0;
-+    DWORD ticks = 0;
-+    HINSTANCE hKernel32;
-+
-+    if (DynGetTickCount64 == (void*)-1)
-+    {
-+        hKernel32 = GetModuleHandleW(L"KERNEL32");
-+        DynGetTickCount64 = *(ULONGLONG (*)(void))(GetProcAddress(hKernel32,
-+                                        "GetTickCount64"));
-+    }
-+    if (DynGetTickCount64 != (void*) NULL)
-+    {
-+        return DynGetTickCount64();
-+    }
-+
-+    ticks = GetTickCount();
-+    if (ticks < last_ticks)
-+        n_overflow++;
-+    last_ticks = ticks;
-+    return ((ULONGLONG)n_overflow << 32LL) + (ULONGLONG)GetTickCount();
-+}
-+#endif
-+
- static LARGE_INTEGER qpcFrequency;
- static bool syncedTime;
- 
 diff --git a/Source/WebCore/bindings/scripts/preprocess-idls.pl b/Source/WebCore/bindings/scripts/preprocess-idls.pl
 index 1111111..2222222 100644
 --- a/Source/WebCore/bindings/scripts/preprocess-idls.pl
@@ -110,45 +57,6 @@ index 1111111..2222222 100644
              $cygwinPathAdded = 1; 
          }
          chomp($path = `cygpath -u '$path'`);
-diff --git a/Source/WebCore/css/makeSelectorPseudoClassAndCompatibilityElementMap.py b/Source/WebCore/css/makeSelectorPseudoClassAndCompatibilityElementMap.py
-index 1111111..2222222 100644
---- a/Source/WebCore/css/makeSelectorPseudoClassAndCompatibilityElementMap.py
-+++ b/Source/WebCore/css/makeSelectorPseudoClassAndCompatibilityElementMap.py
-@@ -57,7 +57,7 @@ def enumerablePseudoType(stringPseudoType):
- def expand_ifdef_condition(condition):
-     return condition.replace('(', '_').replace(')', '')
- 
--output_file = open('SelectorPseudoClassAndCompatibilityElementMap.gperf', 'w')
-+output_file = open('SelectorPseudoClassAndCompatibilityElementMap.gperf', 'wb')
- 
- output_file.write("""
- %{
-diff --git a/Source/WebCore/css/makeSelectorPseudoElementsMap.py b/Source/WebCore/css/makeSelectorPseudoElementsMap.py
-index 1111111..2222222 100644
---- a/Source/WebCore/css/makeSelectorPseudoElementsMap.py
-+++ b/Source/WebCore/css/makeSelectorPseudoElementsMap.py
-@@ -57,7 +57,7 @@ def enumerablePseudoType(stringPseudoType):
- def expand_ifdef_condition(condition):
-     return condition.replace('(', '_').replace(')', '')
- 
--output_file = open('SelectorPseudoElementTypeMap.gperf', 'w')
-+output_file = open('SelectorPseudoElementTypeMap.gperf', 'wb')
- 
- output_file.write("""
- %{
-diff --git a/Source/WebCore/platform/network/create-http-header-name-table b/Source/WebCore/platform/network/create-http-header-name-table
-index 1111111..2222222 100755
---- a/Source/WebCore/platform/network/create-http-header-name-table
-+++ b/Source/WebCore/platform/network/create-http-header-name-table
-@@ -54,7 +54,7 @@ input_file.close()
- 
- http_header_names.sort()
- 
--gperf_file = open('HTTPHeaderNames.gperf', 'w')
-+gperf_file = open('HTTPHeaderNames.gperf', 'wb')
- gperf_file.write('''
- %{
- /*
 diff --git a/Source/cmake/ECMGeneratePriFile.cmake b/Source/cmake/ECMGeneratePriFile.cmake
 index 1111111..2222222 100644
 --- a/Source/cmake/ECMGeneratePriFile.cmake
@@ -183,24 +91,23 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Konstantin Tokarev <annulen@yandex.ru>
 Date: Fri, 3 Nov 2017 18:59:25 +0300
-Subject: [PATCH 2/5] Install private headers for WK2 and private .pri modules
+Subject: [PATCH 2/4] Install private headers for WK2 and private .pri modules
 
-Change-Id: Ie2f52c600180fd31cc5fac2f5d30952df28ea9d6
 
 diff --git a/Source/WebKit/PlatformQt.cmake b/Source/WebKit/PlatformQt.cmake
 index 1111111..2222222 100644
 --- a/Source/WebKit/PlatformQt.cmake
 +++ b/Source/WebKit/PlatformQt.cmake
-@@ -419,7 +419,7 @@ install(
+@@ -418,7 +418,7 @@ install(
      COMPONENT Data
  )
  
 -file(GLOB WebKit_PRIVATE_HEADERS qt/Api/*_p.h)
 +file(GLOB WebKit_PRIVATE_HEADERS qt/Api/*_p.h ../WebKit2/UIProcess/API/qt/*_p.h)
- install(
-     FILES
-         ${WebKit_PRIVATE_HEADERS}
-@@ -512,7 +512,7 @@ if (NOT MACOS_BUILD_FRAMEWORKS)
+ 
+ # This is needed to install WK2 private headers into macOS bundle
+ if (ENABLE_WEBKIT2)
+@@ -521,7 +521,7 @@ if (NOT MACOS_BUILD_FRAMEWORKS)
      install(FILES ${WebKit_PKGCONFIG_FILENAME} DESTINATION ${ECM_PKGCONFIG_INSTALL_DIR} COMPONENT Data)
  endif ()
  
@@ -209,7 +116,7 @@ index 1111111..2222222 100644
      set(WebKit_PRI_ARGUMENTS
          BIN_INSTALL_DIR "$$QT_MODULE_BIN_BASE"
          LIB_INSTALL_DIR "$$QT_MODULE_LIB_BASE"
-@@ -737,7 +737,7 @@ if (NOT MACOS_BUILD_FRAMEWORKS)
+@@ -751,7 +751,7 @@ if (NOT MACOS_BUILD_FRAMEWORKS)
      install(FILES ${WebKitWidgets_PKGCONFIG_FILENAME} DESTINATION ${ECM_PKGCONFIG_INSTALL_DIR} COMPONENT Data)
  endif ()
  
@@ -222,7 +129,7 @@ diff --git a/Source/cmake/WebKitMacros.cmake b/Source/cmake/WebKitMacros.cmake
 index 1111111..2222222 100644
 --- a/Source/cmake/WebKitMacros.cmake
 +++ b/Source/cmake/WebKitMacros.cmake
-@@ -265,8 +265,6 @@ macro(WEBKIT_FRAMEWORK _target)
+@@ -269,8 +269,6 @@ macro(WEBKIT_FRAMEWORK _target)
          ${${_target}_HEADERS}
          ${${_target}_SOURCES}
          ${${_target}_DERIVED_SOURCES}
@@ -235,7 +142,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Pek <tehnick-8@yandex.ru>
 Date: Fri, 11 Jan 2019 18:06:01 +1100
-Subject: [PATCH 3/5] cmake: fix Cflags sections in pkg-config files
+Subject: [PATCH 3/4] cmake: fix Cflags sections in pkg-config files
 
 
 diff --git a/Source/cmake/ECMGeneratePkgConfigFile.cmake b/Source/cmake/ECMGeneratePkgConfigFile.cmake
@@ -254,7 +161,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Pek <tehnick-8@yandex.ru>
 Date: Fri, 11 Jan 2019 18:07:10 +1100
-Subject: [PATCH 4/5] Fix cross-compilation using MinGW
+Subject: [PATCH 4/4] Fix cross-compilation using MinGW
 
 with USE_MEDIA_FOUNDATION=ON. (Part 1)
 
@@ -294,58 +201,3 @@ index 1111111..2222222 100644
  
  namespace WebCore {
  
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Konstantin Tokarev <annulen@yandex.ru>
-Date: Wed, 4 Mar 2020 19:51:10 +0300
-Subject: [PATCH 5/5] Get rid of qt_wrap_cpp()
-
-AUTOMOC can handle them better.
-
-Taken from:
-https://github.com/qtwebkit/qtwebkit/commit/41a05f881cf1af7bfe9197b2d833fdcd515e33dc.patch
-
-via:
-https://github.com/Vitozz/mxe/commit/e87a8b636ea11708260d5f39df7a621f0ce84e99
-Change-Id: Id930570fb587930e98b9979b6359ff5006941237
-
-diff --git a/Source/WebKit/PlatformQt.cmake b/Source/WebKit/PlatformQt.cmake
-index 1111111..2222222 100644
---- a/Source/WebKit/PlatformQt.cmake
-+++ b/Source/WebKit/PlatformQt.cmake
-@@ -289,10 +289,9 @@ if (ENABLE_GEOLOCATION)
- endif ()
- 
- if (USE_QT_MULTIMEDIA)
--    qt_wrap_cpp(WebKit WebKit_SOURCES
--        qt/Api/qwebfullscreenvideohandler.h
--    )
-     list(APPEND WebKit_SOURCES
-+        qt/Api/qwebfullscreenvideohandler.h
-+
-         qt/WebCoreSupport/FullScreenVideoQt.cpp
-     )
- endif ()
-diff --git a/Tools/QtTestBrowser/CMakeLists.txt b/Tools/QtTestBrowser/CMakeLists.txt
-index 1111111..2222222 100644
---- a/Tools/QtTestBrowser/CMakeLists.txt
-+++ b/Tools/QtTestBrowser/CMakeLists.txt
-@@ -25,6 +25,7 @@ set(QtTestBrowser_SOURCES
-     qttestbrowser.cpp
-     urlloader.cpp
-     utils.cpp
-+    webinspector.h
-     webpage.cpp
-     webview.cpp
- )
-@@ -44,10 +45,6 @@ set(QtTestBrowser_LIBRARIES
-     ${STATIC_LIB_DEPENDENCIES}
- )
- 
--qt_wrap_cpp(WebKit QtTestBrowser_SOURCES
--    webinspector.h
--)
--
- qt5_add_resources(QtTestBrowser_SOURCES
-     QtTestBrowser.qrc
- )
