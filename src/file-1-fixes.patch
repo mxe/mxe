@@ -3,99 +3,81 @@ This file is part of MXE. See LICENSE.md for licensing information.
 Contains ad hoc patches for cross building.
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Christos Zoulas <christos@zoulas.com>
-Date: Sat, 18 Nov 2017 22:17:57 +1100
-Subject: [PATCH 1/1] PR/466: Windows fixes.
+From: Jonas Kvinge <jonas@jkvinge.net>
+Date: Thu, 1 Apr 2021 03:41:56 +0200
+Subject: [PATCH 1/1] Remove use of fcntl F_SETFD for WIN32
 
-From https://github.com/file/file/commit/d5f2c28536f1645e3da25fa3f8da5a0a45404dc4.
 
+diff --git a/src/compress.c b/src/compress.c
+index 1111111..2222222 100644
+--- a/src/compress.c
++++ b/src/compress.c
+@@ -858,9 +858,14 @@ uncompressbuf(int fd, size_t bytes_max, size_t method, const unsigned char *old,
+ 	 * and both must have large outputs. Thus it happens not that often).
+ 	 * To avoid this, be sure to create pipes with O_CLOEXEC.
+ 	 */
++#ifdef WIN32
++	if ((fd == -1 && pipe(fdp[STDIN_FILENO]) == -1) ||
++	    pipe(fdp[STDOUT_FILENO]) == -1 || pipe(fdp[STDERR_FILENO]) == -1) {
++#else
+ 	if ((fd == -1 && file_pipe_closexec(fdp[STDIN_FILENO]) == -1) ||
+ 	    file_pipe_closexec(fdp[STDOUT_FILENO]) == -1 ||
+ 	    file_pipe_closexec(fdp[STDERR_FILENO]) == -1) {
++#endif
+ 		closep(fdp[STDIN_FILENO]);
+ 		closep(fdp[STDOUT_FILENO]);
+ 		return makeerror(newch, n, "Cannot create pipe, %s",
 diff --git a/src/file.h b/src/file.h
 index 1111111..2222222 100644
 --- a/src/file.h
 +++ b/src/file.h
-@@ -44,9 +44,11 @@
-     #define SIZE_T_FORMAT ""
-   #endif
-   #define INT64_T_FORMAT "I64"
-+  #define INTMAX_T_FORMAT "I64"
- #else
-   #define SIZE_T_FORMAT "z"
-   #define INT64_T_FORMAT "ll"
-+  #define INTMAX_T_FORMAT "j"
- #endif
+@@ -550,8 +550,10 @@ protected char * file_printable(char *, size_t, const char *, size_t);
+ protected int file_os2_apptype(struct magic_set *, const char *, const void *,
+     size_t);
+ #endif /* __EMX__ */
++#ifndef WIN32
+ protected int file_pipe_closexec(int *);
+ protected int file_clear_closexec(int);
++#endif
+ protected char *file_strtrim(char *);
  
- #include <stdio.h>	/* Include that here, to make sure __P gets defined */
-diff --git a/src/gmtime_r.c b/src/gmtime_r.c
+ protected void buffer_init(struct buffer *, int, const struct stat *,
+diff --git a/src/funcs.c b/src/funcs.c
 index 1111111..2222222 100644
---- a/src/gmtime_r.c
-+++ b/src/gmtime_r.c
-@@ -9,7 +9,7 @@ FILE_RCSID("@(#)$File: gmtime_r.c,v 1.1 2015/01/09 19:28:32 christos Exp $")
+--- a/src/funcs.c
++++ b/src/funcs.c
+@@ -809,6 +809,7 @@ file_print_guid(char *str, size_t len, const uint64_t *guid)
+ 	    g->data4[6], g->data4[7]);
+ }
  
- /* asctime_r is not thread-safe anyway */
- struct tm *
--gmtime_r(const time_t t, struct tm *tm)
-+gmtime_r(const time_t *t, struct tm *tm)
++#ifndef WIN32
+ protected int
+ file_pipe_closexec(int *fds)
  {
- 	struct tm *tmp = gmtime(t);
- 	if (tmp == NULL)
-diff --git a/src/localtime_r.c b/src/localtime_r.c
-index 1111111..2222222 100644
---- a/src/localtime_r.c
-+++ b/src/localtime_r.c
-@@ -9,7 +9,7 @@ FILE_RCSID("@(#)$File: localtime_r.c,v 1.1 2015/01/09 19:28:32 christos Exp $")
+@@ -827,6 +828,7 @@ protected int
+ file_clear_closexec(int fd) {
+ 	return fcntl(fd, F_SETFD, 0);
+ }
++#endif
  
- /* asctime_r is not thread-safe anyway */
- struct tm *
--localtime_r(const time_t t, struct tm *tm)
-+localtime_r(const time_t *t, struct tm *tm)
- {
- 	struct tm *tmp = localtime(t);
- 	if (tmp == NULL)
+ protected char *
+ file_strtrim(char *str)
+@@ -844,3 +846,4 @@ file_strtrim(char *str)
+ 	*++last = '\0';
+ 	return str;
+ }
++
 diff --git a/src/magic.c b/src/magic.c
 index 1111111..2222222 100644
 --- a/src/magic.c
 +++ b/src/magic.c
-@@ -137,6 +137,14 @@ _w32_get_magic_relative_to(char **hmagicpath, HINSTANCE module)
+@@ -461,7 +461,9 @@ file_or_fd(struct magic_set *ms, const char *inname, int fd)
+ 			goto done;
+ 		}
+ #if O_CLOEXEC == 0
++#ifndef WIN32
+ 		(void)fcntl(fd, F_SETFD, FD_CLOEXEC);
++#endif
+ #endif
+ 	}
  
- 	PathRemoveFileSpecA(dllpath);
- 
-+	if (module) {
-+		char exepath[MAX_PATH];
-+		GetModuleFileNameA(NULL, exepath, MAX_PATH);
-+		PathRemoveFileSpecA(exepath);
-+		if (stricmp(exepath, dllpath) == 0)
-+			goto out;
-+	}
-+
- 	sp = strlen(dllpath);
- 	if (sp > 3 && stricmp(&dllpath[sp - 3], "bin") == 0) {
- 		_w32_append_path(hmagicpath,
-diff --git a/src/readelf.c b/src/readelf.c
-index 1111111..2222222 100644
---- a/src/readelf.c
-+++ b/src/readelf.c
-@@ -1054,9 +1054,11 @@ doshn(struct magic_set *ms, int clazz, int swap, int fd, off_t off, int num,
- 		case SHT_NOTE:
- 			if (xsh_size + xsh_offset > (uintmax_t)fsize)  {
- 				if (file_printf(ms,
--				    ", note offset/size 0x%jx+0x%jx exceeds"
--				    " file size 0x%jx", (uintmax_t)xsh_offset,
--				    (uintmax_t)xsh_size, (uintmax_t)fsize) == -1)
-+				    ", note offset/size 0x%" INTMAX_T_FORMAT
-+				    "x+0x%" INTMAX_T_FORMAT "x exceeds"
-+				    " file size 0x%" INTMAX_T_FORMAT "x",
-+				    (uintmax_t)xsh_offset, (uintmax_t)xsh_size,
-+				    (uintmax_t)fsize) == -1)
- 					return -1;
- 				return 0; 
- 			}
-@@ -1065,7 +1067,8 @@ doshn(struct magic_set *ms, int clazz, int swap, int fd, off_t off, int num,
- 				    " for note");
- 				return -1;
- 			}
--			if (pread(fd, nbuf, xsh_size, xsh_offset) < (ssize_t)xsh_size) {
-+			if (pread(fd, nbuf, xsh_size, xsh_offset) <
-+			    (ssize_t)xsh_size) {
- 				file_badread(ms);
- 				free(nbuf);
- 				return -1;
