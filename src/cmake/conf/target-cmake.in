@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-echo "== Using MXE wrapper: @PREFIX@/bin/@TARGET@-cmake"
 
 # https://cmake.org/cmake/help/latest/manual/cmake-policies.7.html
 # https://cmake.org/cmake/help/latest/variable/CMAKE_POLICY_DEFAULT_CMPNNNN.html
@@ -10,10 +9,10 @@ if echo -- "$@" | grep -Ewq "(--build|--install|-E|--system-information)" ; then
     NO_MXE_TOOLCHAIN=1
 fi
 if [[ "$NO_MXE_TOOLCHAIN" == "1" ]]; then
-    echo "== Skip using MXE toolchain: @CMAKE_TOOLCHAIN_FILE@"
     # see https://github.com/mxe/mxe/issues/932
     exec "@PREFIX@/@BUILD@/bin/cmake" "$@"
 else
+    echo "== Using MXE wrapper: @PREFIX@/bin/@TARGET@-cmake"
     echo "     - cmake version @CMAKE_VERSION@"
     echo "     - warnings for unused CMAKE_POLICY_DEFAULT variables can be ignored"
     echo "== Using MXE toolchain: @CMAKE_TOOLCHAIN_FILE@"
