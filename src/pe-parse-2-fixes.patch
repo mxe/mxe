@@ -1,0 +1,168 @@
+From e3108f0a7453506cb9d765eca782a25f3370371d Mon Sep 17 00:00:00 2001
+From: Eric Kilmer <eric.d.kilmer@gmail.com>
+Date: Wed, 19 May 2021 15:41:49 -0400
+Subject: [PATCH 1/2] Fix peaddrconv example
+
+Add option to build examples with main CMake.
+
+Build examples in CI now.
+
+Add target alias with prefix for main pe-parse library.
+---
+ .github/workflows/ci.yml           |  2 ++
+ CMakeLists.txt                     |  6 ++++++
+ README.md                          |  4 ++++
+ examples/peaddrconv/CMakeLists.txt |  4 +++-
+ examples/peaddrconv/main.cpp       | 27 ++++++++++++++-------------
+ pe-parser-library/CMakeLists.txt   |  1 +
+ 6 files changed, 30 insertions(+), 14 deletions(-)
+
+diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+index 3b35eb4..93b71da 100644
+--- a/.github/workflows/ci.yml
++++ b/.github/workflows/ci.yml
+@@ -64,6 +64,7 @@ jobs:
+           -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} \
+           -DBUILD_SHARED_LIBS=${{ matrix.build-shared }} \
+           -DPEPARSE_ENABLE_TESTING=ON \
++          -DPEPARSE_ENABLE_EXAMPLES=ON \
+           ${SANITIZER_FLAG} \
+           ..
+         cmake --build .
+@@ -119,6 +120,7 @@ jobs:
+           -A ${{ matrix.build-arch }} `
+           -DBUILD_SHARED_LIBS=${{ matrix.build-shared }} `
+           -DPEPARSE_ENABLE_TESTING=ON `
++          -DPEPARSE_ENABLE_EXAMPLES=ON `
+           ..
+         cmake --build . --config ${{ matrix.build-type }}
+     - name: install
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index abccbe5..cb6600c 100755
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -64,6 +64,12 @@ message(STATUS "Build Shared: ${BUILD_SHARED_LIBS} ${BUILD_SHARED_LIBS_MESSAGE}"
+ message(STATUS "Build Command Line Tools: ${BUILD_COMMAND_LINE_TOOLS}")
+ message(STATUS "Install prefix: ${CMAKE_INSTALL_PREFIX}")
+ 
++option(PEPARSE_ENABLE_EXAMPLES "Enable building examples" OFF)
++if (PEPARSE_ENABLE_EXAMPLES)
++  message(STATUS "Building Examples")
++  add_subdirectory(examples)
++endif()
++
+ option(PEPARSE_ENABLE_TESTING "Enable building tests" OFF)
+ if (PEPARSE_ENABLE_TESTING)
+   enable_testing()
+diff --git a/README.md b/README.md
+index 6846fc5..d631edf 100644
+--- a/README.md
++++ b/README.md
+@@ -94,6 +94,10 @@ You can build the (catch2-based) tests by adding `-DPEPARSE_ENABLE_TESTING=ON` d
+ 
+ To run the full test suite with the [Corkami test suite](https://github.com/corkami/pocs/tree/master/PE), you must clone the submodule with `git submodule update --init`.
+ 
++## Examples
++
++You can build the included examples by adding `-DPEPARSE_ENABLE_EXAMPLES=ON` during CMake configuration.
++
+ ## Building with Sanitizers
+ 
+ If you are familiar with C++ sanitizers and any specific development environment requirements for them (compiler, instrumented standard library, etc.), you can choose to compile with any of the following sanitizers: `Address`, `HWAddress`, `Undefined`, `Memory`, `MemoryWithOrigins`, `Leak`, `Address,Undefined`.
+diff --git a/examples/peaddrconv/CMakeLists.txt b/examples/peaddrconv/CMakeLists.txt
+index fce13e1..99f05b3 100644
+--- a/examples/peaddrconv/CMakeLists.txt
++++ b/examples/peaddrconv/CMakeLists.txt
+@@ -35,7 +35,9 @@ else ()
+   endif ()
+ endif ()
+ 
+-find_package(pe-parse REQUIRED)
++if (NOT TARGET pe-parse::pe-parse)
++  find_package(pe-parse REQUIRED)
++endif()
+ 
+ add_executable(${PROJECT_NAME} main.cpp)
+ target_link_libraries(${PROJECT_NAME} pe-parse::pe-parse)
+diff --git a/examples/peaddrconv/main.cpp b/examples/peaddrconv/main.cpp
+index 67d727c..09c8a51 100644
+--- a/examples/peaddrconv/main.cpp
++++ b/examples/peaddrconv/main.cpp
+@@ -53,11 +53,12 @@ bool convertAddress(ParsedPeRef &pe,
+     std::uintptr_t highest_offset;
+   };
+ 
+-  auto L_getSectionAddressLimits = [](void *N,
+-                                      peparse::VA secBase,
+-                                      std::string &secName,
+-                                      peparse::image_section_header s,
+-                                      peparse::bounded_buffer *data) -> int {
++  auto L_getSectionAddressLimits =
++      [](void *N,
++         const peparse::VA &secBase,
++         const std::string &secName,
++         const peparse::image_section_header &s,
++         const peparse::bounded_buffer *data) -> int {
+     static_cast<void>(secBase);
+     static_cast<void>(secName);
+     static_cast<void>(data);
+@@ -113,10 +114,10 @@ bool convertAddress(ParsedPeRef &pe,
+         };
+ 
+         auto L_inspectSection = [](void *N,
+-                                   peparse::VA secBase,
+-                                   std::string &secName,
+-                                   peparse::image_section_header s,
+-                                   peparse::bounded_buffer *data) -> int {
++                                   const peparse::VA &secBase,
++                                   const std::string &secName,
++                                   const peparse::image_section_header &s,
++                                   const peparse::bounded_buffer *data) -> int {
+           static_cast<void>(secBase);
+           static_cast<void>(secName);
+           static_cast<void>(data);
+@@ -186,10 +187,10 @@ bool convertAddress(ParsedPeRef &pe,
+         };
+ 
+         auto L_inspectSection = [](void *N,
+-                                   peparse::VA secBase,
+-                                   std::string &secName,
+-                                   peparse::image_section_header s,
+-                                   peparse::bounded_buffer *data) -> int {
++                                   const peparse::VA &secBase,
++                                   const std::string &secName,
++                                   const peparse::image_section_header &s,
++                                   const peparse::bounded_buffer *data) -> int {
+           static_cast<void>(secBase);
+           static_cast<void>(secName);
+           static_cast<void>(data);
+diff --git a/pe-parser-library/CMakeLists.txt b/pe-parser-library/CMakeLists.txt
+index 1962f79..cfa0c0c 100644
+--- a/pe-parser-library/CMakeLists.txt
++++ b/pe-parser-library/CMakeLists.txt
+@@ -25,6 +25,7 @@ else()
+ endif()
+ 
+ add_library(${PROJECT_NAME} ${PEPARSERLIB_SOURCEFILES})
++add_library(pe-parse::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
+ 
+ if(PEPARSE_LIBRARY_WARNINGS)
+ 	target_compile_definitions(${PROJECT_NAME} PRIVATE PEPARSE_LIBRARY_WARNINGS=1)
+
+From cf2fe5428b41a3a22beb1a30e90fb03c8c2db12f Mon Sep 17 00:00:00 2001
+From: Eric Kilmer <eric.d.kilmer@gmail.com>
+Date: Wed, 19 May 2021 15:47:20 -0400
+Subject: [PATCH 2/2] Add missing CMakeLists.txt file to examples dir
+
+---
+ examples/CMakeLists.txt | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 examples/CMakeLists.txt
+
+diff --git a/examples/CMakeLists.txt b/examples/CMakeLists.txt
+new file mode 100644
+index 0000000..8cf9710
+--- /dev/null
++++ b/examples/CMakeLists.txt
+@@ -0,0 +1 @@
++add_subdirectory(peaddrconv)

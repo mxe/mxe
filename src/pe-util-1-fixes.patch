@@ -1,0 +1,64 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Jonas Kvinge <jonas@jkvinge.net>
+Date: Thu, 12 Dec 2019 22:46:22 +0100
+Subject: [PATCH 1/1] Fix pe-parse
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -7,10 +7,14 @@ find_package(Boost 1.54
+     system # needed by filesystem, log
+     filesystem)
+ 
++include_directories(${Boost_INCLUDE_DIR})
++link_directories(${Boost_LIBRARY_DIR})
++
+ add_executable(peldd
+   peldd.cc
+   pe-parse/pe-parser-library/src/parse.cpp
+   pe-parse/pe-parser-library/src/buffer.cpp
++  pe-parse/pe-parser-library/src/unicode_codecvt.cpp
+   )
+ set_property(TARGET peldd PROPERTY INCLUDE_DIRECTORIES
+     ${CMAKE_CURRENT_SOURCE_DIR}/pe-parse/pe-parser-library/include)
+diff --git a/peldd.cc b/peldd.cc
+index 1111111..2222222 100644
+--- a/peldd.cc
++++ b/peldd.cc
+@@ -17,6 +17,7 @@
+ #include <stdexcept>
+ #include <stdlib.h>
+ #include <string.h>
++#include <vector>
+ 
+ #include <boost/filesystem.hpp>
+ #include <boost/algorithm/string/case_conv.hpp>
+@@ -40,7 +41,7 @@ struct section {
+ };
+ 
+ struct parsed_pe_internal {
+-  list<section>   secs;
++  std::vector<section>   secs;
+ };
+ 
+ #define READ_DWORD_NULL(b, o, inst, member)                                     \
+@@ -52,11 +53,8 @@ struct parsed_pe_internal {
+ 
+ // XXX library symbols are too generic
+ extern bool getHeader(bounded_buffer *file, pe_header &p, bounded_buffer *&rem);
+-extern bool getSections( bounded_buffer  *b, 
+-                  bounded_buffer  *fileBegin,
+-                  nt_header_32    &nthdr, 
+-                  list<section>   &secs);
+-extern bool getSecForVA(list<section> &secs, VA v, section &sec);
++extern bool getSections(bounded_buffer *b, bounded_buffer *fileBegin, nt_header_32 &nthdr, std::vector<section> &secs);
++extern bool getSecForVA(const std::vector<section> &secs, VA v, section &sec);
+ }
+ 
+ // most of the following function body is copied from ParsePEFromFile()
