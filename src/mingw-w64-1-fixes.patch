@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 29 Mar 2015 14:36:38 +0200
-Subject: [PATCH 1/1] workaround for -isystem flag messing up include order
+Subject: [PATCH 1/2] workaround for -isystem flag messing up include order
 
 https://bugzilla.redhat.com/show_bug.cgi?id=843436
 
@@ -29,3 +29,28 @@ index 1111111..2222222 100644
  	/* Addition rounds to 0: zero, 1: nearest, 2: +inf, 3: -inf, -1: unknown.  */
  	/* ??? This is supposed to change with calls to fesetround in <fenv.h>.  */
  	#undef FLT_ROUNDS
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Liu Hao <lh_mouse@126.com>
+Date: Sat, 10 Apr 2021 20:05:36 +0800
+Subject: [PATCH 2/2] crt: Undefine `__rdtsc` for GCC 11
+
+Signed-off-by: Liu Hao <lh_mouse@126.com>
+
+Taken from:
+https://github.com/mirror/mingw-w64/commit/6a0e9165008f731bccadfc41a59719cf7c8efc02
+
+diff --git a/mingw-w64-crt/intrincs/rdtsc.c b/mingw-w64-crt/intrincs/rdtsc.c
+index 1111111..2222222 100644
+--- a/mingw-w64-crt/intrincs/rdtsc.c
++++ b/mingw-w64-crt/intrincs/rdtsc.c
+@@ -6,6 +6,9 @@
+ 
+ #include <intrin.h>
+ 
++/* GCC 11 has this as a macro.  */
++#undef __rdtsc
++
+ /* Clang has support for MSVC builtins, GCC doesn't */
+ #ifndef __has_builtin
+   #define __has_builtin(x) 0
