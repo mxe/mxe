@@ -181,7 +181,7 @@
     "libffi": {"version": "3.2.1", "website": "https://sourceware.org/libffi/", "description": ""},
     "libftdi": {"version": "0.20", "website": "https://www.intra2net.com/en/developer/libftdi/index.php", "description": "LibFTDI"},
     "libftdi1": {"version": "1.4", "website": "https://www.intra2net.com/en/developer/libftdi/index.php", "description": "LibFTDI1"},
-    "libgcrypt": {"version": "1.9.2", "website": "https://directory.fsf.org/wiki/Libgcrypt", "description": ""},
+    "libgcrypt": {"version": "1.9.3", "website": "https://directory.fsf.org/wiki/Libgcrypt", "description": ""},
     "libgda": {"version": "4.2.13", "website": "https://www.gnome-db.org/", "description": ""},
     "libgdamm": {"version": "4.1.3", "website": "https://launchpad.net/libgdamm", "description": ""},
     "libgee": {"version": "0.20.1", "website": "https://wiki.gnome.org/Projects/Libgee", "description": ""},
