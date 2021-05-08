@@ -1,9 +1,9 @@
 This file is part of MXE. See LICENSE.md for licensing information.
 
-From 2c59523387b10937ff7d085bc34ec3df68805fea Mon Sep 17 00:00:00 2001
+From 4fe0644890b8d105ac46094a913b292386c1a67a Mon Sep 17 00:00:00 2001
 From: Ray Donnelly <mingw.android@gmail.com>
 Date: Wed, 26 Aug 2015 12:45:43 +0100
-Subject: [PATCH 1/2] cmake: Rearrange STATIC vs INTERFACE targets
+Subject: [PATCH 1/4] cmake: Rearrange STATIC vs INTERFACE targets
 
 Otherwise we attempt to add_library(Qt5::UiPlugin STATIC IMPORTED)
 for header-only modules when building Qt5 statically.
@@ -12,7 +12,7 @@ Source: https://git.io/vzWJz
 See also: https://github.com/mxe/mxe/issues/1185
 
 diff --git a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
-index 309798a767..18156cac9e 100644
+index db18dbece6..6b4457569d 100644
 --- a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
 +++ b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
 @@ -370,6 +370,9 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
@@ -36,18 +36,18 @@ index 309798a767..18156cac9e 100644
      add_library(Qt5::$${CMAKE_MODULE_NAME} SHARED IMPORTED)
  !!ENDIF
 -- 
-2.25.1
+2.30.2
 
 
-From c3fa97702a080eb1a931fd1f41f7a1dd5b775523 Mon Sep 17 00:00:00 2001
+From d9fd8ae37b97ee6d6ff428b2475ab97fa63deee6 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 11 Jun 2017 00:27:41 +0200
-Subject: [PATCH 2/2] use pkg-config for harfbuzz
+Subject: [PATCH 2/4] use pkg-config for harfbuzz
 
 Change-Id: Ia65cbb90fd180f1bc10ce077a9a8323a48e51421
 
 diff --git a/src/gui/configure.json b/src/gui/configure.json
-index 5ebcdb99b5..2553cb5cf6 100644
+index c8c4864eca..f56b2b94f7 100644
 --- a/src/gui/configure.json
 +++ b/src/gui/configure.json
 @@ -303,7 +303,8 @@
@@ -61,5 +61,110 @@ index 5ebcdb99b5..2553cb5cf6 100644
          },
          "imf": {
 -- 
-2.25.1
+2.30.2
+
+
+From e257e2e1b4fd7907dac0d4d56d05379eb973ce51 Mon Sep 17 00:00:00 2001
+From: Thiago Macieira <thiago.macieira@intel.com>
+Date: Mon, 18 Jan 2021 07:40:54 -0800
+Subject: [PATCH 3/4] Fix build with GCC 11: include <limits>
+
+Fixes: QTBUG-90395
+Change-Id: Iecc74d2000eb40dfbe7bfffd165b5dd3708b7a40
+(cherry picked from commit 9c56d4da2ff631a8c1c30475bd792f6c86bda53c)
+Reviewed-by: Edward Welbourne <edward.welbourne@qt.io>
+(cherry picked from commit b2af6332ea37e45ab230a7a5d2d278f86d961b83)
+
+diff --git a/src/corelib/global/qendian.h b/src/corelib/global/qendian.h
+index 257efbbdbe..339f53abb6 100644
+--- a/src/corelib/global/qendian.h
++++ b/src/corelib/global/qendian.h
+@@ -1,7 +1,7 @@
+ /****************************************************************************
+ **
+-** Copyright (C) 2016 The Qt Company Ltd.
+-** Copyright (C) 2016 Intel Corporation.
++** Copyright (C) 2021 The Qt Company Ltd.
++** Copyright (C) 2021 Intel Corporation.
+ ** Contact: https://www.qt.io/licensing/
+ **
+ ** This file is part of the QtCore module of the Qt Toolkit.
+@@ -44,6 +44,8 @@
+ #include <QtCore/qfloat16.h>
+ #include <QtCore/qglobal.h>
+ 
++#include <limits>
++
+ // include stdlib.h and hope that it defines __GLIBC__ for glibc-based systems
+ #include <stdlib.h>
+ #include <string.h>
+diff --git a/src/corelib/global/qfloat16.h b/src/corelib/global/qfloat16.h
+index c7a9c87af3..5302be072e 100644
+--- a/src/corelib/global/qfloat16.h
++++ b/src/corelib/global/qfloat16.h
+@@ -43,6 +43,7 @@
+ 
+ #include <QtCore/qglobal.h>
+ #include <QtCore/qmetatype.h>
++#include <limits>
+ #include <string.h>
+ 
+ #if defined(QT_COMPILER_SUPPORTS_F16C) && defined(__AVX2__) && !defined(__F16C__)
+-- 
+2.30.2
+
+
+From f681fc781277f35499008b99e94cc6049885e01c Mon Sep 17 00:00:00 2001
+From: Ville Voutilainen <ville.voutilainen@qt.io>
+Date: Mon, 18 Jan 2021 09:58:17 +0200
+Subject: [PATCH 4/4] Build fixes for GCC 11
+
+Task-number: QTBUG-89977
+Change-Id: Ic1b7ddbffb8a0a00f8c621d09a868f1d94a52c21
+Reviewed-by: Lars Knoll <lars.knoll@qt.io>
+Reviewed-by: Thiago Macieira <thiago.macieira@intel.com>
+(cherry picked from commit 813a928c7c3cf98670b6043149880ed5c955efb9)
+
+diff --git a/src/corelib/text/qbytearraymatcher.h b/src/corelib/text/qbytearraymatcher.h
+index 0eedfc1d20..f5f9bef7b8 100644
+--- a/src/corelib/text/qbytearraymatcher.h
++++ b/src/corelib/text/qbytearraymatcher.h
+@@ -42,6 +42,8 @@
+ 
+ #include <QtCore/qbytearray.h>
+ 
++#include <limits>
++
+ QT_BEGIN_NAMESPACE
+ 
+ 
+diff --git a/src/corelib/tools/qsharedpointer_impl.h b/src/corelib/tools/qsharedpointer_impl.h
+index 790c187cb9..4aee98af53 100644
+--- a/src/corelib/tools/qsharedpointer_impl.h
++++ b/src/corelib/tools/qsharedpointer_impl.h
+@@ -155,9 +155,6 @@ namespace QtSharedPointer {
+ #endif
+         inline void checkQObjectShared(...) { }
+         inline void setQObjectShared(...) { }
+-
+-        inline void operator delete(void *ptr) { ::operator delete(ptr); }
+-        inline void operator delete(void *, void *) { }
+     };
+     // sizeof(ExternalRefCountData) = 12 (32-bit) / 16 (64-bit)
+ 
+diff --git a/src/plugins/platforms/xcb/qxcbwindow.cpp b/src/plugins/platforms/xcb/qxcbwindow.cpp
+index 9e7e1a5572..f0866a90ac 100644
+--- a/src/plugins/platforms/xcb/qxcbwindow.cpp
++++ b/src/plugins/platforms/xcb/qxcbwindow.cpp
+@@ -698,7 +698,7 @@ void QXcbWindow::show()
+         if (isTransient(window())) {
+             const QWindow *tp = window()->transientParent();
+             if (tp && tp->handle())
+-                transientXcbParent = static_cast<const QXcbWindow *>(tp->handle())->winId();
++                transientXcbParent = tp->handle()->winId();
+             // Default to client leader if there is no transient parent, else modal dialogs can
+             // be hidden by their parents.
+             if (!transientXcbParent)
+-- 
+2.30.2
 
