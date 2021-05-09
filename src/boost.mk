@@ -69,7 +69,7 @@ define $(PKG)_BUILD
     echo 'set(Boost_THREADAPI "win32")' > '$(CMAKE_TOOLCHAIN_DIR)/$(PKG).cmake'
 
     '$(TARGET)-g++' \
-        -W -Wall -Werror -ansi -U__STRICT_ANSI__ -pedantic \
+        -W -Wall -Werror -ansi -pedantic \
         '$(PWD)/src/$(PKG)-test.cpp' -o '$(PREFIX)/$(TARGET)/bin/test-boost.exe' \
         -DBOOST_THREAD_USE_LIB \
         -lboost_serialization-mt \
