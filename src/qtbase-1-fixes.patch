@@ -214,7 +214,7 @@ index 4dd9e9603b..c94d64d9aa 100644
  
  #include <tuple>
  #include <array>
-+#include <limit>
++#include <limits>
  
  QT_BEGIN_NAMESPACE
  
