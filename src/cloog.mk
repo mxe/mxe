@@ -1,19 +1,18 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := cloog
-$(PKG)_WEBSITE  := https://www.bastoul.net/cloog/
+$(PKG)_WEBSITE  := https://github.com/periscop/cloog
 $(PKG)_DESCR    := CLooG Code Generator
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.18.4
-$(PKG)_CHECKSUM := 325adf3710ce2229b7eeb9e84d3b539556d093ae860027185e7af8a8b00a750e
+$(PKG)_VERSION  := 0.20.0
+$(PKG)_CHECKSUM := 835c49951ff57be71dcceb6234d19d2cc22a3a5df84aea0a9d9760d92166fc72
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://www.bastoul.net/cloog/pages/download/$($(PKG)_FILE)
-$(PKG)_URL_2    := https://gcc.gnu.org/pub/gcc/infrastructure/$($(PKG)_FILE)
+$(PKG)_URL      := https://github.com/periscop/cloog/releases/download/$($(PKG)_SUBDIR)/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc gmp isl
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://www.bastoul.net/cloog/download.php' | \
+    $(WGET) -q -O- 'https://api.github.com/repos/periscop/cloog/releases' | \
     $(SED) -n 's,.*cloog-\([0-9][^>]*\)\.tar.*,\1,p' | \
     $(SORT) -V |
     tail -1
