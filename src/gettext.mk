@@ -25,7 +25,6 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(SOURCE_DIR)' && autoreconf -fi
     cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/gettext-runtime/configure' \
         $(MXE_CONFIGURE_OPTS) \
         --enable-threads=win32 \
@@ -37,7 +36,6 @@ define $(PKG)_BUILD
 endef
 
 define $(PKG)_BUILD_$(BUILD)
-    cd '$(SOURCE_DIR)' && autoreconf -fi
     # build and install the library
     cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
         $(MXE_CONFIGURE_OPTS)

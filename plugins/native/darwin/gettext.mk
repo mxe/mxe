@@ -24,3 +24,15 @@ define $(PKG)_BUILD_$(BUILD)
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(MXE_DISABLE_DOCS)
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install $(MXE_DISABLE_DOCS)
 endef
+
+define $(PKG)_BUILD
+    cd '$(SOURCE_DIR)' && autoreconf -fi
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/gettext-runtime/configure' \
+        $(MXE_CONFIGURE_OPTS) \
+        --enable-threads=win32 \
+        --without-libexpat-prefix \
+        --without-libxml2-prefix \
+        CONFIG_SHELL=$(SHELL)
+    $(MAKE) -C '$(BUILD_DIR)/intl' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)/intl' -j 1 install
+endef
