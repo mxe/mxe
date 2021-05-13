@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
 Date: Sun, 30 Aug 2015 14:26:24 +0200
-Subject: [PATCH 1/2] include stdio.h
+Subject: [PATCH 1/5] include stdio.h
 
 
 diff --git a/CPP/7zip/Common/FileStreams.cpp b/CPP/7zip/Common/FileStreams.cpp
@@ -24,7 +24,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
 Date: Sun, 30 Aug 2015 14:46:10 +0200
-Subject: [PATCH 2/2] MyString: include windows.h
+Subject: [PATCH 2/5] MyString: include windows.h
 
 Functions CharUpperA, CharPrev etc
 
@@ -40,3 +40,185 @@ index 1111111..2222222 100644
  
  #ifndef _WIN32
  #include <wctype.h>
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Thu, 13 May 2021 11:23:47 +0200
+Subject: [PATCH 3/5] avoid -Werror=misleading-indentation
+
+
+diff --git a/CPP/Common/MyCom.h b/CPP/Common/MyCom.h
+index 1111111..2222222 100644
+--- a/CPP/Common/MyCom.h
++++ b/CPP/Common/MyCom.h
+@@ -230,8 +230,7 @@ public:
+ 
+ #define MY_ADDREF_RELEASE \
+ STDMETHOD_(ULONG, AddRef)() throw() { return ++__m_RefCount; } \
+-STDMETHOD_(ULONG, Release)() { if (--__m_RefCount != 0)  \
+-  return __m_RefCount; delete this; return 0; }
++STDMETHOD_(ULONG, Release)() { if (--__m_RefCount != 0) return __m_RefCount; delete this; return 0; }
+ 
+ #define MY_UNKNOWN_IMP_SPEC(i) \
+   MY_QUERYINTERFACE_BEGIN \
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Thu, 13 May 2021 11:09:22 +0200
+Subject: [PATCH 4/5] fix case of filenames
+
+
+diff --git a/C/7zip_gcc_c.mak b/C/7zip_gcc_c.mak
+index 1111111..2222222 100644
+--- a/C/7zip_gcc_c.mak
++++ b/C/7zip_gcc_c.mak
+@@ -63,7 +63,7 @@ ifdef IS_MINGW
+ 
+ RM = del
+ MY_MKDIR=mkdir
+-LIB2 = -loleaut32 -luuid -ladvapi32 -lUser32
++LIB2 = -loleaut32 -luuid -ladvapi32 -luser32
+ 
+ 
+ CXXFLAGS_EXTRA = -DUNICODE -D_UNICODE
+diff --git a/C/Alloc.c b/C/Alloc.c
+index 1111111..2222222 100644
+--- a/C/Alloc.c
++++ b/C/Alloc.c
+@@ -6,7 +6,7 @@
+ #include <stdio.h>
+ 
+ #ifdef _WIN32
+-#include <Windows.h>
++#include <windows.h>
+ #endif
+ #include <stdlib.h>
+ 
+diff --git a/C/CpuArch.c b/C/CpuArch.c
+index 1111111..2222222 100644
+--- a/C/CpuArch.c
++++ b/C/CpuArch.c
+@@ -217,7 +217,7 @@ BoolInt CPU_Is_InOrder()
+ }
+ 
+ #if !defined(MY_CPU_AMD64) && defined(_WIN32)
+-#include <Windows.h>
++#include <windows.h>
+ static BoolInt CPU_Sys_Is_SSE_Supported()
+ {
+   OSVERSIONINFO vi;
+@@ -275,7 +275,7 @@ BoolInt CPU_IsSupported_SHA()
+ // #include <stdio.h>
+ 
+ #ifdef _WIN32
+-#include <Windows.h>
++#include <windows.h>
+ #endif
+ 
+ BoolInt CPU_IsSupported_VAES_AVX2()
+@@ -327,7 +327,7 @@ BoolInt CPU_IsSupported_PageGB()
+ 
+ #ifdef _WIN32
+ 
+-#include <Windows.h>
++#include <windows.h>
+ 
+ BoolInt CPU_IsSupported_CRC32()
+   { return IsProcessorFeaturePresent(PF_ARM_V8_CRC32_INSTRUCTIONS_AVAILABLE) ? 1 : 0; }
+diff --git a/C/DllSecur.c b/C/DllSecur.c
+index 1111111..2222222 100644
+--- a/C/DllSecur.c
++++ b/C/DllSecur.c
+@@ -5,7 +5,7 @@
+ 
+ #ifdef _WIN32
+ 
+-#include <Windows.h>
++#include <windows.h>
+ 
+ #include "DllSecur.h"
+ 
+diff --git a/C/Threads.h b/C/Threads.h
+index 1111111..2222222 100644
+--- a/C/Threads.h
++++ b/C/Threads.h
+@@ -5,7 +5,7 @@
+ #define __7Z_THREADS_H
+ 
+ #ifdef _WIN32
+-#include <Windows.h>
++#include <windows.h>
+ #else
+ 
+ #if !defined(__APPLE__) && !defined(_AIX)
+diff --git a/CPP/7zip/7zip_gcc.mak b/CPP/7zip/7zip_gcc.mak
+index 1111111..2222222 100644
+--- a/CPP/7zip/7zip_gcc.mak
++++ b/CPP/7zip/7zip_gcc.mak
+@@ -92,7 +92,7 @@ ifdef IS_MINGW
+ 
+ RM = del
+ MY_MKDIR=mkdir
+-LIB2 = -loleaut32 -luuid -ladvapi32 -lUser32
++LIB2 = -loleaut32 -luuid -ladvapi32 -luser32
+ 
+ CXXFLAGS_EXTRA = -DUNICODE -D_UNICODE
+ # -Wno-delete-non-virtual-dtor
+diff --git a/CPP/Common/MyInitGuid.h b/CPP/Common/MyInitGuid.h
+index 1111111..2222222 100644
+--- a/CPP/Common/MyInitGuid.h
++++ b/CPP/Common/MyInitGuid.h
+@@ -29,7 +29,7 @@ Also we need IID_IUnknown that is initialized in some file for linking:
+ #include <basetyps.h>
+ #endif
+ 
+-#include <InitGuid.h>
++#include <initguid.h>
+ 
+ #ifdef UNDER_CE
+ DEFINE_GUID(IID_IUnknown,
+diff --git a/CPP/Common/MyWindows.h b/CPP/Common/MyWindows.h
+index 1111111..2222222 100644
+--- a/CPP/Common/MyWindows.h
++++ b/CPP/Common/MyWindows.h
+@@ -5,7 +5,7 @@
+ 
+ #ifdef _WIN32
+ 
+-#include <Windows.h>
++#include <windows.h>
+ 
+ #ifdef UNDER_CE
+   #undef VARIANT_TRUE
+diff --git a/CPP/Windows/FileIO.h b/CPP/Windows/FileIO.h
+index 1111111..2222222 100644
+--- a/CPP/Windows/FileIO.h
++++ b/CPP/Windows/FileIO.h
+@@ -17,7 +17,7 @@
+ #ifdef _WIN32
+ 
+ #if defined(_WIN32) && !defined(UNDER_CE)
+-#include <WinIoCtl.h>
++#include <winioctl.h>
+ #endif
+ 
+ #else
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Thu, 13 May 2021 11:48:03 +0200
+Subject: [PATCH 5/5] add missing object file
+
+
+diff --git a/CPP/7zip/Bundles/LzmaCon/makefile.gcc b/CPP/7zip/Bundles/LzmaCon/makefile.gcc
+index 1111111..2222222 100644
+--- a/CPP/7zip/Bundles/LzmaCon/makefile.gcc
++++ b/CPP/7zip/Bundles/LzmaCon/makefile.gcc
+@@ -66,6 +66,7 @@ WIN_OBJS = \
+   $O/FileIO.o \
+   $O/PropVariant.o \
+   $O/System.o \
++  $O/Registry.o \
+   $O/SystemInfo.o \
+ 
+ COMPRESS_OBJS = \
