@@ -406,7 +406,7 @@
     "qttranslations": {"version": "5.15.2", "website": "https://www.qt.io/", "description": "Qt"},
     "qtvirtualkeyboard": {"version": "5.15.2", "website": "https://www.qt.io/", "description": "Qt"},
     "qtwebchannel": {"version": "5.15.2", "website": "https://www.qt.io/", "description": "Qt"},
-    "qtwebkit": {"version": "5.13.1", "website": "https://github.com/annulen/webkit", "description": "QtWebKit"},
+    "qtwebkit": {"version": "5.212", "website": "https://github.com/annulen/webkit", "description": "QtWebKit"},
     "qtwebsockets": {"version": "5.15.2", "website": "https://www.qt.io/", "description": "Qt"},
     "qtwebview": {"version": "5.15.2", "website": "https://www.qt.io/", "description": "Qt"},
     "qtwinextras": {"version": "5.15.2", "website": "https://www.qt.io/", "description": "Qt"},
