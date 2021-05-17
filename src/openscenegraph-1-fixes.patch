@@ -3,41 +3,6 @@ This file is part of MXE. See LICENSE.md for licensing information.
 Contains ad hoc patches for cross building.
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Boris Nagaev <bnagaev@gmail.com>
-Date: Fri, 9 Oct 2015 11:13:12 +0200
-Subject: [PATCH 1/6] fix case in headers windows.h, winsock2.h
-
-
-diff --git a/examples/osghangglide/hat.cpp b/examples/osghangglide/hat.cpp
-index 1111111..2222222 100644
---- a/examples/osghangglide/hat.cpp
-+++ b/examples/osghangglide/hat.cpp
-@@ -17,7 +17,7 @@
- */
- 
- #ifdef _MSC_VER
--#include <Windows.h>
-+#include <windows.h>
- #pragma warning( disable : 4244 )
- #endif
- 
-diff --git a/src/osgPlugins/ply/typedefs.h b/src/osgPlugins/ply/typedefs.h
-index 1111111..2222222 100644
---- a/src/osgPlugins/ply/typedefs.h
-+++ b/src/osgPlugins/ply/typedefs.h
-@@ -13,8 +13,8 @@
- #define MESH_TYPEDEFS_H
- 
- #   if defined(_MSC_VER)
--#      include <Winsock2.h>
--#      include <Windows.h>
-+#      include <winsock2.h>
-+#      include <windows.h>
- #   endif
- 
- #   include <osg/Notify>
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Rashad Kanavath <rashad.kanavath@c-s.fr>
 Date: Sun, 10 Jan 2016 14:04:18 +1100
 Subject: [PATCH 2/6] openscenegraph: use previously built openthreads
@@ -82,39 +47,6 @@ index 77d66f8..1c8398e 100644
  IF(GSTREAMER_FOUND AND GLIB_FOUND)
      ADD_PLUGIN_DIRECTORY(gstreamer)
  ENDIF()
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Boris Pek <tehnick-8@yandex.ru>
-Date: Thu, 14 Dec 2017 15:29:38 +0300
-Subject: [PATCH 4/6] fix case in library ws2_32
-
-
-diff --git a/src/osgPlugins/ZeroConfDevice/CMakeLists.txt b/src/osgPlugins/ZeroConfDevice/CMakeLists.txt
-index 1111111..2222222 100644
---- a/src/osgPlugins/ZeroConfDevice/CMakeLists.txt
-+++ b/src/osgPlugins/ZeroConfDevice/CMakeLists.txt
-@@ -19,7 +19,7 @@ IF(WIN32)
-         mdns_win/dns_sd.h
-         mdns_win/dns-sd.c
-     )
--    SET(TARGET_EXTERNAL_LIBRARIES "${TARGET_EXTERNAL_LIBRARIES};Ws2_32.lib;winmm")
-+    SET(TARGET_EXTERNAL_LIBRARIES "${TARGET_EXTERNAL_LIBRARIES};ws2_32.lib;winmm")
-     SET(TARGET_LIBRARIES_VARS ZEROCONF_LIBRARY)
-     ADD_DEFINITIONS(-DNOT_HAVE_GETOPT)
-     ADD_DEFINITIONS(-DNOT_HAVE_SETLINEBUF)
-diff --git a/src/osgPlugins/vrml/CMakeLists.txt b/src/osgPlugins/vrml/CMakeLists.txt
-index 1111111..2222222 100644
---- a/src/osgPlugins/vrml/CMakeLists.txt
-+++ b/src/osgPlugins/vrml/CMakeLists.txt
-@@ -27,7 +27,7 @@ IF (WIN32)
-         PNG_LIBRARY
-         ZLIB_LIBRARY)
-     SET(TARGET_EXTERNAL_LIBRARIES
--        Ws2_32.lib)
-+        ws2_32.lib)
- ELSE()
-     SET(TARGET_LIBRARIES_VARS
-         OPENVRML_LIBRARY)
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Pek <tehnick-8@yandex.ru>
@@ -181,3 +113,42 @@ index 2b910a6..16466fe 100644
  
  #### end var setup  ###
  SETUP_PLUGIN(gta)
+ commit a2927adc037d2791483ef7fab2261e665ae14557
+Author: Gleb Mazovetskiy <glex.spb@gmail.com>
+Date:   Tue Mar 16 21:46:50 2021 +0000
+
+    Fix C++17 MSVC compilation error
+
+    With C++17, Windows headers must not be included after `using namespace std;`.
+
+    Windows headers define a `byte` type internally and `using namespace std`
+    causes it to conflict with `std::byte`:
+
+        error C2872: 'byte': ambiguous symbol
+
+    MSVC thread: https://developercommunity.visualstudio.com/t/error-c2872-byte-ambiguous-symbol/93889
+
+diff --git a/src/osg/DisplaySettings.cpp b/src/osg/DisplaySettings.cpp
+index 43156bd26..ef2f0e93a 100644
+--- a/src/osg/DisplaySettings.cpp
++++ b/src/osg/DisplaySettings.cpp
+@@ -22,9 +22,6 @@
+ #include <algorithm>
+ #include <string.h>
+ 
+-using namespace osg;
+-using namespace std;
+-
+ #if defined(WIN32) && !defined(__CYGWIN__)
+ #include<windows.h>
+ extern "C" { OSG_EXPORT DWORD NvOptimusEnablement=0x00000001; }
+@@ -32,6 +29,9 @@ extern "C" { OSG_EXPORT DWORD NvOptimusEnablement=0x00000001; }
+ extern "C" { int NvOptimusEnablement=0x00000001; }
+ #endif
+ 
++using namespace osg;
++using namespace std;
++
+ void DisplaySettings::setNvOptimusEnablement(int value)
+ {
+     NvOptimusEnablement = value;
