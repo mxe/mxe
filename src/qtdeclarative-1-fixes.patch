@@ -31,3 +31,26 @@ index 1111111..2222222 100644
 -qtConfig(d3d12): SUBDIRS += d3d12
  qtConfig(openvg): SUBDIRS += openvg
  
+diff -ur a/src/3rdparty/masm/yarr/Yarr.h b/src/3rdparty/masm/yarr/Yarr.h
+--- a/src/3rdparty/masm/yarr/Yarr.h	2021-05-16 15:17:15.949217856 +0200
++++ b/src/3rdparty/masm/yarr/Yarr.h	2021-05-16 15:17:52.044618316 +0200
+@@ -27,6 +27,8 @@
+ 
+ #pragma once
+ 
++#include <limits>
++
+ #include <limits.h>
+ #include "YarrErrorCode.h"
+ 
+diff -ur a/src/qmldebug/qqmlprofilerevent_p.h b/src/qmldebug/qqmlprofilerevent_p.h
+--- a/src/qmldebug/qqmlprofilerevent_p.h	2021-05-16 15:17:15.973217599 +0200
++++ b/src/qmldebug/qqmlprofilerevent_p.h	2021-05-16 22:29:59.569295571 +0200
+@@ -48,6 +48,7 @@
+ #include <QtCore/qmetatype.h>
+ 
+ #include <initializer_list>
++#include <limits>
+ #include <type_traits>
+ 
+ //
