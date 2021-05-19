@@ -132,6 +132,10 @@ PKG_CONFIGURE_OPTS = \
     $(_$(PKG)_CONFIGURE_OPTS) \
     $($(PKG)_CONFIGURE_OPTS)
 
+PKG_CMAKE_OPTS = \
+    $(_$(PKG)_CMAKE_OPTS) \
+    $($(PKG)_CMAKE_OPTS)
+
 # GCC threads and exceptions
 MXE_GCC_THREADS = \
     $(if $(findstring win32,$(or $(TARGET),$(1))),win32,posix)
