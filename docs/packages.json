@@ -59,7 +59,7 @@
     "fdk-aac": {"version": "2.0.0", "website": "https://github.com/mstorsjo/fdk-aac", "description": "FDK-AAC"},
     "ffmpeg": {"version": "4.2.3", "website": "https://ffmpeg.org/", "description": ""},
     "fftw": {"version": "3.3.8", "website": "http://www.fftw.org/", "description": ""},
-    "file": {"version": "5.24", "website": "https://www.darwinsys.com/file/", "description": ""},
+    "file": {"version": "5.40", "website": "https://www.darwinsys.com/file/", "description": ""},
     "flac": {"version": "1.3.3", "website": "https://www.xiph.org/flac/", "description": "FLAC"},
     "flann": {"version": "1.8.4", "website": "https://www.cs.ubc.ca/~mariusm/index.php/FLANN/FLANN", "description": "FLANN"},
     "fltk": {"version": "1.3.5", "website": "https://www.fltk.org/", "description": "FLTK"},
