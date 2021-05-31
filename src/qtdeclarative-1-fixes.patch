@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Martchus <martchus@gmx.net>
 Date: Fri, 20 Nov 2020 18:32:31 +0100
-Subject: [PATCH 1/1] Disable d3d12 requiring fxc.exe
+Subject: [PATCH 1/2] Disable d3d12 requiring fxc.exe
 
 * fxc.exe is not provided by WINE or mingw-w64 and hence not available
   in our build environment
@@ -31,3 +31,34 @@ index 1111111..2222222 100644
 -qtConfig(d3d12): SUBDIRS += d3d12
  qtConfig(openvg): SUBDIRS += openvg
  
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Moritz Bunkus <mo@bunkus.online>
+Date: Mon, 31 May 2021 12:03:31 +0200
+Subject: [PATCH 2/2] fix compilation with gcc 11
+
+
+diff --git a/src/3rdparty/masm/yarr/Yarr.h b/src/3rdparty/masm/yarr/Yarr.h
+index 1111111..2222222 100644
+--- a/src/3rdparty/masm/yarr/Yarr.h
++++ b/src/3rdparty/masm/yarr/Yarr.h
+@@ -27,6 +27,7 @@
+ 
+ #pragma once
+ 
++#include <limits>
+ #include <limits.h>
+ #include "YarrErrorCode.h"
+ 
+diff --git a/src/qmldebug/qqmlprofilerevent_p.h b/src/qmldebug/qqmlprofilerevent_p.h
+index 1111111..2222222 100644
+--- a/src/qmldebug/qqmlprofilerevent_p.h
++++ b/src/qmldebug/qqmlprofilerevent_p.h
+@@ -48,6 +48,7 @@
+ #include <QtCore/qmetatype.h>
+ 
+ #include <initializer_list>
++#include <limits>
+ #include <type_traits>
+ 
+ //
