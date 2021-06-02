@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 2f9b6a580b94577b150a7d5617ad4643a4301a6616ff459307df3e225bcfb
 $(PKG)_SUBDIR   := expat-$($(PKG)_VERSION)
 $(PKG)_FILE     := expat-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/expat/expat/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_URL_2    := https://github.com/libexpat/libexpat/releases/download/R_2_2_10/$($(PKG)_FILE)
+$(PKG)_URL_2    := https://github.com/libexpat/libexpat/releases/download/R_$(subst .,_,$($(PKG)_VERSION))/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
