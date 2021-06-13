@@ -1,0 +1,42 @@
+See: https://build.opensuse.org/package/view_file/openSUSE:Factory/libqt5-qtdeclarative/0001-Include-limits-to-fix-build-with-GCC-11.patch
+
+From 9bc2fa1c7ecd907dd513c07e69a95e5c994b8d9a Mon Sep 17 00:00:00 2001
+From: Fabian Vogt <fvogt@suse.de>
+Date: Thu, 22 Apr 2021 16:41:52 +0200
+Subject: [PATCH] Include <limits> to fix build with GCC 11
+
+Yarr.h is even broken in upstream WebKit as of now.
+
+References: QTBUG-89977
+---
+ src/3rdparty/masm/yarr/Yarr.h      | 1 +
+ src/qmldebug/qqmlprofilerevent_p.h | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/src/3rdparty/masm/yarr/Yarr.h b/src/3rdparty/masm/yarr/Yarr.h
+index ccf78f9880..2955ea7e72 100644
+--- a/src/3rdparty/masm/yarr/Yarr.h
++++ b/src/3rdparty/masm/yarr/Yarr.h
+@@ -28,6 +28,7 @@
+ #pragma once
+ 
+ #include <limits.h>
++#include <limits>
+ #include "YarrErrorCode.h"
+ 
+ namespace JSC { namespace Yarr {
+diff --git a/src/qmldebug/qqmlprofilerevent_p.h b/src/qmldebug/qqmlprofilerevent_p.h
+index a7e37d1964..3f13679a6a 100644
+--- a/src/qmldebug/qqmlprofilerevent_p.h
++++ b/src/qmldebug/qqmlprofilerevent_p.h
+@@ -49,6 +49,7 @@
+ 
+ #include <initializer_list>
+ #include <type_traits>
++#include <limits>
+ 
+ //
+ //  W A R N I N G
+-- 
+2.20.1
+
