@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Thu, 2 Feb 2017 02:05:50 +1100
-Subject: [PATCH 1/6] allow native cpu detection when building with clang
+Subject: [PATCH 1/7] allow native cpu detection when building with clang
 
 function was disabled for non-gcc5 in:
 https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=b587c12551143c14f023860a1dbdf7316ae71f27;hp=43096b526a9f23008b9769372f11475ae63487bc
@@ -29,7 +29,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Fri, 6 Apr 2018 13:40:22 +1000
-Subject: [PATCH 2/6] remove hard-coded mingw from include path
+Subject: [PATCH 2/7] remove hard-coded mingw from include path
 
 
 diff --git a/gcc/config.gcc b/gcc/config.gcc
@@ -62,7 +62,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Cameron Kaiser <classilla@floodgap.com>
 Date: Sat, 13 Oct 2018 18:59:18 -0700
-Subject: [PATCH 3/6] fix gcc compile error on ppc64le
+Subject: [PATCH 3/7] fix gcc compile error on ppc64le
 
 https://gcc.gnu.org/viewcvs/gcc/branches/gcc-6-branch/libcpp/lex.c?view=log&pathrev=261621
 
@@ -83,7 +83,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: uros <uros@138bc75d-0d04-0410-961f-82ee72b054a4>
 Date: Sun, 11 Nov 2018 17:44:43 +0000
-Subject: [PATCH 4/6] Backport from mainline 2018-11-04 Uros Bizjak
+Subject: [PATCH 4/7] Backport from mainline 2018-11-04 Uros Bizjak
  <ubizjak@gmail.com>
 
 	PR middle-end/58372
@@ -136,7 +136,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Sun, 31 May 2020 18:36:27 +1000
-Subject: [PATCH 5/6] PR c++/66297, DR 1684 - literal class and constexpr
+Subject: [PATCH 5/7] PR c++/66297, DR 1684 - literal class and constexpr
  member fns
 
 taken from:
@@ -208,7 +208,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Liu Hao <lh_mouse@126.com>
 Date: Wed, 6 May 2020 21:49:18 +0800
-Subject: [PATCH 6/6] libgomp: Don't hard-code MS printf attributes
+Subject: [PATCH 6/7] libgomp: Don't hard-code MS printf attributes
 
 Source: https://github.com/msys2/MINGW-packages/blob/9501ee2afc8d01dc7d85383e4b22e91c30d93ca7/mingw-w64-gcc/0020-libgomp-Don-t-hard-code-MS-printf-attributes.patch
 
@@ -256,3 +256,24 @@ index 1111111..2222222 100644
  
  /* iter.c */
  
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Carsten Teibes <dev@f4ke.de>
+Date: Fri, 18 Jun 2021 17:55:33 +0200
+Subject: [PATCH 7/7] Fix compatibility with c++17 (default in gcc 11+)
+
+Initially found on https://gitweb.gentoo.org/proj/gcc-patches.git/tree/5.5.0/gentoo/40_all_gcc-c++17.patch
+
+diff --git a/gcc/reload.h b/gcc/reload.h
+index 1111111..2222222 100644
+--- a/gcc/reload.h
++++ b/gcc/reload.h
+@@ -168,7 +168,7 @@ struct target_reload {
+      value indicates the level of indirect addressing supported, e.g., two
+      means that (MEM (MEM (REG n))) is also valid if (REG n) does not get
+      a hard register.  */
+-  bool x_spill_indirect_levels;
++  unsigned char x_spill_indirect_levels;
+ 
+   /* True if caller-save has been reinitialized.  */
+   bool x_caller_save_initialized_p;
