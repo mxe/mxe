@@ -2,17 +2,20 @@ This file is part of MXE. See LICENSE.md for licensing information.
 
 Contains ad hoc patches for cross building.
 
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From a1176a1b5b0d065933989cdcd90980390cbe4811 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Stefan=20L=C3=B6ffler?= <st.loeffler@gmail.com>
 Date: Sun, 5 Nov 2017 20:53:42 +0100
-Subject: [PATCH 1/4] Only check for Type1 fonts in custom directory if path is
+Subject: [PATCH 1/3] Only check for Type1 fonts in custom directory if path is
  non-NULL
 
 Otherwise, programs using poppler may crash
 Proposed upstream at https://bugs.freedesktop.org/show_bug.cgi?id=49037
+---
+ poppler/GlobalParamsWin.cc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/poppler/GlobalParamsWin.cc b/poppler/GlobalParamsWin.cc
-index 1111111..2222222 100644
+index d4eb5871..2056df18 100644
 --- a/poppler/GlobalParamsWin.cc
 +++ b/poppler/GlobalParamsWin.cc
 @@ -382,7 +382,7 @@ void GlobalParams::setupBaseFonts(const char *dir)
@@ -24,69 +27,48 @@ index 1111111..2222222 100644
              GooString *fontPath = appendToPath(new GooString(dir), displayFontTab[i].t1FileName);
              if (FileExists(fontPath->c_str()) || FileExists(replaceSuffix(fontPath, ".pfb", ".pfa")->c_str())) {
                  addFontFile(fontName, fontPath);
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: darealshinji <djcj@gmx.de>
-Date: Thu, 14 Jul 2016 13:21:26 +0200
-Subject: [PATCH 2/4] enable cross-building DLLs
+-- 
+2.30.2
 
 
-diff --git a/cpp/poppler-global.h b/cpp/poppler-global.h
-index 1111111..2222222 100644
---- a/cpp/poppler-global.h
-+++ b/cpp/poppler-global.h
-@@ -22,7 +22,7 @@
- #ifndef POPPLER_GLOBAL_H
- #define POPPLER_GLOBAL_H
- 
--#if defined(_WIN32)
-+#if defined(_WIN32) && defined(DLL_EXPORT)
- #    define LIB_EXPORT __declspec(dllexport)
- #    define LIB_IMPORT __declspec(dllimport)
- #else
-diff --git a/poppler/GlobalParams.cc b/poppler/GlobalParams.cc
-index 1111111..2222222 100644
---- a/poppler/GlobalParams.cc
-+++ b/poppler/GlobalParams.cc
-@@ -104,6 +104,7 @@ std::unique_ptr<GlobalParams> globalParams;
- 
- static HMODULE hmodule;
- 
-+#ifdef DLL_EXPORT
- extern "C" {
- /* Provide declaration to squelch -Wmissing-declarations warning */
- BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved);
-@@ -119,6 +120,7 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
-     return TRUE;
- }
- }
-+#endif
- 
- static const char *get_poppler_datadir(void)
- {
-diff --git a/qt5/src/poppler-export.h b/qt5/src/poppler-export.h
-index 1111111..2222222 100644
---- a/qt5/src/poppler-export.h
-+++ b/qt5/src/poppler-export.h
-@@ -2,7 +2,7 @@
-  * This file is used to set the poppler_qt5_EXPORT macros right.
-  * This is needed for setting the visibility on windows, it will have no effect on other platforms.
-  */
--#if defined(_WIN32)
-+#if defined(_WIN32) && defined(DLL_EXPORT)
- #    define _POPPLER_QT5_LIB_EXPORT __declspec(dllexport)
- #    define _POPPLER_QT5_LIB_IMPORT __declspec(dllimport)
- #elif defined(__GNUC__)
+From 442da3994ede93637da6c619708f3745cab19b67 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Stefan=20L=C3=B6ffler?= <st.loeffler@gmail.com>
+Date: Sat, 26 Jun 2021 19:49:25 +0200
+Subject: [PATCH 2/3] Fix static builds
 
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 51676ec8..8f0654b1 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -76,7 +76,7 @@ option(USE_FLOAT "Use single precision arithmetic in the Splash backend" OFF)
+ option(BUILD_SHARED_LIBS "Build poppler as a shared library" ON)
+ option(RUN_GPERF_IF_PRESENT "Run gperf if it is found" ON)
+ if(WIN32)
+-  option(ENABLE_RELOCATABLE "Do not hardcode the poppler library location (on Windows)." ON)
++  option(ENABLE_RELOCATABLE "Do not hardcode the poppler library location (on Windows)." ${BUILD_SHARED_LIBS})
+ else()
+   set(ENABLE_RELOCATABLE OFF)
+ endif()
+-- 
+2.30.2
+
+
+From af437ce025046060475d2b7f25be3ed5a0399d75 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
 Date: Wed, 27 Jul 2016 10:29:52 +0200
-Subject: [PATCH 3/4] do not try to use mman.h (package mman-win32)
+Subject: [PATCH 3/3] do not try to use mman.h (package mman-win32)
 
 fix https://github.com/mxe/mxe/issues/1455
+---
+ poppler/CairoFontEngine.cc | 7 -------
+ 1 file changed, 7 deletions(-)
 
 diff --git a/poppler/CairoFontEngine.cc b/poppler/CairoFontEngine.cc
-index 1111111..2222222 100755
+index a65b5fc8..99396e42 100755
 --- a/poppler/CairoFontEngine.cc
 +++ b/poppler/CairoFontEngine.cc
 @@ -53,13 +53,6 @@
@@ -103,41 +85,6 @@ index 1111111..2222222 100755
  //------------------------------------------------------------------------
  // CairoFont
  //------------------------------------------------------------------------
+-- 
+2.30.2
 
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?Stefan=20L=C3=B6ffler?= <st.loeffler@gmail.com>
-Date: Sat, 2 Mar 2019 12:42:53 +0100
-Subject: [PATCH 4/4] Add the possibility to disable tests
-
-
-diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 1111111..2222222 100644
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -47,10 +47,11 @@ set(CMAKE_LINK_DEPENDS_NO_SHARED TRUE)
- 
- # command line switches
- option(ENABLE_UNSTABLE_API_ABI_HEADERS "Install API/ABI unstable xpdf headers." OFF)
--option(BUILD_GTK_TESTS "Whether to compile the GTK+ test programs." ON)
--option(BUILD_QT5_TESTS "Whether to compile the Qt5 test programs." ON)
--option(BUILD_QT6_TESTS "Whether to compile the Qt6 test programs." ON)
--option(BUILD_CPP_TESTS "Whether to compile the CPP test programs." ON)
-+option(ENABLE_TESTS "Whether compile tests." ON)
-+option(BUILD_GTK_TESTS "Whether to compile the GTK+ test programs." ${ENABLE_TESTS})
-+option(BUILD_QT5_TESTS "Whether to compile the Qt5 test programs." ${ENABLE_TESTS})
-+option(BUILD_QT6_TESTS "Whether to compile the Qt6 test programs." ${ENABLE_TESTS})
-+option(BUILD_CPP_TESTS "Whether to compile the CPP test programs." ${ENABLE_TESTS})
- option(ENABLE_SPLASH "Build the Splash graphics backend." ON)
- option(ENABLE_UTILS "Compile poppler command line utils." ON)
- option(ENABLE_CPP "Compile poppler cpp wrapper." ON)
-@@ -750,7 +751,9 @@ endif()
- if(ENABLE_GLIB)
-   add_subdirectory(glib)
- endif()
--add_subdirectory(test)
-+if(ENABLE_TESTS)
-+  add_subdirectory(test)
-+endif()
- if(ENABLE_QT5)
-   add_subdirectory(qt5)
- endif()
