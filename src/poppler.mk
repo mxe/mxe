@@ -51,5 +51,5 @@ define $(PKG)_BUILD
     '$(TARGET)-g++' \
         -W -Wall -Werror -ansi -pedantic -std=c++11 \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
-        `'$(TARGET)-pkg-config' poppler-cpp --cflags --libs`
+        `'$(TARGET)-pkg-config' poppler-cpp libjpeg libtiff-4 libpng --cflags --libs`
 endef
