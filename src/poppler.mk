@@ -3,12 +3,12 @@
 PKG             := poppler
 $(PKG)_WEBSITE  := https://poppler.freedesktop.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 21.06.1
-$(PKG)_CHECKSUM := 86b09e5a02de40081a3916ef8711c5128eaf4b1fc59d5f87d0ec66f04f595db4
+$(PKG)_VERSION  := 21.07.0
+$(PKG)_CHECKSUM := e26ab29f68065de4d6562f0a3e2b5435a83ca92be573b99a1c81998fa286a4d4
 $(PKG)_SUBDIR   := poppler-$($(PKG)_VERSION)
 $(PKG)_FILE     := poppler-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://poppler.freedesktop.org/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc cairo curl freetype glib jpeg lcms libpng libwebp openjpeg qtbase tiff zlib
+$(PKG)_DEPS     := cc boost cairo curl freetype glib jpeg lcms libpng libwebp openjpeg qtbase tiff zlib
 
 define $(PKG)_UPDATE
     $(call GET_LATEST_VERSION, https://poppler.freedesktop.org/releases.html, poppler-)
@@ -18,6 +18,7 @@ define $(PKG)_BUILD
     # build and install the library
     cd '$(BUILD_DIR)' && $(TARGET)-cmake \
         -DENABLE_UNSTABLE_API_ABI_HEADERS=ON \
+        -DENABLE_BOOST=ON \
         -DBUILD_GTK_TESTS=OFF \
         -DBUILD_QT5_TESTS=OFF \
         -DBUILD_QT6_TESTS=OFF \
@@ -51,5 +52,5 @@ define $(PKG)_BUILD
     '$(TARGET)-g++' \
         -W -Wall -Werror -ansi -pedantic -std=c++11 \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
-        `'$(TARGET)-pkg-config' poppler-cpp libjpeg libtiff-4 libpng --cflags --libs`
+        `'$(TARGET)-pkg-config' poppler-cpp libopenjp2 --cflags --libs` -liconv
 endef
