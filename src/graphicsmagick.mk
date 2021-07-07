@@ -43,6 +43,7 @@ define $(PKG)_BUILD
         --with-zlib \
         --without-x \
         ac_cv_path_xml2_config='$(PREFIX)/$(TARGET)/bin/xml2-config' \
+        LIBS="`'$(TARGET)-pkg-config' libtiff-4 --libs | $(SED) s/-ltiff//`" \
         $(PKG_CONFIGURE_OPTS)
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' bin_PROGRAMS=
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install bin_PROGRAMS=
