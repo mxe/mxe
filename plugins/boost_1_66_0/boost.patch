@@ -1,0 +1,38 @@
+diff -ur a/boost/thread/win32/basic_timed_mutex.hpp b/boost/thread/win32/basic_timed_mutex.hpp
+--- a/boost/thread/win32/basic_timed_mutex.hpp	2017-12-14 00:56:49.000000000 +0100
++++ b/boost/thread/win32/basic_timed_mutex.hpp	2018-01-29 18:43:25.615734914 +0100
+@@ -23,6 +23,7 @@
+ #include <boost/chrono/ceil.hpp>
+ #endif
+ #include <boost/config/abi_prefix.hpp>
++#include <boost/winapi/wait.hpp>
+ 
+ namespace boost
+ {
+@@ -81,7 +82,7 @@
+ 
+                     do
+                     {
+-                        unsigned const retval(winapi::WaitForSingleObjectEx(sem, ::boost::detail::win32::infinite,0));
++                        unsigned const retval(::boost::winapi::WaitForSingleObjectEx(sem, ::boost::detail::win32::infinite,0));
+                         BOOST_VERIFY(0 == retval || ::boost::detail::win32::wait_abandoned == retval);
+ //                        BOOST_VERIFY(winapi::WaitForSingleObject(
+ //                                         sem,::boost::detail::win32::infinite)==0);
+@@ -142,7 +143,7 @@
+ 
+                     do
+                     {
+-                        if(winapi::WaitForSingleObjectEx(sem,::boost::detail::get_milliseconds_until(wait_until),0)!=0)
++                        if(::boost::winapi::WaitForSingleObjectEx(sem,::boost::detail::get_milliseconds_until(wait_until),0)!=0)
+                         {
+                             BOOST_INTERLOCKED_DECREMENT(&active_count);
+                             return false;
+@@ -210,7 +211,7 @@
+                       }
+                       chrono::milliseconds rel_time= chrono::ceil<chrono::milliseconds>(tp-now);
+ 
+-                      if(winapi::WaitForSingleObjectEx(sem,static_cast<unsigned long>(rel_time.count()),0)!=0)
++                      if(::boost::winapi::WaitForSingleObjectEx(sem,static_cast<unsigned long>(rel_time.count()),0)!=0)
+                       {
+                           BOOST_INTERLOCKED_DECREMENT(&active_count);
+                           return false;
