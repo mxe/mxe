@@ -1,0 +1,118 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Gregorio Litenstein <g.litenstein@gmail.com>
+Date: Sat, 19 Oct 2019 17:07:44 -0300
+Subject: [PATCH 1/1] Fix static build by patching dllimport.
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Without this patch, it’s possible to build glib statically but libs linking to it (like gdk-pixbuf) will fail.
+
+diff --git a/glib/glib-init.c b/glib/glib-init.c
+index 1111111..2222222 100644
+--- a/glib/glib-init.c
++++ b/glib/glib-init.c
+@@ -272,12 +272,14 @@ glib_init (void)
+ 
+ #if defined (G_OS_WIN32)
+ 
++HMODULE glib_dll = NULL;
++
++#if defined (DLL_EXPORT)
++
+ BOOL WINAPI DllMain (HINSTANCE hinstDLL,
+                      DWORD     fdwReason,
+                      LPVOID    lpvReserved);
+ 
+-HMODULE glib_dll;
+-
+ BOOL WINAPI
+ DllMain (HINSTANCE hinstDLL,
+          DWORD     fdwReason,
+@@ -287,12 +289,7 @@ DllMain (HINSTANCE hinstDLL,
+     {
+     case DLL_PROCESS_ATTACH:
+       glib_dll = hinstDLL;
+-      g_clock_win32_init ();
+-#ifdef THREADS_WIN32
+-      g_thread_win32_init ();
+-#endif
+-      glib_init ();
+-      /* must go after glib_init */
++
+       g_console_win32_init ();
+       break;
+ 
+@@ -317,7 +314,10 @@ DllMain (HINSTANCE hinstDLL,
+   return TRUE;
+ }
+ 
+-#elif defined (G_HAS_CONSTRUCTORS)
++#endif /* defined (DLL_EXPORT) */
++#endif /* defined (G_OS_WIN32) */
++
++#if defined (G_HAS_CONSTRUCTORS)
+ 
+ #ifdef G_DEFINE_CONSTRUCTOR_NEEDS_PRAGMA
+ #pragma G_DEFINE_CONSTRUCTOR_PRAGMA_ARGS(glib_init_ctor)
+@@ -327,6 +327,12 @@ G_DEFINE_CONSTRUCTOR(glib_init_ctor)
+ static void
+ glib_init_ctor (void)
+ {
++#if defined (G_OS_WIN32)
++  g_clock_win32_init ();
++#ifdef THREADS_WIN32
++  g_thread_win32_init ();
++#endif /* defined (THREADS_WIN32) */
++#endif /* defined (G_OS_WIN32) */
+   glib_init ();
+ }
+ 
+diff --git a/gobject/gtype.c b/gobject/gtype.c
+index 1111111..2222222 100644
+--- a/gobject/gtype.c
++++ b/gobject/gtype.c
+@@ -4451,7 +4451,19 @@ gobject_init (void)
+   _g_signal_init ();
+ }
+ 
+-#if defined (G_OS_WIN32)
++#if defined (G_HAS_CONSTRUCTORS)
++#ifdef G_DEFINE_CONSTRUCTOR_NEEDS_PRAGMA
++#pragma G_DEFINE_CONSTRUCTOR_PRAGMA_ARGS(gobject_init_ctor)
++#endif
++G_DEFINE_CONSTRUCTOR(gobject_init_ctor)
++
++static void
++gobject_init_ctor (void)
++{
++  gobject_init ();
++}
++
++#elif defined (G_OS_WIN32) && defined (DLL_EXPORT)
+ 
+ BOOL WINAPI DllMain (HINSTANCE hinstDLL,
+                      DWORD     fdwReason,
+@@ -4476,18 +4488,6 @@ DllMain (HINSTANCE hinstDLL,
+   return TRUE;
+ }
+ 
+-#elif defined (G_HAS_CONSTRUCTORS)
+-#ifdef G_DEFINE_CONSTRUCTOR_NEEDS_PRAGMA
+-#pragma G_DEFINE_CONSTRUCTOR_PRAGMA_ARGS(gobject_init_ctor)
+-#endif
+-G_DEFINE_CONSTRUCTOR(gobject_init_ctor)
+-
+-static void
+-gobject_init_ctor (void)
+-{
+-  gobject_init ();
+-}
+-
+ #else
+ # error Your platform/compiler is missing constructor support
+ #endif
