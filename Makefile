@@ -96,6 +96,10 @@ MXE_USE_CCACHE      := mxe
 MXE_CCACHE_DIR      := $(PWD)/.ccache
 MXE_CCACHE_BASE_DIR := $(PWD)
 
+# set to major.minor for LTS
+# MXE_QT6_ID := qt6.2
+MXE_QT6_ID := qt6
+
 # define some whitespace variables
 define newline
 
@@ -414,7 +418,10 @@ NPROCS := $(shell nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 1)
 JOBS   ?= $(call LIST_NMIN, $(DEFAULT_MAX_JOBS) $(NPROCS))
 
 # Core packages.
-override MXE_PLUGIN_DIRS := $(realpath $(TOP_DIR)/src) $(MXE_PLUGIN_DIRS)
+override MXE_PLUGIN_DIRS := \
+    $(realpath $(TOP_DIR)/src) \
+    $(realpath $(TOP_DIR)/src/qt/$(MXE_QT6_ID)) \
+    $(MXE_PLUGIN_DIRS)
 
 # Build native requirements for certain systems
 OS_SHORT_NAME   := $(call lc,$(shell lsb_release -sc 2>/dev/null || uname -s))

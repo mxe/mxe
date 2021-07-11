@@ -62,4 +62,7 @@ define $(PKG)_BUILD_$(BUILD)
     ) \
              > '$(PREFIX)/bin/cmake-configure-file'
     chmod 0755 '$(PREFIX)/bin/cmake-configure-file'
+
+    # make target-cmake a simple symlink
+    ln -sf '$(PREFIX)/$(BUILD)/bin/cmake' '$(PREFIX)/bin/$(TARGET)-cmake'
 endef
