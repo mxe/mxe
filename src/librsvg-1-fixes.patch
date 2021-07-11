@@ -23,44 +23,9 @@ index 1111111..2222222 100644
  Cflags: -I${includedir}/librsvg-@RSVG_API_VERSION@
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Chun-wei Fan <fanchunwei@src.gnome.org>
-Date: Mon, 18 Aug 2014 12:27:28 +0800
-Subject: [PATCH 2/3] rsvg-base.c: Have realpath() Work On Windows
-
-Use _fullpath() on Windows to do the job for realpath() as realpath() does
-not exist on Windows.
-
-https://bugzilla.gnome.org/show_bug.cgi?id=710163
-
-Taken from: https://bug710163.bugzilla-attachments.gnome.org/attachment.cgi?id=283702
-
-Signed-off-by: Timothy Gu <timothygu99@gmail.com>
-
-diff --git a/rsvg-base.c b/rsvg-base.c
-index 1111111..2222222 100644
---- a/rsvg-base.c
-+++ b/rsvg-base.c
-@@ -57,6 +57,15 @@
- #include "rsvg-paint-server.h"
- #include "rsvg-xml.h"
- 
-+/*
-+ * XXX: Perhaps do a GIO-based implementation for
-+ * realpath() or use gnulib implementation for this
-+ * https://bugzilla.gnome.org/show_bug.cgi?id=710163
-+ */
-+#ifdef G_OS_WIN32
-+#define realpath(a,b) _fullpath(b,a,_MAX_PATH)
-+#endif
-+
- /*
-  * This is configurable at runtime
-  */
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Timothy Gu <timothygu99@gmail.com>
 Date: Wed, 17 Sep 2014 17:00:13 -0700
-Subject: [PATCH 3/3] Disable checking gio-unix-2.0 and disable rsvg_convert
+Subject: [PATCH 2/3] Disable checking gio-unix-2.0 and disable rsvg_convert
  program
 
 rsvg_convert uses Unix features.
@@ -72,20 +37,20 @@ diff --git a/Makefile.in b/Makefile.in
 index 1111111..2222222 100644
 --- a/Makefile.in
 +++ b/Makefile.in
-@@ -81,7 +81,7 @@ PRE_UNINSTALL = :
+@@ -91,7 +91,7 @@ PRE_UNINSTALL = :
  POST_UNINSTALL = :
  build_triplet = @build@
  host_triplet = @host@
--bin_PROGRAMS = rsvg-convert$(EXEEXT) $(am__EXEEXT_1)
-+#bin_PROGRAMS = rsvg-convert$(EXEEXT) $(am__EXEEXT_1)
- @HAVE_GTK_3_TRUE@am__append_1 = rsvg-view-3
- @OS_WIN32_TRUE@am__append_2 = -mwindows
- @HAVE_INTROSPECTION_TRUE@am__append_3 = $(nodist_gir_DATA) $(nodist_typelibs_DATA)
+-bin_PROGRAMS = rsvg-convert$(EXEEXT)
++#bin_PROGRAMS = rsvg-convert$(EXEEXT)
+ @ENABLE_VAPIGEN_TRUE@@HAVE_INTROSPECTION_TRUE@am__append_1 = $(VAPIGEN_VAPIS)
+ subdir = .
+ ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 diff --git a/configure b/configure
 index 1111111..2222222 100755
 --- a/configure
 +++ b/configure
-@@ -13662,12 +13662,12 @@ if test -n "$RSVG_CONVERT_CFLAGS"; then
+@@ -17066,12 +17066,12 @@ if test -n "$RSVG_CONVERT_CFLAGS"; then
      pkg_cv_RSVG_CONVERT_CFLAGS="$RSVG_CONVERT_CFLAGS"
   elif test -n "$PKG_CONFIG"; then
      if test -n "$PKG_CONFIG" && \
@@ -101,7 +66,7 @@ index 1111111..2222222 100755
  		      test "x$?" != "x0" && pkg_failed=yes
  else
    pkg_failed=yes
-@@ -13679,12 +13679,12 @@ if test -n "$RSVG_CONVERT_LIBS"; then
+@@ -17083,12 +17083,12 @@ if test -n "$RSVG_CONVERT_LIBS"; then
      pkg_cv_RSVG_CONVERT_LIBS="$RSVG_CONVERT_LIBS"
   elif test -n "$PKG_CONFIG"; then
      if test -n "$PKG_CONFIG" && \
@@ -117,7 +82,7 @@ index 1111111..2222222 100755
  		      test "x$?" != "x0" && pkg_failed=yes
  else
    pkg_failed=yes
-@@ -13705,14 +13705,14 @@ else
+@@ -17109,14 +17109,14 @@ else
          _pkg_short_errors_supported=no
  fi
          if test $_pkg_short_errors_supported = yes; then
@@ -135,3 +100,25 @@ index 1111111..2222222 100755
  
  $RSVG_CONVERT_PKG_ERRORS
  
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Gregorio Litenstein <g.litenstein@gmail.com>
+Date: Sun, 20 Oct 2019 15:27:56 -0300
+Subject: [PATCH 3/3] Change LTO to Thin-LTO
+
+
+diff --git a/Cargo.toml b/Cargo.toml
+index 1111111..2222222 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -6,8 +6,8 @@ members = [
+ ]
+ 
+ [profile.release]
+-lto = true
++lto = 'thin'
+ debug = true
+ 
+ [profile.bench]
+-lto = true
++lto = 'thin'

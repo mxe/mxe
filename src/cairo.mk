@@ -21,7 +21,6 @@ define $(PKG)_BUILD
     $(SED) -i 's,^\(Libs:.*\),\1 @CAIRO_NONPKGCONFIG_LIBS@,' '$(1)/src/cairo.pc.in'
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
-        --disable-lto \
         --disable-gtk-doc \
         --disable-test-surfaces \
         --disable-gcov \
@@ -42,7 +41,7 @@ define $(PKG)_BUILD
         --enable-ps \
         --enable-pdf \
         --enable-svg \
-        --disable-pthread \
+        --enable-pthread \
         CFLAGS="$(CFLAGS) $(if $(BUILD_STATIC),-DCAIRO_WIN32_STATIC_BUILD)" \
         LIBS="-lmsimg32 -lgdi32 `$(TARGET)-pkg-config pixman-1 --libs`"
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
