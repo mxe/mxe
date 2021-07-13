@@ -1,0 +1,81 @@
+diff -urN a-3.3.0/Lib/distutils/command/install.py b-3.3.0/Lib/distutils/command/install.py
+--- a-3.3.0/Lib/distutils/command/install.py	Fri Nov 16 17:38:07 2012
++++ b-3.3.0/Lib/distutils/command/install.py	Fri Nov 16 18:08:10 2012
+@@ -4,6 +4,7 @@
+ 
+ import sys
+ import os
++import re
+ 
+ from distutils import log
+ from distutils.core import Command
+@@ -15,6 +16,37 @@
+ from distutils.util import get_platform
+ from distutils.errors import DistutilsOptionError
+ 
++def is_msys_mingw():
++    if sys.platform == "win32" and "MSYSTEM" in os.environ and sys.version.find("GCC") >= 0:
++        if os.environ["MSYSTEM"] == "MINGW32":
++            return 1
++    return 0
++
++def has_msys():
++    _msysdll = "msys-1.0.dll"
++    for _path in os.environ["PATH"].split(os.pathsep):
++        currpath = os.path.join(_path, _msysdll)
++        if os.path.isfile(currpath) and os.access(currpath, os.F_OK):
++            return _path
++    return None
++
++def msys_root():
++    if is_msys_mingw() and has_msys() is not None:
++        arg = has_msys()
++        if arg == None:
++            return None
++        arg = arg.rstrip("\\")
++        if arg.endswith("\\bin"):
++            # drop the \\bin
++            arg = arg[:-4]
++        table = str.maketrans('\\', '/')
++        arg = arg.translate(table)
++        if arg.endswith("/"):
++            arg = arg[:-1]
++        return arg
++    else:
++        return None
++
+ # this keeps compatibility from 2.3 to 2.5
+ if sys.version < "2.6":
+     USER_BASE = None
+@@ -336,6 +368,14 @@
+         self.expand_basedirs()
+ 
+         self.dump_dirs("post-expand_basedirs()")
++
++        # MSYS (probably) will have transformed --root=/ to the
++        # windows path where the msys is installed, so we check if root begins
++        # with msysroot and if it does then we set root to None again!
++        if self.root is not None and is_msys_mingw():
++            msysroot = msys_root()
++            if msysroot != None and self.root.find(msysroot)==0:
++                self.root = self.root.replace(msysroot, "/")
+ 
+         # Now define config vars for the base directories so we can expand
+         # everything else.
+diff -urN a-3.3.0/Lib/distutils/util.py b-3.3.0/Lib/distutils/util.py
+--- a-3.3.0/Lib/distutils/util.py	Fri Nov 16 17:38:07 2012
++++ b-3.3.0/Lib/distutils/util.py	Fri Nov 16 18:08:10 2012
+@@ -131,6 +131,13 @@
+         paths.remove('.')
+     if not paths:
+         return os.curdir
++    # On Windows, if paths is ['C:','folder','subfolder'] then 
++    # os.path.join(*paths) will return 'C:folder\subfolder' which
++    # is thus relative to the CWD on that drive. So we work around
++    # this by adding a \ to path[0]
++    if (len(paths) > 0 and paths[0].endswith(':') and 
++        sys.platform == "win32" and sys.version.find("GCC") >= 0):
++        paths[0] += '\\'
+     return os.path.join(*paths)
+ 
+ # convert_path ()

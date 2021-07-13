@@ -4,8 +4,8 @@ PKG             := glib
 $(PKG)_WEBSITE  := https://gtk.org/
 $(PKG)_DESCR    := GLib
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.50.2
-$(PKG)_CHECKSUM := be68737c1f268c05493e503b3b654d2b7f43d7d0b8c5556f7e4651b870acfbf5
+$(PKG)_VERSION  := 2.54.0
+$(PKG)_CHECKSUM := fe22998ff0394ec31e6e5511c379b74011bee61a4421bca7fcab223dfbe0fc6a
 $(PKG)_SUBDIR   := glib-$($(PKG)_VERSION)
 $(PKG)_FILE     := glib-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.gnome.org/sources/glib/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
@@ -88,7 +88,7 @@ endef
 
 define $(PKG)_BUILD
     # other packages expect glib-tools in $(TARGET)/bin
-    rm -f  '$(PREFIX)/$(TARGET)/bin/glib-*'
+    rm -f '$(PREFIX)/$(TARGET)/bin/glib-*'
     ln -sf '$(PREFIX)/$(BUILD)/bin/glib-genmarshal'        '$(PREFIX)/$(TARGET)/bin/'
     ln -sf '$(PREFIX)/$(BUILD)/bin/glib-compile-schemas'   '$(PREFIX)/$(TARGET)/bin/'
     ln -sf '$(PREFIX)/$(BUILD)/bin/glib-compile-resources' '$(PREFIX)/$(TARGET)/bin/'

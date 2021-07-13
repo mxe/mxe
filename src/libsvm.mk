@@ -3,16 +3,16 @@
 PKG             := libsvm
 $(PKG)_WEBSITE  := https://www.csie.ntu.edu.tw/~cjlin/libsvm
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.22
-$(PKG)_CHECKSUM := 6d81c67d3b13073eb5a25aa77188f141b242ec328518fad95367ede253d0a77d
+$(PKG)_VERSION  := 322
+$(PKG)_CHECKSUM := a3469436f795bb3f8b1e65ea761e14e5599ec7ee941c001d771c07b7da318ac6
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://www.csie.ntu.edu.tw/~cjlin/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://www.csie.ntu.edu.tw/~cjlin/libsvm/' | \
-    $(SED) -n 's,.*>v\([0-9][^<]*\)<.*,\1,p' | \
+    $(WGET) -q -O- 'https://github.com/cjlin1/libsvm/releases' | \
+    $(SED) -n '/a href/ s_.*releases/tag/v\([0-9.]*\)".*_\1_ip' | \
     head -1
 endef
 

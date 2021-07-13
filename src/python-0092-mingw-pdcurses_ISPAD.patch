@@ -1,0 +1,14 @@
+diff -urN a-3.3.0/Include/py_curses.h b-3.3.0/Include/py_curses.h
+--- a-3.3.0/Include/py_curses.h	Fri Nov 16 18:18:25 2012
++++ b-3.3.0/Include/py_curses.h	Fri Nov 16 18:18:49 2012
+@@ -56,6 +56,10 @@
+ #endif
+ #endif
+ 
++#if defined(__MINGW32__) && !defined(_ISPAD)
++#define _ISPAD 0x10
++#endif
++
+ #ifdef HAVE_NCURSES_H
+ /* configure was checking <curses.h>, but we will
+    use <ncurses.h>, which has all these features. */

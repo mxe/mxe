@@ -1,0 +1,15 @@
+diff -urN a-3.3.0/setup.py b-3.3.0/setup.py
+--- a-3.3.0/setup.py	Sat Nov 17 00:18:21 2012
++++ b-3.3.0/setup.py	Sat Nov 17 00:18:53 2012
+@@ -2232,8 +2232,9 @@
+                 newfilename = filename + fullversion
+             else:
+                 newfilename = filename + minoronly
+-            log.info('renaming {} to {}'.format(filename, newfilename))
+-            os.rename(filename, newfilename)
++            if not os.path.exists(newfilename):
++                log.info('renaming {} to {}'.format(filename, newfilename))
++                os.rename(filename, newfilename)
+             newoutfiles.append(newfilename)
+             if filename in updated_files:
+                 newupdated_files.append(newfilename)

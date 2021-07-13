@@ -1,0 +1,11 @@
+--- a/opal/win32/win_compat.h	2013-03-13 19:13:16.000000000 +0100
++++ b/opal/win32/win_compat.h	2013-03-13 19:23:28.000000000 +0100
+@@ -172,7 +172,7 @@
+ 
+ #define MAXPATHLEN _MAX_PATH
+ #define MAXHOSTNAMELEN _MAX_PATH
+-#define PATH_MAX _MAX_PATH
++// #define PATH_MAX _MAX_PATH
+ #define WTERMSIG(EXIT_CODE)    (1)
+ #define WIFEXITED(EXIT_CODE)   (1)
+ #define WEXITSTATUS(EXIT_CODE) (EXIT_CODE)

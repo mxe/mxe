@@ -1,0 +1,14 @@
+--- a/opal/util/output.h	2012-04-03 16:29:52.000000000 +0200
++++ b/opal/util/output.h	2013-03-13 23:22:28.000000000 +0100
+@@ -72,9 +72,9 @@
+  * For C++, we should not need the file, anyhow.
+  * Circumentvent problems in C++ compilers.
+  */
+-#if defined(HAVE_STDBOOL_H) && !(defined(c_plusplus) || defined(__cplusplus))
++//#if defined(HAVE_STDBOOL_H) && !(defined(c_plusplus) || defined(__cplusplus))
+ #include <stdbool.h>
+-#endif
++//#endif
+ 
+ #include "opal/class/opal_object.h"
+ 

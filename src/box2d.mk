@@ -8,6 +8,12 @@ $(PKG)_CHECKSUM := 75d62738b13d2836cd56647581b6e574d4005a6e077ddefa5d727d445d649
 $(PKG)_GH_CONF  := erincatto/Box2D/tags, v
 $(PKG)_DEPS     := cc
 
+define $(PKG)_UPDATE
+    $(WGET) -q -O- 'https://github.com/erincatto/Box2D/releases' | \
+    $(SED) -n '/a href/ s_.*releases/tag/v\([0-9.]*\)".*_\1_ip' | \
+    head -1
+endef
+
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && $(TARGET)-cmake \
         -DBOX2D_INSTALL=ON \

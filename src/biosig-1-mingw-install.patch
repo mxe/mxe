@@ -1,0 +1,48 @@
+diff --git "a/biosig4c++/Makefile.in" "b/biosig4c++/Makefile.in"
+index c05e4d1..8fd7aad 100644
+--- "a/biosig4c++/Makefile.in"
++++ "b/biosig4c++/Makefile.in"	
+@@ -139,6 +139,7 @@ endif
+ SONAMEVERSION ?= 3
+ 
+ ### TODO: DLEXT does not work correctly on MXE/MINGW
++DLDIR = $(libdir)
+ ifneq (,$(findstring Darwin, $(shell uname)))
+ 	## Homebrew:
+ 	##	brew install gawk
+@@ -183,11 +184,17 @@ else ifneq (,$(findstring MINGW, $(shell uname)))
+ 	LDLIBS  += -liconv -lws2_32
+ 	LDFLAGS += -Wl,-subsystem,windows
+ 	LDFLAGS += -L$(prefix)/lib/
++  DLDIR = $(bindir)
+ 
+ else
+ 	TAR	       = tar
+ 	LD	       = $(CXX)
+-	FULLDLEXT      = .so.${SONAMEVERSION}
++  ifneq (,$(findstring mingw,$(TARGET)))
++    FULLDLEXT      = ${SONAMEVERSION}.dll
++    DLDIR = $(bindir)
++  else
++    FULLDLEXT      = .so.${SONAMEVERSION}
++  endif
+ 	SONAME_PREFIX  = -Wl,-soname=
+ endif
+ 
+@@ -937,12 +944,11 @@ install_libbiosig.a: libbiosig.a libphysicalunits.a libbiosig.pc
+ 	install libphysicalunits.a 	$(DESTDIR)$(libdir)
+ 	install libbiosig.pc		$(DESTDIR)$(libdir)/pkgconfig/
+ 
+-install_libbiosig.$(DLEXT): libbiosig$(FULLDLEXT) libbiosig.$(DLEXT)
+-	install -d 			$(DESTDIR)$(libdir)/pkgconfig/
+-	install libbiosig$(FULLDLEXT)  $(DESTDIR)$(libdir)
+-	(cd $(DESTDIR)$(libdir) && ln -sf libbiosig$(FULLDLEXT) libbiosig${SONAMEVERSION}.$(DLEXT))
++install_libbiosig.$(DLEXT): libbiosig.$(DLEXT)
++	install -d 			$(DESTDIR)$(DLDIR)/pkgconfig/
++	install libbiosig.$(DLEXT)  $(DESTDIR)$(DLDIR)/libbiosig$(FULLDLEXT)
+ ifneq (Darwin,$(shell uname))
+-	cd $(DESTDIR)$(libdir) && ln -sf libbiosig$(FULLDLEXT) libbiosig.$(DLEXT)
++	cd $(DESTDIR)$(DLDIR) && ln -sf libbiosig$(FULLDLEXT) libbiosig.$(DLEXT)
+ endif
+ 	-ldconfig
+ 

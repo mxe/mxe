@@ -1,0 +1,12 @@
+diff -urN a-3.3.0/setup.py b-3.3.0/setup.py
+--- a-3.3.0/setup.py	Sat Nov 17 00:26:05 2012
++++ b-3.3.0/setup.py	Sat Nov 17 00:26:52 2012
+@@ -1877,7 +1877,7 @@
+ ##         # Uncomment these lines if you want to play with xxmodule.c
+ ##         ext = Extension('xx', ['xxmodule.c'])
+ ##         self.extensions.append(ext)
+-        if 'd' not in sys.abiflags:
++        if 'd' not in sys.abiflags and not COMPILED_WITH_PYDEBUG:
+             ext = Extension('xxlimited', ['xxlimited.c'],
+                             define_macros=[('Py_LIMITED_API', 1)])
+             self.extensions.append(ext)

@@ -1,0 +1,39 @@
+diff -uNr e/othersrc/gsdllinc/wgsver.c f/othersrc/gsdllinc/wgsver.c
+--- e/othersrc/gsdllinc/wgsver.c	2010-12-27 10:09:35.000000000 -0500
++++ f/othersrc/gsdllinc/wgsver.c	2013-01-08 22:23:09.775545031 -0500
+@@ -39,6 +39,10 @@
+ #include <stdlib.h>
+ #include "wgsver.h"
+ 
++#ifndef KEY_WOW64_64KEY
++#define KEY_WOW64_64KEY 0x0100
++#endif
++
+ /* Ghostscript may be known in the Windows Registry by
+  * the following names.
+  */
+diff -uNr e/src/cbstream.cpp f/src/cbstream.cpp
+--- e/src/cbstream.cpp	2012-08-28 09:52:28.000000000 -0400
++++ f/src/cbstream.cpp	2013-01-08 22:15:04.575971765 -0500
+@@ -33,6 +33,8 @@
+ // this code is only needed under WIN32
+ // ...and under OS/2
+ 
++#include <cstdio>
++
+ #include "cppcomp.h"
+ 
+ #include "cbstream.h"
+diff -uNr e/src/Makefile.am f/src/Makefile.am
+--- e/src/Makefile.am	2010-08-22 09:54:28.000000000 -0400
++++ f/src/Makefile.am	2013-01-08 22:28:40.596345408 -0500
+@@ -133,7 +133,8 @@
+ 	genericints.h 				\
+ 	version.h
+ 
+-libpstoedit_la_LIBADD = ${CXX_STD_LIB} ${CXX_RUNTIME_LIB} -ldl -lm
++libpstoedit_la_LIBADD = ${CXX_STD_LIB} ${CXX_RUNTIME_LIB} -lm
++libpstoedit_la_CPPFLAGS = -I$(top_srcdir)/othersrc/gsdllinc
+ libpstoedit_la_LDFLAGS = -no-undefined
+ 
+ pstoedit_SOURCES = cmdmain.cpp

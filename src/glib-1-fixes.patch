@@ -155,56 +155,6 @@ Date: Fri, 15 Jun 2012 15:29:06 +0200
 Subject: [PATCH 05/10] Link with dnsapi
 
 
-diff --git a/gio-2.0.pc.in b/gio-2.0.pc.in
-index 1111111..2222222 100644
---- a/gio-2.0.pc.in
-+++ b/gio-2.0.pc.in
-@@ -13,6 +13,6 @@ Description: glib I/O library
- Version: @VERSION@
- Requires: glib-2.0 gobject-2.0
- Requires.private: gmodule-no-export-2.0
--Libs: -L${libdir} -lgio-2.0
-+Libs: -L${libdir} -lgio-2.0 -ldnsapi -liphlpapi
- Libs.private: @ZLIB_LIBS@ @NETWORK_LIBS@ @SELINUX_LIBS@ @COCOA_LIBS@ @CARBON_LIBS@
- Cflags:
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Hans Petter Jansson <hpj@cl.no>
-Date: Fri, 15 Jun 2012 15:29:38 +0200
-Subject: [PATCH 06/10] Ensure globals are initialized even when DllMain is not
- being run
-
-
-diff --git a/glib/gmain.c b/glib/gmain.c
-index 1111111..2222222 100644
---- a/glib/gmain.c
-+++ b/glib/gmain.c
-@@ -2657,12 +2657,15 @@ g_get_real_time (void)
- #if defined (G_OS_WIN32)
- static ULONGLONG (*g_GetTickCount64) (void) = NULL;
- static guint32 g_win32_tick_epoch = 0;
-+static gboolean g_win32_clock_is_initialized;
- 
- void
- g_clock_win32_init (void)
- {
-   HMODULE kernel32;
- 
-+  g_win32_clock_is_initialized = TRUE;
-+
-   g_GetTickCount64 = NULL;
-   kernel32 = GetModuleHandle ("KERNEL32.DLL");
-   if (kernel32 != NULL)
-@@ -2721,6 +2724,9 @@ g_get_monotonic_time (void)
-    *    timeBeginPeriod() to increase it as much as they want
-    */
- 
-+  if (!g_win32_clock_is_initialized)
-+    g_clock_win32_init ();
-+
-   if (g_GetTickCount64 != NULL)
-     {
-       guint32 ticks_as_32bit;
 diff --git a/glib/gthread-win32.c b/glib/gthread-win32.c
 index 1111111..2222222 100644
 --- a/glib/gthread-win32.c
@@ -601,67 +551,6 @@ From: Tony Theodore <tonyt@logyst.com>
 Date: Mon, 26 Feb 2018 16:09:53 +1100
 Subject: [PATCH 09/10] darwin: disable g_cocoa_notification_backend
 
-
-diff --git a/gio/Makefile.am b/gio/Makefile.am
-index 1111111..2222222 100644
---- a/gio/Makefile.am
-+++ b/gio/Makefile.am
-@@ -279,10 +279,6 @@ unix_sources = \
- 
- appinfo_sources += $(unix_appinfo_sources)
- 
--if OS_COCOA
--unix_sources += gcocoanotificationbackend.c
--endif
--
- giounixincludedir=$(includedir)/gio-unix-2.0/gio
- giounixinclude_HEADERS = \
- 	gdesktopappinfo.h	\
-diff --git a/gio/giomodule.c b/gio/giomodule.c
-index 1111111..2222222 100644
---- a/gio/giomodule.c
-+++ b/gio/giomodule.c
-@@ -918,9 +918,6 @@ extern GType g_proxy_resolver_portal_get_type (void);
- extern GType g_network_monitor_portal_get_type (void);
- #endif
- 
--#ifdef HAVE_COCOA
--extern GType g_cocoa_notification_backend_get_type (void);
--#endif
- 
- #ifdef G_PLATFORM_WIN32
- 
-@@ -1117,9 +1114,6 @@ _g_io_modules_ensure_loaded (void)
-       g_type_ensure (g_network_monitor_portal_get_type ());
-       g_type_ensure (g_proxy_resolver_portal_get_type ());
- #endif
--#ifdef HAVE_COCOA
--      g_type_ensure (g_cocoa_notification_backend_get_type ());
--#endif
- #ifdef G_OS_WIN32
-       g_type_ensure (_g_winhttp_vfs_get_type ());
- #endif
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Ernestas Kulik <ekulik@redhat.com>
-Date: Tue, 29 Jan 2019 09:50:46 +0100
-Subject: [PATCH 10/10] gdbus: Avoid printing null strings
-
-This mostly affects the 2.56 branch, but, given that GCC 9 is being
-stricter about passing null string pointers to printf-like functions, it
-might make sense to proactively fix such calls.
-
-gdbusauth.c: In function '_g_dbus_auth_run_server':
-gdbusauth.c:1302:11: error: '%s' directive argument is null
-[-Werror=format-overflow=]
- 1302 |           debug_print ("SERVER: WaitingForBegin, read '%s'",
- line);
-       |
-
-gdbusmessage.c: In function ‘g_dbus_message_to_blob’:
-gdbusmessage.c:2730:30: error: ‘%s’ directive argument is null [-Werror=format-overflow=]
- 2730 |       tupled_signature_str = g_strdup_printf ("(%s)", signature_str);
-      |
 
 diff --git a/gio/gdbusauth.c b/gio/gdbusauth.c
 index 1111111..2222222 100644

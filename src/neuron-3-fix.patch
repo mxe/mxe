@@ -1,0 +1,20 @@
+--- a/src/ivoc/ivocwin.cpp	2012-07-24 14:59:05.000000000 +0200
++++ b/src/ivoc/ivocwin.cpp	2013-02-26 19:48:35.000000000 +0100
+@@ -163,7 +163,7 @@
+ int ivoc_vector_size(Object*) {return 0;}
+ #endif
+ 
+-#ifdef MINGW
++#if 1
+ IOHandler::IOHandler(){}
+ IOHandler::~IOHandler(){}
+ int IOHandler::inputReady(int){return 0;}
+@@ -173,7 +173,7 @@
+ void IOHandler::childStatus(pid_t, int){}
+ #endif // MINGW
+ 
+-#ifdef MINGW
++#if 1
+ extern "C" {
+ int stdin_event_ready();
+ }

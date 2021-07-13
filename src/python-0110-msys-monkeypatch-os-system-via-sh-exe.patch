@@ -1,0 +1,21 @@
+diff -urN a-3.3.0/setup.py b-3.3.0/setup.py
+--- a-3.3.0/setup.py	Mon Nov 19 13:57:49 2012
++++ b-3.3.0/setup.py	Mon Nov 19 13:59:22 2012
+@@ -27,6 +27,17 @@
+     return sys.platform
+ host_platform = get_platform()
+ 
++# On MSYS, os.system needs to be wrapped with sh.exe
++# as otherwise all the io redirection will fail.
++# Arguably, this could happen inside the real os.system
++# rather than this monkey patch.
++if sys.platform == "win32" and "MSYSTEM" in os.environ:
++    os_system = os.system
++    def msys_system(command):
++        command_in_sh = 'sh.exe -c "%s"' % command
++        return os_system(command_in_sh)
++    os.system = msys_system
++
+ # Were we compiled --with-pydebug or with #define Py_DEBUG?
+ COMPILED_WITH_PYDEBUG = ('--with-pydebug' in sysconfig.get_config_var("CONFIG_ARGS"))
+ 
