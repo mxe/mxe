@@ -1,12 +1,12 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := hidapi
-$(PKG)_WEBSITE  := https://github.com/signal11/hidapi/
+$(PKG)_WEBSITE  := https://github.com/libusb/hidapi/
 $(PKG)_DESCR    := HIDAPI
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := a6a622f
-$(PKG)_CHECKSUM := 32ea444bdd6c6a8a940bfa3287a2dc8c291a141fdc78cd638b37b546b44d95be
-$(PKG)_GH_CONF  := signal11/hidapi/branches/master
+$(PKG)_VERSION  := 2a24bf9
+$(PKG)_CHECKSUM := fcf650c10ccd39c47cc86ffd676befc71dd74bd8367f6716418974830f218d1f
+$(PKG)_GH_CONF  := libusb/hidapi/branches/master
 $(PKG)_DEPS     := cc
 
 define $(PKG)_BUILD
