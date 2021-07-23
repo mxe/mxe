@@ -11,7 +11,7 @@ $(PKG)_FILE     := gdal-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.osgeo.org/gdal/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc armadillo curl expat geos giflib gta hdf4 hdf5 \
                    jpeg json-c libgeotiff libmysqlclient libpng libxml2 \
-                   netcdf openjpeg postgresql proj spatialite sqlite tiff zlib
+                   netcdf openjpeg postgresql proj spatialite sqlite tiff zlib openjpeg
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://trac.osgeo.org/gdal/wiki/DownloadSource' | \
