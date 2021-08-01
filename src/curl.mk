@@ -20,7 +20,7 @@ endef
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
         $(MXE_CONFIGURE_OPTS) \
-        --with-winssl \
+        --with-schannel \
         --without-ssl \
         --with-libidn2 \
         --enable-sspi \
