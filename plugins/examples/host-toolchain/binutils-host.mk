@@ -6,6 +6,7 @@ $(PKG)_VERSION   = $(binutils_VERSION)
 $(PKG)_CHECKSUM  = $(binutils_CHECKSUM)
 $(PKG)_SUBDIR    = $(binutils_SUBDIR)
 $(PKG)_FILE      = $(binutils_FILE)
+$(PKG)_PATCHES   = $(binutils_PATCHES)
 $(PKG)_URL       = $(binutils_URL)
 $(PKG)_URL_2     = $(binutils_URL_2)
 $(PKG)_DEPS     := cc
