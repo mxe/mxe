@@ -32,7 +32,8 @@ $(PKG)_SUBDIR   := gcc-$($(PKG)_VERSION)
 $(PKG)_FILE     := gcc-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://ftp.gnu.org/gnu/gcc/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_URL_2    := https://www.mirrorservice.org/sites/sourceware.org/pub/gcc/releases/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_PATCHES  := $(dir $(lastword $(MAKEFILE_LIST)))/gcc10.patch
+$(PKG)_PATCHES  := $(dir $(lastword $(MAKEFILE_LIST)))/gcc10.patch \
+                   $(dir $(lastword $(MAKEFILE_LIST)))/gcc10-1-driver-access-fix.diff
 $(PKG)_DEPS     := binutils mingw-w64 $(addprefix $(BUILD)~,gmp isl mpc mpfr zstd)
 
 _$(PKG)_CONFIGURE_OPTS = --with-zstd='$(PREFIX)/$(BUILD)'
