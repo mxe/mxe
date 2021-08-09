@@ -1,0 +1,80 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+From e2782ccaa642202e50aebefe4107e4313f6bbb53 Mon Sep 17 00:00:00 2001
+From: Cameron Cawley <ccawley2011@gmail.com>
+Date: Sat, 17 Jul 2021 15:56:53 +0100
+Subject: [PATCH] Include required libraries in pkg-config output
+
+---
+Taken from
+https://github.com/scummvm/dockerized-bb/blob/a52be2b8/toolchains/mxe/packages/sdl2_net/sdl2_net-1-pkg-config.patch
+
+diff --git a/Makefile.in b/Makefile.in
+index 1e5292d..a80d9c2 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -305,6 +305,10 @@ ECHO_C = @ECHO_C@
+ ECHO_N = @ECHO_N@
+ ECHO_T = @ECHO_T@
+ EGREP = @EGREP@
++ENABLE_SHARED_FALSE = @ENABLE_SHARED_FALSE@
++ENABLE_SHARED_TRUE = @ENABLE_SHARED_TRUE@
++ENABLE_STATIC_FALSE = @ENABLE_STATIC_FALSE@
++ENABLE_STATIC_TRUE = @ENABLE_STATIC_TRUE@
+ EXEEXT = @EXEEXT@
+ FGREP = @FGREP@
+ GREP = @GREP@
+diff --git a/SDL2_net.pc.in b/SDL2_net.pc.in
+index e3ad892..28dd6c8 100644
+--- a/SDL2_net.pc.in
++++ b/SDL2_net.pc.in
+@@ -7,5 +7,7 @@ Name: SDL2_net
+ Description: net library for Simple DirectMedia Layer
+ Version: @VERSION@
+ Requires: sdl2 >= @SDL_VERSION@
+-Libs: -L${libdir} -lSDL2_net
++@ENABLE_SHARED_TRUE@Libs: -L${libdir} -lSDL2_net
++@ENABLE_SHARED_TRUE@@ENABLE_STATIC_TRUE@Libs.private: @INETLIB@
++@ENABLE_SHARED_FALSE@Libs: -L${libdir} -lSDL2_net @INETLIB@
+ Cflags: -I${includedir}/SDL2
+diff --git a/configure b/configure
+index 9ec6045..eb4e374 100755
+--- a/configure
++++ b/configure
+@@ -772,6 +772,10 @@ ac_subst_vars='am__EXEEXT_FALSE
+ am__EXEEXT_TRUE
+ LTLIBOBJS
+ LIBOBJS
++ENABLE_STATIC_FALSE
++ENABLE_STATIC_TRUE
++ENABLE_SHARED_FALSE
++ENABLE_SHARED_TRUE
+ HAVE_GUI_LIB_FALSE
+ HAVE_GUI_LIB_TRUE
+ SDL2_CONFIG
+@@ -16024,6 +16028,25 @@ fi
+ 
+ CXXFLAGS="$CXXFLAGS $CFLAGS"
+ 
++if test x$enable_shared = xyes; then
++    ENABLE_SHARED_TRUE=
++    ENABLE_SHARED_FALSE="#"
++else
++    ENABLE_SHARED_TRUE="#"
++    ENABLE_SHARED_FALSE=
++fi
++if test x$enable_static = xyes; then
++    ENABLE_STATIC_TRUE=
++    ENABLE_STATIC_FALSE="#"
++else
++    ENABLE_STATIC_TRUE="#"
++    ENABLE_STATIC_FALSE=
++fi
++
++
++
++
++
+ 
+ 
+ # Finally create all the generated files
