@@ -27,7 +27,6 @@ define $(PKG)_BUILD
     '$(TARGET)-gcc' \
         -W -Wall -Werror -std=c99 -pedantic \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-sdl2_net.exe' \
-        `'$(TARGET)-pkg-config' SDL2_net --cflags --libs` \
-        -lws2_32 -liphlpapi
+        `'$(TARGET)-pkg-config' SDL2_net --cflags --libs`
 endef
 
