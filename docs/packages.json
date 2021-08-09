@@ -15,7 +15,7 @@
     "bfd": {"version": "2.28", "website": "https://www.gnu.org/software/binutils/", "description": "Binary File Descriptor library"},
     "binutils": {"version": "2.28", "website": "https://www.gnu.org/software/binutils/", "description": "GNU Binutils"},
     "blas": {"version": "3.8.0", "website": "https://www.netlib.org/blas/", "description": "Reference BLAS (Basic Linear Algebra Subprograms)"},
-    "boost": {"version": "1.60.0", "website": "https://www.boost.org/", "description": "Boost C++ Library"},
+    "boost": {"version": "1.78.0", "website": "https://www.boost.org/", "description": "Boost C++ Library"},
     "box2d": {"version": "2.3.1", "website": "https://www.box2d.org/", "description": ""},
     "bullet": {"version": "2.82-r2704", "website": "https://bulletphysics.org/", "description": "Bullet physics, version 2"},
     "bzip2": {"version": "1.0.6", "website": "https://en.wikipedia.org/wiki/Bzip2", "description": ""},
