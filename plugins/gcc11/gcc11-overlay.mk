@@ -26,8 +26,8 @@ $(PKG)_URL      := https://isl.gforge.inria.fr/$($(PKG)_FILE)
 $(PKG)_URL_2    := https://gcc.gnu.org/pub/gcc/infrastructure/$($(PKG)_FILE)
 
 PKG             := gcc
-$(PKG)_VERSION  := 11.1.0
-$(PKG)_CHECKSUM := 4c4a6fb8a8396059241c2e674b85b351c26a5d678274007f076957afa1cc9ddf
+$(PKG)_VERSION  := 11.2.0
+$(PKG)_CHECKSUM := d08edc536b54c372a1010ff6619dd274c0f1603aa49212ba20f7aa2cda36fa8b
 $(PKG)_SUBDIR   := gcc-$($(PKG)_VERSION)
 $(PKG)_FILE     := gcc-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://ftp.gnu.org/gnu/gcc/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
