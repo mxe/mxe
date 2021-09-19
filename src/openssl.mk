@@ -32,7 +32,7 @@ define $(PKG)_BUILD
         no-capieng \
         --prefix='$(PREFIX)/$(TARGET)' \
         --libdir='$(PREFIX)/$(TARGET)/lib'
-    $(MAKE) -C '$(1)' all install_sw -j 1 \
+    $(MAKE) -C '$(1)' build_sw install_sw -j 1 \
         CC='$(TARGET)-gcc' \
         RANLIB='$(TARGET)-ranlib' \
         AR='$(TARGET)-ar' \
