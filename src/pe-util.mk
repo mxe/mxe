@@ -8,7 +8,7 @@ $(PKG)_VERSION  := 5b07cb3
 $(PKG)_CHECKSUM := 7bc06495a5be6f2b175a28b87c1ab1d16e63b031db2bcfd4760cadc2743c1d68
 $(PKG)_GH_CONF  := gsauthof/pe-util/branches/master
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
-$(PKG)_DEPS     := cc boost pe-parse $(BUILD)~$(PKG)
+$(PKG)_DEPS     := $(BUILD)~$(PKG)
 $(PKG)_DEPS_$(BUILD) := boost cmake pe-parse
 
 define $(PKG)_PRE_CONFIGURE
@@ -19,12 +19,6 @@ define $(PKG)_PRE_CONFIGURE
 endef
 
 define $(PKG)_BUILD
-    $($(PKG)_PRE_CONFIGURE)
-    # install peldd.exe - handy utility (even for static)
-    cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)'
-    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
-    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
-
     # install prefixed wrapper with default paths
     $(if $(BUILD_SHARED),
         (echo '#!/bin/sh'; \
