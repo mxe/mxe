@@ -3,7 +3,7 @@ This file is part of MXE. See LICENSE.md for licensing information.
 From 4fe0644890b8d105ac46094a913b292386c1a67a Mon Sep 17 00:00:00 2001
 From: Ray Donnelly <mingw.android@gmail.com>
 Date: Wed, 26 Aug 2015 12:45:43 +0100
-Subject: [PATCH 1/6] cmake: Rearrange STATIC vs INTERFACE targets
+Subject: [PATCH 1/7] cmake: Rearrange STATIC vs INTERFACE targets
 
 Otherwise we attempt to add_library(Qt5::UiPlugin STATIC IMPORTED)
 for header-only modules when building Qt5 statically.
@@ -42,7 +42,7 @@ index db18dbece6..6b4457569d 100644
 From d9fd8ae37b97ee6d6ff428b2475ab97fa63deee6 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 11 Jun 2017 00:27:41 +0200
-Subject: [PATCH 2/6] use pkg-config for harfbuzz
+Subject: [PATCH 2/7] use pkg-config for harfbuzz
 
 Change-Id: Ia65cbb90fd180f1bc10ce077a9a8323a48e51421
 
@@ -67,7 +67,7 @@ index c8c4864eca..f56b2b94f7 100644
 From e257e2e1b4fd7907dac0d4d56d05379eb973ce51 Mon Sep 17 00:00:00 2001
 From: Thiago Macieira <thiago.macieira@intel.com>
 Date: Mon, 18 Jan 2021 07:40:54 -0800
-Subject: [PATCH 3/6] Fix build with GCC 11: include <limits>
+Subject: [PATCH 3/7] Fix build with GCC 11: include <limits>
 
 Fixes: QTBUG-90395
 Change-Id: Iecc74d2000eb40dfbe7bfffd165b5dd3708b7a40
@@ -117,7 +117,7 @@ index c7a9c87af3..5302be072e 100644
 From f681fc781277f35499008b99e94cc6049885e01c Mon Sep 17 00:00:00 2001
 From: Ville Voutilainen <ville.voutilainen@qt.io>
 Date: Mon, 18 Jan 2021 09:58:17 +0200
-Subject: [PATCH 4/6] Build fixes for GCC 11
+Subject: [PATCH 4/7] Build fixes for GCC 11
 
 Task-number: QTBUG-89977
 Change-Id: Ic1b7ddbffb8a0a00f8c621d09a868f1d94a52c21
@@ -172,7 +172,7 @@ index 9e7e1a5572..f0866a90ac 100644
 From dbedf2727d85fa97b2a287a7192f3b1eabec4589 Mon Sep 17 00:00:00 2001
 From: Ulf Hermann <ulf.hermann@qt.io>
 Date: Wed, 20 Jan 2021 10:42:36 +0100
-Subject: [PATCH 5/6] Partially revert 813a928c7c3cf98670b6043149880ed5c955efb9
+Subject: [PATCH 5/7] Partially revert 813a928c7c3cf98670b6043149880ed5c955efb9
 
 Otherwise ASAN complains about mismatched new/delete.
 
@@ -202,7 +202,7 @@ index 4aee98af53..790c187cb9 100644
 From befb5324e3e00d0b533f4df61483d0d0ccf5db08 Mon Sep 17 00:00:00 2001
 From: Jonas Kvinge <jonas@jkvinge.net>
 Date: Wed, 5 May 2021 14:57:25 +0200
-Subject: [PATCH 6/6] Add missing limits include
+Subject: [PATCH 6/7] Add missing limits include
 
 Change-Id: I927b26d4537478f9130a1ff16d23941c723291fe
 
@@ -221,3 +221,24 @@ index 4dd9e9603b..c94d64d9aa 100644
 -- 
 2.30.2
 
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Thu, 11 Nov 2021 18:18:25 +1100
+Subject: [PATCH 7/7] Add missing macOS header file that was indirectly
+ included before
+
+based on:
+https://code.qt.io/cgit/qt/qtbase.git/commit/src/plugins/platforms/cocoa?id=dece6f5840463ae2ddf927d65eb1b3680e34a547
+
+diff --git a/src/plugins/platforms/cocoa/qiosurfacegraphicsbuffer.h b/src/plugins/platforms/cocoa/qiosurfacegraphicsbuffer.h
+index 1111111..2222222 100644
+--- a/src/plugins/platforms/cocoa/qiosurfacegraphicsbuffer.h
++++ b/src/plugins/platforms/cocoa/qiosurfacegraphicsbuffer.h
+@@ -42,6 +42,7 @@
+ 
+ #include <qpa/qplatformgraphicsbuffer.h>
+ #include <private/qcore_mac_p.h>
++#include <CoreGraphics/CGColorSpace.h>
+ 
+ QT_BEGIN_NAMESPACE
+ 
