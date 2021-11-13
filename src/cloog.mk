@@ -19,10 +19,11 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && ./configure \
+    cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
         $(MXE_CONFIGURE_OPTS) \
         --with-gmp-prefix='$(PREFIX)/$(TARGET)' \
-        --with-isl-prefix='$(PREFIX)/$(TARGET)'
-    $(MAKE) -C '$(1)' -j '$(JOBS)' $(if $(BUILD_SHARED),LDFLAGS=-no-undefined)
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install
+        --with-isl-prefix='$(PREFIX)/$(TARGET)' \
+        ac_cv_prog_TEXI2DVI=
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(if $(BUILD_SHARED),LDFLAGS=-no-undefined)
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' install
 endef
