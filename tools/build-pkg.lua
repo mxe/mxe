@@ -70,7 +70,7 @@ make -C $MXE_DIR lua \
     MXE_TARGETS=$BUILD \
     lua_TARGETS=$BUILD \
     PREFIX=$MXE_DIR/usr.lua && \
-MXE_BUILD_PKG_CODENAME=trusty \
+MXE_BUILD_PKG_CODENAME=focal \
 MXE_BUILD_PKG_TARGETS="i686-w64-mingw32.static" \
 MXE_BUILD_PKG_PKGS=qt5 \
 MXE_BUILD_DRY_RUN=1 \
