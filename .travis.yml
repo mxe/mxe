@@ -1,4 +1,4 @@
-dist: trusty
+dist: focal
 language: c
 sudo: false
 
