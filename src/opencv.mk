@@ -4,12 +4,10 @@ PKG             := opencv
 $(PKG)_WEBSITE  := https://opencv.org/
 $(PKG)_DESCR    := OpenCV
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.3.0
-$(PKG)_CHECKSUM := 3546c3837f88177c898e4172942da7a3ca6c4e8e98a33d0cbccb2b499167c5ba
+$(PKG)_GH_CONF  := opencv/opencv/tags,
+$(PKG)_VERSION  := 3.4.10
+$(PKG)_CHECKSUM := 1ed6f5b02a7baf14daca04817566e7c98ec668cec381e0edf534fa49f10f58a2
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := opencv-$($(PKG)_VERSION).zip
-$(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)library/$(PKG)-unix/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_URL_2    := https://distfiles.macports.org/opencv/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc eigen ffmpeg jasper jpeg libpng libwebp \
                    openblas openexr protobuf tiff xz zlib
 
@@ -56,10 +54,6 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install VERBOSE=1
 
     # fixup and install pkg-config file
-    # openexr isn't available on x86_64-w64-mingw32
-    # opencv builds it's own libIlmImf.a
-    $(if $(findstring x86_64-w64-mingw32,$(TARGET)),\
-        $(SED) -i 's/OpenEXR//' '$(BUILD_DIR)/unix-install/opencv.pc')
 
     $(SED) -i 's,share/OpenCV/3rdparty/,,g' '$(BUILD_DIR)/unix-install/opencv.pc'
 
