@@ -5,10 +5,10 @@ $(PKG)_WEBSITE  := https://opencv.org/
 $(PKG)_DESCR    := OpenCV
 $(PKG)_IGNORE   :=
 $(PKG)_GH_CONF  := opencv/opencv/tags,
-$(PKG)_VERSION  := 3.4.10
-$(PKG)_CHECKSUM := 1ed6f5b02a7baf14daca04817566e7c98ec668cec381e0edf534fa49f10f58a2
+$(PKG)_VERSION  := 3.4.16
+$(PKG)_CHECKSUM := 5e37b791b2fe42ed39b52d9955920b951ee42d5da95f79fbc9765a08ef733399
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_DEPS     := cc eigen ffmpeg jasper jpeg libpng libwebp \
+$(PKG)_DEPS     := cc eigen ffmpeg jasper libpng libwebp \
                    openblas openexr protobuf tiff xz zlib
 
 # -DCMAKE_CXX_STANDARD=98 required for non-posix gcc7 build
@@ -35,15 +35,14 @@ define $(PKG)_BUILD
       -DOPENCV_DOWNLOAD_TRIES_LIST="" \
       -DOPENCV_FFMPEG_SKIP_DOWNLOAD=ON \
       -DBUILD_JASPER=OFF \
-      -DBUILD_JPEG=OFF \
+      -DBUILD_JPEG=ON \
       -DBUILD_WEBP=OFF \
       -DBUILD_PROTOBUF=OFF \
       -DPROTOBUF_UPDATE_FILES=ON \
       -DBUILD_PNG=OFF \
       -DBUILD_OPENEXR=OFF \
       -DCMAKE_VERBOSE=ON \
-      -DCMAKE_CXX_STANDARD=11 \
-      -DCMAKE_CXX_FLAGS='-D_WIN32_WINNT=0x0500'
+      -DENABLE_CXX11=ON
 
     # install
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1
@@ -57,7 +56,7 @@ define $(PKG)_BUILD
     $(if $(BUILD_STATIC), $(INSTALL) -m755 '$(BUILD_DIR)/3rdparty/lib/'*.a \
         '$(PREFIX)/$(TARGET)/lib/')
     '$(TARGET)-g++' \
-        -W -Wall -Werror -ansi \
+        -W -Wall -Werror -ansi -std=c++11 \
         '$(SOURCE_DIR)/samples/cpp/fback.cpp' -o '$(PREFIX)/$(TARGET)/bin/test-opencv.exe' \
         `'$(TARGET)-pkg-config' opencv gnutls --cflags --libs`
 endef
