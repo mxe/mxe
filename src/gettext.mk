@@ -27,7 +27,7 @@ endef
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/gettext-runtime/configure' \
         $(MXE_CONFIGURE_OPTS) \
-        --enable-threads=win32 \
+        --enable-threads=$(if $(POSIX_THREADS),posix,win32) \
         --without-libexpat-prefix \
         --without-libxml2-prefix \
         CONFIG_SHELL=$(SHELL)

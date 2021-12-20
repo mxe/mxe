@@ -4,8 +4,8 @@ PKG             := gtkmm3
 $(PKG)_WEBSITE  := https://www.gtkmm.org/
 $(PKG)_DESCR    := GTKMM
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.14.0
-$(PKG)_CHECKSUM := d9f528a62c6ec226fa08287c45c7465b2dce5aae5068e9ac48d30a64a378e48b
+$(PKG)_VERSION  := 3.20.1
+$(PKG)_CHECKSUM := 051de1b8756ca6ec61f26264338cfc3060af936fd70bf4558bfe1e115418c612
 $(PKG)_SUBDIR   := gtkmm-$($(PKG)_VERSION)
 $(PKG)_FILE     := gtkmm-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.gnome.org/sources/gtkmm/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
@@ -21,10 +21,9 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
-        $(MXE_CONFIGURE_OPTS) \
-        MAKE=$(MAKE)
-    $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
-    $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= doc_install='# DISABLED: doc-install.pl'
+        $(MXE_CONFIGURE_OPTS)
+    $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= LIBS="`$(TARGET)-pkg-config --libs glibmm-2.4`"
+    $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= doc_install='# DISABLED: doc-install.pl' LIBS="`$(TARGET)-pkg-config --libs glibmm-2.4`"
 
     '$(TARGET)-g++' \
         -W -Wall -Wno-deprecated-declarations -Werror -pedantic -std=c++11 \

@@ -20,7 +20,7 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
-        --enable-threads=win32
+        --enable-threads=$(if $(POSIX_THREADS),posix,win32)
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
 endef

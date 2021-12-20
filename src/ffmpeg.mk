@@ -37,8 +37,7 @@ define $(PKG)_BUILD
             --disable-static --enable-shared ) \
         --yasmexe='$(TARGET)-yasm' \
         --disable-debug \
-        --disable-pthreads \
-        --enable-w32threads \
+        --disable-$(if $(POSIX_THREADS),w32threads,pthreads) \
         --disable-doc \
         --enable-avresample \
         --enable-gpl \
@@ -63,6 +62,6 @@ define $(PKG)_BUILD
         --enable-libx264 \
         --enable-libxvid \
         $($(PKG)_CONFIGURE_OPTS)
-    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
-    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' LIBS='-lws2_32'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install LIBS='-lws2_32'
 endef

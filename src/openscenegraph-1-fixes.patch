@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Rashad Kanavath <rashad.kanavath@c-s.fr>
 Date: Sun, 10 Jan 2016 14:04:18 +1100
-Subject: [PATCH 2/6] openscenegraph: use previously built openthreads
+Subject: [PATCH 1/4] openscenegraph: use previously built openthreads
 
 
 diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
@@ -24,7 +24,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
 Date: Mon, 22 Feb 2016 03:35:28 +0300
-Subject: [PATCH 3/6] disable ffmpeg
+Subject: [PATCH 2/4] disable ffmpeg
 
 OpenSceneGraph is using removed features of ffmpeg, which have
 been deprecated for 3+ years.
@@ -51,7 +51,7 @@ index 77d66f8..1c8398e 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Pek <tehnick-8@yandex.ru>
 Date: Wed, 10 Oct 2018 00:56:37 +0300
-Subject: [PATCH 5/6] fix build with GCC < 6.x
+Subject: [PATCH 3/4] fix build with GCC < 6.x
 
 
 diff --git a/src/osgViewer/GraphicsWindowWin32.cpp b/src/osgViewer/GraphicsWindowWin32.cpp
@@ -71,7 +71,7 @@ index 91e6c8f..d11347e 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Pek <tehnick-8@yandex.ru>
 Date: Wed, 10 Oct 2018 01:48:22 +0300
-Subject: [PATCH 6/6] fix build of gta plugin when pkg-config is used
+Subject: [PATCH 4/4] fix build of gta plugin when pkg-config is used
  + update related variable for build without pkg-config.
 
 

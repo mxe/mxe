@@ -31,6 +31,7 @@ SHELL      := bash
 MXE_TMP := $(PWD)
 
 ORIG_PATH  := $(call merge,:,$(filter-out $(PREFIX)/$(BUILD)/bin $(PREFIX)/bin,$(call split,:,$(PATH))))
+AWK        := $(shell which $(shell gawk --help >/dev/null 2>&1 && echo g)awk)
 BUILD_CC   := $(shell (gcc --help >/dev/null 2>&1 && echo gcc) || (clang --help >/dev/null 2>&1 && echo clang))
 BUILD_CXX  := $(shell (g++ --help >/dev/null 2>&1 && echo g++) || (clang++ --help >/dev/null 2>&1 && echo clang++))
 DATE       := $(shell gdate --help >/dev/null 2>&1 && echo g)date
