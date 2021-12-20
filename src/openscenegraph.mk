@@ -19,9 +19,10 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    $(foreach PKG_PATCH,$(sort $(wildcard $(TOP_DIR)/src/openthreads-*.patch)),
+        (cd '$(1)' && $(PATCH) -p1 -u) < $(PKG_PATCH))
     cd '$(BUILD_DIR)' && '$(TARGET)-cmake' '$(SOURCE_DIR)' \
         -DCMAKE_CXX_FLAGS='-D__STDC_CONSTANT_MACROS -D__STDC_LIMIT_MACROS' \
-        -DCMAKE_HAVE_PTHREAD_H=OFF \
         -DOSG_DETERMINE_WIN_VERSION=OFF \
         -DPKG_CONFIG_EXECUTABLE='$(PREFIX)/bin/$(TARGET)-pkg-config' \
         -DDYNAMIC_OPENTHREADS=$(CMAKE_SHARED_BOOL) \
