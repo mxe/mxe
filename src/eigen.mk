@@ -3,18 +3,16 @@
 PKG             := eigen
 $(PKG)_WEBSITE  := https://eigen.tuxfamily.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.3.7
-$(PKG)_CHECKSUM := 9f13cf90dedbe3e52a19f43000d71fdf72e986beb9a5436dddcd61ff9d77a3ce
-$(PKG)_SUBDIR   := $(PKG)-$(PKG)-323c052e1731
+$(PKG)_VERSION  := 3.4.0
+$(PKG)_CHECKSUM := b4c198460eba6f28d34894e3a5710998818515104d6e74e5cc331ce31e46e626
+$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := https://bitbucket.org/$(PKG)/$(PKG)/get/$($(PKG)_VERSION).tar.bz2
+$(PKG)_URL      := https://gitlab.com/libeigen/$(PKG)/-/archive/$($(PKG)_VERSION)/eigen-$($(PKG)_VERSION).tar.bz2
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://eigen.tuxfamily.org/index.php?title=Main_Page#Download' | \
-    grep 'eigen/get/' | \
-    $(SED) -n 's,.*eigen/get/\(3[^>]*\)\.tar.*,\1,p' | \
-    head -1
+    $(SED) -nr 's/^.*eigen-([0-9]+\.[0-9]+\.[0-9]+)\.tar\.bz2.*$/\1/p' | $(SORT) -Vr | $(SED) 1q
 endef
 
 define $(PKG)_BUILD
