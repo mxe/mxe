@@ -7,6 +7,12 @@ From: Tony Theodore <tonyt@logyst.com>
 Date: Wed, 27 Feb 2019 00:55:49 +1100
 Subject: [PATCH 1/1] mingw fixes
 
+From: kirill Okhotnikov <kirill.okhotnikov@gmail.com>
+Date: Mon, 3 Jan 2022 02:40:22 +0100
+Subject: [PATCH 1/1] Fixes eigen 3.4.0 compatibility.
+
+
+
 
 diff --git a/common/include/pcl/pcl_macros.h b/common/include/pcl/pcl_macros.h
 index 1111111..2222222 100644
@@ -52,6 +58,64 @@ index 1111111..2222222 100644
      if(WIN32)
        target_link_libraries("${LIB_NAME}" Rpcrt4.lib)
      endif(WIN32)
++    if(MINGW)
++      add_definitions(-Wa,-mbig-obj)
++    endif(MINGW)
+ endif(build)
+diff --git a/filters/include/pcl/filters/impl/frustum_culling.hpp b/filters/include/pcl/filters/impl/frustum_culling.hpp
+index 1111111..2222222 100644
+--- a/filters/include/pcl/filters/impl/frustum_culling.hpp
++++ b/filters/include/pcl/filters/impl/frustum_culling.hpp
+@@ -109,12 +109,12 @@ pcl::FrustumCulling<PointT>::applyFilter (std::vector<int> &indices)
+   Eigen::Vector3f np_bl (np_c - (up * np_h / 2) - (right * np_w / 2));   // Bottom left corner of the near plane
+   Eigen::Vector3f np_br (np_c - (up * np_h / 2) + (right * np_w / 2));   // Bottom right corner of the near plane
+ 
+-  pl_f.block (0, 0, 3, 1).matrix () = (fp_bl - fp_br).cross (fp_tr - fp_br);   // Far plane equation - cross product of the 
+-  pl_f (3) = -fp_c.dot (pl_f.block (0, 0, 3, 1));                    // perpendicular edges of the far plane
+-
+-  pl_n.block (0, 0, 3, 1).matrix () = (np_tr - np_br).cross (np_bl - np_br);   // Near plane equation - cross product of the 
+-  pl_n (3) = -np_c.dot (pl_n.block (0, 0, 3, 1));                    // perpendicular edges of the far plane
++  pl_f.head<3> () = (fp_bl - fp_br).cross (fp_tr - fp_br);  // Far plane equation - cross product of the 
++  pl_f (3) = -fp_c.dot (pl_f.head<3> ());                   // perpendicular edges of the far plane
+ 
++  pl_n.head<3> () = (np_tr - np_br).cross (np_bl - np_br);  // Near plane equation - cross product of the 
++  pl_n (3) = -np_c.dot (pl_n.head<3> ());                   // perpendicular edges of the far plane
++  
+   Eigen::Vector3f a (fp_bl - T);    // Vector connecting the camera and far plane bottom left
+   Eigen::Vector3f b (fp_br - T);    // Vector connecting the camera and far plane bottom right
+   Eigen::Vector3f c (fp_tr - T);    // Vector connecting the camera and far plane top right
+@@ -133,15 +133,15 @@ pcl::FrustumCulling<PointT>::applyFilter (std::vector<int> &indices)
+   //                   T
+   //
+ 
+-  pl_r.block (0, 0, 3, 1).matrix () = b.cross (c);
+-  pl_l.block (0, 0, 3, 1).matrix () = d.cross (a);
+-  pl_t.block (0, 0, 3, 1).matrix () = c.cross (d);
+-  pl_b.block (0, 0, 3, 1).matrix () = a.cross (b);
++  pl_r.head<3> () = b.cross (c);
++  pl_l.head<3> () = d.cross (a);
++  pl_t.head<3> () = c.cross (d);
++  pl_b.head<3> () = a.cross (b);
+ 
+-  pl_r (3) = -T.dot (pl_r.block (0, 0, 3, 1));
+-  pl_l (3) = -T.dot (pl_l.block (0, 0, 3, 1));
+-  pl_t (3) = -T.dot (pl_t.block (0, 0, 3, 1));
+-  pl_b (3) = -T.dot (pl_b.block (0, 0, 3, 1));
++  pl_r (3) = -T.dot (pl_r.head<3> ());
++  pl_l (3) = -T.dot (pl_l.head<3> ());
++  pl_t (3) = -T.dot (pl_t.head<3> ());
++  pl_b (3) = -T.dot (pl_b.head<3> ());
+ 
+   if (extract_removed_indices_)
+   {
+diff --git a/segmentation/CMakeLists.txt b/segmentation/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/segmentation/CMakeLists.txt
++++ b/segmentation/CMakeLists.txt
+@@ -130,6 +130,9 @@ if(build)
+     # Install include files
+     PCL_ADD_INCLUDES("${SUBSYS_NAME}" "${SUBSYS_NAME}" ${incs})
+     PCL_ADD_INCLUDES("${SUBSYS_NAME}" "${SUBSYS_NAME}/impl" ${impl_incs})
 +    if(MINGW)
 +      add_definitions(-Wa,-mbig-obj)
 +    endif(MINGW)

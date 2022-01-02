@@ -7,15 +7,14 @@ $(PKG)_VERSION  := 1.0.6
 $(PKG)_CHECKSUM := a2848f34fcd5d6cf47def00461fcb528a0484d8edef8208d6d2e2909dc61d9cd
 $(PKG)_SUBDIR   := bzip2-$($(PKG)_VERSION)
 $(PKG)_FILE     := bzip2-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://ftp.osuosl.org/pub/clfs/conglomeration/bzip2/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := https://sourceware.org/pub/bzip2/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://ftp.osuosl.org/pub/clfs/conglomeration/bzip2/' | \
-    grep 'bzip2-' | \
+    $(WGET) -q -O- 'https://sourceware.org/pub/bzip2/' | \
+    $(GREP) 'bzip2-' | \
     $(SED) -n 's,.*bzip2-\([0-9][^>]*\)\.tar.*,\1,p' | \
-    sort -V | \
-    tail -1
+    $(SORT) -Vr | $(SED) 1q
 endef
 
 define $(PKG)_BUILD_COMMON
