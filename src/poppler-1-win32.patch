@@ -2,49 +2,17 @@ This file is part of MXE. See LICENSE.md for licensing information.
 
 Contains ad hoc patches for cross building.
 
-From a1176a1b5b0d065933989cdcd90980390cbe4811 Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?Stefan=20L=C3=B6ffler?= <st.loeffler@gmail.com>
-Date: Sun, 5 Nov 2017 20:53:42 +0100
-Subject: [PATCH 1/4] Only check for Type1 fonts in custom directory if path is
- non-NULL
-
-Otherwise, programs using poppler may crash
-Proposed upstream at https://bugs.freedesktop.org/show_bug.cgi?id=49037
----
- poppler/GlobalParamsWin.cc | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/poppler/GlobalParamsWin.cc b/poppler/GlobalParamsWin.cc
-index d4eb5871..2056df18 100644
---- a/poppler/GlobalParamsWin.cc
-+++ b/poppler/GlobalParamsWin.cc
-@@ -382,7 +382,7 @@ void GlobalParams::setupBaseFonts(const char *dir)
- 
-         GooString *fontName = new GooString(displayFontTab[i].name);
- 
--        if (dir) {
-+        if (dir && displayFontTab[i].t1FileName) {
-             GooString *fontPath = appendToPath(new GooString(dir), displayFontTab[i].t1FileName);
-             if (FileExists(fontPath->c_str()) || FileExists(replaceSuffix(fontPath, ".pfb", ".pfa")->c_str())) {
-                 addFontFile(fontName, fontPath);
--- 
-2.30.2
-
-
-From 442da3994ede93637da6c619708f3745cab19b67 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Stefan=20L=C3=B6ffler?= <st.loeffler@gmail.com>
 Date: Sat, 26 Jun 2021 19:49:25 +0200
-Subject: [PATCH 2/4] Fix static builds
+Subject: [PATCH 1/3] Fix static builds
 
----
- CMakeLists.txt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 51676ec8..8f0654b1 100644
+index 1111111..2222222 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -76,7 +76,7 @@ option(USE_FLOAT "Use single precision arithmetic in the Splash backend" OFF)
+@@ -89,7 +89,7 @@ option(USE_FLOAT "Use single precision arithmetic in the Splash backend" OFF)
  option(BUILD_SHARED_LIBS "Build poppler as a shared library" ON)
  option(RUN_GPERF_IF_PRESENT "Run gperf if it is found" ON)
  if(WIN32)
@@ -53,22 +21,16 @@ index 51676ec8..8f0654b1 100644
  else()
    set(ENABLE_RELOCATABLE OFF)
  endif()
--- 
-2.30.2
 
-
-From af437ce025046060475d2b7f25be3ed5a0399d75 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
 Date: Wed, 27 Jul 2016 10:29:52 +0200
-Subject: [PATCH 3/4] do not try to use mman.h (package mman-win32)
+Subject: [PATCH 2/3] do not try to use mman.h (package mman-win32)
 
 fix https://github.com/mxe/mxe/issues/1455
----
- poppler/CairoFontEngine.cc | 7 -------
- 1 file changed, 7 deletions(-)
 
 diff --git a/poppler/CairoFontEngine.cc b/poppler/CairoFontEngine.cc
-index a65b5fc8..99396e42 100755
+index 1111111..2222222 100755
 --- a/poppler/CairoFontEngine.cc
 +++ b/poppler/CairoFontEngine.cc
 @@ -53,13 +53,6 @@
@@ -85,24 +47,18 @@ index a65b5fc8..99396e42 100755
  //------------------------------------------------------------------------
  // CairoFont
  //------------------------------------------------------------------------
--- 
-2.30.2
 
-
-From 83d432c4059cb98a83ff92770ea9dbd129c9d683 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Stefan=20L=C3=B6ffler?= <st.loeffler@gmail.com>
 Date: Thu, 4 Feb 2021 20:44:30 +0100
-Subject: [PATCH 4/4] Fix static linking for libopenjpeg >= 2.4
+Subject: [PATCH 3/3] Fix static linking for libopenjpeg >= 2.4
 
----
- CMakeLists.txt | 3 +++
- 1 file changed, 3 insertions(+)
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 8f0654b1..b3aea099 100644
+index 1111111..2222222 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -267,6 +267,9 @@ else()
+@@ -285,6 +285,9 @@ else()
    message(FATAL_ERROR "Invalid ENABLE_LIBOPENJPEG value: ${ENABLE_LIBOPENJPEG}")
  endif()
  set(ENABLE_LIBOPENJPEG "${WITH_OPENJPEG}")
@@ -112,6 +68,3 @@ index 8f0654b1..b3aea099 100644
  if(ENABLE_CMS STREQUAL "lcms2")
    find_package(LCMS2)
    set(USE_CMS ${LCMS2_FOUND})
--- 
-2.30.2
-
