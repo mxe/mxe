@@ -135,7 +135,7 @@
     "ilmbase": {"version": "2.2.0", "website": "https://www.openexr.com/", "description": "IlmBase"},
     "imagemagick": {"version": "7.0.8-63", "website": "https://www.imagemagick.org/", "description": "ImageMagick"},
     "intel-tbb": {"version": "c28c8be", "website": "https://www.threadingbuildingblocks.org", "description": "Intel Threading Building Blocks"},
-    "isl": {"version": "0.15", "website": "https://isl.gforge.inria.fr/", "description": "Integer Set Library"},
+    "isl": {"version": "0.15", "website": "https://libisl.sourceforge.io/", "description": "Integer Set Library"},
     "itk": {"version": "5.0.1", "website": "https://www.itk.org/", "description": "Insight Segmentation and Registration Toolkit (ITK)"},
     "itpp": {"version": "4.3.1", "website": "https://itpp.sourceforge.io/", "description": ""},
     "jack": {"version": "1.9.16", "website": "https://jackaudio.org/", "description": "JACK Audio Connection Kit"},
