@@ -2,13 +2,13 @@
 
 PKG             := gdb
 $(PKG)_WEBSITE  := https://www.gnu.org/software/gdb/
-$(PKG)_VERSION  := 11.1
-$(PKG)_CHECKSUM := cccfcc407b20d343fb320d4a9a2110776dd3165118ffd41f4b1b162340333f94
+$(PKG)_VERSION  := 11.2
+$(PKG)_CHECKSUM := 1497c36a71881b8671a9a84a0ee40faab788ca30d7ba19d8463c3cc787152e32
 $(PKG)_SUBDIR   := gdb-$($(PKG)_VERSION)
 $(PKG)_FILE     := gdb-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://ftp.gnu.org/gnu/$(PKG)/$($(PKG)_FILE)
 $(PKG)_URL_2    := https://ftpmirror.gnu.org/$(PKG)/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc dlfcn-win32 expat libiconv mman-win32 readline zlib
+$(PKG)_DEPS     := cc dlfcn-win32 expat gmp libiconv mman-win32 readline zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://ftp.gnu.org/gnu/gdb/?C=M;O=D' | \
