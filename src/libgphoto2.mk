@@ -11,13 +11,17 @@ $(PKG)_DEPS     := cc curl libltdl libxml2 libusb1 libexif
 
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
+	--with-libusb=no \
+	--with-libusb-1.0=no \
         PKG_CONFIG='$(PREFIX)/bin/$(TARGET)-pkg-config' \
         $(MXE_CONFIGURE_OPTS) \
-        $(PKG_CONFIGURE_OPTS)
+        $(PKG_CONFIGURE_OPTS) \
+        LDFLAGS='-lintl' \
+        LIBLTDL='-lltdl -ldl'
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' install
 
     '$(TARGET)-gcc' \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
-        `'$(TARGET)-pkg-config' libgphoto2 --cflags --libs`
+        `'$(TARGET)-pkg-config' libgphoto2 --cflags --libs` -lltdl -ldl -lintl -liconv -ladvapi32
 endef
