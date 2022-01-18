@@ -6,5 +6,5 @@ $(PKG)_DESCR    := LLD Linker on host OS
 $(PKG)_VERSION  := system
 
 define $(PKG)_BUILD
-    ln -s /usr/bin/ld.lld '$(MXE_PREFIX_DIR)/bin/$(TARGET)-ld.lld'
+    ln -s /usr/bin/ld.lld '$(PREFIX)/bin/$(TARGET)-ld.lld'
 endef
