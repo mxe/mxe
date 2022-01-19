@@ -54,3 +54,53 @@ diff -ur a/src/qmldebug/qqmlprofilerevent_p.h b/src/qmldebug/qqmlprofilerevent_p
  #include <type_traits>
  
  //
+
+
+From 831efa14e91cfa358e57a32197578d41c2ae1b24 Mon Sep 17 00:00:00 2001
+From: Allan Sandfeld Jensen <allan.jensen@qt.io>
+Date: Wed, 19 Jun 2019 12:54:43 +0200
+Subject: [PATCH] Update hovered on disabled QQuickItems
+
+Changes handling of hovered so that the property is still updated on
+disabled items, so that other items can bind to it. This is in
+particular useful for tooltips.
+
+[ChangeLog][Behavior Changes] QQuickItem::hovered will now update even
+when the item is disabled.
+
+Fixes: QTBUG-30801
+Pick-to: 6.0
+Change-Id: Id17298f657d7631b0e5019138ba33a7d5f863475
+Reviewed-by: Fabian Kosmale <fabian.kosmale@qt.io>
+Reviewed-by: Allan Sandfeld Jensen <allan.jensen@qt.io>
+Reviewed-by: Shawn Rutledge <shawn.rutledge@qt.io>
+---
+
+diff --git a/src/quick/items/qquickwindow.cpp b/src/quick/items/qquickwindow.cpp
+index 6a57553..446573a 100644
+--- a/src/quick/items/qquickwindow.cpp
++++ b/src/quick/items/qquickwindow.cpp
+@@ -2152,7 +2152,9 @@
+         QList<QQuickItem *> children = itemPrivate->paintOrderChildItems();
+         for (int ii = children.count() - 1; ii >= 0; --ii) {
+             QQuickItem *child = children.at(ii);
+-            if (!child->isVisible() || !child->isEnabled() || QQuickItemPrivate::get(child)->culled)
++            if (!child->isVisible() || QQuickItemPrivate::get(child)->culled)
++                continue;
++            if (!child->isEnabled() && !QQuickItemPrivate::get(child)->subtreeHoverEnabled)
+                 continue;
+             if (deliverHoverEvent(child, scenePos, lastScenePos, modifiers, timestamp, accepted))
+                 return true;
+diff --git a/tests/auto/quick/qquickitem/tst_qquickitem.cpp b/tests/auto/quick/qquickitem/tst_qquickitem.cpp
+index 0c92d04..61780fc 100644
+--- a/tests/auto/quick/qquickitem/tst_qquickitem.cpp
++++ b/tests/auto/quick/qquickitem/tst_qquickitem.cpp
+@@ -1622,7 +1622,7 @@
+     QTest::mouseMove(window, inside);
+     QTest::mouseMove(window, outside);
+ 
+-    const bool shouldReceiveHoverEvents = visible && enabled && acceptHoverEvents;
++    const bool shouldReceiveHoverEvents = visible && acceptHoverEvents;
+     if (shouldReceiveHoverEvents) {
+         QCOMPARE(item->hoverEnterCount, 1);
+         QCOMPARE(item->hoverMoveCount, 2);
