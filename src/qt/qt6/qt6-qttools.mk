@@ -3,7 +3,7 @@
 PKG := qt6-qttools
 $(eval $(QT6_METADATA))
 
-$(PKG)_CHECKSUM := b6dc559db447bf394d09dfb238d5c09108f834139a183888179e855c6566bfae
+$(PKG)_CHECKSUM := 9aadbd5a14fad8874d2aa76be79652ec5ed81d31d49b3eff245ebeffc7d8ac08
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 $(PKG)_DEPS     := cc qt6-qtbase #qt6-qtdeclarative
 $(PKG)_DEPS_$(BUILD) := qt6-qtbase
