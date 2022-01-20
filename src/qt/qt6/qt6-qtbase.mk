@@ -5,11 +5,11 @@ PKG             := qt6-$(PKG_BASENAME)
 $(PKG)_WEBSITE  := https://www.qt.io/
 $(PKG)_DESCR    := Qt6
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 6.0.0
-$(PKG)_CHECKSUM := ae227180272d199cbb15318e3353716afada5c57fd5185b812ae26912c958656
+$(PKG)_VERSION  := 6.2.3
+$(PKG)_CHECKSUM := 34d6d0072e197241463c417ad72610c3d44e2efd6062868e9a95283103d75df4
 $(PKG)_SUBDIR   := $(PKG_BASENAME)-everywhere-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG_BASENAME)-everywhere-src-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := https://download.qt.io/official_releases/qt/6.0/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
+$(PKG)_URL      := https://download.qt.io/official_releases/qt/6.2/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 $(PKG)_DEPS     := \
     cc dbus fontconfig freetds freetype harfbuzz jpeg libmysqlclient libpng mesa openssl \
