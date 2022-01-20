@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Niels Kristian Bech Jensen <nkbj1970@hotmail.com>
 Date: Sat, 22 Aug 2015 11:25:36 +0200
-Subject: [PATCH 1/1] fix *.pc file for harfbuzz-icu
+Subject: [PATCH 1/2] fix *.pc file for harfbuzz-icu
 
 
 diff --git a/src/harfbuzz-icu.pc.in b/src/harfbuzz-icu.pc.in
@@ -35,3 +35,23 @@ index 1111111..2222222 100644
 +Libs.private: -lm %libs_private% -lusp10 -lgdi32
  Requires.private: %requires_private%
  Cflags: -I${includedir}/harfbuzz
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Fri, 17 Dec 2021 02:29:43 +0100
+Subject: [PATCH 2/2] don't build test or docs
+
+
+diff --git a/Makefile.am b/Makefile.am
+index 1111111..2222222 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -4,7 +4,7 @@ NULL =
+ 
+ ACLOCAL_AMFLAGS = -I m4
+ 
+-SUBDIRS = src util test docs
++SUBDIRS = src util
+ 
+ EXTRA_DIST = \
+ 	autogen.sh \

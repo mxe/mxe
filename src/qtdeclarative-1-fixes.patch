@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Martchus <martchus@gmx.net>
 Date: Fri, 20 Nov 2020 18:32:31 +0100
-Subject: [PATCH 1/1] Disable d3d12 requiring fxc.exe
+Subject: [PATCH 1/2] Disable d3d12 requiring fxc.exe
 
 * fxc.exe is not provided by WINE or mingw-w64 and hence not available
   in our build environment
@@ -21,6 +21,19 @@ Subject: [PATCH 1/1] Disable d3d12 requiring fxc.exe
 taken from:
 https://aur.archlinux.org/cgit/aur.git/tree/0003-Disable-d3d12-requiring-fxc.exe.patch?h=mingw-w64-qt5-declarative
 
+diff --git a/src/3rdparty/masm/yarr/Yarr.h b/src/3rdparty/masm/yarr/Yarr.h
+index 1111111..2222222 100644
+--- a/src/3rdparty/masm/yarr/Yarr.h
++++ b/src/3rdparty/masm/yarr/Yarr.h
+@@ -27,6 +27,8 @@
+ 
+ #pragma once
+ 
++#include <limits>
++
+ #include <limits.h>
+ #include "YarrErrorCode.h"
+ 
 diff --git a/src/plugins/scenegraph/scenegraph.pro b/src/plugins/scenegraph/scenegraph.pro
 index 1111111..2222222 100644
 --- a/src/plugins/scenegraph/scenegraph.pro
@@ -31,21 +44,10 @@ index 1111111..2222222 100644
 -qtConfig(d3d12): SUBDIRS += d3d12
  qtConfig(openvg): SUBDIRS += openvg
  
-diff -ur a/src/3rdparty/masm/yarr/Yarr.h b/src/3rdparty/masm/yarr/Yarr.h
---- a/src/3rdparty/masm/yarr/Yarr.h	2021-05-16 15:17:15.949217856 +0200
-+++ b/src/3rdparty/masm/yarr/Yarr.h	2021-05-16 15:17:52.044618316 +0200
-@@ -27,6 +27,8 @@
- 
- #pragma once
- 
-+#include <limits>
-+
- #include <limits.h>
- #include "YarrErrorCode.h"
- 
-diff -ur a/src/qmldebug/qqmlprofilerevent_p.h b/src/qmldebug/qqmlprofilerevent_p.h
---- a/src/qmldebug/qqmlprofilerevent_p.h	2021-05-16 15:17:15.973217599 +0200
-+++ b/src/qmldebug/qqmlprofilerevent_p.h	2021-05-16 22:29:59.569295571 +0200
+diff --git a/src/qmldebug/qqmlprofilerevent_p.h b/src/qmldebug/qqmlprofilerevent_p.h
+index 1111111..2222222 100644
+--- a/src/qmldebug/qqmlprofilerevent_p.h
++++ b/src/qmldebug/qqmlprofilerevent_p.h
 @@ -48,6 +48,7 @@
  #include <QtCore/qmetatype.h>
  
@@ -54,3 +56,51 @@ diff -ur a/src/qmldebug/qqmlprofilerevent_p.h b/src/qmldebug/qqmlprofilerevent_p
  #include <type_traits>
  
  //
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Allan Sandfeld Jensen <allan.jensen@qt.io>
+Date: Wed, 19 Jun 2019 12:54:43 +0200
+Subject: [PATCH 2/2] Update hovered on disabled QQuickItems
+
+Changes handling of hovered so that the property is still updated on
+disabled items, so that other items can bind to it. This is in
+particular useful for tooltips.
+
+[ChangeLog][Behavior Changes] QQuickItem::hovered will now update even
+when the item is disabled.
+
+Fixes: QTBUG-30801
+Pick-to: 6.0
+Change-Id: Id17298f657d7631b0e5019138ba33a7d5f863475
+Reviewed-by: Fabian Kosmale <fabian.kosmale@qt.io>
+Reviewed-by: Allan Sandfeld Jensen <allan.jensen@qt.io>
+Reviewed-by: Shawn Rutledge <shawn.rutledge@qt.io>
+
+diff --git a/src/quick/items/qquickwindow.cpp b/src/quick/items/qquickwindow.cpp
+index 1111111..2222222 100644
+--- a/src/quick/items/qquickwindow.cpp
++++ b/src/quick/items/qquickwindow.cpp
+@@ -2107,7 +2107,9 @@ bool QQuickWindowPrivate::deliverHoverEvent(QQuickItem *item, const QPointF &sce
+         QList<QQuickItem *> children = itemPrivate->paintOrderChildItems();
+         for (int ii = children.count() - 1; ii >= 0; --ii) {
+             QQuickItem *child = children.at(ii);
+-            if (!child->isVisible() || !child->isEnabled() || QQuickItemPrivate::get(child)->culled)
++            if (!child->isVisible() || QQuickItemPrivate::get(child)->culled)
++                continue;
++            if (!child->isEnabled() && !QQuickItemPrivate::get(child)->subtreeHoverEnabled)
+                 continue;
+             if (deliverHoverEvent(child, scenePos, lastScenePos, modifiers, timestamp, accepted))
+                 return true;
+diff --git a/tests/auto/quick/qquickitem/tst_qquickitem.cpp b/tests/auto/quick/qquickitem/tst_qquickitem.cpp
+index 1111111..2222222 100644
+--- a/tests/auto/quick/qquickitem/tst_qquickitem.cpp
++++ b/tests/auto/quick/qquickitem/tst_qquickitem.cpp
+@@ -1657,7 +1657,7 @@ void tst_qquickitem::hoverEvent()
+     sendMouseMove(window, inside);
+     sendMouseMove(window, outside);
+ 
+-    const bool shouldReceiveHoverEvents = visible && enabled && acceptHoverEvents;
++    const bool shouldReceiveHoverEvents = visible && acceptHoverEvents;
+     if (shouldReceiveHoverEvents) {
+         QCOMPARE(item->hoverEnterCount, 1);
+         QCOMPARE(item->hoverMoveCount, 2);

@@ -3,8 +3,8 @@
 PKG             := libtasn1
 $(PKG)_WEBSITE  := https://www.gnu.org/software/libtasn1/
 $(PKG)_DESCR    := GnuTLS
-$(PKG)_VERSION  := 4.17.0
-$(PKG)_CHECKSUM := ece7551cea7922b8e10d7ebc70bc2248d1fdd73351646a2d6a8d68a9421c45a5
+$(PKG)_VERSION  := 4.18.0
+$(PKG)_CHECKSUM := 4365c154953563d64c67a024b607d1ee75c6db76e0d0f65709ea80a334cd1898
 $(PKG)_SUBDIR   := libtasn1-$($(PKG)_VERSION)
 $(PKG)_FILE     := libtasn1-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://ftp.gnu.org/gnu/libtasn1/$($(PKG)_FILE)

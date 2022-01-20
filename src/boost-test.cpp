@@ -9,9 +9,9 @@
 
 boost::thread_specific_ptr<int> ptr;
 
-// https://www.boost.org/doc/libs/1_60_0/libs/context/doc/html/context/context.html
-#include <boost/context/all.hpp>
-boost::context::fcontext_t fcm,fc1,fc2;
+// https://www.boost.org/doc/libs/1_76_0/libs/context/doc/html/context/context.html
+#include <boost/context/fiber_fcontext.hpp>
+namespace ctx=boost::context;
 
 void test_thread()
 {
@@ -19,23 +19,6 @@ void test_thread()
         ptr.reset(new int(0));
     }
     std::cout << "Hello, World! from thread" << std::endl;
-}
-
-void f1(intptr_t)
-{
-    std::cout<<"f1: entered"<<std::endl;
-    std::cout<<"f1: call jump_fcontext( & fc1, fc2, 0)"<< std::endl;
-    boost::context::jump_fcontext(&fc1,fc2,0);
-    std::cout<<"f1: return"<<std::endl;
-    boost::context::jump_fcontext(&fc1,fcm,0);
-}
-
-void f2(intptr_t)
-{
-    std::cout<<"f2: entered"<<std::endl;
-    std::cout<<"f2: call jump_fcontext( & fc2, fc1, 0)"<<std::endl;
-    boost::context::jump_fcontext(&fc2,fc1,0);
-    BOOST_ASSERT(false&&!"f2: never returns");
 }
 
 int main(int argc, char *argv[])
@@ -50,15 +33,28 @@ int main(int argc, char *argv[])
     boost::thread thrd(test_thread);
     thrd.join();
 
-    std::size_t size(8192);
-    void* sp1(std::malloc(size));
-    void* sp2(std::malloc(size));
-
-    fc1=boost::context::make_fcontext(sp1,size,f1);
-    fc2=boost::context::make_fcontext(sp2,size,f2);
-
-    std::cout<<"main: call jump_fcontext( & fcm, fc1, 0)"<<std::endl;
-    boost::context::jump_fcontext(&fcm,fc1,0);
-
+    int data=0;
+    ctx::fiber f1{[&data](ctx::fiber&& f2) {
+        std::cout << "f1: entered first time: " << data << std::endl;
+        data+=1;
+        f2=std::move(f2).resume();
+        std::cout << "f1: entered second time: " << data << std::endl;
+        data+=1;
+        f2=std::move(f2).resume();
+        std::cout << "f1: entered third time: " << data << std::endl;
+        return std::move(f2);
+    }};
+    f1=std::move(f1).resume();
+    std::cout << "f1: returned first time: " << data << std::endl;
+    data+=1;
+    f1=std::move(f1).resume();
+    std::cout << "f1: returned second time: " << data << std::endl;
+    data+=1;
+    f1=std::move(f1).resume_with([&data](ctx::fiber&& f2){
+        std::cout << "f2: entered: " << data << std::endl;
+        data=-1;
+        return std::move(f2);
+    });
+    std::cout << "f1: returned third time" << std::endl;
     return 0;
 }

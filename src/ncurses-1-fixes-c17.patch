@@ -1,0 +1,104 @@
+diff --git a/c++/cursesw.h b/c++/cursesw.h
+index ca07b042..d22b5507 100644
+--- a/c++/cursesw.h
++++ b/c++/cursesw.h
+@@ -1,7 +1,7 @@
+ // * This makes emacs happy -*-Mode: C++;-*-
+ // vile:cppmode
+ /****************************************************************************
+- * Copyright (c) 1998-2011,2014 Free Software Foundation, Inc.              *
++ * Copyright (c) 1998-2014,2017 Free Software Foundation, Inc.              *
+  *                                                                          *
+  * Permission is hereby granted, free of charge, to any person obtaining a  *
+  * copy of this software and associated documentation files (the            *
+@@ -31,14 +31,14 @@
+ #ifndef NCURSES_CURSESW_H_incl
+ #define NCURSES_CURSESW_H_incl 1
+ 
+-// $Id: cursesw.h,v 1.50 2014/02/01 22:17:37 tom Exp $
+-
+-#include <etip.h>
++// $Id: cursesw.h,v 1.51 2017/06/24 22:05:30 tom Exp $
+ 
+ extern "C" {
+ #  include   <curses.h>
+ }
+ 
++#include <etip.h>
++
+ /* SCO 3.2v4 curses.h includes term.h, which defines lines as a macro.
+    Undefine it here, because NCursesWindow uses lines as a method.  */
+ #undef lines
+diff --git a/c++/etip.h.in b/c++/etip.h.in
+index 9f642ee6..fbef3589 100644
+--- a/c++/etip.h.in
++++ b/c++/etip.h.in
+@@ -1,6 +1,6 @@
+ // * This makes emacs happy -*-Mode: C++;-*-
+ /****************************************************************************
+- * Copyright (c) 1998-2011,2012 Free Software Foundation, Inc.              *
++ * Copyright (c) 1998-2012,2017 Free Software Foundation, Inc.              *
+  *                                                                          *
+  * Permission is hereby granted, free of charge, to any person obtaining a  *
+  * copy of this software and associated documentation files (the            *
+@@ -31,7 +31,7 @@
+  *   Author: Juergen Pfeifer, 1997                                          *
+  ****************************************************************************/
+ 
+-// $Id: etip.h.in,v 1.39 2012/12/29 21:50:44 tom Exp $
++// $Id: etip.h.in,v 1.41 2017/06/24 21:57:16 tom Exp $
+ 
+ #ifndef NCURSES_ETIP_H_incl
+ #define NCURSES_ETIP_H_incl 1
+@@ -330,7 +330,7 @@ public:
+   }
+ };
+ 
+-#if !((defined(__GNUG__) && defined(__EXCEPTIONS)) || defined(__SUNPRO_CC))
++#if !((defined(__GNUG__) && defined(__EXCEPTIONS) && (__GNUG__ < 7)) || defined(__SUNPRO_CC))
+ #  if HAVE_IOSTREAM
+ #     include <iostream>
+ #     if IOSTREAM_NAMESPACE
+@@ -347,15 +347,20 @@ inline void THROW(const NCursesException *e) {
+ #if defined(__GNUG__) && defined(__EXCEPTIONS)
+ #  if ((__GNUG__ <= 2) && (__GNUC_MINOR__ < 8))
+       (*lib_error_handler)(e ? e->classname() : "", e ? e->message : "");
+-#else
+-#define CPP_HAS_TRY_CATCH 1
+-#endif
++#  elif (__GNUG__ >= 7)
++     // g++ 7.0 warns about deprecation, but lacks the predefined symbols
++      ::endwin();
++      std::cerr << "Found a problem - goodbye" << std::endl;
++      exit(EXIT_FAILURE);
++#  else
++#    define CPP_HAS_TRY_CATCH 1
++#  endif
+ #elif defined(__SUNPRO_CC)
+ #  if !defined(__SUNPRO_CC_COMPAT) || (__SUNPRO_CC_COMPAT < 5)
+   genericerror(1, ((e != 0) ? (char *)(e->message) : ""));
+-#else
+-#define CPP_HAS_TRY_CATCH 1
+-#endif
++#  else
++#    define CPP_HAS_TRY_CATCH 1
++#  endif
+ #else
+   if (e)
+     cerr << e->message << endl;
+@@ -372,9 +377,15 @@ inline void THROW(const NCursesException *e) {
+   throw *e;
+ #define NCURSES_CPP_TRY		try
+ #define NCURSES_CPP_CATCH(e)	catch(e)
++#if defined(__cpp_noexcept_function_type) && (__cpp_noexcept_function_type >= 201510)
++// C++17 deprecates the usage of throw().
++#define THROWS(s)		/* nothing */
++#define THROW2(s,t)		/* nothing */
++#else
+ #define THROWS(s)		throw(s)
+ #define THROW2(s,t)		throw(s,t)
+ #endif
++#endif
+ }
+ 
+ #endif /* NCURSES_ETIP_H_incl */
