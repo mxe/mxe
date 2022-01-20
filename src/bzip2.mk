@@ -12,7 +12,7 @@ $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://sourceware.org/pub/bzip2/' | \
-    $(GREP) 'bzip2-' | \
+    grep 'bzip2-' | \
     $(SED) -n 's,.*bzip2-\([0-9][^>]*\)\.tar.*,\1,p' | \
     $(SORT) -Vr | $(SED) 1q
 endef
