@@ -1,0 +1,279 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Thu, 2 Feb 2017 02:05:50 +1100
+Subject: [PATCH 1/7] allow native cpu detection when building with clang
+
+function was disabled for non-gcc5 in:
+https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=b587c12551143c14f023860a1dbdf7316ae71f27;hp=43096b526a9f23008b9769372f11475ae63487bc
+
+clang can build it correctly and this should probably be a feature test
+
+diff --git a/gcc/config/i386/driver-i386.c b/gcc/config/i386/driver-i386.c
+index 1111111..2222222 100644
+--- a/gcc/config/i386/driver-i386.c
++++ b/gcc/config/i386/driver-i386.c
+@@ -24,7 +24,7 @@ along with GCC; see the file COPYING3.  If not see
+ 
+ const char *host_detect_local_cpu (int argc, const char **argv);
+ 
+-#if defined(__GNUC__) && (__GNUC__ >= 5 || !defined(__PIC__))
++#if defined(__GNUC__) && (__GNUC__ >= 5 || !defined(__PIC__)) || defined(__clang__)
+ #include "cpuid.h"
+ 
+ struct cache_desc
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Fri, 6 Apr 2018 13:40:22 +1000
+Subject: [PATCH 2/7] remove hard-coded mingw from include path
+
+
+diff --git a/gcc/config.gcc b/gcc/config.gcc
+index 1111111..2222222 100644
+--- a/gcc/config.gcc
++++ b/gcc/config.gcc
+@@ -1713,7 +1713,7 @@ i[34567]86-*-mingw* | x86_64-*-mingw*)
+ 			tmake_file="${tmake_file} i386/t-mingw-w32"
+ 			;;
+ 	esac
+-        native_system_header_dir=/mingw/include
++        native_system_header_dir=/include
+ 	target_gtfiles="\$(srcdir)/config/i386/winnt.c"
+ 	extra_options="${extra_options} i386/cygming.opt i386/mingw.opt"
+ 	case ${target} in
+diff --git a/gcc/config/i386/mingw32.h b/gcc/config/i386/mingw32.h
+index 1111111..2222222 100644
+--- a/gcc/config/i386/mingw32.h
++++ b/gcc/config/i386/mingw32.h
+@@ -170,7 +170,7 @@ along with GCC; see the file COPYING3.  If not see
+ /* For native mingw-version we need to take care that NATIVE_SYSTEM_HEADER_DIR
+    macro contains POSIX-style path.  See bug 52947.  */
+ #undef NATIVE_SYSTEM_HEADER_DIR
+-#define NATIVE_SYSTEM_HEADER_DIR "/mingw/include"
++#define NATIVE_SYSTEM_HEADER_DIR "/include"
+ 
+ /* Output STRING, a string representing a filename, to FILE.
+    We canonicalize it to be in Unix format (backslashes are replaced
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Cameron Kaiser <classilla@floodgap.com>
+Date: Sat, 13 Oct 2018 18:59:18 -0700
+Subject: [PATCH 3/7] fix gcc compile error on ppc64le
+
+https://gcc.gnu.org/viewcvs/gcc/branches/gcc-6-branch/libcpp/lex.c?view=log&pathrev=261621
+
+diff --git a/libcpp/lex.c b/libcpp/lex.c
+index 1111111..2222222 100644
+--- a/libcpp/lex.c
++++ b/libcpp/lex.c
+@@ -550,7 +550,7 @@ search_line_fast (const uchar *s, const uchar *end ATTRIBUTE_UNUSED)
+     {
+       vc m_nl, m_cr, m_bs, m_qm;
+ 
+-      data = *((const vc *)s);
++      data = __builtin_vec_vsx_ld (0, s);
+       s += 16;
+ 
+       m_nl = (vc) __builtin_vec_cmpeq(data, repl_nl);
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: uros <uros@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Sun, 11 Nov 2018 17:44:43 +0000
+Subject: [PATCH 4/7] Backport from mainline 2018-11-04 Uros Bizjak
+ <ubizjak@gmail.com>
+
+	PR middle-end/58372
+	* cfgexpand.c (pass_expand::execute): Move the call to
+	finish_eh_generation in front of the call to expand_stack_alignment.
+
+testsuite/ChangeLog:
+
+	Backport from mainline
+	2018-11-04  Uros Bizjak  <ubizjak@gmail.com>
+
+	PR middle-end/58372
+	* g++.dg/pr58372.C: New test.
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-7-branch@266015 138bc75d-0d04-0410-961f-82ee72b054a4
+
+diff --git a/gcc/cfgexpand.c b/gcc/cfgexpand.c
+index 1111111..2222222 100644
+--- a/gcc/cfgexpand.c
++++ b/gcc/cfgexpand.c
+@@ -6260,6 +6260,14 @@ pass_expand::execute (function *fun)
+   sbitmap_free (blocks);
+   purge_all_dead_edges ();
+ 
++  /* After initial rtl generation, call back to finish generating
++     exception support code.  We need to do this before cleaning up
++     the CFG as the code does not expect dead landing pads.  */
++  if (fun->eh->region_tree != NULL)
++    finish_eh_generation ();
++
++  /* Call expand_stack_alignment after finishing all
++     updates to crtl->preferred_stack_boundary.  */
+   expand_stack_alignment ();
+ 
+   /* Fixup REG_EQUIV notes in the prologue if there are tailcalls in this
+@@ -6267,12 +6275,6 @@ pass_expand::execute (function *fun)
+   if (crtl->tail_call_emit)
+     fixup_tail_calls ();
+ 
+-  /* After initial rtl generation, call back to finish generating
+-     exception support code.  We need to do this before cleaning up
+-     the CFG as the code does not expect dead landing pads.  */
+-  if (fun->eh->region_tree != NULL)
+-    finish_eh_generation ();
+-
+   /* Remove unreachable blocks, otherwise we cannot compute dominators
+      which are needed for loop state verification.  As a side-effect
+      this also compacts blocks.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Sun, 31 May 2020 18:36:27 +1000
+Subject: [PATCH 5/7] PR c++/66297, DR 1684 - literal class and constexpr
+ member fns
+
+taken from:
+https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=54069e595976eb556b22c231951cb2703e523a22;hp=8ef2b9a7b59418d9f5e644badbc0aade7f83414f
+
+diff --git a/gcc/cp/class.c b/gcc/cp/class.c
+index 1111111..2222222 100644
+--- a/gcc/cp/class.c
++++ b/gcc/cp/class.c
+@@ -5549,7 +5549,9 @@ finalize_literal_type_property (tree t)
+ 	   && !TYPE_HAS_CONSTEXPR_CTOR (t))
+     CLASSTYPE_LITERAL_P (t) = false;
+ 
+-  if (!CLASSTYPE_LITERAL_P (t))
++  /* C++14 DR 1684 removed this restriction.  */
++  if (cxx_dialect < cxx14
++      && !CLASSTYPE_LITERAL_P (t) && !LAMBDA_TYPE_P (t))
+     for (fn = TYPE_METHODS (t); fn; fn = DECL_CHAIN (fn))
+       if (DECL_DECLARED_CONSTEXPR_P (fn)
+ 	  && TREE_CODE (fn) != TEMPLATE_DECL
+@@ -5557,12 +5559,11 @@ finalize_literal_type_property (tree t)
+ 	  && !DECL_CONSTRUCTOR_P (fn))
+ 	{
+ 	  DECL_DECLARED_CONSTEXPR_P (fn) = false;
+-	  if (!DECL_GENERATED_P (fn))
+-	    {
+-	      error ("enclosing class of constexpr non-static member "
+-		     "function %q+#D is not a literal type", fn);
+-	      explain_non_literal_class (t);
+-	    }
++         if (!DECL_GENERATED_P (fn)
++             && pedwarn (DECL_SOURCE_LOCATION (fn), OPT_Wpedantic,
++                         "enclosing class of constexpr non-static member "
++                         "function %q+#D is not a literal type", fn))
++           explain_non_literal_class (t);
+ 	}
+ }
+ 
+diff --git a/gcc/cp/constexpr.c b/gcc/cp/constexpr.c
+index 1111111..2222222 100644
+--- a/gcc/cp/constexpr.c
++++ b/gcc/cp/constexpr.c
+@@ -219,16 +219,17 @@ is_valid_constexpr_fn (tree fun, bool complain)
+ 	    }
+ 	}
+ 
+-      if (DECL_NONSTATIC_MEMBER_FUNCTION_P (fun)
++      /* C++14 DR 1684 removed this restriction.  */
++      if (cxx_dialect < cxx14
++         && DECL_NONSTATIC_MEMBER_FUNCTION_P (fun)
+ 	  && !CLASSTYPE_LITERAL_P (DECL_CONTEXT (fun)))
+ 	{
+ 	  ret = false;
+-	  if (complain)
+-	    {
+-	      error ("enclosing class of constexpr non-static member "
+-		     "function %q+#D is not a literal type", fun);
+-	      explain_non_literal_class (DECL_CONTEXT (fun));
+-	    }
++         if (complain
++             && pedwarn (DECL_SOURCE_LOCATION (fun), OPT_Wpedantic,
++                         "enclosing class of constexpr non-static member "
++                         "function %q+#D is not a literal type", fun))
++           explain_non_literal_class (DECL_CONTEXT (fun));
+ 	}
+     }
+   else if (CLASSTYPE_VBASECLASSES (DECL_CONTEXT (fun)))
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Liu Hao <lh_mouse@126.com>
+Date: Wed, 6 May 2020 21:49:18 +0800
+Subject: [PATCH 6/7] libgomp: Don't hard-code MS printf attributes
+
+Source: https://github.com/msys2/MINGW-packages/blob/9501ee2afc8d01dc7d85383e4b22e91c30d93ca7/mingw-w64-gcc/0020-libgomp-Don-t-hard-code-MS-printf-attributes.patch
+
+Following discussion at https://www.spinics.net/lists/gcchelp/msg51246.html
+
+diff --git a/libgomp/libgomp.h b/libgomp/libgomp.h
+index 1111111..2222222 100644
+--- a/libgomp/libgomp.h
++++ b/libgomp/libgomp.h
+@@ -45,6 +45,14 @@
+ #include <stdlib.h>
+ #include <stdarg.h>
+ 
++#include <stdio.h>
++#include <stdio.h>
++#ifdef __MINGW_PRINTF_FORMAT
++#define PRINTF_FORMAT __MINGW_PRINTF_FORMAT
++#else
++#define PRINTF_FORMAT printf
++#endif
++
+ #ifdef HAVE_ATTRIBUTE_VISIBILITY
+ # pragma GCC visibility push(hidden)
+ #endif
+@@ -541,7 +549,7 @@ extern void *gomp_realloc (void *, size_t);
+ 
+ extern void gomp_vdebug (int, const char *, va_list);
+ extern void gomp_debug (int, const char *, ...)
+-	__attribute__ ((format (printf, 2, 3)));
++	__attribute__ ((format (PRINTF_FORMAT, 2, 3)));
+ #define gomp_vdebug(KIND, FMT, VALIST) \
+   do { \
+     if (__builtin_expect (gomp_debug_var, 0)) \
+@@ -554,11 +562,11 @@ extern void gomp_debug (int, const char *, ...)
+   } while (0)
+ extern void gomp_verror (const char *, va_list);
+ extern void gomp_error (const char *, ...)
+-	__attribute__ ((format (printf, 1, 2)));
++	__attribute__ ((format (PRINTF_FORMAT, 1, 2)));
+ extern void gomp_vfatal (const char *, va_list)
+ 	__attribute__ ((noreturn));
+ extern void gomp_fatal (const char *, ...)
+-	__attribute__ ((noreturn, format (printf, 1, 2)));
++	__attribute__ ((noreturn, format (PRINTF_FORMAT, 1, 2)));
+ 
+ /* iter.c */
+ 
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Carsten Teibes <dev@f4ke.de>
+Date: Fri, 18 Jun 2021 17:55:33 +0200
+Subject: [PATCH 7/7] Fix compatibility with c++17 (default in gcc 11+)
+
+Initially found on https://gitweb.gentoo.org/proj/gcc-patches.git/tree/5.5.0/gentoo/40_all_gcc-c++17.patch
+
+diff --git a/gcc/reload.h b/gcc/reload.h
+index 1111111..2222222 100644
+--- a/gcc/reload.h
++++ b/gcc/reload.h
+@@ -168,7 +168,7 @@ struct target_reload {
+      value indicates the level of indirect addressing supported, e.g., two
+      means that (MEM (MEM (REG n))) is also valid if (REG n) does not get
+      a hard register.  */
+-  bool x_spill_indirect_levels;
++  unsigned char x_spill_indirect_levels;
+ 
+   /* True if caller-save has been reinitialized.  */
+   bool x_caller_save_initialized_p;
