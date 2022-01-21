@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Tue, 5 Jul 2016 21:12:38 +0300
-Subject: [PATCH 1/1] fix for deprecated mkdir
+Subject: [PATCH 1/2] fix for deprecated mkdir
 
 
 diff --git a/libxslt/security.c b/libxslt/security.c
@@ -21,3 +21,23 @@ index 1111111..2222222 100644
  	}
  	xmlFree(directory);
  	if (ret < 0)
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Fri, 21 Jan 2022 12:08:12 +0100
+Subject: [PATCH 2/2] fix libxml2 detection
+
+
+diff --git a/configure.ac b/configure.ac
+index 1111111..2222222 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -546,7 +546,7 @@ dnl make sure xml2-config is executable,
+ dnl test version and init our variables
+ dnl
+ 
+-if test "x$LIBXML_LIBS" = "x" && ${XML_CONFIG} --libs print > /dev/null 2>&1
++if test "x$LIBXML_LIBS" = "x" && ${XML_CONFIG} --libs > /dev/null 2>&1
+ then
+     AC_MSG_CHECKING(for libxml libraries >= $LIBXML_REQUIRED_VERSION)
+     XMLVERS=`$XML_CONFIG --version`

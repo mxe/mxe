@@ -17,6 +17,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    cd '$(1)' && autoconf
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
         --without-debug \
