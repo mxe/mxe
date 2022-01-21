@@ -1,0 +1,23 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Sun, 13 Feb 2022 17:30:59 +0100
+Subject: [PATCH 1/1] try to fix linking to libtiff's transitive dependencies
+
+
+diff --git a/src/imageformats/configure.cmake b/src/imageformats/configure.cmake
+index 1111111..2222222 100644
+--- a/src/imageformats/configure.cmake
++++ b/src/imageformats/configure.cmake
+@@ -16,6 +16,8 @@ set_property(CACHE INPUT_webp PROPERTY STRINGS undefined no qt system)
+ 
+ qt_find_package(WrapJasper PROVIDED_TARGETS WrapJasper::WrapJasper MODULE_NAME imageformats QMAKE_LIB jasper)
+ qt_find_package(TIFF PROVIDED_TARGETS TIFF::TIFF MODULE_NAME imageformats QMAKE_LIB tiff)
++### <sigh>
++target_link_libraries(TIFF::TIFF INTERFACE -ltiff -lwebp -lzstd -llzma -ljpeg -lz)
+ qt_find_package(WrapWebP PROVIDED_TARGETS WrapWebP::WrapWebP MODULE_NAME imageformats QMAKE_LIB webp)
+ qt_find_package(Libmng PROVIDED_TARGETS Libmng::Libmng MODULE_NAME imageformats QMAKE_LIB mng)
+ 
