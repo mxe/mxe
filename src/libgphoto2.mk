@@ -12,7 +12,6 @@ $(PKG)_DEPS     := cc curl libltdl libxml2 libusb1 libexif
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
 	--with-libusb=no \
-	--with-libusb-1.0=no \
         PKG_CONFIG='$(PREFIX)/bin/$(TARGET)-pkg-config' \
         $(MXE_CONFIGURE_OPTS) \
         $(PKG_CONFIGURE_OPTS) \
