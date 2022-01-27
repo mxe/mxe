@@ -4,17 +4,19 @@ PKG             := libgphoto2
 $(PKG)_WEBSITE  := https://github.com/gphoto/libgphoto2
 $(PKG)_DESCR    := libgphoto2
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.5.27
-$(PKG)_CHECKSUM := fd48f6f58259ba199e834010aca0af3672ca0223ed0a98ba89ec693a415f242a
+$(PKG)_VERSION  := 2.5.28
+$(PKG)_CHECKSUM := 35846402a6d1806a4fb73d590d410d44fd2cd14c99d927837c16801fd7fcbac9
 $(PKG)_GH_CONF  := gphoto/libgphoto2/releases, v
 $(PKG)_DEPS     := cc curl libltdl libxml2 libusb1 libexif
 
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
-	--with-libusb=no \
+        --with-libusb=no \
         PKG_CONFIG='$(PREFIX)/bin/$(TARGET)-pkg-config' \
         $(MXE_CONFIGURE_OPTS) \
         $(PKG_CONFIGURE_OPTS) \
+        DEFAULT_CAMLIBS='./libgphoto2' \
+        DEFAULT_IOLIBS='./libgphoto2_port' \
         LDFLAGS='-lintl' \
         LIBLTDL='-lltdl -ldl'
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
