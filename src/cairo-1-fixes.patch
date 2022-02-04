@@ -1,0 +1,56 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Hans Petter Jansson <hpj@cl.no>
+Date: Sat, 5 Feb 2022 00:30:55 +0100
+Subject: [PATCH 1/2] Insist that ssize_t is defined
+
+
+diff --git a/util/cairo-missing/cairo-missing.h b/util/cairo-missing/cairo-missing.h
+index 1111111..2222222 100644
+--- a/util/cairo-missing/cairo-missing.h
++++ b/util/cairo-missing/cairo-missing.h
+@@ -37,6 +37,8 @@
+ #include <string.h>
+ #include <sys/types.h>
+ 
++#define _SSIZE_T_DEFINED 1
++
+ #ifdef _WIN32
+ #define WIN32_LEAN_AND_MEAN
+ #include <windows.h>
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Hans Petter Jansson <hpj@cl.no>
+Date: Sat, 5 Feb 2022 00:32:53 +0100
+Subject: [PATCH 2/2] When DllMain is not being run, initialize font face mutex
+
+
+diff --git a/src/win32/cairo-win32-font.c b/src/win32/cairo-win32-font.c
+index 1111111..2222222 100644
+--- a/src/win32/cairo-win32-font.c
++++ b/src/win32/cairo-win32-font.c
+@@ -1873,6 +1873,10 @@ _cairo_win32_font_face_hash_table_destroy (void)
+ {
+     cairo_hash_table_t *hash_table;
+ 
++#ifdef CAIRO_WIN32_STATIC_BUILD
++    CAIRO_MUTEX_INITIALIZE ();
++#endif
++
+     /* We manually acquire the lock rather than calling
+      * _cairo_win32_font_face_hash_table_lock simply to avoid creating
+      * the table only to destroy it again. */
+@@ -1888,6 +1892,10 @@ _cairo_win32_font_face_hash_table_destroy (void)
+ static cairo_hash_table_t *
+ _cairo_win32_font_face_hash_table_lock (void)
+ {
++#ifdef CAIRO_WIN32_STATIC_BUILD
++    CAIRO_MUTEX_INITIALIZE ();
++#endif
++
+     CAIRO_MUTEX_LOCK (_cairo_win32_font_face_mutex);
+ 
+     if (unlikely (cairo_win32_font_face_hash_table == NULL))
