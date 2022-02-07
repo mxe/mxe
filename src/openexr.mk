@@ -32,6 +32,7 @@ define $(PKG)_BUILD
         --prefix='$(1)/ilmbase' \
         --enable-threading=no \
         --disable-posix-sem \
+        CXXFLAGS="-g -O2 -std=gnu++0x" \
         CONFIG_SHELL=$(SHELL) \
         SHELL=$(SHELL)
     $(MAKE) -C '$(1)/$(ilmbase_SUBDIR)' -j '$(JOBS)' install \
@@ -42,7 +43,7 @@ define $(PKG)_BUILD
         --disable-posix-sem \
         --disable-ilmbasetest \
         PKG_CONFIG='$(PREFIX)/bin/$(TARGET)-pkg-config' \
-        CXXFLAGS="-g -O2"
+        CXXFLAGS="-g -O2 -std=gnu++0x"
     # build the code generator manually
     cd '$(1)/IlmImf' && $(BUILD_CXX) -O2 \
         -I'$(1)/ilmbase/include/OpenEXR' \
