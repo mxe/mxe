@@ -1,14 +1,35 @@
-# This file is part of MXE. See LICENSE.md for licensing information.
-
-message("== Custom MXE File: " ${CMAKE_CURRENT_LIST_FILE})
-
-if(NOT PKG_CONFIG_FOUND)
-  find_package(PkgConfig REQUIRED)
+if(TARGET TIFF::TIFF)
+    set(TIFF_FOUND TRUE)
+    return()
 endif()
 
-pkg_check_modules(TIFF libtiff-4)
+find_package(PkgConfig QUIET)
 
-# for backward compatibility
-set(TIFF_LIBRARY ${TIFF_LIBRARIES})
-set(TIFF_INCLUDE_DIR ${TIFF_INCLUDE_DIRS})
-set(TIFF_VERSION_STRING ${TIFF_VERSION})
+if(PkgConfig_FOUND)
+    pkg_check_modules(TIFF IMPORTED_TARGET libtiff-4)
+
+    if(TARGET PkgConfig::TIFF)
+        add_library(TIFF::TIFF INTERFACE IMPORTED)
+        target_link_libraries(TIFF::TIFF INTERFACE PkgConfig::TIFF)
+        set(TIFF_FOUND TRUE)
+    endif()
+endif()
+
+if(NOT TARGET TIFF::TIFF)
+    find_library(TIFF_LIBRARY NAMES tiff-4)
+    find_path(TIFF_INCLUDE_DIR tiff.h)
+
+    if(TIFF_LIBRARY AND TIFF_INCLUDE_DIR)
+        add_library(TIFF::TIFF UNKNOWN IMPORTED)
+        set_target_properties(TIFF::TIFF PROPERTIES
+            IMPORTED_LOCATION ${TIFF_LIBRARY}
+            INTERFACE_INCLUDE_DIRECTORIES ${TIFF_INCLUDE_DIR}
+        )
+    endif()
+
+    include(FindPackageHandleStandardArgs)
+    find_package_handle_standard_args(TIFF REQUIRED_VARS
+        TIFF_LIBRARY
+        TIFF_INCLUDE_DIR
+    )
+endif()
