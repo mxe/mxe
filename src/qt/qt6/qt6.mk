@@ -3,7 +3,7 @@
 PKG             := qt6
 $(PKG)_WEBSITE  := https://www.qt.io/
 $(PKG)_DESCR    := Qt6
-$(PKG)_VERSION   = $(qtbase_VERSION)
+$(PKG)_VERSION   = $(qt6-qtbase_VERSION)
 $(PKG)_TYPE     := meta
 $(PKG)_DEPS     := $(patsubst $(dir $(lastword $(MAKEFILE_LIST)))/%.mk,%,\
                        $(shell grep -l 'QT6_METADATA' \
