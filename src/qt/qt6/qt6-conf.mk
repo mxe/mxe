@@ -18,9 +18,9 @@ define QT6_METADATA
     $(PKG)_DESCR    := Qt
     $(PKG)_IGNORE   :=
     $(PKG)_VERSION   = $(qt6-qtbase_VERSION)
-    $(PKG)_SUBDIR    = $(subst qtbase,qttools,$(qt6-qtbase_SUBDIR))
-    $(PKG)_FILE      = $(subst qtbase,qttools,$(qt6-qtbase_FILE))
-    $(PKG)_URL       = $(subst qtbase,qttools,$(qt6-qtbase_URL))
+    $(PKG)_SUBDIR    = $(subst qtbase,$(subst qt6-,,$(PKG)),$(qt6-qtbase_SUBDIR))
+    $(PKG)_FILE      = $(subst qtbase,$(subst qt6-,,$(PKG)),$(qt6-qtbase_FILE))
+    $(PKG)_URL       = $(subst qtbase,$(subst qt6-,,$(PKG)),$(qt6-qtbase_URL))
     $(PKG)_UPDATE    = echo $(qt6-qtbase_VERSION)
 endef
 
