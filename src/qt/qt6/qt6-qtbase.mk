@@ -55,7 +55,7 @@ define $(PKG)_BUILD
         -DFEATURE_system_pcre2=ON \
         -DFEATURE_pkg_config=ON \
         -DFEATURE_sql_mysql=OFF \
-        -DFEATURE_sql_odbc=OFF \
+        -DFEATURE_sql_odbc=ON \
         -DFEATURE_sql_psql=OFF \
         -DFEATURE_system_sqlite=ON \
         -DFEATURE_system_zlib=ON \
@@ -63,6 +63,9 @@ define $(PKG)_BUILD
 
     cmake --build '$(BUILD_DIR)' -j '$(JOBS)'
     cmake --install '$(BUILD_DIR)'
+    $(SED) -i -e 's/^QMAKE_PRL_LIBS .*/& -lodbc32/;' \
+	      -e 's/^QMAKE_PRL_LIBS_FOR_CMAKE .*/&;-lodbc32/;' \
+              '$(PREFIX)/$(TARGET)/$(MXE_QT6_ID)/plugins/sqldrivers/qsqlodbc.prl'
 endef
 
 define $(PKG)_BUILD_$(BUILD)
