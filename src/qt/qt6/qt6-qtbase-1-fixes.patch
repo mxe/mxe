@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Mon, 14 Dec 2020 15:09:00 +1100
-Subject: [PATCH 1/2] optionally build docs
+Subject: [PATCH 1/3] optionally build docs
 
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
@@ -27,7 +27,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 3 Apr 2023 13:12:47 +0200
-Subject: [PATCH 2/2] add missing oleaut32 dependency for networklistmanager
+Subject: [PATCH 2/3] add missing oleaut32 dependency for networklistmanager
 
 Required for symbols VariantInit and VariantClear.
 
@@ -47,3 +47,23 @@ index 1111111..2222222 100644
  qt_internal_extend_target(QNLMNIPlugin CONDITION WIN32 AND MSVC AND NOT CLANG
      LIBRARIES
          runtimeobject
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Mon, 14 Feb 2022 00:44:19 +0100
+Subject: [PATCH 3/3] help openssl detection
+
+
+diff --git a/cmake/FindWrapOpenSSL.cmake b/cmake/FindWrapOpenSSL.cmake
+index 1111111..2222222 100644
+--- a/cmake/FindWrapOpenSSL.cmake
++++ b/cmake/FindWrapOpenSSL.cmake
+@@ -21,7 +21,7 @@ if(TARGET OpenSSL::SSL)
+         else()
+             set(writableLib OpenSSL::Crypto)
+         endif()
+-        set_property(TARGET ${writableLib} APPEND PROPERTY INTERFACE_LINK_LIBRARIES ws2_32 crypt32)
++        set_property(TARGET ${writableLib} APPEND PROPERTY INTERFACE_LINK_LIBRARIES -lssl -lcrypto -lz -lws2_32 -lgdi32 -lcrypt32)
+         unset(libType)
+         unset(writableLib)
+     endif()
