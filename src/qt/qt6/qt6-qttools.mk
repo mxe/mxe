@@ -21,8 +21,8 @@ define $(PKG)_BUILD
         -DQT_MAJOR=6 \
         -DPKG=qttools \
         -DPKG_VERSION=$($(PKG)_VERSION)
-    $(QT6_QT_CMAKE) -j '$(JOBS)' --build '$(BUILD_DIR).test-cmake'
-    $(QT6_QT_CMAKE) --install '$(BUILD_DIR).test-cmake'
+    '$(TARGET)-cmake' --build '$(BUILD_DIR).test-cmake' -j '$(JOBS)'
+    '$(TARGET)-cmake' --install '$(BUILD_DIR).test-cmake'
 endef
 
 define $(PKG)_BUILD_$(BUILD)
