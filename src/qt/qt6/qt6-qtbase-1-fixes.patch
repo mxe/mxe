@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Mon, 14 Dec 2020 15:09:00 +1100
-Subject: [PATCH 1/1] optionally build docs
+Subject: [PATCH 1/2] optionally build docs
 
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
@@ -23,3 +23,23 @@ index 1111111..2222222 100644
  
      ## Visit all the directories:
      add_subdirectory(src)
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Guilherme Bernal <guilherme@cubos.io>
+Date: Fri, 18 Feb 2022 11:08:48 +0000
+Subject: [PATCH 2/2] disable opengl check
+
+
+diff --git a/src/gui/configure.cmake b/src/gui/configure.cmake
+index 1111111..2222222 100644
+--- a/src/gui/configure.cmake
++++ b/src/gui/configure.cmake
+@@ -1297,7 +1297,7 @@ qt_configure_add_report_entry(
+     CONDITION APPLE AND QT_FEATURE_system_harfbuzz
+ )
+ qt_configure_add_report_entry(
+-    TYPE ERROR
++    TYPE WARNING
+     MESSAGE "The OpenGL functionality tests failed!  You might need to modify the include and library search paths by editing QMAKE_INCDIR_OPENGL[_ES2], QMAKE_LIBDIR_OPENGL[_ES2] and QMAKE_LIBS_OPENGL[_ES2] in the mkspec for your platform."
+     CONDITION QT_FEATURE_gui AND NOT WATCHOS AND ( NOT INPUT_opengl STREQUAL 'no' ) AND NOT QT_FEATURE_opengl_desktop AND NOT QT_FEATURE_opengles2 AND NOT QT_FEATURE_opengl_dynamic
+ )
