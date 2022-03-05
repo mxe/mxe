@@ -22,6 +22,7 @@ define $(PKG)_BUILD
         $(MXE_CONFIGURE_OPTS) \
         --enable-static \
         --disable-shared \
+        --disable-source-highlight \
         --with-system-readline \
         --disable-gdbtk \
         --disable-tui \
