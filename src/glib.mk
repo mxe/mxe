@@ -4,8 +4,8 @@ PKG             := glib
 $(PKG)_WEBSITE  := https://gtk.org/
 $(PKG)_DESCR    := GLib
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.50.2
-$(PKG)_CHECKSUM := be68737c1f268c05493e503b3b654d2b7f43d7d0b8c5556f7e4651b870acfbf5
+$(PKG)_VERSION  := 2.58.3
+$(PKG)_CHECKSUM := 8f43c31767e88a25da72b52a40f3301fefc49a665b56dc10ee7cc9565cbe7481
 $(PKG)_SUBDIR   := glib-$($(PKG)_VERSION)
 $(PKG)_FILE     := glib-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.gnome.org/sources/glib/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
@@ -21,13 +21,15 @@ define $(PKG)_UPDATE
     head -1
 endef
 
+define $(PKG)_PATCH_STATIC
+	(cd $(SOURCE_DIR) && $(PATCH) -p1 -u) < $(TOP_DIR)/src/glib-patch-static-dllmain.diff
+endef
+
 define $(PKG)_BUILD_DARWIN
     # native build for glib-tools
     cd '$(SOURCE_DIR)' && NOCONFIGURE=true ./autogen.sh
     cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS) \
-        --enable-regex \
-        --disable-threads \
         --disable-selinux \
         --disable-inotify \
         --disable-fam \
@@ -42,6 +44,7 @@ define $(PKG)_BUILD_DARWIN
     $(MAKE) -C '$(BUILD_DIR)/gthread' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)/gmodule' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)/gobject' -j '$(JOBS)' lib_LTLIBRARIES= install-exec
+    $(MAKE) -C '$(BUILD_DIR)/gio'     -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)/gio/xdgmime'     -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)/gio/kqueue'      -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)/gio'     -j '$(JOBS)' glib-compile-schemas
@@ -55,10 +58,7 @@ define $(PKG)_BUILD_NATIVE
     cd '$(SOURCE_DIR)' && NOCONFIGURE=true ./autogen.sh
     cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS) \
-        --enable-regex \
-        --disable-threads \
         --disable-selinux \
-        --disable-inotify \
         --disable-fam \
         --disable-xattr \
         --disable-dtrace \
@@ -74,6 +74,7 @@ define $(PKG)_BUILD_NATIVE
     $(MAKE) -C '$(BUILD_DIR)/gmodule' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)/gobject' -j '$(JOBS)' lib_LTLIBRARIES= install-exec
     $(MAKE) -C '$(BUILD_DIR)/gio/xdgmime'     -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)/gio'     -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)/gio'     -j '$(JOBS)' glib-compile-schemas
     $(MAKE) -C '$(BUILD_DIR)/gio'     -j '$(JOBS)' glib-compile-resources
     $(INSTALL) -m755 '$(BUILD_DIR)/gio/glib-compile-schemas' '$(PREFIX)/$(TARGET)/bin/'
@@ -87,6 +88,7 @@ define $(PKG)_BUILD_$(BUILD)
 endef
 
 define $(PKG)_BUILD
+	$(if $(BUILD_STATIC), $(call $(PKG)_PATCH_STATIC))
     # other packages expect glib-tools in $(TARGET)/bin
     rm -f  '$(PREFIX)/$(TARGET)/bin/glib-*'
     ln -sf '$(PREFIX)/$(BUILD)/bin/glib-genmarshal'        '$(PREFIX)/$(TARGET)/bin/'
@@ -97,7 +99,7 @@ define $(PKG)_BUILD
     cd '$(SOURCE_DIR)' && NOCONFIGURE=true ./autogen.sh
     cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS) \
-        --with-threads=win32 \
+        --with-threads=$(MXE_GCC_THREADS) \
         --with-pcre=system \
         --with-libiconv=gnu \
         --disable-inotify \
@@ -106,12 +108,13 @@ define $(PKG)_BUILD
         CFLAGS='-Wno-incompatible-pointer-types -Wno-deprecated-declarations -Wno-format' \
         GLIB_GENMARSHAL='$(PREFIX)/$(TARGET)/bin/glib-genmarshal' \
         GLIB_COMPILE_SCHEMAS='$(PREFIX)/$(TARGET)/bin/glib-compile-schemas' \
-        GLIB_COMPILE_RESOURCES='$(PREFIX)/$(TARGET)/bin/glib-compile-resources'
-    $(MAKE) -C '$(BUILD_DIR)/glib'    -j '$(JOBS)' install sbin_PROGRAMS= noinst_PROGRAMS=
-    $(MAKE) -C '$(BUILD_DIR)/gmodule' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
-    $(MAKE) -C '$(BUILD_DIR)/gthread' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
-    $(MAKE) -C '$(BUILD_DIR)/gobject' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
-    $(MAKE) -C '$(BUILD_DIR)/gio'     -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= MISC_STUFF=
-    $(MAKE) -C '$(BUILD_DIR)'         -j '$(JOBS)' install-pkgconfigDATA
-    $(MAKE) -C '$(BUILD_DIR)/m4macros' install
+        GLIB_COMPILE_RESOURCES='$(PREFIX)/$(TARGET)/bin/glib-compile-resources' \
+        LIBS="-ldnsapi -liphlpapi -lintl"
+    $(MAKE) -C '$(BUILD_DIR)/glib'    -j '$(JOBS)' install sbin_PROGRAMS= noinst_PROGRAMS= LIBS="-ldnsapi -liphlpapi -lintl"
+    $(MAKE) -C '$(BUILD_DIR)/gmodule' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= LIBS="-ldnsapi -liphlpapi -lintl"
+    $(MAKE) -C '$(BUILD_DIR)/gthread' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= LIBS="-ldnsapi -liphlpapi -lintl"
+    $(MAKE) -C '$(BUILD_DIR)/gobject' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= LIBS="-ldnsapi -liphlpapi -lintl"
+    $(MAKE) -C '$(BUILD_DIR)/gio'     -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= MISC_STUFF= LIBS="-ldnsapi -liphlpapi -lintl"
+    $(MAKE) -C '$(BUILD_DIR)'         -j '$(JOBS)' install-pkgconfigDATA LIBS="-ldnsapi -liphlpapi -lintl"
+    $(MAKE) -C '$(BUILD_DIR)/m4macros' install 
 endef

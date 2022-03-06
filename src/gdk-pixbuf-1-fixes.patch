@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Fri, 24 Sep 2010 23:31:24 +0200
-Subject: [PATCH 1/3] s,DllMain,static _disabled_DllMain,
+Subject: [PATCH 1/4] s,DllMain,static _disabled_DllMain,
 
 
 diff --git a/gdk-pixbuf/gdk-pixbuf-io.c b/gdk-pixbuf/gdk-pixbuf-io.c
@@ -31,7 +31,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Fri, 12 Oct 2012 12:24:51 +0200
-Subject: [PATCH 2/3] add libtiff to required.private in .pc
+Subject: [PATCH 2/4] add libtiff to required.private in .pc
 
 
 diff --git a/gdk-pixbuf-2.0.pc.in b/gdk-pixbuf-2.0.pc.in
@@ -49,39 +49,51 @@ index 1111111..2222222 100644
  Cflags: -I${includedir}/gdk-pixbuf-@GDK_PIXBUF_API_VERSION@ @GDK_PIXBUF_EXTRA_CFLAGS@
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Fri, 12 Oct 2012 12:25:27 +0200
-Subject: [PATCH 3/3] allow static
+From: Gregorio Litenstein <g.litenstein@gmail.com>
+Date: Sat, 19 Oct 2019 17:35:02 -0300
+Subject: [PATCH 3/4] Remove tests and thumbnailer, which will fail.
 
 
-diff --git a/configure.ac b/configure.ac
+diff --git a/Makefile.am b/Makefile.am
 index 1111111..2222222 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -136,16 +136,16 @@ case $host in
-     ;;
- esac
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -1,4 +1,4 @@
+-SUBDIRS = gdk-pixbuf po docs thumbnailer tests contrib win32
++SUBDIRS = gdk-pixbuf po docs contrib win32
  
--if test "$os_win32" = "yes"; then
--  if test x$enable_static = xyes -o x$enable_static = x; then
--    AC_MSG_WARN([Disabling static library build, must build as DLL on Windows.])
--    enable_static=no
--  fi
--  if test x$enable_shared = xno; then
--    AC_MSG_WARN([Enabling shared library build, must build as DLL on Windows.])
--  fi
--  enable_shared=yes
--fi
-+dnl if test "$os_win32" = "yes"; then
-+dnl   if test x$enable_static = xyes -o x$enable_static = x; then
-+dnl     AC_MSG_WARN([Disabling static library build, must build as DLL on Windows.])
-+dnl     enable_static=no
-+dnl   fi
-+dnl   if test x$enable_shared = xno; then
-+dnl     AC_MSG_WARN([Enabling shared library build, must build as DLL on Windows.])
-+dnl   fi
-+dnl   enable_shared=yes
-+dnl fi
+ meson_files = \
+ 	meson.build \
+@@ -8,12 +8,9 @@ meson_files = \
+ 	docs/reference/gdk-pixbuf/meson.build \
+ 	contrib/gdk-pixbuf-xlib/meson.build \
+ 	po/meson.build \
+-	tests/meson.build \
+-	thumbnailer/meson.build \
+ 	build-aux/gen-color-table.pl \
+ 	build-aux/gen-installed-test.py \
+ 	build-aux/gen-resources.py \
+-	build-aux/gen-thumbnailer.py \
+ 	$()
  
- dnl Initialize libtool
- LT_PREREQ([2.2.6])
+ EXTRA_DIST = 			\
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Gregorio Litenstein <g.litenstein@gmail.com>
+Date: Thu, 11 Jun 2020 12:32:20 -0400
+Subject: [PATCH 4/4] Fix camel-cased windows include.
+
+
+diff --git a/gdk-pixbuf/io-tiff.c b/gdk-pixbuf/io-tiff.c
+index 1111111..2222222 100644
+--- a/gdk-pixbuf/io-tiff.c
++++ b/gdk-pixbuf/io-tiff.c
+@@ -41,7 +41,7 @@
+ #ifdef G_OS_WIN32
+ #include <fcntl.h>
+ #include <io.h>
+-#include <Windows.h>
++#include <windows.h>
+ #define lseek(a,b,c) _lseek(a,b,c)
+ #define O_RDWR _O_RDWR
+ #endif
