@@ -5,7 +5,7 @@ $(eval $(QT6_METADATA))
 
 $(PKG)_CHECKSUM := 9aadbd5a14fad8874d2aa76be79652ec5ed81d31d49b3eff245ebeffc7d8ac08
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
-$(PKG)_DEPS     := cc qt6-qtbase qt6-qtdeclarative
+$(PKG)_DEPS     := cc qt6-qtbase qt6-qtdeclarative $(BUILD)~$(PKG)
 $(PKG)_DEPS_$(BUILD) := qt6-qtbase
 
 define $(PKG)_BUILD
