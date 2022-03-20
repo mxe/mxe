@@ -3,7 +3,7 @@
 PKG := qt6-qtserialport
 $(eval $(QT6_METADATA))
 
-$(PKG)_CHECKSUM := ce610c0edbdf22332acb445053e4f91d5f8579c21c07e5cd680b0cf770a0e2cf
+$(PKG)_CHECKSUM := 8fdbfbb2aeee0e6400c90406927a784d3790bb0dfa7e5d7b9da7b2ded52bb744
 $(PKG)_DEPS     := cc qt6-qtbase
 
 QT6_PREFIX   = '$(PREFIX)/$(TARGET)/$(MXE_QT6_ID)'
