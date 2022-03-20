@@ -12,8 +12,8 @@ $(PKG)_FILE     := $(PKG_BASENAME)-everywhere-src-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.qt.io/official_releases/qt/6.2/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 $(PKG)_DEPS     := \
-    cc dbus fontconfig freetype harfbuzz jpeg libmysqlclient libpng mesa \
-    pcre2 postgresql sqlite zlib zstd $(BUILD)~$(PKG)
+    cc fontconfig freetype harfbuzz jpeg libpng mesa \
+    pcre2 sqlite zlib zstd $(BUILD)~$(PKG)
 $(PKG)_DEPS_$(BUILD) :=
 $(PKG)_OO_DEPS_$(BUILD) := ninja
 
