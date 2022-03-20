@@ -9,7 +9,7 @@ qt6-qt5compat_SUBDIR    = $(subst qtbase,qt5compat,$(qt6-qtbase_SUBDIR))
 qt6-qt5compat_FILE      = $(subst qtbase,qt5compat,$(qt6-qtbase_FILE))
 qt6-qt5compat_URL       = $(subst qtbase,qt5compat,$(qt6-qtbase_URL))
 
-$(PKG)_CHECKSUM := 1cf89198cf2cf8a5c15336ccd69fa1f39b779feb64117d6bbf5509c21c123f53
+$(PKG)_CHECKSUM := 5de2b9e25bf7de161fbb88ecdd468ed1788bc899392fc05ed80aa590ebb352fa
 $(PKG)_DEPS     := cc qt6-qtbase
 
 QT6_PREFIX   = '$(PREFIX)/$(TARGET)/$(MXE_QT6_ID)'
