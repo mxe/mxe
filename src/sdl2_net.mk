@@ -3,18 +3,10 @@
 PKG             := sdl2_net
 $(PKG)_WEBSITE  := https://www.libsdl.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.0.0
-$(PKG)_CHECKSUM := d715be30783cc99e541626da52079e308060b21d4f7b95f0224b1d06c1faacab
-$(PKG)_SUBDIR   := SDL2_net-$($(PKG)_VERSION)
-$(PKG)_FILE     := SDL2_net-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://www.libsdl.org/projects/SDL_net/release/$($(PKG)_FILE)
+$(PKG)_VERSION  := 2.0.1
+$(PKG)_CHECKSUM := 1fefe563ea333a2655c32169d03a376a334cdbe39da51fd424bf5f430dec83f4
+$(PKG)_GH_CONF  := libsdl-org/SDL_net/releases/tag,release-,,
 $(PKG)_DEPS     := cc sdl2
-
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://www.libsdl.org/projects/SDL_net/release/?C=M;O=D' | \
-    $(SED) -n 's,.*SDL_net-\([0-9][^>]*\)\.tar.*,\1,p' | \
-    head -1
-endef
 
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
