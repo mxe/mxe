@@ -1,11 +1,13 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
+include src/qt/qt6/qt6-conf.mk
+
 PKG := qt6-qtshadertools
 $(eval $(QT6_METADATA))
 
 $(PKG)_CHECKSUM      := 20881824cba0c1396c0fe6b27d0f995a261070b68fa3629b1a188147d58933cc
 $(PKG)_TARGETS       := $(BUILD) $(MXE_TARGETS)
-$(PKG)_DEPS_$(BUILD) := qt6-qtbase
+$(PKG)_DEPS_$(BUILD) := qt6-conf qt6-qtbase
 $(PKG)_DEPS          := cc $($(PKG)_DEPS_$(BUILD)) $(BUILD)~$(PKG)
 
 QT6_PREFIX   = '$(PREFIX)/$(TARGET)/$(MXE_QT6_ID)'
