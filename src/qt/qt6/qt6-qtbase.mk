@@ -66,6 +66,10 @@ define $(PKG)_BUILD
     $(if $(BUILD_STATIC),$(SED) -i -e 's/^QMAKE_PRL_LIBS .*/& -lodbc32/;' \
 	      -e 's/^QMAKE_PRL_LIBS_FOR_CMAKE .*/&;-lodbc32/;' \
               '$(PREFIX)/$(TARGET)/$(MXE_QT6_ID)/plugins/sqldrivers/qsqlodbc.prl',)
+
+    mkdir -p '$(CMAKE_TOOLCHAIN_DIR)'
+    echo 'set(QT_HOST_PATH "$(PREFIX)/$(BUILD)/$(MXE_QT6_ID)")' \
+        > '$(CMAKE_TOOLCHAIN_DIR)/$(PKG).cmake'
 endef
 
 define $(PKG)_BUILD_$(BUILD)
