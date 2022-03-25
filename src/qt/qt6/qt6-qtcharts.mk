@@ -1,10 +1,12 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
+include src/qt/qt6/qt6-conf.mk
+
 PKG := qt6-qtcharts
 $(eval $(QT6_METADATA))
 
 $(PKG)_CHECKSUM := 3c2e6267ef0fb5345c7737e3a12e09ce9ec09117792e78af9a8617f828b2249a
-$(PKG)_DEPS     := cc qt6-qtbase
+$(PKG)_DEPS     := cc qt6-conf qt6-qtbase
 
 QT6_PREFIX   = '$(PREFIX)/$(TARGET)/$(MXE_QT6_ID)'
 QT6_QT_CMAKE = '$(QT6_PREFIX)/bin/qt-cmake-private' \
