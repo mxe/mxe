@@ -1,14 +1,25 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := librsvg
-$(PKG)_WEBSITE  := https://librsvg.sourceforge.io/
-$(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.40.5
-$(PKG)_CHECKSUM := d14d7b3e25023ce34302022fd7c9b3a468629c94dff6c177874629686bfc71a7
+$(PKG)_WEBSITE  := https://wiki.gnome.org/Projects/LibRsvg
+$(PKG)_VERSION  := 2.46.4
+$(PKG)_CHECKSUM := b45b9ee3b64c58baaf800bcdff5fcd04d79930dba4c56e46e0d3b0aead40cc29
 $(PKG)_SUBDIR   := librsvg-$($(PKG)_VERSION)
 $(PKG)_FILE     := librsvg-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.gnome.org/sources/librsvg/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc cairo gdk-pixbuf glib libcroco libgsf pango
+$(PKG)_DEPS     := cc cairo gdk-pixbuf glib libcroco libgsf pango $(BUILD)~rustc rust-std
+
+ifneq (, $(findstring darwin,$(BUILD)))
+    BUILD_TRIPLET = $(firstword $(call split,-,$(BUILD)))-apple-darwin
+else
+    ifneq (, $(findstring ibm-linux,$(BUILD)))
+        BUILD_TRIPLET = $(firstword $(call split,-,$(BUILD)))-unknown-linux-gnu
+    else
+        BUILD_TRIPLET = $(BUILD)
+    endif
+endif
+
+TARGET_TRIPLET          = $(firstword $(call split,-,$(TARGET)))-pc-windows-gnu
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://gitlab.gnome.org/GNOME/librsvg/tags' | \
@@ -17,17 +28,26 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && ./configure \
-        $(MXE_CONFIGURE_OPTS) \
-        $(if $(BUILD_STATIC), \
-          --disable-pixbuf-loader,) \
+    cat '$(PREFIX)/$(TARGET)/.cargo/config' >> '$(SOURCE_DIR)/.cargo/config'
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
+        --build=$(BUILD_TRIPLET) \
+        --host=$(TARGET) \
+        --prefix='$(PREFIX)/$(TARGET)' \
         --disable-gtk-doc \
-        --enable-introspection=no
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+        $(if $(BUILD_STATIC), \
+        --enable-static --disable-shared --disable-pixbuf-loader, \
+        --disable-static --enable-shared) \
+        --enable-gtk-doc=no \
+        --enable-introspection=no \
+        RUST_TARGET=$(TARGET_TRIPLET) \
+        RUSTC='$(PREFIX)/$(BUILD)/bin/rustc' \
+        CARGO='$(PREFIX)/$(BUILD)/bin/cargo' \
+        LIBS='-luserenv -lws2_32 -liphlpapi -ldnsapi'
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 
     '$(TARGET)-gcc' \
         -mwindows -W -Wall -Werror -Wno-error=deprecated-declarations \
         -std=c99 -pedantic \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-librsvg.exe' \
-        `'$(TARGET)-pkg-config' librsvg-2.0 --cflags --libs`
+        `'$(TARGET)-pkg-config' librsvg-2.0 --cflags --libs` -liphlpapi -ldnsapi
 endef
