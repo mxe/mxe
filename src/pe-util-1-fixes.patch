@@ -1,0 +1,92 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Cameron Cawley <ccawley2011@gmail.com>
+Date: Sat, 26 Mar 2022 23:48:20 +0000
+Subject: [PATCH 1/1] Update the pe-parse submodule
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -17,10 +17,30 @@ find_package(Boost 1.54
+     system      # needed by filesystem
+     filesystem)
+ 
++# List all files explicitly; this will make IDEs happy (i.e. QtCreator, CLion, ...)
++list(APPEND PEPARSERLIB_SOURCEFILES
++  pe-parse/pe-parser-library/include/pe-parse/parse.h
++  pe-parse/pe-parser-library/include/pe-parse/nt-headers.h
++  pe-parse/pe-parser-library/include/pe-parse/to_string.h
++
++  pe-parse/pe-parser-library/src/buffer.cpp
++  pe-parse/pe-parser-library/src/parse.cpp
++)
++
++# NOTE(ww): On Windows we use the Win32 API's built-in UTF16 conversion
++# routines; on other platforms we use codecvt. codecvt is nominally deprecated
++# in C++17 and onwards, but will probably be available for quite some time.
++# Previous versions of pe-parse used ICU when available, but this caused
++# DLL hell on Windows and wasn't worth the additional dependency.
++if(MSVC)
++  list(APPEND PEPARSERLIB_SOURCEFILES pe-parse/pe-parser-library/src/unicode_winapi.cpp)
++else()
++  list(APPEND PEPARSERLIB_SOURCEFILES pe-parse/pe-parser-library/src/unicode_codecvt.cpp)
++endif()
++
+ add_executable(peldd
+   peldd.cc
+-  pe-parse/pe-parser-library/src/parse.cpp
+-  pe-parse/pe-parser-library/src/buffer.cpp
++  ${PEPARSERLIB_SOURCEFILES}
+   )
+ set_property(TARGET peldd PROPERTY INCLUDE_DIRECTORIES
+     ${CMAKE_CURRENT_SOURCE_DIR}/pe-parse/pe-parser-library/include)
+diff --git a/peldd.cc b/peldd.cc
+index 1111111..2222222 100644
+--- a/peldd.cc
++++ b/peldd.cc
+@@ -1,8 +1,8 @@
+ // The code in this file is licensed under the MIT License (MIT).
+ 
+ 
+-#include <parser-library/parse.h>
+-#include <parser-library/nt-headers.h>
++#include <pe-parse/parse.h>
++#include <pe-parse/nt-headers.h>
+ 
+ #include <iostream>
+ #include <array>
+@@ -40,13 +40,13 @@ struct section {
+ };
+ 
+ struct parsed_pe_internal {
+-  list<section>   secs;
++  vector<section>   secs;
+ };
+ 
+-#define READ_DWORD_NULL(b, o, inst, member)                                     \
+-  if (!readDword(b, o + _offset(__typeof__(inst), member), inst.member)) { \
+-    PE_ERR(PEERR_READ);                                                    \
+-    return nullptr;                                                          \
++#define READ_DWORD_NULL(b, o, inst, member)                                 \
++  if (!readDword(b, o + offsetof(__typeof__(inst), member), inst.member)) { \
++    PE_ERR(PEERR_READ);                                                     \
++    return nullptr;                                                         \
+   }
+ 
+ 
+@@ -55,8 +55,8 @@ extern bool getHeader(bounded_buffer *file, pe_header &p, bounded_buffer *&rem);
+ extern bool getSections( bounded_buffer  *b, 
+                   bounded_buffer  *fileBegin,
+                   nt_header_32    &nthdr, 
+-                  list<section>   &secs);
+-extern bool getSecForVA(list<section> &secs, VA v, section &sec);
++                  vector<section>   &secs);
++extern bool getSecForVA(const vector<section> &secs, VA v, section &sec);
+ }
+ 
+ // most of the following function body is copied from ParsePEFromFile()
