@@ -1,0 +1,8 @@
+# This file is part of MXE. See LICENSE.md for licensing information.
+
+# Do not use this file outside of MXE's build system!
+# It is intended to allow using ccache.
+
+[binaries]
+c = '@PREFIX@/@BUILD@/bin/@TARGET@-gcc'
+cpp = '@PREFIX@/@BUILD@/bin/@TARGET@-g++'

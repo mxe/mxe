@@ -11,9 +11,10 @@ if [[ "$NO_MESON_CROSSFILE" == "1" ]]; then
     exec meson "$@"
 else
     echo "== Using Meson cross file: @MESON_CROSS_FILE@"
-    exec meson \
-              --cross-file "@MESON_CROSS_FILE@" \
-              --default-library "@LIBTYPE@" \
-              --prefix "@PREFIX@/@TARGET@" \
+    exec @MESON_EXECUTABLE@ \
+              --cross-file="@MESON_CROSS_FILE@" \
+              --default-library="@LIBTYPE@" \
+              --prefix="@PREFIX@/@TARGET@" \
+              --libdir=lib \
               "$@"
 fi

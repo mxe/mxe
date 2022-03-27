@@ -10,11 +10,14 @@ strip = '@PREFIX@/bin/@TARGET@-strip'
 windres = '@PREFIX@/bin/@TARGET@-windres'
 windmc = '@PREFIX@/bin/@TARGET@-windmc'
 pkgconfig = '@PREFIX@/bin/@TARGET@-pkg-config'
+cmake = '@PREFIX@/bin/@TARGET@-cmake'
 # MXE forbids this
 # exe_wrapper = 'wine'
 
 [properties]
 needs_exe_wrapper = true
+sys_root = '@PREFIX@/@TARGET@'
+pkg_config_libdir = '@PREFIX@/@TARGET@/lib/pkgconfig'
 
 [host_machine]
 system = 'windows'
