@@ -1,0 +1,52 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: v1993 <v19930312@gmail.com>
+Date: Fri, 10 Dec 2021 17:33:50 +0300
+Subject: [PATCH 1/2] Fix static builds
+
+
+diff --git a/atk/atkprivate.c b/atk/atkprivate.c
+index 1111111..2222222 100644
+--- a/atk/atkprivate.c
++++ b/atk/atkprivate.c
+@@ -38,6 +38,7 @@
+ 
+ static HMODULE atk_dll;
+ 
++#ifdef DLL_EXPORT
+ BOOL WINAPI
+ DllMain (HINSTANCE hinstDLL,
+          DWORD     fdwReason,
+@@ -52,6 +53,7 @@ DllMain (HINSTANCE hinstDLL,
+ 
+   return TRUE;
+ }
++#endif
+ 
+ static const char *
+ get_atk_locale_dir (void)
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: v1993 <v19930312@gmail.com>
+Date: Fri, 10 Dec 2021 17:49:42 +0300
+Subject: [PATCH 2/2] Fix variable exporting/importing
+
+This makes windows builds of GTK no longer need a patch.
+Tested only with GCC, both shared and static builds.
+
+diff --git a/atk/atkmisc.h b/atk/atkmisc.h
+index 1111111..2222222 100644
+--- a/atk/atkmisc.h
++++ b/atk/atkmisc.h
+@@ -42,7 +42,7 @@
+ #          define ATK_VAR extern
+ #        endif /* !DLL_EXPORT */
+ #      else /* !ATK_COMPILATION */
+-#        define ATK_VAR extern __declspec(dllimport)
++#        define ATK_VAR extern
+ #      endif /* !ATK_COMPILATION */
+ #    endif /* !ATK_STATIC_COMPILATION */
+ #  else /* !G_PLATFORM_WIN32 */
