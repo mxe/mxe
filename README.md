@@ -46,6 +46,31 @@ various target platforms, which:
 
 Please see [mxe.cc](https://mxe.cc/) for further information and package support matrix.
 
+## Build Dependencies
+
+For some packages additional dependencies are required to be installed in order to build:
+
+* Python 3
+
+## Usage
+
+You can use the `make` command to start the build.  
+
+Below *an example* of cross-compiling the GTK3 project to one statically linked Windows 64-bit library:
+
+```sh
+make gtk3 -j 8 MXE_TARGETS='x86_64-w64-mingw32.static'
+```
+
+Please see [mxe.cc](https://mxe.cc/) for more information about how-to build the MXE project.
+
+## Packages
+
+Within the [MXE makefiles](src) we either define `$(PKG)_GH_CONF` or `$(PKG)_URL`, which will be used to download the package.  
+Next the checksum will be validated of the downloaded archive file (sha256 checksum).
+
+Updating a package or updating checksum is all possible using the make commands, see [usage for more info](https://mxe.cc/#usage).
+
 ## Shared Library Notes
 There are several approaches to recursively finding DLL dependencies (alphabetical list):
   * [go script](https://github.com/desertbit/gml/blob/master/cmd/gml-copy-dlls/main.go)
