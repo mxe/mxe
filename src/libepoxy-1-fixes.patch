@@ -3,32 +3,28 @@ This file is part of MXE. See LICENSE.md for licensing information.
 Contains ad hoc patches for cross building.
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Boris Nagaev <bnagaev@gmail.com>
-Date: Tue, 31 Jan 2017 02:03:55 +0100
-Subject: [PATCH 1/1] fix EPOXY_IMPORTEXPORT for static targets
+From: v1993 <v19930312@gmail.com>
+Date: Mon, 6 Dec 2021 22:38:14 +0300
+Subject: [PATCH 1/1] Fix static builds on Windows
 
-Based on https://github.com/mxe/mxe/issues/1647#issuecomment-275967915
 
-diff --git a/include/epoxy/gl.h b/include/epoxy/gl.h
+diff --git a/src/dispatch_wgl.c b/src/dispatch_wgl.c
 index 1111111..2222222 100644
---- a/include/epoxy/gl.h
-+++ b/include/epoxy/gl.h
-@@ -71,7 +71,17 @@ extern "C" {
- #endif
+--- a/src/dispatch_wgl.c
++++ b/src/dispatch_wgl.c
+@@ -89,6 +89,7 @@ epoxy_handle_external_wglMakeCurrent(void)
+     }
+ }
  
- #ifndef EPOXY_IMPORTEXPORT
--#define EPOXY_IMPORTEXPORT __declspec(dllimport)
-+#  ifdef EPOXY_SHARED
-+#    ifdef EPOXY_DLL
-+#      define EPOXY_IMPORTEXPORT __declspec(dllexport)
-+#    else
-+#      define EPOXY_IMPORTEXPORT __declspec(dllimport)
-+#    endif
-+#  elif EPOXY_STATIC
-+#    define EPOXY_IMPORTEXPORT
-+#  else
-+#    error "Please define EPOXY_STATIC or EPOXY_SHARED"
-+#  endif
- #endif
++#ifdef DLL_EXPORT
+ /**
+  * This global symbol is apparently looked up by Windows when loading
+  * a DLL, but it doesn't declare the prototype.
+@@ -140,6 +141,7 @@ DllMain(HINSTANCE dll, DWORD reason, LPVOID reserved)
  
- #ifndef GLAPI
+     return TRUE;
+ }
++#endif
+ 
+ WRAPPER_VISIBILITY (BOOL)
+ WRAPPER(epoxy_wglMakeCurrent)(HDC hdc, HGLRC hglrc)
