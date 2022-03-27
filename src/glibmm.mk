@@ -21,7 +21,7 @@ endef
 define $(PKG)_BUILD
     '$(MXE_MESON_WRAPPER)' $(MXE_MESON_OPTS) \
         -Dbuild-examples=false \
-        '$(BUILD_DIR)' '$(SOURCE_DIR)' && \
-    '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)' && \
+        '$(BUILD_DIR)' '$(SOURCE_DIR)'
+    '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)'
     '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)' install
 endef

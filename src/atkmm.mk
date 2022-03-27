@@ -18,7 +18,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    '$(MXE_MESON_WRAPPER)' $(MXE_MESON_OPTS) '$(BUILD_DIR)' '$(SOURCE_DIR)' && \
-    '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)' && \
+    '$(MXE_MESON_WRAPPER)' $(MXE_MESON_OPTS) '$(BUILD_DIR)' '$(SOURCE_DIR)'
+    '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)'
     '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)' install
 endef
