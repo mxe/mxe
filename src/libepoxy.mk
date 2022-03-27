@@ -11,8 +11,8 @@ $(PKG)_URL      := https://github.com/anholt/libepoxy/releases/download/$($(PKG)
 $(PKG)_DEPS     := cc meson-wrapper xorg-macros
 
 define $(PKG)_BUILD
-     '$(MXE_MESON_WRAPPER)' $(MXE_MESON_OPTS) -Dtests=false -Ddocs=false '$(BUILD_DIR)' '$(SOURCE_DIR)' && \
-    '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)' && \
+     '$(MXE_MESON_WRAPPER)' $(MXE_MESON_OPTS) -Dtests=false -Ddocs=false '$(BUILD_DIR)' '$(SOURCE_DIR)'
+    '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)'
     '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)' install
 
     $(SED) 's/Cflags:/Cflags: -DEPOXY_$(if $(BUILD_STATIC),STATIC,SHARED)/' \

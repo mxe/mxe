@@ -28,8 +28,8 @@ define $(PKG)_BUILD
         -Dinstalled_tests=false \
         -Dbuiltin_immodules=yes \
         -Dintrospection=false \
-        '$(BUILD_DIR)' '$(SOURCE_DIR)' && \
-    '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)' && \
+        '$(BUILD_DIR)' '$(SOURCE_DIR)'
+    '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)'
     DESTDIR="/" \
         '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)' install
 

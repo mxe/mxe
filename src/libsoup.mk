@@ -19,8 +19,8 @@ define $(PKG)_BUILD
         -Dgssapi=disabled \
         -Dsysprof=disabled \
         -Dtls_check=false \
-        '$(BUILD_DIR)' '$(SOURCE_DIR)' && \
-    '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)' && \
+        '$(BUILD_DIR)' '$(SOURCE_DIR)'
+    '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)'
     '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)' install
 
     $(TARGET)-gcc \

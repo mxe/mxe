@@ -24,8 +24,8 @@ define $(PKG)_BUILD
     '$(MXE_MESON_WRAPPER)' $(MXE_MESON_OPTS) \
         -Dbuild-tests=false \
         -Dbuild-demos=false \
-        '$(BUILD_DIR)' '$(SOURCE_DIR)' && \
-    '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)' && \
+        '$(BUILD_DIR)' '$(SOURCE_DIR)'
+    '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)'
     DESTDIR="/" \
         '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)' install
 

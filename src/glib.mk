@@ -25,8 +25,8 @@ define $(PKG)_BUILD_$(BUILD)
     '$(MXE_MESON_NATIVE_WRAPPER)' \
         --buildtype=release \
         -Dtests=false \
-        '$(BUILD_DIR)' '$(SOURCE_DIR)' && \
-    '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)' && \
+        '$(BUILD_DIR)' '$(SOURCE_DIR)'
+    '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)'
     '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)' install
 endef
 
@@ -43,7 +43,7 @@ define $(PKG)_BUILD
         -Dtests=false \
         -Dforce_posix_threads=true \
         -Druntime_bindir='../$(BUILD)/bin' \
-        '$(BUILD_DIR)' '$(SOURCE_DIR)' && \
-    '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)' && \
+        '$(BUILD_DIR)' '$(SOURCE_DIR)'
+    '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)'
     '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)' install
 endef
