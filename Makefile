@@ -720,7 +720,7 @@ else
     NONET_LIB := $(PREFIX)/$(BUILD)/lib/nonetwork.dylib
     PRELOAD   := DYLD_FORCE_FLAT_NAMESPACE=1 DYLD_INSERT_LIBRARIES='$(NONET_LIB)' \
                  http_proxy=$(DUMMY_PROXY) https_proxy=$(DUMMY_PROXY)
-    NONET_CFLAGS := -arch x86_64
+    NONET_CFLAGS := -arch $(shell uname -m)
 endif
 
 $(NONET_LIB): $(TOP_DIR)/tools/nonetwork.c | $(PREFIX)/$(BUILD)/lib/.gitkeep
