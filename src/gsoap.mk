@@ -52,7 +52,7 @@ define $(PKG)_BUILD
         --prefix='$(PREFIX)/$(TARGET)' \
         --host='$(TARGET)' \
         --build="`config.guess`" \
-        CPPFLAGS='-DWITH_NTLM -D_WIN32_WINNT=0x0601 -DWINVER=0x0601'
+        CPPFLAGS='-DWITH_NTLM'
 
     # Building for mingw requires native soapcpp2
     ln -sf '$(PREFIX)/bin/$(TARGET)-soapcpp2' '$(1)/gsoap/src/soapcpp2'
