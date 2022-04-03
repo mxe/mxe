@@ -20,8 +20,7 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
-        $(MXE_CONFIGURE_OPTS) \
-        CFLAGS=-D_WIN32_WINNT=0x0500
+        $(MXE_CONFIGURE_OPTS)
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
 
     '$(TARGET)-gcc' \

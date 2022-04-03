@@ -24,7 +24,7 @@ define $(PKG)_BUILD
         --disable-debug \
         --disable-tests \
         --disable-examples \
-        CXXFLAGS='-D_WIN32_WINNT=0x0501 -g -O2' \
+        CXXFLAGS='-g -O2' \
         LIBS='-lws2_32 -lmswsock'
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' LDFLAGS=-no-undefined
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install LDFLAGS=-no-undefined
