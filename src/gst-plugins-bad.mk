@@ -3,8 +3,8 @@
 PKG             := gst-plugins-bad
 $(PKG)_WEBSITE  := https://gstreamer.freedesktop.org/modules/gst-plugins-bad.html
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.16.3
-$(PKG)_CHECKSUM := 84efe57011658f0a53a5d5b20f64ef109f5105dccb0808c21e069e946673514d
+$(PKG)_VERSION  := 1.20.1
+$(PKG)_CHECKSUM := 09d3c2cf5911f0bc7da6bf557a55251779243d3de216b6a26cc90c445b423848
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://gstreamer.freedesktop.org/src/$(PKG)/$($(PKG)_FILE)
@@ -16,13 +16,18 @@ $(PKG)_DEPS     := cc chromaprint faad2 fdk-aac gst-plugins-base gstreamer gtk3 
 $(PKG)_UPDATE = $(subst gstreamer/refs,gst-plugins-bad/refs,$(gstreamer_UPDATE))
 
 define $(PKG)_BUILD
-    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
-        $(MXE_CONFIGURE_OPTS) \
-        --disable-debug \
-        --disable-examples \
-        --disable-opengl
-    $(MAKE) -C '$(BUILD_DIR)' -j $(JOBS) LDFLAGS='-no-undefined' CFLAGS='-DHAVE_AUDCLNT_STREAMOPTIONS'
-    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
+    # review meson_options.txt
+    CFLAGS='-DHAVE_AUDCLNT_STREAMOPTIONS' \
+    '$(MXE_MESON_WRAPPER)' $(MXE_MESON_OPTS) \
+        -Dtests=disabled \
+        -Dexamples=disabled \
+        -Dintrospection=disabled \
+        -Ddoc=disabled \
+        -Dd3d11=disabled \
+        $(PKG_MESON_OPTS) \
+        '$(BUILD_DIR)' '$(SOURCE_DIR)'
+    '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)'
+    '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)' install
 
     # some .dlls are installed to lib - no obvious way to change
     $(if $(BUILD_SHARED),

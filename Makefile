@@ -145,6 +145,10 @@ MXE_MESON_OPTS = \
     $(if $(findstring mxe,$(MXE_USE_CCACHE)), \
     --cross-file='$(PREFIX)/$(TARGET)/share/meson/mxe-crossfile-internal.meson')
 
+PKG_MESON_OPTS = \
+    $(_$(PKG)_MESON_OPTS) \
+    $($(PKG)_MESON_OPTS)
+
 PKG_CONFIGURE_OPTS = \
     $(_$(PKG)_CONFIGURE_OPTS) \
     $($(PKG)_CONFIGURE_OPTS)
