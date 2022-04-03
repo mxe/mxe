@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Luke Potgieter <fried.roadkill+ght@gmail.com>
 Date: Tue, 29 Aug 2017 16:31:09 +0200
-Subject: [PATCH 1/2] Detect spatialite more effectively than just checking for
+Subject: [PATCH 1/3] Detect spatialite more effectively than just checking for
  headers in the system paths. PostgreSQL detection requires -lpthread when
  building statically.
 
@@ -23,7 +23,7 @@ index 1111111..2222222 100644
  
    if test "${HAVE_PG}" = "yes" ; then
      LIBS=-L`$PG_CONFIG --libdir`" -lpq $LIBS"
-@@ -3557,16 +3557,21 @@ AC_ARG_WITH(spatialite-soname,
+@@ -3598,16 +3598,21 @@ AC_ARG_WITH(spatialite-soname,
  
  HAVE_SPATIALITE=no
  SPATIALITE_AMALGAMATION=no
@@ -74,7 +74,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Luke Potgieter <fried.roadkill+ght@gmail.com>
 Date: Tue, 26 Sep 2017 14:56:19 +0200
-Subject: [PATCH 2/2] Use the new proj dll version number for the latest proj.
+Subject: [PATCH 2/3] Use the new proj dll version number for the latest proj.
 
 
 diff --git a/ogr/ogrct.cpp b/ogr/ogrct.cpp
@@ -93,3 +93,59 @@ index 1111111..2222222 100644
  #elif defined(__APPLE__)
  #  define LIBNAME "libproj.dylib"
  #else
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Sun, 3 Apr 2022 22:52:30 +0200
+Subject: [PATCH 3/3] detect openjpeg-2.4 in MXE
+
+
+diff --git a/configure.ac b/configure.ac
+index 1111111..2222222 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -2540,11 +2540,11 @@ if test "$with_openjpeg" = "no" ; then
+ elif test "$with_openjpeg" = "yes" -o "$with_openjpeg" = "" ; then
+ 
+ 
+-  AC_CHECK_HEADERS([openjpeg-2.3/openjpeg.h])
+-  if test "$ac_cv_header_openjpeg_2_3_openjpeg_h" = "yes"; then
++  AC_CHECK_HEADERS([openjpeg-2.4/openjpeg.h])
++  if test "$ac_cv_header_openjpeg_2_4_openjpeg_h" = "yes"; then
+     AC_CHECK_LIB(openjp2,opj_stream_set_user_data_length,HAVE_OPENJPEG=yes,HAVE_OPENJPEG=no,)
+     if test "$HAVE_OPENJPEG" = "yes"; then
+-        OPENJPEG_VERSION=20300
++        OPENJPEG_VERSION=20400
+         LIBS="-lopenjp2 $LIBS"
+     fi
+   else
+@@ -2585,11 +2585,11 @@ else
+   elif test -r $with_openjpeg/include/openjpeg-2.2/openjpeg.h ; then
+     OPENJPEG_VERSION=20200
+     EXTRA_INCLUDES="-I$with_openjpeg/include $EXTRA_INCLUDES"
+-  elif test -r $with_openjpeg/include/openjpeg-2.3/openjpeg.h ; then
+-    OPENJPEG_VERSION=20300
++  elif test -r $with_openjpeg/include/openjpeg-2.4/openjpeg.h ; then
++    OPENJPEG_VERSION=20400
+     EXTRA_INCLUDES="-I$with_openjpeg/include $EXTRA_INCLUDES"
+   else
+-    AC_MSG_ERROR([openjpeg.h not found in $with_openjpeg/include/openjpeg-2.0 or $with_openjpeg/include/openjpeg-2.1 or $with_openjpeg/include/openjpeg-2.2 or $with_openjpeg/include/openjpeg-2.3])
++    AC_MSG_ERROR([openjpeg.h not found in $with_openjpeg/include/openjpeg-2.0 or $with_openjpeg/include/openjpeg-2.1 or $with_openjpeg/include/openjpeg-2.2 or $with_openjpeg/include/openjpeg-2.4])
+   fi
+ 
+   AC_CHECK_LIB(openjp2,opj_stream_set_user_data_length,HAVE_OPENJPEG=yes,HAVE_OPENJPEG=no,-L$with_openjpeg/lib)
+diff --git a/frmts/openjpeg/openjpegdataset.cpp b/frmts/openjpeg/openjpegdataset.cpp
+index 1111111..2222222 100644
+--- a/frmts/openjpeg/openjpegdataset.cpp
++++ b/frmts/openjpeg/openjpegdataset.cpp
+@@ -34,8 +34,8 @@
+ #pragma clang diagnostic ignored "-Wdocumentation"
+ #endif
+ 
+-#if defined(OPENJPEG_VERSION) && OPENJPEG_VERSION >= 20300
+-#include <openjpeg-2.3/openjpeg.h>
++#if defined(OPENJPEG_VERSION) && OPENJPEG_VERSION >= 20400
++#include <openjpeg-2.4/openjpeg.h>
+ #elif defined(OPENJPEG_VERSION) && OPENJPEG_VERSION >= 20200
+ #include <openjpeg-2.2/openjpeg.h>
+ #elif defined(OPENJPEG_VERSION) && OPENJPEG_VERSION >= 20100
