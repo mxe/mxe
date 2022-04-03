@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Sun, 25 Apr 2021 19:23:19 +1000
-Subject: [PATCH 1/1] fix windres whitespace handling
+Subject: [PATCH 1/2] fix windres whitespace handling
 
 
 diff --git a/ffbuild/common.mak b/ffbuild/common.mak
@@ -21,3 +21,25 @@ index 1111111..2222222 100644
  
  %.i: %.c
  	$(CC) $(CCFLAGS) $(CC_E) $<
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Mon, 4 Apr 2022 00:33:50 +0200
+Subject: [PATCH 2/2] avoid warning: cast from pointer to integer of different
+ size [-Wpointer-to-int-cast]
+
+when checking opus
+
+diff --git a/configure b/configure
+index 1111111..2222222 100755
+--- a/configure
++++ b/configure
+@@ -1336,7 +1336,7 @@ check_func_headers(){
+         done
+         echo "#include <stdint.h>"
+         for func in $funcs; do
+-            echo "long check_$func(void) { return (long) $func; }"
++            echo "intptr_t check_$func(void) { return (intptr_t) $func; }"
+         done
+         echo "int main(void) { int ret = 0;"
+         # LTO could optimize out the test functions without this
