@@ -48,7 +48,8 @@ define $(PKG)_BUILD
       -DBUILD_PNG=OFF \
       -DBUILD_OPENEXR=OFF \
       -DCMAKE_VERBOSE=ON \
-      -DCMAKE_CXX_STANDARD=11
+      -DCMAKE_CXX_STANDARD=11 \
+      -DCMAKE_CXX_FLAGS="-Wno-deprecated-copy -Wno-class-memaccess"
 
     # install
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1
