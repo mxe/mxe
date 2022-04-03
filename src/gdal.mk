@@ -74,7 +74,6 @@ define $(PKG)_BUILD
         --with-xerces=no \
         --with-xml2='$(PREFIX)/$(TARGET)/bin/xml2-config' \
         --with-pg='$(PREFIX)/$(TARGET)/bin/pg_config' \
-        CXXFLAGS='-D_WIN32_WINNT=0x0600' \
         LIBS="-ljpeg -lsecur32 -lportablexdr `'$(TARGET)-pkg-config' --libs openssl libtiff-4 spatialite freexl armadillo`" \
         $(PKG_CONFIGURE_OPTS)
 
