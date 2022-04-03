@@ -23,9 +23,7 @@ define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         $(subst docdir$(comma),,$(MXE_CONFIGURE_OPTS)) \
         --with-apr='$(PREFIX)/$(TARGET)' \
-        --with-apr-util='$(PREFIX)/$(TARGET)' \
-        CFLAGS=-D_WIN32_WINNT=0x0500 \
-        CXXFLAGS=-D_WIN32_WINNT=0x0500
+        --with-apr-util='$(PREFIX)/$(TARGET)'
 
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(MXE_DISABLE_PROGRAMS)
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install $(MXE_DISABLE_PROGRAMS)
