@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Stephen Kitt <skitt@debian.org>
 Date: Sat, 15 Jul 2017 00:09:40 +1000
-Subject: [PATCH 1/2] Allow the PE timestamp to be specified with
+Subject: [PATCH 1/1] Allow the PE timestamp to be specified with
  SOURCE_DATE_EPOCH
 
 Taken from:
@@ -140,4 +140,3 @@ index 1111111..2222222 100644
    else
      H_PUT_32 (abfd, pe_data (abfd)->timestamp, edata_d + 4);
  
-

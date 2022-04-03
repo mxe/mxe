@@ -8,14 +8,6 @@
 PKG             := cloog
 $(PKG)_TARGETS  := $(MXE_TARGETS)
 
-PKG             := binutils
-$(PKG)_VERSION  := 2.37
-$(PKG)_CHECKSUM := 67fc1a4030d08ee877a4867d3dcab35828148f87e1fd05da6db585ed5a166bd4
-$(PKG)_SUBDIR   := binutils-$($(PKG)_VERSION)
-$(PKG)_FILE     := binutils-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := https://ftp.gnu.org/gnu/binutils/$($(PKG)_FILE)
-$(PKG)_URL_2    := https://ftpmirror.gnu.org/binutils/$($(PKG)_FILE)
-
 PKG             := isl
 $(PKG)_VERSION  := 0.16.1
 $(PKG)_CHECKSUM := 412538bb65c799ac98e17e8cfcdacbb257a57362acfaaff254b0fcae970126d2
