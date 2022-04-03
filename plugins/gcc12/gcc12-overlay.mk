@@ -8,22 +8,6 @@
 PKG             := cloog
 $(PKG)_TARGETS  := $(MXE_TARGETS)
 
-PKG             := binutils
-$(PKG)_VERSION  := 2.36.1
-$(PKG)_CHECKSUM := 5b4bd2e79e30ce8db0abd76dd2c2eae14a94ce212cfc59d3c37d23e24bc6d7a3
-$(PKG)_SUBDIR   := binutils-$($(PKG)_VERSION)
-$(PKG)_FILE     := binutils-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := https://ftp.gnu.org/gnu/binutils/$($(PKG)_FILE)
-$(PKG)_URL_2    := https://ftpmirror.gnu.org/binutils/$($(PKG)_FILE)
-$(PKG)_PATCHES  := $(dir $(lastword $(MAKEFILE_LIST)))/$(PKG)-1-fixes.patch
-
-PKG             := gmp
-$(PKG)_VERSION  := 6.2.1
-$(PKG)_CHECKSUM := fd4829912cddd12f84181c3451cc752be224643e87fac497b69edddadc49b4f2
-$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := https://gmplib.org/download/$(PKG)/$($(PKG)_FILE)
-
 PKG             := isl
 $(PKG)_VERSION  := 0.16.1
 $(PKG)_CHECKSUM := 412538bb65c799ac98e17e8cfcdacbb257a57362acfaaff254b0fcae970126d2
