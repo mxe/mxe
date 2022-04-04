@@ -3,8 +3,8 @@
 PKG             := libssh2
 $(PKG)_WEBSITE  := https://libssh2.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.9.0
-$(PKG)_CHECKSUM := d5fb8bd563305fd1074dda90bd053fb2d29fc4bce048d182f96eaa466dfadafd
+$(PKG)_VERSION  := 1.10.0
+$(PKG)_CHECKSUM := 2d64e90f3ded394b91d3a2e774ca203a4179f69aebee03003e5a6fa621e41d51
 $(PKG)_SUBDIR   := libssh2-$($(PKG)_VERSION)
 $(PKG)_FILE     := libssh2-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://libssh2.org/download/$($(PKG)_FILE)
@@ -18,7 +18,6 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && ./buildconf
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
         --disable-examples-build \
