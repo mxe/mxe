@@ -5,6 +5,7 @@ $(PKG)_WEBSITE  := https://gcc.gnu.org/
 $(PKG)_DESCR    := GCC
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 11.2.0
+$(PKG)_RELEASE  := $($(PKG)_VERSION)
 $(PKG)_CHECKSUM := d08edc536b54c372a1010ff6619dd274c0f1603aa49212ba20f7aa2cda36fa8b
 $(PKG)_SUBDIR   := gcc-$($(PKG)_VERSION)
 $(PKG)_FILE     := gcc-$($(PKG)_VERSION).tar.xz
@@ -128,19 +129,19 @@ define $(PKG)_POST_BUILD
         toolexecdir='$(PREFIX)/$(TARGET)/bin' \
         SHLIB_SLIBDIR_QUAL= \
         install-shared
-    mv  -v '$(PREFIX)/lib/gcc/$(TARGET)/$($(PKG)_VERSION)/'*.dll '$(PREFIX)/$(TARGET)/bin/'
+    mv  -v '$(PREFIX)/lib/gcc/$(TARGET)/$($(PKG)_RELEASE)/'*.dll '$(PREFIX)/$(TARGET)/bin/'
     -rm -v '$(PREFIX)/lib/gcc/$(TARGET)/'libgcc_s*.dll
     -rm -v '$(PREFIX)/lib/gcc/$(TARGET)/lib/'libgcc_s*.a
     -rmdir '$(PREFIX)/lib/gcc/$(TARGET)/lib/')
 
     # cc1libdir isn't passed to subdirs so install correctly and rm
-    $(MAKE) -C '$(BUILD_DIR)/libcc1' -j 1 install cc1libdir='$(PREFIX)/lib/gcc/$(TARGET)/$($(PKG)_VERSION)'
+    $(MAKE) -C '$(BUILD_DIR)/libcc1' -j 1 install cc1libdir='$(PREFIX)/lib/gcc/$(TARGET)/$($(PKG)_RELEASE)'
     -rm -f '$(PREFIX)/lib/'libcc1*
 
     # overwrite default specs to mimic stack protector handling of glibc
     # ./configure above doesn't do this
-    '$(TARGET)-gcc' -dumpspecs > '$(PREFIX)/lib/gcc/$(TARGET)/$($(PKG)_VERSION)/specs'
-    $(SED) -i 's,-lmingwex,-lmingwex -lssp_nonshared -lssp,' '$(PREFIX)/lib/gcc/$(TARGET)/$($(PKG)_VERSION)/specs'
+    '$(TARGET)-gcc' -dumpspecs > '$(PREFIX)/lib/gcc/$(TARGET)/$($(PKG)_RELEASE)/specs'
+    $(SED) -i 's,-lmingwex,-lmingwex -lssp_nonshared -lssp,' '$(PREFIX)/lib/gcc/$(TARGET)/$($(PKG)_RELEASE)/specs'
 
     # compile test
     cd '$(PREFIX)/$(TARGET)/bin' && '$(TARGET)-gcc' \
