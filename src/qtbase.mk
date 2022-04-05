@@ -10,8 +10,8 @@ $(PKG)_SUBDIR   := $(PKG)-everywhere-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.qt.io/official_releases/qt/5.15/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc dbus fontconfig freetds freetype harfbuzz jpeg libmysqlclient \
-				   libpng mesa openssl pcre2 postgresql sqlite zlib zstd $(BUILD)~zstd \
-				   $(if $(findstring shared,$(MXE_TARGETS)), icu4c)
+                   libpng mesa openssl pcre2 postgresql sqlite zlib zstd $(BUILD)~zstd \
+                   $(if $(findstring shared,$(MXE_TARGETS)), icu4c)
 $(PKG)_DEPS_$(BUILD) :=
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 
