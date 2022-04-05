@@ -18,6 +18,7 @@ $(PKG)_URL_2    := https://gcc.gnu.org/pub/gcc/infrastructure/$($(PKG)_FILE)
 
 PKG             := gcc
 $(PKG)_VERSION  := 7.5.0
+$(PKG)_RELEASE  := $($(PKG)_VERSION)
 $(PKG)_CHECKSUM := b81946e7f01f90528a1f7352ab08cc602b9ccc05d4e44da4bd501c5a189ee661
 $(PKG)_SUBDIR   := gcc-$($(PKG)_VERSION)
 $(PKG)_FILE     := gcc-$($(PKG)_VERSION).tar.xz

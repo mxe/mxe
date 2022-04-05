@@ -18,6 +18,7 @@ $(PKG)_URL_2    := https://gcc.gnu.org/pub/gcc/infrastructure/$($(PKG)_FILE)
 
 PKG             := gcc
 $(PKG)_VERSION  := 9.4.0
+$(PKG)_RELEASE  := $($(PKG)_VERSION)
 $(PKG)_CHECKSUM := c95da32f440378d7751dd95533186f7fc05ceb4fb65eb5b85234e6299eb9838e
 $(PKG)_SUBDIR   := gcc-$($(PKG)_VERSION)
 $(PKG)_FILE     := gcc-$($(PKG)_VERSION).tar.xz

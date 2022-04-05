@@ -34,6 +34,7 @@ $(PKG)_WEBSITE  := https://gcc.gnu.org/
 $(PKG)_DESCR    := GCC
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 5.5.0
+$(PKG)_RELEASE  := $($(PKG)_VERSION)
 $(PKG)_CHECKSUM := 530cea139d82fe542b358961130c69cfde8b3d14556370b65823d2f91f0ced87
 $(PKG)_SUBDIR   := gcc-$($(PKG)_VERSION)
 $(PKG)_FILE     := gcc-$($(PKG)_VERSION).tar.xz
