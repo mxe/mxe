@@ -13,7 +13,8 @@ $(PKG)_URL      := https://download.qt.io/official_releases/qt/6.2/$($(PKG)_VERS
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 $(PKG)_DEPS     := \
     cc fontconfig freetype harfbuzz jpeg libpng mesa \
-    pcre2 sqlite zlib zstd $(BUILD)~$(PKG)
+    pcre2 sqlite zlib zstd $(BUILD)~$(PKG) \
+    $(if $(findstring shared,$(MXE_TARGETS)), icu4c)
 $(PKG)_DEPS_$(BUILD) :=
 $(PKG)_OO_DEPS_$(BUILD) := ninja
 
@@ -47,7 +48,7 @@ define $(PKG)_BUILD
         -DINPUT_freetype=system \
         -DFEATURE_glib=OFF \
         -DFEATURE_system_harfbuzz=ON \
-        -DFEATURE_icu=OFF \
+        -DFEATURE_icu=$(CMAKE_SHARED_BOOL) \
         -DFEATURE_libjpeg=ON \
         -DFEATURE_libpng=ON \
         -DFEATURE_opengl_dynamic=ON \
@@ -59,7 +60,8 @@ define $(PKG)_BUILD
         -DFEATURE_sql_psql=OFF \
         -DFEATURE_system_sqlite=ON \
         -DFEATURE_system_zlib=ON \
-        -DFEATURE_use_gold_linker_alias=OFF
+        -DFEATURE_use_gold_linker_alias=OFF \
+        $(PKG_CMAKE_OPTS)
 
     cmake --build '$(BUILD_DIR)' -j '$(JOBS)'
     cmake --install '$(BUILD_DIR)'

@@ -9,7 +9,9 @@ $(PKG)_CHECKSUM := 26394ec9375d52c1592bd7b689b1619c6b8dbe9b6f91fdd5c355589787f3a
 $(PKG)_SUBDIR   := $(PKG)-everywhere-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.qt.io/official_releases/qt/5.15/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc dbus fontconfig freetds freetype harfbuzz jpeg libmysqlclient libpng mesa openssl pcre2 postgresql sqlite zlib zstd $(BUILD)~zstd
+$(PKG)_DEPS     := cc dbus fontconfig freetds freetype harfbuzz jpeg libmysqlclient \
+				   libpng mesa openssl pcre2 postgresql sqlite zlib zstd $(BUILD)~zstd \
+				   $(if $(findstring shared,$(MXE_TARGETS)), icu4c)
 $(PKG)_DEPS_$(BUILD) :=
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 
@@ -22,7 +24,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    # ICU is buggy. See #653. TODO: reenable it some time in the future.
+    # ICU is buggy on static builds. See #653. TODO: reenable it some time in the future.
     cd '$(1)' && \
         OPENSSL_LIBS="`'$(TARGET)-pkg-config' --libs-only-l openssl`" \
         PSQL_LIBS="-lpq -lpgport -lpgcommon -lsecur32 `'$(TARGET)-pkg-config' --libs-only-l openssl pthreads` -lws2_32" \
@@ -43,7 +45,7 @@ define $(PKG)_BUILD
             -release \
             $(if $(BUILD_STATIC), -static,)$(if $(BUILD_SHARED), -shared,) \
             -prefix '$(PREFIX)/$(TARGET)/qt5' \
-            -no-icu \
+            $(if $(BUILD_STATIC), -no)-icu \
             -opengl dynamic \
             -no-glib \
             -accessibility \
@@ -67,7 +69,7 @@ define $(PKG)_BUILD
             -dbus-linked \
             -no-pch \
             -v \
-            $($(PKG)_CONFIGURE_OPTS)
+            $(PKG_CONFIGURE_OPTS)
 
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     rm -rf '$(PREFIX)/$(TARGET)/qt5'
