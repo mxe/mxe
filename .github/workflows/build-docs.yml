@@ -16,5 +16,5 @@ jobs:
           git config --global user.name 'MXEBot as Github Actions'
           git config --global user.email 'mxebot@gmail.com'
           git add .
-          git commit -m Update packages.json & build-matrix.html'
+          git commit -m 'Update packages.json & build-matrix.html'
           git push
