@@ -29,7 +29,7 @@ define $(PKG)_BUILD
         --disable-python \
         --disable-ruby \
         --disable-doc \
-        LIBS=-luuid
+        $(if $(BUILD_STATIC), LIBS=-luuid)
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
     ln -sf '$(PREFIX)/$(TARGET)/bin/caca-config' '$(PREFIX)/bin/$(TARGET)-caca-config'
