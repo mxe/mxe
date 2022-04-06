@@ -20,6 +20,9 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    # workaround for gcc12 snapshot
+    $(if $(call gte, $(word 1,$(subst -, ,$(gcc_VERSION))), 12), \
+    	$(SED) -i '/-Werror=array-bounds/d' '$(SOURCE_DIR)/meson.build')
     # Meson configure, with additional options for GTK
     '$(MXE_MESON_WRAPPER)' $(MXE_MESON_OPTS) \
         -Dtests=false \
