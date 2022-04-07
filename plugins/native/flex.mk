@@ -15,7 +15,7 @@ $(PKG)_DEPS     :=
 REQUIREMENTS := $(filter-out $(PKG), $(REQUIREMENTS))
 
 # recursive variable so always use literal instead of $(PKG)
-MXE_REQS_PKGS   += $(BUILD)~flex
+BOOTSTRAP_PKGS += $(BUILD)~flex
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://sourceforge.net/projects/flex/files/' | \

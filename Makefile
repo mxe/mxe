@@ -489,7 +489,7 @@ $(PREFIX)/installed/print-git-oneline-$(GIT_HEAD): | $(PREFIX)/installed/.gitkee
 
 # Common dependency lists for `make` prerequisites and `build-pkg`
 #   - `make` considers only explicit normal deps to trigger rebuilds
-#   - packages can add themselves to implicit MXE_REQS_PKGS in the case
+#   - packages can add themselves to implicit BOOTSTRAP_PKGS in the case
 #       of a tool like `patch` which may be outdated on some systems
 #   - downloads and `build-pkg` use both explicit and implicit deps
 #   - don't depend on `disabled` rules but do depend on virtual pkgs
@@ -498,11 +498,9 @@ $(PREFIX)/installed/print-git-oneline-$(GIT_HEAD): | $(PREFIX)/installed/.gitkee
 # in `cleanup-deps-style` rule below
 CROSS_COMPILER := cc
 
-# set reqs and bootstrap variables to recursive so pkgs can add themselves
-# CROSS_COMPILER depends (order-only) on MXE_REQS_PKGS
-# all depend (order-only) on BOOTSTRAP_PKGS
+# set bootstrap variable to recursive so pkgs can add themselves
+# all pkgs depend (order-only) on BOOTSTRAP_PKGS
 # BOOTSTRAP_PKGS may be prefixed with $(BUILD)~
-MXE_REQS_PKGS  =
 BOOTSTRAP_PKGS =
 
 # warning about switching from `gcc` to `cc`
