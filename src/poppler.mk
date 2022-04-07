@@ -3,12 +3,12 @@
 PKG             := poppler
 $(PKG)_WEBSITE  := https://poppler.freedesktop.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 22.02.0
-$(PKG)_CHECKSUM := e390c8b806f6c9f0e35c8462033e0a738bb2460ebd660bdb8b6dca01556193e1
+$(PKG)_VERSION  := 22.04.0
+$(PKG)_CHECKSUM := 813fb4b90e7bda63df53205c548602bae728887a60f4048aae4dbd9b1927deff
 $(PKG)_SUBDIR   := poppler-$($(PKG)_VERSION)
 $(PKG)_FILE     := poppler-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://poppler.freedesktop.org/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc cairo curl freetype glib jpeg lcms libpng libwebp openjpeg qtbase tiff zlib
+$(PKG)_DEPS     := cc boost cairo curl freetype glib jpeg lcms libpng libwebp openjpeg qtbase tiff zlib
 
 define $(PKG)_UPDATE
     $(call GET_LATEST_VERSION, https://poppler.freedesktop.org/releases.html, poppler-)
@@ -30,6 +30,7 @@ define $(PKG)_BUILD
         -DENABLE_GOBJECT_INTROSPECTION=OFF \
         -DENABLE_GTK_DOC=OFF \
         -DENABLE_QT5=ON \
+        -DENABLE_QT6=OFF \
         -DENABLE_LIBOPENJPEG=openjpeg2 \
         -DENABLE_CMS=lcms2 \
         -DENABLE_DCTDECODER=libjpeg \
