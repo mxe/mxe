@@ -502,7 +502,6 @@
     "wget": {"version": "1.21.3", "website": "https://www.gnu.org/software/wget/", "description": ""},
     "widl": {"version": "10.0.0", "website": "https://www.winehq.org/docs/widl/", "description": "Wine IDL Compiler"},
     "winpcap": {"version": "4_1_3", "website": "https://www.winpcap.org/", "description": "WinPcap"},
-    "woff2": {"version": "1.0.2", "website": "https://github.com/google/woff2", "description": "WOFF2 font compression library"},
     "wt": {"version": "4.3.1", "website": "https://www.webtoolkit.eu/", "description": "Wt"},
     "wxwidgets": {"version": "3.1.4", "website": "https://www.wxwidgets.org/", "description": "wxWidgets"},
     "x264": {"version": "20180806-2245", "website": "https://www.videolan.org/developers/x264.html", "description": ""},
