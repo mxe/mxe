@@ -15,6 +15,8 @@ define $(PKG)_BUILD
         -Ddocs=disabled \
         -Dintrospection=disabled \
         '$(BUILD_DIR)' '$(SOURCE_DIR)'
+    # mman-win32 is only a partial implementation
+    $(SED) -i '/HAVE_SYS_MMAN_H/d' '$(BUILD_DIR)/config.h'
     '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)'
     '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)' install
 endef
