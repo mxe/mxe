@@ -437,7 +437,7 @@
     "quazip": {"version": "0.8.1", "website": "https://github.com/stachenov/quazip", "description": ""},
     "qwt": {"version": "6.1.5", "website": "https://qwt.sourceforge.io/", "description": "Qwt"},
     "qwtplot3d": {"version": "d80c908", "website": "https://github.com/sintegrial/qwtplot3d", "description": "QwtPlot3D"},
-    "ragel": {"version": "6.9", "website": "https://www.colm.net/open-source/ragel/", "description": "Ragel"},
+    "ragel": {"version": "6.10", "website": "https://www.colm.net/open-source/ragel/", "description": "Ragel"},
     "readline": {"version": "8.1", "website": "https://tiswww.case.edu/php/chet/readline/rltop.html", "description": "Readline"},
     "rubberband": {"version": "1.8.1", "website": "https://breakfastquay.com/rubberband/", "description": "Rubberband"},
     "rucksack": {"version": "3.1.0", "website": "https://github.com/andrewrk/rucksack", "description": ""},
