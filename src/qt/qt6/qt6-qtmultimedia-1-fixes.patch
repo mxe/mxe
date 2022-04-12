@@ -122,7 +122,7 @@ index 1111111..2222222 100644
  
  //#define DEBUG_MEDIAFOUNDATION
  
-@@ -2060,4 +2060,3 @@ QMediaMetaData MFPlayerSession::trackMetaData(QPlatformMediaPlayer::TrackType ty
+@@ -2074,4 +2074,3 @@ QMediaMetaData MFPlayerSession::trackMetaData(QPlatformMediaPlayer::TrackType ty
  
      return m_trackInfo[type].metaData.at(trackNumber);
  }
