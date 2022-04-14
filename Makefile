@@ -97,6 +97,7 @@ STRIP_EXE       := $(true)
 MXE_USE_CCACHE      := mxe
 MXE_CCACHE_DIR      := $(PWD)/.ccache
 MXE_CCACHE_BASE_DIR := $(PWD)
+MXE_CCACHE_CACHE_DIR := $(MXE_CCACHE_DIR)/ccache
 
 # set to major.minor for LTS
 # MXE_QT6_ID := qt6.2
