@@ -78,7 +78,8 @@ REQUIREMENTS := \
     wget \
     xz
 
-PREFIX     := $(PWD)/usr
+MXE_PREFIX := $(PWD)/usr
+PREFIX     := $(MXE_PREFIX)
 LOG_DIR    := $(PWD)/log
 GITS_DIR   := $(PWD)/gits
 GIT_HEAD   := $(shell git rev-parse HEAD)
