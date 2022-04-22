@@ -4,19 +4,10 @@ PKG             := exiv2
 $(PKG)_WEBSITE  := https://www.exiv2.org/
 $(PKG)_DESCR    := Exiv2
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.27.3
-$(PKG)_CHECKSUM := a79f5613812aa21755d578a297874fb59a85101e793edc64ec2c6bd994e3e778
-$(PKG)_SUBDIR   := exiv2-$($(PKG)_VERSION)-Source
-$(PKG)_FILE     := exiv2-$($(PKG)_VERSION)-Source.tar.gz
-$(PKG)_URL      := https://www.exiv2.org/builds/$($(PKG)_FILE)
+$(PKG)_VERSION  := 0.27.5
+$(PKG)_CHECKSUM := 1da1721f84809e4d37b3f106adb18b70b1b0441c860746ce6812bb3df184ed6c
+$(PKG)_GH_CONF  := Exiv2/exiv2/tags,v
 $(PKG)_DEPS     := cc expat gettext mman-win32 zlib
-
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://www.exiv2.org/download.html' | \
-    grep 'href="builds/exiv2-' | \
-    $(SED) -n 's,.*exiv2-\([0-9][^>]*\)-Source\.tar.*,\1,p' | \
-    head -1
-endef
 
 define $(PKG)_BUILD
     $(TARGET)-cmake -S '$(SOURCE_DIR)' -B '$(BUILD_DIR)' \
