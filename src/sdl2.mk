@@ -10,18 +10,12 @@ $(PKG)_GH_CONF  := libsdl-org/SDL/releases/tag,release-,,
 $(PKG)_DEPS     := cc libiconv libsamplerate
 
 define $(PKG)_BUILD
-    cd '$(1)' && aclocal -I acinclude && autoconf && $(SHELL) ./configure \
-        $(MXE_CONFIGURE_OPTS) \
-        --enable-threads \
-        --enable-directx \
-        --enable-libsamplerate \
-        --enable-libsamplerate-shared=$(if $(BUILD_SHARED),yes,no)
-    $(SED) -i 's,defined(__MINGW64_VERSION_MAJOR),defined(__MINGW64_VERSION_MAJOR) \&\& defined(_WIN64),' '$(1)/include/SDL_cpuinfo.h'
-    $(SED) -i 's,-XCClinker,,' '$(1)/sdl2.pc'
-    $(SED) -i 's,-XCClinker,,' '$(1)/sdl2-config'
-    $(MAKE) -C '$(1)' -j '$(JOBS)' SHELL=$(SHELL)
-    $(MAKE) -C '$(1)' -j 1 install SHELL=$(SHELL)
-    ln -sf '$(PREFIX)/$(TARGET)/bin/sdl2-config' '$(PREFIX)/bin/$(TARGET)-sdl2-config'
+    cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \
+        -DSDL_SHARED=$(CMAKE_SHARED_BOOL) \
+        -DSDL_STATIC=$(CMAKE_STATIC_BOOL) \
+        -DVERBOSE=1
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
