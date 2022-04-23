@@ -712,6 +712,10 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         <td></td>
     </tr>
     <tr>
+        <td><a href="https://www.makotemplates.org/">Mako Templates</a></td>
+        <td></td>
+    </tr>
+    <tr>
         <td><a href="https://www.openssl.org/">OpenSSL</a>-dev</td>
         <td>≥ 1.01</td>
     </tr>
@@ -732,7 +736,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
         <td></td>
     </tr>
     <tr>
-        <td><a href="https://www.python.org/">Python</a></td>
+        <td><a href="https://www.python.org/">Python3</a></td>
         <td></td>
     </tr>
     <tr>
@@ -759,7 +763,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <h3 id="requirements-alpine">Alpine</h3>
 
-    <!-- https://pkgs.alpinelinux.org/packages/ -->
+    <!-- https://pkgs.alpinelinux.org/packages -->
     <pre>apk add \
     autoconf \
     automake \
@@ -784,6 +788,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     patch \
     perl \
     python3 \
+    py3-mako \
     ruby \
     unzip \
     wget \
@@ -819,7 +824,8 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     p7zip-full \
     patch \
     perl \
-    python \
+    python3 \
+    python3-mako \
     ruby \
     sed \
     unzip \
@@ -856,7 +862,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
 
     <pre>yum install epel-release</pre>
 
-    <!-- https://apps.fedoraproject.org/packages/ -->
+    <!-- https://packages.fedoraproject.org -->
     <pre>yum install \
     autoconf \
     automake \
@@ -877,7 +883,8 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     p7zip \
     patch \
     perl \
-    python \
+    python3 \
+    python3-mako \
     ruby \
     sed \
     unzip \
@@ -914,7 +921,8 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     p7zip \
     patch \
     perl5 \
-    python \
+    python3 \
+    textproc/py-mako \
     ruby \
     unzip \
     wget</pre>
@@ -983,7 +991,8 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     patch \
     perl \
     perl-xml-parser \
-    python \
+    python3 \
+    python3-mako \
     ruby \
     sed \
     unzip \
@@ -1011,6 +1020,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     dev-lang/ruby \
     dev-libs/openssl \
     dev-perl/XML-Parser \
+    dev-python/mako \
     dev-util/gperf \
     dev-util/intltool \
     dev-vcs/git \
@@ -1047,6 +1057,7 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     intltool \
     lzip \
     p7zip \
+    py-mako \
     wget \
     xz</pre>
 
@@ -1073,9 +1084,12 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     intltool \
     libtool \
     lzip \
+    python3 \
     p7zip \
     wget \
     xz</pre>
+    <pre>python3 -m pip install mako</pre>
+
     <p>
     You will see messages about
     <a href="https://github.com/Homebrew/brew/blob/master/docs/FAQ.md#what-does-keg-only-mean"><code>keg-only</code></a>
@@ -1127,7 +1141,8 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     patch \
     perl \
     perl-XML-Parser \
-    python \
+    python3 \
+    python3-Mako \
     ruby \
     sed \
     unzip \
@@ -1170,7 +1185,8 @@ USE_OSGPLUGIN(&lt;plugin2&gt;)
     p7zip \
     patch \
     perl-XML-Parser \
-    python \
+    python3 \
+    python3-Mako \
     ruby \
     unzip \
     wget \
