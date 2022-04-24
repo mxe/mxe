@@ -20,10 +20,12 @@ define $(PKG)_BUILD
         $(PKG_MESON_OPTS) \
         '$(BUILD_DIR)' '$(SOURCE_DIR)'
     '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)'
-    '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)' install
 
-    for i in EGL GLES GLES2 GLES3; do \
+    # manual install to avoid clobbering platform opengl driver
+    for i in EGL GLES GLES2 GLES3 KHR; do \
         $(INSTALL) -d "$(PREFIX)/$(TARGET)/include/$$i"; \
         $(INSTALL) -m 644 "$(1)/include/$$i/"* "$(PREFIX)/$(TARGET)/include/$$i/"; \
     done
+    $(INSTALL) -m 755 '$(BUILD_DIR)/src/gallium/targets/wgl/libgallium_wgl.dll' '$(PREFIX)/$(TARGET)/bin/'
+    $(INSTALL) -m 755 '$(BUILD_DIR)/src/gallium/targets/libgl-gdi/opengl32.dll' '$(PREFIX)/$(TARGET)/bin/'
 endef
