@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Gregorio Litenstein <g.litenstein@gmail.com>
 Date: Thu, 31 Aug 2017 18:27:53 -0300
-Subject: [PATCH 1/4] patch-1 for opencv-3.3.0
+Subject: [PATCH 1/6] patch-1 for opencv-3.3.0
 
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
@@ -138,7 +138,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Gregorio Litenstein <g.litenstein@gmail.com>
 Date: Thu, 31 Aug 2017 18:32:39 -0300
-Subject: [PATCH 2/4] patch 2 for opencv-3.3.0
+Subject: [PATCH 2/6] patch 2 for opencv-3.3.0
 
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
@@ -199,7 +199,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Gregorio Litenstein <g.litenstein@gmail.com>
 Date: Thu, 31 Aug 2017 18:35:23 -0300
-Subject: [PATCH 3/4] patch-3 for opencv-3.3.0
+Subject: [PATCH 3/6] patch-3 for opencv-3.3.0
 
 Originally From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
@@ -235,7 +235,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Florian Jung <flo@windfis.ch>
 Date: Wed, 29 Jul 2020 18:51:55 +0200
-Subject: [PATCH 4/4] Fix build of grfmt_jpeg2000.cpp
+Subject: [PATCH 4/6] Fix build of grfmt_jpeg2000.cpp
 
 libjasper has recently changed `jas_matrix_get` from a macro to an inline function
 (389951d071 in https://github.com/jasper-software/jasper), causing the build to fail.
@@ -264,3 +264,81 @@ index 1111111..2222222 100644
          ushort* dst = data + (y - yoffset) * step - xoffset;
  
          if( xstep == 1 )
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Mon, 4 Apr 2022 01:24:04 +0200
+Subject: [PATCH 5/6] remove invalid CXXFLAGS
+
+cc1plus: warning: command-line option '-Wmissing-prototypes' is valid for C/ObjC but not for C++
+cc1plus: warning: command-line option '-Wstrict-prototypes' is valid for C/ObjC but not for C++
+
+diff --git a/3rdparty/protobuf/CMakeLists.txt b/3rdparty/protobuf/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/3rdparty/protobuf/CMakeLists.txt
++++ b/3rdparty/protobuf/CMakeLists.txt
+@@ -16,7 +16,7 @@ if(MSVC)
+                                        /wd4702 /wd4456 /wd4457 /wd4065 /wd4310 /wd4661 /wd4506
+   )
+ else()
+-  ocv_warnings_disable(CMAKE_CXX_FLAGS -Wno-deprecated -Wmissing-prototypes -Wmissing-declarations -Wshadow
++  ocv_warnings_disable(CMAKE_CXX_FLAGS -Wno-deprecated -Wmissing-declarations -Wshadow
+                                        -Wunused-parameter -Wunused-local-typedefs -Wsign-compare -Wsign-promo
+                                        -Wundef -Wtautological-undefined-compare -Wignored-qualifiers -Wextra
+                                        -Wunused-function -Wunused-const-variable -Wshorten-64-to-32
+diff --git a/cmake/OpenCVCompilerOptions.cmake b/cmake/OpenCVCompilerOptions.cmake
+index 1111111..2222222 100644
+--- a/cmake/OpenCVCompilerOptions.cmake
++++ b/cmake/OpenCVCompilerOptions.cmake
+@@ -120,8 +120,6 @@ if(CMAKE_COMPILER_IS_GNUCXX)
+   add_extra_compiler_option(-Wformat)
+   add_extra_compiler_option(-Werror=format-security -Wformat)
+   add_extra_compiler_option(-Wmissing-declarations)
+-  add_extra_compiler_option(-Wmissing-prototypes)
+-  add_extra_compiler_option(-Wstrict-prototypes)
+   add_extra_compiler_option(-Wundef)
+   add_extra_compiler_option(-Winit-self)
+   add_extra_compiler_option(-Wpointer-arith)
+diff --git a/modules/dnn/CMakeLists.txt b/modules/dnn/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/modules/dnn/CMakeLists.txt
++++ b/modules/dnn/CMakeLists.txt
+@@ -17,7 +17,7 @@ ocv_add_dispatched_file("layers/layers_common" AVX AVX2)
+ 
+ ocv_add_module(dnn opencv_core opencv_imgproc WRAP python matlab java)
+ ocv_warnings_disable(CMAKE_CXX_FLAGS -Wno-shadow -Wno-parentheses -Wmaybe-uninitialized -Wsign-promo
+-                                     -Wmissing-declarations -Wmissing-prototypes
++                                     -Wmissing-declarations
+ )
+ ocv_warnings_disable(CMAKE_CXX_FLAGS /wd4701 /wd4100)
+ 
+@@ -28,7 +28,7 @@ if(MSVC)
+                                        /wd4702 /wd4456 /wd4457 /wd4065 /wd4310 /wd4661 /wd4506
+   )
+ else()
+-  ocv_warnings_disable(CMAKE_CXX_FLAGS -Wno-deprecated -Wmissing-prototypes -Wmissing-declarations -Wshadow
++  ocv_warnings_disable(CMAKE_CXX_FLAGS -Wno-deprecated -Wmissing-declarations -Wshadow
+                                        -Wunused-parameter -Wunused-local-typedefs -Wsign-compare -Wsign-promo
+                                        -Wundef -Wtautological-undefined-compare -Wignored-qualifiers -Wextra
+                                        -Wunused-function -Wunused-const-variable -Wdeprecated-declarations
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Mon, 4 Apr 2022 01:44:56 +0200
+Subject: [PATCH 6/6] avoid error: comparing the result of pointer addition
+ '(src + ((sizetype)off))' and NULL [-Werror=address]
+
+
+diff --git a/modules/core/src/persistence.cpp b/modules/core/src/persistence.cpp
+index 1111111..2222222 100644
+--- a/modules/core/src/persistence.cpp
++++ b/modules/core/src/persistence.cpp
+@@ -7596,7 +7596,7 @@ size_t base64::base64_decode(char const * src, char * dst, size_t off, size_t cn
+ bool base64::base64_valid(uint8_t const * src, size_t off, size_t cnt)
+ {
+     /* check parameters */
+-    if (src == 0 || src + off == 0)
++    if (src == 0 || -(size_t)src == off)
+         return false;
+     if (cnt == 0U)
+         cnt = std::strlen(reinterpret_cast<char const *>(src));

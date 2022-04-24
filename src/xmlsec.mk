@@ -14,7 +14,6 @@ define $(PKG)_BUILD
         $(MXE_CONFIGURE_OPTS) \
         --enable-docs=no \
         --enable-apps=no \
-        CFLAGS='-D_WIN32_WINNT=0x0600 -DWINVER=0x0600' \
         LIBS="`$(TARGET)-pkg-config --libs-only-l dlfcn`"
 
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' V=1 $(MXE_DISABLE_CRUFT) LIBS=-lgcrypt

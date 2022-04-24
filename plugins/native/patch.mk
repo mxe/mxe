@@ -16,7 +16,7 @@ $(PKG)_DEPS     :=
 REQUIREMENTS := $(filter-out $(PKG), $(REQUIREMENTS))
 
 # recursive variable so always use literal instead of $(PKG)
-MXE_REQS_PKGS   += $(BUILD)~patch
+BOOTSTRAP_PKGS += $(BUILD)~patch
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://ftp.gnu.org/gnu/patch/?C=M;O=D' | \

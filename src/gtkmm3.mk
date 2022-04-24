@@ -4,12 +4,12 @@ PKG             := gtkmm3
 $(PKG)_WEBSITE  := https://www.gtkmm.org/
 $(PKG)_DESCR    := GTKMM
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.14.0
-$(PKG)_CHECKSUM := d9f528a62c6ec226fa08287c45c7465b2dce5aae5068e9ac48d30a64a378e48b
+$(PKG)_VERSION  := 3.24.5
+$(PKG)_CHECKSUM := 856333de86689f6a81c123f2db15d85db9addc438bc3574c36f15736aeae22e6
 $(PKG)_SUBDIR   := gtkmm-$($(PKG)_VERSION)
 $(PKG)_FILE     := gtkmm-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.gnome.org/sources/gtkmm/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc atkmm cairomm gtk3 libsigc++ pangomm
+$(PKG)_DEPS     := cc meson-wrapper atkmm cairomm gtk3 libsigc++ pangomm
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://gitlab.gnome.org/GNOME/gtkmm/tags' | \
@@ -20,11 +20,14 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && ./configure \
-        $(MXE_CONFIGURE_OPTS) \
-        MAKE=$(MAKE)
-    $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
-    $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= doc_install='# DISABLED: doc-install.pl'
+    # Meson configure, with additional options for Gtkmm
+    '$(MXE_MESON_WRAPPER)' $(MXE_MESON_OPTS) \
+        -Dbuild-tests=false \
+        -Dbuild-demos=false \
+        '$(BUILD_DIR)' '$(SOURCE_DIR)'
+    '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)'
+    DESTDIR="/" \
+        '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)' install
 
     '$(TARGET)-g++' \
         -W -Wall -Wno-deprecated-declarations -Werror -pedantic -std=c++11 \

@@ -2,8 +2,8 @@
 
 PKG             := wget
 $(PKG)_WEBSITE  := https://www.gnu.org/software/wget/
-$(PKG)_VERSION  := 1.21.2
-$(PKG)_CHECKSUM := 1727a330a86acacb3e57615ce268f5f29978bf7adec4abe6a30d370207bc91b3
+$(PKG)_VERSION  := 1.21.3
+$(PKG)_CHECKSUM := dbd2fb5e47149d4752d0eaa0dac68cc49cf20d46df4f8e326ffc8f18b2af4ea5
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.lz
 $(PKG)_URL      := https://ftp.gnu.org/gnu/$(PKG)/$($(PKG)_FILE)
@@ -19,7 +19,7 @@ define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
         --with-ssl=gnutls \
-        CFLAGS='-DIN6_ARE_ADDR_EQUAL=IN6_ADDR_EQUAL -D_WIN32_WINNT=0x0600 $(if $(BUILD_STATIC),-DGNUTLS_INTERNAL_BUILD,)'\
+        CFLAGS='-DIN6_ARE_ADDR_EQUAL=IN6_ADDR_EQUAL $(if $(BUILD_STATIC),-DGNUTLS_INTERNAL_BUILD,)'\
         LDFLAGS='$(if $(BUILD_SHARED),-Wl$(comma)--allow-multiple-definition,)'
     $(MAKE) -C '$(1)/lib' -j '$(JOBS)'
     $(MAKE) -C '$(1)/src' -j '$(JOBS)' install-binPROGRAMS

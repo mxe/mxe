@@ -1,18 +1,21 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
+include src/qt/qt6/qt6-conf.mk
+
 PKG := qt6-qttools
 $(eval $(QT6_METADATA))
 
-$(PKG)_CHECKSUM := 9aadbd5a14fad8874d2aa76be79652ec5ed81d31d49b3eff245ebeffc7d8ac08
+$(PKG)_CHECKSUM := fce94688ea925782a2879347584991f854630daadba6c52aed6d93e33cd0b19c
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
-$(PKG)_DEPS     := cc qt6-qtbase #qt6-qtdeclarative
-$(PKG)_DEPS_$(BUILD) := qt6-qtbase
+$(PKG)_DEPS_$(BUILD) := qt6-conf qt6-qtbase
+$(PKG)_DEPS     := cc $($(PKG)_DEPS_$(BUILD)) qt6-qtdeclarative $(BUILD)~$(PKG)
 
 define $(PKG)_BUILD
     $(QT6_QT_CMAKE) -S '$(SOURCE_DIR)' -B '$(BUILD_DIR)' \
         -DQT_BUILD_TOOLS_WHEN_CROSSCOMPILING=ON
     # not built for some reason. make dummy so install won't fail
     touch '$(BUILD_DIR)/bin/qhelpgenerator.exe'
+    $(if $(BUILD_STATIC),'$(SED)' -i "/^ *LINK_LIBRARIES = /{s/$$/ `'$(TARGET)-pkg-config' --libs freetype2`/g}" '$(BUILD_DIR)/build.ninja',)
     cmake --build '$(BUILD_DIR)' -j '$(JOBS)'
     cmake --install '$(BUILD_DIR)'
 

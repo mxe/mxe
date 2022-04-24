@@ -5,20 +5,21 @@ PKG             := qt6-$(PKG_BASENAME)
 $(PKG)_WEBSITE  := https://www.qt.io/
 $(PKG)_DESCR    := Qt6
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 6.2.3
-$(PKG)_CHECKSUM := 34d6d0072e197241463c417ad72610c3d44e2efd6062868e9a95283103d75df4
+$(PKG)_VERSION  := 6.3.0
+$(PKG)_CHECKSUM := b865aae43357f792b3b0a162899d9bf6a1393a55c4e5e4ede5316b157b1a0f99
 $(PKG)_SUBDIR   := $(PKG_BASENAME)-everywhere-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG_BASENAME)-everywhere-src-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := https://download.qt.io/official_releases/qt/6.2/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
+$(PKG)_URL      := https://download.qt.io/official_releases/qt/6.3/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 $(PKG)_DEPS     := \
-    cc dbus fontconfig freetype harfbuzz jpeg libmysqlclient libpng mesa \
-    pcre2 postgresql sqlite zlib zstd $(BUILD)~$(PKG)
+    cc fontconfig freetype harfbuzz jpeg libpng mesa \
+    pcre2 sqlite zlib zstd $(BUILD)~$(PKG) \
+    $(if $(findstring shared,$(MXE_TARGETS)), icu4c)
 $(PKG)_DEPS_$(BUILD) :=
 $(PKG)_OO_DEPS_$(BUILD) := ninja
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- https://download.qt.io/official_releases/qt/6.0/ | \
+    $(WGET) -q -O- https://download.qt.io/official_releases/qt/6.3/ | \
     $(SED) -n 's,.*href="\(6\.[0-9]\.[^/]*\)/".*,\1,p' | \
     grep -iv -- '-rc' | \
     $(SORT) -V | \
@@ -47,7 +48,7 @@ define $(PKG)_BUILD
         -DINPUT_freetype=system \
         -DFEATURE_glib=OFF \
         -DFEATURE_system_harfbuzz=ON \
-        -DFEATURE_icu=OFF \
+        -DFEATURE_icu=$(CMAKE_SHARED_BOOL) \
         -DFEATURE_libjpeg=ON \
         -DFEATURE_libpng=ON \
         -DFEATURE_opengl_dynamic=ON \
@@ -59,13 +60,18 @@ define $(PKG)_BUILD
         -DFEATURE_sql_psql=OFF \
         -DFEATURE_system_sqlite=ON \
         -DFEATURE_system_zlib=ON \
-        -DFEATURE_use_gold_linker_alias=OFF
+        -DFEATURE_use_gold_linker_alias=OFF \
+        $(PKG_CMAKE_OPTS)
 
     cmake --build '$(BUILD_DIR)' -j '$(JOBS)'
     cmake --install '$(BUILD_DIR)'
     $(if $(BUILD_STATIC),$(SED) -i -e 's/^QMAKE_PRL_LIBS .*/& -lodbc32/;' \
 	      -e 's/^QMAKE_PRL_LIBS_FOR_CMAKE .*/&;-lodbc32/;' \
               '$(PREFIX)/$(TARGET)/$(MXE_QT6_ID)/plugins/sqldrivers/qsqlodbc.prl',)
+
+    mkdir -p '$(CMAKE_TOOLCHAIN_DIR)'
+    echo 'set(QT_HOST_PATH "$(PREFIX)/$(BUILD)/$(MXE_QT6_ID)")' \
+        > '$(CMAKE_TOOLCHAIN_DIR)/$(PKG).cmake'
 endef
 
 define $(PKG)_BUILD_$(BUILD)

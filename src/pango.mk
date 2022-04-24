@@ -4,12 +4,12 @@ PKG             := pango
 $(PKG)_WEBSITE  := https://www.pango.org/
 $(PKG)_DESCR    := Pango
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.37.4
-$(PKG)_CHECKSUM := ae2446f1c23c81d78e935054a37530336818c214f54bed2351bdd4ad0acebcbe
+$(PKG)_VERSION  := 1.50.0
+$(PKG)_CHECKSUM := dba8b62ddf86e10f73f93c3d2256b73238b2bcaf87037ca229b40bdc040eb3f3
 $(PKG)_SUBDIR   := pango-$($(PKG)_VERSION)
 $(PKG)_FILE     := pango-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.gnome.org/sources/pango/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc cairo fontconfig freetype glib harfbuzz
+$(PKG)_DEPS     := cc meson-wrapper cairo fontconfig freetype glib harfbuzz fribidi
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://gitlab.gnome.org/GNOME/pango/tags' | \
@@ -18,13 +18,9 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    rm '$(1)'/docs/Makefile.am
-    cd '$(1)' && NOCONFIGURE=1 ./autogen.sh
-    cd '$(1)' && ./configure \
-        $(MXE_CONFIGURE_OPTS) \
-        --enable-explicit-deps \
-        --with-included-modules \
-        --without-dynamic-modules \
-        CXX='$(TARGET)-g++'
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+    '$(MXE_MESON_WRAPPER)' $(MXE_MESON_OPTS) \
+        -Dintrospection=disabled \
+        '$(BUILD_DIR)' '$(SOURCE_DIR)' && \
+    '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)' && \
+    '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)' install
 endef

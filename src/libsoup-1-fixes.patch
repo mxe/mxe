@@ -3,51 +3,40 @@ This file is part of MXE. See LICENSE.md for licensing information.
 Contains ad hoc patches for cross building.
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Pavel Vatagin <pavelvat@gmail.com>
-Date: Sat, 18 Feb 2017 20:26:34 +0300
-Subject: [PATCH 1/1] fix build
+From: v1993 <v19930312@gmail.com>
+Date: Mon, 6 Dec 2021 18:01:42 +0300
+Subject: [PATCH 1/2] Explicitly set extern for exported variables
 
 
-diff --git a/Makefile.am b/Makefile.am
+diff --git a/libsoup/soup-version.h.in b/libsoup/soup-version.h.in
 index 1111111..2222222 100644
---- a/Makefile.am
-+++ b/Makefile.am
-@@ -1,7 +1,7 @@
- ## Process this file with automake to produce Makefile.in
- ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
- 
--SUBDIRS = libsoup po tests examples docs build/win32
-+SUBDIRS = libsoup tests docs build/win32
- 
- EXTRA_DIST =				\
- 	data/effective_tld_names.dat	\
-diff --git a/autogen.sh b/autogen.sh
-index 1111111..2222222 100755
---- a/autogen.sh
-+++ b/autogen.sh
-@@ -19,13 +19,6 @@ if test -z $INTLTOOLIZE; then
-         exit 1
- fi
- 
--GTKDOCIZE=`which gtkdocize`
--if test -z $GTKDOCIZE; then
--        echo "*** No GTK-Doc found, please install it ***"
--        exit 1
--fi
--
--gtkdocize || exit $?
- intltoolize --automake --copy
- autoreconf --force --install --verbose
- 
-diff --git a/docs/reference/Makefile.am b/docs/reference/Makefile.am
+--- a/libsoup/soup-version.h.in
++++ b/libsoup/soup-version.h.in
+@@ -33,7 +33,7 @@ G_BEGIN_DECLS
+ #  ifdef G_PLATFORM_WIN32
+ #    ifdef LIBSOUP_COMPILATION
+ #      ifdef DLL_EXPORT
+-#        define SOUP_VAR __declspec(dllexport)
++#        define SOUP_VAR extern __declspec(dllexport)
+ #      else /* !DLL_EXPORT */
+ #        define SOUP_VAR extern
+ #      endif /* !DLL_EXPORT */
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: v1993 <v19930312@gmail.com>
+Date: Mon, 6 Dec 2021 21:55:36 +0300
+Subject: [PATCH 2/2] Diable building examples
+
+
+diff --git a/meson.build b/meson.build
 index 1111111..2222222 100644
---- a/docs/reference/Makefile.am
-+++ b/docs/reference/Makefile.am
-@@ -77,7 +77,6 @@ GTKDOC_LIBS =						\
- 	$(GLIB_LIBS)
+--- a/meson.build
++++ b/meson.build
+@@ -392,7 +392,6 @@ subdir('libsoup')
+ if find_program('xgettext', required : false).found()
+   subdir('po')
+ endif
+-subdir('examples')
  
- # include common portion ...
--include $(top_srcdir)/gtk-doc.make
- 
- # kludges
- $(srcdir)/tmpl/*.sgml:
+ if get_option('tests')
+   subdir('tests')

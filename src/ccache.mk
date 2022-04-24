@@ -50,7 +50,7 @@ define $(PKG)_BUILD_$(BUILD)
      echo '# $($(PKG)_USR_CONF)'; \
      echo; \
      echo 'base_dir = $(MXE_CCACHE_BASE_DIR)'; \
-     echo 'cache_dir = $(MXE_CCACHE_DIR)'; \
+     echo 'cache_dir = $(MXE_CCACHE_CACHE_DIR)'; \
      echo 'compiler_check = %compiler% -v'; \
      ) > '$($(PKG)_SYS_CONF)'
 

@@ -32,8 +32,7 @@ define $(PKG)_BUILD
         ac_cv_sizeof_pid_t=4 \
         ac_cv_sizeof_size_t=4 \
         ac_cv_sizeof_ssize_t=4 \
-        $(if $(POSIX_THREADS),apr_cv_mutex_robust_shared=yes) \
-        CFLAGS=-D_WIN32_WINNT=0x0500
+        $(if $(POSIX_THREADS),apr_cv_mutex_robust_shared=yes)
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' GEN_TEST_CHAR='$(BUILD_DIR).native/tools/gen_test_char'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
