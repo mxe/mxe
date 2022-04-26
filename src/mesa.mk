@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := df4fa560dcce6680133067cd15b0505fc424ca703244ce9ab247c74d2fab6
 $(PKG)_SUBDIR   := mesa-$($(PKG)_VERSION)
 $(PKG)_FILE     := mesa-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://archive.mesa3d.org/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc meson-wrapper zlib zstd
+$(PKG)_DEPS     := cc meson-wrapper zlib zstd llvm
 
 define $(PKG)_UPDATE
     $(call GET_LATEST_VERSION, https://archive.mesa3d.org, mesa-)
@@ -17,6 +17,7 @@ endef
 define $(PKG)_BUILD
     '$(MXE_MESON_WRAPPER)' $(MXE_MESON_OPTS) \
         -Dbuild-tests=false \
+        -Dcpp_rtti=false \
         $(PKG_MESON_OPTS) \
         '$(BUILD_DIR)' '$(SOURCE_DIR)'
     '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)'
@@ -26,6 +27,11 @@ define $(PKG)_BUILD
         $(INSTALL) -d "$(PREFIX)/$(TARGET)/include/$$i"; \
         $(INSTALL) -m 644 "$(1)/include/$$i/"* "$(PREFIX)/$(TARGET)/include/$$i/"; \
     done
-    $(INSTALL) -m 755 '$(BUILD_DIR)/src/gallium/targets/wgl/libgallium_wgl.dll' '$(PREFIX)/$(TARGET)/bin/'
-    $(INSTALL) -m 755 '$(BUILD_DIR)/src/gallium/targets/libgl-gdi/opengl32.dll' '$(PREFIX)/$(TARGET)/bin/'
+
+    $(if $(BUILD_SHARED), \
+        $(INSTALL) -m 755 '$(BUILD_DIR)/src/gallium/targets/wgl/libgallium_wgl.dll' \
+                          '$(PREFIX)/$(TARGET)/bin/'
+        $(INSTALL) -m 755 '$(BUILD_DIR)/src/gallium/targets/libgl-gdi/opengl32.dll' \
+                          '$(PREFIX)/$(TARGET)/bin/'
+    )
 endef
