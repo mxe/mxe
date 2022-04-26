@@ -304,7 +304,7 @@
     "netpbm": {"version": "10.35.96", "website": "https://netpbm.sourceforge.io/", "description": "Netpbm"},
     "nettle": {"version": "3.7.3", "website": "https://www.lysator.liu.se/~nisse/nettle/", "description": ""},
     "ninja": {"version": "1.10.2", "website": "https://ninja-build.org", "description": "A small build system with a focus on speed"},
-    "nlopt": {"version": "2.6.1", "website": "https://nlopt.readthedocs.io/en/latest/", "description": "NLopt"},
+    "nlopt": {"version": "2.7.1", "website": "https://nlopt.readthedocs.io/en/latest/", "description": "NLopt"},
     "nsis": {"version": "3.06.1", "website": "https://nsis.sourceforge.io/", "description": "NSIS"},
     "ocaml-cairo": {"version": "1.2.0", "website": "https://cairographics.org/cairo-ocaml/", "description": "cairo-ocaml"},
     "ocaml-camlimages": {"version": "4.0.1", "website": "http://gallium.inria.fr/camlimages", "description": "camlimages"},
