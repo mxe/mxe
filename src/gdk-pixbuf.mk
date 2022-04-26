@@ -23,6 +23,7 @@ define $(PKG)_BUILD
       -Dinstalled_tests=false \
       -Dintrospection=disabled \
       -Dman=false \
+      $(if $(BUILD_STATIC),-Dbuiltin_loaders=all) \
     '$(BUILD_DIR)' '$(SOURCE_DIR)'
     '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)'
     '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)' install
