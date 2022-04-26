@@ -31,7 +31,7 @@ FC: no differences encountered
 make cmake-host MXE_PLUGIN_DIRS=plugins/examples/host-toolchain/
 ```
 
-CMake defaults to Visual Studio generators and additional configuration is
+CMake is made to default to Unix Makefiles generator and additional configuration is
 required for [MinGW or MSYS Makefiles][cmake-generators]. MinGW uses `cmd.exe`
 and requires `mingw32-make`, MSYS uses `make` and requires `/bin/sh`. The
 latter is recommended for further investigation since it's closest to the
