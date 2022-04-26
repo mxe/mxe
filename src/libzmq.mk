@@ -16,7 +16,8 @@ define $(PKG)_BUILD
         -DCMAKE_CXX_FLAGS='-D_WIN32_WINNT=0x0600' \
         -DWITH_DOC=OFF \
         -DWITH_LIBSODIUM=ON \
-        -DWITH_PERF_TOOL=OFF
+        -DWITH_PERF_TOOL=OFF \
+        -DZMQ_HAVE_IPC=OFF
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
