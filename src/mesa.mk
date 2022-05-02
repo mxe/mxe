@@ -16,6 +16,7 @@ endef
 
 define $(PKG)_BUILD
     '$(MXE_MESON_WRAPPER)' $(MXE_MESON_OPTS) \
+        -Dllvm=false \
         -Dbuild-tests=false \
         $(PKG_MESON_OPTS) \
         '$(BUILD_DIR)' '$(SOURCE_DIR)'
