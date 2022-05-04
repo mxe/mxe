@@ -3,8 +3,8 @@
 PKG             := poppler
 $(PKG)_WEBSITE  := https://poppler.freedesktop.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 22.04.0
-$(PKG)_CHECKSUM := 813fb4b90e7bda63df53205c548602bae728887a60f4048aae4dbd9b1927deff
+$(PKG)_VERSION  := 22.05.0
+$(PKG)_CHECKSUM := a969ced458e050d6202367bd7427054e2bd19bae39e8f969910d3b9151abf958
 $(PKG)_SUBDIR   := poppler-$($(PKG)_VERSION)
 $(PKG)_FILE     := poppler-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://poppler.freedesktop.org/$($(PKG)_FILE)
@@ -52,5 +52,5 @@ define $(PKG)_BUILD
     '$(TARGET)-g++' \
         -W -Wall -Werror -ansi -pedantic -std=c++11 \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
-        `'$(TARGET)-pkg-config' poppler-cpp libjpeg libtiff-4 libpng libopenjp2 --cflags --libs` -liconv
+        `'$(TARGET)-pkg-config' poppler-cpp freetype2 libjpeg libtiff-4 libpng libopenjp2 --cflags --libs` -liconv
 endef
