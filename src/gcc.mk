@@ -51,6 +51,7 @@ define $(PKG)_CONFIGURE
         --with-as='$(PREFIX)/bin/$(TARGET)-as' \
         --with-ld='$(PREFIX)/bin/$(TARGET)-ld' \
         --with-nm='$(PREFIX)/bin/$(TARGET)-nm' \
+        --enable-libstdcxx-time \
         $(shell [ `uname -s` == Darwin ] && echo "LDFLAGS='-Wl,-no_pie'") \
         $(PKG_CONFIGURE_OPTS)
 endef
