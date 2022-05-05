@@ -28,6 +28,9 @@ define $(PKG)_BUILD
     rm -rf '$(PREFIX)/$(TARGET)/include/boost/'
     rm -f "$(PREFIX)/$(TARGET)/lib/libboost"*
 
+    # remove file accidentally added to 1.78.0 (with space in its name)
+    rm -f "$(1)/boost/serialization/collection_size_type copy.hpp"
+
     # create user-config
     echo 'using gcc : mxe : $(TARGET)-g++ : <rc>$(TARGET)-windres <archiver>$(TARGET)-ar <ranlib>$(TARGET)-ranlib ;' > '$(1)/user-config.jam'
 
