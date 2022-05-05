@@ -48,5 +48,7 @@ define $(PKG)_BUILD
         -Druntime_bindir='../$(BUILD)/bin' \
         '$(BUILD_DIR)' '$(SOURCE_DIR)'
     '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)'
+    # add -luuid
+    $(SED) -i 's/-lglib-2.0/-lglib-2.0 -luuid/' '$(BUILD_DIR)/meson-private/glib-2.0.pc'
     '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)' install
 endef
