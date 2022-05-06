@@ -1,0 +1,30 @@
+diff -Nru sox-14.4.2-orig/src/formats.c sox-14.4.2-patched/src/formats.c
+--- sox-14.4.2-orig/src/formats.c	2014-10-26 22:55:50.000000000 -0400
++++ sox-14.4.2-patched/src/formats.c	2022-05-06 13:14:40.488933687 -0400
+@@ -406,6 +406,7 @@
+ 
+ /* Hack to rewind pipes (a small amount).
+  * Works by resetting the FILE buffer pointer */
++#ifndef NO_REWIND_PIPE
+ static void UNUSED rewind_pipe(FILE * fp)
+ {
+ /* _FSTDIO is for Torek stdio (i.e. most BSD-derived libc's)
+@@ -415,8 +416,8 @@
+   fp->_r += PIPE_AUTO_DETECT_SIZE;
+ #elif defined __GLIBC__
+   fp->_IO_read_ptr = fp->_IO_read_base;
+-#elif defined _MSC_VER || defined _WIN32 || defined _WIN64 || \
+-      defined _ISO_STDIO_ISO_H || defined __sgi
++#elif !defined _UCRT && (defined _MSC_VER || defined _WIN32 || defined _WIN64 || \
++      defined _ISO_STDIO_ISO_H || defined __sgi)
+   fp->_ptr = fp->_base;
+ #else
+   /* To fix this #error, either simply remove the #error line and live without
+@@ -427,6 +428,7 @@
+   (void)fp;
+ #endif
+ }
++#endif
+ 
+ static sox_format_t * open_read(
+     char               const * path,
