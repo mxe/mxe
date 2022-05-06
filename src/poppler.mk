@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := a969ced458e050d6202367bd7427054e2bd19bae39e8f969910d3b9151abf
 $(PKG)_SUBDIR   := poppler-$($(PKG)_VERSION)
 $(PKG)_FILE     := poppler-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://poppler.freedesktop.org/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc boost cairo curl freetype glib jpeg lcms libpng libwebp openjpeg qtbase tiff zlib
+$(PKG)_DEPS     := cc boost cairo curl freetype glib jpeg lcms libpng libwebp openjpeg qt6-qtbase qtbase tiff zlib
 
 define $(PKG)_UPDATE
     $(call GET_LATEST_VERSION, https://poppler.freedesktop.org/releases.html, poppler-)
@@ -30,7 +30,7 @@ define $(PKG)_BUILD
         -DENABLE_GOBJECT_INTROSPECTION=OFF \
         -DENABLE_GTK_DOC=OFF \
         -DENABLE_QT5=ON \
-        -DENABLE_QT6=OFF \
+        -DENABLE_QT6=ON \
         -DENABLE_LIBOPENJPEG=openjpeg2 \
         -DENABLE_CMS=lcms2 \
         -DENABLE_DCTDECODER=libjpeg \
