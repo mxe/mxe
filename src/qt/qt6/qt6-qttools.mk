@@ -15,7 +15,6 @@ define $(PKG)_BUILD
         -DQT_BUILD_TOOLS_WHEN_CROSSCOMPILING=ON
     # not built for some reason. make dummy so install won't fail
     touch '$(BUILD_DIR)/bin/qhelpgenerator.exe'
-    $(if $(BUILD_STATIC),'$(SED)' -i "/^ *LINK_LIBRARIES = /{s/$$/ `'$(TARGET)-pkg-config' --libs freetype2`/g}" '$(BUILD_DIR)/build.ninja',)
     cmake --build '$(BUILD_DIR)' -j '$(JOBS)'
     cmake --install '$(BUILD_DIR)'
 

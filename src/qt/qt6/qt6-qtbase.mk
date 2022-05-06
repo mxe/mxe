@@ -13,6 +13,7 @@ $(PKG)_URL      := https://download.qt.io/official_releases/qt/6.3/$($(PKG)_VERS
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 $(PKG)_DEPS     := \
     cc harfbuzz jpeg libpng mesa \
+    cc freetype harfbuzz jpeg libpng mesa \
     pcre2 sqlite zlib zstd $(BUILD)~$(PKG) \
     $(if $(findstring shared,$(MXE_TARGETS)), icu4c)
 $(PKG)_DEPS_$(BUILD) :=
@@ -45,7 +46,7 @@ define $(PKG)_BUILD
         -DFEATURE_accessibility=ON \
         -DFEATURE_dbus=OFF \
         -DFEATURE_fontconfig=OFF \
-        -DFEATURE_freetype=ON \
+        -DFEATURE_system_freetype=ON \
         -DFEATURE_glib=OFF \
         -DFEATURE_system_harfbuzz=ON \
         -DFEATURE_icu=$(CMAKE_SHARED_BOOL) \
