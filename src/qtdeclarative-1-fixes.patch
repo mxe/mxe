@@ -80,7 +80,7 @@ diff --git a/src/quick/items/qquickwindow.cpp b/src/quick/items/qquickwindow.cpp
 index 1111111..2222222 100644
 --- a/src/quick/items/qquickwindow.cpp
 +++ b/src/quick/items/qquickwindow.cpp
-@@ -2107,7 +2107,9 @@ bool QQuickWindowPrivate::deliverHoverEvent(QQuickItem *item, const QPointF &sce
+@@ -2106,7 +2106,9 @@ bool QQuickWindowPrivate::deliverHoverEvent(QQuickItem *item, const QPointF &sce
          QList<QQuickItem *> children = itemPrivate->paintOrderChildItems();
          for (int ii = children.count() - 1; ii >= 0; --ii) {
              QQuickItem *child = children.at(ii);
