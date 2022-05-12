@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 96d8a6413ba9394fbec1217aeef63741a729d476a505a797c1d5337d8fa7c
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://gstreamer.freedesktop.org/src/$(PKG)/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc glib gstreamer liboil libxml2 ogg pango theora vorbis
+$(PKG)_DEPS     := cc glib gstreamer liboil libxml2 ogg opus pango theora vorbis
 
 $(PKG)_UPDATE = $(subst gstreamer/refs,gst-plugins-base/refs,$(gstreamer_UPDATE))
 
