@@ -11,7 +11,7 @@ $(PKG)_URL      := https://gstreamer.freedesktop.org/src/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc chromaprint faad2 fdk-aac gst-plugins-base gstreamer gtk3 \
                    libass libbs2b libdvdnav libdvdread libgcrypt libmms libmodplug librsvg \
                    librtmp libsndfile libwebp mpg123 neon openal opencv openexr \
-                   openjpeg openssl opus vo-aacenc vo-amrwbenc
+                   openjpeg openssl vo-aacenc vo-amrwbenc
 
 $(PKG)_UPDATE = $(subst gstreamer/refs,gst-plugins-bad/refs,$(gstreamer_UPDATE))
 
