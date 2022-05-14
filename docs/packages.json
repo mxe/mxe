@@ -324,7 +324,7 @@
     "opencsg": {"version": "1.4.2", "website": "http://www.opencsg.org/", "description": ""},
     "opencv": {"version": "3.3.0", "website": "https://opencv.org/", "description": "OpenCV"},
     "openexr": {"version": "2.2.0", "website": "https://www.openexr.com/", "description": "OpenEXR"},
-    "openjpeg": {"version": "2.4.0", "website": "https://www.openjpeg.org/", "description": "OpenJPEG"},
+    "openjpeg": {"version": "2.5.0", "website": "https://www.openjpeg.org/", "description": "OpenJPEG"},
     "openmp-validation": {"version": "ff8cf0c", "website": "https://github.com/uhhpctools/omp-validation", "description": "OpenMP Validation Suite"},
     "openscenegraph": {"version": "3.6.5", "website": "http://www.openscenegraph.org/", "description": "OpenSceneGraph"},
     "openssl": {"version": "3.0.3", "website": "https://www.openssl.org/", "description": ""},
