@@ -76,6 +76,7 @@ define $(PKG)_BUILD_$(BUILD)
         -G Ninja \
         -DCMAKE_INSTALL_PREFIX='$(PREFIX)/$(TARGET)/$(MXE_QT6_ID)' \
         -DQT_BUILD_{TESTS,EXAMPLES}=OFF \
+        -DBUILD_WITH_PCH=OFF \
         -DFEATURE_{eventfd,glib,harfbuzz,icu,opengl,openssl}=OFF \
         -DFEATURE_sql_{db2,ibase,mysql,oci,odbc,psql,sqlite}=OFF
     '$(TARGET)-cmake' --build '$(BUILD_DIR)' -j '$(JOBS)'
