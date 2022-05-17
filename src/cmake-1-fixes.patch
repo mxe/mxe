@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Fri, 12 Aug 2016 02:01:20 +1000
-Subject: [PATCH 1/1] fix windres invocation options
+Subject: [PATCH 1/3] fix windres invocation options
 
 windres doesn't recognise various gcc flags like -mms-bitfields,
 -fopenmp, -mthreads etc. (basically not `-D` or `-I`)
@@ -17,3 +17,56 @@ index 1111111..2222222 100644
 @@ -1 +1 @@
 -set(CMAKE_RC_COMPILE_OBJECT "<CMAKE_RC_COMPILER> -O coff <DEFINES> <INCLUDES> <FLAGS> <SOURCE> <OBJECT>")
 +set(CMAKE_RC_COMPILE_OBJECT "<CMAKE_RC_COMPILER> -O coff <DEFINES> <INCLUDES> <SOURCE> <OBJECT>")
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tomas Kalibera <tomas.kalibera@gmail.com>
+Date: Tue, 17 May 2022 13:14:29 +0200
+Subject: [PATCH 2/3] Fix installation location for host cmake so it finds
+ CMAKE_ROOT
+
+Without this, data get installed into share/cmake-3.22, while the host cmake
+(built by cmake-host) at startup expects them to be in share/cmake-3.22.1
+and hence fails to detect the cmake root.  From Msys2, mingw-w64-cmake,
+0003-Fix-install-destinations.patch.
+
+diff --git a/Source/CMakeInstallDestinations.cmake b/Source/CMakeInstallDestinations.cmake
+index 1111111..2222222 100644
+--- a/Source/CMakeInstallDestinations.cmake
++++ b/Source/CMakeInstallDestinations.cmake
+@@ -6,7 +6,7 @@ if(BEOS)
+   set(CMAKE_INFO_DIR_DEFAULT "documentation/info") # HAIKU
+   set(CMAKE_MAN_DIR_DEFAULT "documentation/man") # HAIKU
+   set(CMAKE_XDGDATA_DIR_DEFAULT "share") # HAIKU
+-elseif(CYGWIN)
++elseif(CYGWIN OR MINGW)
+   set(CMAKE_BIN_DIR_DEFAULT "bin") # CYGWIN
+   set(CMAKE_DATA_DIR_DEFAULT "share/cmake-${CMake_VERSION}") # CYGWIN
+   set(CMAKE_DOC_DIR_DEFAULT "share/doc/cmake-${CMake_VERSION}") # CYGWIN
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tomas Kalibera <tomas.kalibera@gmail.com>
+Date: Tue, 17 May 2022 13:17:14 +0200
+Subject: [PATCH 3/3] Change the default cmake generator to Unix Makefiles to
+ allow using the host cmake without a wrapper/override
+
+Use "Unix Makefiles" as the default generator.  Without this patch, the
+default generator is "NMake Makefiles", hence requires Microsoft Visual
+Studio.  Analogous to Msys2, mingw-w64-cmake,
+0005-Default-to-ninja-generator.patch.
+
+diff --git a/Source/cmake.cxx b/Source/cmake.cxx
+index 1111111..2222222 100644
+--- a/Source/cmake.cxx
++++ b/Source/cmake.cxx
+@@ -2276,7 +2276,10 @@ std::unique_ptr<cmGlobalGenerator> cmake::EvaluateDefaultGlobalGenerator()
+       return gen;
+     }
+   }
+-#if defined(_WIN32) && !defined(__CYGWIN__) && !defined(CMAKE_BOOT_MINGW)
++#if defined(_WIN32) && defined(__MINGW32__) && !defined(CMAKE_BOOT_MINGW)
++  return std::unique_ptr<cmGlobalGenerator>(
++    cm::make_unique<cmGlobalUnixMakefileGenerator3>(this));
++#elif defined(_WIN32) && !defined(__CYGWIN__) && !defined(CMAKE_BOOT_MINGW)
+   std::string found;
+   // Try to find the newest VS installed on the computer and
+   // use that as a default if -G is not specified
