@@ -406,7 +406,7 @@
     "qtlottie": {"version": "5.15.4", "website": "https://www.qt.io/", "description": "Qt"},
     "qtmultimedia": {"version": "5.15.4", "website": "https://www.qt.io/", "description": "Qt"},
     "qtnetworkauth": {"version": "5.15.4", "website": "https://www.qt.io/", "description": "Qt"},
-    "qtofficeopenxml": {"version": "02dda4a", "website": "https://github.com/dbzhang800/QtOfficeOpenXml/", "description": "QtOfficeOpenXml"},
+    "qtofficeopenxml": {"version": "b26a85b", "website": "https://github.com/dbzhang800/QtOfficeOpenXml/", "description": "QtOfficeOpenXml"},
     "qtpurchasing": {"version": "5.15.4", "website": "https://www.qt.io/", "description": "Qt"},
     "qtquick3d": {"version": "5.15.4", "website": "https://www.qt.io/", "description": "Qt"},
     "qtquickcontrols": {"version": "5.15.4", "website": "https://www.qt.io/", "description": "Qt"},
