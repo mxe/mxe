@@ -180,7 +180,7 @@
     "libexif": {"version": "0.6.22", "website": "https://github.com/libexif/libexif", "description": "libexif"},
     "libf2c": {"version": "1", "website": "https://www.netlib.org/f2c/", "description": ""},
     "libfcgi": {"version": "2.4.2", "website": "https://github.com/FastCGI-Archives", "description": "FastCGI"},
-    "libffi": {"version": "3.2.1", "website": "https://sourceware.org/libffi/", "description": ""},
+    "libffi": {"version": "3.3", "website": "https://sourceware.org/libffi/", "description": ""},
     "libftdi": {"version": "0.20", "website": "https://www.intra2net.com/en/developer/libftdi/index.php", "description": "LibFTDI"},
     "libftdi1": {"version": "1.4", "website": "https://www.intra2net.com/en/developer/libftdi/index.php", "description": "LibFTDI1"},
     "libgcrypt": {"version": "1.10.1", "website": "https://directory.fsf.org/wiki/Libgcrypt", "description": ""},
