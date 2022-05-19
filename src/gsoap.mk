@@ -4,16 +4,16 @@ PKG             := gsoap
 $(PKG)_WEBSITE  := https://www.genivia.com/dev.html
 $(PKG)_DESCR    := gSOAP
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.8.111
-$(PKG)_CHECKSUM := f1670c7e3aeaa66bc5658539fbd162e5099f022666855ef2b2c2bac07fec4bd3
+$(PKG)_VERSION  := 2.8.122
+$(PKG)_CHECKSUM := 3eb8486c986b44071bb5f19ef7b990791f819bb267c0bf640e95bd991070fad8
 $(PKG)_SUBDIR   := gsoap-$(call SHORT_PKG_VERSION,$(PKG))
 $(PKG)_FILE     := gsoap_$($(PKG)_VERSION).zip
-$(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/gsoap2/gsoap-$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
+$(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/gsoap2/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc libgcrypt libntlm openssl
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://sourceforge.net/projects/gsoap2/files/gsoap-2.8/' | \
-    $(SED) -n 's,.*gsoap_\([0-9][^>]*\)\.zip.*,\1,p' | \
+    $(WGET) -q -O- 'https://sourceforge.net/projects/gsoap2/files/' | \
+    $(SED) -n 's,.*gsoap_\([0-9.]\+\)\.zip.*,\1,p' | \
     head -1
 endef
 
