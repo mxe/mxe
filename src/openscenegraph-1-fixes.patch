@@ -152,3 +152,28 @@ index 43156bd26..ef2f0e93a 100644
  void DisplaySettings::setNvOptimusEnablement(int value)
  {
      NvOptimusEnablement = value;
+
+    Fix wrong return type of variable that makes the following switch statement incorrect.
+    This is needed for compiling with GCC 12.
+
+diff -ur a/src/osgViewer/GraphicsWindowWin32.cpp b/src/osgViewer/GraphicsWindowWin32.cpp
+--- a/src/osgViewer/GraphicsWindowWin32.cpp	2020-01-31 12:03:07.000000000 +0100
++++ b/src/osgViewer/GraphicsWindowWin32.cpp	2022-05-22 20:01:04.638027857 +0200
+@@ -1101,7 +1101,7 @@
+     // Start by testing if the change would be successful (without applying it)
+     //
+ 
+-    unsigned int result = ::ChangeDisplaySettingsEx(displayDevice.DeviceName, &deviceMode, NULL, CDS_TEST, NULL);
++    LONG result = ::ChangeDisplaySettingsEx(displayDevice.DeviceName, &deviceMode, NULL, CDS_TEST, NULL);
+     if (result==DISP_CHANGE_SUCCESSFUL)
+     {
+         result = ::ChangeDisplaySettingsEx(displayDevice.DeviceName, &deviceMode, NULL, 0, NULL);
+@@ -1118,7 +1118,7 @@
+         default : break;
+     }
+ 
+-    reportErrorForScreen(msg, si, result);
++    reportErrorForScreen(msg, si, static_cast<unsigned int>(result));
+     return false;
+ }
+ 
