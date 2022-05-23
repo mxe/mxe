@@ -50,7 +50,7 @@ index 1111111..2222222 100644
  
  ACLOCAL_AMFLAGS = -I m4
  
--SUBDIRS = src util test docs
+-SUBDIRS = src util test perf docs
 +SUBDIRS = src util
  
  EXTRA_DIST = \
