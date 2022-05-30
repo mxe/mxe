@@ -460,7 +460,7 @@
     "sfml": {"version": "2.5.1", "website": "https://www.sfml-dev.org/", "description": "SFML"},
     "smpeg": {"version": "0.4.5+cvs20030824", "website": "https://icculus.org/smpeg/", "description": ""},
     "smpeg2": {"version": "2.0.0", "website": "https://icculus.org/smpeg/", "description": "smpeg"},
-    "smtpclient-for-qt": {"version": "4982d32", "website": "https://github.com/bluetiger9/SmtpClient-for-Qt/", "description": "SmtpClient-for-Qt"},
+    "smtpclient-for-qt": {"version": "7e55309", "website": "https://github.com/bluetiger9/SmtpClient-for-Qt/", "description": "SmtpClient-for-Qt"},
     "sox": {"version": "14.4.2", "website": "https://sox.sourceforge.io/", "description": "SoX"},
     "sparsehash": {"version": "2.0.3", "website": "https://github.com/sparsehash/sparsehash", "description": ""},
     "spatialite": {"version": "4.4.0-RC1", "website": "https://www.gaia-gis.it/fossil/libspatialite/index", "description": "SpatiaLite"},
