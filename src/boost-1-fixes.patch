@@ -5,14 +5,14 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Wed, 8 Apr 2020 00:37:10 +1000
-Subject: [PATCH 1/1] fix darwin build
+Subject: [PATCH 1/2] fix darwin build
 
 
 diff --git a/tools/build/src/tools/darwin.jam b/tools/build/src/tools/darwin.jam
 index 1111111..2222222 100644
 --- a/tools/build/src/tools/darwin.jam
 +++ b/tools/build/src/tools/darwin.jam
-@@ -138,11 +138,6 @@
+@@ -138,11 +138,6 @@ rule init ( version ? : command * : options * : requirement * )
      common.handle-options darwin : $(condition) : $(command) : $(options) ;
  
      real-version = [ regex.split $(real-version) \\. ] ;
@@ -24,3 +24,34 @@ index 1111111..2222222 100644
      # - GCC 4.2 and higher in Darwin does not have -Wno-long-double.
      if [ version.version-less $(real-version) : 4 2 ]
      {
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Orgad Shaneh <orgad.shaneh@audiocodes.com>
+Date: Mon, 6 Jun 2022 16:55:21 +0300
+Subject: [PATCH 2/2] Fix incomplete type error when using list and pair
+
+Example:
+
+boost::container::list<std::pair<int, int>> list;
+
+.../boost/container/allocator_traits.hpp:403:11: error: invalid use of incomplete type 'struct boost::container::dtl::pair<int, int>'
+  403 |    {  p->~T(); (void)p;  }
+      |       ~~~~^
+In file included from .../boost/container/detail/node_alloc_holder.hpp:39,
+                 from .../boost/container/list.hpp:34:
+.../boost/container/detail/is_pair.hpp:59:8: note: declaration of 'struct boost::container::dtl::pair<int, int>'
+   59 | struct pair;
+      |        ^~~~
+
+diff --git a/boost/container/list.hpp b/boost/container/list.hpp
+index 1111111..2222222 100644
+--- a/boost/container/list.hpp
++++ b/boost/container/list.hpp
+@@ -32,6 +32,7 @@
+ #include <boost/container/detail/iterators.hpp>
+ #include <boost/container/detail/mpl.hpp>
+ #include <boost/container/detail/node_alloc_holder.hpp>
++#include <boost/container/detail/pair.hpp>
+ #include <boost/container/detail/version_type.hpp>
+ #include <boost/container/detail/value_functors.hpp>
+ // move
