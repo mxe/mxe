@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Mon, 14 Dec 2020 15:09:00 +1100
-Subject: [PATCH 1/1] optionally build docs
+Subject: [PATCH 1/2] optionally build docs
 
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
@@ -23,3 +23,67 @@ index 1111111..2222222 100644
  
      ## Visit all the directories:
      add_subdirectory(src)
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Tue, 14 Jun 2022 21:11:49 +0200
+Subject: [PATCH 2/2] Revert "CMake: Fix static library link order when using
+ qmake"
+
+For MXE at least, the upstream commit here reverted caused lib paths
+from the build directory to appear in QMAKE_PRL_LIBS in installed prl
+files, breaking (at least) static linking for qmake projects.
+
+This reverts commit 4e45f261a99eaf6d7ccf038a03125befde92bbe4.
+
+Change-Id: I044fbd5ed60dce0eb481c84cce717fd12cfb2d03
+
+diff --git a/cmake/QtFinishPrlFile.cmake b/cmake/QtFinishPrlFile.cmake
+index 1111111..2222222 100644
+--- a/cmake/QtFinishPrlFile.cmake
++++ b/cmake/QtFinishPrlFile.cmake
+@@ -32,8 +32,6 @@ set(qt_framework_search_path_inserted FALSE)
+ foreach(line ${lines})
+     if(line MATCHES "^RCC_OBJECTS = (.*)")
+         set(rcc_objects ${CMAKE_MATCH_1})
+-    elseif(line MATCHES "^QMAKE_PRL_TARGET_PATH_FOR_CMAKE = (.*)")
+-        set(target_library_path "${CMAKE_MATCH_1}")
+     elseif(line MATCHES "^QMAKE_PRL_LIBS_FOR_CMAKE = (.*)")
+         unset(adjusted_libs)
+         foreach(lib ${CMAKE_MATCH_1})
+@@ -76,22 +74,7 @@ foreach(line ${lines})
+             endif()
+         endforeach()
+         if(rcc_objects)
+-            set(libs_to_prepend ${rcc_objects})
+-
+-            # By default, when qmake processes prl files, it first puts the processed library
+-            # on the link line, followed by all values specified in QMAKE_PRL_LIBS.
+-            # Because we add the resource object files into QMAKE_PRL_LIBS, this means they will
+-            # also appear on the link line after the library.
+-            # This causes issues on Linux because the linker may discard unreferenced symbols from
+-            # the library, which are referenced by the resource object files.
+-            # We can't control the placement of the library in relation to QMAKE_PRL_LIBS, but we
+-            # can add the library one more time in QMAKE_PRL_LIBS, after the object files.
+-            # qmake's UnixMakefileGenerator::findLibraries then takes care of deduplication, which
+-            # keeps the last occurrence of the library on the link line, the one after the object
+-            # files.
+-            list(APPEND libs_to_prepend "${target_library_path}")
+-
+-            list(PREPEND adjusted_libs ${libs_to_prepend})
++            list(PREPEND adjusted_libs ${rcc_objects})
+         endif()
+         list(JOIN adjusted_libs " " adjusted_libs_for_qmake)
+         string(APPEND content "QMAKE_PRL_LIBS = ${adjusted_libs_for_qmake}\n")
+diff --git a/cmake/QtPrlHelpers.cmake b/cmake/QtPrlHelpers.cmake
+index 1111111..2222222 100644
+--- a/cmake/QtPrlHelpers.cmake
++++ b/cmake/QtPrlHelpers.cmake
+@@ -107,7 +107,6 @@ function(qt_generate_prl_file target install_dir)
+         "RCC_OBJECTS = ${rcc_objects}
+ QMAKE_PRL_BUILD_DIR = ${CMAKE_CURRENT_BINARY_DIR}
+ QMAKE_PRL_TARGET = $<TARGET_LINKER_FILE_NAME:${target}>
+-QMAKE_PRL_TARGET_PATH_FOR_CMAKE = $<TARGET_LINKER_FILE:${target}>
+ QMAKE_PRL_CONFIG = ${prl_config}
+ QMAKE_PRL_VERSION = ${PROJECT_VERSION}
+ ${prl_step1_content_libs}
