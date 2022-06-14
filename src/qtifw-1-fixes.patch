@@ -21,10 +21,10 @@ index 1111111..2222222 100644
  include (installerfw.pri)
  
  BUILD_TESTS = $$(BUILDTESTS)
-diff --git a/src/libs/7zip/win/CPP/Windows/SecurityUtils.h b/src/libs/7zip/win/CPP/Windows/SecurityUtils.h
+diff --git a/src/libs/3rdparty/7zip/win/CPP/Windows/SecurityUtils.h b/src/libs/3rdparty/7zip/win/CPP/Windows/SecurityUtils.h
 index 1111111..2222222 100644
---- a/src/libs/7zip/win/CPP/Windows/SecurityUtils.h
-+++ b/src/libs/7zip/win/CPP/Windows/SecurityUtils.h
+--- a/src/libs/3rdparty/7zip/win/CPP/Windows/SecurityUtils.h
++++ b/src/libs/3rdparty/7zip/win/CPP/Windows/SecurityUtils.h
 @@ -3,7 +3,7 @@
  #ifndef __WINDOWS_SECURITY_UTILS_H
  #define __WINDOWS_SECURITY_UTILS_H
@@ -73,7 +73,7 @@ diff --git a/src/libs/installer/extractarchiveoperation_p.h b/src/libs/installer
 index 1111111..2222222 100644
 --- a/src/libs/installer/extractarchiveoperation_p.h
 +++ b/src/libs/installer/extractarchiveoperation_p.h
-@@ -40,6 +40,8 @@
+@@ -41,6 +41,8 @@
  
  #include <QRunnable>
  #include <QThread>
@@ -134,7 +134,7 @@ diff --git a/src/sdk/main.cpp b/src/sdk/main.cpp
 index 1111111..2222222 100644
 --- a/src/sdk/main.cpp
 +++ b/src/sdk/main.cpp
-@@ -49,6 +49,10 @@
+@@ -56,6 +56,10 @@
  #  include <sys/types.h>
  #endif
  
