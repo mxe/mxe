@@ -44,18 +44,6 @@ index 1111111..2222222 100644
 -qtConfig(d3d12): SUBDIRS += d3d12
  qtConfig(openvg): SUBDIRS += openvg
  
-diff --git a/src/qmldebug/qqmlprofilerevent_p.h b/src/qmldebug/qqmlprofilerevent_p.h
-index 1111111..2222222 100644
---- a/src/qmldebug/qqmlprofilerevent_p.h
-+++ b/src/qmldebug/qqmlprofilerevent_p.h
-@@ -48,6 +48,7 @@
- #include <QtCore/qmetatype.h>
- 
- #include <initializer_list>
-+#include <limits>
- #include <type_traits>
- 
- //
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Allan Sandfeld Jensen <allan.jensen@qt.io>
