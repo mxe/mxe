@@ -399,7 +399,7 @@
     "qtdeclarative": {"version": "5.15.5", "website": "https://www.qt.io/", "description": "Qt"},
     "qtgamepad": {"version": "5.15.5", "website": "https://www.qt.io/", "description": "Qt"},
     "qtgraphicaleffects": {"version": "5.15.5", "website": "https://www.qt.io/", "description": "Qt"},
-    "qtifw": {"version": "4.4.0", "website": "https://doc.qt.io/qtinstallerframework/index.html", "description": "Qt Installer Framework"},
+    "qtifw": {"version": "4.4.1", "website": "https://doc.qt.io/qtinstallerframework/index.html", "description": "Qt Installer Framework"},
     "qtimageformats": {"version": "5.15.5", "website": "https://www.qt.io/", "description": "Qt"},
     "qtkeychain": {"version": "0.12.0", "website": "https://github.com/frankosterfeld/qtkeychain", "description": "QtKeychain"},
     "qtlocation": {"version": "5.15.5", "website": "https://www.qt.io/", "description": "Qt"},
