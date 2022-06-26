@@ -27,7 +27,8 @@ define $(PKG)_BUILD
         $(MXE_CONFIGURE_OPTS) \
         --disable-debug \
         --disable-examples \
-        as_cv_unaligned_access=yes
+        as_cv_unaligned_access=yes \
+        LIBS=-luuid
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 endef

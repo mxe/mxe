@@ -4,8 +4,8 @@ PKG             := nlopt
 $(PKG)_WEBSITE  := https://nlopt.readthedocs.io/en/latest/
 $(PKG)_DESCR    := NLopt
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.6.1
-$(PKG)_CHECKSUM := 66d63a505187fb6f98642703bd0ef006fedcae2f9a6d1efa4f362ea919a02650
+$(PKG)_VERSION  := 2.7.1
+$(PKG)_CHECKSUM := db88232fa5cef0ff6e39943fc63ab6074208831dc0031cf1545f6ecd31ae2a1a
 $(PKG)_GH_CONF  := stevengj/nlopt/releases/tags,v
 $(PKG)_DEPS     := cc
 

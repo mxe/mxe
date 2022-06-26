@@ -13,8 +13,7 @@ define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && '$(TARGET)-cmake' '$(SOURCE_DIR)' \
         -DBUILD_DOC=OFF \
         -DBUILD_EXAMPLES=OFF \
-        -DBUILD_TESTS=OFF \
-        -DCMAKE_CXX_FLAGS='-D_WIN32_WINNT=0x0601'
+        -DBUILD_TESTS=OFF
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 

@@ -3,103 +3,9 @@ This file is part of MXE. See LICENSE.md for licensing information.
 Contains ad hoc patches for cross building.
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Boris Nagaev <bnagaev@gmail.com>
-Date: Sun, 29 Jan 2017 21:47:39 +0100
-Subject: [PATCH 1/5] These were adapted from the gtk2 patchset.
-
-
-diff --git a/gdk/win32/gdkmain-win32.c b/gdk/win32/gdkmain-win32.c
-index 1111111..2222222 100644
---- a/gdk/win32/gdkmain-win32.c
-+++ b/gdk/win32/gdkmain-win32.c
-@@ -64,7 +64,7 @@ const GOptionEntry _gdk_windowing_args[] = {
- };
- 
- BOOL WINAPI
--DllMain (HINSTANCE hinstDLL,
-+gdk_DllMain (HINSTANCE hinstDLL,
- 	 DWORD     dwReason,
- 	 LPVOID    reserved)
- {
-diff --git a/gtk+-3.0.pc.in b/gtk+-3.0.pc.in
-index 1111111..2222222 100644
---- a/gtk+-3.0.pc.in
-+++ b/gtk+-3.0.pc.in
-@@ -12,5 +12,5 @@ Description: GTK+ Graphical UI Library
- Version: @VERSION@
- Requires: gdk-@GTK_API_VERSION@ @GTK_PACKAGES@
- Requires.private: @GTK_PRIVATE_PACKAGES@
--Libs: -L${libdir} -lgtk-3 @GTK_EXTRA_LIBS@
-+Libs: -L${libdir} -lgtk-3 @GTK_DEP_LIBS@ -lwinspool -lcomctl32 -lcomdlg32
- Cflags: -I${includedir}/gtk-@GTK_API_VERSION@ @GTK_EXTRA_CFLAGS@
-diff --git a/gtk/gtkwin32.c b/gtk/gtkwin32.c
-index 1111111..2222222 100644
---- a/gtk/gtkwin32.c
-+++ b/gtk/gtkwin32.c
-@@ -42,7 +42,7 @@
- static HMODULE gtk_dll;
- 
- BOOL WINAPI
--DllMain (HINSTANCE hinstDLL,
-+gtk_DllMain (HINSTANCE hinstDLL,
-          DWORD     fdwReason,
-          LPVOID    lpvReserved)
- {
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Boris Nagaev <bnagaev@gmail.com>
-Date: Sun, 29 Jan 2017 21:50:48 +0100
-Subject: [PATCH 2/5] Not sure what happens when this line is commented out
-
-
-diff --git a/gtk/a11y/gtkaccessibility.c b/gtk/a11y/gtkaccessibility.c
-index 1111111..2222222 100644
---- a/gtk/a11y/gtkaccessibility.c
-+++ b/gtk/a11y/gtkaccessibility.c
-@@ -992,5 +992,5 @@ _gtk_accessibility_init (void)
-   atk_bridge_adaptor_init (NULL, NULL);
- #endif
- 
--  atk_misc_instance = g_object_new (GTK_TYPE_MISC_IMPL, NULL);
-+  /* atk_misc_instance = g_object_new (GTK_TYPE_MISC_IMPL, NULL); */
- }
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Boris Nagaev <bnagaev@gmail.com>
-Date: Sun, 29 Jan 2017 22:50:45 +0100
-Subject: [PATCH 3/5] disable gtk-update-icon-cache
-
-The error: https://gist.github.com/b3030a43a325ee7646a2bda2864465b5
-
-diff --git a/demos/gtk-demo/Makefile.in b/demos/gtk-demo/Makefile.in
-index 1111111..2222222 100644
---- a/demos/gtk-demo/Makefile.in
-+++ b/demos/gtk-demo/Makefile.in
-@@ -1422,7 +1422,6 @@ uninstall-hook: uninstall-update-icon-cache
- 
- install-update-icon-cache:
- 	$(AM_V_at)$(POST_INSTALL)
--	test -n "$(DESTDIR)" || $(update_icon_cache) "$(iconthemedir)"
- 
- uninstall-update-icon-cache:
- 	$(AM_V_at)$(POST_UNINSTALL)
-diff --git a/demos/widget-factory/Makefile.in b/demos/widget-factory/Makefile.in
-index 1111111..2222222 100644
---- a/demos/widget-factory/Makefile.in
-+++ b/demos/widget-factory/Makefile.in
-@@ -1161,7 +1161,6 @@ uninstall-hook: uninstall-update-icon-cache
- 
- install-update-icon-cache:
- 	$(AM_V_at)$(POST_INSTALL)
--	test -n "$(DESTDIR)" || $(update_icon_cache) "$(iconthemedir)"
- 
- uninstall-update-icon-cache:
- 	$(AM_V_at)$(POST_UNINSTALL)
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Gerardo Ballabio <gerardo.ballabio@gmail.com>
 Date: Fri, 10 Nov 2017 08:22:39 +1100
-Subject: [PATCH 4/5] restore built-in icons from 3.12
+Subject: [PATCH 1/3] restore built-in icons from 3.12
 
 https://lists.nongnu.org/archive/html/mingw-cross-env-list/2017-11/msg00000.html
 
@@ -35983,7 +35889,7 @@ diff --git a/gtk/gtkicontheme.c b/gtk/gtkicontheme.c
 index 1111111..2222222 100644
 --- a/gtk/gtkicontheme.c
 +++ b/gtk/gtkicontheme.c
-@@ -43,6 +43,7 @@
+@@ -44,6 +44,7 @@
  #include "gtkdebug.h"
  #include "deprecated/gtkiconfactory.h"
  #include "gtkiconcache.h"
@@ -35991,7 +35897,7 @@ index 1111111..2222222 100644
  #include "gtkintl.h"
  #include "gtkmain.h"
  #include "deprecated/gtknumerableiconprivate.h"
-@@ -368,6 +369,10 @@ static guint signal_changed = 0;
+@@ -369,6 +370,10 @@ static guint signal_changed = 0;
  
  static GHashTable *icon_theme_builtin_icons;
  
@@ -36002,7 +35908,7 @@ index 1111111..2222222 100644
  static guint
  icon_info_key_hash (gconstpointer _key)
  {
-@@ -1451,6 +1456,38 @@ load_themes (GtkIconTheme *icon_theme)
+@@ -1454,6 +1459,38 @@ load_themes (GtkIconTheme *icon_theme)
    });
  }
  
@@ -36041,7 +35947,7 @@ index 1111111..2222222 100644
  static void
  ensure_valid_themes (GtkIconTheme *icon_theme)
  {
-@@ -1462,6 +1499,8 @@ ensure_valid_themes (GtkIconTheme *icon_theme)
+@@ -1465,6 +1502,8 @@ ensure_valid_themes (GtkIconTheme *icon_theme)
      return;
    priv->loading_themes = TRUE;
  
@@ -36050,7 +35956,7 @@ index 1111111..2222222 100644
    if (priv->themes_valid)
      {
        g_get_current_time (&tv);
-@@ -1983,6 +2022,12 @@ choose_icon (GtkIconTheme       *icon_theme,
+@@ -2000,6 +2039,12 @@ choose_icon (GtkIconTheme       *icon_theme,
          {
            icon_name_list_add_icon (new_names, dir_suffix, g_strdup (icon_names[i]));
          }
@@ -36063,7 +35969,7 @@ index 1111111..2222222 100644
        g_ptr_array_add (new_names, NULL);
  
        icon_info = real_choose_icon (icon_theme,
-@@ -1995,11 +2040,26 @@ choose_icon (GtkIconTheme       *icon_theme,
+@@ -2012,11 +2057,26 @@ choose_icon (GtkIconTheme       *icon_theme,
      }
    else
      {
@@ -36091,7 +35997,7 @@ index 1111111..2222222 100644
      }
  
    return icon_info;
-@@ -2454,6 +2514,10 @@ gtk_icon_theme_has_icon (GtkIconTheme *icon_theme,
+@@ -2472,6 +2532,10 @@ gtk_icon_theme_has_icon (GtkIconTheme *icon_theme,
          return TRUE;
      }
  
@@ -36102,7 +36008,7 @@ index 1111111..2222222 100644
    if (icon_theme_builtin_icons &&
        g_hash_table_lookup_extended (icon_theme_builtin_icons,
                                      icon_name, NULL, NULL))
-@@ -3046,9 +3110,11 @@ theme_lookup_icon (IconTheme   *theme,
+@@ -3064,9 +3128,11 @@ theme_lookup_icon (IconTheme   *theme,
  
        if (min_difference == 0)
          return icon_info_new_builtin (closest_builtin);
@@ -36116,7 +36022,7 @@ index 1111111..2222222 100644
  
    l = dirs;
    while (l != NULL)
-@@ -3071,6 +3137,12 @@ theme_lookup_icon (IconTheme   *theme,
+@@ -3089,6 +3155,12 @@ theme_lookup_icon (IconTheme   *theme,
          }
  
        l = l->next;
@@ -36133,7 +36039,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 28 May 2020 20:29:53 +0200
-Subject: [PATCH 5/5] remove unnecessary parentheses
+Subject: [PATCH 2/3] remove unnecessary parentheses
 
 ..which break build of gtkmm using gcc 10.
 
@@ -36145,10 +36051,10 @@ index 1111111..2222222 100644
                                       gboolean        keyboard_mode,
                                       GtkTooltip     *tooltip);
  
--  void (*__gtk_reserved1);
--  void (*__gtk_reserved2);
--  void (*__gtk_reserved3);
--  void (*__gtk_reserved4);
+-  void (*__gtk_reserved1) (void);
+-  void (*__gtk_reserved2) (void);
+-  void (*__gtk_reserved3) (void);
+-  void (*__gtk_reserved4) (void);
 +  void *__gtk_reserved1;
 +  void *__gtk_reserved2;
 +  void *__gtk_reserved3;
@@ -36164,10 +36070,10 @@ index 1111111..2222222 100644
    /*< private >*/
  
    /* Padding for future expansion */
--  void (*__gtk_reserved1);
--  void (*__gtk_reserved2);
--  void (*__gtk_reserved3);
--  void (*__gtk_reserved4);
+-  void (*__gtk_reserved1) (void);
+-  void (*__gtk_reserved2) (void);
+-  void (*__gtk_reserved3) (void);
+-  void (*__gtk_reserved4) (void);
 +  void *__gtk_reserved1;
 +  void *__gtk_reserved2;
 +  void *__gtk_reserved3;
@@ -36175,3 +36081,26 @@ index 1111111..2222222 100644
  };
  
  
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: v1993 <v19930312@gmail.com>
+Date: Fri, 10 Dec 2021 16:19:53 +0300
+Subject: [PATCH 3/3] Fix libintl check
+
+
+diff --git a/meson.build b/meson.build
+index 1111111..2222222 100644
+--- a/meson.build
++++ b/meson.build
+@@ -763,7 +763,10 @@ if cc.has_function('ngettext')
+   cdata.set('HAVE_BIND_TEXTDOMAIN_CODESET', 1)
+ else
+   libintl_dep = cc.find_library('intl', required : false)
+-  if cc.has_function('bind_textdomain_codeset', dependencies: libintl_dep)
++  libiconv_dep = cc.find_library('iconv', required : false)
++  if cc.has_function('bind_textdomain_codeset', dependencies: [libintl_dep, libiconv_dep], prefix : '''
++    #include <libintl.h>
++  ''')
+     cdata.set('HAVE_BIND_TEXTDOMAIN_CODESET', 1)
+   else
+     # Don't use subproject('proxy-libintl').get_variable('intl_dep') because that

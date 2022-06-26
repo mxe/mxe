@@ -29,8 +29,7 @@ define $(PKG)_BUILD
         --disable-tests \
         --enable-local-libopts \
         --without-p11-kit \
-        --disable-silent-rules \
-        CFLAGS='-D_WIN32_WINNT=0x0600'
+        --disable-silent-rules
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 

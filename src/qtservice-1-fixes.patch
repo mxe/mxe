@@ -1,0 +1,145 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Fri, 21 Jan 2022 01:43:14 +0100
+Subject: [PATCH 1/2] adjust build for MXE
+
+
+diff --git a/qtservice/buildlib/buildlib.pro b/qtservice/buildlib/buildlib.pro
+index 1111111..2222222 100644
+--- a/qtservice/buildlib/buildlib.pro
++++ b/qtservice/buildlib/buildlib.pro
+@@ -11,3 +11,16 @@ win32 {
+ }
+ target.path = $$DESTDIR
+ INSTALLS += target
++
++CONFIG -= dll debug_and_release build_all
++CONFIG += create_prl create_pc
++QMAKE_PKGCONFIG_DESTDIR = pkgconfig
++DESTDIR =
++DLLDESTDIR =
++headers.path = $$[QT_INSTALL_HEADERS]
++headers.files += ../src/qtservice.h
++win32:dlltarget.path = $$[QT_INSTALL_BINS]
++target.path = $$[QT_INSTALL_LIBS]
++!static:win32:target.CONFIG = no_dll
++win32:INSTALLS += dlltarget
++INSTALLS += target headers
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Thu, 20 Jan 2022 22:48:22 +0100
+Subject: [PATCH 2/2] qt6 build fixes
+
+
+diff --git a/qtservice/src/qtservice.cpp b/qtservice/src/qtservice.cpp
+index 1111111..2222222 100644
+--- a/qtservice/src/qtservice.cpp
++++ b/qtservice/src/qtservice.cpp
+@@ -436,7 +436,7 @@ private:
+ QtServiceBase *QtServiceBasePrivate::instance = 0;
+ 
+ QtServiceBasePrivate::QtServiceBasePrivate(const QString &name)
+-    : startupType(QtServiceController::ManualStartup), serviceFlags(0), controller(name)
++    : startupType(QtServiceController::ManualStartup), controller(name)
+ {
+ 
+ }
+@@ -663,7 +663,6 @@ QtServiceBase::QtServiceBase(int argc, char **argv, const QString &name)
+     d_ptr = new QtServiceBasePrivate(nm);
+     d_ptr->q_ptr = this;
+ 
+-    d_ptr->serviceFlags = 0;
+     d_ptr->sysd = 0;
+     for (int i = 0; i < argc; ++i)
+         d_ptr->args.append(QString::fromLocal8Bit(argv[i]));
+diff --git a/qtservice/src/qtservice.h b/qtservice/src/qtservice.h
+index 1111111..2222222 100644
+--- a/qtservice/src/qtservice.h
++++ b/qtservice/src/qtservice.h
+@@ -59,7 +59,6 @@
+ #  define QT_QTSERVICE_EXPORT
+ #endif
+ 
+-class QStringList;
+ class QtServiceControllerPrivate;
+ 
+ class QT_QTSERVICE_EXPORT QtServiceController
+diff --git a/qtservice/src/qtservice_unix.cpp b/qtservice/src/qtservice_unix.cpp
+index 1111111..2222222 100644
+--- a/qtservice/src/qtservice_unix.cpp
++++ b/qtservice/src/qtservice_unix.cpp
+@@ -297,7 +297,7 @@ private:
+ };
+ 
+ QtServiceSysPrivate::QtServiceSysPrivate()
+-    : QtUnixServerSocket(), ident(0), serviceFlags(0)
++    : QtUnixServerSocket(), ident(0)
+ {
+ }
+ 
+diff --git a/qtservice/src/qtservice_win.cpp b/qtservice/src/qtservice_win.cpp
+index 1111111..2222222 100644
+--- a/qtservice/src/qtservice_win.cpp
++++ b/qtservice/src/qtservice_win.cpp
+@@ -737,11 +737,20 @@ class QtServiceAppEventFilter : public QAbstractNativeEventFilter
+ {
+ public:
+     QtServiceAppEventFilter() {}
++#if QT_VERSION >= 0x060000
++    bool nativeEventFilter(const QByteArray &eventType, void *message, qintptr *result);
++#else
+     bool nativeEventFilter(const QByteArray &eventType, void *message, long *result);
++#endif
+ };
+ 
+-bool QtServiceAppEventFilter::nativeEventFilter(const QByteArray &, void *message, long *result)
++#if QT_VERSION >= 0x060000
++bool QtServiceAppEventFilter::nativeEventFilter(const QByteArray &eventType, void *message, qintptr *result)
++#else
++bool QtServiceAppEventFilter::nativeEventFilter(const QByteArray &eventType, void *message, long *result)
++#endif
+ {
++    Q_UNUSED(eventType);
+     MSG *winMessage = (MSG*)message;
+     if (winMessage->message == WM_ENDSESSION && (winMessage->lParam & ENDSESSION_LOGOFF)) {
+         *result = TRUE;
+diff --git a/qtwinmigrate/src/qmfcapp.cpp b/qtwinmigrate/src/qmfcapp.cpp
+index 1111111..2222222 100644
+--- a/qtwinmigrate/src/qmfcapp.cpp
++++ b/qtwinmigrate/src/qmfcapp.cpp
+@@ -73,8 +73,13 @@ QMfcAppEventFilter::QMfcAppEventFilter() : QAbstractNativeEventFilter()
+ {
+ }
+ 
+-bool QMfcAppEventFilter::nativeEventFilter(const QByteArray &, void *message, long *result)
++#if QT_VERSION >= 0x060000
++bool QMfcAppEventFilter::nativeEventFilter(const QByteArray &eventType, void *message, qintptr *result)
++#else
++bool QMfcAppEventFilter::nativeEventFilter(const QByteArray &eventType, void *message, long *result)
++#endif
+ {
++    Q_UNUSED(eventType);
+     return static_cast<QMfcApp*>(qApp)->winEventFilter((MSG*)message, result);
+ }
+ #endif
+diff --git a/qtwinmigrate/src/qmfcapp.h b/qtwinmigrate/src/qmfcapp.h
+index 1111111..2222222 100644
+--- a/qtwinmigrate/src/qmfcapp.h
++++ b/qtwinmigrate/src/qmfcapp.h
+@@ -74,7 +74,11 @@ class QT_QTWINMIGRATE_EXPORT QMfcAppEventFilter : public QAbstractNativeEventFil
+ {
+ public:
+     QMfcAppEventFilter();
++#if QT_VERSION >= 0x060000
++    bool nativeEventFilter(const QByteArray &eventType, void *message, qintptr *result);
++#else
+     bool nativeEventFilter(const QByteArray &eventType, void *message, long *result);
++#endif
+ };
+ #endif
+ 

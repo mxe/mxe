@@ -6,6 +6,7 @@ $(PKG)_VERSION   = $(cmake_VERSION)
 $(PKG)_CHECKSUM  = $(cmake_CHECKSUM)
 $(PKG)_SUBDIR    = $(cmake_SUBDIR)
 $(PKG)_FILE      = $(cmake_FILE)
+$(PKG)_PATCHES   = $(cmake_PATCHES)
 $(PKG)_URL       = $(cmake_URL)
 $(PKG)_URL_2     = $(cmake_URL_2)
 $(PKG)_DEPS     := cc

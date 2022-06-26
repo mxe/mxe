@@ -3,78 +3,167 @@ This file is part of MXE. See LICENSE.md for licensing information.
 Contains ad hoc patches for cross building.
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: "a@a.org" <a@a.org>
-Date: Mon, 24 Oct 2011 14:02:33 +0200
-Subject: [PATCH 1/4] use unix style names for openssl on mingw-cross-env
+From: brodieG <brodieG@users.noreply.github.com>
+Date: Sun, 13 Mar 2022 14:19:03 +0000
+Subject: [PATCH 1/4] Add buffer around AC version check
+
+Subsequent patches will modify this portion of the code, but
+without the buffer the postgresql version and the copyright dates
+become part of the context, which then interferes with
+make update-package-postgresql
+
+diff --git a/configure.in b/configure.in
+index 1111111..2222222 100644
+--- a/configure.in
++++ b/configure.in
+@@ -19,10 +19,19 @@ m4_pattern_forbid(^PGAC_)dnl to catch undefined macros
+ 
+ AC_INIT([PostgreSQL], [13.6], [pgsql-bugs@lists.postgresql.org], [], [https://www.postgresql.org/])
+ 
++dnl Buffer for MXE patch application
++dnl   Required to ensure patch context
++dnl   excludes version numbers / dates
++dnl End buffer for MXE patch application
+ m4_if(m4_defn([m4_PACKAGE_VERSION]), [2.69], [], [m4_fatal([Autoconf version 2.69 is required.
+ Untested combinations of 'autoconf' and PostgreSQL versions are not
+ recommended.  You can remove the check from 'configure.in' but it is then
+ your responsibility whether the result works or not.])])
++dnl Buffer for MXE patch application
++dnl   Required to ensure patch context
++dnl   excludes version numbers / dates
++dnl End buffer for MXE patch application
++
+ AC_COPYRIGHT([Copyright (c) 1996-2020, PostgreSQL Global Development Group])
+ AC_CONFIG_SRCDIR([src/backend/access/common/heaptuple.c])
+ AC_CONFIG_AUX_DIR(config)
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: brodieG <brodieG@users.noreply.github.com>
+Date: Sun, 13 Mar 2022 14:29:45 +0000
+Subject: [PATCH 2/4] Change AC version check
+
+See discussion in #672, originally the m4 check was removed, but
+subsequently a need for it in a different form was found so the
+AC_PREREQ line was added.
+
+The m4 check was removed by @mabrand in d31b6ec92d0779da
+The AC_PREREQ was added by @avih / @TimothyGu in caa19541103025
+
+diff --git a/configure.in b/configure.in
+index 1111111..2222222 100644
+--- a/configure.in
++++ b/configure.in
+@@ -23,10 +23,7 @@ dnl Buffer for MXE patch application
+ dnl   Required to ensure patch context
+ dnl   excludes version numbers / dates
+ dnl End buffer for MXE patch application
+-m4_if(m4_defn([m4_PACKAGE_VERSION]), [2.69], [], [m4_fatal([Autoconf version 2.69 is required.
+-Untested combinations of 'autoconf' and PostgreSQL versions are not
+-recommended.  You can remove the check from 'configure.in' but it is then
+-your responsibility whether the result works or not.])])
++AC_PREREQ(2.69)
+ dnl Buffer for MXE patch application
+ dnl   Required to ensure patch context
+ dnl   excludes version numbers / dates
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: brodieG <brodieG@users.noreply.github.com>
+Date: Sun, 13 Mar 2022 14:34:44 +0000
+Subject: [PATCH 3/4] use unix style names for openssl on mingw-cross-env
 
 
 diff --git a/configure.in b/configure.in
 index 1111111..2222222 100644
 --- a/configure.in
 +++ b/configure.in
-@@ -926,13 +926,8 @@ fi
+@@ -1246,13 +1246,8 @@ fi
  
  if test "$with_openssl" = yes ; then
    dnl Order matters!
 -  if test "$PORTNAME" != "win32"; then
 -     AC_CHECK_LIB(crypto, CRYPTO_new_ex_data, [], [AC_MSG_ERROR([library 'crypto' is required for OpenSSL])])
--     AC_CHECK_LIB(ssl,    SSL_library_init, [], [AC_MSG_ERROR([library 'ssl' is required for OpenSSL])])
+-     AC_CHECK_LIB(ssl,    SSL_new, [], [AC_MSG_ERROR([library 'ssl' is required for OpenSSL])])
 -  else
--     AC_SEARCH_LIBS(CRYPTO_new_ex_data, eay32 crypto, [], [AC_MSG_ERROR([library 'eay32' or 'crypto' is required for OpenSSL])])
--     AC_SEARCH_LIBS(SSL_library_init, ssleay32 ssl, [], [AC_MSG_ERROR([library 'ssleay32' or 'ssl' is required for OpenSSL])])
+-     AC_SEARCH_LIBS(CRYPTO_new_ex_data, [eay32 crypto], [], [AC_MSG_ERROR([library 'eay32' or 'crypto' is required for OpenSSL])])
+-     AC_SEARCH_LIBS(SSL_new, [ssleay32 ssl], [], [AC_MSG_ERROR([library 'ssleay32' or 'ssl' is required for OpenSSL])])
 -  fi
 +  AC_CHECK_LIB(crypto, CRYPTO_new_ex_data, [], [AC_MSG_ERROR([library 'crypto' is required for OpenSSL])])
-+  AC_CHECK_LIB(ssl,    SSL_library_init, [], [AC_MSG_ERROR([library 'ssl' is required for OpenSSL])])
- fi
- 
- if test "$with_pam" = yes ; then
++  AC_CHECK_LIB(ssl,    SSL_new, [], [AC_MSG_ERROR([library 'ssl' is required for OpenSSL])])
+   # Function introduced in OpenSSL 1.0.2.
+   AC_CHECK_FUNCS([X509_get_signature_nid])
+   # Functions introduced in OpenSSL 1.1.0. We used to check for
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: "a@a.org" <a@a.org>
-Date: Mon, 24 Oct 2011 14:09:38 +0200
-Subject: [PATCH 2/4] do not check autoconf version
+From: brodieG <brodieG@users.noreply.github.com>
+Date: Sun, 13 Mar 2022 14:39:48 +0000
+Subject: [PATCH 4/4] Adapt static/shared lib builds
 
-
-diff --git a/configure.in b/configure.in
-index 1111111..2222222 100644
---- a/configure.in
-+++ b/configure.in
-@@ -19,10 +19,6 @@ m4_pattern_forbid(^PGAC_)dnl to catch undefined macros
- 
- AC_INIT([PostgreSQL], [9.2.4], [pgsql-bugs@postgresql.org])
- 
--m4_if(m4_defn([m4_PACKAGE_VERSION]), [2.63], [], [m4_fatal([Autoconf version 2.63 is required.
--Untested combinations of 'autoconf' and PostgreSQL versions are not
--recommended.  You can remove the check from 'configure.in' but it is then
--your responsibility whether the result works or not.])])
- AC_COPYRIGHT([Copyright (c) 1996-2012, PostgreSQL Global Development Group])
- AC_CONFIG_SRCDIR([src/backend/access/common/heaptuple.c])
- AC_CONFIG_AUX_DIR(config)
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Timothy Gu <timothygu99@gmail.com>
-Date: Tue, 1 Jul 2014 14:27:21 -0700
-Subject: [PATCH 3/4] Fix shared lib install location
-
-Signed-off-by: Timothy Gu <timothygu99@gmail.com>
+This modifies original patches by @TimothyGu, and is required
+due to the loss of the enable_shared variable in newer versions
+of postgresql
 
 diff --git a/src/Makefile.shlib b/src/Makefile.shlib
 index 1111111..2222222 100644
 --- a/src/Makefile.shlib
 +++ b/src/Makefile.shlib
-@@ -293,6 +293,7 @@ endif
- ifeq ($(PORTNAME), win32)
-   ifdef SO_MAJOR_VERSION
-     shlib		= lib$(NAME)$(DLSUFFIX)
-+    stlib		= lib$(NAME)$(DLSUFFIX).a
-   endif
-   haslibarule   = yes
- endif
-@@ -447,14 +448,16 @@ ifeq ($(PORTNAME), darwin)
+@@ -246,10 +246,15 @@ ifeq ($(PORTNAME), cygwin)
  endif
  
- ifeq ($(enable_shared), yes)
+ ifeq ($(PORTNAME), win32)
+-  ifdef SO_MAJOR_VERSION
+-    shlib		= lib$(NAME)$(DLSUFFIX)
++  ifeq ($(MXE_BUILD_SHARED), TRUE)
++    ifdef SO_MAJOR_VERSION
++      shlib		= lib$(NAME)$(DLSUFFIX)
++      stlib		= lib$(NAME)$(DLSUFFIX).a
++    endif
++    haslibarule		= yes
++  else
++    shlib		=
+   endif
+-  haslibarule   = yes
+ endif
+ 
+ 
+@@ -357,10 +362,6 @@ else
+ 
+ # Win32 case
+ 
+-# See notes in src/backend/parser/Makefile about the following two rules
+-$(stlib): $(shlib)
+-	touch $@
+-
+ # XXX A backend that loads a module linked with libgcc_s_dw2-1.dll will exit
+ # uncleanly, hence -static-libgcc.  (Last verified with MinGW-w64 compilers
+ # from i686-4.9.1-release-win32-dwarf-rt_v3-rev1.)  Shared libgcc has better
+@@ -369,6 +370,13 @@ $(stlib): $(shlib)
+ #
+ # If SHLIB_EXPORTS is set, the rules below will build a .def file from that.
+ # Else we just use --export-all-symbols.
++
++ifeq ($(MXE_BUILD_SHARED), TRUE)
++## See notes in src/backend/parser/Makefile about the following two rules
++## MXE: for static builds we do not override the stdlib rule.
++$(stlib): $(shlib)
++	touch $@
++
+ ifeq (,$(SHLIB_EXPORTS))
+ $(shlib): $(OBJS) | $(SHLIB_PREREQS)
+ 	$(CC) $(CFLAGS)  -shared -static-libgcc -o $@  $(OBJS) $(LDFLAGS) $(LDFLAGS_SL) $(SHLIB_LINK) $(LIBS) -Wl,--export-all-symbols -Wl,--out-implib=$(stlib)
+@@ -385,6 +393,7 @@ $(DLL_DEFFILE): $(SHLIB_EXPORTS)
+ 	echo 'EXPORTS' >>$@
+ 	sed -e '/^#/d' -e 's/^\(.*[ 	]\)\([0-9][0-9]*\)/    \1@ \2/' $< >>$@
+ endif
++endif # MXE_BUILD_SHARED
+ 
+ endif # PORTNAME == cygwin
+ endif # PORTNAME == cygwin || PORTNAME == win32
+@@ -428,14 +437,17 @@ ifeq ($(PORTNAME), darwin)
+ 	$(RANLIB) $(stlib)
+ endif
+ 
 -install-lib-shared: $(shlib) installdirs-lib
++ifeq ($(MXE_BUILD_SHARED), TRUE)
 +install-lib-shared: $(shlib)
 +ifeq (, $(filter $(PORTNAME), win32 cygwin))
 +install-lib-shared: installdirs-lib
@@ -90,7 +179,7 @@ index 1111111..2222222 100644
  ifneq ($(shlib), $(shlib_major))
  	cd '$(DESTDIR)$(libdir)' && \
  	rm -f $(shlib_major) && \
-@@ -465,8 +468,9 @@ ifneq ($(shlib), $(shlib_bare))
+@@ -446,8 +458,9 @@ ifneq ($(shlib), $(shlib_bare))
  	rm -f $(shlib_bare) && \
  	$(LN_S) $(shlib) $(shlib_bare)
  endif
@@ -100,38 +189,13 @@ index 1111111..2222222 100644
 +	$(INSTALL_SHLIB) $< '$(DESTDIR)$(bindir)/$(shlib)'
 +endif # not win32 or cygwin
  endif # not aix
+ ifneq (,$(findstring $(PORTNAME),win32 cygwin))
+ 	$(INSTALL_SHLIB) $< '$(DESTDIR)$(bindir)/$(shlib)'
+@@ -455,6 +468,7 @@ endif
  else # no soname
  	$(INSTALL_SHLIB) $< '$(DESTDIR)$(pkglibdir)/$(shlib)'
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Timothy Gu <timothygu99@gmail.com>
-Date: Tue, 1 Jul 2014 14:41:44 -0700
-Subject: [PATCH 4/4] Don't build shared lib on win32 if --disable-shared is
- set
-
-Signed-off-by: Timothy Gu <timothygu99@gmail.com>
-
-diff --git a/src/Makefile.shlib b/src/Makefile.shlib
-index 1111111..2222222 100644
---- a/src/Makefile.shlib
-+++ b/src/Makefile.shlib
-@@ -291,11 +291,15 @@ ifeq ($(PORTNAME), cygwin)
  endif
- 
- ifeq ($(PORTNAME), win32)
--  ifdef SO_MAJOR_VERSION
--    shlib		= lib$(NAME)$(DLSUFFIX)
--    stlib		= lib$(NAME)$(DLSUFFIX).a
-+  ifeq ($(enable_shared), yes)
-+    ifdef SO_MAJOR_VERSION
-+      shlib		= lib$(NAME)$(DLSUFFIX)
-+      stlib		= lib$(NAME)$(DLSUFFIX).a
-+    endif
-+    haslibarule   = yes
-+  else
-+    shlib		=
-   endif
--  haslibarule   = yes
- endif
++endif # not MXE_BUILD_SHARED
  
  
+ installdirs-lib:

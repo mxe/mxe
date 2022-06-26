@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+echo "== Using MXE wrapper for native builds: @PREFIX@/bin/mxe-native-meson"
+
+unset NO_MESON_CROSSFILE
+if echo -- "$@" | grep -Ewq "configure"; then
+    NO_MESON_CROSSFILE=1
+fi
+
+if [[ "$NO_MESON_CROSSFILE" == "1" ]]; then
+    echo "== Skip using Meson prefix options"
+    exec meson "$@"
+else
+    echo "== Using Meson prefix options"
+    exec @MESON_EXECUTABLE@ \
+              --prefix "@PREFIX@/@BUILD@" \
+              --default-library "@LIBTYPE@" \
+              -Dpkg_config_path="@PREFIX@/@BUILD@/lib/pkgconfig" \
+              -Dcmake_prefix_path="@PREFIX@/@BUILD@" \
+              --libdir=lib \
+              "$@"
+fi

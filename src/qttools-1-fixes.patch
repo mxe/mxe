@@ -12,7 +12,7 @@ diff --git a/src/src.pro b/src/src.pro
 index 1111111..2222222 100644
 --- a/src/src.pro
 +++ b/src/src.pro
-@@ -35,7 +35,7 @@ macos {
+@@ -36,7 +36,7 @@ macos {
  
  qtHaveModule(dbus): SUBDIRS += qdbus
  
@@ -32,7 +32,7 @@ diff --git a/src/src.pro b/src/src.pro
 index 1111111..2222222 100644
 --- a/src/src.pro
 +++ b/src/src.pro
-@@ -23,9 +23,9 @@ qtConfig(library) {
+@@ -24,9 +24,9 @@ qtConfig(library) {
      !android|android_app: SUBDIRS += qtplugininfo
  }
  

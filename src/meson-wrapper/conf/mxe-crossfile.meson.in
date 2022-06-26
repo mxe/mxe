@@ -1,0 +1,26 @@
+# This file is part of MXE. See LICENSE.md for licensing information.
+
+[binaries]
+c = '@PREFIX@/bin/@TARGET@-gcc'
+cpp = '@PREFIX@/bin/@TARGET@-g++'
+ar = '@PREFIX@/bin/@TARGET@-ar'
+ranlib = '@PREFIX@/bin/@TARGET@-ranlib'
+ld = '@PREFIX@/bin/@TARGET@-ld'
+strip = '@PREFIX@/bin/@TARGET@-strip'
+windres = '@PREFIX@/bin/@TARGET@-windres'
+windmc = '@PREFIX@/bin/@TARGET@-windmc'
+pkgconfig = '@PREFIX@/bin/@TARGET@-pkg-config'
+cmake = '@PREFIX@/bin/@TARGET@-cmake'
+# MXE forbids this
+# exe_wrapper = 'wine'
+
+[properties]
+needs_exe_wrapper = true
+sys_root = '@PREFIX@/@TARGET@'
+pkg_config_libdir = '@PREFIX@/@TARGET@/lib/pkgconfig'
+
+[host_machine]
+system = 'windows'
+cpu_family = '@CPU_FAMILY@'
+cpu = '@CPU@'
+endian = 'little'

@@ -4,8 +4,8 @@ PKG             := curl
 $(PKG)_WEBSITE  := https://curl.haxx.se/libcurl/
 $(PKG)_DESCR    := cURL
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 7.77.0
-$(PKG)_CHECKSUM := 0f64582c54282f31c0de9f0a1a596b182776bd4df9a4c4a2a41bbeb54f62594b
+$(PKG)_VERSION  := 7.83.1
+$(PKG)_CHECKSUM := 2cb9c2356e7263a1272fd1435ef7cdebf2cd21400ec287b068396deb705c22c4
 $(PKG)_SUBDIR   := curl-$($(PKG)_VERSION)
 $(PKG)_FILE     := curl-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://curl.haxx.se/download/$($(PKG)_FILE)
@@ -20,7 +20,7 @@ endef
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
         $(MXE_CONFIGURE_OPTS) \
-        --with-winssl \
+        --with-schannel \
         --without-ssl \
         --with-libidn2 \
         --enable-sspi \

@@ -4,8 +4,8 @@ PKG             := qtofficeopenxml
 $(PKG)_WEBSITE  := https://github.com/dbzhang800/QtOfficeOpenXml/
 $(PKG)_DESCR    := QtOfficeOpenXml
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 02dda4a
-$(PKG)_CHECKSUM := 02927da4386d5e5f1ed4679f089db3029c4ff8dfebc448c93fa1bacf1828d8d9
+$(PKG)_VERSION  := b26a85b
+$(PKG)_CHECKSUM := a7b7c95e3549f7c63b2d0b1f108e006b89f78eeb4433c3a7dae1a51bebf3d254
 $(PKG)_GH_CONF  := dbzhang800/QtOfficeOpenXml/branches/master
 $(PKG)_DEPS     := cc qtbase
 

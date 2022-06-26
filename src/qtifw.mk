@@ -4,10 +4,11 @@ PKG             := qtifw
 $(PKG)_WEBSITE  := https://doc.qt.io/qtinstallerframework/index.html
 $(PKG)_DESCR    := Qt Installer Framework
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.2.2
-$(PKG)_CHECKSUM := d4793b891acaa06938e4bfc5367e024bc132108f819b48da0e8a97feab555ce9
-$(PKG)_FILE     := qtifw-$($(PKG)_VERSION).tar
-$(PKG)_URL      := https://download.qt.io/official_releases/qt-installer-framework/$($(PKG)_VERSION)/qt-installer-framework-opensource-src-$($(PKG)_VERSION).tar.gz
+$(PKG)_VERSION  := 4.4.1
+$(PKG)_CHECKSUM := 394bf434b7fee78f6168d589613fea25eaca025f12bbfff4457e9a1ac0b16782
+$(PKG)_SUBDIR   := installer-framework-opensource-src-4.4
+$(PKG)_FILE     := installer-framework-opensource-src-$($(PKG)_VERSION).tar.xz
+$(PKG)_URL      := https://download.qt.io/official_releases/qt-installer-framework/$($(PKG)_VERSION)/installer-framework-opensource-src-$($(PKG)_VERSION).tar.xz
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 
 $(PKG)_DEPS_$(BUILD) := cc qtbase qttools
@@ -39,7 +40,7 @@ define $(PKG)_BUILD_STATIC
 
     # build the tutorial installer in /tmp, because the binarycreator internal
     # rename will fail if /tmp is not in the same filesystem as mxe
-    cd '$(SOURCE_DIR)examples/tutorial' && \
+    cd '$(SOURCE_DIR)/examples/tutorial' && \
     '$(PREFIX)/bin/$(BUILD)-binarycreator' \
         -c config/config.xml \
         -p packages \

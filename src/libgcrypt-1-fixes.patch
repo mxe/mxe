@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Thu, 4 Dec 2014 15:07:43 +1100
-Subject: [PATCH 1/2] fix for mingw cross building
+Subject: [PATCH 1/1] fix for mingw cross building
 
 Taken from:
 https://aur.archlinux.org/packages/mingw-w64-libgcrypt/
@@ -56,49 +56,3 @@ index 1111111..2222222 100644
        gcry_check_version  @1
        gcry_control  @2
  
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: "Richard W.M. Jones" <rjones@redhat.com>
-Date: Sun, 28 Jun 2015 17:17:25 +0200
-Subject: [PATCH 2/2] configure.ac: no serial-tests if automake < 1.12
-
-Earlier versions of automake complain if they get a configuration
-parameter which they don't understand.  The error is:
-
-configure.ac:27: error: option 'serial-tests' not recognized
-
-Use some m4 hackery to work around this.
-
-Fix libgcrypt build under x86_64
-See https://www.redhat.com/archives/libguestfs/2013-February/msg00102.html
-
-diff --git a/configure.ac b/configure.ac
-index 1111111..2222222 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -76,7 +76,24 @@ NEED_GPG_ERROR_VERSION=1.27
- 
- AC_CONFIG_AUX_DIR([build-aux])
- AC_CONFIG_SRCDIR([src/libgcrypt.vers])
--AM_INIT_AUTOMAKE([serial-tests dist-bzip2])
-+
-+dnl Initialize automake.  automake < 1.12 didn't have serial-tests and
-+dnl gives an error if it sees this, but for automake >= 1.13
-+dnl serial-tests is required so we have to include it.  Solution is to
-+dnl test for the version of automake (by running an external command)
-+dnl and provide it if necessary.  Note we have to do this entirely using
-+dnl m4 macros since automake queries this macro by running
-+dnl 'autoconf --trace ...'.
-+m4_define([serial_tests], [
-+    m4_esyscmd([automake --version |
-+                head -1 |
-+                awk '{split ($NF,a,"."); if (a[1] == 1 && a[2] >= 12) { '\
-+                    'print "serial-tests" }}'
-+    ])
-+])
-+dnl NB: Do not [quote] this parameter.
-+AM_INIT_AUTOMAKE(serial_tests dist-bzip2)
-+
- AC_CONFIG_HEADER(config.h)
- AC_CONFIG_MACRO_DIR([m4])
- AC_CONFIG_LIBOBJ_DIR([compat])

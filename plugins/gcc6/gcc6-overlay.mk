@@ -13,11 +13,12 @@ $(PKG)_VERSION  := 0.16.1
 $(PKG)_CHECKSUM := 412538bb65c799ac98e17e8cfcdacbb257a57362acfaaff254b0fcae970126d2
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := https://isl.gforge.inria.fr/$($(PKG)_FILE)
+$(PKG)_URL      := https://libisl.sourceforge.io/$($(PKG)_FILE)
 $(PKG)_URL_2    := https://gcc.gnu.org/pub/gcc/infrastructure/$($(PKG)_FILE)
 
 PKG             := gcc
 $(PKG)_VERSION  := 6.5.0
+$(PKG)_RELEASE  := $($(PKG)_VERSION)
 $(PKG)_CHECKSUM := 7ef1796ce497e89479183702635b14bb7a46b53249209a5e0f999bebf4740945
 $(PKG)_SUBDIR   := gcc-$($(PKG)_VERSION)
 $(PKG)_FILE     := gcc-$($(PKG)_VERSION).tar.xz

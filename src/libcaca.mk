@@ -18,19 +18,20 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && autoreconf -fi
+    cd '$(SOURCE_DIR)' && autoreconf -fi
     $(if $(BUILD_STATIC),                                         \
         $(SED) -i 's/__declspec(dllimport)//' '$(1)/caca/caca.h'; \
         $(SED) -i 's/__declspec(dllimport)//' '$(1)/caca/caca0.h')
-    cd '$(1)' && ./configure \
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS) \
         --disable-csharp \
         --disable-java \
         --disable-python \
         --disable-ruby \
-        --disable-doc
-    $(MAKE) -C '$(1)' -j '$(JOBS)'
-    $(MAKE) -C '$(1)' -j 1 install
+        --disable-doc \
+        $(if $(BUILD_STATIC), LIBS=-luuid)
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
     ln -sf '$(PREFIX)/$(TARGET)/bin/caca-config' '$(PREFIX)/bin/$(TARGET)-caca-config'
 endef
 

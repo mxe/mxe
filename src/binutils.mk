@@ -3,8 +3,8 @@
 PKG             := binutils
 $(PKG)_WEBSITE  := https://www.gnu.org/software/binutils/
 $(PKG)_DESCR    := GNU Binutils
-$(PKG)_VERSION  := 2.28
-$(PKG)_CHECKSUM := 6297433ee120b11b4b0a1c8f3512d7d73501753142ab9e2daa13c5a3edd32a72
+$(PKG)_VERSION  := 2.38
+$(PKG)_CHECKSUM := 070ec71cf077a6a58e0b959f05a09a35015378c2d8a51e90f3aeabfe30590ef8
 $(PKG)_SUBDIR   := binutils-$($(PKG)_VERSION)
 $(PKG)_FILE     := binutils-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://ftp.gnu.org/gnu/binutils/$($(PKG)_FILE)
@@ -32,6 +32,7 @@ define $(PKG)_BUILD
         --disable-nls \
         --disable-shared \
         --disable-werror
+    touch -d2020-01-01 '$(SOURCE_DIR)/gas/doc/.dirstamp'
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 $(INSTALL_STRIP_TOOLCHAIN)
 

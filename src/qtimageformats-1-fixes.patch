@@ -12,9 +12,9 @@ diff --git a/src/plugins/imageformats/jp2/qjp2handler.cpp b/src/plugins/imagefor
 index 1111111..2222222 100644
 --- a/src/plugins/imageformats/jp2/qjp2handler.cpp
 +++ b/src/plugins/imageformats/jp2/qjp2handler.cpp
-@@ -46,6 +46,8 @@
- 
+@@ -47,6 +47,8 @@
  #include <jasper/jasper.h>
+ #include <math.h> // for pow
  
 +#include <math.h>
 +

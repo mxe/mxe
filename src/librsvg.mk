@@ -3,13 +3,15 @@
 PKG             := librsvg
 $(PKG)_WEBSITE  := https://librsvg.sourceforge.io/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.40.5
-$(PKG)_CHECKSUM := d14d7b3e25023ce34302022fd7c9b3a468629c94dff6c177874629686bfc71a7
+# 2.40 branch is the last one using pure C. Later started using rust.
+$(PKG)_VERSION  := 2.40.21
+$(PKG)_CHECKSUM := f7628905f1cada84e87e2b14883ed57d8094dca3281d5bcb24ece4279e9a92ba
 $(PKG)_SUBDIR   := librsvg-$($(PKG)_VERSION)
 $(PKG)_FILE     := librsvg-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.gnome.org/sources/librsvg/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc cairo gdk-pixbuf glib libcroco libgsf pango
 
+# TODO: limit versions to librsvg-2.40 branch
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://gitlab.gnome.org/GNOME/librsvg/tags' | \
     $(SED) -n "s,.*<a [^>]\+>v\?\([0-9]\+\.[0-9.]\+\)<.*,\1,p" | \

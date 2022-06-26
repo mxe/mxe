@@ -1,0 +1,21 @@
+name: Build Docs
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: "github.repository == 'mxe/mxe'"
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build Docs
+      run: make docs/build-matrix.html docs/packages.json OS_SHORT_NAME=disable-native-plugins MXE_TARGETS="`echo {i686-w64-mingw32,x86_64-w64-mingw32}.{static,shared}`"
+    - name: Commit & Push
+      run: |
+          git config --global user.name 'MXEBot as Github Actions'
+          git config --global user.email 'mxebot@gmail.com'
+          git add .
+          git commit -m 'Update packages.json & build-matrix.html' || true
+          git push

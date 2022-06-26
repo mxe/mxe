@@ -4,8 +4,8 @@ PKG             := tidy-html5
 $(PKG)_WEBSITE  := https://www.html-tidy.org/
 $(PKG)_DESCR    := HTML/XML syntax checker and reformatter
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.6.0
-$(PKG)_CHECKSUM := 08a63bba3d9e7618d1570b4ecd6a7daa83c8e18a41c82455b6308bc11fe34958
+$(PKG)_VERSION  := 5.8.0
+$(PKG)_CHECKSUM := 59c86d5b2e452f63c5cdb29c866a12a4c55b1741d7025cf2f3ce0cde99b0660e
 $(PKG)_GH_CONF  := htacg/tidy-html5/tags
 $(PKG)_DEPS     := cc
 
@@ -17,8 +17,8 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
     $(if $(BUILD_STATIC),
-        cd '$(PREFIX)/$(TARGET)/lib' && mv libtidys.a libtidy.a,
-        rm -f '$(PREFIX)/$(TARGET)/lib/libtidys.a')
+        cd '$(PREFIX)/$(TARGET)/lib' && mv libtidy_static.a libtidy.a,
+        rm -f '$(PREFIX)/$(TARGET)/lib/libtidy_static.a')
     rm -f '$(PREFIX)/$(TARGET)/bin/tidy.exe'
 
     # build test manually

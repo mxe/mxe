@@ -25,6 +25,10 @@ define $(PKG)_BUILD
         -DBUILD_EXAMPLES=OFF \
         -DFLUIDSYNTH=OFF \
         -DSTATIC_CFLAGS="-DAL_LIBTYPE_STATIC"
+    $(SED) -i 's/\(-I[^;]\+\);-I/\1 -I/g;' \
+        '$(BUILD_DIR)/CMakeCache.txt' \
+        '$(BUILD_DIR)/CMakeFiles/ALURE32$(if $(BUILD_STATIC),-static,).dir/build.make' \
+        '$(BUILD_DIR)/CMakeFiles/ALURE32$(if $(BUILD_STATIC),-static,).dir/flags.make'
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 endef

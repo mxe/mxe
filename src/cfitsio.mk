@@ -26,6 +26,7 @@ define $(PKG)_BUILD
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
     (echo 'Name: $(PKG)'; \
      echo 'Version: $($(PKG)_VERSION)'; \
+     echo 'Description: A FITS File Subroutine Library'; \
      echo 'Libs: -l$(PKG)';) \
      > '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG).pc'
 

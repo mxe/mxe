@@ -3,8 +3,8 @@
 PKG             := lcms
 $(PKG)_WEBSITE  := http://www.littlecms.com/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.12
-$(PKG)_CHECKSUM := 18663985e864100455ac3e507625c438c3710354d85e5cbb7cd4043e11fe10f5
+$(PKG)_VERSION  := 2.13
+$(PKG)_CHECKSUM := 0c67a5cc144029cfa34647a52809ec399aae488db4258a6a66fba318474a070f
 $(PKG)_SUBDIR   := $(PKG)$(word 1,$(subst ., ,$($(PKG)_VERSION)))-$(subst a,,$($(PKG)_VERSION))
 $(PKG)_FILE     := $(PKG)$(word 1,$(subst ., ,$($(PKG)_VERSION)))-$(subst a,,$($(PKG)_VERSION)).tar.gz
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$(subst a,,$($(PKG)_VERSION))/$($(PKG)_FILE)

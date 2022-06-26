@@ -1,0 +1,21 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Tue, 25 Jan 2022 14:36:49 +0100
+Subject: [PATCH 1/1] fix static linking with pkg-config
+
+
+diff --git a/libexif.pc.in b/libexif.pc.in
+index 1111111..2222222 100644
+--- a/libexif.pc.in
++++ b/libexif.pc.in
+@@ -8,5 +8,5 @@ Description: Library for easy access to EXIF data
+ Requires:
+ Version: @VERSION@
+ Libs: -L${libdir} -lexif
+-Libs.private: -lm
++Libs.private: -lintl -liconv -lm
+ Cflags: -I${includedir}

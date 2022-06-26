@@ -2,10 +2,10 @@
 
 PKG             := make
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.1
-$(PKG)_CHECKSUM := 0bc7613389650ee6a24554b52572a272f7356164fd2c4132b0bcf13123e4fca5
+$(PKG)_VERSION  := 4.3
+$(PKG)_CHECKSUM := de1a441c4edf952521db30bfca80baae86a0ff1acd0a00402999344f04c45e82
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
+$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.lz
 $(PKG)_URL      := https://ftp.gnu.org/gnu/$(PKG)/$($(PKG)_FILE)
 $(PKG)_URL_2    := https://ftpmirror.gnu.org/$(PKG)/$($(PKG)_FILE)
 $(PKG)_WEBSITE  := https://www.gnu.org/software/make

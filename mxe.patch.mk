@@ -27,7 +27,7 @@ define INIT_GIT
     $(call GIT_CMD,$(1)) init
     $(call GIT_CMD,$(1)) add -A -f
     $(call GIT_CMD,$(1)) commit -m "init"
-    $(call GIT_CMD,$(1)) tag dist
+    $(call GIT_CMD,$(1)) tag -m "dist" dist
 endef
 
 define IMPORT_PATCH

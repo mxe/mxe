@@ -3,85 +3,52 @@ This file is part of MXE. See LICENSE.md for licensing information.
 Contains ad hoc patches for cross building.
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Fri, 24 Sep 2010 23:31:24 +0200
-Subject: [PATCH 1/3] s,DllMain,static _disabled_DllMain,
+From: v1993 <v19930312@gmail.com>
+Date: Mon, 6 Dec 2021 21:38:36 +0300
+Subject: [PATCH 1/2] Fix static builds for Windows
 
 
 diff --git a/gdk-pixbuf/gdk-pixbuf-io.c b/gdk-pixbuf/gdk-pixbuf-io.c
 index 1111111..2222222 100644
 --- a/gdk-pixbuf/gdk-pixbuf-io.c
 +++ b/gdk-pixbuf/gdk-pixbuf-io.c
-@@ -193,12 +193,12 @@ get_file_formats (void)
+@@ -186,8 +186,9 @@ get_file_formats (void)
  
- #ifdef G_OS_WIN32
+ /* DllMain function needed to tuck away the gdk-pixbuf DLL handle */
  
--/* DllMain function needed to tuck away the gdk-pixbuf DLL handle */
-+/* static _disabled_DllMain function needed to tuck away the gdk-pixbuf DLL handle */
+-static HMODULE gdk_pixbuf_dll;
++static HMODULE gdk_pixbuf_dll = NULL;
  
- static HMODULE gdk_pixbuf_dll;
- 
++#ifdef DLL_EXPORT
  BOOL WINAPI
--DllMain (HINSTANCE hinstDLL,
-+gdkpixbuf_DllMain (HINSTANCE hinstDLL,
+ DllMain (HINSTANCE hinstDLL,
           DWORD     fdwReason,
-          LPVOID    lpvReserved)
- {
+@@ -203,6 +204,8 @@ DllMain (HINSTANCE hinstDLL,
+ }
+ #endif
+ 
++#endif
++
+ 
+ #ifdef GDK_PIXBUF_RELOCATABLE
+ 
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Fri, 12 Oct 2012 12:24:51 +0200
-Subject: [PATCH 2/3] add libtiff to required.private in .pc
+From: v1993 <v19930312@gmail.com>
+Date: Fri, 10 Dec 2021 18:53:33 +0300
+Subject: [PATCH 2/2] Search for iconv when adding intl
 
 
-diff --git a/gdk-pixbuf-2.0.pc.in b/gdk-pixbuf-2.0.pc.in
+diff --git a/meson.build b/meson.build
 index 1111111..2222222 100644
---- a/gdk-pixbuf-2.0.pc.in
-+++ b/gdk-pixbuf-2.0.pc.in
-@@ -12,7 +12,7 @@ Name: GdkPixbuf
- Description: Image loading and scaling
- Version: @VERSION@
- Requires: gobject-2.0
--Requires.private: gmodule-no-export-2.0 @PNG_DEP_CFLAGS_PACKAGES@
-+Requires.private: gmodule-no-export-2.0 @PNG_DEP_CFLAGS_PACKAGES@ libtiff-4
- Libs: -L${libdir} -lgdk_pixbuf-@GDK_PIXBUF_API_VERSION@
- Libs.private: @GDK_PIXBUF_EXTRA_LIBS@
- Cflags: -I${includedir}/gdk-pixbuf-@GDK_PIXBUF_API_VERSION@ @GDK_PIXBUF_EXTRA_CFLAGS@
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Fri, 12 Oct 2012 12:25:27 +0200
-Subject: [PATCH 3/3] allow static
-
-
-diff --git a/configure.ac b/configure.ac
-index 1111111..2222222 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -136,16 +136,16 @@ case $host in
-     ;;
- esac
+--- a/meson.build
++++ b/meson.build
+@@ -94,7 +94,7 @@ if cc.has_function('lrint', dependencies: mathlib_dep)
+   gdk_pixbuf_conf.set('HAVE_LRINT', 1)
+ endif
  
--if test "$os_win32" = "yes"; then
--  if test x$enable_static = xyes -o x$enable_static = x; then
--    AC_MSG_WARN([Disabling static library build, must build as DLL on Windows.])
--    enable_static=no
--  fi
--  if test x$enable_shared = xno; then
--    AC_MSG_WARN([Enabling shared library build, must build as DLL on Windows.])
--  fi
--  enable_shared=yes
--fi
-+dnl if test "$os_win32" = "yes"; then
-+dnl   if test x$enable_static = xyes -o x$enable_static = x; then
-+dnl     AC_MSG_WARN([Disabling static library build, must build as DLL on Windows.])
-+dnl     enable_static=no
-+dnl   fi
-+dnl   if test x$enable_shared = xno; then
-+dnl     AC_MSG_WARN([Enabling shared library build, must build as DLL on Windows.])
-+dnl   fi
-+dnl   enable_shared=yes
-+dnl fi
- 
- dnl Initialize libtool
- LT_PREREQ([2.2.6])
+-intl_dep = cc.find_library('intl', required: false)
++intl_dep = [ cc.find_library('intl', required: false), cc.find_library('iconv', required: false) ]
+ if cc.has_function('bind_textdomain_codeset', prefix: '#include <libintl.h>', dependencies: intl_dep)
+   gdk_pixbuf_conf.set('HAVE_BIND_TEXTDOMAIN_CODESET', 1)
+ endif

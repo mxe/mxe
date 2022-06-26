@@ -1,0 +1,72 @@
+diff -ur a/src/tbb/tbb_misc.cpp b/src/tbb/tbb_misc.cpp
+--- a/src/tbb/tbb_misc.cpp	2017-08-24 11:48:57.000000000 +0000
++++ b/src/tbb/tbb_misc.cpp	2022-02-17 03:56:06.814282402 +0000
+@@ -21,6 +21,10 @@
+ // Source file for miscellaneous entities that are infrequently referenced by
+ // an executing program.
+ 
++#if _WIN32||_WIN64
++#include "tbb/machine/windows_api.h"
++#endif
++
+ #include "tbb/tbb_stddef.h"
+ #include "tbb_assert_impl.h" // Out-of-line TBB assertion handling routines are instantiated here.
+ #include "tbb/tbb_exception.h"
+@@ -32,10 +36,6 @@
+ #include <cstdlib>
+ #include <stdexcept>
+ 
+-#if _WIN32||_WIN64
+-#include "tbb/machine/windows_api.h"
+-#endif
+-
+ #if !TBB_USE_EXCEPTIONS && _MSC_VER
+     // Suppress "C++ exception handler used, but unwind semantics are not enabled" warning in STL headers
+     #pragma warning (push)
+diff -ur a/src/tbbmalloc/proxy.cpp b/src/tbbmalloc/proxy.cpp
+--- a/src/tbbmalloc/proxy.cpp	2017-08-24 11:48:57.000000000 +0000
++++ b/src/tbbmalloc/proxy.cpp	2022-02-17 03:56:06.894280724 +0000
+@@ -439,12 +439,12 @@
+ #pragma warning( disable : 4290 )
+ #endif
+ 
+-void * operator_new(size_t sz) throw (std::bad_alloc) {
++void * operator_new(size_t sz) {
+     void *res = scalable_malloc(sz);
+     if (NULL == res) throw std::bad_alloc();
+     return res;
+ }
+-void* operator_new_arr(size_t sz) throw (std::bad_alloc) {
++void* operator_new_arr(size_t sz) {
+     void *res = scalable_malloc(sz);
+     if (NULL == res) throw std::bad_alloc();
+     return res;
+diff -ur a/src/tbbmalloc/tbbmalloc.cpp b/src/tbbmalloc/tbbmalloc.cpp
+--- a/src/tbbmalloc/tbbmalloc.cpp	2017-08-24 11:48:57.000000000 +0000
++++ b/src/tbbmalloc/tbbmalloc.cpp	2022-02-17 03:56:06.934279884 +0000
+@@ -18,6 +18,12 @@
+ 
+ */
+ 
++#if USE_PTHREAD
++#include <dlfcn.h> // dlopen
++#elif USE_WINTHREAD
++#include "tbb/machine/windows_api.h"
++#endif
++
+ #include "TypeDefinitions.h" // Customize.h and proxy.h get included
+ #include "tbbmalloc_internal_api.h"
+ 
+@@ -25,12 +31,6 @@
+ 
+ #undef UNICODE
+ 
+-#if USE_PTHREAD
+-#include <dlfcn.h> // dlopen
+-#elif USE_WINTHREAD
+-#include "tbb/machine/windows_api.h"
+-#endif
+-
+ namespace rml {
+ namespace internal {
+ 

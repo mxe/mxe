@@ -16,7 +16,7 @@ $(PKG)_DEPS     := flex
 REQUIREMENTS := $(filter-out $(PKG), $(REQUIREMENTS))
 
 # recursive variable so always use literal instead of $(PKG)
-MXE_REQS_PKGS   += $(BUILD)~bison
+BOOTSTRAP_PKGS += $(BUILD)~bison
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://ftp.gnu.org/gnu/bison/?C=M;O=D' | \

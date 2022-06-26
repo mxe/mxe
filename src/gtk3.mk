@@ -4,12 +4,12 @@ PKG             := gtk3
 $(PKG)_WEBSITE  := https://gtk.org/
 $(PKG)_DESCR    := GTK+
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.22.7
-$(PKG)_CHECKSUM := a3a27564bfb1679ebbc75c37cd2bcd6e727c8bdfbcd3984d29305bf9ee60d432
+$(PKG)_VERSION  := 3.24.32
+$(PKG)_CHECKSUM := a667e13f8f86ea44455b0443f4870bf23f53f6707c1df436eb2b516c62496bff
 $(PKG)_SUBDIR   := gtk+-$($(PKG)_VERSION)
 $(PKG)_FILE     := gtk+-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.gnome.org/sources/gtk+/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc atk cairo gdk-pixbuf gettext glib jasper jpeg libepoxy libpng pango tiff
+$(PKG)_DEPS     := cc meson-wrapper atk cairo gdk-pixbuf gettext glib jasper jpeg libepoxy libpng pango tiff
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://gitlab.gnome.org/GNOME/gtk+/tags' | \
@@ -20,22 +20,23 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
-        $(MXE_CONFIGURE_OPTS) \
-        --disable-glibtest \
-        --disable-cups \
-        --disable-test-print-backend \
-        --disable-gtk-doc \
-        --disable-man \
-        --with-included-immodules \
-        --enable-win32-backend
-    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(MXE_DISABLE_CRUFT) EXTRA_DIST=
-    $(MAKE) -C '$(BUILD_DIR)' -j 1 install $(MXE_DISABLE_CRUFT) EXTRA_DIST=
+    # workaround for gcc12 snapshot
+    $(if $(call gte, $(word 1,$(subst ., ,$(subst -, ,$(gcc_VERSION)))), 12), \
+    	$(SED) -i '/-Werror=array-bounds/d' '$(SOURCE_DIR)/meson.build')
+    # Meson configure, with additional options for GTK
+    '$(MXE_MESON_WRAPPER)' $(MXE_MESON_OPTS) \
+        -Dtests=false \
+        -Dexamples=false \
+        -Ddemos=false \
+        -Dinstalled_tests=false \
+        -Dbuiltin_immodules=yes \
+        -Dintrospection=false \
+        '$(BUILD_DIR)' '$(SOURCE_DIR)'
+    '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)'
+    DESTDIR="/" \
+        '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)' install
 
-    # cleanup to avoid gtk2/3 conflicts (EXTRA_DIST doesn't exclude it)
-    # and *.def files aren't really relevant for MXE
-    rm -f '$(PREFIX)/$(TARGET)/lib/gailutil.def'
-
+    # Just compile our MXE testfile
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-gtk3.exe' \

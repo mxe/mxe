@@ -5,17 +5,9 @@ $(PKG)_WEBSITE  := https://www.libsdl.org/
 $(PKG)_DESCR    := SDL2_mixer
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.0.4
-$(PKG)_CHECKSUM := b4cf5a382c061cd75081cf246c2aa2f9df8db04bdda8dcdc6b6cca55bede2419
-$(PKG)_SUBDIR   := SDL2_mixer-$($(PKG)_VERSION)
-$(PKG)_FILE     := SDL2_mixer-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://www.libsdl.org/projects/SDL_mixer/release/$($(PKG)_FILE)
+$(PKG)_CHECKSUM := 5605b6f230717acf6d09549671f7fe03f006700c61a61b86042888f81792e2b3
+$(PKG)_GH_CONF  := libsdl-org/SDL_mixer/releases/tag,release-,,
 $(PKG)_DEPS     := cc libmodplug mpg123 ogg opusfile sdl2 smpeg2 vorbis
-
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://hg.libsdl.org/SDL_mixer/tags' | \
-    $(SED) -n 's,.*release-\([0-9][^<]*\).*,\1,p' | \
-    head -1
-endef
 
 define $(PKG)_BUILD
     $(SED) -i 's,^\(Requires:.*\),\1 opusfile vorbisfile,' '$(1)/SDL2_mixer.pc.in'

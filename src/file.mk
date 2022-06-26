@@ -3,8 +3,8 @@
 PKG             := file
 $(PKG)_WEBSITE  := https://www.darwinsys.com/file/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.40
-$(PKG)_CHECKSUM := 167321f43c148a553f68a0ea7f579821ef3b11c27b8cbe158e4df897e4a5dd57
+$(PKG)_VERSION  := 5.42
+$(PKG)_CHECKSUM := c076fb4d029c74073f15c43361ef572cfb868407d347190ba834af3b1639b0e4
 $(PKG)_SUBDIR   := file-$($(PKG)_VERSION)
 $(PKG)_FILE     := file-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://astron.com/pub/file/$($(PKG)_FILE)

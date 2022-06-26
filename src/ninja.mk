@@ -4,16 +4,15 @@ PKG             := ninja
 $(PKG)_WEBSITE  := https://ninja-build.org
 $(PKG)_DESCR    := A small build system with a focus on speed
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.10.2
-$(PKG)_CHECKSUM := ce35865411f0490368a8fc383f29071de6690cbadc27704734978221f25e2bed
+$(PKG)_VERSION  := 1.11.0
+$(PKG)_CHECKSUM := 3c6ba2e66400fe3f1ae83deb4b235faf3137ec20bd5b08c29bfc368db143e4c6
 $(PKG)_GH_CONF  := ninja-build/ninja/tags,v
-$(PKG)_DEPS     := cmake
 $(PKG)_TARGETS  := $(BUILD)
 
-define $(PKG)_BUILD
-    cmake -S '$(SOURCE_DIR)' -B '$(BUILD_DIR)' \
+define $(PKG)_BUILD_$(BUILD)
+    '$(TARGET)-cmake' -S '$(SOURCE_DIR)' -B '$(BUILD_DIR)' \
         -DCMAKE_INSTALL_PREFIX='$(PREFIX)/$(TARGET)' \
         -DBUILD_TESTING=OFF
-    cmake --build '$(BUILD_DIR)' -j '$(JOBS)'
-    cmake --install '$(BUILD_DIR)'
+    '$(TARGET)-cmake' --build '$(BUILD_DIR)' -j '$(JOBS)'
+    '$(TARGET)-cmake' --install '$(BUILD_DIR)'
 endef

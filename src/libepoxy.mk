@@ -3,21 +3,18 @@
 PKG             := libepoxy
 $(PKG)_WEBSITE  := https://github.com/anholt/libepoxy
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.3.1
-$(PKG)_CHECKSUM := 6700ddedffb827b42c72cce1e0be6fba67b678b19bf256e1b5efd3ea38cc2bb4
+$(PKG)_VERSION  := 1.5.9
+$(PKG)_CHECKSUM := d168a19a6edfdd9977fef1308ccf516079856a4275cf876de688fb7927e365e4
 $(PKG)_GH_CONF  := anholt/libepoxy/releases/latest
-# prefix `v` removed from 1.4.1 onwards, remove URL_2 after update
-$(PKG)_URL_2    := https://github.com/anholt/libepoxy/archive/v$($(PKG)_VERSION).tar.gz
-$(PKG)_DEPS     := cc xorg-macros
+$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
+$(PKG)_URL      := https://github.com/anholt/libepoxy/releases/download/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_DEPS     := cc meson-wrapper xorg-macros
 
 define $(PKG)_BUILD
-    cd '$(SOURCE_DIR)' && autoreconf -fi -I'$(PREFIX)/$(TARGET)/share/aclocal'
-    cd '$(BUILD_DIR)' && \
-        CFLAGS='$(if $(BUILD_STATIC),-DEPOXY_STATIC,-DEPOXY_SHARED -DEPOXY_DLL)' \
-        $(SOURCE_DIR)/configure \
-        $(MXE_CONFIGURE_OPTS)
-    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(MXE_DISABLE_CRUFT)
-    $(MAKE) -C '$(BUILD_DIR)' -j 1 install $(MXE_DISABLE_CRUFT)
+     '$(MXE_MESON_WRAPPER)' $(MXE_MESON_OPTS) -Dtests=false -Ddocs=false '$(BUILD_DIR)' '$(SOURCE_DIR)'
+    '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)'
+    '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)' install
+
     $(SED) 's/Cflags:/Cflags: -DEPOXY_$(if $(BUILD_STATIC),STATIC,SHARED)/' \
         -i '$(PREFIX)/$(TARGET)/lib/pkgconfig/epoxy.pc'
 

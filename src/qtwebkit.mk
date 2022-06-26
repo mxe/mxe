@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 10cbdaba60aac79d27016aa05bae9ab3ec7b0aed4df163debfbf8fddd66ad
 $(PKG)_SUBDIR   := qtwebkit-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := qtwebkit-opensource-src-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.qt.io/snapshots/ci/qtwebkit/5.212/latest/src/submodules/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc libxml2 libxslt libwebp qtbase qtmultimedia qtquickcontrols \
+$(PKG)_DEPS     := cc icu4c libxml2 libxslt libwebp qtbase qtmultimedia qtquickcontrols \
                    qtsensors qtwebchannel sqlite
 
 define $(PKG)_BUILD_SHARED

@@ -5,6 +5,7 @@
 set(TGT test-${PKG}-cmake)
 
 enable_language(CXX)
+set(CMAKE_CXX_STANDARD 11)
 add_executable(${TGT} ${CMAKE_CURRENT_LIST_DIR}/${PKG}-test.cpp)
 
 find_package(Boost ${PKG_VERSION} EXACT COMPONENTS chrono context serialization system thread REQUIRED)

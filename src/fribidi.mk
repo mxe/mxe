@@ -4,17 +4,13 @@ PKG             := fribidi
 $(PKG)_WEBSITE  := https://fribidi.org/
 $(PKG)_DESCR    := FriBidi
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.0.8
-$(PKG)_CHECKSUM := 94c7b68d86ad2a9613b4dcffe7bbeb03523d63b5b37918bdf2e4ef34195c1e6c
-$(PKG)_GH_CONF  := fribidi/fribidi/releases,v,,,,.tar.bz2
-$(PKG)_DEPS     := cc
+$(PKG)_VERSION  := 1.0.11
+$(PKG)_CHECKSUM := 0e6d631c184e1012fb3ae86e80adabf26e46b4ffee2332e679eb308edd337398
+$(PKG)_GH_CONF  := fribidi/fribidi/releases,v,,,,.tar.gz
+$(PKG)_DEPS     := cc meson-wrapper
 
 define $(PKG)_BUILD
-    cd '$(1)' && ./configure \
-        $(MXE_CONFIGURE_OPTS) \
-        --disable-debug \
-        --disable-deprecated \
-        $(if $(BUILD_STATIC), \
-            --enable-static )
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= dist_man_MANS=
+    '$(MXE_MESON_WRAPPER)' $(MXE_MESON_OPTS) -Dtests=false -Ddocs=false '$(BUILD_DIR)' '$(SOURCE_DIR)'
+    '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)'
+    '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)' install
 endef

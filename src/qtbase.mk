@@ -4,12 +4,14 @@ PKG             := qtbase
 $(PKG)_WEBSITE  := https://www.qt.io/
 $(PKG)_DESCR    := Qt
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.15.2
-$(PKG)_CHECKSUM := 909fad2591ee367993a75d7e2ea50ad4db332f05e1c38dd7a5a274e156a4e0f8
+$(PKG)_VERSION  := 5.15.5
+$(PKG)_CHECKSUM := 0c42c799aa7c89e479a07c451bf5a301e291266ba789e81afc18f95049524edc
 $(PKG)_SUBDIR   := $(PKG)-everywhere-src-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-everywhere-src-$($(PKG)_VERSION).tar.xz
+$(PKG)_FILE     := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.qt.io/official_releases/qt/5.15/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc dbus fontconfig freetds freetype harfbuzz jpeg libmysqlclient libpng mesa openssl pcre2 postgresql sqlite zlib zstd $(BUILD)~zstd
+$(PKG)_DEPS     := cc dbus fontconfig freetds freetype harfbuzz jpeg libmysqlclient \
+                   libpng mesa openssl pcre2 postgresql sqlite zlib zstd $(BUILD)~zstd \
+                   $(if $(findstring shared,$(MXE_TARGETS)), icu4c)
 $(PKG)_DEPS_$(BUILD) :=
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 
@@ -22,10 +24,10 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    # ICU is buggy. See #653. TODO: reenable it some time in the future.
+    # ICU is buggy on static builds. See #653. TODO: reenable it some time in the future.
     cd '$(1)' && \
         OPENSSL_LIBS="`'$(TARGET)-pkg-config' --libs-only-l openssl`" \
-        PSQL_LIBS="-lpq -lsecur32 `'$(TARGET)-pkg-config' --libs-only-l openssl pthreads` -lws2_32" \
+        PSQL_LIBS="-lpq -lpgport -lpgcommon -lsecur32 `'$(TARGET)-pkg-config' --libs-only-l openssl pthreads` -lws2_32" \
         SYBASE_LIBS="-lsybdb `'$(TARGET)-pkg-config' --libs-only-l openssl` -liconv -lws2_32" \
         PKG_CONFIG="${TARGET}-pkg-config" \
         PKG_CONFIG_SYSROOT_DIR="/" \
@@ -43,7 +45,7 @@ define $(PKG)_BUILD
             -release \
             $(if $(BUILD_STATIC), -static,)$(if $(BUILD_SHARED), -shared,) \
             -prefix '$(PREFIX)/$(TARGET)/qt5' \
-            -no-icu \
+            $(if $(BUILD_STATIC), -no)-icu \
             -opengl dynamic \
             -no-glib \
             -accessibility \
@@ -67,7 +69,7 @@ define $(PKG)_BUILD
             -dbus-linked \
             -no-pch \
             -v \
-            $($(PKG)_CONFIGURE_OPTS)
+            $(PKG_CONFIGURE_OPTS)
 
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     rm -rf '$(PREFIX)/$(TARGET)/qt5'
