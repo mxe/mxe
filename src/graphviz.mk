@@ -53,7 +53,7 @@ $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://gitlab.com/api/v4/projects/4207231/packages/generic/graphviz-releases/5.0.0/graphviz-5.0.0.tar.gz
 $(PKG)_DEPS     := gcc mman-win32 cairo devil expat freetype fontconfig gd ghostscript libwebp pango poppler
 
-define $(PKG)_BUILD
+define $(PKG)_BUILD_SHARED
     cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS) \
 		--disable-swig \
