@@ -338,7 +338,7 @@
     "pangomm": {"version": "2.46.2", "website": "https://www.pango.org/", "description": "Pangomm"},
     "pcl": {"version": "1.9.1", "website": "http://www.pointclouds.org/", "description": "PCL (Point Cloud Library)"},
     "pcre": {"version": "8.45", "website": "https://www.pcre.org/", "description": "PCRE"},
-    "pcre2": {"version": "10.37", "website": "https://www.pcre.org/", "description": "PCRE2"},
+    "pcre2": {"version": "10.40", "website": "https://www.pcre.org/", "description": "PCRE2"},
     "pdcurses": {"version": "3.4", "website": "https://pdcurses.sourceforge.io/", "description": "PDcurses"},
     "pdflib_lite": {"version": "7.0.5p3", "website": "https://www.pdflib.com/download/free-software/pdflib-lite-7/", "description": "PDFlib Lite"},
     "pe-parse": {"version": "2a1aa79", "website": "https://github.com/trailofbits/pe-parse", "description": "Principled, lightweight C/C++ PE parser"},
