@@ -4,8 +4,8 @@ PKG             := glfw3
 $(PKG)_WEBSITE  := https://www.glfw.org/
 $(PKG)_DESCR    := GLFW 3.x
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.2.1
-$(PKG)_CHECKSUM := e10f0de1384d75e6fc210c53e91843f6110d6c4f3afbfb588130713c2f9d8fe8
+$(PKG)_VERSION  := 3.3.8
+$(PKG)_CHECKSUM := f30f42e05f11e5fc62483e513b0488d5bceeab7d9c5da0ffe2252ad81816c713
 $(PKG)_GH_CONF  := glfw/glfw/tags
 $(PKG)_DEPS     := cc
 
