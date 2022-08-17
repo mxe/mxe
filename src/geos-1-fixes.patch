@@ -3,26 +3,29 @@ This file is part of MXE. See LICENSE.md for licensing information.
 Contains ad hoc patches for cross building.
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Luke Potgieter <fried.roadkill+ght@gmail.com>
-Date: Mon, 7 Aug 2017 15:24:32 +0200
-Subject: [PATCH 1/1] Always link as static (based on the previous patch by
- Timothy Gu)
+From: brodieG <brodieG@users.noreply.github.com>
+Date: Mon, 20 Jun 2022 23:44:02 +0000
+Subject: [PATCH 1/1] Always link as static
 
+Based on the previous patch by Timothy Gu, updated by
+Luke Potgieter <fried.roadkill+ght@gmail.com>, then
+adjusted to apply on 3.9.1.
 
 diff --git a/tools/geos-config.in b/tools/geos-config.in
 index 1111111..2222222 100644
 --- a/tools/geos-config.in
 +++ b/tools/geos-config.in
-@@ -39,33 +39,22 @@ case $1 in
-      ;;
-     --cflags)
-     echo -I${prefix}/include 
--      ;;
+@@ -46,22 +46,11 @@ while test $# -gt 0; do
+     --version)
+       echo @VERSION@
+       ;;
 -    --libs)
 -      # TODO: make an alias for --clibs
 -      # see http://trac.osgeo.org/geos/ticket/497
--      echo -L${libdir} -lgeos
--      ;;
+-      echo -L${libdir} -lgeos-@VERSION_RELEASE@
++    --clibs|--static-clibs)
++      echo -L${libdir} -lgeos_c -lgeos -lm -lstdc++
+       ;;
 -    --clibs)
 -      echo -L${libdir} -lgeos_c
 -      ;;
@@ -34,28 +37,8 @@ index 1111111..2222222 100644
 -      ;;
 -    --static-cclibs)
 -      echo -L${libdir} -lgeos -lm
--      ;;
-+     ;;
-+    --clibs|--static-clibs)
-+    echo -L${libdir} -lgeos_c -lgeos -lstdc++ -lm
-+     ;;
 +    --libs|--cclibs|--static-cclibs)
-+    echo -L${libdir} -lgeos -lstdc++ -lm
-+     ;;
-     --ldflags)
--      echo -L${libdir}
--      ;;
-+    echo -L${libdir}
-+     ;;
-     --includes)
--      echo ${prefix}/include
--      ;;
-+    echo ${prefix}/include
-+     ;;
-     --jtsport)
-     echo @JTS_PORT@ 
--      ;;
-+     ;;
-     *)
-       usage 1 1>&2
++      echo -L${libdir} -lgeos -lm -lstdc++
        ;;
+     --cflags)
+       echo -I${prefix}/include
