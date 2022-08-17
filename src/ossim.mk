@@ -4,11 +4,12 @@ PKG             := ossim
 $(PKG)_WEBSITE  := https://trac.osgeo.org/ossim
 $(PKG)_DESCR    := OSSIM
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 43a071a
-$(PKG)_CHECKSUM := 1796994c8586e62ef799724969e3bef57178194fafe056db3de41dd6ee0dc931
+$(PKG)_VERSION  := 1af3774
+$(PKG)_CHECKSUM := 159bc40a90c79065cfe3f144f5afe2fe7944721d15dc96eefc4163d4629f9230
 # releases have unpredictable names and are based on master branch
 $(PKG)_GH_CONF  := ossimlabs/ossim/branches/master
-$(PKG)_DEPS     := cc freetype geos hdf5 jpeg libgeotiff libpng openthreads proj tiff zlib
+$(PKG)_DEPS     := cc freetype geos hdf5 jpeg libgeotiff libpng openthreads proj \
+  tiff zlib jsoncpp
 
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && '$(TARGET)-cmake' '$(SOURCE_DIR)' \

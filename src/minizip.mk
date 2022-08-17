@@ -6,7 +6,7 @@ $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2aa369c
 $(PKG)_CHECKSUM := 165afc71c29863f41c4d1cf9d3a2b1333b863e3d66e5e05b9e1e41c5af8b8a44
 $(PKG)_GH_CONF  := nmoinvaz/minizip/branches/master
-$(PKG)_DEPS     := cc bzip2 zlib
+$(PKG)_DEPS     := cc bzip2 zlib openssl
 
 define $(PKG)_BUILD
     # build and install the library

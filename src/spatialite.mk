@@ -4,12 +4,13 @@ PKG             := spatialite
 $(PKG)_WEBSITE  := https://www.gaia-gis.it/fossil/libspatialite/index
 $(PKG)_DESCR    := SpatiaLite
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.4.0-RC1
-$(PKG)_CHECKSUM := 80f7fff0a147044c5eb197e565f598ac1f137d86d0a548cbc8f52fb7ff7cac68
+$(PKG)_VERSION  := 5.0.1
+$(PKG)_CHECKSUM := eecbc94311c78012d059ebc0fae86ea5ef6eecb13303e6e82b3753c1b3409e98
 $(PKG)_SUBDIR   := libspatialite-$($(PKG)_VERSION)
 $(PKG)_FILE     := libspatialite-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://www.gaia-gis.it/gaia-sins/libspatialite-sources/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc dlfcn-win32 freexl geos libiconv libxml2 proj sqlite zlib
+$(PKG)_DEPS     := cc dlfcn-win32 freexl geos libiconv libxml2 proj sqlite zlib \
+                   minizip
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://www.gaia-gis.it/gaia-sins/libspatialite-sources/' | \
@@ -23,8 +24,12 @@ define $(PKG)_BUILD
     cd '$(SOURCE_DIR)' && autoreconf -fi -I ./m4
     cd '$(SOURCE_DIR)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
+        CPPFLAGS=-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H \
+        LIBS="`'$(TARGET)-pkg-config' --libs proj minizip`" \
         --enable-freexl=yes \
+        --disable-rttopo \
         --with-geosconfig='$(PREFIX)/$(TARGET)/bin/geos-config'
+    # also compiles demos
     $(MAKE) -C '$(SOURCE_DIR)' -j '$(JOBS)' $(if $(BUILD_SHARED), LDFLAGS='-no-undefined')
     $(MAKE) -C '$(SOURCE_DIR)' -j 1  $(INSTALL_STRIP_LIB)
 
