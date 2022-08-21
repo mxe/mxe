@@ -96,7 +96,7 @@ index 1111111..2222222 100644
  #ifdef HAVE_ATTRIBUTE_VISIBILITY
  # pragma GCC visibility push(hidden)
  #endif
-@@ -177,7 +185,7 @@ team_free (void *ptr)
+@@ -176,7 +184,7 @@ team_free (void *ptr)
  
  extern void gomp_vdebug (int, const char *, va_list);
  extern void gomp_debug (int, const char *, ...)
@@ -105,7 +105,7 @@ index 1111111..2222222 100644
  #define gomp_vdebug(KIND, FMT, VALIST) \
    do { \
      if (__builtin_expect (gomp_debug_var, 0)) \
-@@ -190,11 +198,11 @@ extern void gomp_debug (int, const char *, ...)
+@@ -189,11 +197,11 @@ extern void gomp_debug (int, const char *, ...)
    } while (0)
  extern void gomp_verror (const char *, va_list);
  extern void gomp_error (const char *, ...)
