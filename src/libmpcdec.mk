@@ -2,24 +2,26 @@
 
 PKG             := libmpcdec
 $(PKG)_WEBSITE  := https://www.musepack.net/
+$(PKG)_DESCR    := Living Audio Compression
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.2.6
-$(PKG)_CHECKSUM := 4bd54929a80850754f27b568d7891e1e3e1b8d2f208d371f27d1fda09e6f12a8
-$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := https://files.musepack.net/source/$(PKG)-$($(PKG)_VERSION).tar.bz2
+$(PKG)_VERSION  := 475
+$(PKG)_CHECKSUM := a4b1742f997f83e1056142d556a8c20845ba764b70365ff9ccf2e3f81c427b2b
+$(PKG)_SUBDIR   := musepack_src_r$($(PKG)_VERSION)
+$(PKG)_FILE     := musepack_src_r$($(PKG)_VERSION).tar.gz
+$(PKG)_URL      := https://files.musepack.net/source/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc
 
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://svn.musepack.net/libmpcdec/tags/' | \
-    $(SED) -n "s,.*>release-\([0-9]\+\.[0-9]\+\.[0-9]\+\).*,\1,p" | \
-    $(SORT) -Vr | \
-    head -1
-endef
-
 define $(PKG)_BUILD
-    cd '$(1)' && autoreconf -fi
-    cd '$(1)' && ./configure \
-        $(MXE_CONFIGURE_OPTS)
-    $(MAKE) -C '$(1)' -j 1 install
+    LDFLAGS='$(LDFLAGS) -Wl,--allow-multiple-definition' \
+    '$(TARGET)-cmake' -S '$(SOURCE_DIR)' -B '$(BUILD_DIR)' \
+        -DCMAKE_BUILD_TYPE='$(MXE_BUILD_TYPE)' \
+        -DCMAKE_INSTALL_PREFIX='$(PREFIX)/$(TARGET)' \
+        $(if $(BUILD_SHARED),-DSHARED=ON)
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
+    $(if $(BUILD_STATIC),$(INSTALL) -m644 '$(BUILD_DIR)/libmpcdec/libmpcdec_static.a' '$(PREFIX)/$(TARGET)/lib/')
+    $(if $(BUILD_SHARED),
+      $(INSTALL) -m644 '$(BUILD_DIR)/libmpcdec/libmpcdec.dll.a' '$(PREFIX)/$(TARGET)/lib/'
+      $(INSTALL) -m644 '$(BUILD_DIR)/libmpcdec/libmpcdec.dll' '$(PREFIX)/$(TARGET)/bin/'
+    )
 endef
