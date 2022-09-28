@@ -8,10 +8,10 @@ $(PKG)_CHECKSUM := 42035145e29983308d2828207bb4ef933ed0407bb587fb3a569738c6a57fd
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://gstreamer.freedesktop.org/src/$(PKG)/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc a52dec gst-plugins-base gstreamer lame libcdio libdvdread \
-                   opencore-amr twolame x264
+$(PKG)_DEPS     := cc a52dec gst-plugins-base gstreamer libcdio libdvdread \
+                   opencore-amr x264
 
-$(PKG)_UPDATE = $(subst gstreamer/refs,gst-plugins-ugly/refs,$(gstreamer_UPDATE))
+$(PKG)_UPDATE = $(gstreamer_UPDATE)
 
 define $(PKG)_BUILD
     '$(MXE_MESON_WRAPPER)' $(MXE_MESON_OPTS) \

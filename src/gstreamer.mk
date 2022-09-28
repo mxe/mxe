@@ -3,12 +3,12 @@
 PKG             := gstreamer
 $(PKG)_WEBSITE  := https://gstreamer.freedesktop.org/modules/gstreamer.html
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.20.1
-$(PKG)_CHECKSUM := de094a404a3ad8f4977829ea87edf695a4da0b5c8f613ebe54ab414bac89f031
+$(PKG)_VERSION  := 1.20.3
+$(PKG)_CHECKSUM := 607daf64bbbd5fb18af9d17e21c0d22c4d702fffe83b23cb22d1b1af2ca23a2a
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://gstreamer.freedesktop.org/src/$(PKG)/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc glib libxml2 pthreads
+$(PKG)_DEPS     := cc dlfcn-win32 glib pthreads
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://cgit.freedesktop.org/gstreamer/gstreamer/refs/tags' | \

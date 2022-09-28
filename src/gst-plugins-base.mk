@@ -3,14 +3,14 @@
 PKG             := gst-plugins-base
 $(PKG)_WEBSITE  := https://gstreamer.freedesktop.org/modules/gst-plugins-base.html
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.20.1
-$(PKG)_CHECKSUM := 96d8a6413ba9394fbec1217aeef63741a729d476a505a797c1d5337d8fa7c204
+$(PKG)_VERSION  := 1.20.3
+$(PKG)_CHECKSUM := 7e30b3dd81a70380ff7554f998471d6996ff76bbe6fc5447096f851e24473c9f
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://gstreamer.freedesktop.org/src/$(PKG)/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc glib gstreamer liboil libxml2 ogg opus pango theora vorbis
+$(PKG)_DEPS     := cc glib gstreamer ogg opus pango theora vorbis
 
-$(PKG)_UPDATE = $(subst gstreamer/refs,gst-plugins-base/refs,$(gstreamer_UPDATE))
+$(PKG)_UPDATE = $(gstreamer_UPDATE)
 
 define $(PKG)_BUILD
     '$(MXE_MESON_WRAPPER)' $(MXE_MESON_OPTS) \
