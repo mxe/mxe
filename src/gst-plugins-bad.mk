@@ -3,17 +3,17 @@
 PKG             := gst-plugins-bad
 $(PKG)_WEBSITE  := https://gstreamer.freedesktop.org/modules/gst-plugins-bad.html
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.20.1
-$(PKG)_CHECKSUM := 09d3c2cf5911f0bc7da6bf557a55251779243d3de216b6a26cc90c445b423848
+$(PKG)_VERSION  := 1.20.3
+$(PKG)_CHECKSUM := 7a11c13b55dd1d2386dd902219e41cbfcdda8e1e0aa3e738186c95074b35da4f
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://gstreamer.freedesktop.org/src/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc chromaprint faad2 fdk-aac gst-plugins-base gstreamer gtk3 \
                    libass libbs2b libdvdnav libdvdread libgcrypt libmms libmodplug librsvg \
-                   librtmp libsndfile libwebp mpg123 neon openal opencv openexr \
+                   librtmp libsndfile libxml2 libwebp neon openal opencv openexr \
                    openjpeg openssl vo-aacenc vo-amrwbenc
 
-$(PKG)_UPDATE = $(subst gstreamer/refs,gst-plugins-bad/refs,$(gstreamer_UPDATE))
+$(PKG)_UPDATE = $(gstreamer_UPDATE)
 
 define $(PKG)_BUILD
     # review meson_options.txt

@@ -3,15 +3,16 @@
 PKG             := gst-plugins-good
 $(PKG)_WEBSITE  := https://gstreamer.freedesktop.org/modules/gst-plugins-good.html
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.20.1
-$(PKG)_CHECKSUM := 3c66876f821d507bcdbebffb08b4f31a322727d6753f65a0f02c905ecb7084aa
+$(PKG)_VERSION  := 1.20.3
+$(PKG)_CHECKSUM := f8f3c206bf5cdabc00953920b47b3575af0ef15e9f871c0b6966f6d0aa5868b7
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://gstreamer.freedesktop.org/src/$(PKG)/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc cairo flac gdk-pixbuf glib gst-plugins-base gstreamer jpeg libcaca \
-                   liboil libpng libshout libsoup libvpx libxml2 speex taglib wavpack
+$(PKG)_DEPS     := cc cairo flac gdk-pixbuf glib gst-plugins-base gstreamer jpeg lame \
+                   libcaca libpng libshout libsoup libvpx mpg123 speex taglib twolame \
+                   wavpack
 
-$(PKG)_UPDATE = $(subst gstreamer/refs,gst-plugins-good/refs,$(gstreamer_UPDATE))
+$(PKG)_UPDATE = $(gstreamer_UPDATE)
 
 define $(PKG)_BUILD
     # The value for WAVE_FORMAT_DOLBY_AC3_SPDIF comes from vlc and mplayer:
