@@ -37,5 +37,6 @@ define $(PKG)_BUILD
     '$(TARGET)-g++' \
         -W -Wall -pedantic \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-coin.exe' \
+        -D$(if $(BUILD_STATIC),COIN_NOT_DLL,COIN_DLL) \
         `'$(TARGET)-pkg-config' Coin --cflags --libs`
 endef
