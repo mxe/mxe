@@ -1,0 +1,62 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Jonas Kvinge <jonas@jkvinge.net>
+Date: Thu, 17 Mar 2022 23:58:18 +0100
+Subject: [PATCH 1/1] Build fixes
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1111111..2222222 100755
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -15,19 +15,14 @@ endif(WIN32)
+ 
+ add_definitions(-DFAST_MATH -DCVD_FASTLOG)
+ 
++if(MSVC AND SHARED)
++  add_definitions(-DDLL_EXPORT)
++endif()
++
+ if(NOT MSVC)
+-  set(CMAKE_C_FLAGS "-O3 -Wall -fomit-frame-pointer -pipe")
++  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3 -Wall -fomit-frame-pointer -pipe")
+ endif(NOT MSVC)
+ 
+ add_subdirectory(libmpcdec)
+-add_subdirectory(libmpcpsy)
+ add_subdirectory(libmpcenc)
+-add_subdirectory(libwavformat)
+-add_subdirectory(mpcgain)
+-add_subdirectory(mpcdec)
+-add_subdirectory(mpcenc)
+-add_subdirectory(mpc2sv8)
+-add_subdirectory(mpccut)
+-add_subdirectory(mpcchap)
+-add_subdirectory(wavcmp)
+ add_subdirectory(include)
+diff --git a/mpcgain/CMakeLists.txt b/mpcgain/CMakeLists.txt
+index 1111111..2222222 100755
+--- a/mpcgain/CMakeLists.txt
++++ b/mpcgain/CMakeLists.txt
+@@ -1,12 +1,12 @@
+-FIND_PATH(REPLAY_GAIN_INCLUDE_DIR replaygain/gain_analysis.h
+-	/usr/include
+-	/usr/local/include
++if(NOT REPLAY_GAIN_INCLUDE_DIR)
++    FIND_PATH(REPLAY_GAIN_INCLUDE_DIR replaygain/gain_analysis.h
++	${CMAKE_INSTALL_PREFIX}/include
+ 	${libmpc_SOURCE_DIR}/../libreplaygain/include
+-)
++    )
++endif()
+ 
+ FIND_LIBRARY(REPLAY_GAIN_LIBRARY NAMES replaygain replaygain_static PATHS
+-	/usr/lib
+-	/usr/local/lib
++	${CMAKE_INSTALL_PREFIX}/lib
+ 	${libmpc_SOURCE_DIR}/../libreplaygain/bin/src/release
+ )
+ 
