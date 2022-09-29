@@ -29,11 +29,50 @@ index 1111111..2222222 100644
  
  
  set(WMF_LIBRARIES ${WMF_STRMIIDS_LIBRARY} ${WMF_AMSTRMID_LIBRARY} ${WMF_DMOGUIDS_LIBRARY} ${WMF_UUID_LIBRARY}
-diff --git a/src/multimedia/platform/windows/common/mfmetadata_p.h b/src/multimedia/platform/windows/common/mfmetadata_p.h
+diff --git a/src/multimedia/windows/qwindowsmediadevices.cpp b/src/multimedia/windows/qwindowsmediadevices.cpp
 index 1111111..2222222 100644
---- a/src/multimedia/platform/windows/common/mfmetadata_p.h
-+++ b/src/multimedia/platform/windows/common/mfmetadata_p.h
-@@ -52,7 +52,7 @@
+--- a/src/multimedia/windows/qwindowsmediadevices.cpp
++++ b/src/multimedia/windows/qwindowsmediadevices.cpp
+@@ -13,7 +13,7 @@
+ #include <mmddk.h>
+ #include <mfobjects.h>
+ #include <mfidl.h>
+-#include <Mferror.h>
++#include <mferror.h>
+ #include <mmdeviceapi.h>
+ #include <qwindowsmfdefs_p.h>
+ 
+diff --git a/src/multimedia/windows/qwindowsresampler.cpp b/src/multimedia/windows/qwindowsresampler.cpp
+index 1111111..2222222 100644
+--- a/src/multimedia/windows/qwindowsresampler.cpp
++++ b/src/multimedia/windows/qwindowsresampler.cpp
+@@ -5,7 +5,7 @@
+ #include <qwindowsaudioutils_p.h>
+ #include <qloggingcategory.h>
+ 
+-#include <Wmcodecdsp.h>
++#include <wmcodecdsp.h>
+ #include <mftransform.h>
+ #include <mfapi.h>
+ #include <mferror.h>
+diff --git a/src/plugins/multimedia/ffmpeg/qwindowscamera.cpp b/src/plugins/multimedia/ffmpeg/qwindowscamera.cpp
+index 1111111..2222222 100644
+--- a/src/plugins/multimedia/ffmpeg/qwindowscamera.cpp
++++ b/src/plugins/multimedia/ffmpeg/qwindowscamera.cpp
+@@ -10,7 +10,7 @@
+ 
+ #include <mfapi.h>
+ #include <mfidl.h>
+-#include <Mferror.h>
++#include <mferror.h>
+ #include <Mfreadwrite.h>
+ 
+ #include <system_error>
+diff --git a/src/plugins/multimedia/windows/common/mfmetadata_p.h b/src/plugins/multimedia/windows/common/mfmetadata_p.h
+index 1111111..2222222 100644
+--- a/src/plugins/multimedia/windows/common/mfmetadata_p.h
++++ b/src/plugins/multimedia/windows/common/mfmetadata_p.h
+@@ -16,7 +16,7 @@
  //
  
  #include <qmediametadata.h>
@@ -42,24 +81,11 @@ index 1111111..2222222 100644
  
  QT_USE_NAMESPACE
  
-diff --git a/src/multimedia/platform/windows/common/qwindowsresampler.cpp b/src/multimedia/platform/windows/common/qwindowsresampler.cpp
+diff --git a/src/plugins/multimedia/windows/decoder/mfaudiodecodercontrol.cpp b/src/plugins/multimedia/windows/decoder/mfaudiodecodercontrol.cpp
 index 1111111..2222222 100644
---- a/src/multimedia/platform/windows/common/qwindowsresampler.cpp
-+++ b/src/multimedia/platform/windows/common/qwindowsresampler.cpp
-@@ -41,7 +41,7 @@
- #include <private/qwindowsaudioutils_p.h>
- #include <qloggingcategory.h>
- 
--#include <Wmcodecdsp.h>
-+#include <wmcodecdsp.h>
- #include <mftransform.h>
- #include <mfapi.h>
- #include <mferror.h>
-diff --git a/src/multimedia/platform/windows/decoder/mfaudiodecodercontrol.cpp b/src/multimedia/platform/windows/decoder/mfaudiodecodercontrol.cpp
-index 1111111..2222222 100644
---- a/src/multimedia/platform/windows/decoder/mfaudiodecodercontrol.cpp
-+++ b/src/multimedia/platform/windows/decoder/mfaudiodecodercontrol.cpp
-@@ -40,7 +40,7 @@
+--- a/src/plugins/multimedia/windows/decoder/mfaudiodecodercontrol.cpp
++++ b/src/plugins/multimedia/windows/decoder/mfaudiodecodercontrol.cpp
+@@ -4,7 +4,7 @@
  #include <system_error>
  #include <mferror.h>
  #include <qglobal.h>
@@ -68,11 +94,11 @@ index 1111111..2222222 100644
  #include "mfaudiodecodercontrol_p.h"
  #include <private/qwindowsaudioutils_p.h>
  
-diff --git a/src/multimedia/platform/windows/mediacapture/qwindowsmediadevicereader_p.h b/src/multimedia/platform/windows/mediacapture/qwindowsmediadevicereader_p.h
+diff --git a/src/plugins/multimedia/windows/mediacapture/qwindowsmediadevicereader_p.h b/src/plugins/multimedia/windows/mediacapture/qwindowsmediadevicereader_p.h
 index 1111111..2222222 100644
---- a/src/multimedia/platform/windows/mediacapture/qwindowsmediadevicereader_p.h
-+++ b/src/multimedia/platform/windows/mediacapture/qwindowsmediadevicereader_p.h
-@@ -53,8 +53,8 @@
+--- a/src/plugins/multimedia/windows/mediacapture/qwindowsmediadevicereader_p.h
++++ b/src/plugins/multimedia/windows/mediacapture/qwindowsmediadevicereader_p.h
+@@ -17,8 +17,8 @@
  
  #include <mfapi.h>
  #include <mfidl.h>
@@ -83,37 +109,37 @@ index 1111111..2222222 100644
  
  #include <QtCore/qobject.h>
  #include <QtCore/qmutex.h>
-diff --git a/src/multimedia/platform/windows/mediacapture/qwindowsmediaencoder.cpp b/src/multimedia/platform/windows/mediacapture/qwindowsmediaencoder.cpp
+diff --git a/src/plugins/multimedia/windows/mediacapture/qwindowsmediaencoder.cpp b/src/plugins/multimedia/windows/mediacapture/qwindowsmediaencoder.cpp
 index 1111111..2222222 100644
---- a/src/multimedia/platform/windows/mediacapture/qwindowsmediaencoder.cpp
-+++ b/src/multimedia/platform/windows/mediacapture/qwindowsmediaencoder.cpp
-@@ -45,7 +45,7 @@
+--- a/src/plugins/multimedia/windows/mediacapture/qwindowsmediaencoder.cpp
++++ b/src/plugins/multimedia/windows/mediacapture/qwindowsmediaencoder.cpp
+@@ -8,7 +8,7 @@
  #include "mfmetadata_p.h"
  #include <QtCore/QUrl>
  #include <QtCore/QMimeType>
 -#include <Mferror.h>
 +#include <mferror.h>
  #include <shobjidl.h>
+ #include <private/qmediastoragelocation_p.h>
  #include <private/qmediarecorder_p.h>
- 
-diff --git a/src/multimedia/platform/windows/player/mfplayercontrol_p.h b/src/multimedia/platform/windows/player/mfplayercontrol_p.h
+diff --git a/src/plugins/multimedia/windows/player/mfplayercontrol_p.h b/src/plugins/multimedia/windows/player/mfplayercontrol_p.h
 index 1111111..2222222 100644
---- a/src/multimedia/platform/windows/player/mfplayercontrol_p.h
-+++ b/src/multimedia/platform/windows/player/mfplayercontrol_p.h
-@@ -51,7 +51,7 @@
+--- a/src/plugins/multimedia/windows/player/mfplayercontrol_p.h
++++ b/src/plugins/multimedia/windows/player/mfplayercontrol_p.h
+@@ -15,7 +15,7 @@
  // We mean it.
  //
  
 -#include "QUrl.h"
 +#include <QtCore/qurl.h>
- #include "qplatformmediaplayer_p.h"
+ #include "private/qplatformmediaplayer_p.h"
  
  #include <QtCore/qcoreevent.h>
-diff --git a/src/multimedia/platform/windows/player/mfplayersession.cpp b/src/multimedia/platform/windows/player/mfplayersession.cpp
+diff --git a/src/plugins/multimedia/windows/player/mfplayersession.cpp b/src/plugins/multimedia/windows/player/mfplayersession.cpp
 index 1111111..2222222 100644
---- a/src/multimedia/platform/windows/player/mfplayersession.cpp
-+++ b/src/multimedia/platform/windows/player/mfplayersession.cpp
-@@ -67,7 +67,7 @@
+--- a/src/plugins/multimedia/windows/player/mfplayersession.cpp
++++ b/src/plugins/multimedia/windows/player/mfplayersession.cpp
+@@ -32,7 +32,7 @@
  
  #include <mmdeviceapi.h>
  #include <propvarutil.h>
@@ -122,16 +148,11 @@ index 1111111..2222222 100644
  
  //#define DEBUG_MEDIAFOUNDATION
  
-@@ -2119,4 +2119,3 @@ QMediaMetaData MFPlayerSession::trackMetaData(QPlatformMediaPlayer::TrackType ty
- 
-     return m_trackInfo[type].metaData.at(trackNumber);
- }
--
-diff --git a/src/multimedia/platform/windows/player/mftvideo.cpp b/src/multimedia/platform/windows/player/mftvideo.cpp
+diff --git a/src/plugins/multimedia/windows/player/mftvideo.cpp b/src/plugins/multimedia/windows/player/mftvideo.cpp
 index 1111111..2222222 100644
---- a/src/multimedia/platform/windows/player/mftvideo.cpp
-+++ b/src/multimedia/platform/windows/player/mftvideo.cpp
-@@ -43,7 +43,7 @@
+--- a/src/plugins/multimedia/windows/player/mftvideo.cpp
++++ b/src/plugins/multimedia/windows/player/mftvideo.cpp
+@@ -7,7 +7,7 @@
  #include <mferror.h>
  #include <strmif.h>
  #include <uuids.h>
@@ -140,52 +161,21 @@ index 1111111..2222222 100644
  #include <d3d9.h>
  #include <qdebug.h>
  
-diff --git a/src/multimedia/platform/windows/player/mfvideorenderercontrol.cpp b/src/multimedia/platform/windows/player/mfvideorenderercontrol.cpp
+diff --git a/src/plugins/multimedia/windows/qwindowsvideodevices.cpp b/src/plugins/multimedia/windows/qwindowsvideodevices.cpp
 index 1111111..2222222 100644
---- a/src/multimedia/platform/windows/player/mfvideorenderercontrol.cpp
-+++ b/src/multimedia/platform/windows/player/mfvideorenderercontrol.cpp
-@@ -47,13 +47,13 @@
- #include <private/qwindowsmfdefs_p.h>
- #include <qvideosink.h>
- #include <qvideoframeformat.h>
--#include <qtcore/qtimer.h>
--#include <qtcore/qmutex.h>
--#include <qtcore/qcoreevent.h>
--#include <qtcore/qcoreapplication.h>
--#include <qtcore/qthread.h>
-+#include <QtCore/qtimer.h>
-+#include <QtCore/qmutex.h>
-+#include <QtCore/qcoreevent.h>
-+#include <QtCore/qcoreapplication.h>
-+#include <QtCore/qthread.h>
- #include "guiddef.h"
--#include <qtcore/qdebug.h>
-+#include <QtCore/qdebug.h>
- 
- //#define DEBUG_MEDIAFOUNDATION
- #define PAD_TO_DWORD(x)  (((x) + 3) & ~3)
-diff --git a/src/multimedia/platform/windows/qwindowsmediadevices.cpp b/src/multimedia/platform/windows/qwindowsmediadevices.cpp
-index 1111111..2222222 100644
---- a/src/multimedia/platform/windows/qwindowsmediadevices.cpp
-+++ b/src/multimedia/platform/windows/qwindowsmediadevices.cpp
-@@ -49,7 +49,7 @@
- 
- #include <private/mftvideo_p.h>
+--- a/src/plugins/multimedia/windows/qwindowsvideodevices.cpp
++++ b/src/plugins/multimedia/windows/qwindowsvideodevices.cpp
+@@ -8,11 +8,11 @@
+ #include <private/qwindowsmultimediautils_p.h>
+ #include <private/qwindowsiupointer_p.h>
  
 -#include <Dbt.h>
 +#include <dbt.h>
- #include <ks.h>
  
- #include <mmsystem.h>
-@@ -58,9 +58,9 @@
- #include <mfobjects.h>
- #include <mfidl.h>
+ #include <mfapi.h>
  #include <mfreadwrite.h>
 -#include <Mferror.h>
 +#include <mferror.h>
- #include <mmdeviceapi.h>
--#include <Functiondiscoverykeys_devpkey.h>
-+#include <functiondiscoverykeys_devpkey.h>
- #include <private/qwindowsaudioutils_p.h>
- #include <private/qwindowsmfdefs_p.h>
+ 
+ QT_BEGIN_NAMESPACE
  

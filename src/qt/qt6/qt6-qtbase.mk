@@ -5,11 +5,11 @@ PKG             := qt6-$(PKG_BASENAME)
 $(PKG)_WEBSITE  := https://www.qt.io/
 $(PKG)_DESCR    := Qt6
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 6.3.2
-$(PKG)_CHECKSUM := 7929ba4df870b6b30870bc0aed2525cfc606ed7091107b23cf7ed7e434caa9a6
+$(PKG)_VERSION  := 6.4.0
+$(PKG)_CHECKSUM := cb6475a0bd8567c49f7ffbb072a05516ee6671171bed55db75b22b94ead9b37d
 $(PKG)_SUBDIR   := $(PKG_BASENAME)-everywhere-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG_BASENAME)-everywhere-src-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := https://download.qt.io/official_releases/qt/6.3/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
+$(PKG)_URL      := https://download.qt.io/official_releases/qt/6.4/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 $(PKG)_DEPS     := cc freetype harfbuzz jpeg libpng mesa pcre2 sqlite zlib zstd $(BUILD)~$(PKG) \
                    $(if $(findstring shared,$(MXE_TARGETS)), icu4c)
