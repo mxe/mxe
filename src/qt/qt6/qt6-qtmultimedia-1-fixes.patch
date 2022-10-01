@@ -59,15 +59,17 @@ diff --git a/src/plugins/multimedia/ffmpeg/qwindowscamera.cpp b/src/plugins/mult
 index 1111111..2222222 100644
 --- a/src/plugins/multimedia/ffmpeg/qwindowscamera.cpp
 +++ b/src/plugins/multimedia/ffmpeg/qwindowscamera.cpp
-@@ -10,7 +10,7 @@
+@@ -10,8 +10,8 @@
  
  #include <mfapi.h>
  #include <mfidl.h>
 -#include <Mferror.h>
+-#include <Mfreadwrite.h>
 +#include <mferror.h>
- #include <Mfreadwrite.h>
++#include <mfreadwrite.h>
  
  #include <system_error>
+ 
 diff --git a/src/plugins/multimedia/windows/common/mfmetadata_p.h b/src/plugins/multimedia/windows/common/mfmetadata_p.h
 index 1111111..2222222 100644
 --- a/src/plugins/multimedia/windows/common/mfmetadata_p.h
