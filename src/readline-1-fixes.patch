@@ -1,0 +1,36 @@
+diff --git a/input.c b/input.c
+index 6f038d4..da4da45 100644
+--- a/input.c
++++ b/input.c
+@@ -151,7 +151,9 @@ int rl_timeout_remaining (unsigned int *, unsigned int *);
+ 
+ int _rl_timeout_init (void);
+ int _rl_timeout_sigalrm_handler (void);
++#if defined (RL_TIMEOUT_USE_SELECT)
+ int _rl_timeout_select (int, fd_set *, fd_set *, fd_set *, const struct timeval *, const sigset_t *);
++#endif
+ 
+ static void _rl_timeout_handle (void);
+ #if defined (RL_TIMEOUT_USE_SIGALRM)
+@@ -818,7 +820,7 @@ rl_getc (FILE *stream)
+       /* We know at this point that _rl_caught_signal == 0 */
+ 
+ #if defined (__MINGW32__)
+-      if (isatty (fd)
++      if (isatty (fd))
+ 	return (_getch ());	/* "There is no error return." */
+ #endif
+       result = 0;
+diff --git a/rlprivate.h b/rlprivate.h
+index d87d07a..cb9cf17 100644
+--- a/rlprivate.h
++++ b/rlprivate.h
+@@ -303,7 +303,7 @@ extern int _rl_pushed_input_available (void);
+ 
+ extern int _rl_timeout_init (void);
+ extern int _rl_timeout_handle_sigalrm (void);
+-#if defined (_POSIXSELECT_H_)
++#if defined (RL_TIMEOUT_USE_SELECT)
+ /* use as a sentinel for fd_set, struct timeval,  and sigset_t definitions */
+ extern int _rl_timeout_select (int, fd_set *, fd_set *, fd_set *, const struct timeval *, const sigset_t *);
+ #endif
