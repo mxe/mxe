@@ -1,0 +1,79 @@
+name: Build PR
+on: [pull_request]
+
+jobs:
+
+  get_packages:
+    name: Get build packages
+    runs-on: ubuntu-latest
+    outputs:
+      packages: ${{steps.get_packages.outputs.packages}}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Add safe git directory
+        run: git config --global --add safe.directory ${GITHUB_WORKSPACE}
+      - name: Create settings.mk
+        run: touch settings.mk && make clean || true
+      - name: Get build packages
+        id: get_packages
+        shell: bash
+        run: |
+          set -x
+          changed_files=$(git diff --name-only --diff-filter=ACMRT ${{github.event.pull_request.base.sha}} ${{github.sha}})
+          echo "Changed files: ${changed_files}"
+          changed_packages=$(echo "${changed_files}" | tr ' ' '\n' | grep -e '^src/[0-9a-zA-Z_-]*\.mk$' -e '^src/qt/qt6/[0-9a-zA-Z_-]*\.mk$' | sed 's/src\/\(.*\)\.mk$/\1/g' | tr '\n' ' ' | sed 's/ $/\n/g' || true)
+          echo "Changed packages: ${changed_packages}"
+          excluded_packages=("freeimage" "gdal" "gtkimageview" "gtkmm2" "guile" "itk" "libdnet" "libical" "liblastfm" "libomemo" "libtorrent-rasterbar" "luajit" "ocaml-cairo" "ocaml-camlimages" "ocaml-core" "ocaml-findlib" "ocaml-flexdll" "ocaml-lablgl" "ocaml-lablgtk2" "ocaml-native" "ocaml-xml-light" "openscenegraph" "osgearth" "ossim" "pe-parse" "pire" "plibc" "qt" "qt6-qtmultimedia" "qtifw" "upx" "vtk" "wget" "xapian-core" "xmlwrapp")
+          build_packages=()
+          for changed_package in ${changed_packages}; do
+            if [[ "${excluded_packages[*]}" =~ "${changed_package}" ]]; then
+              continue
+            fi
+            if [[ ! "${build_packages[*]}" =~ "${changed_package}" ]]; then
+              build_packages+=("${changed_package}")
+            fi
+            downstream_packages=$(make show-downstream-deps-${changed_package})
+            for downstream_package in ${downstream_packages}; do
+              if [[ "${excluded_packages[*]}" =~ "${downstream_package}" ]]; then
+                continue
+              fi
+              if [[ ! "${build_packages[*]}" =~ "${downstream_package}" ]]; then
+                build_packages+=("${downstream_package}")
+              fi
+            done
+          done
+          echo "Build packages: ${build_packages[@]}"
+          echo "::set-output name=packages::${build_packages[@]}"
+      - name: Show build packages
+        shell: bash
+        run: echo "Build packages ${{steps.get_packages.outputs.packages}}"
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    container: opensuse/tumbleweed
+    needs: get_packages
+    strategy:
+      matrix:
+       target: [ i686-w64-mingw32.static, x86_64-w64-mingw32.static, i686-w64-mingw32.shared, x86_64-w64-mingw32.shared ]
+    steps:
+      - name: Show build packages
+        shell: bash
+        run: echo "Build packages ${{needs.get_packages.outputs.packages}}"
+      - name: Update packages
+        run: zypper -n --gpg-auto-import-keys ref
+      - name: Upgrade packages
+        run: zypper -n --gpg-auto-import-keys dup -l -y
+      - name: Install openSUSE dependencies
+        run: zypper -n --gpg-auto-import-keys install glibc glibc-extra glibc-locale glibc-i18ndata glibc-32bit gcc gcc-c++ shadow which patch gperf wget curl git diffutils make cmake libtool pkgconf-pkg-config autoconf automake makeinfo intltool tar gzip bzip2 xz 7zip lzip zip unzip gtk-doc gettext-tools scons bison flex ruby orc linux-glibc-devel glibc-devel file-devel libopenssl-devel libffi-devel gdk-pixbuf-devel python3-base python3-Mako libzstd-devel pcre-devel pcre2-devel Mesa-libGL-devel
+      - name: Link python 3
+        run: ln -s /usr/bin/python3 /usr/bin/python
+      - uses: actions/checkout@v3
+      - name: Add safe git directory
+        run: git config --global --add safe.directory ${GITHUB_WORKSPACE}
+      - name: Build
+        shell: bash
+        run: make -j 4 ${{needs.get_packages.outputs.packages}} MXE_TARGETS="${{matrix.target}}" MXE_VERBOSE=1
