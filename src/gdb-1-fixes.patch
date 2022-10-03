@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Wed, 18 May 2022 12:59:35 +0200
-Subject: [PATCH 1/1] add missing prototype for strsignal
+Subject: [PATCH 1/2] add missing prototype for strsignal
 
 Borrowed from:
 https://www.mail-archive.com/cygwin@cygwin.com/msg169420.html
@@ -28,3 +28,34 @@ index 1111111..2222222 100644
  /* Instead of invoking (and waiting for) readline to read the command
     line and pass it back for processing, we use readline's alternate
     interface, via callback functions, so that the event loop can react
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Andreas Schwab <schwab@linux-m68k.org>
+Date: Sun, 20 Mar 2022 14:01:54 +0100
+Subject: [PATCH 2/2] Add support for readline 8.2
+
+In readline 8.2 the type of rl_completer_word_break_characters changed to
+include const.
+
+diff --git a/gdb/completer.c b/gdb/completer.c
+index 1111111..2222222 100644
+--- a/gdb/completer.c
++++ b/gdb/completer.c
+@@ -36,7 +36,7 @@
+    calling a hook instead so we eliminate the CLI dependency.  */
+ #include "gdbcmd.h"
+ 
+-/* Needed for rl_completer_word_break_characters() and for
++/* Needed for rl_completer_word_break_characters and for
+    rl_filename_completion_function.  */
+ #include "readline/readline.h"
+ 
+@@ -2011,7 +2011,7 @@ gdb_completion_word_break_characters_throw ()
+       rl_basic_quote_characters = NULL;
+     }
+ 
+-  return rl_completer_word_break_characters;
++  return (char *) rl_completer_word_break_characters;
+ }
+ 
+ char *
