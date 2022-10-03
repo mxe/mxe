@@ -2,6 +2,7 @@
 
 PKG             := gstreamer
 $(PKG)_WEBSITE  := https://gstreamer.freedesktop.org/modules/gstreamer.html
+$(PKG)_DESCR    := GStreamer multimedia framework
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.20.3
 $(PKG)_CHECKSUM := 607daf64bbbd5fb18af9d17e21c0d22c4d702fffe83b23cb22d1b1af2ca23a2a
