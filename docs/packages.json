@@ -219,7 +219,7 @@
     "libmms": {"version": "0.6.4", "website": "https://sourceforge.net/projects/libmms/", "description": "a library for downloading (streaming) media files using the mmst and mmsh protocols"},
     "libmng": {"version": "2.0.3", "website": "https://www.libmng.com/", "description": ""},
     "libmodplug": {"version": "0.8.8.4", "website": "https://modplug-xmms.sourceforge.io/", "description": ""},
-    "libmpcdec": {"version": "1.2.6", "website": "https://www.musepack.net/", "description": ""},
+    "libmpcdec": {"version": "475", "website": "https://www.musepack.net/", "description": "Living Audio Compression"},
     "libmpeg2": {"version": "0.5.1", "website": "https://libmpeg2.sourceforge.io/", "description": "libmpeg2 - a free MPEG-2 video stream decoder"},
     "libmysqlclient": {"version": "6.1.6", "website": "https://dev.mysql.com/downloads/connector/c/", "description": ""},
     "libnice": {"version": "0.1.16", "website": "https://libnice.freedesktop.org", "description": ""},
