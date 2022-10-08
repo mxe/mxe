@@ -12,7 +12,7 @@ diff --git a/src/mkheader.c b/src/mkheader.c
 index 1111111..2222222 100644
 --- a/src/mkheader.c
 +++ b/src/mkheader.c
-@@ -603,7 +603,7 @@ write_special (const char *fname, int lnr, const char *tag)
+@@ -610,7 +610,7 @@ write_special (const char *fname, int lnr, const char *tag)
      }
    else if (!strcmp (tag, "include:os-add"))
      {
