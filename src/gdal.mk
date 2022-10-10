@@ -20,6 +20,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    touch '$(1)/config.rpath'
     cd '$(1)' && autoreconf -fi -I ./m4
     # The option '--with-threads=no' means native win32 threading without pthread.
     # mysql uses threading from Vista onwards - '-D_WIN32_WINNT=0x0600'
