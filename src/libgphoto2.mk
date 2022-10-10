@@ -4,8 +4,8 @@ PKG             := libgphoto2
 $(PKG)_WEBSITE  := https://github.com/gphoto/libgphoto2
 $(PKG)_DESCR    := libgphoto2
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.5.28
-$(PKG)_CHECKSUM := 35846402a6d1806a4fb73d590d410d44fd2cd14c99d927837c16801fd7fcbac9
+$(PKG)_VERSION  := 2.5.30
+$(PKG)_CHECKSUM := 3e7eb9500fbf73ffaf4aa5eb65efde1998fb7ac702e689c274aacf52646f7ea4
 $(PKG)_GH_CONF  := gphoto/libgphoto2/releases, v
 $(PKG)_DEPS     := cc curl libltdl libxml2 libusb1 libexif
 
@@ -24,5 +24,5 @@ define $(PKG)_BUILD
 
     '$(TARGET)-gcc' \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
-        `'$(TARGET)-pkg-config' libgphoto2 --cflags --libs` -lltdl -ldl -lintl -liconv -ladvapi32
+        `'$(TARGET)-pkg-config' libgphoto2 --cflags --libs` -lltdl -ldl -lintl -liconv -ladvapi32 -lregex
 endef
