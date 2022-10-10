@@ -4,8 +4,8 @@ PKG             := hyperscan
 $(PKG)_WEBSITE  := https://01.org/hyperscan
 $(PKG)_DESCR    := Hyperscan
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.3.2
-$(PKG)_CHECKSUM := 6cd5820d6da51d6fe4ab12066d1efd9afecc1bc6fb7d6eca9c98f76fd391dbd5
+$(PKG)_VERSION  := 5.4.0
+$(PKG)_CHECKSUM := e51aba39af47e3901062852e5004d127fa7763b5dbbc16bcca4265243ffa106f
 $(PKG)_GH_CONF  := 01org/hyperscan/tags, v
 $(PKG)_DEPS     := cc boost $(BUILD)~ragel
 
