@@ -3,28 +3,110 @@ This file is part of MXE. See LICENSE.md for licensing information.
 Contains ad hoc patches for cross building.
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Boris Nagaev <bnagaev@gmail.com>
-Date: Thu, 25 Aug 2016 10:28:30 +0200
-Subject: [PATCH 1/4] update preprocessor conditions
+From: Jonas Kvinge <jonas@jkvinge.net>
+Date: Mon, 10 Oct 2022 23:06:29 +0200
+Subject: [PATCH 1/1] mingw build fixes
 
-Add macro NATIVE_WIN32 = Windows && !MinGW.
-Replace _WIN32 with NATIVE_WIN32 where it failed.
 
-diff --git a/cmake/config.h.in b/cmake/config.h.in
+diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 1111111..2222222 100644
---- a/cmake/config.h.in
-+++ b/cmake/config.h.in
-@@ -89,3 +89,4 @@
- /* define if this is a release build. */
- #cmakedefine RELEASE_BUILD
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -288,6 +288,11 @@ else()
+     endif ()
+ endif()
  
-+#define NATIVE_WIN32 ((defined(_WIN32) || defined(_WIN64)) && !defined(__MINGW__) && !defined(__MINGW32__))
++if (MINGW)
++    set(EXTRA_C_FLAGS "${EXTRA_C_FLAGS} -posix")
++    set(EXTRA_CXX_FLAGS "${EXTRA_CXX_FLAGS} -posix")
++endif()
++
+ CHECK_INCLUDE_FILES(unistd.h HAVE_UNISTD_H)
+ CHECK_INCLUDE_FILES(intrin.h HAVE_C_INTRIN_H)
+ CHECK_INCLUDE_FILE_CXX(intrin.h HAVE_CXX_INTRIN_H)
+@@ -344,7 +349,7 @@ CHECK_C_SOURCE_COMPILES("void *aa_test(void *x) { return __builtin_assume_aligne
+ CHECK_CXX_SOURCE_COMPILES("void *aa_test(void *x) { return __builtin_assume_aligned(x, 16);}\nint main(void) { return 0; }" HAVE_CXX_BUILTIN_ASSUME_ALIGNED)
+ CHECK_C_SOURCE_COMPILES("int main(void) { __builtin_constant_p(0); }" HAVE__BUILTIN_CONSTANT_P)
+ 
+-if (NOT WIN32)
++if (MINGW OR NOT WIN32)
+ set(C_FLAGS_TO_CHECK
+ # Variable length arrays are way bad, most especially at run time
+ "-Wvla"
+@@ -444,7 +449,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "FreeBSD")
+     set(FREEBSD true)
+ endif(CMAKE_SYSTEM_NAME MATCHES "FreeBSD")
+ 
+-if(NOT WIN32)
++if(MINGW OR NOT WIN32)
+ if(CMAKE_C_COMPILER_ID MATCHES "Intel")
+     SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -diag-error 10006 -diag-disable 68 -diag-disable 177 -diag-disable 186 -diag-disable 2304 -diag-disable 2305 -diag-disable 2338 -diag-disable 1418 -diag-disable 279 -diag-disable=remark")
+ endif()
+@@ -466,7 +471,7 @@ endif()
+ add_subdirectory(util)
+ add_subdirectory(doc/dev-reference)
+ 
+-if (NOT WIN32)
++if (MINGW OR NOT WIN32)
+ # PCRE check, we have a fixed requirement for PCRE to use Chimera
+ # and hscollider
+ set(PCRE_REQUIRED_MAJOR_VERSION 8)
+@@ -495,7 +500,7 @@ endif()
+ configure_file(${CMAKE_MODULE_PATH}/config.h.in ${PROJECT_BINARY_DIR}/config.h)
+ configure_file(src/hs_version.h.in ${PROJECT_BINARY_DIR}/hs_version.h)
+ 
+-if (NOT WIN32)
++if (MINGW OR NOT WIN32)
+     # expand out library names for pkgconfig static link info
+     foreach (LIB ${CMAKE_CXX_IMPLICIT_LINK_LIBRARIES})
+         # this is fragile, but protects us from toolchain specific files
+@@ -518,7 +523,7 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${EXTRA_C_FLAGS}")
+ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${EXTRA_CXX_FLAGS}")
+ endif()
+ 
+-if (WIN32)
++if (WIN32 AND NOT MINGW)
+ # PCRE check, we have a fixed requirement for PCRE to use Chimera
+ # and hscollider
+ set(PCRE_REQUIRED_MAJOR_VERSION 8)
+@@ -543,7 +548,7 @@ if (EXISTS ${CMAKE_SOURCE_DIR}/chimera/CMakeLists.txt AND BUILD_CHIMERA)
+ endif()
+ endif()
+ 
+-if(NOT WIN32)
++if(MINGW OR NOT WIN32)
+ set(RAGEL_C_FLAGS "-Wno-unused")
+ endif()
+ 
+diff --git a/chimera/CMakeLists.txt b/chimera/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/chimera/CMakeLists.txt
++++ b/chimera/CMakeLists.txt
+@@ -33,7 +33,7 @@ target_link_libraries(chimera hs pcre)
+ 
+ install(TARGETS chimera DESTINATION ${CMAKE_INSTALL_LIBDIR})
+ 
+-if (NOT WIN32)
++if (MINGW OR NOT WIN32)
+     # expand out library names for pkgconfig static link info
+     foreach (LIB ${CMAKE_CXX_IMPLICIT_LINK_LIBRARIES})
+         # this is fragile, but protects us from toolchain specific files
+diff --git a/libhs.pc.in b/libhs.pc.in
+index 1111111..2222222 100644
+--- a/libhs.pc.in
++++ b/libhs.pc.in
+@@ -8,4 +8,4 @@ Description: Intel(R) Hyperscan Library
+ Version: @HS_VERSION@
+ Libs: -L${libdir} -lhs
+ Libs.private: @PRIVATE_LIBS@
+-Cflags: -I${includedir}/hs
++Cflags: -I${includedir}/hs -posix
 diff --git a/src/database.c b/src/database.c
 index 1111111..2222222 100644
 --- a/src/database.c
 +++ b/src/database.c
-@@ -385,7 +385,7 @@ hs_database_t *dbCreate(const char *in_bytecode, size_t len, u64a platform) {
-     return db;
+@@ -353,7 +353,7 @@ hs_error_t dbIsValid(const hs_database_t *db) {
+     return HS_SUCCESS;
  }
  
 -#if defined(_WIN32)
@@ -32,37 +114,11 @@ index 1111111..2222222 100644
  #define SNPRINTF_COMPAT _snprintf
  #else
  #define SNPRINTF_COMPAT snprintf
-diff --git a/src/nfa/limex_shuffle.h b/src/nfa/limex_shuffle.h
-index 1111111..2222222 100644
---- a/src/nfa/limex_shuffle.h
-+++ b/src/nfa/limex_shuffle.h
-@@ -41,7 +41,7 @@
- #include "util/bitutils.h"
- #include "util/simd_utils.h"
- 
--#if defined(__BMI2__) || (defined(_WIN32) && defined(__AVX2__))
-+#if defined(__BMI2__) || (NATIVE_WIN32 && defined(__AVX2__))
- #define HAVE_PEXT
- #endif
- 
-diff --git a/src/nfa/mcclellan_common_impl.h b/src/nfa/mcclellan_common_impl.h
-index 1111111..2222222 100644
---- a/src/nfa/mcclellan_common_impl.h
-+++ b/src/nfa/mcclellan_common_impl.h
-@@ -26,7 +26,7 @@
-  * POSSIBILITY OF SUCH DAMAGE.
-  */
- 
--#if defined(__INTEL_COMPILER) || defined(__clang__) || defined(_WIN32) || defined(__GNUC__) && (__GNUC__ < 4)
-+#if defined(__INTEL_COMPILER) || defined(__clang__) || NATIVE_WIN32 || defined(__GNUC__) && (__GNUC__ < 4)
- #define really_flatten
- #else
- #define really_flatten __attribute__ ((flatten))
 diff --git a/src/nfa/nfa_internal.h b/src/nfa/nfa_internal.h
 index 1111111..2222222 100644
 --- a/src/nfa/nfa_internal.h
 +++ b/src/nfa/nfa_internal.h
-@@ -195,7 +195,7 @@ int isMultiTopType(u8 t) {
+@@ -234,7 +234,7 @@ int isMultiTopType(u8 t) {
  
  /** Macros used in place of unimplemented NFA API functions for a given
   * engine. */
@@ -84,7 +140,7 @@ index 1111111..2222222 100644
  #define ALIGN_ATTR(x) __declspec(align(x))
  #else
  #define ALIGN_ATTR(x) __attribute__((aligned((x))))
-@@ -78,7 +78,7 @@ typedef u32 ReportID;
+@@ -83,7 +83,7 @@ typedef u32 ReportID;
  
  /* Shorthand for attribute to mark a function as part of our public API.
   * Functions without this attribute will be hidden. */
@@ -93,7 +149,7 @@ index 1111111..2222222 100644
  #define HS_PUBLIC_API     __attribute__((visibility("default")))
  #else
  // TODO: dllexport defines for windows
-@@ -88,14 +88,14 @@ typedef u32 ReportID;
+@@ -93,14 +93,14 @@ typedef u32 ReportID;
  #define ARRAY_LENGTH(a) (sizeof(a)/sizeof((a)[0]))
  
  /** \brief Shorthand for the attribute to shut gcc about unused parameters */
@@ -110,7 +166,7 @@ index 1111111..2222222 100644
  #if defined(HS_OPTIMIZE)
  #define really_inline inline __attribute__ ((always_inline, unused))
  #else
-@@ -125,7 +125,7 @@ typedef u32 ReportID;
+@@ -130,7 +130,7 @@ typedef u32 ReportID;
  
  
  // We use C99-style "restrict".
@@ -119,7 +175,7 @@ index 1111111..2222222 100644
  #ifdef __cplusplus
  #define restrict
  #else
-@@ -181,7 +181,7 @@ typedef u32 ReportID;
+@@ -186,7 +186,7 @@ typedef u32 ReportID;
  #define LIMIT_TO_AT_MOST(a, b) (*(a) = MIN(*(a),(b)))
  #define ENSURE_AT_LEAST(a, b) (*(a) = MAX(*(a),(b)))
  
@@ -132,16 +188,7 @@ diff --git a/src/util/bitutils.h b/src/util/bitutils.h
 index 1111111..2222222 100644
 --- a/src/util/bitutils.h
 +++ b/src/util/bitutils.h
-@@ -63,7 +63,7 @@
- #endif
- 
- // MSVC has a different form of inline asm
--#ifdef _WIN32
-+#if NATIVE_WIN32
- #define NO_ASM
- #endif
- 
-@@ -74,7 +74,7 @@
+@@ -46,7 +46,7 @@
  static really_inline
  u32 clz32(u32 x) {
      assert(x); // behaviour not defined for x == 0
@@ -150,7 +197,7 @@ index 1111111..2222222 100644
      unsigned long r;
      _BitScanReverse(&r, x);
      return 31 - r;
-@@ -86,11 +86,11 @@ u32 clz32(u32 x) {
+@@ -58,11 +58,11 @@ u32 clz32(u32 x) {
  static really_inline
  u32 clz64(u64a x) {
      assert(x); // behaviour not defined for x == 0
@@ -164,7 +211,7 @@ index 1111111..2222222 100644
      unsigned long x1 = (u32)x;
      unsigned long x2 = (u32)(x >> 32);
      unsigned long r;
-@@ -109,7 +109,7 @@ u32 clz64(u64a x) {
+@@ -81,7 +81,7 @@ u32 clz64(u64a x) {
  static really_inline
  u32 ctz32(u32 x) {
      assert(x); // behaviour not defined for x == 0
@@ -173,7 +220,7 @@ index 1111111..2222222 100644
      unsigned long r;
      _BitScanForward(&r, x);
      return r;
-@@ -121,11 +121,11 @@ u32 ctz32(u32 x) {
+@@ -93,11 +93,11 @@ u32 ctz32(u32 x) {
  static really_inline
  u32 ctz64(u64a x) {
      assert(x); // behaviour not defined for x == 0
@@ -187,29 +234,29 @@ index 1111111..2222222 100644
      unsigned long r;
      if (_BitScanForward(&r, (u32)x)) {
          return (u32)r;
-diff --git a/src/util/cpuid_flags.c b/src/util/cpuid_flags.c
+diff --git a/src/util/cpuid_inline.h b/src/util/cpuid_inline.h
 index 1111111..2222222 100644
---- a/src/util/cpuid_flags.c
-+++ b/src/util/cpuid_flags.c
-@@ -31,7 +31,7 @@
- #include "hs_compile.h" // for HS_MODE_ flags
- #include "hs_internal.h"
+--- a/src/util/cpuid_inline.h
++++ b/src/util/cpuid_inline.h
+@@ -32,7 +32,7 @@
+ #include "ue2common.h"
+ #include "cpuid_flags.h"
  
--#ifndef _WIN32
-+#if !NATIVE_WIN32
+-#if !defined(_WIN32) && !defined(CPUID_H_)
++#if !NATIVE_WIN32 && !defined(CPUID_H_)
  #include <cpuid.h>
- #endif
- 
-@@ -60,7 +60,7 @@
- static __inline
+ /* system header doesn't have a header guard */
+ #define CPUID_H_
+@@ -46,7 +46,7 @@ extern "C"
+ static inline
  void cpuid(unsigned int op, unsigned int leaf, unsigned int *eax,
             unsigned int *ebx, unsigned int *ecx, unsigned int *edx) {
 -#ifndef _WIN32
 +#if !NATIVE_WIN32
      __cpuid_count(op, leaf, *eax, *ebx, *ecx, *edx);
  #else
-     unsigned int a[4];
-@@ -74,7 +74,7 @@ void cpuid(unsigned int op, unsigned int leaf, unsigned int *eax,
+     int a[4];
+@@ -95,7 +95,7 @@ void cpuid(unsigned int op, unsigned int leaf, unsigned int *eax,
  
  static inline
  u64a xgetbv(u32 op) {
@@ -231,19 +278,6 @@ index 1111111..2222222 100644
  // VC++ 2013 onwards has make_unique in the STL
  #define USE_STD
  #include <memory>
-diff --git a/src/util/popcount.h b/src/util/popcount.h
-index 1111111..2222222 100644
---- a/src/util/popcount.h
-+++ b/src/util/popcount.h
-@@ -38,7 +38,7 @@
- // We have a native popcount where the compiler has defined __POPCNT__.
- #if defined(__POPCNT__)
- #define HAVE_POPCOUNT_INSTR
--#elif defined(_WIN32) && defined(__AVX__) // TODO: fix win preproc
-+#elif NATIVE_WIN32 && defined(__AVX__) // TODO: fix win preproc
- #define HAVE_POPCOUNT_INSTR
- #endif
- 
 diff --git a/src/util/simd_utils.h b/src/util/simd_utils.h
 index 1111111..2222222 100644
 --- a/src/util/simd_utils.h
@@ -279,12 +313,73 @@ index 1111111..2222222 100644
  #pragma pack(pop)
  #endif // win32
  
+diff --git a/tools/hsbench/CMakeLists.txt b/tools/hsbench/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/tools/hsbench/CMakeLists.txt
++++ b/tools/hsbench/CMakeLists.txt
+@@ -58,7 +58,7 @@ if (BUILD_CHIMERA)
+     )
+     add_executable(hsbench ${hsbench_SOURCES})
+     include_directories(${PCRE_INCLUDE_DIRS})
+-    if(NOT WIN32)
++    if(MINGW OR NOT WIN32)
+         target_link_libraries(hsbench hs chimera ${PCRE_LDFLAGS} databaseutil
+             expressionutil ${SQLITE3_LDFLAGS} ${CMAKE_THREAD_LIBS_INIT})
+     else()
+diff --git a/tools/hscheck/CMakeLists.txt b/tools/hscheck/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/tools/hscheck/CMakeLists.txt
++++ b/tools/hscheck/CMakeLists.txt
+@@ -10,7 +10,7 @@ if (BUILD_CHIMERA)
+     include_directories(${PCRE_INCLUDE_DIRS})
+     add_definitions(-DHS_HYBRID)
+     add_executable(hscheck ${hscheck_SOURCES})
+-    if(NOT WIN32)
++    if(MINGW OR NOT WIN32)
+         target_link_libraries(hscheck hs chimera ${PCRE_LDFLAGS} expressionutil pthread)
+     else()
+         target_link_libraries(hscheck hs chimera pcre expressionutil)
+@@ -21,7 +21,7 @@ else()
+     else()
+         add_executable(hscheck ${hscheck_SOURCES})
+     endif()
+-    if(NOT WIN32)
++    if(MINGW OR NOT WIN32)
+         target_link_libraries(hscheck hs expressionutil pthread)
+     else()
+         target_link_libraries(hscheck hs expressionutil)
+diff --git a/tools/hscollider/CMakeLists.txt b/tools/hscollider/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/tools/hscollider/CMakeLists.txt
++++ b/tools/hscollider/CMakeLists.txt
+@@ -65,7 +65,7 @@ set_source_files_properties(${hscollider_SOURCES} PROPERTIES
+ add_executable(hscollider ${hscollider_SOURCES})
+ add_dependencies(hscollider ragel_ColliderCorporaParser)
+ 
+-if(NOT WIN32)
++if(MINGW OR NOT WIN32)
+     if (BUILD_CHIMERA)
+         target_link_libraries(hscollider hs chimera ${PCRE_LDFLAGS} databaseutil
+             expressionutil corpusomatic crosscompileutil pthread
+diff --git a/unit/CMakeLists.txt b/unit/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/unit/CMakeLists.txt
++++ b/unit/CMakeLists.txt
+@@ -38,7 +38,7 @@ endif()
+ 
+ add_definitions(-DGTEST_HAS_PTHREAD=0 -DSRCDIR=${PROJECT_SOURCE_DIR})
+ 
+-if (WIN32)
++if (WIN32 AND NOT MINGW)
+     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4309 /wd4018")
+ endif()
+ 
 diff --git a/unit/hyperscan/test_util.h b/unit/hyperscan/test_util.h
 index 1111111..2222222 100644
 --- a/unit/hyperscan/test_util.h
 +++ b/unit/hyperscan/test_util.h
 @@ -37,7 +37,7 @@
- #include "hs.h"
+ #include <vector>
  
  #ifndef UNUSED
 -#if defined(_WIN32) || defined(_WIN64)
@@ -296,16 +391,16 @@ diff --git a/util/expressions.cpp b/util/expressions.cpp
 index 1111111..2222222 100644
 --- a/util/expressions.cpp
 +++ b/util/expressions.cpp
-@@ -37,7 +37,7 @@
- #include <boost/algorithm/string/trim.hpp>
+@@ -40,7 +40,7 @@
+ 
  #include <sys/types.h>
  #include <sys/stat.h>
 -#if !defined(_WIN32)
 +#if !NATIVE_WIN32
  #include <dirent.h>
+ #include <fcntl.h>
  #include <unistd.h>
- #else
-@@ -96,7 +96,7 @@ void processLine(string &line, unsigned lineNum,
+@@ -98,7 +98,7 @@ void processLine(string &line, unsigned lineNum,
      }
  }
  
@@ -314,7 +409,7 @@ index 1111111..2222222 100644
  #define stat _stat
  #define S_ISDIR(st_m) (_S_IFDIR & (st_m))
  #define S_ISREG(st_m) (_S_IFREG & (st_m))
-@@ -141,7 +141,7 @@ bool isIgnorable(const std::string &f) {
+@@ -143,7 +143,7 @@ bool isIgnorable(const std::string &f) {
      return false;
  }
  
@@ -323,122 +418,3 @@ index 1111111..2222222 100644
  void loadExpressions(const string &inPath, ExpressionMap &exprMap) {
      // Is our input path a file or a directory?
      struct stat st;
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Boris Nagaev <bnagaev@gmail.com>
-Date: Wed, 18 May 2016 07:38:29 +0200
-Subject: [PATCH 2/4] cmake: replace WIN32 with WIN32 AND NOT MINGW
-
-
-diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 1111111..2222222 100644
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -125,7 +125,7 @@ option(BUILD_SHARED_LIBS "Build shared libs instead of static" OFF)
- option(BUILD_STATIC_AND_SHARED "Build shared libs as well as static" OFF)
- 
- if (BUILD_STATIC_AND_SHARED OR BUILD_SHARED_LIBS)
--    if (WIN32)
-+    if (WIN32 AND NOT MINGW)
-         message(FATAL_ERROR "Windows DLLs currently not supported")
-     else()
-         message(STATUS "Building shared libraries")
-@@ -274,7 +274,7 @@ include (${CMAKE_MODULE_PATH}/arch.cmake)
- CHECK_C_SOURCE_COMPILES("void *aa_test(void *x) { return __builtin_assume_aligned(x, 16);}\nint main(void) { return 0; }" HAVE_CC_BUILTIN_ASSUME_ALIGNED)
- CHECK_CXX_SOURCE_COMPILES("void *aa_test(void *x) { return __builtin_assume_aligned(x, 16);}\nint main(void) { return 0; }" HAVE_CXX_BUILTIN_ASSUME_ALIGNED)
- 
--if (NOT WIN32)
-+if (MINGW OR NOT WIN32)
- set(C_FLAGS_TO_CHECK
- # Variable length arrays are way bad, most especially at run time
- "-Wvla"
-@@ -366,7 +366,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "FreeBSD")
-     set(FREEBSD true)
- endif(CMAKE_SYSTEM_NAME MATCHES "FreeBSD")
- 
--if(NOT WIN32)
-+if(MINGW OR NOT WIN32)
- if(CMAKE_C_COMPILER_ID MATCHES "Intel")
-     SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -diag-error 10006 -diag-disable 177 -diag-disable 2304 -diag-disable 2305 -diag-disable 2338 -diag-disable 1418 -diag-disable=remark")
- endif()
-@@ -386,7 +386,7 @@ endif()
- configure_file(${CMAKE_MODULE_PATH}/config.h.in ${PROJECT_BINARY_DIR}/config.h)
- configure_file(src/hs_version.h.in ${PROJECT_BINARY_DIR}/hs_version.h)
- 
--if (NOT WIN32)
-+if (MINGW OR NOT WIN32)
-     # expand out library names for pkgconfig static link info
-     foreach (LIB ${CMAKE_CXX_IMPLICIT_LINK_LIBRARIES})
-         # this is fragile, but protects us from toolchain specific files
-@@ -405,7 +405,7 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${EXTRA_C_FLAGS}")
- set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${EXTRA_CXX_FLAGS}")
- 
- 
--if(NOT WIN32)
-+if(MINGW OR NOT WIN32)
- set(RAGEL_C_FLAGS "-Wno-unused")
- endif()
- 
-@@ -1058,6 +1058,6 @@ install(TARGETS hs_shared
-     LIBRARY DESTINATION lib)
- endif()
- 
--if(NOT WIN32)
-+if(MINGW OR NOT WIN32)
-     add_subdirectory(examples)
- endif()
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Boris Nagaev <bnagaev@gmail.com>
-Date: Wed, 18 May 2016 07:55:44 +0200
-Subject: [PATCH 3/4] add compile flag "-posix" to fix printf %llu
-
-See https://lists.nongnu.org/archive/html/mingw-cross-env-list/2013-04/msg00024.html
-The similar problem occurred in examples/simplegrep.c
-
-diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 1111111..2222222 100644
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -244,6 +244,11 @@ else()
- 
- endif()
- 
-+if (MINGW)
-+    set(EXTRA_C_FLAGS "${EXTRA_C_FLAGS} -posix")
-+    set(EXTRA_CXX_FLAGS "${EXTRA_CXX_FLAGS} -posix")
-+endif()
-+
- CHECK_INCLUDE_FILES(unistd.h HAVE_UNISTD_H)
- CHECK_INCLUDE_FILES(intrin.h HAVE_C_INTRIN_H)
- CHECK_INCLUDE_FILE_CXX(intrin.h HAVE_CXX_INTRIN_H)
-diff --git a/libhs.pc.in b/libhs.pc.in
-index 1111111..2222222 100644
---- a/libhs.pc.in
-+++ b/libhs.pc.in
-@@ -8,4 +8,4 @@ Description: Intel(R) Hyperscan Library
- Version: @HS_VERSION@
- Libs: -L${libdir} -lhs
- Libs.private: @PRIVATE_LIBS@
--Cflags: -I${includedir}/hs
-+Cflags: -I${includedir}/hs -posix
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Thu, 28 May 2020 17:25:43 +0200
-Subject: [PATCH 4/4] fix gcc version check
-
-
-diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 1111111..2222222 100644
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -183,7 +183,7 @@ else()
-                      ARGS ${CMAKE_CXX_COMPILER_ARG1} --version
-                      OUTPUT_VARIABLE _GXX_OUTPUT)
-         # is the following too fragile?
--        string(REGEX REPLACE ".* ([0-9]\\.[0-9](\\.[0-9])?)( |\n).*" "\\1"
-+        string(REGEX REPLACE ".* ([0-9]+\\.[0-9](\\.[0-9])?)( |\n).*" "\\1"
-                GNUCXX_VERSION "${_GXX_OUTPUT}")
-         message(STATUS "g++ version ${GNUCXX_VERSION}")
-         if (GNUCXX_VERSION VERSION_LESS ${GNUCXX_MINVER})
