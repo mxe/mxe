@@ -26,7 +26,7 @@ define $(PKG)_BUILD
         --disable-man \
         --without-tools \
         --without-imagemagick
-    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' LDFLAGS='-no-undefined'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 endef
 
