@@ -4,20 +4,11 @@ PKG             := opencv
 $(PKG)_WEBSITE  := https://opencv.org/
 $(PKG)_DESCR    := OpenCV
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.3.0
-$(PKG)_CHECKSUM := 3546c3837f88177c898e4172942da7a3ca6c4e8e98a33d0cbccb2b499167c5ba
-$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := opencv-$($(PKG)_VERSION).zip
-$(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)library/$(PKG)-unix/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_URL_2    := https://distfiles.macports.org/opencv/$($(PKG)_FILE)
+$(PKG)_VERSION  := 4.6.0
+$(PKG)_CHECKSUM := 1ec1cba65f9f20fe5a41fda1586e01c70ea0c9a6d7b67c9e13edf0cfe2239277
+$(PKG)_GH_CONF  := opencv/opencv/releases
 $(PKG)_DEPS     := cc eigen ffmpeg jasper jpeg libpng libwebp \
                    openblas openexr protobuf tiff xz zlib
-
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://sourceforge.net/projects/opencvlibrary/files/opencv-unix/' | \
-    $(SED) -n 's,.*/projects/.*/\([0-9][^"]*\)/".*,\1,p' | \
-    head -1
-endef
 
 # -DCMAKE_CXX_STANDARD=98 required for non-posix gcc7 build
 
@@ -30,6 +21,7 @@ define $(PKG)_BUILD
       -DWITH_GTK=OFF \
       -DWITH_VIDEOINPUT=ON \
       -DWITH_XINE=OFF \
+      -DWITH_LAPACK=OFF \
       -DBUILD_opencv_apps=OFF \
       -DBUILD_DOCS=OFF \
       -DBUILD_EXAMPLES=OFF \
@@ -48,25 +40,16 @@ define $(PKG)_BUILD
       -DBUILD_PNG=OFF \
       -DBUILD_OPENEXR=OFF \
       -DCMAKE_VERBOSE=ON \
-      -DCMAKE_CXX_STANDARD=11 \
-      -DCMAKE_CXX_FLAGS="-Wno-deprecated-copy -Wno-class-memaccess"
+      -DOPENCV_GENERATE_PKGCONFIG=ON
 
     # install
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install VERBOSE=1
 
-    # fixup and install pkg-config file
-    # openexr isn't available on x86_64-w64-mingw32
-    # opencv builds it's own libIlmImf.a
-    $(if $(findstring x86_64-w64-mingw32,$(TARGET)),\
-        $(SED) -i 's/OpenEXR//' '$(BUILD_DIR)/unix-install/opencv.pc')
-
-    $(SED) -i 's,share/OpenCV/3rdparty/,,g' '$(BUILD_DIR)/unix-install/opencv.pc'
-
-    $(INSTALL) -m755 '$(BUILD_DIR)/unix-install/opencv.pc' '$(PREFIX)/$(TARGET)/lib/pkgconfig'
+    $(INSTALL) -m755 '$(BUILD_DIR)/unix-install/opencv4.pc' '$(PREFIX)/$(TARGET)/lib/pkgconfig'
 
     '$(TARGET)-g++' \
-        -W -Wall -Werror -ansi \
+        -W -Wall -Werror -ansi -std=c++11 \
         '$(SOURCE_DIR)/samples/cpp/fback.cpp' -o '$(PREFIX)/$(TARGET)/bin/test-opencv.exe' \
-        `'$(TARGET)-pkg-config' opencv --cflags --libs`
+        `'$(TARGET)-pkg-config' opencv4 libavcodec libavformat libswscale --cflags --libs` -lwebp
 endef

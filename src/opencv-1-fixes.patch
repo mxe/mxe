@@ -3,31 +3,24 @@ This file is part of MXE. See LICENSE.md for licensing information.
 Contains ad hoc patches for cross building.
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Gregorio Litenstein <g.litenstein@gmail.com>
-Date: Thu, 31 Aug 2017 18:27:53 -0300
-Subject: [PATCH 1/6] patch-1 for opencv-3.3.0
+From: Jonas Kvinge <jonas@jkvinge.net>
+Date: Tue, 11 Oct 2022 01:26:11 +0200
+Subject: [PATCH 1/1] MinGW build fixes
 
 
-diff --git a/CMakeLists.txt b/CMakeLists.txt
+diff --git a/cmake/OpenCVCompilerOptions.cmake b/cmake/OpenCVCompilerOptions.cmake
 index 1111111..2222222 100644
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -36,7 +36,6 @@ if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-   if(NOT CMAKE_TOOLCHAIN_FILE)
-     # it _must_ go before project(OpenCV) in order to work
-     if(WIN32)
--      set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/install" CACHE PATH "Installation Directory")
-     else()
-       set(CMAKE_INSTALL_PREFIX "/usr/local" CACHE PATH "Installation Directory")
-     endif()
-@@ -44,7 +43,6 @@ if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-     #Android: set output folder to ${CMAKE_BINARY_DIR}
-     set( LIBRARY_OUTPUT_PATH_ROOT ${CMAKE_BINARY_DIR} CACHE PATH "root for library output, set this to change where android libs are compiled to" )
-     # any crosscompiling
--    set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/install" CACHE PATH "Installation Directory")
-   endif(NOT CMAKE_TOOLCHAIN_FILE)
- endif()
- 
+--- a/cmake/OpenCVCompilerOptions.cmake
++++ b/cmake/OpenCVCompilerOptions.cmake
+@@ -126,8 +126,6 @@ if(CV_GCC OR CV_CLANG)
+   add_extra_compiler_option(-Wformat)
+   add_extra_compiler_option(-Wformat-security -Wformat)
+   add_extra_compiler_option(-Wmissing-declarations)
+-  add_extra_compiler_option(-Wmissing-prototypes)
+-  add_extra_compiler_option(-Wstrict-prototypes)
+   add_extra_compiler_option(-Wundef)
+   add_extra_compiler_option(-Winit-self)
+   add_extra_compiler_option(-Wpointer-arith)
 diff --git a/cmake/OpenCVFindLibsGrfmt.cmake b/cmake/OpenCVFindLibsGrfmt.cmake
 index 1111111..2222222 100644
 --- a/cmake/OpenCVFindLibsGrfmt.cmake
@@ -44,175 +37,23 @@ index 1111111..2222222 100644
  # --- zlib (required) ---
  if(BUILD_ZLIB)
    ocv_clear_vars(ZLIB_FOUND)
-@@ -26,6 +31,11 @@ if(NOT ZLIB_FOUND)
-   ocv_parse_header2(ZLIB "${${ZLIB_LIBRARY}_SOURCE_DIR}/zlib.h" ZLIB_VERSION)
- endif()
- 
-+# --- lcms (required by apps, examples, perf, tests) ---
-+if(BUILD_opencv_apps OR BUILD_EXAMPLES OR BUILD_PERF_TESTS OR BUILD_TESTS)
-+  include(cmake/OpenCVFindLCMS.cmake)
-+endif()
-+
- # --- libtiff (optional, should be searched after zlib) ---
- if(WITH_TIFF)
-   if(BUILD_TIFF)
 diff --git a/cmake/OpenCVFindLibsVideo.cmake b/cmake/OpenCVFindLibsVideo.cmake
 index 1111111..2222222 100644
 --- a/cmake/OpenCVFindLibsVideo.cmake
 +++ b/cmake/OpenCVFindLibsVideo.cmake
-@@ -272,15 +272,15 @@ endif(WITH_MSMF)
- 
+@@ -1,6 +1,6 @@
  # --- Extra HighGUI and VideoIO libs on Windows ---
  if(WIN32)
 -  list(APPEND HIGHGUI_LIBRARIES comctl32 gdi32 ole32 setupapi ws2_32)
 +  list(APPEND HIGHGUI_LIBRARIES -lcomctl32 -lcomdlg32 -lgdi32 -lole32 -lsetupapi -lws2_32 -lvfw32 -lstrmiids -loleaut32 -luuid)
-   if(HAVE_VFW)
-     list(APPEND VIDEOIO_LIBRARIES vfw32)
-   endif()
-   if(MINGW64)
--    list(APPEND VIDEOIO_LIBRARIES avifil32 avicap32 winmm msvfw32)
--    list(REMOVE_ITEM VIDEOIO_LIBRARIES vfw32)
-+    list(APPEND VIDEOIO_LIBRARIES -lavifil32 -lavicap32 -lwinmm -lmsvfw32)
-+    list(REMOVE_ITEM VIDEOIO_LIBRARIES -lvfw32)
-   elseif(MINGW)
--    list(APPEND VIDEOIO_LIBRARIES winmm)
-+    list(APPEND VIDEOIO_LIBRARIES -lwinmm)
-   endif()
  endif(WIN32)
  
-diff --git a/cmake/templates/opencv-XXX.pc.in b/cmake/templates/opencv-XXX.pc.in
-index 1111111..2222222 100644
---- a/cmake/templates/opencv-XXX.pc.in
-+++ b/cmake/templates/opencv-XXX.pc.in
-@@ -9,6 +9,7 @@ includedir_new=@includedir@
- Name: OpenCV
- Description: Open Source Computer Vision Library
- Version: @OPENCV_VERSION_PLAIN@
-+Requires: OpenEXR libtiff-4
- Libs: @OPENCV_PC_LIBS@
--Libs.private: @OPENCV_PC_LIBS_PRIVATE@
-+Libs.private: @OPENCV_PC_LIBS_PRIVATE@ -luuid -loleaut32
- Cflags: -I${includedir_old} -I${includedir_new}
-diff --git a/modules/core/src/lapack.cpp b/modules/core/src/lapack.cpp
-index 1111111..2222222 100644
---- a/modules/core/src/lapack.cpp
-+++ b/modules/core/src/lapack.cpp
-@@ -608,7 +608,7 @@ void hal::SVD32f(float* At, size_t astep, float* W, float* U, size_t ustep, floa
- void hal::SVD64f(double* At, size_t astep, double* W, double* U, size_t ustep, double* Vt, size_t vstep, int m, int n, int n1)
- {
-     CALL_HAL(SVD64f, cv_hal_SVD64f, At, astep, W, U, ustep, Vt, vstep, m, n, decodeSVDParameters(U, Vt, m, n, n1))
--    JacobiSVDImpl_(At, astep, W, Vt, vstep, m, n, !Vt ? 0 : n1 < 0 ? n : n1, DBL_MIN, DBL_EPSILON*10);
-+    JacobiSVDImpl_(At, astep, W, Vt, vstep, m, n, !Vt ? 0 : n1 < 0 ? n : n1, DBL_MIN, DBL_EPSILON*10L);
- }
- 
- /* y[0:m,0:n] += diag(a[0:1,0:m]) * x[0:m,0:n] */
-diff --git a/modules/core/src/precomp.hpp b/modules/core/src/precomp.hpp
-index 1111111..2222222 100644
---- a/modules/core/src/precomp.hpp
-+++ b/modules/core/src/precomp.hpp
-@@ -60,7 +60,7 @@
- 
- #include <assert.h>
- #include <ctype.h>
--#include <float.h>
-+#include <cfloat>
- #include <limits.h>
- #include <math.h>
- #include <stdarg.h>
-diff --git a/modules/videoio/CMakeLists.txt b/modules/videoio/CMakeLists.txt
-index 1111111..2222222 100644
---- a/modules/videoio/CMakeLists.txt
-+++ b/modules/videoio/CMakeLists.txt
-@@ -231,6 +231,10 @@ if(WIN32)
-   include_directories(AFTER SYSTEM "${OpenCV_SOURCE_DIR}/3rdparty/include/ffmpeg_") # for tests
- endif()
- 
-+if(WIN32)
-+  add_definitions(-DSTRSAFE_NO_DEPRECATE)
-+endif()
-+
- if(UNIX)
-   #these variables are set by CHECK_MODULE macro
-   foreach(P ${VIDEOIO_INCLUDE_DIRS})
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Gregorio Litenstein <g.litenstein@gmail.com>
-Date: Thu, 31 Aug 2017 18:32:39 -0300
-Subject: [PATCH 2/6] patch 2 for opencv-3.3.0
-
-
-diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 1111111..2222222 100644
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -358,14 +358,7 @@ else()
-   ocv_update(OPENCV_DOC_INSTALL_PATH share/OpenCV/doc)
- endif()
- 
--if(WIN32 AND CMAKE_HOST_SYSTEM_NAME MATCHES Windows)
--  if(DEFINED OpenCV_RUNTIME AND DEFINED OpenCV_ARCH)
--    ocv_update(OpenCV_INSTALL_BINARIES_PREFIX "${OpenCV_ARCH}/${OpenCV_RUNTIME}/")
--  else()
--    message(STATUS "Can't detect runtime and/or arch")
--    ocv_update(OpenCV_INSTALL_BINARIES_PREFIX "")
--  endif()
--elseif(ANDROID)
-+if(ANDROID)
-   ocv_update(OpenCV_INSTALL_BINARIES_PREFIX "sdk/native/")
- else()
-   ocv_update(OpenCV_INSTALL_BINARIES_PREFIX "")
-@@ -413,12 +406,8 @@ else()
-   ocv_update(3P_LIBRARY_OUTPUT_PATH      "${OpenCV_BINARY_DIR}/3rdparty/lib${LIB_SUFFIX}")
- 
-   if(WIN32 AND CMAKE_HOST_SYSTEM_NAME MATCHES Windows)
--    if(OpenCV_STATIC)
--      ocv_update(OPENCV_LIB_INSTALL_PATH   "${OpenCV_INSTALL_BINARIES_PREFIX}staticlib${LIB_SUFFIX}")
--    else()
--      ocv_update(OPENCV_LIB_INSTALL_PATH   "${OpenCV_INSTALL_BINARIES_PREFIX}lib${LIB_SUFFIX}")
--    endif()
--    ocv_update(OPENCV_3P_LIB_INSTALL_PATH  "${OpenCV_INSTALL_BINARIES_PREFIX}staticlib${LIB_SUFFIX}")
-+	ocv_update(OPENCV_LIB_INSTALL_PATH   "${OpenCV_INSTALL_BINARIES_PREFIX}lib${LIB_SUFFIX}")
-+	ocv_update(OPENCV_3P_LIB_INSTALL_PATH  "${OpenCV_INSTALL_BINARIES_PREFIX}lib${LIB_SUFFIX}")
-     ocv_update(OPENCV_SAMPLES_SRC_INSTALL_PATH    samples/native)
-     ocv_update(OPENCV_JAR_INSTALL_PATH java)
-     ocv_update(OPENCV_OTHER_INSTALL_PATH   etc)
-@@ -462,15 +451,9 @@ if(INSTALL_TO_MANGLED_PATHS)
- endif()
- 
- 
--if(WIN32)
--  # Postfix of DLLs:
--  set(OPENCV_DLLVERSION "${OPENCV_VERSION_MAJOR}${OPENCV_VERSION_MINOR}${OPENCV_VERSION_PATCH}")
--  set(OPENCV_DEBUG_POSTFIX d)
--else()
--  # Postfix of so's:
--  set(OPENCV_DLLVERSION "")
--  set(OPENCV_DEBUG_POSTFIX "")
--endif()
-+# Postfix of so's and DLLs:
-+set(OPENCV_DLLVERSION "")
-+set(OPENCV_DEBUG_POSTFIX "")
- 
- if(DEFINED CMAKE_DEBUG_POSTFIX)
-   set(OPENCV_DEBUG_POSTFIX "${CMAKE_DEBUG_POSTFIX}")
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Gregorio Litenstein <g.litenstein@gmail.com>
-Date: Thu, 31 Aug 2017 18:35:23 -0300
-Subject: [PATCH 3/6] patch-3 for opencv-3.3.0
-
-Originally From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Boris Nagaev <bnagaev@gmail.com>
-Date: Sun, 20 Dec 2015 18:14:56 +0300
-Subject: [PATCH] fix CMake error if a directory contains ++
-
-See https://github.com/mxe/mxe/issues/1091
-
+ if(WITH_VA)
 diff --git a/cmake/OpenCVModule.cmake b/cmake/OpenCVModule.cmake
 index 1111111..2222222 100644
 --- a/cmake/OpenCVModule.cmake
 +++ b/cmake/OpenCVModule.cmake
-@@ -491,12 +491,16 @@ function(__ocv_resolve_dependencies)
+@@ -602,12 +602,16 @@ function(__ocv_resolve_dependencies)
    # process private deps
    foreach(m ${OPENCV_MODULES_BUILD})
      foreach(d ${OPENCV_MODULE_${m}_PRIVATE_REQ_DEPS})
@@ -231,114 +72,42 @@ index 1111111..2222222 100644
          if(HAVE_${d} OR TARGET ${d})
            list(APPEND deps_${m} ${d})
          endif()
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Florian Jung <flo@windfis.ch>
-Date: Wed, 29 Jul 2020 18:51:55 +0200
-Subject: [PATCH 4/6] Fix build of grfmt_jpeg2000.cpp
-
-libjasper has recently changed `jas_matrix_get` from a macro to an inline function
-(389951d071 in https://github.com/jasper-software/jasper), causing the build to fail.
-
-See: https://github.com/opencv/opencv/pull/17983
-
-diff --git a/modules/imgcodecs/src/grfmt_jpeg2000.cpp b/modules/imgcodecs/src/grfmt_jpeg2000.cpp
+diff --git a/modules/core/src/lapack.cpp b/modules/core/src/lapack.cpp
 index 1111111..2222222 100644
---- a/modules/imgcodecs/src/grfmt_jpeg2000.cpp
-+++ b/modules/imgcodecs/src/grfmt_jpeg2000.cpp
-@@ -305,7 +305,7 @@ bool  Jpeg2KDecoder::readComponent8u( uchar *data, void *_buffer,
+--- a/modules/core/src/lapack.cpp
++++ b/modules/core/src/lapack.cpp
+@@ -628,7 +628,7 @@ void hal::SVD32f(float* At, size_t astep, float* W, float* U, size_t ustep, floa
+ void hal::SVD64f(double* At, size_t astep, double* W, double* U, size_t ustep, double* Vt, size_t vstep, int m, int n, int n1)
+ {
+     CALL_HAL(SVD64f, cv_hal_SVD64f, At, astep, W, U, ustep, Vt, vstep, m, n, decodeSVDParameters(U, Vt, m, n, n1))
+-    JacobiSVDImpl_(At, astep, W, Vt, vstep, m, n, !Vt ? 0 : n1 < 0 ? n : n1, DBL_MIN, DBL_EPSILON*10);
++    JacobiSVDImpl_(At, astep, W, Vt, vstep, m, n, !Vt ? 0 : n1 < 0 ? n : n1, DBL_MIN, DBL_EPSILON*10L);
+ }
  
-     for( y = 0; y < yend - ystart; )
-     {
--        jas_seqent_t* pix_row = &jas_matrix_get( buffer, y / ystep, 0 );
-+        jas_seqent_t* pix_row = jas_matrix_getref( buffer, y / ystep, 0 );
-         uchar* dst = data + (y - yoffset) * step - xoffset;
- 
-         if( xstep == 1 )
-@@ -369,7 +369,7 @@ bool  Jpeg2KDecoder::readComponent16u( unsigned short *data, void *_buffer,
- 
-     for( y = 0; y < yend - ystart; )
-     {
--        jas_seqent_t* pix_row = &jas_matrix_get( buffer, y / ystep, 0 );
-+        jas_seqent_t* pix_row = jas_matrix_getref( buffer, y / ystep, 0 );
-         ushort* dst = data + (y - yoffset) * step - xoffset;
- 
-         if( xstep == 1 )
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Mon, 4 Apr 2022 01:24:04 +0200
-Subject: [PATCH 5/6] remove invalid CXXFLAGS
-
-cc1plus: warning: command-line option '-Wmissing-prototypes' is valid for C/ObjC but not for C++
-cc1plus: warning: command-line option '-Wstrict-prototypes' is valid for C/ObjC but not for C++
-
-diff --git a/3rdparty/protobuf/CMakeLists.txt b/3rdparty/protobuf/CMakeLists.txt
+ /* y[0:m,0:n] += diag(a[0:1,0:m]) * x[0:m,0:n] */
+diff --git a/modules/core/src/precomp.hpp b/modules/core/src/precomp.hpp
 index 1111111..2222222 100644
---- a/3rdparty/protobuf/CMakeLists.txt
-+++ b/3rdparty/protobuf/CMakeLists.txt
-@@ -16,7 +16,7 @@ if(MSVC)
-                                        /wd4702 /wd4456 /wd4457 /wd4065 /wd4310 /wd4661 /wd4506
-   )
- else()
--  ocv_warnings_disable(CMAKE_CXX_FLAGS -Wno-deprecated -Wmissing-prototypes -Wmissing-declarations -Wshadow
-+  ocv_warnings_disable(CMAKE_CXX_FLAGS -Wno-deprecated -Wmissing-declarations -Wshadow
-                                        -Wunused-parameter -Wunused-local-typedefs -Wsign-compare -Wsign-promo
-                                        -Wundef -Wtautological-undefined-compare -Wignored-qualifiers -Wextra
-                                        -Wunused-function -Wunused-const-variable -Wshorten-64-to-32
-diff --git a/cmake/OpenCVCompilerOptions.cmake b/cmake/OpenCVCompilerOptions.cmake
-index 1111111..2222222 100644
---- a/cmake/OpenCVCompilerOptions.cmake
-+++ b/cmake/OpenCVCompilerOptions.cmake
-@@ -120,8 +120,6 @@ if(CMAKE_COMPILER_IS_GNUCXX)
-   add_extra_compiler_option(-Wformat)
-   add_extra_compiler_option(-Werror=format-security -Wformat)
-   add_extra_compiler_option(-Wmissing-declarations)
--  add_extra_compiler_option(-Wmissing-prototypes)
--  add_extra_compiler_option(-Wstrict-prototypes)
-   add_extra_compiler_option(-Wundef)
-   add_extra_compiler_option(-Winit-self)
-   add_extra_compiler_option(-Wpointer-arith)
+--- a/modules/core/src/precomp.hpp
++++ b/modules/core/src/precomp.hpp
+@@ -63,7 +63,7 @@
+ #endif
+ 
+ #include <ctype.h>
+-#include <float.h>
++#include <cfloat>
+ #include <limits.h>
+ #include <math.h>
+ #include <stdarg.h>
 diff --git a/modules/dnn/CMakeLists.txt b/modules/dnn/CMakeLists.txt
 index 1111111..2222222 100644
 --- a/modules/dnn/CMakeLists.txt
 +++ b/modules/dnn/CMakeLists.txt
-@@ -17,7 +17,7 @@ ocv_add_dispatched_file("layers/layers_common" AVX AVX2)
- 
- ocv_add_module(dnn opencv_core opencv_imgproc WRAP python matlab java)
- ocv_warnings_disable(CMAKE_CXX_FLAGS -Wno-shadow -Wno-parentheses -Wmaybe-uninitialized -Wsign-promo
--                                     -Wmissing-declarations -Wmissing-prototypes
-+                                     -Wmissing-declarations
- )
- ocv_warnings_disable(CMAKE_CXX_FLAGS /wd4701 /wd4100)
- 
-@@ -28,7 +28,7 @@ if(MSVC)
-                                        /wd4702 /wd4456 /wd4457 /wd4065 /wd4310 /wd4661 /wd4506
-   )
+@@ -67,7 +67,7 @@ if(MSVC)
+     ocv_warnings_disable(CMAKE_CXX_FLAGS /wd4592)  # symbol will be dynamically initialized (implementation limitation)
+   endif()
  else()
 -  ocv_warnings_disable(CMAKE_CXX_FLAGS -Wno-deprecated -Wmissing-prototypes -Wmissing-declarations -Wshadow
 +  ocv_warnings_disable(CMAKE_CXX_FLAGS -Wno-deprecated -Wmissing-declarations -Wshadow
-                                        -Wunused-parameter -Wunused-local-typedefs -Wsign-compare -Wsign-promo
-                                        -Wundef -Wtautological-undefined-compare -Wignored-qualifiers -Wextra
-                                        -Wunused-function -Wunused-const-variable -Wdeprecated-declarations
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Mon, 4 Apr 2022 01:44:56 +0200
-Subject: [PATCH 6/6] avoid error: comparing the result of pointer addition
- '(src + ((sizetype)off))' and NULL [-Werror=address]
-
-
-diff --git a/modules/core/src/persistence.cpp b/modules/core/src/persistence.cpp
-index 1111111..2222222 100644
---- a/modules/core/src/persistence.cpp
-+++ b/modules/core/src/persistence.cpp
-@@ -7596,7 +7596,7 @@ size_t base64::base64_decode(char const * src, char * dst, size_t off, size_t cn
- bool base64::base64_valid(uint8_t const * src, size_t off, size_t cnt)
- {
-     /* check parameters */
--    if (src == 0 || src + off == 0)
-+    if (src == 0 || -(size_t)src == off)
-         return false;
-     if (cnt == 0U)
-         cnt = std::strlen(reinterpret_cast<char const *>(src));
+                                        -Wunused-parameter -Wsign-compare
+   )
+ endif()
