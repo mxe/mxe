@@ -193,7 +193,7 @@
     "libglade": {"version": "2.6.4", "website": "https://glade.gnome.org/", "description": "glade"},
     "libgnurx": {"version": "2.6.1", "website": "https://sourceforge.net/projects/mingw/files/UserContributed/regex/", "description": ""},
     "libgpg_error": {"version": "1.46", "website": "https://www.gnupg.org/related_software/libgpg-error/", "description": "libgpg-error"},
-    "libgphoto2": {"version": "2.5.28", "website": "https://github.com/gphoto/libgphoto2", "description": "libgphoto2"},
+    "libgphoto2": {"version": "2.5.30", "website": "https://github.com/gphoto/libgphoto2", "description": "libgphoto2"},
     "libgsasl": {"version": "1.10.0", "website": "https://www.gnu.org/software/gsasl/", "description": "Libgsasl"},
     "libgsf": {"version": "1.14.30", "website": "https://developer.gnome.org/gsf/", "description": ""},
     "libharu": {"version": "2.3.0", "website": "http://libharu.org/", "description": ""},
