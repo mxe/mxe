@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Sat, 25 Jul 2015 16:39:52 +0300
-Subject: [PATCH 1/2] remove custom isatty
+Subject: [PATCH 1/4] remove custom isatty
 
 Fix the following problem:
 
@@ -25,7 +25,7 @@ index 1111111..2222222 100644
 +++ b/pire/inline.lpp
 @@ -36,10 +36,6 @@ ystring filename = "";
  int line = 1;
- yvector<ystring> args;
+ TVector<ystring> args;
  
 -#ifdef _WIN32
 -static int isatty(int) { return 0; }
@@ -38,11 +38,11 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Mon, 21 Sep 2015 18:41:12 +1000
-Subject: [PATCH 2/2] check for target AR
+Subject: [PATCH 2/4] check for target AR
 
 
 diff --git a/configure.ac b/configure.ac
-index 1111111..2222222 100644
+index 1111111..2222222 100755
 --- a/configure.ac
 +++ b/configure.ac
 @@ -8,6 +8,7 @@ AC_CONFIG_MACRO_DIR([m4])
@@ -53,3 +53,42 @@ index 1111111..2222222 100644
  AC_PROG_CXX
  AC_PROG_CC
  AC_PROG_LEX
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Jonas Kvinge <jonas@jkvinge.net>
+Date: Tue, 11 Oct 2022 18:58:37 +0200
+Subject: [PATCH 3/4] Remove check for valgrind
+
+Fixes: `configure: line 19536: syntax error near unexpected token newline`
+
+diff --git a/configure.ac b/configure.ac
+index 1111111..2222222 100755
+--- a/configure.ac
++++ b/configure.ac
+@@ -92,7 +92,6 @@ if test x"$enable_valgrind_safe" = xyes; then
+ 	AC_DEFINE(ENABLE_VALGRIND_SAFE, 1, [Define to 1 if valgrind-compatible memory fetch is needed])
+ fi
+ 
+-AC_CACHE_CHECK([[for valgrind]], [pire_cv_have_valgrind], AC_CHECK_PROG([pire_cv_have_valgrind], [valgrind], [yes], [no]))
+ AM_CONDITIONAL([HAVE_VALGRIND], [test x"$pire_cv_have_valgrind" = xyes])
+ 
+ AC_CONFIG_FILES([
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Jonas Kvinge <jonas@jkvinge.net>
+Date: Tue, 11 Oct 2022 18:59:36 +0200
+Subject: [PATCH 4/4] Add missing limits include
+
+
+diff --git a/pire/extra/count.cpp b/pire/extra/count.cpp
+index 1111111..2222222 100644
+--- a/pire/extra/count.cpp
++++ b/pire/extra/count.cpp
+@@ -28,6 +28,7 @@
+ #include "../glue.h"
+ #include "../stub/lexical_cast.h"
+ #include "../stub/stl.h"
++#include <limits>
+ #include <tuple>
+ 
+ namespace Pire {

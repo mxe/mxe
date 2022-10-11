@@ -4,8 +4,8 @@ PKG             := pire
 $(PKG)_WEBSITE  := https://github.com/yandex/pire
 $(PKG)_DESCR    := PIRE
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.0.5
-$(PKG)_CHECKSUM := 85a9bd66fff568554826e4aff9b188ed6124e3ea0530cc561723b36aea2a58e3
+$(PKG)_VERSION  := 0.0.6
+$(PKG)_CHECKSUM := 552b9163c7cdaf8dcdc44af8a1c938204038584f9a939fca371d76c1cdf1a395
 $(PKG)_GH_CONF  := yandex/pire/tags,release-
 $(PKG)_DEPS     := cc
 
