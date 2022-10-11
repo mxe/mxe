@@ -323,7 +323,7 @@
     "openblas": {"version": "0.3.20", "website": "https://www.openblas.net/", "description": "OpenBLAS"},
     "opencore-amr": {"version": "0.1.3", "website": "https://opencore-amr.sourceforge.io/", "description": ""},
     "opencsg": {"version": "1.4.2", "website": "http://www.opencsg.org/", "description": ""},
-    "opencv": {"version": "3.3.0", "website": "https://opencv.org/", "description": "OpenCV"},
+    "opencv": {"version": "4.6.0", "website": "https://opencv.org/", "description": "OpenCV"},
     "openexr": {"version": "2.2.0", "website": "https://www.openexr.com/", "description": "OpenEXR"},
     "openjpeg": {"version": "2.5.0", "website": "https://www.openjpeg.org/", "description": "OpenJPEG"},
     "openmp-validation": {"version": "ff8cf0c", "website": "https://github.com/uhhpctools/omp-validation", "description": "OpenMP Validation Suite"},
