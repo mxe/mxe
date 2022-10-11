@@ -3,84 +3,33 @@ This file is part of MXE. See LICENSE.md for licensing information.
 Contains ad hoc patches for cross building.
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Boris Nagaev <bnagaev@gmail.com>
-Date: Sun, 30 Aug 2015 14:26:24 +0200
-Subject: [PATCH 1/5] include stdio.h
-
-
-diff --git a/CPP/7zip/Common/FileStreams.cpp b/CPP/7zip/Common/FileStreams.cpp
-index 1111111..2222222 100644
---- a/CPP/7zip/Common/FileStreams.cpp
-+++ b/CPP/7zip/Common/FileStreams.cpp
-@@ -1,6 +1,7 @@
- // FileStreams.cpp
- 
- #include "StdAfx.h"
-+#include <stdio.h>
- 
- #ifndef _WIN32
- #include <fcntl.h>
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Boris Nagaev <bnagaev@gmail.com>
-Date: Sun, 30 Aug 2015 14:46:10 +0200
-Subject: [PATCH 2/5] MyString: include windows.h
-
-Functions CharUpperA, CharPrev etc
-
-diff --git a/CPP/Common/MyString.h b/CPP/Common/MyString.h
-index 1111111..2222222 100644
---- a/CPP/Common/MyString.h
-+++ b/CPP/Common/MyString.h
-@@ -4,6 +4,7 @@
- #define __COMMON_STRING_H
- 
- #include <string.h>
-+#include <windows.h>
- 
- #ifndef _WIN32
- #include <wctype.h>
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Thu, 13 May 2021 11:23:47 +0200
-Subject: [PATCH 3/5] avoid -Werror=misleading-indentation
-
-
-diff --git a/CPP/Common/MyCom.h b/CPP/Common/MyCom.h
-index 1111111..2222222 100644
---- a/CPP/Common/MyCom.h
-+++ b/CPP/Common/MyCom.h
-@@ -230,8 +230,7 @@ public:
- 
- #define MY_ADDREF_RELEASE \
- STDMETHOD_(ULONG, AddRef)() throw() { return ++__m_RefCount; } \
--STDMETHOD_(ULONG, Release)() { if (--__m_RefCount != 0)  \
--  return __m_RefCount; delete this; return 0; }
-+STDMETHOD_(ULONG, Release)() { if (--__m_RefCount != 0) return __m_RefCount; delete this; return 0; }
- 
- #define MY_UNKNOWN_IMP_SPEC(i) \
-   MY_QUERYINTERFACE_BEGIN \
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Thu, 13 May 2021 11:09:22 +0200
-Subject: [PATCH 4/5] fix case of filenames
+From: Jonas Kvinge <jonas@jkvinge.net>
+Date: Tue, 11 Oct 2022 18:27:06 +0200
+Subject: [PATCH 1/1] MinGW build fixes
 
 
 diff --git a/C/7zip_gcc_c.mak b/C/7zip_gcc_c.mak
 index 1111111..2222222 100644
 --- a/C/7zip_gcc_c.mak
 +++ b/C/7zip_gcc_c.mak
-@@ -63,7 +63,7 @@ ifdef IS_MINGW
+@@ -93,7 +93,7 @@ DEL_OBJ_EXE = -$(RM) $(O)\*.o $(O)\$(PROG).exe $(O)\$(PROG).dll
+ endif
  
- RM = del
- MY_MKDIR=mkdir
--LIB2 = -loleaut32 -luuid -ladvapi32 -lUser32
-+LIB2 = -loleaut32 -luuid -ladvapi32 -luser32
  
+-LIB2 = -lOle32 -loleaut32 -luuid -ladvapi32 -lUser32
++LIB2 = -lOle32 -loleaut32 -luuid -ladvapi32 -luser32
  
  CXXFLAGS_EXTRA = -DUNICODE -D_UNICODE
+ # -Wno-delete-non-virtual-dtor
+@@ -157,7 +157,7 @@ $(PROGPATH_STATIC): $(OBJS)
+ 
+ ifndef NO_DEFAULT_RES
+ $O/resource.o: resource.rc
+-	windres.exe $(RFLAGS) resource.rc $O/resource.o
++	$(WINDRES) $(RFLAGS) resource.rc $O/resource.o
+ endif
+ 
+ 
 diff --git a/C/Alloc.c b/C/Alloc.c
 index 1111111..2222222 100644
 --- a/C/Alloc.c
@@ -115,16 +64,16 @@ index 1111111..2222222 100644
 +#include <windows.h>
  #endif
  
- BoolInt CPU_IsSupported_VAES_AVX2()
-@@ -327,7 +327,7 @@ BoolInt CPU_IsSupported_PageGB()
+ BoolInt CPU_IsSupported_AVX2()
+@@ -351,7 +351,7 @@ BoolInt CPU_IsSupported_PageGB()
  
  #ifdef _WIN32
  
 -#include <Windows.h>
 +#include <windows.h>
  
- BoolInt CPU_IsSupported_CRC32()
-   { return IsProcessorFeaturePresent(PF_ARM_V8_CRC32_INSTRUCTIONS_AVAILABLE) ? 1 : 0; }
+ BoolInt CPU_IsSupported_CRC32()  { return IsProcessorFeaturePresent(PF_ARM_V8_CRC32_INSTRUCTIONS_AVAILABLE) ? 1 : 0; }
+ BoolInt CPU_IsSupported_CRYPTO() { return IsProcessorFeaturePresent(PF_ARM_V8_CRYPTO_INSTRUCTIONS_AVAILABLE) ? 1 : 0; }
 diff --git a/C/DllSecur.c b/C/DllSecur.c
 index 1111111..2222222 100644
 --- a/C/DllSecur.c
@@ -150,20 +99,63 @@ index 1111111..2222222 100644
 +#include <windows.h>
  #else
  
- #if !defined(__APPLE__) && !defined(_AIX)
+ #if defined(__linux__)
 diff --git a/CPP/7zip/7zip_gcc.mak b/CPP/7zip/7zip_gcc.mak
 index 1111111..2222222 100644
 --- a/CPP/7zip/7zip_gcc.mak
 +++ b/CPP/7zip/7zip_gcc.mak
-@@ -92,7 +92,7 @@ ifdef IS_MINGW
+@@ -113,8 +113,8 @@ MY_MKDIR=mkdir
+ DEL_OBJ_EXE = -$(RM) $(O)\*.o $(O)\$(PROG).exe $(O)\$(PROG).dll
+ endif
  
- RM = del
- MY_MKDIR=mkdir
--LIB2 = -loleaut32 -luuid -ladvapi32 -lUser32
-+LIB2 = -loleaut32 -luuid -ladvapi32 -luser32
+-LIB2_GUI = -lOle32 -lGdi32 -lComctl32 -lComdlg32 $(LIB_HTMLHELP)
+-LIB2 = -loleaut32 -luuid -ladvapi32 -lUser32 $(LIB2_GUI)
++LIB2_GUI = -lole32 -lgdi32 -lcomctl32 -lcomdlg32 $(LIB_HTMLHELP)
++LIB2 = -loleaut32 -luuid -ladvapi32 -luser32 $(LIB2_GUI)
  
  CXXFLAGS_EXTRA = -DUNICODE -D_UNICODE
  # -Wno-delete-non-virtual-dtor
+@@ -206,7 +206,7 @@ $(PROGPATH_STATIC): $(OBJS)
+ 
+ ifndef NO_DEFAULT_RES
+ $O/resource.o: resource.rc
+-	windres.exe $(RFLAGS) resource.rc $O/resource.o
++	$(WINDRES) $(RFLAGS) resource.rc $O/resource.o
+ endif
+ 
+ $O/LzmaAlone.o: LzmaAlone.cpp
+diff --git a/CPP/7zip/Bundles/LzmaCon/makefile.gcc b/CPP/7zip/Bundles/LzmaCon/makefile.gcc
+index 1111111..2222222 100644
+--- a/CPP/7zip/Bundles/LzmaCon/makefile.gcc
++++ b/CPP/7zip/Bundles/LzmaCon/makefile.gcc
+@@ -77,6 +77,7 @@ WIN_OBJS = \
+   $O/FileIO.o \
+   $O/PropVariant.o \
+   $O/System.o \
++  $O/Registry.o \
+   $O/SystemInfo.o \
+ 
+ COMPRESS_OBJS = \
+diff --git a/CPP/7zip/Common/FileStreams.cpp b/CPP/7zip/Common/FileStreams.cpp
+index 1111111..2222222 100644
+--- a/CPP/7zip/Common/FileStreams.cpp
++++ b/CPP/7zip/Common/FileStreams.cpp
+@@ -1,6 +1,7 @@
+ // FileStreams.cpp
+ 
+ #include "StdAfx.h"
++#include <stdio.h>
+ 
+ // #include <stdio.h>
+ 
+diff --git a/CPP/7zip/MyVersionInfo.rc b/CPP/7zip/MyVersionInfo.rc
+index 1111111..2222222 100644
+--- a/CPP/7zip/MyVersionInfo.rc
++++ b/CPP/7zip/MyVersionInfo.rc
+@@ -1,2 +1,2 @@
+ #include "MyVersion.h"
+-#include "..\..\C\7zVersion.rc"
++#include "../../C/7zVersion.rc"
 diff --git a/CPP/Common/MyInitGuid.h b/CPP/Common/MyInitGuid.h
 index 1111111..2222222 100644
 --- a/CPP/Common/MyInitGuid.h
@@ -177,6 +169,18 @@ index 1111111..2222222 100644
  
  #ifdef UNDER_CE
  DEFINE_GUID(IID_IUnknown,
+diff --git a/CPP/Common/MyString.h b/CPP/Common/MyString.h
+index 1111111..2222222 100644
+--- a/CPP/Common/MyString.h
++++ b/CPP/Common/MyString.h
+@@ -4,6 +4,7 @@
+ #define __COMMON_MY_STRING_H
+ 
+ #include <string.h>
++#include <windows.h>
+ 
+ #ifndef _WIN32
+ #include <wctype.h>
 diff --git a/CPP/Common/MyWindows.h b/CPP/Common/MyWindows.h
 index 1111111..2222222 100644
 --- a/CPP/Common/MyWindows.h
@@ -203,22 +207,3 @@ index 1111111..2222222 100644
  #endif
  
  #else
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Thu, 13 May 2021 11:48:03 +0200
-Subject: [PATCH 5/5] add missing object file
-
-
-diff --git a/CPP/7zip/Bundles/LzmaCon/makefile.gcc b/CPP/7zip/Bundles/LzmaCon/makefile.gcc
-index 1111111..2222222 100644
---- a/CPP/7zip/Bundles/LzmaCon/makefile.gcc
-+++ b/CPP/7zip/Bundles/LzmaCon/makefile.gcc
-@@ -66,6 +66,7 @@ WIN_OBJS = \
-   $O/FileIO.o \
-   $O/PropVariant.o \
-   $O/System.o \
-+  $O/Registry.o \
-   $O/SystemInfo.o \
- 
- COMPRESS_OBJS = \
