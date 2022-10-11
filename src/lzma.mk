@@ -4,8 +4,8 @@ PKG             := lzma
 $(PKG)_WEBSITE  := https://www.7-zip.org/sdk.html
 $(PKG)_DESCR    := LZMA SDK
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2102
-$(PKG)_CHECKSUM := 299c435e5b97c0419deac0afd1df1b5fa8618ecb166d1d38621b3f78bec22d75
+$(PKG)_VERSION  := 2201
+$(PKG)_CHECKSUM := 35b1689169efbc7c3c147387e5495130f371b4bad8ec24f049d28e126d52d9fe
 $(PKG)_SUBDIR   := .
 $(PKG)_FILE     := lzma$(subst .,,$($(PKG)_VERSION)).7z
 $(PKG)_URL      := https://www.7-zip.org/a/$($(PKG)_FILE)
@@ -29,7 +29,9 @@ define $(PKG)_BUILD
         'CXX=$(TARGET)-g++' \
         'LD=$(TARGET)-ld' \
         'AR=$(TARGET)-ar' \
-        'PKG_CONFIG=$(TARGET)-pkg-config'
+        'WINDRES=$(TARGET)-windres' \
+        'PKG_CONFIG=$(TARGET)-pkg-config' \
+        'LDFLAGS=-Wl,--allow-multiple-definition -L$(TARGET)/lib'
     cp '$(1)/C/Util/Lzma/_o/lzma.exe' \
         '$(PREFIX)/$(TARGET)/bin/lzma.exe'
     $(MAKE) all -C '$(1)/CPP/7zip/Bundles/LzmaCon' \
@@ -41,7 +43,9 @@ define $(PKG)_BUILD
         'CC=$(TARGET)-gcc' \
         'LD=$(TARGET)-ld' \
         'AR=$(TARGET)-ar' \
-        'PKG_CONFIG=$(TARGET)-pkg-config'
+        'WINDRES=$(TARGET)-windres' \
+        'PKG_CONFIG=$(TARGET)-pkg-config' \
+        'LDFLAGS=-Wl,--allow-multiple-definition -L$(TARGET)/lib'
     cp '$(1)/CPP/7zip/Bundles/LzmaCon/_o/lzma.exe.exe' \
         '$(PREFIX)/$(TARGET)/bin/lzma-cxx.exe'
 endef
