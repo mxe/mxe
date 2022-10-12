@@ -38,7 +38,7 @@ define $(PKG)_BUILD
         --enable-speex \
         --disable-physfs \
         --disable-altcvt \
-        CFLAGS='-g -O2 -fno-inline' \
+        CFLAGS="-g -O2 -fno-inline `'$(TARGET)-pkg-config' flac --cflags`" \
         LIBS="`'$(TARGET)-pkg-config' vorbisfile flac speex --libs` `'$(PREFIX)/$(TARGET)/bin/libmikmod-config' --libs`"
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(MXE_DISABLE_PROGRAMS)
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install $(MXE_DISABLE_PROGRAMS)

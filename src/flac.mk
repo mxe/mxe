@@ -20,6 +20,10 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && ./autogen.sh
+    $(if $(BUILD_STATIC), \
+        $(SED) -i 's/^\(Cflags:.*\)/\1 -DFLAC__NO_DLL/' \
+            '$(1)/src/libFLAC/flac.pc.in' \
+            '$(1)/src/libFLAC++/flac++.pc.in',)
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
         --disable-doxygen-docs \
