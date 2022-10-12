@@ -1,5 +1,13 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Jonas Kvinge <jonas@jkvinge.net>
+Date: Wed, 12 Oct 2022 11:06:50 +0200
+Subject: [PATCH 1/1] build fixes
+
+
 diff --git a/configure.ac b/configure.ac
-index daa6304..631cf7a 100644
+index 1111111..2222222 100644
 --- a/configure.ac
 +++ b/configure.ac
 @@ -375,11 +375,10 @@ if test "x$enable_doxygen_docs" != xfalse ; then
@@ -17,14 +25,9 @@ index daa6304..631cf7a 100644
  
  AC_ARG_ENABLE(local-xmms-plugin,
  AS_HELP_STRING([--enable-local-xmms-plugin],[Install XMMS plugin to ~/.xmms/Plugins instead of system location]),
-@@ -480,13 +479,14 @@ AM_LANGINFO_CODESET
- AC_CHECK_PROGS(PANDOC, pandoc)
- AM_CONDITIONAL(FLaC__HAS_PANDOC, test -n "$PANDOC")
- if test -n "$PANDOC" ; then
--AC_DEFINE(FLAC__HAS_PANDOC)
--AH_TEMPLATE(FLAC__HAS_PANDOC, [define if you have pandoc])
-+	AC_DEFINE(FLAC__HAS_PANDOC)
-+	AH_TEMPLATE(FLAC__HAS_PANDOC, [define if you have pandoc])
+@@ -483,10 +482,11 @@ if test -n "$PANDOC" ; then
+ AC_DEFINE(FLAC__HAS_PANDOC)
+ AH_TEMPLATE(FLAC__HAS_PANDOC, [define if you have pandoc])
  else
 -AC_CHECK_FILE($srcdir/man/flac.1,[HAVE_MAN_FLAC=yes])
 -AC_CHECK_FILE($srcdir/man/metaflac.1,[HAVE_MAN_METAFLAC=yes])
@@ -38,7 +41,7 @@ index daa6304..631cf7a 100644
  AC_CHECK_LIB(rt, clock_gettime,
          LIB_CLOCK_GETTIME=-lrt
 diff --git a/doc/Makefile.am b/doc/Makefile.am
-index 593d691..20e291e 100644
+index 1111111..2222222 100644
 --- a/doc/Makefile.am
 +++ b/doc/Makefile.am
 @@ -56,7 +56,7 @@ if FLaC__HAS_PREBUILT_DOXYGEN
