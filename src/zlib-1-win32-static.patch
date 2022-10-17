@@ -10,7 +10,7 @@ diff --git a/Makefile.in b/Makefile.in
 index 1852192..c88f5b5 100644
 --- a/Makefile.in
 +++ b/Makefile.in
-@@ -310,12 +310,12 @@ install-libs: $(LIBS)
+@@ -306,12 +306,12 @@ install-libs: $(LIBS)
  	-@if [ ! -d $(DESTDIR)$(man3dir)      ]; then mkdir -p $(DESTDIR)$(man3dir); fi
  	-@if [ ! -d $(DESTDIR)$(pkgconfigdir) ]; then mkdir -p $(DESTDIR)$(pkgconfigdir); fi
  	rm -f $(DESTDIR)$(libdir)/$(STATICLIB)
@@ -25,21 +25,3 @@ index 1852192..c88f5b5 100644
  	  echo "cp $(SHAREDLIBV) $(DESTDIR)$(sharedlibdir)"; \
  	  chmod 755 $(DESTDIR)$(sharedlibdir)/$(SHAREDLIBV); \
  	  echo "chmod 755 $(DESTDIR)$(sharedlibdir)/$(SHAREDLIBV)"; \
-diff --git a/configure b/configure
-index e974d1f..f023947 100755
---- a/configure
-+++ b/configure
-@@ -215,10 +215,7 @@ if test "$gcc" -eq 1 && ($cc -c $test.c) >> configure.log 2>&1; then
-   CYGWIN* | Cygwin* | cygwin* | OS/2*)
-         EXE='.exe' ;;
-   MINGW* | mingw*)
--# temporary bypass
-         rm -f $test.[co] $test $test$shared_ext
--        echo "Please use win32/Makefile.gcc instead." | tee -a configure.log
--        leave 1
-         LDSHARED=${LDSHARED-"$cc -shared"}
-         LDSHAREDLIBC=""
-         EXE='.exe' ;;
--- 
-2.9.3
-
