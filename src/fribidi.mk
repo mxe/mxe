@@ -4,9 +4,9 @@ PKG             := fribidi
 $(PKG)_WEBSITE  := https://fribidi.org/
 $(PKG)_DESCR    := FriBidi
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.0.11
-$(PKG)_CHECKSUM := 0e6d631c184e1012fb3ae86e80adabf26e46b4ffee2332e679eb308edd337398
-$(PKG)_GH_CONF  := fribidi/fribidi/releases,v,,,,.tar.gz
+$(PKG)_VERSION  := 1.0.12
+$(PKG)_CHECKSUM := 0cd233f97fc8c67bb3ac27ce8440def5d3ffacf516765b91c2cc654498293495
+$(PKG)_GH_CONF  := fribidi/fribidi/releases,v,,,,.tar.xz
 $(PKG)_DEPS     := cc meson-wrapper
 
 define $(PKG)_BUILD
