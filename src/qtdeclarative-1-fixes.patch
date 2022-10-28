@@ -32,8 +32,8 @@ index 1111111..2222222 100644
 +#include <limits>
 +
  #include <limits.h>
+ #include <limits>
  #include "YarrErrorCode.h"
- 
 diff --git a/src/plugins/scenegraph/scenegraph.pro b/src/plugins/scenegraph/scenegraph.pro
 index 1111111..2222222 100644
 --- a/src/plugins/scenegraph/scenegraph.pro
@@ -68,7 +68,7 @@ diff --git a/src/quick/items/qquickwindow.cpp b/src/quick/items/qquickwindow.cpp
 index 1111111..2222222 100644
 --- a/src/quick/items/qquickwindow.cpp
 +++ b/src/quick/items/qquickwindow.cpp
-@@ -2106,7 +2106,9 @@ bool QQuickWindowPrivate::deliverHoverEvent(QQuickItem *item, const QPointF &sce
+@@ -2112,7 +2112,9 @@ bool QQuickWindowPrivate::deliverHoverEvent(QQuickItem *item, const QPointF &sce
          QList<QQuickItem *> children = itemPrivate->paintOrderChildItems();
          for (int ii = children.count() - 1; ii >= 0; --ii) {
              QQuickItem *child = children.at(ii);
