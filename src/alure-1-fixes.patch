@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Sun, 18 Feb 2018 12:33:24 +1100
-Subject: [PATCH 1/2] fix pkg-config
+Subject: [PATCH 1/3] fix pkg-config
 
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
@@ -31,7 +31,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Sun, 18 Feb 2018 12:51:07 +1100
-Subject: [PATCH 2/2] disable docs
+Subject: [PATCH 2/3] disable docs
 
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
@@ -48,3 +48,32 @@ index 1111111..2222222 100644
  INSTALL(FILES include/AL/alure.h
          DESTINATION "include/${INCPATH}"
  )
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Mon, 31 Oct 2022 18:03:53 +1100
+Subject: [PATCH 3/3] use COMPILE_OPTIONS to handle semicolons correctly
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -215,7 +215,7 @@ IF(SNDFILE)
+         SET(HAS_SNDFILE 1)
+         LINK_DIRECTORIES(${SNDFILE_LIBRARY_DIRS})
+         SET_SOURCE_FILES_PROPERTIES(src/codec_sndfile.cpp PROPERTIES
+-                                    COMPILE_FLAGS "${SNDFILE_CFLAGS}")
++                                    COMPILE_OPTIONS "${SNDFILE_CFLAGS}")
+     ELSE(SNDFILE_FOUND)
+         FIND_PACKAGE(SndFile)
+         IF(SNDFILE_FOUND)
+@@ -237,7 +237,7 @@ IF(VORBIS)
+         SET(HAS_VORBISFILE 1)
+         LINK_DIRECTORIES(${VORBISFILE_LIBRARY_DIRS})
+         SET_SOURCE_FILES_PROPERTIES(src/codec_vorbisfile.cpp PROPERTIES
+-                                    COMPILE_FLAGS "${VORBISFILE_CFLAGS}")
++                                    COMPILE_OPTIONS "${VORBISFILE_CFLAGS}")
+     ELSE(VORBISFILE_FOUND)
+         FIND_PACKAGE(OggVorbis)
+         IF(OGGVORBIS_FOUND)
