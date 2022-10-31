@@ -1,9 +1,9 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libsndfile
-$(PKG)_VERSION  := 1.0.30
-$(PKG)_CHECKSUM := 9df273302c4fa160567f412e10cc4f76666b66281e7ba48370fb544e87e4611a
-$(PKG)_GH_CONF  := libsndfile/libsndfile/releases,v,,,,.tar.bz2
+$(PKG)_VERSION  := 1.1.0
+$(PKG)_CHECKSUM := 0f98e101c0f7c850a71225fb5feaf33b106227b3d331333ddc9bacee190bcf41
+$(PKG)_GH_CONF  := libsndfile/libsndfile/releases/latest,,,,,.tar.xz
 $(PKG)_DEPS     := cc flac ogg vorbis opus
 
 define $(PKG)_BUILD
