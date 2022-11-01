@@ -23,26 +23,10 @@ define $(PKG)_UPDATE
     head -1
 endef
 
-define $(PKG)_BUILD
-    # old version appears to interfere
-    rm -rf '$(PREFIX)/$(TARGET)/include/boost/'
-    rm -f "$(PREFIX)/$(TARGET)/lib/libboost"*
-
-    # remove file accidentally added to 1.78.0 (with space in its name)
-    rm -f "$(1)/boost/serialization/collection_size_type copy.hpp"
-
-    # create user-config
-    echo 'using gcc : mxe : $(TARGET)-g++ : <rc>$(TARGET)-windres <archiver>$(TARGET)-ar <ranlib>$(TARGET)-ranlib ;' > '$(1)/user-config.jam'
-
-    # compile boost build (b2)
-    cd '$(1)/tools/build/' && ./bootstrap.sh
-
-    # cross-build, see b2 options at:
-    # https://www.boost.org/build/doc/html/bbv2/overview/invocation.html
-    cd '$(1)' && ./tools/build/b2 \
-        -a \
-        -q \
-        -j '$(JOBS)' \
+# cross-build, see b2 options at:
+# https://www.boost.org/build/doc/html/bbv2/overview/invocation.html
+define $(PKG)_B2_CROSS_BUILD
+    cd '$(SOURCE_DIR)' && ./tools/build/b2 \
         --ignore-site-config \
         --user-config=user-config.jam \
         abi=ms \
@@ -66,6 +50,22 @@ define $(PKG)_BUILD
         -sEXPAT_INCLUDE='$(PREFIX)/$(TARGET)/include' \
         -sEXPAT_LIBPATH='$(PREFIX)/$(TARGET)/lib' \
         install
+endef
+
+define $(PKG)_BUILD
+    # old version appears to interfere
+    rm -rf '$(PREFIX)/$(TARGET)/include/boost/'
+    rm -f "$(PREFIX)/$(TARGET)/lib/libboost"*
+
+    # create user-config
+    echo 'using gcc : mxe : $(TARGET)-g++ : <rc>$(TARGET)-windres <archiver>$(TARGET)-ar <ranlib>$(TARGET)-ranlib ;' > '$(SOURCE_DIR)/user-config.jam'
+
+    # compile boost build (b2)
+    cd '$(SOURCE_DIR)/tools/build/' && ./bootstrap.sh
+
+    # retry if parallel build fails
+    $($(PKG)_B2_CROSS_BUILD) -a -j '$(JOBS)' \
+    || $($(PKG)_B2_CROSS_BUILD) -j '1'
 
     $(if $(BUILD_SHARED), \
         mv -fv '$(PREFIX)/$(TARGET)/lib/'libboost_*.dll '$(PREFIX)/$(TARGET)/bin/')
@@ -84,12 +84,12 @@ define $(PKG)_BUILD
         -lboost_context$($(PKG)_SUFFIX)
 
     # test cmake
-    mkdir '$(1).test-cmake'
-    cd '$(1).test-cmake' && '$(TARGET)-cmake' \
+    mkdir '$(BUILD_DIR).test-cmake'
+    cd '$(BUILD_DIR).test-cmake' && '$(TARGET)-cmake' \
         -DPKG=$(PKG) \
         -DPKG_VERSION=$($(PKG)_VERSION) \
         '$(PWD)/src/cmake/test'
-    $(MAKE) -C '$(1).test-cmake' -j 1 install
+    $(MAKE) -C '$(BUILD_DIR).test-cmake' -j 1 install
 endef
 
 define $(PKG)_BUILD_$(BUILD)
