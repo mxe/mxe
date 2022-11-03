@@ -222,7 +222,7 @@
     "libmpeg2": {"version": "0.5.1", "website": "https://libmpeg2.sourceforge.io/", "description": "libmpeg2 - a free MPEG-2 video stream decoder"},
     "libmysqlclient": {"version": "6.1.6", "website": "https://dev.mysql.com/downloads/connector/c/", "description": ""},
     "libnice": {"version": "0.1.16", "website": "https://libnice.freedesktop.org", "description": ""},
-    "libntlm": {"version": "1.6", "website": "https://www.nongnu.org/libntlm/", "description": "Libntlm"},
+    "libntlm": {"version": "1.6", "website": "https://gitlab.com/gsasl/libntlm/", "description": "Libntlm"},
     "liboauth": {"version": "1.0.3", "website": "https://liboauth.sourceforge.io/", "description": ""},
     "libodbc++": {"version": "0.2.5", "website": "https://libodbcxx.sourceforge.io/", "description": ""},
     "liboil": {"version": "0.3.17", "website": "https://liboil.freedesktop.org/", "description": ""},
