@@ -3,9 +3,9 @@
 PKG             := libraw
 $(PKG)_WEBSITE  := https://libraw.org
 $(PKG)_DESCR    := A library for reading RAW files obtained from digital photo cameras
-$(PKG)_VERSION  := 0.19.5
-$(PKG)_CHECKSUM := 9a2a40418e4fb0ab908f6d384ff6f9075f4431f8e3d79a0e44e5a6ea9e75abdc
-$(PKG)_GH_CONF  := LibRaw/LibRaw/releases
+$(PKG)_VERSION  := 0.20.2
+$(PKG)_CHECKSUM := 02df7d403b34602b769bb38e5bf7d4258e075eeefbe980b6832e6e1491989d60
+$(PKG)_GH_CONF  := LibRaw/LibRaw/tags
 $(PKG)_DEPS     := cc jasper jpeg lcms
 
 define $(PKG)_BUILD
