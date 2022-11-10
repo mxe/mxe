@@ -134,7 +134,7 @@ diff --git a/src/sdk/main.cpp b/src/sdk/main.cpp
 index 1111111..2222222 100644
 --- a/src/sdk/main.cpp
 +++ b/src/sdk/main.cpp
-@@ -56,6 +56,10 @@
+@@ -58,6 +58,10 @@
  #  include <sys/types.h>
  #endif
  
