@@ -46,20 +46,20 @@ diff --git a/src/multimedia/windows/qwindowsresampler.cpp b/src/multimedia/windo
 index 1111111..2222222 100644
 --- a/src/multimedia/windows/qwindowsresampler.cpp
 +++ b/src/multimedia/windows/qwindowsresampler.cpp
-@@ -5,7 +5,7 @@
- #include <qwindowsaudioutils_p.h>
+@@ -7,7 +7,7 @@
  #include <qloggingcategory.h>
+ #include <QUuid>
  
 -#include <Wmcodecdsp.h>
 +#include <wmcodecdsp.h>
  #include <mftransform.h>
- #include <mfapi.h>
  #include <mferror.h>
+ 
 diff --git a/src/plugins/multimedia/ffmpeg/qwindowscamera.cpp b/src/plugins/multimedia/ffmpeg/qwindowscamera.cpp
 index 1111111..2222222 100644
 --- a/src/plugins/multimedia/ffmpeg/qwindowscamera.cpp
 +++ b/src/plugins/multimedia/ffmpeg/qwindowscamera.cpp
-@@ -10,8 +10,8 @@
+@@ -11,8 +11,8 @@
  
  #include <mfapi.h>
  #include <mfidl.h>

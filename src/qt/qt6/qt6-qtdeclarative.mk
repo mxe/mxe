@@ -5,7 +5,7 @@ include src/qt/qt6/qt6-conf.mk
 PKG := qt6-qtdeclarative
 $(eval $(QT6_METADATA))
 
-$(PKG)_CHECKSUM      := 3434e72fccfa0c929c326790723d05c155f5067746b1ab05cfd7a9ba632c4383
+$(PKG)_CHECKSUM      := af8c485fdb938dda26c4140d246821b7d8c8715024e1441f3f947bd5ac684dfe
 $(PKG)_TARGETS       := $(BUILD) $(MXE_TARGETS)
 $(PKG)_DEPS_$(BUILD) := qt6-conf qt6-qtbase qt6-qtshadertools
 $(PKG)_DEPS          := cc $($(PKG)_DEPS_$(BUILD)) $(BUILD)~$(PKG) tiff
