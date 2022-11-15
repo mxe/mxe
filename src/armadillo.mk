@@ -20,7 +20,8 @@ endef
 define $(PKG)_BUILD
     # build and install the library
     cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \
-        -DDETECT_HDF5=ON \
+        -DARMA_HDF5_INCLUDE_DIR=$(PREFIX)/$(TARGET)/include/hdf5/serial \
+        -DDETECT_HDF5=OFF \
         -DARMA_USE_WRAPPER=ON
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install VERBOSE=1

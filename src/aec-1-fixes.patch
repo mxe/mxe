@@ -1,0 +1,79 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: brodieG <brodieG@users.noreply.github.com>
+Date: Sat, 15 Oct 2022 11:10:58 +0000
+Subject: [PATCH 1/1] Do not build both static and shared
+
+
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -1,25 +1,15 @@
+ # Main library aec
+-add_library(aec OBJECT
+-  encode.c
+-  encode_accessors.c
+-  decode.c)
++#
++set(AEC_SRCS encode.c encode_accessors.c decode.c)
+ 
++add_library(aec ${AEC_SRCS})
+ target_include_directories(aec
+   PUBLIC
+   "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>"
+   "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/..>"
+   "$<INSTALL_INTERFACE:include>")
+ 
+-# Create both static and shared aec library.
+-add_library(aec_static STATIC "$<TARGET_OBJECTS:aec>")
+-target_link_libraries(aec_static PUBLIC aec)
+-set_target_properties(aec_static
+-  PROPERTIES
+-  OUTPUT_NAME $<IF:$<BOOL:${MSVC}>,aec-static,aec>)
+-
+-add_library(aec_shared SHARED "$<TARGET_OBJECTS:aec>")
+-target_link_libraries(aec_shared PUBLIC aec)
+-set_target_properties(aec_shared
++set_target_properties(aec
+   PROPERTIES
+   VERSION 0.0.12
+   SOVERSION 0
+@@ -27,23 +17,15 @@ set_target_properties(aec_shared
+   PUBLIC_HEADER ../include/libaec.h)
+ 
+ # Wrapper for compatibility with szip
+-add_library(sz OBJECT sz_compat.c)
++add_library(sz
++  sz_compat.c
++  $<IF:$<BOOL:${BUILD_SHARED_LIBS}>,,${AEC_SRCS}>
++)
+ target_link_libraries(sz PUBLIC aec)
+-
+-# Create both static and shared szip library.
+-add_library(sz_static STATIC "$<TARGET_OBJECTS:sz>" "$<TARGET_OBJECTS:aec>")
+-set_target_properties(sz_static
+-  PROPERTIES
+-  OUTPUT_NAME $<IF:$<BOOL:${MSVC}>,szip-static,sz>)
+-target_link_libraries(sz_static PUBLIC sz)
+-
+-add_library(sz_shared SHARED "$<TARGET_OBJECTS:sz>" "$<TARGET_OBJECTS:aec>")
+-target_link_libraries(sz_shared PUBLIC sz)
+-set_target_properties(sz_shared
++set_target_properties(sz
+   PROPERTIES
+   VERSION 2.0.1
+   SOVERSION 2
+-  OUTPUT_NAME $<IF:$<BOOL:${MSVC}>,szip,sz>
+   PUBLIC_HEADER ../include/szlib.h)
+ 
+ # Simple client for testing and benchmarking.
+@@ -80,4 +62,4 @@ if(UNIX OR MINGW)
+     COMPONENT doc)
+ endif()
+ 
+-install(TARGETS aec_static aec_shared sz_static sz_shared aec_client)
++install(TARGETS aec sz)

@@ -24,4 +24,9 @@ define $(PKG)_BUILD
         --without-docbook
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
+
+    # Remove cmake folder since we're not using cmake here and it's
+    # prebuilt misconfigured for MXE
+    $(RM) -r '$(PREFIX)/$(TARGET)/lib/cmake/expat-$($(PKG)_VERSION)'
+
 endef

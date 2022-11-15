@@ -3,26 +3,41 @@ This file is part of MXE. See LICENSE.md for licensing information.
 Contains ad hoc patches for cross building.
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: brodieG <brodieG@users.noreply.github.com>
+Date: Fri, 11 Nov 2022 02:01:10 +0000
+Subject: [PATCH 1/1] add option to disable protobuf
+
+Originally:
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Sat, 2 Mar 2019 02:57:50 +1100
 Subject: [PATCH 1/1] add option to disable protobuf
 
+Adapted for new osgearth version
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 1111111..2222222 100755
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -162,8 +162,11 @@ ENDIF(MINGW)
- FIND_PACKAGE(SilverLining QUIET)
- FIND_PACKAGE(Triton QUIET)
- 
--FIND_PACKAGE(Protobuf QUIET)
--SET (PROTOBUF_USE_DLLS FALSE CACHE BOOL "Set this to true if Protobuf is compiled as dll")
+@@ -154,7 +154,10 @@ find_package(Sqlite3)
+ find_package(Draco)
+ find_package(BASISU)
+ find_package(GLEW)
+-find_package(Protobuf)
 +OPTION(OSGEARTH_USE_PROTOBUF "Set to OFF to disable Protobuf" ON)
-+IF (OSGEARTH_USE_PROTOBUF)
-+    FIND_PACKAGE(Protobuf QUIET)
-+    SET (PROTOBUF_USE_DLLS FALSE CACHE BOOL "Set this to true if Protobuf is compiled as dll")
-+ENDIF (OSGEARTH_USE_PROTOBUF)
++if (OSGEARTH_USE_PROTOBUF)  
++    find_package(Protobuf)
++endif()
+ find_package(WEBP)
+ find_package(Blend2D)
+ find_package(blosc)
+@@ -185,7 +188,7 @@ IF(draco_FOUND)
+     ADD_DEFINITIONS(-DOSGEARTH_HAVE_DRACO)
+ ENDIF(draco_FOUND)
  
- SET (WITH_EXTERNAL_DUKTAPE FALSE CACHE BOOL "Use bundled or system wide version of Duktape")
- IF (WITH_EXTERNAL_DUKTAPE)
+-if(Protobuf_FOUND)
++if(Protobuf_FOUND AND OSGEARTH_USE_PROTOBUF)
+     add_definitions(-DOSGEARTH_HAVE_PROTOBUF)
+ endif()
+ 

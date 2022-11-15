@@ -1,0 +1,25 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: brodieG <brodieG@users.noreply.github.com>
+Date: Tue, 20 Sep 2022 11:33:16 +0000
+Subject: [PATCH 1/1] Portability patch
+
+Originally 'matio-1-portability.patch', no additional
+information.
+
+diff --git a/src/matio_private.h b/src/matio_private.h
+index 1111111..2222222 100644
+--- a/src/matio_private.h
++++ b/src/matio_private.h
+@@ -103,7 +103,7 @@
+  */
+ struct _mat_t
+ {
+-    void *fp;            /**< File pointer for the MAT file */
++    FILE *fp;            /**< File pointer for the MAT file */
+     char *header;        /**< MAT file header string */
+     char *subsys_offset; /**< Offset */
+     char *filename;      /**< Filename of the MAT file */
