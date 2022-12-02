@@ -16,10 +16,12 @@ define $(PKG)_BUILD
         -DNCXX_ENABLE_TESTS=OFF
 
     # fix hdf5 target/libname mixup
-    $(SED) -i -e 's!-lhdf5_hl-\(static\|shared\)!-lhdf5_hl!g' \
-        '$(BUILD_DIR)/cxx4/CMakeFiles/netcdf-cxx4.dir/linklibs.rsp'
-    $(SED) -i -e 's!-lhdf5-\(static\|shared\)!-lhdf5!g' \
-        '$(BUILD_DIR)/cxx4/CMakeFiles/netcdf-cxx4.dir/linklibs.rsp'
+    $(if $(BUILD_SHARED), \
+      $(SED) -i -e 's!-lhdf5_hl-\(static\|shared\)!-lhdf5_hl!g' \
+          '$(BUILD_DIR)/cxx4/CMakeFiles/netcdf-cxx4.dir/linklibs.rsp'
+      $(SED) -i -e 's!-lhdf5-\(static\|shared\)!-lhdf5!g' \
+          '$(BUILD_DIR)/cxx4/CMakeFiles/netcdf-cxx4.dir/linklibs.rsp'
+    )
 
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install

@@ -13,6 +13,7 @@ define $(PKG)_BUILD
     # build and install the library
     cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \
         -DBUILD_SHARED_LIBS=$(CMAKE_SHARED_BOOL) \
+        -DHDF5_USE_STATIC_LIBRARIES=$(CMAKE_STATIC_BOOL) \
         -DENABLE_DOXYGEN=OFF \
         -DENABLE_EXAMPLES=OFF \
         -DENABLE_TESTS=OFF \
@@ -37,4 +38,5 @@ define $(PKG)_BUILD
         -W -Wall -Werror -ansi -pedantic \
         '$(SOURCE_DIR)/examples/C/simple.c' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
         `'$(TARGET)-pkg-config' $(PKG) libjpeg libcurl --cflags --libs` -lportablexdr
+
 endef
