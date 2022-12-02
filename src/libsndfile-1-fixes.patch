@@ -1,0 +1,24 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Michael Cho <cho-m@tuta.io>
+Date: Sun, 17 Apr 2022 21:31:07 -0700
+Subject: [PATCH 1/1] configure.ac: substitute EXTERNAL_MPEG_LIBS in sndfile.pc
+
+Back-ported from
+https://github.com/libsndfile/libsndfile/commit/e4fdaeefddd39bae1db27d48ccb7db7733e0c009
+
+diff --git a/configure.ac b/configure.ac
+index 1111111..2222222 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -739,6 +739,7 @@ AC_SUBST(SNDIO_LIBS)
+ AC_SUBST(EXTERNAL_XIPH_CFLAGS)
+ AC_SUBST(EXTERNAL_XIPH_LIBS)
+ AC_SUBST(EXTERNAL_XIPH_REQUIRE)
++AC_SUBST(EXTERNAL_MPEG_LIBS)
+ AC_SUBST(EXTERNAL_MPEG_REQUIRE)
+ AC_SUBST(MPG123_CFLAGS)
+ AC_SUBST(MPG123_LIBS)
