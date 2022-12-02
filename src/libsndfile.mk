@@ -7,6 +7,7 @@ $(PKG)_GH_CONF  := libsndfile/libsndfile/releases/latest,,,,,.tar.xz
 $(PKG)_DEPS     := cc flac ogg vorbis opus
 
 define $(PKG)_BUILD
+    cd '$(SOURCE_DIR)' && autoreconf -fi
     cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS) \
         --disable-sqlite \
