@@ -4,8 +4,8 @@ PKG             := hunspell
 $(PKG)_WEBSITE  := https://hunspell.github.io/
 $(PKG)_DESCR    := Hunspell
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.7.0
-$(PKG)_CHECKSUM := bb27b86eb910a8285407cf3ca33b62643a02798cf2eef468c0a74f6c3ee6bc8a
+$(PKG)_VERSION  := 1.7.1
+$(PKG)_CHECKSUM := 6e3557624c608b3e6525b8bd277706db4f5a857c28fdb3cfa8d0d2b67776da8a
 $(PKG)_GH_CONF  := hunspell/hunspell/tags, v
 $(PKG)_DEPS     := cc gettext libiconv pthreads readline
 
