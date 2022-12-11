@@ -22,7 +22,7 @@ define $(PKG)_BUILD
     cd '$(SOURCE_DIR)/win' && autoreconf -fi
     cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/win/configure' \
         $(MXE_CONFIGURE_OPTS) \
-        --enable-threads \
+        --enable-threads --disable-shared \
         --with-tcl='$(PREFIX)/$(TARGET)/lib' \
         $(if $(findstring x86_64,$(TARGET)), --enable-64bit) \
         CFLAGS='-D__MINGW_EXCPT_DEFINE_PSDK'
