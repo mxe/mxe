@@ -29,3 +29,472 @@ index 1111111..2222222 100644
  	/* Addition rounds to 0: zero, 1: nearest, 2: +inf, 3: -inf, -1: unknown.  */
  	/* ??? This is supposed to change with calls to fesetround in <fenv.h>.  */
  	#undef FLT_ROUNDS
+From bceadc54d8f32b3f14c69074892e2718eac08e3b Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Martin=20Storsj=C3=B6?= <martin@martin.st>
+Date: Fri, 20 May 2022 14:08:52 +0300
+Subject: [PATCH 1/2] crt: Redirect access() to __mingw_access() on UCRT
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+__mingw_access() was introduced as the msvcrt.dll access() function
+reportedly returned errors when passed the X_OK constant on
+Vista.
+
+Users who expect to be calling access() with the X_OK constant could
+set the __USE_MINGW_ACCESS define to get a mingw specific reimplementation
+of the function. GCC has been setting this define to work around this
+issue (but there have been cases where the define hasn't applied on all
+the source where it's needed).
+
+Current versions of msvcrt.dll no longer seem to have this issue
+with X_OK, so the issue has somewhat been forgotten since. But UCRT's
+access() function shows the same behaviour of returning errors when
+given that constant.
+
+Always defining __USE_MINGW_ACCESS when building targeting UCRT
+doesn't work, as the define of access() breaks other valid cases
+(e.g. calls to methods named access() in C++ classes).
+
+Instead remove the access() symbol from the import libraries, and
+expose an UCRT specific access() that just redirects to __mingw_access().
+
+Signed-off-by: Martin Storsjö <martin@martin.st>
+---
+ mingw-w64-crt/Makefile.am                     |  1 +
+ .../def-include/msvcrt-common.def.in          |  4 ++++
+ .../api-ms-win-crt-filesystem-l1-1-0.def      |  3 ++-
+ mingw-w64-crt/misc/ucrt-access.c              | 19 +++++++++++++++++++
+ 4 files changed, 26 insertions(+), 1 deletion(-)
+ create mode 100644 mingw-w64-crt/misc/ucrt-access.c
+
+diff --git a/mingw-w64-crt/Makefile.am b/mingw-w64-crt/Makefile.am
+index 6a2835079..802657117 100644
+--- a/mingw-w64-crt/Makefile.am
++++ b/mingw-w64-crt/Makefile.am
+@@ -240,6 +240,7 @@ src_ucrtbase=\
+   crt/ucrtbase_compat.c \
+   math/_huge.c \
+   misc/__initenv.c \
++  misc/ucrt-access.c \
+   stdio/ucrt_fprintf.c \
+   stdio/ucrt_fscanf.c \
+   stdio/ucrt_fwprintf.c \
+diff --git a/mingw-w64-crt/def-include/msvcrt-common.def.in b/mingw-w64-crt/def-include/msvcrt-common.def.in
+index e28b09e59..c31c6b631 100644
+--- a/mingw-w64-crt/def-include/msvcrt-common.def.in
++++ b/mingw-w64-crt/def-include/msvcrt-common.def.in
+@@ -12,7 +12,11 @@ wcscmpi == _wcsicmp
+ strcasecmp == _stricmp
+ strncasecmp == _strnicmp
+ 
++#ifdef UCRTBASE
++; access is provided as an alias for __mingw_access
++#else
+ ADD_UNDERSCORE(access)
++#endif
+ ADD_UNDERSCORE(chdir)
+ ADD_UNDERSCORE(chmod)
+ ADD_UNDERSCORE(chsize)
+diff --git a/mingw-w64-crt/lib-common/api-ms-win-crt-filesystem-l1-1-0.def b/mingw-w64-crt/lib-common/api-ms-win-crt-filesystem-l1-1-0.def
+index e5966d642..45ae728ba 100644
+--- a/mingw-w64-crt/lib-common/api-ms-win-crt-filesystem-l1-1-0.def
++++ b/mingw-w64-crt/lib-common/api-ms-win-crt-filesystem-l1-1-0.def
+@@ -3,7 +3,8 @@ LIBRARY api-ms-win-crt-filesystem-l1-1-0
+ EXPORTS
+ 
+ _access
+-access == _access
++; access is provided as an alias for __mingw_access
++; access == _access
+ _access_s
+ _chdir
+ chdir == _chdir
+diff --git a/mingw-w64-crt/misc/ucrt-access.c b/mingw-w64-crt/misc/ucrt-access.c
+new file mode 100644
+index 000000000..e0c93cad0
+--- /dev/null
++++ b/mingw-w64-crt/misc/ucrt-access.c
+@@ -0,0 +1,19 @@
++/**
++ * This file has no copyright assigned and is placed in the Public Domain.
++ * This file is part of the mingw-w64 runtime package.
++ * No warranty is given; refer to the file DISCLAIMER.PD within this package.
++ */
++
++#include <io.h>
++
++int __cdecl __mingw_access(const char *fname, int mode);
++
++int __cdecl access(const char *fname, int mode)
++{
++  /* On UCRT, unconditionally forward access to __mingw_access. UCRT's
++   * access() function return an error if passed the X_OK constant,
++   * while msvcrt.dll's access() doesn't. (It's reported that msvcrt.dll's
++   * access() also returned errors on X_OK in the version shipped in Vista,
++   * but in recent tests it's no longer the case.) */
++  return __mingw_access(fname, mode);
++}
+-- 
+2.34.1
+
+From 89bacd2be60fa92dd74d3b5f2074b06a32d8c784 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Martin=20Storsj=C3=B6?= <martin@martin.st>
+Date: Fri, 20 May 2022 14:16:16 +0300
+Subject: [PATCH 2/2] crt: Regenerate Makefile.in
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Martin Storsjö <martin@martin.st>
+---
+ mingw-w64-crt/Makefile.in | 109 +++++++++++++++++++++++++++++++++-----
+ 1 file changed, 97 insertions(+), 12 deletions(-)
+
+diff --git a/mingw-w64-crt/Makefile.in b/mingw-w64-crt/Makefile.in
+index 4cf3425db..75fe5cb01 100644
+--- a/mingw-w64-crt/Makefile.in
++++ b/mingw-w64-crt/Makefile.in
+@@ -1632,9 +1632,9 @@ lib32_libtaskschd_a_OBJECTS = $(am_lib32_libtaskschd_a_OBJECTS)
+ lib32_libucrt_extra_a_AR = $(AR) $(ARFLAGS)
+ lib32_libucrt_extra_a_LIBADD =
+ am__lib32_libucrt_extra_a_SOURCES_DIST = crt/ucrtbase_compat.c \
+-	math/_huge.c misc/__initenv.c stdio/ucrt_fprintf.c \
+-	stdio/ucrt_fscanf.c stdio/ucrt_fwprintf.c stdio/ucrt_printf.c \
+-	stdio/ucrt_scanf.c stdio/ucrt__snwprintf.c \
++	math/_huge.c misc/__initenv.c misc/ucrt-access.c \
++	stdio/ucrt_fprintf.c stdio/ucrt_fscanf.c stdio/ucrt_fwprintf.c \
++	stdio/ucrt_printf.c stdio/ucrt_scanf.c stdio/ucrt__snwprintf.c \
+ 	stdio/ucrt_snprintf.c stdio/ucrt_sprintf.c stdio/ucrt_sscanf.c \
+ 	stdio/ucrt__vscprintf.c stdio/ucrt__vsnprintf.c \
+ 	stdio/ucrt__vsnwprintf.c stdio/ucrt_vfprintf.c \
+@@ -1644,6 +1644,7 @@ am__lib32_libucrt_extra_a_SOURCES_DIST = crt/ucrtbase_compat.c \
+ am__objects_46 = crt/lib32_libucrt_extra_a-ucrtbase_compat.$(OBJEXT) \
+ 	math/lib32_libucrt_extra_a-_huge.$(OBJEXT) \
+ 	misc/lib32_libucrt_extra_a-__initenv.$(OBJEXT) \
++	misc/lib32_libucrt_extra_a-ucrt-access.$(OBJEXT) \
+ 	stdio/lib32_libucrt_extra_a-ucrt_fprintf.$(OBJEXT) \
+ 	stdio/lib32_libucrt_extra_a-ucrt_fscanf.$(OBJEXT) \
+ 	stdio/lib32_libucrt_extra_a-ucrt_fwprintf.$(OBJEXT) \
+@@ -2942,9 +2943,9 @@ lib64_libtaskschd_a_OBJECTS = $(am_lib64_libtaskschd_a_OBJECTS)
+ lib64_libucrt_extra_a_AR = $(AR) $(ARFLAGS)
+ lib64_libucrt_extra_a_LIBADD =
+ am__lib64_libucrt_extra_a_SOURCES_DIST = crt/ucrtbase_compat.c \
+-	math/_huge.c misc/__initenv.c stdio/ucrt_fprintf.c \
+-	stdio/ucrt_fscanf.c stdio/ucrt_fwprintf.c stdio/ucrt_printf.c \
+-	stdio/ucrt_scanf.c stdio/ucrt__snwprintf.c \
++	math/_huge.c misc/__initenv.c misc/ucrt-access.c \
++	stdio/ucrt_fprintf.c stdio/ucrt_fscanf.c stdio/ucrt_fwprintf.c \
++	stdio/ucrt_printf.c stdio/ucrt_scanf.c stdio/ucrt__snwprintf.c \
+ 	stdio/ucrt_snprintf.c stdio/ucrt_sprintf.c stdio/ucrt_sscanf.c \
+ 	stdio/ucrt__vscprintf.c stdio/ucrt__vsnprintf.c \
+ 	stdio/ucrt__vsnwprintf.c stdio/ucrt_vfprintf.c \
+@@ -2954,6 +2955,7 @@ am__lib64_libucrt_extra_a_SOURCES_DIST = crt/ucrtbase_compat.c \
+ am__objects_91 = crt/lib64_libucrt_extra_a-ucrtbase_compat.$(OBJEXT) \
+ 	math/lib64_libucrt_extra_a-_huge.$(OBJEXT) \
+ 	misc/lib64_libucrt_extra_a-__initenv.$(OBJEXT) \
++	misc/lib64_libucrt_extra_a-ucrt-access.$(OBJEXT) \
+ 	stdio/lib64_libucrt_extra_a-ucrt_fprintf.$(OBJEXT) \
+ 	stdio/lib64_libucrt_extra_a-ucrt_fscanf.$(OBJEXT) \
+ 	stdio/lib64_libucrt_extra_a-ucrt_fwprintf.$(OBJEXT) \
+@@ -4251,9 +4253,9 @@ libarm32_libstrmiids_a_OBJECTS = $(am_libarm32_libstrmiids_a_OBJECTS)
+ libarm32_libucrt_extra_a_AR = $(AR) $(ARFLAGS)
+ libarm32_libucrt_extra_a_LIBADD =
+ am__libarm32_libucrt_extra_a_SOURCES_DIST = crt/ucrtbase_compat.c \
+-	math/_huge.c misc/__initenv.c stdio/ucrt_fprintf.c \
+-	stdio/ucrt_fscanf.c stdio/ucrt_fwprintf.c stdio/ucrt_printf.c \
+-	stdio/ucrt_scanf.c stdio/ucrt__snwprintf.c \
++	math/_huge.c misc/__initenv.c misc/ucrt-access.c \
++	stdio/ucrt_fprintf.c stdio/ucrt_fscanf.c stdio/ucrt_fwprintf.c \
++	stdio/ucrt_printf.c stdio/ucrt_scanf.c stdio/ucrt__snwprintf.c \
+ 	stdio/ucrt_snprintf.c stdio/ucrt_sprintf.c stdio/ucrt_sscanf.c \
+ 	stdio/ucrt__vscprintf.c stdio/ucrt__vsnprintf.c \
+ 	stdio/ucrt__vsnwprintf.c stdio/ucrt_vfprintf.c \
+@@ -4264,6 +4266,7 @@ am__objects_137 =  \
+ 	crt/libarm32_libucrt_extra_a-ucrtbase_compat.$(OBJEXT) \
+ 	math/libarm32_libucrt_extra_a-_huge.$(OBJEXT) \
+ 	misc/libarm32_libucrt_extra_a-__initenv.$(OBJEXT) \
++	misc/libarm32_libucrt_extra_a-ucrt-access.$(OBJEXT) \
+ 	stdio/libarm32_libucrt_extra_a-ucrt_fprintf.$(OBJEXT) \
+ 	stdio/libarm32_libucrt_extra_a-ucrt_fscanf.$(OBJEXT) \
+ 	stdio/libarm32_libucrt_extra_a-ucrt_fwprintf.$(OBJEXT) \
+@@ -5446,9 +5449,9 @@ libarm64_libstrmiids_a_OBJECTS = $(am_libarm64_libstrmiids_a_OBJECTS)
+ libarm64_libucrt_extra_a_AR = $(AR) $(ARFLAGS)
+ libarm64_libucrt_extra_a_LIBADD =
+ am__libarm64_libucrt_extra_a_SOURCES_DIST = crt/ucrtbase_compat.c \
+-	math/_huge.c misc/__initenv.c stdio/ucrt_fprintf.c \
+-	stdio/ucrt_fscanf.c stdio/ucrt_fwprintf.c stdio/ucrt_printf.c \
+-	stdio/ucrt_scanf.c stdio/ucrt__snwprintf.c \
++	math/_huge.c misc/__initenv.c misc/ucrt-access.c \
++	stdio/ucrt_fprintf.c stdio/ucrt_fscanf.c stdio/ucrt_fwprintf.c \
++	stdio/ucrt_printf.c stdio/ucrt_scanf.c stdio/ucrt__snwprintf.c \
+ 	stdio/ucrt_snprintf.c stdio/ucrt_sprintf.c stdio/ucrt_sscanf.c \
+ 	stdio/ucrt__vscprintf.c stdio/ucrt__vsnprintf.c \
+ 	stdio/ucrt__vsnwprintf.c stdio/ucrt_vfprintf.c \
+@@ -5459,6 +5462,7 @@ am__objects_178 =  \
+ 	crt/libarm64_libucrt_extra_a-ucrtbase_compat.$(OBJEXT) \
+ 	math/libarm64_libucrt_extra_a-_huge.$(OBJEXT) \
+ 	misc/libarm64_libucrt_extra_a-__initenv.$(OBJEXT) \
++	misc/libarm64_libucrt_extra_a-ucrt-access.$(OBJEXT) \
+ 	stdio/libarm64_libucrt_extra_a-ucrt_fprintf.$(OBJEXT) \
+ 	stdio/libarm64_libucrt_extra_a-ucrt_fscanf.$(OBJEXT) \
+ 	stdio/libarm64_libucrt_extra_a-ucrt_fwprintf.$(OBJEXT) \
+@@ -8413,6 +8417,7 @@ am__depfiles_remade = ./$(DEPDIR)/lib32_libm_a-_libm_dummy.Po \
+ 	misc/$(DEPDIR)/lib32_libmsvcrt_extra_a-seterrno.Po \
+ 	misc/$(DEPDIR)/lib32_libmsvcrt_extra_a-wassert.Po \
+ 	misc/$(DEPDIR)/lib32_libucrt_extra_a-__initenv.Po \
++	misc/$(DEPDIR)/lib32_libucrt_extra_a-ucrt-access.Po \
+ 	misc/$(DEPDIR)/lib32_libucrtapp_extra_a-longjmp.Po \
+ 	misc/$(DEPDIR)/lib32_libucrtapp_extra_a-setjmp.Po \
+ 	misc/$(DEPDIR)/lib64_libdloadhelper_a-delay-f.Po \
+@@ -8515,6 +8520,7 @@ am__depfiles_remade = ./$(DEPDIR)/lib32_libm_a-_libm_dummy.Po \
+ 	misc/$(DEPDIR)/lib64_libmsvcrt_extra_a-purecall.Po \
+ 	misc/$(DEPDIR)/lib64_libmsvcrt_extra_a-seterrno.Po \
+ 	misc/$(DEPDIR)/lib64_libucrt_extra_a-__initenv.Po \
++	misc/$(DEPDIR)/lib64_libucrt_extra_a-ucrt-access.Po \
+ 	misc/$(DEPDIR)/lib64_libucrtapp_extra_a-longjmp.Po \
+ 	misc/$(DEPDIR)/lib64_libucrtapp_extra_a-setjmp.Po \
+ 	misc/$(DEPDIR)/libarm32_libdloadhelper_a-delay-f.Po \
+@@ -8610,6 +8616,7 @@ am__depfiles_remade = ./$(DEPDIR)/lib32_libm_a-_libm_dummy.Po \
+ 	misc/$(DEPDIR)/libarm32_libmsvcrt_extra_a-output_format.Po \
+ 	misc/$(DEPDIR)/libarm32_libmsvcrt_extra_a-purecall.Po \
+ 	misc/$(DEPDIR)/libarm32_libucrt_extra_a-__initenv.Po \
++	misc/$(DEPDIR)/libarm32_libucrt_extra_a-ucrt-access.Po \
+ 	misc/$(DEPDIR)/libarm32_libucrtapp_extra_a-longjmp.Po \
+ 	misc/$(DEPDIR)/libarm32_libucrtapp_extra_a-setjmp.Po \
+ 	misc/$(DEPDIR)/libarm64_libdloadhelper_a-delay-f.Po \
+@@ -8703,6 +8710,7 @@ am__depfiles_remade = ./$(DEPDIR)/lib32_libm_a-_libm_dummy.Po \
+ 	misc/$(DEPDIR)/libarm64_libmsvcrt_extra_a-output_format.Po \
+ 	misc/$(DEPDIR)/libarm64_libmsvcrt_extra_a-purecall.Po \
+ 	misc/$(DEPDIR)/libarm64_libucrt_extra_a-__initenv.Po \
++	misc/$(DEPDIR)/libarm64_libucrt_extra_a-ucrt-access.Po \
+ 	misc/$(DEPDIR)/libarm64_libucrtapp_extra_a-longjmp.Po \
+ 	misc/$(DEPDIR)/libarm64_libucrtapp_extra_a-setjmp.Po \
+ 	profile/$(DEPDIR)/lib32_libgmon_a-gmon.Po \
+@@ -10594,6 +10602,7 @@ src_ucrtbase = \
+   crt/ucrtbase_compat.c \
+   math/_huge.c \
+   misc/__initenv.c \
++  misc/ucrt-access.c \
+   stdio/ucrt_fprintf.c \
+   stdio/ucrt_fscanf.c \
+   stdio/ucrt_fwprintf.c \
+@@ -15110,6 +15119,8 @@ math/lib32_libucrt_extra_a-_huge.$(OBJEXT): math/$(am__dirstamp) \
+ 	math/$(DEPDIR)/$(am__dirstamp)
+ misc/lib32_libucrt_extra_a-__initenv.$(OBJEXT): misc/$(am__dirstamp) \
+ 	misc/$(DEPDIR)/$(am__dirstamp)
++misc/lib32_libucrt_extra_a-ucrt-access.$(OBJEXT):  \
++	misc/$(am__dirstamp) misc/$(DEPDIR)/$(am__dirstamp)
+ stdio/lib32_libucrt_extra_a-ucrt_fprintf.$(OBJEXT):  \
+ 	stdio/$(am__dirstamp) stdio/$(DEPDIR)/$(am__dirstamp)
+ stdio/lib32_libucrt_extra_a-ucrt_fscanf.$(OBJEXT):  \
+@@ -16934,6 +16945,8 @@ math/lib64_libucrt_extra_a-_huge.$(OBJEXT): math/$(am__dirstamp) \
+ 	math/$(DEPDIR)/$(am__dirstamp)
+ misc/lib64_libucrt_extra_a-__initenv.$(OBJEXT): misc/$(am__dirstamp) \
+ 	misc/$(DEPDIR)/$(am__dirstamp)
++misc/lib64_libucrt_extra_a-ucrt-access.$(OBJEXT):  \
++	misc/$(am__dirstamp) misc/$(DEPDIR)/$(am__dirstamp)
+ stdio/lib64_libucrt_extra_a-ucrt_fprintf.$(OBJEXT):  \
+ 	stdio/$(am__dirstamp) stdio/$(DEPDIR)/$(am__dirstamp)
+ stdio/lib64_libucrt_extra_a-ucrt_fscanf.$(OBJEXT):  \
+@@ -18835,6 +18848,8 @@ math/libarm32_libucrt_extra_a-_huge.$(OBJEXT): math/$(am__dirstamp) \
+ 	math/$(DEPDIR)/$(am__dirstamp)
+ misc/libarm32_libucrt_extra_a-__initenv.$(OBJEXT):  \
+ 	misc/$(am__dirstamp) misc/$(DEPDIR)/$(am__dirstamp)
++misc/libarm32_libucrt_extra_a-ucrt-access.$(OBJEXT):  \
++	misc/$(am__dirstamp) misc/$(DEPDIR)/$(am__dirstamp)
+ stdio/libarm32_libucrt_extra_a-ucrt_fprintf.$(OBJEXT):  \
+ 	stdio/$(am__dirstamp) stdio/$(DEPDIR)/$(am__dirstamp)
+ stdio/libarm32_libucrt_extra_a-ucrt_fscanf.$(OBJEXT):  \
+@@ -20511,6 +20526,8 @@ math/libarm64_libucrt_extra_a-_huge.$(OBJEXT): math/$(am__dirstamp) \
+ 	math/$(DEPDIR)/$(am__dirstamp)
+ misc/libarm64_libucrt_extra_a-__initenv.$(OBJEXT):  \
+ 	misc/$(am__dirstamp) misc/$(DEPDIR)/$(am__dirstamp)
++misc/libarm64_libucrt_extra_a-ucrt-access.$(OBJEXT):  \
++	misc/$(am__dirstamp) misc/$(DEPDIR)/$(am__dirstamp)
+ stdio/libarm64_libucrt_extra_a-ucrt_fprintf.$(OBJEXT):  \
+ 	stdio/$(am__dirstamp) stdio/$(DEPDIR)/$(am__dirstamp)
+ stdio/libarm64_libucrt_extra_a-ucrt_fscanf.$(OBJEXT):  \
+@@ -23829,6 +23846,7 @@ distclean-compile:
+ @AMDEP_TRUE@@am__include@ @am__quote@misc/$(DEPDIR)/lib32_libmsvcrt_extra_a-seterrno.Po@am__quote@ # am--include-marker
+ @AMDEP_TRUE@@am__include@ @am__quote@misc/$(DEPDIR)/lib32_libmsvcrt_extra_a-wassert.Po@am__quote@ # am--include-marker
+ @AMDEP_TRUE@@am__include@ @am__quote@misc/$(DEPDIR)/lib32_libucrt_extra_a-__initenv.Po@am__quote@ # am--include-marker
++@AMDEP_TRUE@@am__include@ @am__quote@misc/$(DEPDIR)/lib32_libucrt_extra_a-ucrt-access.Po@am__quote@ # am--include-marker
+ @AMDEP_TRUE@@am__include@ @am__quote@misc/$(DEPDIR)/lib32_libucrtapp_extra_a-longjmp.Po@am__quote@ # am--include-marker
+ @AMDEP_TRUE@@am__include@ @am__quote@misc/$(DEPDIR)/lib32_libucrtapp_extra_a-setjmp.Po@am__quote@ # am--include-marker
+ @AMDEP_TRUE@@am__include@ @am__quote@misc/$(DEPDIR)/lib64_libdloadhelper_a-delay-f.Po@am__quote@ # am--include-marker
+@@ -23931,6 +23949,7 @@ distclean-compile:
+ @AMDEP_TRUE@@am__include@ @am__quote@misc/$(DEPDIR)/lib64_libmsvcrt_extra_a-purecall.Po@am__quote@ # am--include-marker
+ @AMDEP_TRUE@@am__include@ @am__quote@misc/$(DEPDIR)/lib64_libmsvcrt_extra_a-seterrno.Po@am__quote@ # am--include-marker
+ @AMDEP_TRUE@@am__include@ @am__quote@misc/$(DEPDIR)/lib64_libucrt_extra_a-__initenv.Po@am__quote@ # am--include-marker
++@AMDEP_TRUE@@am__include@ @am__quote@misc/$(DEPDIR)/lib64_libucrt_extra_a-ucrt-access.Po@am__quote@ # am--include-marker
+ @AMDEP_TRUE@@am__include@ @am__quote@misc/$(DEPDIR)/lib64_libucrtapp_extra_a-longjmp.Po@am__quote@ # am--include-marker
+ @AMDEP_TRUE@@am__include@ @am__quote@misc/$(DEPDIR)/lib64_libucrtapp_extra_a-setjmp.Po@am__quote@ # am--include-marker
+ @AMDEP_TRUE@@am__include@ @am__quote@misc/$(DEPDIR)/libarm32_libdloadhelper_a-delay-f.Po@am__quote@ # am--include-marker
+@@ -24026,6 +24045,7 @@ distclean-compile:
+ @AMDEP_TRUE@@am__include@ @am__quote@misc/$(DEPDIR)/libarm32_libmsvcrt_extra_a-output_format.Po@am__quote@ # am--include-marker
+ @AMDEP_TRUE@@am__include@ @am__quote@misc/$(DEPDIR)/libarm32_libmsvcrt_extra_a-purecall.Po@am__quote@ # am--include-marker
+ @AMDEP_TRUE@@am__include@ @am__quote@misc/$(DEPDIR)/libarm32_libucrt_extra_a-__initenv.Po@am__quote@ # am--include-marker
++@AMDEP_TRUE@@am__include@ @am__quote@misc/$(DEPDIR)/libarm32_libucrt_extra_a-ucrt-access.Po@am__quote@ # am--include-marker
+ @AMDEP_TRUE@@am__include@ @am__quote@misc/$(DEPDIR)/libarm32_libucrtapp_extra_a-longjmp.Po@am__quote@ # am--include-marker
+ @AMDEP_TRUE@@am__include@ @am__quote@misc/$(DEPDIR)/libarm32_libucrtapp_extra_a-setjmp.Po@am__quote@ # am--include-marker
+ @AMDEP_TRUE@@am__include@ @am__quote@misc/$(DEPDIR)/libarm64_libdloadhelper_a-delay-f.Po@am__quote@ # am--include-marker
+@@ -24119,6 +24139,7 @@ distclean-compile:
+ @AMDEP_TRUE@@am__include@ @am__quote@misc/$(DEPDIR)/libarm64_libmsvcrt_extra_a-output_format.Po@am__quote@ # am--include-marker
+ @AMDEP_TRUE@@am__include@ @am__quote@misc/$(DEPDIR)/libarm64_libmsvcrt_extra_a-purecall.Po@am__quote@ # am--include-marker
+ @AMDEP_TRUE@@am__include@ @am__quote@misc/$(DEPDIR)/libarm64_libucrt_extra_a-__initenv.Po@am__quote@ # am--include-marker
++@AMDEP_TRUE@@am__include@ @am__quote@misc/$(DEPDIR)/libarm64_libucrt_extra_a-ucrt-access.Po@am__quote@ # am--include-marker
+ @AMDEP_TRUE@@am__include@ @am__quote@misc/$(DEPDIR)/libarm64_libucrtapp_extra_a-longjmp.Po@am__quote@ # am--include-marker
+ @AMDEP_TRUE@@am__include@ @am__quote@misc/$(DEPDIR)/libarm64_libucrtapp_extra_a-setjmp.Po@am__quote@ # am--include-marker
+ @AMDEP_TRUE@@am__include@ @am__quote@profile/$(DEPDIR)/lib32_libgmon_a-gmon.Po@am__quote@ # am--include-marker
+@@ -35975,6 +35996,20 @@ misc/lib32_libucrt_extra_a-__initenv.obj: misc/__initenv.c
+ @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+ @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib32_libucrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o misc/lib32_libucrt_extra_a-__initenv.obj `if test -f 'misc/__initenv.c'; then $(CYGPATH_W) 'misc/__initenv.c'; else $(CYGPATH_W) '$(srcdir)/misc/__initenv.c'; fi`
+ 
++misc/lib32_libucrt_extra_a-ucrt-access.o: misc/ucrt-access.c
++@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib32_libucrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT misc/lib32_libucrt_extra_a-ucrt-access.o -MD -MP -MF misc/$(DEPDIR)/lib32_libucrt_extra_a-ucrt-access.Tpo -c -o misc/lib32_libucrt_extra_a-ucrt-access.o `test -f 'misc/ucrt-access.c' || echo '$(srcdir)/'`misc/ucrt-access.c
++@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) misc/$(DEPDIR)/lib32_libucrt_extra_a-ucrt-access.Tpo misc/$(DEPDIR)/lib32_libucrt_extra_a-ucrt-access.Po
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='misc/ucrt-access.c' object='misc/lib32_libucrt_extra_a-ucrt-access.o' libtool=no @AMDEPBACKSLASH@
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
++@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib32_libucrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o misc/lib32_libucrt_extra_a-ucrt-access.o `test -f 'misc/ucrt-access.c' || echo '$(srcdir)/'`misc/ucrt-access.c
++
++misc/lib32_libucrt_extra_a-ucrt-access.obj: misc/ucrt-access.c
++@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib32_libucrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT misc/lib32_libucrt_extra_a-ucrt-access.obj -MD -MP -MF misc/$(DEPDIR)/lib32_libucrt_extra_a-ucrt-access.Tpo -c -o misc/lib32_libucrt_extra_a-ucrt-access.obj `if test -f 'misc/ucrt-access.c'; then $(CYGPATH_W) 'misc/ucrt-access.c'; else $(CYGPATH_W) '$(srcdir)/misc/ucrt-access.c'; fi`
++@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) misc/$(DEPDIR)/lib32_libucrt_extra_a-ucrt-access.Tpo misc/$(DEPDIR)/lib32_libucrt_extra_a-ucrt-access.Po
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='misc/ucrt-access.c' object='misc/lib32_libucrt_extra_a-ucrt-access.obj' libtool=no @AMDEPBACKSLASH@
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
++@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib32_libucrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o misc/lib32_libucrt_extra_a-ucrt-access.obj `if test -f 'misc/ucrt-access.c'; then $(CYGPATH_W) 'misc/ucrt-access.c'; else $(CYGPATH_W) '$(srcdir)/misc/ucrt-access.c'; fi`
++
+ stdio/lib32_libucrt_extra_a-ucrt_fprintf.o: stdio/ucrt_fprintf.c
+ @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib32_libucrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT stdio/lib32_libucrt_extra_a-ucrt_fprintf.o -MD -MP -MF stdio/$(DEPDIR)/lib32_libucrt_extra_a-ucrt_fprintf.Tpo -c -o stdio/lib32_libucrt_extra_a-ucrt_fprintf.o `test -f 'stdio/ucrt_fprintf.c' || echo '$(srcdir)/'`stdio/ucrt_fprintf.c
+ @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) stdio/$(DEPDIR)/lib32_libucrt_extra_a-ucrt_fprintf.Tpo stdio/$(DEPDIR)/lib32_libucrt_extra_a-ucrt_fprintf.Po
+@@ -46167,6 +46202,20 @@ misc/lib64_libucrt_extra_a-__initenv.obj: misc/__initenv.c
+ @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+ @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib64_libucrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o misc/lib64_libucrt_extra_a-__initenv.obj `if test -f 'misc/__initenv.c'; then $(CYGPATH_W) 'misc/__initenv.c'; else $(CYGPATH_W) '$(srcdir)/misc/__initenv.c'; fi`
+ 
++misc/lib64_libucrt_extra_a-ucrt-access.o: misc/ucrt-access.c
++@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib64_libucrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT misc/lib64_libucrt_extra_a-ucrt-access.o -MD -MP -MF misc/$(DEPDIR)/lib64_libucrt_extra_a-ucrt-access.Tpo -c -o misc/lib64_libucrt_extra_a-ucrt-access.o `test -f 'misc/ucrt-access.c' || echo '$(srcdir)/'`misc/ucrt-access.c
++@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) misc/$(DEPDIR)/lib64_libucrt_extra_a-ucrt-access.Tpo misc/$(DEPDIR)/lib64_libucrt_extra_a-ucrt-access.Po
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='misc/ucrt-access.c' object='misc/lib64_libucrt_extra_a-ucrt-access.o' libtool=no @AMDEPBACKSLASH@
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
++@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib64_libucrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o misc/lib64_libucrt_extra_a-ucrt-access.o `test -f 'misc/ucrt-access.c' || echo '$(srcdir)/'`misc/ucrt-access.c
++
++misc/lib64_libucrt_extra_a-ucrt-access.obj: misc/ucrt-access.c
++@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib64_libucrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT misc/lib64_libucrt_extra_a-ucrt-access.obj -MD -MP -MF misc/$(DEPDIR)/lib64_libucrt_extra_a-ucrt-access.Tpo -c -o misc/lib64_libucrt_extra_a-ucrt-access.obj `if test -f 'misc/ucrt-access.c'; then $(CYGPATH_W) 'misc/ucrt-access.c'; else $(CYGPATH_W) '$(srcdir)/misc/ucrt-access.c'; fi`
++@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) misc/$(DEPDIR)/lib64_libucrt_extra_a-ucrt-access.Tpo misc/$(DEPDIR)/lib64_libucrt_extra_a-ucrt-access.Po
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='misc/ucrt-access.c' object='misc/lib64_libucrt_extra_a-ucrt-access.obj' libtool=no @AMDEPBACKSLASH@
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
++@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib64_libucrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o misc/lib64_libucrt_extra_a-ucrt-access.obj `if test -f 'misc/ucrt-access.c'; then $(CYGPATH_W) 'misc/ucrt-access.c'; else $(CYGPATH_W) '$(srcdir)/misc/ucrt-access.c'; fi`
++
+ stdio/lib64_libucrt_extra_a-ucrt_fprintf.o: stdio/ucrt_fprintf.c
+ @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib64_libucrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT stdio/lib64_libucrt_extra_a-ucrt_fprintf.o -MD -MP -MF stdio/$(DEPDIR)/lib64_libucrt_extra_a-ucrt_fprintf.Tpo -c -o stdio/lib64_libucrt_extra_a-ucrt_fprintf.o `test -f 'stdio/ucrt_fprintf.c' || echo '$(srcdir)/'`stdio/ucrt_fprintf.c
+ @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) stdio/$(DEPDIR)/lib64_libucrt_extra_a-ucrt_fprintf.Tpo stdio/$(DEPDIR)/lib64_libucrt_extra_a-ucrt_fprintf.Po
+@@ -56709,6 +56758,20 @@ misc/libarm32_libucrt_extra_a-__initenv.obj: misc/__initenv.c
+ @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+ @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libarm32_libucrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o misc/libarm32_libucrt_extra_a-__initenv.obj `if test -f 'misc/__initenv.c'; then $(CYGPATH_W) 'misc/__initenv.c'; else $(CYGPATH_W) '$(srcdir)/misc/__initenv.c'; fi`
+ 
++misc/libarm32_libucrt_extra_a-ucrt-access.o: misc/ucrt-access.c
++@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libarm32_libucrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT misc/libarm32_libucrt_extra_a-ucrt-access.o -MD -MP -MF misc/$(DEPDIR)/libarm32_libucrt_extra_a-ucrt-access.Tpo -c -o misc/libarm32_libucrt_extra_a-ucrt-access.o `test -f 'misc/ucrt-access.c' || echo '$(srcdir)/'`misc/ucrt-access.c
++@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) misc/$(DEPDIR)/libarm32_libucrt_extra_a-ucrt-access.Tpo misc/$(DEPDIR)/libarm32_libucrt_extra_a-ucrt-access.Po
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='misc/ucrt-access.c' object='misc/libarm32_libucrt_extra_a-ucrt-access.o' libtool=no @AMDEPBACKSLASH@
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
++@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libarm32_libucrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o misc/libarm32_libucrt_extra_a-ucrt-access.o `test -f 'misc/ucrt-access.c' || echo '$(srcdir)/'`misc/ucrt-access.c
++
++misc/libarm32_libucrt_extra_a-ucrt-access.obj: misc/ucrt-access.c
++@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libarm32_libucrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT misc/libarm32_libucrt_extra_a-ucrt-access.obj -MD -MP -MF misc/$(DEPDIR)/libarm32_libucrt_extra_a-ucrt-access.Tpo -c -o misc/libarm32_libucrt_extra_a-ucrt-access.obj `if test -f 'misc/ucrt-access.c'; then $(CYGPATH_W) 'misc/ucrt-access.c'; else $(CYGPATH_W) '$(srcdir)/misc/ucrt-access.c'; fi`
++@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) misc/$(DEPDIR)/libarm32_libucrt_extra_a-ucrt-access.Tpo misc/$(DEPDIR)/libarm32_libucrt_extra_a-ucrt-access.Po
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='misc/ucrt-access.c' object='misc/libarm32_libucrt_extra_a-ucrt-access.obj' libtool=no @AMDEPBACKSLASH@
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
++@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libarm32_libucrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o misc/libarm32_libucrt_extra_a-ucrt-access.obj `if test -f 'misc/ucrt-access.c'; then $(CYGPATH_W) 'misc/ucrt-access.c'; else $(CYGPATH_W) '$(srcdir)/misc/ucrt-access.c'; fi`
++
+ stdio/libarm32_libucrt_extra_a-ucrt_fprintf.o: stdio/ucrt_fprintf.c
+ @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libarm32_libucrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT stdio/libarm32_libucrt_extra_a-ucrt_fprintf.o -MD -MP -MF stdio/$(DEPDIR)/libarm32_libucrt_extra_a-ucrt_fprintf.Tpo -c -o stdio/libarm32_libucrt_extra_a-ucrt_fprintf.o `test -f 'stdio/ucrt_fprintf.c' || echo '$(srcdir)/'`stdio/ucrt_fprintf.c
+ @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) stdio/$(DEPDIR)/libarm32_libucrt_extra_a-ucrt_fprintf.Tpo stdio/$(DEPDIR)/libarm32_libucrt_extra_a-ucrt_fprintf.Po
+@@ -66187,6 +66250,20 @@ misc/libarm64_libucrt_extra_a-__initenv.obj: misc/__initenv.c
+ @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+ @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libarm64_libucrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o misc/libarm64_libucrt_extra_a-__initenv.obj `if test -f 'misc/__initenv.c'; then $(CYGPATH_W) 'misc/__initenv.c'; else $(CYGPATH_W) '$(srcdir)/misc/__initenv.c'; fi`
+ 
++misc/libarm64_libucrt_extra_a-ucrt-access.o: misc/ucrt-access.c
++@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libarm64_libucrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT misc/libarm64_libucrt_extra_a-ucrt-access.o -MD -MP -MF misc/$(DEPDIR)/libarm64_libucrt_extra_a-ucrt-access.Tpo -c -o misc/libarm64_libucrt_extra_a-ucrt-access.o `test -f 'misc/ucrt-access.c' || echo '$(srcdir)/'`misc/ucrt-access.c
++@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) misc/$(DEPDIR)/libarm64_libucrt_extra_a-ucrt-access.Tpo misc/$(DEPDIR)/libarm64_libucrt_extra_a-ucrt-access.Po
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='misc/ucrt-access.c' object='misc/libarm64_libucrt_extra_a-ucrt-access.o' libtool=no @AMDEPBACKSLASH@
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
++@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libarm64_libucrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o misc/libarm64_libucrt_extra_a-ucrt-access.o `test -f 'misc/ucrt-access.c' || echo '$(srcdir)/'`misc/ucrt-access.c
++
++misc/libarm64_libucrt_extra_a-ucrt-access.obj: misc/ucrt-access.c
++@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libarm64_libucrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT misc/libarm64_libucrt_extra_a-ucrt-access.obj -MD -MP -MF misc/$(DEPDIR)/libarm64_libucrt_extra_a-ucrt-access.Tpo -c -o misc/libarm64_libucrt_extra_a-ucrt-access.obj `if test -f 'misc/ucrt-access.c'; then $(CYGPATH_W) 'misc/ucrt-access.c'; else $(CYGPATH_W) '$(srcdir)/misc/ucrt-access.c'; fi`
++@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) misc/$(DEPDIR)/libarm64_libucrt_extra_a-ucrt-access.Tpo misc/$(DEPDIR)/libarm64_libucrt_extra_a-ucrt-access.Po
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='misc/ucrt-access.c' object='misc/libarm64_libucrt_extra_a-ucrt-access.obj' libtool=no @AMDEPBACKSLASH@
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
++@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libarm64_libucrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o misc/libarm64_libucrt_extra_a-ucrt-access.obj `if test -f 'misc/ucrt-access.c'; then $(CYGPATH_W) 'misc/ucrt-access.c'; else $(CYGPATH_W) '$(srcdir)/misc/ucrt-access.c'; fi`
++
+ stdio/libarm64_libucrt_extra_a-ucrt_fprintf.o: stdio/ucrt_fprintf.c
+ @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libarm64_libucrt_extra_a_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT stdio/libarm64_libucrt_extra_a-ucrt_fprintf.o -MD -MP -MF stdio/$(DEPDIR)/libarm64_libucrt_extra_a-ucrt_fprintf.Tpo -c -o stdio/libarm64_libucrt_extra_a-ucrt_fprintf.o `test -f 'stdio/ucrt_fprintf.c' || echo '$(srcdir)/'`stdio/ucrt_fprintf.c
+ @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) stdio/$(DEPDIR)/libarm64_libucrt_extra_a-ucrt_fprintf.Tpo stdio/$(DEPDIR)/libarm64_libucrt_extra_a-ucrt_fprintf.Po
+@@ -73582,6 +73659,7 @@ distclean: distclean-am
+ 	-rm -f misc/$(DEPDIR)/lib32_libmsvcrt_extra_a-seterrno.Po
+ 	-rm -f misc/$(DEPDIR)/lib32_libmsvcrt_extra_a-wassert.Po
+ 	-rm -f misc/$(DEPDIR)/lib32_libucrt_extra_a-__initenv.Po
++	-rm -f misc/$(DEPDIR)/lib32_libucrt_extra_a-ucrt-access.Po
+ 	-rm -f misc/$(DEPDIR)/lib32_libucrtapp_extra_a-longjmp.Po
+ 	-rm -f misc/$(DEPDIR)/lib32_libucrtapp_extra_a-setjmp.Po
+ 	-rm -f misc/$(DEPDIR)/lib64_libdloadhelper_a-delay-f.Po
+@@ -73684,6 +73762,7 @@ distclean: distclean-am
+ 	-rm -f misc/$(DEPDIR)/lib64_libmsvcrt_extra_a-purecall.Po
+ 	-rm -f misc/$(DEPDIR)/lib64_libmsvcrt_extra_a-seterrno.Po
+ 	-rm -f misc/$(DEPDIR)/lib64_libucrt_extra_a-__initenv.Po
++	-rm -f misc/$(DEPDIR)/lib64_libucrt_extra_a-ucrt-access.Po
+ 	-rm -f misc/$(DEPDIR)/lib64_libucrtapp_extra_a-longjmp.Po
+ 	-rm -f misc/$(DEPDIR)/lib64_libucrtapp_extra_a-setjmp.Po
+ 	-rm -f misc/$(DEPDIR)/libarm32_libdloadhelper_a-delay-f.Po
+@@ -73779,6 +73858,7 @@ distclean: distclean-am
+ 	-rm -f misc/$(DEPDIR)/libarm32_libmsvcrt_extra_a-output_format.Po
+ 	-rm -f misc/$(DEPDIR)/libarm32_libmsvcrt_extra_a-purecall.Po
+ 	-rm -f misc/$(DEPDIR)/libarm32_libucrt_extra_a-__initenv.Po
++	-rm -f misc/$(DEPDIR)/libarm32_libucrt_extra_a-ucrt-access.Po
+ 	-rm -f misc/$(DEPDIR)/libarm32_libucrtapp_extra_a-longjmp.Po
+ 	-rm -f misc/$(DEPDIR)/libarm32_libucrtapp_extra_a-setjmp.Po
+ 	-rm -f misc/$(DEPDIR)/libarm64_libdloadhelper_a-delay-f.Po
+@@ -73872,6 +73952,7 @@ distclean: distclean-am
+ 	-rm -f misc/$(DEPDIR)/libarm64_libmsvcrt_extra_a-output_format.Po
+ 	-rm -f misc/$(DEPDIR)/libarm64_libmsvcrt_extra_a-purecall.Po
+ 	-rm -f misc/$(DEPDIR)/libarm64_libucrt_extra_a-__initenv.Po
++	-rm -f misc/$(DEPDIR)/libarm64_libucrt_extra_a-ucrt-access.Po
+ 	-rm -f misc/$(DEPDIR)/libarm64_libucrtapp_extra_a-longjmp.Po
+ 	-rm -f misc/$(DEPDIR)/libarm64_libucrtapp_extra_a-setjmp.Po
+ 	-rm -f profile/$(DEPDIR)/lib32_libgmon_a-gmon.Po
+@@ -76890,6 +76971,7 @@ maintainer-clean: maintainer-clean-am
+ 	-rm -f misc/$(DEPDIR)/lib32_libmsvcrt_extra_a-seterrno.Po
+ 	-rm -f misc/$(DEPDIR)/lib32_libmsvcrt_extra_a-wassert.Po
+ 	-rm -f misc/$(DEPDIR)/lib32_libucrt_extra_a-__initenv.Po
++	-rm -f misc/$(DEPDIR)/lib32_libucrt_extra_a-ucrt-access.Po
+ 	-rm -f misc/$(DEPDIR)/lib32_libucrtapp_extra_a-longjmp.Po
+ 	-rm -f misc/$(DEPDIR)/lib32_libucrtapp_extra_a-setjmp.Po
+ 	-rm -f misc/$(DEPDIR)/lib64_libdloadhelper_a-delay-f.Po
+@@ -76992,6 +77074,7 @@ maintainer-clean: maintainer-clean-am
+ 	-rm -f misc/$(DEPDIR)/lib64_libmsvcrt_extra_a-purecall.Po
+ 	-rm -f misc/$(DEPDIR)/lib64_libmsvcrt_extra_a-seterrno.Po
+ 	-rm -f misc/$(DEPDIR)/lib64_libucrt_extra_a-__initenv.Po
++	-rm -f misc/$(DEPDIR)/lib64_libucrt_extra_a-ucrt-access.Po
+ 	-rm -f misc/$(DEPDIR)/lib64_libucrtapp_extra_a-longjmp.Po
+ 	-rm -f misc/$(DEPDIR)/lib64_libucrtapp_extra_a-setjmp.Po
+ 	-rm -f misc/$(DEPDIR)/libarm32_libdloadhelper_a-delay-f.Po
+@@ -77087,6 +77170,7 @@ maintainer-clean: maintainer-clean-am
+ 	-rm -f misc/$(DEPDIR)/libarm32_libmsvcrt_extra_a-output_format.Po
+ 	-rm -f misc/$(DEPDIR)/libarm32_libmsvcrt_extra_a-purecall.Po
+ 	-rm -f misc/$(DEPDIR)/libarm32_libucrt_extra_a-__initenv.Po
++	-rm -f misc/$(DEPDIR)/libarm32_libucrt_extra_a-ucrt-access.Po
+ 	-rm -f misc/$(DEPDIR)/libarm32_libucrtapp_extra_a-longjmp.Po
+ 	-rm -f misc/$(DEPDIR)/libarm32_libucrtapp_extra_a-setjmp.Po
+ 	-rm -f misc/$(DEPDIR)/libarm64_libdloadhelper_a-delay-f.Po
+@@ -77180,6 +77264,7 @@ maintainer-clean: maintainer-clean-am
+ 	-rm -f misc/$(DEPDIR)/libarm64_libmsvcrt_extra_a-output_format.Po
+ 	-rm -f misc/$(DEPDIR)/libarm64_libmsvcrt_extra_a-purecall.Po
+ 	-rm -f misc/$(DEPDIR)/libarm64_libucrt_extra_a-__initenv.Po
++	-rm -f misc/$(DEPDIR)/libarm64_libucrt_extra_a-ucrt-access.Po
+ 	-rm -f misc/$(DEPDIR)/libarm64_libucrtapp_extra_a-longjmp.Po
+ 	-rm -f misc/$(DEPDIR)/libarm64_libucrtapp_extra_a-setjmp.Po
+ 	-rm -f profile/$(DEPDIR)/lib32_libgmon_a-gmon.Po
+-- 
+2.34.1
+
