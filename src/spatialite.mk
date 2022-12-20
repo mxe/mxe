@@ -24,7 +24,6 @@ define $(PKG)_BUILD
     cd '$(SOURCE_DIR)' && autoreconf -fi -I ./m4
     cd '$(SOURCE_DIR)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
-        CPPFLAGS=-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H \
         LIBS="`'$(TARGET)-pkg-config' --libs proj minizip`" \
         --enable-freexl=yes \
         --disable-rttopo \

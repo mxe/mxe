@@ -76,7 +76,7 @@ define $(PKG)_BUILD
         --with-xml2='$(PREFIX)/$(TARGET)/bin/xml2-config' \
         --with-pg='$(PREFIX)/$(TARGET)/bin/pg_config' \
         LIBS="-ljpeg -lsecur32 -lportablexdr `'$(TARGET)-pkg-config' --libs openssl libtiff-4 spatialite freexl armadillo`" \
-        CXXFLAGS="-Wno-deprecated-copy -Wno-class-memaccess $(if $(BUILD_STATIC),-DOPJ_STATIC,)" \
+        CXXFLAGS="-Wno-deprecated-copy -Wno-class-memaccess $(if $(BUILD_STATIC),-DOPJ_STATIC -DCURL_STATICLIB,)" \
         $(PKG_CONFIGURE_OPTS)
 
     $(MAKE) -C '$(1)'       -j '$(JOBS)' lib-target
