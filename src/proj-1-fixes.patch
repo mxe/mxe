@@ -1,0 +1,22 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: brodieG <brodieG@users.noreply.github.com>
+Date: Wed, 28 Sep 2022 10:46:55 +0000
+Subject: [PATCH 1/1] add libs to pc file
+
+From R Project toolchain patches.
+
+diff --git a/proj.pc.in b/proj.pc.in
+index 1111111..2222222 100644
+--- a/proj.pc.in
++++ b/proj.pc.in
+@@ -10,5 +10,5 @@ Description: Coordinate transformation software library
+ Requires:
+ Version: @VERSION@
+ Libs: -L${libdir} -lproj
+-Libs.private: @EXTRA_LIBS@
++Libs.private: @EXTRA_LIBS@ @SQLITE3_LIBS@ @TIFF_LIBS@ @CURL_LIBS@
+ Cflags: -I${includedir}
