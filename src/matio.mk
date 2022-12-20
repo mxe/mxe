@@ -3,8 +3,8 @@
 PKG             := matio
 $(PKG)_WEBSITE  := https://sourceforge.net/projects/matio/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.5.2
-$(PKG)_CHECKSUM := db02d0fb3373c3d766a606309b17e64a5d8da55610e921a9f1a0ec171e911d45
+$(PKG)_VERSION  := 1.5.23
+$(PKG)_CHECKSUM := 9f91eae661df46ea53c311a1b2dcff72051095b023c612d7cbfc09406c9f4d6e
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
@@ -17,11 +17,13 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    # https://github.com/tbeu/matio/issues/78 for ac_cv_va_copy
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --build="`config.guess`" \
         --prefix='$(PREFIX)/$(TARGET)' \
-        --disable-shared
+        --disable-shared \
+        ac_cv_va_copy=C99
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
 endef
