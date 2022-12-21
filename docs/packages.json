@@ -278,7 +278,7 @@
     "lz4": {"version": "1.9.4", "website": "https://github.com/lz4/lz4", "description": "lossless compression algorithm optimized for speed"},
     "lzma": {"version": "2201", "website": "https://www.7-zip.org/sdk.html", "description": "LZMA SDK"},
     "lzo": {"version": "2.10", "website": "https://www.oberhumer.com/opensource/lzo/", "description": ""},
-    "matio": {"version": "1.5.2", "website": "https://sourceforge.net/projects/matio/", "description": ""},
+    "matio": {"version": "1.5.23", "website": "https://sourceforge.net/projects/matio/", "description": ""},
     "mdbtools": {"version": "0.7.1", "website": "https://sourceforge.net/projects/mdbtools/", "description": ""},
     "mesa": {"version": "22.3.1", "website": "https://mesa3d.org", "description": "The Mesa 3D Graphics Library"},
     "meson": {"version": "0.64.1", "website": "https://mesonbuild.com/", "description": ""},
