@@ -12,7 +12,7 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 1111111..2222222 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -82,7 +82,7 @@ option(USE_FLOAT "Use single precision arithmetic in the Splash backend" OFF)
+@@ -83,7 +83,7 @@ option(USE_FLOAT "Use single precision arithmetic in the Splash backend" OFF)
  option(BUILD_SHARED_LIBS "Build poppler as a shared library" ON)
  option(RUN_GPERF_IF_PRESENT "Run gperf if it is found" ON)
  if(WIN32)
@@ -32,7 +32,7 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 1111111..2222222 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -277,6 +277,9 @@ else()
+@@ -314,6 +314,9 @@ else()
    message(FATAL_ERROR "Invalid ENABLE_LIBOPENJPEG value: ${ENABLE_LIBOPENJPEG}")
  endif()
  set(ENABLE_LIBOPENJPEG "${WITH_OPENJPEG}")
