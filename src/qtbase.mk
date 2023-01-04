@@ -4,8 +4,8 @@ PKG             := qtbase
 $(PKG)_WEBSITE  := https://www.qt.io/
 $(PKG)_DESCR    := Qt
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.15.7
-$(PKG)_CHECKSUM := 05edd00b2a1ba99c85b3fe876fe1c23d63f0a9bbca7df52bc47393cfd8c809c7
+$(PKG)_VERSION  := 5.15.8
+$(PKG)_CHECKSUM := bfb11126c7f3abc3fdf86425ce912988b864a7e79a606d77325cffdbacb4be9c
 $(PKG)_SUBDIR   := $(PKG)-everywhere-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.qt.io/official_releases/qt/5.15/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
@@ -16,8 +16,8 @@ $(PKG)_DEPS_$(BUILD) :=
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- https://download.qt.io/official_releases/qt/5.8/ | \
-    $(SED) -n 's,.*href="\(5\.[0-9]\.[^/]*\)/".*,\1,p' | \
+    $(WGET) -q -O- https://download.qt.io/official_releases/qt/5.15/ | \
+    $(SED) -n 's,.*href="\(5\.15\.[^/]*\)/".*,\1,p' | \
     grep -iv -- '-rc' | \
     sort |
     tail -1
