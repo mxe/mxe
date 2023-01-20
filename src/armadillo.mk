@@ -4,12 +4,12 @@ PKG             := armadillo
 $(PKG)_WEBSITE  := https://arma.sourceforge.io/
 $(PKG)_DESCR    := Armadillo C++ linear algebra library
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 8.200.2
-$(PKG)_CHECKSUM := 63845e36235f2bd78b4f6890fe5013b6ce51a4e92e3176b20bbc6631b340050a
+$(PKG)_VERSION  := 11.4.3
+$(PKG)_CHECKSUM := 87603263664988af41da2ca4f36205e36ea47a9281fa6cfd463115f3797a1da2
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/arma/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc hdf5 openblas
+$(PKG)_DEPS     := cc hdf5 openblas lapack
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://sourceforge.net/projects/arma/files/' | \
@@ -20,8 +20,10 @@ endef
 define $(PKG)_BUILD
     # build and install the library
     cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \
-        -DDETECT_HDF5=ON \
-        -DARMA_USE_WRAPPER=ON
+        -DARMA_HDF5_INCLUDE_DIR=$(PREFIX)/$(TARGET)/include \
+        -DDETECT_HDF5=OFF \
+        -DARMA_USE_WRAPPER=ON \
+        -DBUILD_SMOKE_TEST=OFF
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install VERBOSE=1
 
@@ -36,7 +38,7 @@ define $(PKG)_BUILD
 
     # compile test
     '$(TARGET)-g++' \
-        -W -Wall -Werror \
+        -W -Wall -Werror -fopenmp \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
-        `'$(TARGET)-pkg-config' $(PKG) --cflags --libs`
+        `'$(TARGET)-pkg-config' $(PKG) --cflags --libs` -lgomp
 endef
