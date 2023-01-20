@@ -20,7 +20,8 @@ define $(PKG)_BUILD
         -DCMAKE_AR='$(PREFIX)/bin/$(TARGET)-ar' \
         -DCMAKE_RANLIB='$(PREFIX)/bin/$(TARGET)-ranlib' \
         -DCBLAS=OFF \
-        -DLAPACKE=OFF
+        -DLAPACKE=OFF \
+        -DTEST_FORTRAN_COMPILER:BOOL=OFF
     $(MAKE) -C '$(BUILD_DIR)/BLAS' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)/BLAS' -j 1 install
 endef

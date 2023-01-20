@@ -4,19 +4,20 @@ PKG             := lapack
 $(PKG)_WEBSITE  := https://www.netlib.org/lapack/
 $(PKG)_DESCR    := Reference LAPACK — Linear Algebra PACKage
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.10.0
-$(PKG)_CHECKSUM := 328c1bea493a32cac5257d84157dc686cc3ab0b004e2bea22044e0a59f6f8a19
+$(PKG)_VERSION  := 3.11.0
+$(PKG)_CHECKSUM := 4b9ba79bfd4921ca820e83979db76ab3363155709444a787979e81c22285ffa9
 $(PKG)_GH_CONF  := Reference-LAPACK/lapack/tags,v
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_DEPS     := cc cblas
 
 define $(PKG)_BUILD
-    cd '$(BUILD_DIR)' && '$(TARGET)-cmake' '$(SOURCE_DIR)' \
+    cd '$(BUILD_DIR)' && '$(TARGET)-cmake' --trace-expand '$(SOURCE_DIR)' \
         -DCMAKE_AR='$(PREFIX)/bin/$(TARGET)-ar' \
         -DCMAKE_RANLIB='$(PREFIX)/bin/$(TARGET)-ranlib' \
         -DBLAS_LIBRARIES=blas \
         -DCBLAS=OFF \
-        -DLAPACKE=ON
+        -DLAPACKE=ON \
+        -DTEST_FORTRAN_COMPILER:BOOL=OFF
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
