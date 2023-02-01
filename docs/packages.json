@@ -204,7 +204,7 @@
     "libidn2": {"version": "2.3.0", "website": "https://www.gnu.org/software/libidn/#libidn2", "description": "implementation of IDNA2008/TR46 internationalized domain names"},
     "libieee1284": {"version": "0.2.11", "website": "http://cyberelk.net/tim/software/libieee1284/", "description": ""},
     "libircclient": {"version": "1.10", "website": "https://sourceforge.net/projects/libircclient/", "description": ""},
-    "libjpeg-turbo": {"version": "2.1.4", "website": "https://libjpeg-turbo.virtualgl.org/", "description": ""},
+    "libjpeg-turbo": {"version": "2.1.5", "website": "https://libjpeg-turbo.virtualgl.org/", "description": ""},
     "liblastfm": {"version": "1.0.9", "website": "https://github.com/lastfm/liblastfm", "description": "A Qt C++ library for the Last.fm webservices"},
     "liblastfm_qt4": {"version": "1.0.9", "website": "https://github.com/lastfm/liblastfm", "description": "A Qt C++ library for the Last.fm webservices"},
     "liblaxjson": {"version": "1.0.5", "website": "https://github.com/andrewrk/liblaxjson", "description": ""},
