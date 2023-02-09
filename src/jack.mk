@@ -4,10 +4,10 @@ PKG             := jack
 $(PKG)_WEBSITE  := https://jackaudio.org/
 $(PKG)_DESCR    := JACK Audio Connection Kit
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.9.16
-$(PKG)_CHECKSUM := e176d04de94dcaa3f9d32ca1825091e1b938783a78c84e7466abd06af7637d37
+$(PKG)_VERSION  := 1.9.22
+$(PKG)_CHECKSUM := 1e42b9fc4ad7db7befd414d45ab2f8a159c0b30fcd6eee452be662298766a849
 $(PKG)_GH_CONF  := jackaudio/jack2/tags,v
-$(PKG)_DEPS     := cc libgnurx libsamplerate libsndfile portaudio pthreads readline
+$(PKG)_DEPS     := cc libgnurx libsamplerate portaudio pthreads
 
 define $(PKG)_BUILD
     # uses modified waf so can't use MXE waf package
@@ -19,8 +19,7 @@ define $(PKG)_BUILD
         ./waf configure build install \
             -j '$(JOBS)' \
             --prefix='$(PREFIX)/$(TARGET)' \
-            --platform=win32 \
-            LDFLAGS=-lreadline
+            --platform=win32
 endef
 
 $(PKG)_BUILD_STATIC =
