@@ -1,0 +1,24 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Fri, 10 Feb 2023 02:27:59 +0100
+Subject: [PATCH 1/1] don't duplicate Requires.private in Libs.private
+
+Causes wrongly ordered -lsharpyuv -lwebp.
+
+diff --git a/libtiff-4.pc.in b/libtiff-4.pc.in
+index 1111111..2222222 100644
+--- a/libtiff-4.pc.in
++++ b/libtiff-4.pc.in
+@@ -7,6 +7,7 @@ Name: libtiff
+ Description:  Tag Image File Format (TIFF) library.
+ Version: @LIBTIFF_MAJOR_VERSION@.@LIBTIFF_MINOR_VERSION@.@LIBTIFF_MICRO_VERSION@
+ Libs: -L${libdir} -ltiff
+-Libs.private: @tiff_libs_private@
++# don't duplicate Requires.private
++#Libs.private: @tiff_libs_private@
+ Cflags: -I${includedir}
+ Requires.private: @tiff_requires_private@
