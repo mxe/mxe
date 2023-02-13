@@ -146,6 +146,7 @@ MXE_NINJA = '$(PREFIX)/$(BUILD)/bin/ninja'
 # unless your changes only apply to building MXE's packages
 MXE_MESON_OPTS = \
     --buildtype=release \
+    --wrap-mode=nofallback \
     $(if $(findstring mxe,$(MXE_USE_CCACHE)), \
     --cross-file='$(PREFIX)/$(TARGET)/share/meson/mxe-crossfile-internal.meson')
 
