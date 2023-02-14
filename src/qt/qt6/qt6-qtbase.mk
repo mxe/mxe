@@ -11,7 +11,7 @@ $(PKG)_SUBDIR   := $(PKG_BASENAME)-everywhere-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG_BASENAME)-everywhere-src-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.qt.io/archive/qt/6.8/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
-$(PKG)_DEPS     := cc freetype harfbuzz jpeg libpng mesa openssl pcre2 sqlite zlib zstd $(BUILD)~$(PKG) \
+$(PKG)_DEPS     := cc freetype harfbuzz jpeg libpng mesa openssl pcre2 postgresql sqlite zlib zstd $(BUILD)~$(PKG) \
                    $(if $(findstring shared,$(MXE_TARGETS)), icu4c)
 $(PKG)_DEPS_$(BUILD) :=
 $(PKG)_OO_DEPS_$(BUILD) := ninja
@@ -55,7 +55,8 @@ define $(PKG)_BUILD
         -DFEATURE_pkg_config=ON \
         -DFEATURE_sql_mysql=OFF \
         -DFEATURE_sql_odbc=ON \
-        -DFEATURE_sql_psql=OFF \
+        -DPostgreSQL_LIBRARIES="-lpq -lpgport -lpgcommon" \
+        -DFEATURE_sql_psql=ON \
         -DFEATURE_system_sqlite=ON \
         -DFEATURE_system_zlib=ON \
         -DFEATURE_use_gold_linker_alias=OFF \
@@ -66,6 +67,9 @@ define $(PKG)_BUILD
     $(if $(BUILD_STATIC),$(SED) -i -e 's/^QMAKE_PRL_LIBS .*/& -lodbc32/;' \
 	      -e 's/^QMAKE_PRL_LIBS_FOR_CMAKE .*/&;-lodbc32/;' \
               '$(PREFIX)/$(TARGET)/$(MXE_QT6_ID)/plugins/sqldrivers/qsqlodbc.prl',)
+    $(if $(BUILD_STATIC),$(SED) -i -e 's/^QMAKE_PRL_LIBS = -lpq/& -lpgport -lpgcommon/;' \
+             -e 's/^QMAKE_PRL_LIBS_FOR_CMAKE = -lpq/&;-lpgport;-lpgcommon/;' \
+              '$(PREFIX)/$(TARGET)/$(MXE_QT6_ID)/plugins/sqldrivers/qsqlpsql.prl',)
 
     mkdir -p '$(CMAKE_TOOLCHAIN_DIR)'
     echo 'set(QT_HOST_PATH "$(PREFIX)/$(BUILD)/$(MXE_QT6_ID)")' \
