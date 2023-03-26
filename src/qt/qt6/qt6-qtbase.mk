@@ -65,6 +65,11 @@ define $(PKG)_BUILD
 	      -e 's/^QMAKE_PRL_LIBS_FOR_CMAKE .*/&;-lodbc32/;' \
               '$(PREFIX)/$(TARGET)/$(MXE_QT6_ID)/plugins/sqldrivers/qsqlodbc.prl',)
 
+    # QTBUG-103019 MinGW Qt6Platform.pc has an extra '>' after '-D_UNICODE'
+    # https://bugreports.qt.io/browse/QTBUG-103019
+    $(SED) -i 's/-D_UNICODE>/-D_UNICODE/' \
+              '$(PREFIX)/$(TARGET)/$(MXE_QT6_ID)/lib/pkgconfig/Qt6Platform.pc'
+
     mkdir -p '$(CMAKE_TOOLCHAIN_DIR)'
     echo 'set(QT_HOST_PATH "$(PREFIX)/$(BUILD)/$(MXE_QT6_ID)")' \
         > '$(CMAKE_TOOLCHAIN_DIR)/$(PKG).cmake'
