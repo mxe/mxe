@@ -1,0 +1,62 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Zeus James <39390245+zEuS0390@users.noreply.github.com>
+Date: Sun, 12 Feb 2023 16:34:22 +0800
+Subject: [PATCH] Fix MinGW build issue on example (#2642)
+
+* Fix MinGW build issue on example #2638
+
+* Move the cmake change to example\CMakeLists.txt
+
+* Update CMakeLists.txt on the example
+
+Signed-off-by: Jan200101 <sentrycraft123@gmail.com>
+---
+ example/CMakeLists.txt                      |  2 +-
+ include/spdlog/details/udp_client-windows.h | 10 ++++++----
+ 2 files changed, 7 insertions(+), 5 deletions(-)
+
+diff --git a/example/CMakeLists.txt b/example/CMakeLists.txt
+index 83336e98..a7863493 100644
+--- a/example/CMakeLists.txt
++++ b/example/CMakeLists.txt
+@@ -12,7 +12,7 @@ endif()
+ # Example of using pre-compiled library
+ # ---------------------------------------------------------------------------------------
+ add_executable(example example.cpp)
+-target_link_libraries(example PRIVATE spdlog::spdlog)
++target_link_libraries(example PRIVATE spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>)
+ 
+ # ---------------------------------------------------------------------------------------
+ # Example of using header-only library
+diff --git a/include/spdlog/details/udp_client-windows.h b/include/spdlog/details/udp_client-windows.h
+index 8e763356..7d25f037 100644
+--- a/include/spdlog/details/udp_client-windows.h
++++ b/include/spdlog/details/udp_client-windows.h
+@@ -15,9 +15,11 @@
+ #include <stdio.h>
+ #include <string>
+ 
+-#pragma comment(lib, "Ws2_32.lib")
+-#pragma comment(lib, "Mswsock.lib")
+-#pragma comment(lib, "AdvApi32.lib")
++#if defined(_MSC_VER)
++#	pragma comment(lib, "Ws2_32.lib")
++#	pragma comment(lib, "Mswsock.lib")
++#	pragma comment(lib, "AdvApi32.lib")
++#endif
+ 
+ namespace spdlog {
+ namespace details {
+@@ -25,7 +27,7 @@ class udp_client
+ {
+     static constexpr int TX_BUFFER_SIZE = 1024 * 10;
+     SOCKET socket_ = INVALID_SOCKET;
+-    sockaddr_in addr_ = {0};
++    sockaddr_in addr_ = {};
+ 
+     static void init_winsock_()
+     {
