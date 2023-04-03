@@ -3,9 +3,10 @@
 PKG             := ghostscript
 $(PKG)_WEBSITE  := https://www.ghostscript.com/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 9.50
+$(PKG)_VERSION  := 10.01.1
 $(PKG)_NODOTVER := $(subst .,,$($(PKG)_VERSION))
-$(PKG)_CHECKSUM := db9bb0817b6f22974e6d5ad751975f346420c2c86a0afcfe6b4e09c47803e7d4
+$(PKG)_MAJORVER := $(firstword $(subst ., ,$($(PKG)_VERSION)))
+$(PKG)_CHECKSUM := c91193635aa2578f9508b8ba846106c1e3705fbd3fed5fd9a015f21b55f15d68
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs$($(PKG)_NODOTVER)/$($(PKG)_FILE)
@@ -18,16 +19,14 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cp -f `automake --print-libdir`/{config.guess,config.sub,install-sh} '$(SOURCE_DIR)'
     cd '$(SOURCE_DIR)' && rm -rf freetype jpeg lcms2mt libpng openjpeg tiff
-    cd '$(SOURCE_DIR)' && autoreconf -f -i
     cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
-        CPPFLAGS='$(CPPFLAGS) -DHAVE_SYS_TIMES_H=0' \
         $(MXE_CONFIGURE_OPTS) \
         --with-libiconv=gnu \
-        --without-local-zlib
-    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(if $(BUILD_STATIC),libgs,so) || \
-    $(MAKE) -C '$(BUILD_DIR)' -j '1' $(if $(BUILD_STATIC),libgs,so)
+        --without-local-zlib \
+        --without-tesseract
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(if $(BUILD_STATIC),libgs,so-only) || \
+    $(MAKE) -C '$(BUILD_DIR)' -j '1' $(if $(BUILD_STATIC),libgs,so-only)
 
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/include/ghostscript'
     $(INSTALL) '$(SOURCE_DIR)/devices/gdevdsp.h' '$(PREFIX)/$(TARGET)/include/ghostscript/gdevdsp.h'
@@ -38,7 +37,7 @@ define $(PKG)_BUILD
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/bin'
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib'
     $(if $(BUILD_STATIC),$(INSTALL) '$(BUILD_DIR)/bin/gs.a' '$(PREFIX)/$(TARGET)/lib/libgs.a', \
-        $(INSTALL) '$(BUILD_DIR)/sobin/libgs-9.dll' '$(PREFIX)/$(TARGET)/bin/libgs-9.dll' && \
+        $(INSTALL) '$(BUILD_DIR)/sobin/libgs-$($(PKG)_MAJORVER).dll' '$(PREFIX)/$(TARGET)/bin/libgs-$($(PKG)_MAJORVER).dll' && \
         $(INSTALL) '$(BUILD_DIR)/sobin/libgs.dll.a' '$(PREFIX)/$(TARGET)/lib/libgs.dll.a')
 
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
@@ -47,13 +46,13 @@ define $(PKG)_BUILD
      echo 'Description: Ghostscript library'; \
      echo 'Cflags: -I"$(PREFIX)/$(TARGET)/include/ghostscript"'; \
      echo 'Libs: -L"$(PREFIX)/$(TARGET)/lib" -lgs'; \
-     echo 'Requires: fontconfig freetype2 lcms2 libidn libtiff-4 libpng libopenjp2 libjpeg zlib'; \
+     echo 'Requires: dbus-1 fontconfig freetype2 lcms2 libidn libpaper libtiff-4 libpng libopenjp2 libjpeg zlib'; \
      echo '# https://github.com/mxe/mxe/issues/1446'; \
-     echo 'Libs.private: -lm -liconv -lpaper -lwinspool';) \
+     echo 'Libs.private: -lm -liconv -lwinspool';) \
      > '$(PREFIX)/$(TARGET)/lib/pkgconfig/ghostscript.pc'
 
     '$(TARGET)-gcc' \
-        -W -Wall -Werror -pedantic \
+        -W -Wall -Werror \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-ghostscript.exe' \
         `$(TARGET)-pkg-config --cflags --libs ghostscript`
 endef
