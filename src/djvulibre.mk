@@ -3,8 +3,8 @@
 PKG             := djvulibre
 $(PKG)_WEBSITE  := https://djvu.sourceforge.io/
 $(PKG)_DESCR    := DjVuLibre
-$(PKG)_VERSION  := 3.5.27
-$(PKG)_CHECKSUM := e69668252565603875fb88500cde02bf93d12d48a3884e472696c896e81f505f
+$(PKG)_VERSION  := 3.5.28
+$(PKG)_CHECKSUM := fcd009ea7654fde5a83600eb80757bd3a76998e47d13c66b54c8db849f8f2edc
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/djvu/DjVuLibre/$($(PKG)_VERSION)/$($(PKG)_FILE)
