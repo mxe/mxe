@@ -403,6 +403,7 @@
     "qtifw": {"version": "4.5.1", "website": "https://doc.qt.io/qtinstallerframework/index.html", "description": "Qt Installer Framework"},
     "qtimageformats": {"version": "5.15.8", "website": "https://www.qt.io/", "description": "Qt"},
     "qtkeychain": {"version": "0.12.0", "website": "https://github.com/frankosterfeld/qtkeychain", "description": "QtKeychain"},
+    "qtkeychain-qt6": {"version": "0.12.0", "website": "https://github.com/frankosterfeld/qtkeychain", "description": "QtKeychain"},
     "qtlocation": {"version": "5.15.8", "website": "https://www.qt.io/", "description": "Qt"},
     "qtlottie": {"version": "5.15.8", "website": "https://www.qt.io/", "description": "Qt"},
     "qtmultimedia": {"version": "5.15.8", "website": "https://www.qt.io/", "description": "Qt"},
