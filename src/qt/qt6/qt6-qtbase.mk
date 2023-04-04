@@ -67,8 +67,9 @@ define $(PKG)_BUILD
 
     # QTBUG-103019 MinGW Qt6Platform.pc has an extra '>' after '-D_UNICODE'
     # https://bugreports.qt.io/browse/QTBUG-103019
-    $(SED) -i 's/-D_UNICODE>/-D_UNICODE/' \
-              '$(PREFIX)/$(TARGET)/$(MXE_QT6_ID)/lib/pkgconfig/Qt6Platform.pc'
+    # However, qt6 seems to install .pc files only for shared builds.
+    $(if $(BUILD_SHARED),$(SED) -i 's/-D_UNICODE>/-D_UNICODE/' \
+              '$(PREFIX)/$(TARGET)/$(MXE_QT6_ID)/lib/pkgconfig/Qt6Platform.pc',)
 
     mkdir -p '$(CMAKE_TOOLCHAIN_DIR)'
     echo 'set(QT_HOST_PATH "$(PREFIX)/$(BUILD)/$(MXE_QT6_ID)")' \
