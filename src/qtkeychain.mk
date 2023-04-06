@@ -17,6 +17,8 @@ define $(PKG)_BUILD_COMMON
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
+    # Qt6 does not provide pkgconfig files for static builds
+    test '@build_with_qt6@' = 'on' -a '$(BUILD_STATIC)' || \
     '$(TARGET)-g++' \
         -W -Wall -Werror -ansi -pedantic -std=c++17 \
         '$(SOURCE_DIR)/testclient.cpp' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
