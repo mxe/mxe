@@ -245,6 +245,7 @@
     "libsigc++": {"version": "2.10.7", "website": "https://libsigc.sourceforge.io/", "description": ""},
     "libsignal-protocol-c": {"version": "2.3.3", "website": "https://github.com/signalapp/libsignal-protocol-c", "description": "libsignal-protocol-c"},
     "libsigrok": {"version": "0.5.0", "website": "https://www.sigrok.org/wiki/Libsigrok", "description": "libsigrok"},
+    "libslirp": {"version": "4.7.0", "website": "https://gitlab.freedesktop.org/slirp/libslirp", "description": ""},
     "libsndfile": {"version": "1.1.0", "website": "", "description": ""},
     "libsodium": {"version": "1.0.18", "website": "https://download.libsodium.org/doc/", "description": ""},
     "libsoup": {"version": "2.74.2", "website": "https://wiki.gnome.org/Projects/libsoup", "description": "HTTP client/server library for GNOME"},
