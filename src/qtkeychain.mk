@@ -37,7 +37,7 @@ define $(PKG)_BUILD_COMMON
 > '$(PREFIX)/$(TARGET)/bin/test-@qt_version_prefix@keychain.bat'
 endef
 
-$(PKG)_build = $(subst @build_with_qt6@,off, \
+$(PKG)_BUILD = $(subst @build_with_qt6@,off, \
                $(subst @qt_version_prefix@,qt5, \
                $(subst @qtcore_pkgconfig_module@,Qt5Core, \
                $($(PKG)_BUILD_COMMON))))
