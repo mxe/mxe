@@ -8,14 +8,13 @@ $(PKG)_CHECKSUM := b6d893dc7dcd4138b9e9df59a13c59695e50e80dc5c2cacee067467069395
 $(PKG)_SUBDIR   := poppler-$($(PKG)_VERSION)
 $(PKG)_FILE     := poppler-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://poppler.freedesktop.org/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc boost cairo curl freetype glib jpeg lcms libpng libwebp openjpeg qt6-qtbase qtbase tiff zlib
+$(PKG)_DEPS     := cc boost cairo curl freetype glib jpeg lcms libpng libwebp openjpeg tiff zlib
 
 define $(PKG)_UPDATE
     $(call GET_LATEST_VERSION, https://poppler.freedesktop.org/releases.html, poppler-)
 endef
 
-define $(PKG)_BUILD
-    # build and install the library
+define $(PKG)_BUILD_COMMON
     cd '$(BUILD_DIR)' && $(TARGET)-cmake \
         -DPOPPLER_REQUIRES="lcms2 freetype2 libjpeg libpng libopenjp2 libtiff-4" \
         -DENABLE_UNSTABLE_API_ABI_HEADERS=ON \
@@ -26,12 +25,12 @@ define $(PKG)_BUILD
         -DBUILD_MANUAL_TESTS=OFF \
         -DENABLE_SPLASH=ON \
         -DENABLE_UTILS=OFF \
-        -DENABLE_CPP=ON \
-        -DENABLE_GLIB=ON \
+        -DENABLE_CPP=@build_with_cpp@ \
+        -DENABLE_GLIB=@build_with_glib@ \
         -DENABLE_GOBJECT_INTROSPECTION=OFF \
         -DENABLE_GTK_DOC=OFF \
-        -DENABLE_QT5=ON \
-        -DENABLE_QT6=ON \
+        -DENABLE_QT5=@build_with_qt5@ \
+        -DENABLE_QT6=@build_with_qt6@ \
         -DENABLE_LIBOPENJPEG=openjpeg2 \
         -DENABLE_CMS=lcms2 \
         -DENABLE_DCTDECODER=libjpeg \
@@ -47,11 +46,19 @@ define $(PKG)_BUILD
         -DFONT_CONFIGURATION=win32 \
         '$(SOURCE_DIR)'
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+endef
+
+define $(PKG)_BUILD
+    $(subst @build_with_cpp@,ON, \
+    $(subst @build_with_glib@,ON, \
+    $(subst @build_with_qt5@,OFF, \
+    $(subst @build_with_qt6@,OFF, \
+    $($(PKG)_BUILD_COMMON)))))
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
-    # compile test
     '$(TARGET)-g++' \
         -W -Wall -Werror -ansi -pedantic -std=c++11 \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
         `'$(TARGET)-pkg-config' poppler-cpp freetype2 libjpeg libtiff-4 libpng libopenjp2 --cflags --libs` -liconv
 endef
+
