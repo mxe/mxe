@@ -1,0 +1,63 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: brodieG <brodieG@users.noreply.github.com>
+Date: Wed, 29 Jun 2022 00:29:15 +0000
+Subject: [PATCH 1/3] add explicit requires to pkgconfig
+
+In conjunction with hot-patching hdf4 to generate pc
+files, this allows the dependencies to be resolved
+correctly
+
+diff --git a/netcdf.pc.in b/netcdf.pc.in
+index 1111111..2222222 100644
+--- a/netcdf.pc.in
++++ b/netcdf.pc.in
+@@ -8,6 +8,7 @@ Name: @PACKAGE@
+ Description: NetCDF Client Library for C
+ URL: http://www.unidata.ucar.edu/netcdf
+ Version: @PACKAGE_VERSION@
++Requires: df mfhdf hdf5 hdf5_hl
+ Libs: -L${libdir} @NC_LIBS@
+ Libs.private: @LIBS@
+ Cflags: -I${includedir}
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: brodieG <brodieG@users.noreply.github.com>
+Date: Wed, 29 Jun 2022 00:34:48 +0000
+Subject: [PATCH 2/3] only allow lcurl as libprivate
+
+
+diff --git a/netcdf.pc.in b/netcdf.pc.in
+index 1111111..2222222 100644
+--- a/netcdf.pc.in
++++ b/netcdf.pc.in
+@@ -10,5 +10,5 @@ URL: http://www.unidata.ucar.edu/netcdf
+ Version: @PACKAGE_VERSION@
+ Requires: df mfhdf hdf5 hdf5_hl
+ Libs: -L${libdir} @NC_LIBS@
+-Libs.private: @LIBS@
++Libs.private: -lcurl
+ Cflags: -I${includedir}
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: brodieG <brodieG@users.noreply.github.com>
+Date: Tue, 13 Sep 2022 00:28:49 +0000
+Subject: [PATCH 3/3] experiment with Requires.private
+
+
+diff --git a/netcdf.pc.in b/netcdf.pc.in
+index 1111111..2222222 100644
+--- a/netcdf.pc.in
++++ b/netcdf.pc.in
+@@ -8,7 +8,7 @@ Name: @PACKAGE@
+ Description: NetCDF Client Library for C
+ URL: http://www.unidata.ucar.edu/netcdf
+ Version: @PACKAGE_VERSION@
+-Requires: df mfhdf hdf5 hdf5_hl
++Requires.private: df mfhdf hdf5 hdf5_hl
+ Libs: -L${libdir} @NC_LIBS@
+ Libs.private: -lcurl
+ Cflags: -I${includedir}
