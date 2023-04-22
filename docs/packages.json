@@ -284,7 +284,7 @@
     "matio": {"version": "1.5.23", "website": "https://sourceforge.net/projects/matio/", "description": ""},
     "mdbtools": {"version": "0.7.1", "website": "https://sourceforge.net/projects/mdbtools/", "description": ""},
     "mesa": {"version": "22.3.3", "website": "https://mesa3d.org", "description": "The Mesa 3D Graphics Library"},
-    "meson": {"version": "0.64.1", "website": "https://mesonbuild.com/", "description": ""},
+    "meson": {"version": "1.1.0", "website": "https://mesonbuild.com/", "description": ""},
     "meson-wrapper": {"version": "1", "website": "", "description": ""},
     "metis": {"version": "5.1.0", "website": "glaros.dtc.umn.edu", "description": "metis"},
     "mingw-w64": {"version": "10.0.0", "website": "https://mingw-w64.sourceforge.io/", "description": "MinGW-w64 Runtime"},
