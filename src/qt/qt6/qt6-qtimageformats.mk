@@ -16,4 +16,6 @@ define $(PKG)_BUILD
     $(QT6_QT_CMAKE) -S '$(SOURCE_DIR)' -B '$(BUILD_DIR)'
     cd '$(BUILD_DIR)' && '$(TARGET)-cmake' --build . -j '$(JOBS)'
     cd '$(BUILD_DIR)' && '$(TARGET)-cmake' --install .
+    $(foreach fmt,ICNS Jp2 Mng Tga Tiff Wbmp Webp,\
+      $(SED) -i 's|LINK_ONLY:Qt::|LINK_ONLY:Qt6::|g' '$(PREFIX)/$(TARGET)/qt6/lib/cmake/Qt6Gui/Qt6Q$(fmt)PluginTargets.cmake';)
 endef
