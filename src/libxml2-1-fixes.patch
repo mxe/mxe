@@ -17,6 +17,6 @@ index 1111111..2222222 100644
  Description: libXML library version2.
  Requires:
 +Requires.private: liblzma
- Libs: -L${libdir} -lxml2
- Libs.private: @ICU_LIBS@ @THREAD_LIBS@ @Z_LIBS@ @LZMA_LIBS@ @ICONV_LIBS@ @M_LIBS@ @WIN32_EXTRA_LIBADD@ @LIBS@
+ Libs: -L${libdir} @XML_LIBS@
+ Libs.private: @XML_PRIVATE_LIBS@ @LIBS@
  Cflags: @XML_INCLUDEDIR@ @XML_CFLAGS@
