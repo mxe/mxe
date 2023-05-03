@@ -12,7 +12,7 @@ diff --git a/libxslt/security.c b/libxslt/security.c
 index 1111111..2222222 100644
 --- a/libxslt/security.c
 +++ b/libxslt/security.c
-@@ -343,7 +343,7 @@ xsltCheckWritePath(xsltSecurityPrefsPtr sec,
+@@ -327,7 +327,7 @@ xsltCheckWritePath(xsltSecurityPrefsPtr sec,
  	    }
  	    ret = xsltCheckWritePath(sec, ctxt, directory);
  	    if (ret == 1)
