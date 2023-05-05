@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM  = $(poppler_CHECKSUM)
 $(PKG)_SUBDIR    = $(poppler_SUBDIR)
 $(PKG)_FILE      = $(poppler_FILE)
 $(PKG)_URL       = $(poppler_URL)
-$(PKG)_DEPS     := cc poppler qt6-qtbase
+$(PKG)_DEPS     := cc poppler qt6-qtbase qt6-qtimageformats
 
 define $(PKG)_BUILD
     $(subst @build_with_cpp@,OFF, \

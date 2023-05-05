@@ -1,0 +1,48 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Stefan=20L=C3=B6ffler?= <st.loeffler@gmail.com>
+Date: Sat, 26 Jun 2021 19:49:25 +0200
+Subject: [PATCH 1/2] Fix static builds
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -83,7 +83,7 @@ option(USE_FLOAT "Use single precision arithmetic in the Splash backend" OFF)
+ option(BUILD_SHARED_LIBS "Build poppler as a shared library" ON)
+ option(RUN_GPERF_IF_PRESENT "Run gperf if it is found" ON)
+ if(WIN32)
+-  option(ENABLE_RELOCATABLE "Do not hardcode the poppler library location (on Windows)." ON)
++  option(ENABLE_RELOCATABLE "Do not hardcode the poppler library location (on Windows)." ${BUILD_SHARED_LIBS})
+ else()
+   set(ENABLE_RELOCATABLE OFF)
+ endif()
+
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Fri, 5 May 2023 18:00:00 +0200
+Subject: [PATCH 2/2] Fix static builds involving qtimageformats
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -203,7 +203,7 @@ if (ENABLE_QT5)
+ endif()
+ 
+ if (ENABLE_QT6)
+-  SET(QT_NO_CREATE_VERSIONLESS_TARGETS ON)
++  SET(QT_NO_CREATE_VERSIONLESS_TARGETS ${BUILD_SHARED_LIBS})
+   find_package(Qt6 6.2 COMPONENTS Core Gui Widgets Test QUIET)
+   if (NOT (Qt6Core_FOUND AND Qt6Gui_FOUND AND Qt6Widgets_FOUND AND Qt6Test_FOUND))
+     message("-- Package Qt6Core or Qt6Gui or Qt6Widgets or Qt6Test not found")
+
