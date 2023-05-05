@@ -798,7 +798,7 @@ $(PREFIX)/$(3)/installed/$(1): $(PKG_MAKEFILES) \
 	               $(MAKE) -f '$(MAKEFILE)' \
 	                   'build-only-$(1)_$(3)' \
 	                   WGET=false \
-	               ) &> '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'; then \
+	               ) $(if $(filter-out 0,$(VERBOSE)),|& tee,&>) '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'; then \
 	            echo; \
 	            echo 'Failed to build package $(1) for target $(3)!'; \
 	            echo '------------------------------------------------------------'; \
