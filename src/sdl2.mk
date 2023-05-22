@@ -4,8 +4,10 @@ PKG             := sdl2
 $(PKG)_WEBSITE  := https://www.libsdl.org/
 $(PKG)_DESCR    := SDL2
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.0.20
-$(PKG)_CHECKSUM := 2a026753af9b03fca043824bca8341f74921a836d28729e0c31aa262202a83c6
+$(PKG)_VERSION  := 2.26.2
+$(PKG)_SUBDIR   := SDL2-$($(PKG)_VERSION)
+$(PKG)_FILE     := SDL2-$($(PKG)_VERSION).tar.gz
+$(PKG)_CHECKSUM := 95d39bc3de037fbdfa722623737340648de4f180a601b0afad27645d150b99e0
 $(PKG)_GH_CONF  := libsdl-org/SDL/releases/tag,release-,,
 $(PKG)_DEPS     := cc libiconv libsamplerate
 

@@ -20,7 +20,7 @@ diff --git a/Makefile.in b/Makefile.in
 index 1111111..2222222 100644
 --- a/Makefile.in
 +++ b/Makefile.in
-@@ -143,13 +143,13 @@ update-revision:
+@@ -158,13 +158,13 @@ update-revision:
  .PHONY: all update-revision install install-bin install-hdrs install-lib install-data uninstall uninstall-bin uninstall-hdrs uninstall-lib uninstall-data clean distclean dist $(OBJECTS:.lo=.d)
  
  $(objects)/$(TARGET): $(GEN_HEADERS) $(GEN_OBJECTS) $(OBJECTS) $(VERSION_OBJECTS)
@@ -50,7 +50,7 @@ diff --git a/include/SDL_opengl.h b/include/SDL_opengl.h
 index 1111111..2222222 100644
 --- a/include/SDL_opengl.h
 +++ b/include/SDL_opengl.h
-@@ -25,2156 +25,60 @@
+@@ -25,2105 +25,60 @@
   *  This is a simple file to encapsulate the OpenGL API headers.
   */
  
@@ -163,10 +163,6 @@ index 1111111..2222222 100644
  
 -#ifndef GLAPI
 -#define GLAPI extern
--#endif
--
--#ifndef GLAPIENTRY
--#define GLAPIENTRY
 +#ifdef __glext_h_
 +/* Someone has already included glext.h */
 +#define NO_SDL_GLEXT
@@ -175,13 +171,8 @@ index 1111111..2222222 100644
 +#define __glext_h_              /* Don't let gl.h include glext.h */
  #endif
 -
--#ifndef APIENTRY
--#define APIENTRY GLAPIENTRY
--#endif
--
--/* "P" suffix to be used for a pointer to a function */
--#ifndef APIENTRYP
--#define APIENTRYP APIENTRY *
+-#ifndef GLAPIENTRY
+-#define GLAPIENTRY
 +#if defined(__MACOSX__)
 +#include <OpenGL/gl.h>          /* Header File For The OpenGL Library */
 +#define __X_GL_H
@@ -189,12 +180,21 @@ index 1111111..2222222 100644
 +#include <GL/gl.h>              /* Header File For The OpenGL Library */
  #endif
 -
--#ifndef GLAPIENTRYP
--#define GLAPIENTRYP GLAPIENTRY *
+-#ifndef APIENTRY
+-#define APIENTRY GLAPIENTRY
 +#ifdef _SDL_CLEAR_GLEXT_HEADERGUARD
 +#undef __glext_h_
  #endif
  
+-/* "P" suffix to be used for a pointer to a function */
+-#ifndef APIENTRYP
+-#define APIENTRYP APIENTRY *
+-#endif
+-
+-#ifndef GLAPIENTRYP
+-#define GLAPIENTRYP GLAPIENTRY *
+-#endif
+-
 -#if defined(PRAGMA_EXPORT_SUPPORTED)
 -#pragma export on
 -#endif
@@ -2082,7 +2082,7 @@ index 1111111..2222222 100644
 -#define GL_ACTIVE_TEXTURE_ARB			0x84E0
 -#define GL_CLIENT_ACTIVE_TEXTURE_ARB		0x84E1
 -#define GL_MAX_TEXTURE_UNITS_ARB		0x84E2
- 
+-
 -GLAPI void GLAPIENTRY glActiveTextureARB(GLenum texture);
 -GLAPI void GLAPIENTRY glClientActiveTextureARB(GLenum texture);
 -GLAPI void GLAPIENTRY glMultiTexCoord1dARB(GLenum target, GLdouble s);
@@ -2154,7 +2154,7 @@ index 1111111..2222222 100644
 -typedef void (APIENTRYP PFNGLMULTITEXCOORD4SVARBPROC) (GLenum target, const GLshort *v);
 -
 -#endif /* GL_ARB_multitexture */
--
+ 
 -
 -
 -/*
@@ -2164,57 +2164,6 @@ index 1111111..2222222 100644
  #if !defined(NO_SDL_GLEXT) && !defined(GL_GLEXT_LEGACY)
  #include "SDL_opengl_glext.h"
 -#endif  /* GL_GLEXT_LEGACY */
--
--
--
--/*
-- * ???. GL_MESA_packed_depth_stencil
-- * XXX obsolete
-- */
--#ifndef GL_MESA_packed_depth_stencil
--#define GL_MESA_packed_depth_stencil 1
--
--#define GL_DEPTH_STENCIL_MESA			0x8750
--#define GL_UNSIGNED_INT_24_8_MESA		0x8751
--#define GL_UNSIGNED_INT_8_24_REV_MESA		0x8752
--#define GL_UNSIGNED_SHORT_15_1_MESA		0x8753
--#define GL_UNSIGNED_SHORT_1_15_REV_MESA		0x8754
--
--#endif /* GL_MESA_packed_depth_stencil */
--
--
--#ifndef GL_ATI_blend_equation_separate
--#define GL_ATI_blend_equation_separate 1
--
--#define GL_ALPHA_BLEND_EQUATION_ATI	        0x883D
--
--GLAPI void GLAPIENTRY glBlendEquationSeparateATI( GLenum modeRGB, GLenum modeA );
--typedef void (APIENTRYP PFNGLBLENDEQUATIONSEPARATEATIPROC) (GLenum modeRGB, GLenum modeA);
--
--#endif /* GL_ATI_blend_equation_separate */
--
--
--/* GL_OES_EGL_image */
--#ifndef GL_OES_EGL_image
--typedef void* GLeglImageOES;
--#endif
--
--#ifndef GL_OES_EGL_image
--#define GL_OES_EGL_image 1
--#ifdef GL_GLEXT_PROTOTYPES
--GLAPI void APIENTRY glEGLImageTargetTexture2DOES (GLenum target, GLeglImageOES image);
--GLAPI void APIENTRY glEGLImageTargetRenderbufferStorageOES (GLenum target, GLeglImageOES image);
--#endif
--typedef void (APIENTRYP PFNGLEGLIMAGETARGETTEXTURE2DOESPROC) (GLenum target, GLeglImageOES image);
--typedef void (APIENTRYP PFNGLEGLIMAGETARGETRENDERBUFFERSTORAGEOESPROC) (GLenum target, GLeglImageOES image);
--#endif
--
--
--/**
-- ** NOTE!!!!!  If you add new functions to this file, or update
-- ** glext.h be sure to regenerate the gl_mangle.h file.  See comments
-- ** in that file for details.
-- **/
 -
 -
 -
@@ -2250,7 +2199,7 @@ diff --git a/configure.ac b/configure.ac
 index 1111111..2222222 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -3407,6 +3407,7 @@ case "$host" in
+@@ -4034,6 +4034,7 @@ case "$host" in
          CheckVulkan
          CheckDIRECTX
          CheckHIDAPI
