@@ -1,0 +1,32 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Jan200101 <sentrycraft123@gmail.com>
+Date: Sat, 27 May 2023 20:31:20 +0200
+Subject: [PATCH] don't check for gtkdocize when generating configurations
+
+Signed-off-by: Jan200101 <sentrycraft123@gmail.com>
+---
+ autogen.sh | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
+
+diff --git a/autogen.sh b/autogen.sh
+index 1111111..2222222 100755
+--- a/autogen.sh
++++ b/autogen.sh
+@@ -13,12 +13,7 @@ if test -z $AUTORECONF; then
+         exit 1
+ fi
+ 
+-GTKDOCIZE=`which gtkdocize`
+-if test -z $GTKDOCIZE; then
+-        echo "*** No GTK-Doc found, documentation won't be generated ***"
+-else
+-        gtkdocize || exit $?
+-fi
++export GTKDOCIZE=echo
+ 
+ # create dummy */Makefile.am.features and ChangeLog to make automake happy
+ > boilerplate/Makefile.am.features
