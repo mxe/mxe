@@ -1,0 +1,9 @@
+--- a/netcdf.pc.in	2023-06-08 11:19:40.184677206 +1000
++++ b/netcdf.pc.in	2023-06-08 11:20:34.870711377 +1000
+@@ -9,5 +9,5 @@
+ URL: https://www.unidata.ucar.edu/netcdf
+ Version: @PACKAGE_VERSION@
+ Libs: -L${libdir} @NC_LIBS@
+-Libs.private: @LIBS@
+ Cflags: -I${includedir}
++Requires.private: mfhdf hdf5_hl libcurl libxml-2.0
