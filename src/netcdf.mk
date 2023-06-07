@@ -23,7 +23,8 @@ define $(PKG)_BUILD
         -DENABLE_NETCDF_4=ON \
         -DUSE_HDF5=ON \
         -DHDF5_VERSION=$(hdf5_VERSION) \
-        -DENABLE_LIBXML2=ON
+        -DENABLE_LIBXML2=ON \
+        $(if $(BUILD_STATIC),-DCMAKE_C_FLAGS=-DLIBXML_STATIC)
 
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
@@ -39,6 +40,6 @@ define $(PKG)_BUILD
         -W -Wall -Werror -ansi -pedantic \
         '$(SOURCE_DIR)/examples/C/simple.c' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
         `'$(TARGET)-pkg-config' $(PKG) libjpeg libcurl libxml-2.0 \
-         --cflags --libs` -lportablexdr
+         --cflags --libs $(if $(BUILD_STATIC),--static)` -lportablexdr
 
 endef
