@@ -39,7 +39,6 @@ define $(PKG)_BUILD
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
         '$(SOURCE_DIR)/examples/C/simple.c' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
-        `'$(TARGET)-pkg-config' $(PKG) libjpeg libcurl libxml-2.0 \
-         --cflags --libs $(if $(BUILD_STATIC),--static)` -lportablexdr
+        `'$(TARGET)-pkg-config' $(PKG) --cflags --libs`
 
 endef
