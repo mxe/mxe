@@ -24,16 +24,11 @@ define $(PKG)_BUILD
         -DUSE_HDF5=ON \
         -DHDF5_VERSION=$(hdf5_VERSION) \
         -DENABLE_LIBXML2=ON \
-        $(if $(BUILD_STATIC),-DCMAKE_C_FLAGS=-DLIBXML_STATIC)
+        $(if $(BUILD_STATIC),-DCMAKE_C_FLAGS=-DLIBXML_STATIC) \
+        -DHDF5_NO_FIND_PACKAGE_CONFIG_FILE=ON
 
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
-
-    # fix hdf5 libraries
-    $(SED) -i -e 's!-lhdf5_hl-\(static\|shared\)!-lhdf5_hl!g' \
-        '$(PREFIX)/$(TARGET)/bin/nc-config'
-    $(SED) -i -e 's!-lhdf5-\(static\|shared\)!-lhdf5!g' \
-        '$(PREFIX)/$(TARGET)/bin/nc-config'
 
     # compile test, pkg-config support incomplete
     '$(TARGET)-gcc' \
