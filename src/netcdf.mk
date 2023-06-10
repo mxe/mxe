@@ -30,7 +30,7 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
-    # compile test, pkg-config support incomplete
+    # compile test
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
         '$(SOURCE_DIR)/examples/C/simple.c' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
