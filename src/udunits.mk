@@ -10,7 +10,18 @@ $(PKG)_URL      := https://artifacts.unidata.ucar.edu/repository/downloads-$(PKG
 $(PKG)_DEPS     := cc expat
 
 define $(PKG)_BUILD
+    # Build and install the library:
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS)
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
+
+    # Create pkg-config file:
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
+    (echo 'Name: $(PKG)'; \
+     echo 'Version: $($(PKG)_VERSION)'; \
+     echo 'Description: UDUNITS supports units of physical quantities'; \
+     echo 'URL: https://downloads.unidata.ucar.edu/udunits/'; \
+     echo 'Libs: -ludunits2'; \
+     echo 'Libs.private: -lexpat';) \
+     > '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG).pc'
 endef
