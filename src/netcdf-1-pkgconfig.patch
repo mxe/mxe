@@ -1,3 +1,7 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
 --- a/netcdf.pc.in	2023-06-08 11:19:40.184677206 +1000
 +++ b/netcdf.pc.in	2023-06-08 11:20:34.870711377 +1000
 @@ -9,5 +9,5 @@
