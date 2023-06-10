@@ -24,4 +24,13 @@ define $(PKG)_BUILD
      echo 'Libs: -ludunits2'; \
      echo 'Libs.private: -lexpat';) \
      > '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG).pc'
+
+    # Compile test program:
+    '$(TARGET)-gcc' \
+        -W -Wall -Werror -ansi -pedantic \
+        -I$(SOURCE_DIR) \
+        '$(TEST_FILE)' \
+        -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
+        `'$(TARGET)-pkg-config' $(PKG) --cflags --libs`
+
 endef
