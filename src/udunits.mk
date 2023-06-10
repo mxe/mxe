@@ -12,9 +12,10 @@ $(PKG)_DEPS     := cc expat
 
 define $(PKG)_BUILD
     # Build and install the library:
-    cd '$(1)' && ./configure \
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS)
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(MXE_DISABLE_CRUFT)
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install $(MXE_DISABLE_CRUFT)
 
     # Create pkg-config file:
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
@@ -29,7 +30,7 @@ define $(PKG)_BUILD
     # Compile test program:
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
-        -I$(SOURCE_DIR) \
+        -I$(BUILD_DIR) \
         '$(TEST_FILE)' \
         -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
         `'$(TARGET)-pkg-config' $(PKG) --cflags --libs`
