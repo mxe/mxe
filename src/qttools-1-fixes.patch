@@ -45,3 +45,50 @@ index 1111111..2222222 100644
  
  !android|android_app: SUBDIRS += qtpaths
  
+diff --git a/src/assistant/help/Qt5HelpConfigExtras.cmake.in b/src/assistant/help/Qt5HelpConfigExtras.cmake.in
+deleted file mode 100644
+index 1f7544b..0000000
+--- a/src/assistant/help/Qt5HelpConfigExtras.cmake.in
++++ /dev/null
+@@ -1,41 +0,0 @@
+-
+-if (NOT TARGET Qt5::qcollectiongenerator)
+-    add_executable(Qt5::qcollectiongenerator IMPORTED)
+-
+-!!IF isEmpty(CMAKE_BIN_DIR_IS_ABSOLUTE)
+-    set(imported_location \"${_qt5Help_install_prefix}/$${CMAKE_BIN_DIR}qcollectiongenerator$$CMAKE_BIN_SUFFIX\")
+-!!ELSE
+-    set(imported_location \"$${CMAKE_BIN_DIR}qcollectiongenerator$$CMAKE_BIN_SUFFIX\")
+-!!ENDIF
+-    _qt5_Help_check_file_exists(${imported_location})
+-
+-    set_target_properties(Qt5::qcollectiongenerator PROPERTIES
+-        IMPORTED_LOCATION ${imported_location}
+-    )
+-endif()
+-
+-if (NOT TARGET Qt5::qhelpgenerator)
+-    add_executable(Qt5::qhelpgenerator IMPORTED)
+-
+-!!IF isEmpty(CMAKE_BIN_DIR_IS_ABSOLUTE)
+-    set(imported_location \"${_qt5Help_install_prefix}/$${CMAKE_BIN_DIR}qhelpgenerator$$CMAKE_BIN_SUFFIX\")
+-!!ELSE
+-    set(imported_location \"$${CMAKE_BIN_DIR}qhelpgenerator$$CMAKE_BIN_SUFFIX\")
+-!!ENDIF
+-    _qt5_Help_check_file_exists(${imported_location})
+-
+-    set_target_properties(Qt5::qhelpgenerator PROPERTIES
+-        IMPORTED_LOCATION ${imported_location}
+-    )
+-endif()
+-
+-# Create versionless tool targets.
+-foreach(__qt_tool qcollectiongenerator qhelpgenerator)
+-    if(NOT \"${QT_NO_CREATE_VERSIONLESS_TARGETS}\" AND NOT TARGET Qt::${__qt_tool}
+-       AND TARGET Qt5::${__qt_tool})
+-        add_executable(Qt::${__qt_tool} IMPORTED)
+-        get_target_property(__qt_imported_location Qt5::${__qt_tool} IMPORTED_LOCATION)
+-        set_target_properties(Qt::${__qt_tool}
+-                              PROPERTIES IMPORTED_LOCATION \"${__qt_imported_location}\")
+-    endif()
+-endforeach()
