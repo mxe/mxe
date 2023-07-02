@@ -3,8 +3,8 @@
 PKG             := libsrt
 $(PKG)_WEBSITE  := https://github.com/Haivision/srt
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.4.4
-$(PKG)_CHECKSUM := 93f5f3715bd5bd522b8d65fc0d086ef2ad49db6a41ad2d7b35df2e8bd7094114
+$(PKG)_VERSION  := 1.5.2
+$(PKG)_CHECKSUM := 463970a3f575446b3f55abb6f323d5476c963c77b3c975cd902e9c87cdd9a92c
 $(PKG)_GH_CONF  := Haivision/srt/tags, v
 $(PKG)_DEPS     := cc pthreads openssl
 
