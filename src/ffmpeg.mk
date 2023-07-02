@@ -3,10 +3,10 @@
 PKG             := ffmpeg
 $(PKG)_WEBSITE  := https://ffmpeg.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.2.8
-$(PKG)_CHECKSUM := 24eb8ba022c88f451e8658bf7ca4c5fe4d4debc28e26d17dcf50aa7f0e4fbd15
+$(PKG)_VERSION  := 6.0
+$(PKG)_CHECKSUM := 57be87c22d9b49c112b6d24bc67d42508660e6b718b3db89c44e47e289137082
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
+$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://ffmpeg.org/releases/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc bzip2 gnutls lame libass libbluray libbs2b libcaca \
                    libvpx opencore-amr opus sdl2 speex theora vidstab \
@@ -40,11 +40,9 @@ define $(PKG)_BUILD
         --disable-pthreads \
         --enable-w32threads \
         --disable-doc \
-        --enable-avresample \
         --enable-gpl \
         --enable-version3 \
         --extra-libs='-mconsole' \
-        --enable-avisynth \
         --enable-gnutls \
         --enable-libass \
         --enable-libbluray \
