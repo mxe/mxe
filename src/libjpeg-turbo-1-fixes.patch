@@ -14,7 +14,7 @@ diff --git a/jmorecfg.h b/jmorecfg.h
 index 1111111..2222222 100644
 --- a/jmorecfg.h
 +++ b/jmorecfg.h
-@@ -14,7 +14,13 @@
+@@ -16,7 +16,13 @@
   * optimizations.  Most users will not need to touch this file.
   */
  
