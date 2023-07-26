@@ -58,7 +58,7 @@ diff --git a/Source/cmake.cxx b/Source/cmake.cxx
 index 1111111..2222222 100644
 --- a/Source/cmake.cxx
 +++ b/Source/cmake.cxx
-@@ -2276,7 +2276,10 @@ std::unique_ptr<cmGlobalGenerator> cmake::EvaluateDefaultGlobalGenerator()
+@@ -2588,7 +2588,10 @@ std::unique_ptr<cmGlobalGenerator> cmake::EvaluateDefaultGlobalGenerator()
        return gen;
      }
    }
