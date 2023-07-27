@@ -19,11 +19,11 @@
 
 PKG             := gcc
 # version used for tarball, will be X-YYYYMMDD for snapshots
-$(PKG)_VERSION  := 13.1.0
+$(PKG)_VERSION  := 13.2.0
 # release used for install dirs, will be X.0.1 for snapshots
 # change to $($(PKG)_VERSION) variable on release X.Y[>0].Z
 $(PKG)_RELEASE  := $($(PKG)_VERSION)
-$(PKG)_CHECKSUM := 61d684f0aa5e76ac6585ad8898a2427aade8979ed5e7f85492286c4dfc13ee86
+$(PKG)_CHECKSUM := e275e76442a6067341a27f04c5c6b83d8613144004c0413528863dc6b5c743da
 $(PKG)_SUBDIR   := gcc-$($(PKG)_VERSION)
 $(PKG)_FILE     := gcc-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://ftp.gnu.org/gnu/gcc/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
