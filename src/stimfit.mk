@@ -3,8 +3,8 @@
 
 PKG             := stimfit
 $(PKG)_IGNORE   := 
-$(PKG)_VERSION  := 0.16.2macports
-$(PKG)_CHECKSUM := 0c58f51e20c4253dee66be6cf0249ece4c806aa7dc3ae0934f6f3693c43577e7
+$(PKG)_VERSION  := 0.16.3windows-portable
+$(PKG)_CHECKSUM := 44729af1bd4879d4437e390c6ffdcf489f2bf7cb34517f5cbacbd0fc8a64f48f
 $(PKG)_SUBDIR   := stimfit-$($(PKG)_VERSION)
 $(PKG)_FILE     := stimfit-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/neurodroid/stimfit/archive/refs/tags/v$($(PKG)_VERSION).tar.gz
@@ -18,7 +18,7 @@ endef
 
 define $(PKG)_BUILD
 
-    rm -rf '$(1)' && git clone ~/src/stimfit '$(1)' 
+    # rm -rf '$(1)' && git clone ~/src/stimfit '$(1)'
 
     cd '$(1)' && ./autogen.sh && CPPFLAGS="-std=gnu++17" \
 	./configure --disable-python --with-biosig --with-pslope \
