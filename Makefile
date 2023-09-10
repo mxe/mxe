@@ -160,7 +160,8 @@ PKG_CONFIGURE_OPTS = \
 
 PKG_CMAKE_OPTS = \
     $(_$(PKG)_CMAKE_OPTS) \
-    $($(PKG)_CMAKE_OPTS)
+    $($(PKG)_CMAKE_OPTS) \
+    $($(PKG)_$(TARGET)_CMAKE_OPTS)
 
 # GCC threads and exceptions
 MXE_GCC_THREADS = \

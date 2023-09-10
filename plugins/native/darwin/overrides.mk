@@ -34,3 +34,7 @@ cc-wrapper:
 	) > '$(PREFIX)/$(BUILD)/bin/cc'
 	@chmod 0755 '$(PREFIX)/$(BUILD)/bin/cc'
 	@cp '$(PREFIX)/$(BUILD)/bin/cc' '$(PREFIX)/$(BUILD)/bin/gcc'
+
+# opengl_desktop is auto-detected and build fails without opengl=ON
+# opengl_desktop=OFF causes config errors
+qt6-qtbase_$(BUILD)_CMAKE_OPTS = -DFEATURE_opengl=ON
