@@ -17,7 +17,7 @@
     "blas": {"version": "3.11.0", "website": "https://www.netlib.org/blas/", "description": "Reference BLAS (Basic Linear Algebra Subprograms)"},
     "boost": {"version": "1.81.0", "website": "https://www.boost.org/", "description": "Boost C++ Library"},
     "box2d": {"version": "2.3.1", "website": "https://www.box2d.org/", "description": ""},
-    "brotli": {"version": "1.0.9", "website": "https://github.com/google/brotli", "description": ""},
+    "brotli": {"version": "1.1.0", "website": "https://github.com/google/brotli", "description": ""},
     "bullet": {"version": "2.82-r2704", "website": "https://bulletphysics.org/", "description": "Bullet physics, version 2"},
     "bzip2": {"version": "1.0.8", "website": "https://en.wikipedia.org/wiki/Bzip2", "description": ""},
     "cairo": {"version": "1.16.0", "website": "https://cairographics.org/", "description": ""},
