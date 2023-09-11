@@ -7,7 +7,7 @@ $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 7.3.0
 $(PKG)_CHECKSUM := 20770789749ac9ba846df33983dbda22db836c70d9f5d050cb9aa5347094a8fb
 $(PKG)_GH_CONF  := harfbuzz/harfbuzz/releases,,,,,.tar.xz
-$(PKG)_DEPS     := cc meson-wrapper cairo freetype-bootstrap glib icu4c
+$(PKG)_DEPS     := cc meson-wrapper brotli cairo freetype-bootstrap glib icu4c
 
 define $(PKG)_BUILD
     '$(MXE_MESON_WRAPPER)' $(MXE_MESON_OPTS) \
