@@ -24,9 +24,12 @@ define $(PKG)_BUILD_$(BUILD)
     # native build
     $(if $(findstring darwin, $(BUILD)), \
         CPPFLAGS='-I$(PREFIX)/$(TARGET).gnu/include' \
-        LDFLAGS='-L$(PREFIX)/$(TARGET).gnu/lib' \)
+        LDFLAGS='-L$(PREFIX)/$(TARGET).gnu/lib' \,
+        CPPFLAGS='-I$(PREFIX)/$(TARGET)/include' \
+        LDFLAGS='-L$(PREFIX)/$(TARGET)/lib' \)
     '$(MXE_MESON_NATIVE_WRAPPER)' \
         --buildtype=release \
+        -Diconv=external \
         -Dtests=false \
         '$(BUILD_DIR)' '$(SOURCE_DIR)'
     '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)'
