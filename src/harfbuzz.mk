@@ -11,6 +11,7 @@ $(PKG)_DEPS     := cc meson-wrapper cairo freetype-bootstrap glib icu4c
 
 define $(PKG)_BUILD
     '$(MXE_MESON_WRAPPER)' $(MXE_MESON_OPTS) \
+        -Dchafa=disabled \
         -Dtests=disabled \
         -Ddocs=disabled \
         -Dintrospection=disabled \
