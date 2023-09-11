@@ -10,6 +10,7 @@ $(PKG)_SUBDIR   := pcre-$($(PKG)_VERSION)
 $(PKG)_FILE     := pcre-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/pcre/pcre/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc
+$(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 
 define $(PKG)_BUILD_SHARED
     cd '$(1)' && ./configure \
@@ -31,4 +32,11 @@ define $(PKG)_BUILD
     $(SED) -i 's,__declspec(dllimport),,' '$(1)/pcre.h.in'
     $(SED) -i 's,__declspec(dllimport),,' '$(1)/pcreposix.h'
     $($(PKG)_BUILD_SHARED)
+endef
+
+define $(PKG)_BUILD_$(BUILD)
+    cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
+        $(MXE_CONFIGURE_OPTS)
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 endef

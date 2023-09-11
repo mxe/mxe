@@ -160,7 +160,8 @@ PKG_CONFIGURE_OPTS = \
 
 PKG_CMAKE_OPTS = \
     $(_$(PKG)_CMAKE_OPTS) \
-    $($(PKG)_CMAKE_OPTS)
+    $($(PKG)_CMAKE_OPTS) \
+    $($(PKG)_$(TARGET)_CMAKE_OPTS)
 
 # GCC threads and exceptions
 MXE_GCC_THREADS = \
@@ -348,7 +349,8 @@ ESCAPE_PKG = \
 BACKUP_DOWNLOAD = \
     (echo "MXE Warning! Downloading $(1) from backup." >&2 && \
     ($(foreach SITE,$(MIRROR_SITES), \
-        $(WGET) -O '$(TMP_FILE)' $($(SITE))/`$(call ESCAPE_PKG,$(1))`_$($(1)_CHECKSUM) || ) false))
+        $(WGET) -O '$(TMP_FILE)' $($(SITE))/`$(call ESCAPE_PKG,$(1))`_$($(1)_CHECKSUM) || \
+        $(WGET) -O '$(TMP_FILE)' $($(SITE))/`$(call ESCAPE_PKG,$(1))` || ) false))
 
 DOWNLOAD_PKG_ARCHIVE = \
     $(eval TMP_FILE := $(PKG_DIR)/.tmp-$($(1)_FILE)) \

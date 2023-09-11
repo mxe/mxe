@@ -84,7 +84,8 @@ define $(PKG)_BUILD_$(BUILD)
         -DQT_BUILD_{TESTS,EXAMPLES}=OFF \
         -DBUILD_WITH_PCH=OFF \
         -DFEATURE_{eventfd,glib,harfbuzz,icu,opengl,openssl,zstd}=OFF \
-        -DFEATURE_sql_{db2,ibase,mysql,oci,odbc,psql,sqlite}=OFF
+        -DFEATURE_sql_{db2,ibase,mysql,oci,odbc,psql,sqlite}=OFF \
+        $(PKG_CMAKE_OPTS)
     '$(TARGET)-cmake' --build '$(BUILD_DIR)' -j '$(JOBS)'
     '$(TARGET)-cmake' --install '$(BUILD_DIR)'
 endef
