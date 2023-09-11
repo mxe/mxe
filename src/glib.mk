@@ -11,7 +11,7 @@ $(PKG)_FILE     := glib-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.gnome.org/sources/glib/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc meson-wrapper dbus gettext libffi libiconv pcre zlib $(BUILD)~$(PKG)
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
-$(PKG)_DEPS_$(BUILD) := cc meson-wrapper gettext libffi libiconv zlib
+$(PKG)_DEPS_$(BUILD) := cc meson-wrapper gettext libffi libiconv pcre zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://gitlab.gnome.org/GNOME/glib/tags' | \
