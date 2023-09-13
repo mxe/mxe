@@ -1,0 +1,35 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Jan200101 <sentrycraft123@gmail.com>
+Date: Tue, 23 May 2023 22:52:10 +0200
+Subject: [PATCH] fix libintl detection
+
+Signed-off-by: Jan200101 <sentrycraft123@gmail.com>
+---
+ meson.build | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
+
+diff --git a/meson.build b/meson.build
+index 43e058078..02bf58e69 100644
+--- a/meson.build
++++ b/meson.build
+@@ -2103,11 +2103,16 @@ if libintl.found()
+   if cc.has_function('ngettext', dependencies : libintl)
+     libintl_deps += [libintl]
+   else
+-    libintl_pthread = cc.find_library('pthread', required : false)
+-    if libintl_pthread.found() and cc.has_function('ngettext', dependencies : [libintl, libintl_pthread])
+-      libintl_deps += [libintl, libintl_pthread]
++    libintl_iconv = cc.find_library('iconv', required : false)
++    if libintl_iconv.found() and cc.has_function('ngettext', dependencies : [libintl, libintl_iconv])
++      libintl_deps += [libintl, libintl_iconv]
+     else
+-      libintl = disabler()
++      libintl_pthread = cc.find_library('pthread', required : false)
++      if libintl_pthread.found() and cc.has_function('ngettext', dependencies : [libintl, libintl_pthread])
++        libintl_deps += [libintl, libintl_pthread]
++      else
++        libintl = disabler()
++      endif
+     endif
+   endif
+ endif

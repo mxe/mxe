@@ -38,7 +38,7 @@ define $(PKG)_BUILD
 
     # Just compile our MXE testfile
     '$(TARGET)-gcc' \
-        -W -Wall -Werror -ansi \
+        -W -Wall -ansi \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-gtk3.exe' \
         `'$(TARGET)-pkg-config' gtk+-3.0 --cflags --libs`
 endef

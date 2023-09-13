@@ -2,128 +2,6 @@ This file is part of MXE. See LICENSE.md for licensing information.
 
 Contains ad hoc patches for cross building.
 
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: v1993 <v19930312@gmail.com>
-Date: Fri, 15 Jun 2012 15:25:01 +0200
-Subject: [PATCH 1/4] Fix static builds
-
-Don't declare DllMain, use constructors from gconstructor.h instead.
-
-A possibly better approach to this problem is to use TLS callbacks. See https://gitlab.gnome.org/GNOME/glib/-/merge_requests/1655 for its status.
-
-diff --git a/gio/giomodule.c b/gio/giomodule.c
-index 1111111..2222222 100644
---- a/gio/giomodule.c
-+++ b/gio/giomodule.c
-@@ -51,6 +51,9 @@
- #ifdef G_OS_WIN32
- #include "gregistrysettingsbackend.h"
- #include "giowin32-priv.h"
-+#ifndef DLL_EXPORT
-+#include <glib/gconstructor.h>
-+#endif
- #endif
- #include <glib/gstdio.h>
- 
-@@ -1094,8 +1097,7 @@ extern GType _g_win32_network_monitor_get_type (void);
- 
- static HMODULE gio_dll = NULL;
- 
--#ifdef DLL_EXPORT
--
-+#if defined (DLL_EXPORT)
- BOOL WINAPI DllMain (HINSTANCE hinstDLL,
-                      DWORD     fdwReason,
-                      LPVOID    lpvReserved);
-@@ -1113,7 +1115,19 @@ DllMain (HINSTANCE hinstDLL,
- 
-   return TRUE;
- }
-+#elif defined (G_HAS_CONSTRUCTORS)
-+#ifdef G_DEFINE_CONSTRUCTOR_NEEDS_PRAGMA
-+#pragma G_DEFINE_CONSTRUCTOR_PRAGMA_ARGS(gio_win32_ctor)
-+#endif
-+G_DEFINE_CONSTRUCTOR(gio_win32_ctor)
- 
-+static void
-+gio_win32_ctor(void)
-+{
-+  gio_win32_appinfo_init (FALSE);
-+}
-+#else
-+# error Your platform/compiler is missing constructor support
- #endif
- 
- void *
-diff --git a/glib/glib-init.c b/glib/glib-init.c
-index 1111111..2222222 100644
---- a/glib/glib-init.c
-+++ b/glib/glib-init.c
-@@ -334,20 +334,32 @@ glib_init (void)
- 
-   glib_inited = TRUE;
- 
-+#ifdef G_OS_WIN32
-+  g_crash_handler_win32_init ();
-+  g_clock_win32_init ();
-+#ifdef THREADS_WIN32
-+  g_thread_win32_init ();
-+#endif
-+#endif
-+
-   g_messages_prefixed_init ();
-   g_debug_init ();
-   g_quark_init ();
-   g_error_init ();
-+
-+#ifdef G_OS_WIN32
-+  g_console_win32_init ();
-+#endif
- }
- 
--#if defined (G_OS_WIN32)
-+#ifdef G_OS_WIN32
-+HMODULE glib_dll;
-+#endif
- 
-+#if defined (G_OS_WIN32) && defined (DLL_EXPORT)
- BOOL WINAPI DllMain (HINSTANCE hinstDLL,
-                      DWORD     fdwReason,
-                      LPVOID    lpvReserved);
--
--HMODULE glib_dll;
--
- BOOL WINAPI
- DllMain (HINSTANCE hinstDLL,
-          DWORD     fdwReason,
-@@ -357,14 +369,7 @@ DllMain (HINSTANCE hinstDLL,
-     {
-     case DLL_PROCESS_ATTACH:
-       glib_dll = hinstDLL;
--      g_crash_handler_win32_init ();
--      g_clock_win32_init ();
--#ifdef THREADS_WIN32
--      g_thread_win32_init ();
--#endif
-       glib_init ();
--      /* must go after glib_init */
--      g_console_win32_init ();
-       break;
- 
-     case DLL_THREAD_DETACH:
-diff --git a/gobject/gtype.c b/gobject/gtype.c
-index 1111111..2222222 100644
---- a/gobject/gtype.c
-+++ b/gobject/gtype.c
-@@ -4510,7 +4510,7 @@ gobject_init (void)
-   _g_signal_init ();
- }
- 
--#if defined (G_OS_WIN32)
-+#if defined (G_OS_WIN32) && defined (DLL_EXPORT)
- 
- BOOL WINAPI DllMain (HINSTANCE hinstDLL,
-                      DWORD     fdwReason,
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: aquiles2k <aj@elane2k.com>
@@ -159,9 +37,9 @@ diff --git a/gio/meson.build b/gio/meson.build
 index 1111111..2222222 100644
 --- a/gio/meson.build
 +++ b/gio/meson.build
-@@ -831,8 +831,15 @@ libgio_dep = declare_dependency(link_with : libgio,
-   dependencies : [libgmodule_dep, libgobject_dep, gioenumtypes_dep],
-   include_directories : [gioinc])
+@@ -875,7 +875,15 @@ libgio_dep = declare_dependency(link_with : libgio,
+   ],
+ )
  
 +# Link against libuuid to prevent linker error in certain cases
 +windows_ldflags = []
@@ -171,8 +49,7 @@ index 1111111..2222222 100644
 +endif
 +
  pkg.generate(libgio,
--  libraries_private : [osx_ldflags],
-+  libraries_private : [osx_ldflags, windows_ldflags],
++  libraries_private : [windows_ldflags],
    requires : ['glib-2.0', 'gobject-2.0'],
    variables : ['datadir=' + join_paths('${prefix}', get_option('datadir')),
                 'schemasdir=' + join_paths('${datadir}', schemas_subdir),
@@ -187,7 +64,7 @@ diff --git a/gio/meson.build b/gio/meson.build
 index 1111111..2222222 100644
 --- a/gio/meson.build
 +++ b/gio/meson.build
-@@ -843,7 +843,7 @@ pkg.generate(libgio,
+@@ -879,7 +879,7 @@ pkg.generate(libgio,
    requires : ['glib-2.0', 'gobject-2.0'],
    variables : ['datadir=' + join_paths('${prefix}', get_option('datadir')),
                 'schemasdir=' + join_paths('${datadir}', schemas_subdir),
@@ -195,13 +72,13 @@ index 1111111..2222222 100644
 +               'bindir=' + join_paths('${prefix}', get_option('runtime_bindir')),
                 'giomoduledir=' + pkgconfig_giomodulesdir,
                 'gio=' + join_paths('${bindir}', 'gio'),
-                'gio_querymodules=' + join_paths('${bindir}', 'gio-querymodules'),
+                'gio_querymodules=@0@'.format(pkgconfig_multiarch_bindir / 'gio-querymodules'),
 diff --git a/glib/meson.build b/glib/meson.build
 index 1111111..2222222 100644
 --- a/glib/meson.build
 +++ b/glib/meson.build
-@@ -393,7 +393,7 @@ pkg.generate(libglib,
-   libraries_private : [osx_ldflags, win32_ldflags],
+@@ -440,7 +440,7 @@ pkg.generate(libglib,
+   libraries_private : [win32_ldflags],
    subdirs : ['glib-2.0'],
    extra_cflags : ['-I${libdir}/glib-2.0/include'] + win32_cflags,
 -  variables : ['bindir=' + join_paths('${prefix}', get_option('bindir')),
@@ -213,13 +90,10 @@ diff --git a/meson_options.txt b/meson_options.txt
 index 1111111..2222222 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
-@@ -126,4 +126,9 @@ option('glib_checks',
- option('libelf',
-        type : 'feature',
-        value : 'auto',
--       description : 'Enable support for listing and extracting from ELF resource files with gresource tool')
-\ No newline at end of file
-+       description : 'Enable support for listing and extracting from ELF resource files with gresource tool')
+@@ -125,3 +125,8 @@ option('multiarch',
+        type : 'boolean',
+        value : false,
+        description : 'Install some helper executables in per-architecture locations')
 +
 +option('runtime_bindir',
 +       type : 'string',
