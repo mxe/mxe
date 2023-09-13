@@ -6,7 +6,7 @@ PKG := qt6-qthttpserver
 $(eval $(QT6_METADATA))
 
 $(PKG)_CHECKSUM := f8fa2b5d1278d05c8841fe14d3a81c91196a126219d491562f7c179b5202dcac
-$(PKG)_DEPS     := cc qt6-conf qt6-qtbase
+$(PKG)_DEPS     := cc qt6-conf qt6-qtbase qt6-qtwebsockets
 
 QT6_PREFIX   = '$(PREFIX)/$(TARGET)/$(MXE_QT6_ID)'
 QT6_QT_CMAKE = '$(QT6_PREFIX)/$(if $(findstring mingw,$(TARGET)),bin,libexec)/qt-cmake-private' \
