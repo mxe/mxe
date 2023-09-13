@@ -396,6 +396,7 @@
     "qt6-qtsvg": {"version": "6.5.2", "website": "https://www.qt.io/", "description": "Qt"},
     "qt6-qttools": {"version": "6.5.2", "website": "https://www.qt.io/", "description": "Qt"},
     "qt6-qttranslations": {"version": "6.5.2", "website": "https://www.qt.io/", "description": "Qt"},
+    "qt6-qtwebsockets": {"version": "6.5.2", "website": "https://www.qt.io/", "description": "Qt"},
     "qtactiveqt": {"version": "5.15.10", "website": "https://www.qt.io/", "description": "Qt"},
     "qtbase": {"version": "5.15.10", "website": "https://www.qt.io/", "description": "Qt"},
     "qtcharts": {"version": "5.15.10", "website": "https://www.qt.io/", "description": "Qt"},
