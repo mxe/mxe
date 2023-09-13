@@ -388,6 +388,7 @@
     "qt6-qtbase": {"version": "6.5.2", "website": "https://www.qt.io/", "description": "Qt6"},
     "qt6-qtcharts": {"version": "6.5.2", "website": "https://www.qt.io/", "description": "Qt"},
     "qt6-qtdeclarative": {"version": "6.5.2", "website": "https://www.qt.io/", "description": "Qt"},
+    "qt6-qthttpserver": {"version": "6.5.2", "website": "https://www.qt.io/", "description": "Qt"},
     "qt6-qtimageformats": {"version": "6.5.2", "website": "https://www.qt.io/", "description": "Qt"},
     "qt6-qtmultimedia": {"version": "6.5.2", "website": "https://www.qt.io/", "description": "Qt"},
     "qt6-qtserialport": {"version": "6.5.2", "website": "https://www.qt.io/", "description": "Qt"},
