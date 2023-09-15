@@ -336,7 +336,7 @@
     "opusfile": {"version": "0.11", "website": "https://opus-codec.org/", "description": ""},
     "osgearth": {"version": "2.10", "website": "http://osgearth.org/", "description": "Geospatial SDK for OpenSceneGraph"},
     "ossim": {"version": "1af3774", "website": "https://trac.osgeo.org/ossim", "description": "OSSIM"},
-    "pango": {"version": "1.50.0", "website": "https://www.pango.org/", "description": "Pango"},
+    "pango": {"version": "1.51.0", "website": "https://www.pango.org/", "description": "Pango"},
     "pangomm": {"version": "2.46.2", "website": "https://www.pango.org/", "description": "Pangomm"},
     "pcl": {"version": "1.9.1", "website": "http://www.pointclouds.org/", "description": "PCL (Point Cloud Library)"},
     "pcre": {"version": "8.45", "website": "https://www.pcre.org/", "description": "PCRE"},
