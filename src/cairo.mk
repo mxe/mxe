@@ -43,7 +43,7 @@ define $(PKG)_BUILD
         --enable-pdf \
         --enable-svg \
         --disable-pthread \
-        CFLAGS="$(CFLAGS) $(if $(BUILD_STATIC),-DCAIRO_WIN32_STATIC_BUILD)" \
+        CFLAGS="$(if $(BUILD_STATIC),-DCAIRO_WIN32_STATIC_BUILD)" \
         LIBS="-lmsimg32 -lgdi32 `$(TARGET)-pkg-config pixman-1 --libs`"
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 endef

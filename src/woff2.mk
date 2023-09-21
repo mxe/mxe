@@ -10,8 +10,9 @@ $(PKG)_DEPS     := cc brotli
 
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && '$(TARGET)-cmake' \
+        -DBROTLIDEC_LIBRARIES:STRING="`$(TARGET)-pkg-config --libs libbrotlidec`" \
+        -DBROTLIENC_LIBRARIES:STRING="`$(TARGET)-pkg-config --libs libbrotlienc`" \
         -DGEN_PKG_VERSION=ON \
         '$(SOURCE_DIR)'
- 
     '$(TARGET)-cmake' --build '$(BUILD_DIR)' --config Release --target install
 endef
