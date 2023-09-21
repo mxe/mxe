@@ -18,7 +18,7 @@ define $(PKG)_BUILD
     cd '$(SOURCE_DIR)' && ./autogen.sh
     cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS) \
-        CFLAGS="$(CFLAGS) $(if $(BUILD_STATIC),-DPKGCONFIG_IS_STATIC)"
+        CFLAGS="$(if $(BUILD_STATIC),-DPKGCONFIG_IS_STATIC)"
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
