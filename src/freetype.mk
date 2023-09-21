@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 12991c4e55c506dd7f9b765933e62fd2be2e06d421505d7950a132e4f1bb4
 $(PKG)_SUBDIR   := freetype-$($(PKG)_VERSION)
 $(PKG)_FILE     := freetype-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/freetype/freetype2/$(shell echo '$($(PKG)_VERSION)' | cut -d . -f 1,2,3)/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc bzip2 harfbuzz libpng zlib
+$(PKG)_DEPS     := cc brotli bzip2 harfbuzz libpng zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://sourceforge.net/projects/freetype/files/freetype2/' | \
