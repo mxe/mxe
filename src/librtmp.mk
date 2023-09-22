@@ -3,8 +3,8 @@
 PKG             := librtmp
 $(PKG)_WEBSITE  := https://rtmpdump.mplayerhq.hu/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := fa8646d
-$(PKG)_CHECKSUM := 301cb9e93a7d2bf2da6b784ee6a9e45a04e2a9e3d322080d46c5d66576a792ec
+$(PKG)_VERSION  := f1b83c1
+$(PKG)_CHECKSUM := f616525e1540b666c79038a9b7aa80ca73f6535dda6fd91ee1cb9d9bd2e219ba
 $(PKG)_GH_CONF  := mirror/rtmpdump/branches/master
 $(PKG)_DEPS     := cc gnutls zlib
 
