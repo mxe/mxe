@@ -15,9 +15,9 @@ diff --git a/bfd/peXXigen.c b/bfd/peXXigen.c
 index 1111111..2222222 100644
 --- a/bfd/peXXigen.c
 +++ b/bfd/peXXigen.c
-@@ -77,6 +77,9 @@
+@@ -74,6 +74,9 @@
+ #include <wchar.h>
  #include <wctype.h>
- #endif
  
 +#include <errno.h>
 +#include <limits.h>
@@ -25,7 +25,7 @@ index 1111111..2222222 100644
  /* NOTE: it's strange to be including an architecture specific header
     in what's supposed to be general (to PE/PEI) code.  However, that's
     where the definitions are, and they don't vary per architecture
-@@ -856,7 +859,36 @@ _bfd_XXi_only_swap_filehdr_out (bfd * abfd, void * in, void * out)
+@@ -855,7 +858,36 @@ _bfd_XXi_only_swap_filehdr_out (bfd * abfd, void * in, void * out)
    /* Use a real timestamp by default, unless the no-insert-timestamp
       option was chosen.  */
    if ((pe_data (abfd)->timestamp) == -1)
@@ -67,7 +67,7 @@ diff --git a/ld/emultempl/pe.em b/ld/emultempl/pe.em
 index 1111111..2222222 100644
 --- a/ld/emultempl/pe.em
 +++ b/ld/emultempl/pe.em
-@@ -318,7 +318,7 @@ gld${EMULATION_NAME}_add_options
+@@ -329,7 +329,7 @@ gld${EMULATION_NAME}_add_options
       OPTION_USE_NUL_PREFIXED_IMPORT_TABLES},
      {"no-leading-underscore", no_argument, NULL, OPTION_NO_LEADING_UNDERSCORE},
      {"leading-underscore", no_argument, NULL, OPTION_LEADING_UNDERSCORE},
@@ -80,7 +80,7 @@ diff --git a/ld/emultempl/pep.em b/ld/emultempl/pep.em
 index 1111111..2222222 100644
 --- a/ld/emultempl/pep.em
 +++ b/ld/emultempl/pep.em
-@@ -337,7 +337,7 @@ gld${EMULATION_NAME}_add_options
+@@ -340,7 +340,7 @@ gld${EMULATION_NAME}_add_options
      {"no-bind", no_argument, NULL, OPTION_NO_BIND},
      {"wdmdriver", no_argument, NULL, OPTION_WDM_DRIVER},
      {"tsaware", no_argument, NULL, OPTION_TERMINAL_SERVER_AWARE},
@@ -102,7 +102,7 @@ index 1111111..2222222 100644
  #include <time.h>
  
  #include "ld.h"
-@@ -1220,7 +1222,36 @@ fill_edata (bfd *abfd, struct bfd_link_info *info ATTRIBUTE_UNUSED)
+@@ -1221,7 +1223,36 @@ fill_edata (bfd *abfd, struct bfd_link_info *info ATTRIBUTE_UNUSED)
    memset (edata_d, 0, edata_sz);
  
    if (pe_data (abfd)->timestamp == -1)
