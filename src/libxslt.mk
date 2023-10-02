@@ -3,8 +3,8 @@
 PKG             := libxslt
 $(PKG)_WEBSITE  := https://gitlab.gnome.org/GNOME/libxslt/-/wikis
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.1.37
-$(PKG)_CHECKSUM := 3a4b27dc8027ccd6146725950336f1ec520928f320f144eb5fa7990ae6123ab4
+$(PKG)_VERSION  := 1.1.38
+$(PKG)_CHECKSUM := 1f32450425819a09acaff2ab7a5a7f8a2ec7956e505d7beeb45e843d0e1ecab1
 $(PKG)_SUBDIR   := libxslt-$($(PKG)_VERSION)
 $(PKG)_FILE     := libxslt-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.gnome.org/sources/libxslt/1.1/$($(PKG)_FILE)
