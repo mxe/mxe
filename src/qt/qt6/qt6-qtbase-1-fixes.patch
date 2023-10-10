@@ -12,7 +12,7 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 1111111..2222222 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -173,7 +173,9 @@ if(NOT QT_BUILD_STANDALONE_TESTS)
+@@ -171,7 +171,9 @@ if(NOT QT_BUILD_STANDALONE_TESTS)
      qt_internal_set_up_config_optimizations_like_in_qmake()
  
      ## Setup documentation
