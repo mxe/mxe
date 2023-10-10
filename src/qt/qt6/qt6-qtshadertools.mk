@@ -5,7 +5,7 @@ include src/qt/qt6/qt6-conf.mk
 PKG := qt6-qtshadertools
 $(eval $(QT6_METADATA))
 
-$(PKG)_CHECKSUM      := 201b7b3a409f048e78c5defb90a70af423166313ad4386f8e6b83990ae0f3573
+$(PKG)_CHECKSUM      := 3690327dc550144b8102be2bb7f6dc995ccbe3584041094ad021a83737ef9875
 $(PKG)_TARGETS       := $(BUILD) $(MXE_TARGETS)
 $(PKG)_DEPS_$(BUILD) := qt6-conf qt6-qtbase
 $(PKG)_DEPS          := cc $($(PKG)_DEPS_$(BUILD)) $(BUILD)~$(PKG)
