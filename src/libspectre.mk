@@ -3,8 +3,8 @@
 PKG             := libspectre
 $(PKG)_WEBSITE  := https://libspectre.freedesktop.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.2.8
-$(PKG)_CHECKSUM := 65256af389823bbc4ee4d25bfd1cc19023ffc29ae9f9677f2d200fa6e98bc7a8
+$(PKG)_VERSION  := 0.2.12
+$(PKG)_CHECKSUM := 55a7517cd3572bd2565df0cf450944a04d5273b279ebb369a895391957f0f960
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://libspectre.freedesktop.org/releases/$($(PKG)_FILE)
