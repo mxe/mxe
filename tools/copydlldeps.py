@@ -41,10 +41,20 @@ def get_imports(file):
     f.seek(60)
     pe_header_offset = struct.unpack('<L', f.read(4))[0]
 
+    # Is it PE32 or PE32+ ?
+    f.seek(pe_header_offset + 24)
+    pe_magic = struct.unpack('<H', f.read(2))[0]
+
     # Get sizes of tables we need.
     f.seek(pe_header_offset + 6)
     number_of_sections = struct.unpack('<H', f.read(2))[0]
-    f.seek(pe_header_offset + 116)
+
+    # Determine position of the "NumberOfRvaAndSizes" field
+    if pe_magic == 0x20b:
+        f.seek(pe_header_offset + 132)  # PE32+
+    else:
+        f.seek(pe_header_offset + 116)  # PE32
+
     number_of_data_directory_entries = struct.unpack('<L', f.read(4))[0]
     data_directory_offset = f.tell()  # it's right after the number of entries
 
@@ -59,7 +69,7 @@ def get_imports(file):
         section_descriptor_data = f.read(40)
         name, size, va, rawsize, offset = \
             struct.unpack('<8sLLLL', section_descriptor_data[:24])
-        sections.append({'min': va, 'max': va+rawsize, 'offset': offset})
+        sections.append({'name': name, 'min': va, 'max': va+rawsize, 'offset': offset})
 
     def seek_to_rva(rva):
         for s in sections:
