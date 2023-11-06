@@ -7,7 +7,9 @@ From: darealshinji <djcj@gmx.de>
 Date: Mon, 23 Oct 2023 12:00:00 +0200
 Subject: [PATCH 1/1] ad hoc patches
 
-enable static library builds and fix compilation error in JPEGDecoder.cpp
+* enable static library builds
+* fix compilation error in JPEGDecoder.cpp
+* enable pthreads
 
 
 diff --git a/libdjvu/DjVuGlobal.h b/libdjvu/DjVuGlobal.h
@@ -106,7 +108,7 @@ index 1111111..2222222 100644
  #   define DDJVUAPI __declspec(dllexport)
  #  else
 diff --git a/libdjvu/miniexp.h b/libdjvu/miniexp.h
-index 1739532..c277213 100644
+index 1111111..2222222 100644
 --- a/libdjvu/miniexp.h
 +++ b/libdjvu/miniexp.h
 @@ -27,7 +27,9 @@ extern "C" {
@@ -120,3 +122,32 @@ index 1739532..c277213 100644
  #  ifdef MINILISPAPI_EXPORT
  #   define MINILISPAPI __declspec(dllexport)
  #  else
+diff --git a/configure.ac b/configure.ac
+index 1111111..2222222 100755
+--- a/configure.ac
++++ b/configure.ac
+@@ -209,9 +209,9 @@ fi
+ # Test auxilliary packages
+ # ----------------------------------------
+ 
+-# Search for PTHREADS (when not on windows)
++# Search for PTHREADS
+ have_pthread=no
+-AM_COND_IF([HAVE_OS_WIN32],,[AC_PATH_PTHREAD([have_pthread=yes])])
++AC_PATH_PTHREAD([have_pthread=yes])
+ 
+ # Search JPEG library
+ AC_PATH_JPEG([have_jpeg="yes"], [have_jpeg="no"])
+diff --git a/libdjvu/miniexp.cpp b/libdjvu/miniexp.cpp
+index 1111111..2222222 100644
+--- a/libdjvu/miniexp.cpp
++++ b/libdjvu/miniexp.cpp
+@@ -71,7 +71,7 @@ assertfail(const char *fn, int ln)
+ /* -------------------------------------------------- */
+ 
+ #ifndef WITHOUT_THREADS
+-# ifdef _WIN32
++# if defined(_WIN32) && !defined(__MINGW32__)
+ #  include <windows.h>
+ #  define USE_WINTHREADS 1
+ # elif defined(HAVE_PTHREAD)

@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := fcd009ea7654fde5a83600eb80757bd3a76998e47d13c66b54c8db849f8f2
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/djvu/DjVuLibre/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc jpeg zlib
+$(PKG)_DEPS     := cc pthreads jpeg zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://sourceforge.net/projects/djvu/files/DjVuLibre/' | \
