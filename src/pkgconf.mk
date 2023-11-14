@@ -3,9 +3,9 @@
 PKG             := pkgconf
 $(PKG)_WEBSITE  := https://github.com/pkgconf/pkgconf
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := da179fd
-$(PKG)_CHECKSUM := 91b2e5d7ce06583d5920c373b61d7d6554cd085cbd61ed176c7ff7ff3032523d
-$(PKG)_GH_CONF  := pkgconf/pkgconf/branches/master
+$(PKG)_VERSION  := $(PKG)-2.0.3
+$(PKG)_CHECKSUM := d139baa5ea65e8bd9267f416c3bb88a91cf66f6bc84b1be0408cabfe886a4b3b
+$(PKG)_GH_CONF  := pkgconf/pkgconf/tags
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 $(PKG)_DEPS     := $(BUILD)~$(PKG)
 $(PKG)_DEPS_$(BUILD) := libtool
