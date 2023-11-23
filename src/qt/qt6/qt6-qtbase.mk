@@ -17,7 +17,7 @@ $(PKG)_DEPS_$(BUILD) :=
 $(PKG)_OO_DEPS_$(BUILD) := ninja
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- https://download.qt.io/official_releases/qt/6.5/ | \
+    $(WGET) -q -O- https://download.qt.io/official_releases/qt/6.6/ | \
     $(SED) -n 's,.*href="\(6\.[0-9]\.[^/]*\)/".*,\1,p' | \
     grep -iv -- '-rc' | \
     $(SORT) -V | \
