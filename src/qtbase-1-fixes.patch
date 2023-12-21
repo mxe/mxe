@@ -3,7 +3,7 @@ This file is part of MXE. See LICENSE.md for licensing information.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Ray Donnelly <mingw.android@gmail.com>
 Date: Wed, 26 Aug 2015 12:45:43 +0100
-Subject: [PATCH 1/3] cmake: Rearrange STATIC vs INTERFACE targets
+Subject: [PATCH 1/5] cmake: Rearrange STATIC vs INTERFACE targets
 
 Otherwise we attempt to add_library(Qt5::UiPlugin STATIC IMPORTED)
 for header-only modules when building Qt5 statically.
@@ -39,7 +39,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 11 Jun 2017 00:27:41 +0200
-Subject: [PATCH 2/3] use pkg-config for harfbuzz
+Subject: [PATCH 2/5] use pkg-config for harfbuzz
 
 Change-Id: Ia65cbb90fd180f1bc10ce077a9a8323a48e51421
 
@@ -61,7 +61,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Wed, 16 Nov 2022 15:22:10 +0100
-Subject: [PATCH 3/3] fix linking for schannel ssl support
+Subject: [PATCH 3/5] fix linking for schannel ssl support
 
 Lower case library file names.
 
@@ -78,3 +78,114 @@ index 1111111..2222222 100644
      }
  
      qtConfig(securetransport) {
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Fri, 22 Dec 2023 01:32:13 +0100
+Subject: [PATCH 4/5] buildfix: avoid deprecated operator
+
+Change-Id: I1d4ae659ee7ebcbe9557b265c7035d7b48e4a667
+
+diff --git a/src/plugins/platforms/windows/qwindowscontext.cpp b/src/plugins/platforms/windows/qwindowscontext.cpp
+index 1111111..2222222 100644
+--- a/src/plugins/platforms/windows/qwindowscontext.cpp
++++ b/src/plugins/platforms/windows/qwindowscontext.cpp
+@@ -1005,7 +1005,7 @@ QByteArray QWindowsContext::comErrorString(HRESULT hr)
+     }
+     _com_error error(hr);
+     result += QByteArrayLiteral(" (");
+-    result += errorMessageFromComError(error);
++    result += errorMessageFromComError(error).toUtf8();
+     result += ')';
+     return result;
+ }
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Fri, 22 Dec 2023 01:41:01 +0100
+Subject: [PATCH 5/5] Revert "SQL/MySQL: fix handling of json column"
+
+The reverted commit breaks compatibility with mysql driver in MXE.
+
+This reverts commit 1bf394a4c98c529844c896f8666412e5fcac8a7a.
+
+diff --git a/src/plugins/sqldrivers/mysql/qsql_mysql.cpp b/src/plugins/sqldrivers/mysql/qsql_mysql.cpp
+index 1111111..2222222 100644
+--- a/src/plugins/sqldrivers/mysql/qsql_mysql.cpp
++++ b/src/plugins/sqldrivers/mysql/qsql_mysql.cpp
+@@ -309,7 +309,6 @@ static QMetaType::Type qDecodeMYSQLType(int mysqltype, uint flags)
+     case FIELD_TYPE_MEDIUM_BLOB :
+     case FIELD_TYPE_LONG_BLOB :
+     case FIELD_TYPE_GEOMETRY :
+-    case MYSQL_TYPE_JSON :
+         type = (flags & BINARY_FLAG) ? QMetaType::QByteArray : QMetaType::QString;
+         break;
+     default:
+@@ -348,8 +347,7 @@ static bool qIsBlob(int t)
+     return t == MYSQL_TYPE_TINY_BLOB
+            || t == MYSQL_TYPE_BLOB
+            || t == MYSQL_TYPE_MEDIUM_BLOB
+-           || t == MYSQL_TYPE_LONG_BLOB
+-           || t == MYSQL_TYPE_JSON;
++           || t == MYSQL_TYPE_LONG_BLOB;
+ }
+ 
+ static bool qIsInteger(int t)
+diff --git a/tests/auto/sql/kernel/qsqlquery/tst_qsqlquery.cpp b/tests/auto/sql/kernel/qsqlquery/tst_qsqlquery.cpp
+index 1111111..2222222 100644
+--- a/tests/auto/sql/kernel/qsqlquery/tst_qsqlquery.cpp
++++ b/tests/auto/sql/kernel/qsqlquery/tst_qsqlquery.cpp
+@@ -251,9 +251,6 @@ private slots:
+     void sqlite_real_data() { generic_data("QSQLITE"); }
+     void sqlite_real();
+ 
+-    void prepared_query_json_row_data() { generic_data(); }
+-    void prepared_query_json_row();
+-
+     void aggregateFunctionTypes_data() { generic_data(); }
+     void aggregateFunctionTypes();
+ 
+@@ -4311,43 +4308,6 @@ void tst_QSqlQuery::sqlite_real()
+     QCOMPARE(q.value(0).toDouble(), 5.6);
+ }
+ 
+-void tst_QSqlQuery::prepared_query_json_row()
+-{
+-    QFETCH(QString, dbName);
+-    QSqlDatabase db = QSqlDatabase::database(dbName);
+-    CHECK_DATABASE(db);
+-    if (tst_Databases::getDatabaseType(db) != QSqlDriver::MySqlServer &&
+-        tst_Databases::getDatabaseType(db) != QSqlDriver::PostgreSQL) {
+-        QSKIP("PostgreSQL / MySQL specific test");
+-    }
+-
+-    const QString tableName(qTableName("tableWithJsonRow", __FILE__, db));
+-    tst_Databases::safeDropTable(db, tableName);
+-
+-    QSqlQuery q(db);
+-    const QLatin1String vals[] = {QLatin1String("{\"certificateNumber\": \"CERT-001\"}"),
+-                                  QLatin1String("{\"certificateNumber\": \"CERT-002\"}")};
+-    QVERIFY_SQL(q, exec(QLatin1String("CREATE TABLE %1 (id INTEGER, value JSON)").arg(tableName)));
+-    for (const QLatin1String &json : vals) {
+-        QVERIFY_SQL(q, exec(QLatin1String("INSERT INTO %1 (id, value) VALUES (1, '%2')")
+-                            .arg(tableName, json)));
+-    }
+-
+-    QVERIFY_SQL(q, prepare(QLatin1String("SELECT id, value FROM %1 WHERE id = ?").arg(tableName)));
+-    q.addBindValue(1);
+-    QVERIFY_SQL(q, exec());
+-
+-    size_t iCount = 0;
+-    while (q.next()) {
+-        QVERIFY(iCount < sizeof(vals));
+-        const int id = q.value(0).toInt();
+-        const QByteArray json = q.value(1).toByteArray();
+-        QCOMPARE(id, 1);
+-        QCOMPARE(json, vals[iCount].data());
+-        ++iCount;
+-    }
+-}
+-
+ void tst_QSqlQuery::aggregateFunctionTypes()
+ {
+     QFETCH(QString, dbName);
