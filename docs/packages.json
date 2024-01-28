@@ -527,11 +527,11 @@
     "xorg-macros": {"version": "1.19.0", "website": "https://cgit.freedesktop.org/xorg/util/macros/", "description": "X.org utility macros"},
     "xvidcore": {"version": "1.3.4", "website": "https://www.xvid.com/", "description": ""},
     "xxhash": {"version": "0.7.2", "website": "https://cyan4973.github.io/xxHash/", "description": "xxHash"},
-    "xz": {"version": "5.4.5", "website": "https://tukaani.org/xz/", "description": "XZ"},
+    "xz": {"version": "5.4.6", "website": "https://tukaani.org/xz/", "description": "XZ"},
     "yaml-cpp": {"version": "0.6.2", "website": "https://github.com/jbeder/yaml-cpp", "description": "A YAML parser and emitter for C++"},
     "yasm": {"version": "1.3.0", "website": "https://yasm.tortall.net/", "description": "Yasm"},
     "zip": {"version": "3.0", "website": "https://infozip.sourceforge.io/Zip.html", "description": "Info-ZIP"},
-    "zlib": {"version": "1.3", "website": "https://zlib.net/", "description": ""},
+    "zlib": {"version": "1.3.1", "website": "https://zlib.net/", "description": ""},
     "zstd": {"version": "1.5.5", "website": "https://github.com/facebook/zstd", "description": "Zstandard is a fast lossless compression algorithm"},
     "zziplib": {"version": "0.13.69", "website": "https://github.com/gdraheim/zziplib", "description": "ZZIPlib"},
     "": null
