@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 3 Apr 2023 13:57:29 +0200
-Subject: [PATCH 1/2] Use lower-case header/library names for with mingw-w64
+Subject: [PATCH 1/1] Use lower-case header/library names for with mingw-w64
  (more)
 
 
@@ -24,39 +24,3 @@ index 1111111..2222222 100644
  
  #include <system_error>
  #include <thread>
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Tue, 18 Apr 2023 00:38:02 +0200
-Subject: [PATCH 2/2] fix link list for ffmpeg libraries and static
- dependencies
-
-This fixes the link lists found in ffmpegmediaplugin.prl, which led
-to linking errors for applications built with cmake and qmake.
-
-The first problem affects all the ffmpeg libaries and is exemplified by:
-    -llibavformat.a -lavformat
-The filename libavformat.a has somehow found its way into the conventional
-libary list, all prefixed with the -l flag.
-
-An additional problem was that static dependencies of the ffmpeg
-libraries were missing from these lists.
-
-Both problems are fixed in FindFFmpeg.cmake by setting, for
-example, AVFORMAT_LIBRARIES to a list consisting of the libary avformat
-and its dependencies. Previously, AVFORMAT_LIBRARIES was set to the
-filename libavformat.a.
-
-diff --git a/cmake/FindFFmpeg.cmake b/cmake/FindFFmpeg.cmake
-index 1111111..2222222 100644
---- a/cmake/FindFFmpeg.cmake
-+++ b/cmake/FindFFmpeg.cmake
-@@ -146,7 +146,7 @@ macro(find_component _component _pkgconfig _library _header)
-   set(${_component}_DEFINITIONS  ${PC_${_component}_CFLAGS_OTHER}       CACHE STRING "The ${_component} CFLAGS.")
-   set(${_component}_VERSION      ${PC_${_component}_VERSION}            CACHE STRING "The ${_component} version number.")
-   set(${_component}_LIBRARY_DIRS ${${_component}_LIBRARY_DIR_FROM_FIND} CACHE STRING "The ${_component} library dirs.")
--  set(${_component}_LIBRARIES    ${${_component}_LIBRARY_FROM_FIND}     CACHE STRING "The ${_component} libraries.")
-+  set(${_component}_LIBRARIES    ${PC_${_component}_LIBRARIES}          CACHE STRING "The ${_component} libraries.")
- 
- #  message("Libs" ${FFMPEG_DIR} ${${_component}_LIBRARIES} ${${_component}_LIBRARY_DIRS})
- 
