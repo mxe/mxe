@@ -134,7 +134,7 @@
     "hiredis": {"version": "1.0.2", "website": "https://github.com/redis/hiredis", "description": "HIREDIS"},
     "hunspell": {"version": "1.7.2", "website": "https://hunspell.github.io/", "description": "Hunspell"},
     "hyperscan": {"version": "5.4.0", "website": "https://01.org/hyperscan", "description": "Hyperscan"},
-    "icu4c": {"version": "66.1", "website": "https://github.com/unicode-org/icu", "description": "ICU4C"},
+    "icu4c": {"version": "74.2", "website": "https://github.com/unicode-org/icu", "description": "ICU4C"},
     "id3lib": {"version": "3.8.3", "website": "https://id3lib.sourceforge.io/", "description": ""},
     "ilmbase": {"version": "2.2.0", "website": "https://www.openexr.com/", "description": "IlmBase"},
     "imagemagick": {"version": "7.1.0-51", "website": "https://www.imagemagick.org/", "description": "ImageMagick"},
