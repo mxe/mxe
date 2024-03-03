@@ -203,13 +203,25 @@ Subject: [PATCH 4/4] add readline to PC_REQUIRES when detected
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 1111111..2222222 100644
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -606,6 +606,7 @@ if ( enable-readline )
-   if ( HAVE_READLINE )
-     set ( WITH_READLINE 1 )
-     set ( READLINE_LIBS ${READLINE_LIBRARIES} )
-+    set ( PC_REQUIRES "${PC_REQUIRES} readline")
-   endif ( HAVE_READLINE )
- else ( enable-readline )
-   unset ( READLINE_LIBS CACHE )
+--- a/CMakeLists.txt	     2020-05-03 20:29:44.116701894 +0200
++++ b/CMakeLists.txt          2020-05-03 20:36:16.274435275 +0200
+@@ -611,6 +611,7 @@
+     if ( READLINE_FOUND )
+         set ( WITH_READLINE 1 )
+         set ( READLINE_LIBS ${READLINE_LIBRARIES} )
++        set ( PC_REQUIRES "${PC_REQUIRES} readline")
+     endif ( READLINE_FOUND )
+     endif ( enable-readline )
+ 
+--- a/CMakeLists	     2020-05-03 21:18:55.561159206 +0200
++++ b/CMakeLists.txt	2020-05-03 21:21:27.063145612 +0200
+@@ -584,6 +584,9 @@
+     if ( enable-sdl2 )
+         pkg_check_modules ( SDL2 sdl2 )
+         set ( SDL2_SUPPORT ${SDL2_FOUND} )
++        if ( SDL2_SUPPORT )
++          set ( PC_REQUIRES "${PC_REQUIRES} sdl2")
++        endif ()
+     else ( enable-sdl2 )
+         unset_pkg_config ( SDL2 )
+     endif ( enable-sdl2 )
