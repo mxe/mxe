@@ -1,0 +1,12 @@
+diff -Naur mlt-6.4.1/src/melt/Makefile mlt-6.4.1-patch/src/melt/Makefile
+--- mlt-6.4.1/src/melt/Makefile	2016-11-16 07:53:11.000000000 +0100
++++ mlt-6.4.1-patch/src/melt/Makefile	2016-11-19 09:22:19.618700486 +0100
+@@ -11,7 +11,7 @@
+ 
+ ifeq ($(targetos), MinGW)
+ ifeq (, $(findstring MELT_NOSDL, $(CFLAGS)))
+-ifeq (, $(shell pkg-config --exists sdl))
++ifeq (, $(shell pkg-config --exists sdl && echo yes))
+ CFLAGS += $(shell  sdl-config --cflags)
+ LDFLAGS += $(shell sdl-config --libs)
+ else
