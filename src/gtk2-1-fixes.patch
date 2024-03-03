@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Fri, 24 Sep 2010 14:43:43 +0200
-Subject: [PATCH 01/12] s,DllMain,static _disabled_DllMain,
+Subject: [PATCH 01/13] s,DllMain,static _disabled_DllMain,
 
 
 diff --git a/gdk/win32/gdkmain-win32.c b/gdk/win32/gdkmain-win32.c
@@ -38,7 +38,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Fri, 24 Sep 2010 14:46:20 +0200
-Subject: [PATCH 02/12] s,__declspec(dllimport),,
+Subject: [PATCH 02/13] s,__declspec(dllimport),,
 
 
 diff --git a/gdk/gdktypes.h b/gdk/gdktypes.h
@@ -97,7 +97,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Fri, 24 Sep 2010 15:03:28 +0200
-Subject: [PATCH 03/12] s,__declspec(dllexport),,
+Subject: [PATCH 03/13] s,__declspec(dllexport),,
 
 
 diff --git a/gdk/gdktypes.h b/gdk/gdktypes.h
@@ -156,7 +156,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Fri, 24 Sep 2010 14:17:22 +0200
-Subject: [PATCH 04/12] fix gtk+-2.0.pc.in
+Subject: [PATCH 04/13] fix gtk+-2.0.pc.in
 
 
 diff --git a/gtk+-2.0.pc.in b/gtk+-2.0.pc.in
@@ -174,7 +174,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Fri, 24 Sep 2010 14:48:31 +0200
-Subject: [PATCH 05/12] disable gtkbuiltincache
+Subject: [PATCH 05/13] disable gtkbuiltincache
 
 
 diff --git a/gtk/Makefile.in b/gtk/Makefile.in
@@ -194,7 +194,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Fri, 24 Sep 2010 14:49:50 +0200
-Subject: [PATCH 06/12] disable test-inline-pixbufs.h
+Subject: [PATCH 06/13] disable test-inline-pixbufs.h
 
 
 diff --git a/demos/Makefile.in b/demos/Makefile.in
@@ -214,7 +214,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Fri, 24 Sep 2010 14:51:04 +0200
-Subject: [PATCH 07/12] permit static building
+Subject: [PATCH 07/13] permit static building
 
 
 diff --git a/configure b/configure
@@ -312,7 +312,7 @@ index 1111111..2222222 100755
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Fri, 24 Sep 2010 14:53:18 +0200
-Subject: [PATCH 08/12] no -Wl
+Subject: [PATCH 08/13] no -Wl
 
 
 diff --git a/configure b/configure
@@ -332,7 +332,7 @@ index 1111111..2222222 100755
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Fri, 24 Sep 2010 14:54:15 +0200
-Subject: [PATCH 09/12] gio not gio-unix
+Subject: [PATCH 09/13] gio not gio-unix
 
 
 diff --git a/configure b/configure
@@ -355,7 +355,7 @@ index 1111111..2222222 100755
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "fix@me" <fix@me>
 Date: Fri, 24 Sep 2010 15:30:49 +0200
-Subject: [PATCH 10/12] removed duplicate _gtk_marshal_OBJECT__VOID()
+Subject: [PATCH 10/13] removed duplicate _gtk_marshal_OBJECT__VOID()
 
 
 diff --git a/perf/marshalers.c b/perf/marshalers.c
@@ -410,7 +410,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 28 May 2020 18:22:19 +0200
-Subject: [PATCH 11/12] gcc 10 compatibility: add missing "extern"
+Subject: [PATCH 11/13] gcc 10 compatibility: add missing "extern"
 
 Related to:
     Default to -fno-common
@@ -523,7 +523,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 28 May 2020 19:45:12 +0200
-Subject: [PATCH 12/12] remove unnecessary parentheses
+Subject: [PATCH 12/13] remove unnecessary parentheses
 
 ..which break build of gtkmm2 using gcc 10.
 
@@ -567,3 +567,161 @@ index 1111111..2222222 100644
  };
  
  GType                 gtk_status_icon_get_type           (void) G_GNUC_CONST;
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Zach Bacon <zachbacon@vba-m.com>
+Date: Wed, 24 Jun 2020 04:32:05 -0400
+Subject: [PATCH 13/13] This bakes in the msw gtk2 engine into gtk2 itself
+
+
+diff --git a/gtk/gtkthemes.c b/gtk/gtkthemes.c
+index 1111111..2222222 100644
+--- a/gtk/gtkthemes.c
++++ b/gtk/gtkthemes.c
+@@ -61,7 +61,11 @@ static gboolean
+ gtk_theme_engine_load (GTypeModule *module)
+ {
+   GtkThemeEngine *engine = GTK_THEME_ENGINE (module);
+-  
++
++#ifdef G_OS_WIN32
++  extern void _gtk_theme_wimp_init (GTypeModule *);
++  _gtk_theme_wimp_init(module);
++#else  
+   gchar *engine_path;
+       
+   engine_path = gtk_rc_find_module_in_path (engine->name);
+@@ -103,6 +107,7 @@ gtk_theme_engine_load (GTypeModule *module)
+   /* setup anything it needs to set up. */
+   engine->init (module);
+ 
++#endif
+   return TRUE;
+ }
+ 
+@@ -111,6 +116,10 @@ gtk_theme_engine_unload (GTypeModule *module)
+ {
+   GtkThemeEngine *engine = GTK_THEME_ENGINE (module);
+ 
++#ifdef G_OS_WIN32
++  extern void _gtk_theme_wimp_exit (void);
++  _gtk_theme_wimp_exit();
++#else
+   engine->exit();
+ 
+   g_module_close (engine->library);
+@@ -119,6 +128,7 @@ gtk_theme_engine_unload (GTypeModule *module)
+   engine->init = NULL;
+   engine->exit = NULL;
+   engine->create_rc_style = NULL;
++#endif
+ }
+ 
+ static void
+@@ -189,8 +199,32 @@ gtk_theme_engine_create_rc_style (GtkThemeEngine *engine)
+ {
+   g_return_val_if_fail (engine != NULL, NULL);
+ 
++#ifdef G_OS_WIN32
++  extern GtkRcStyle * _gtk_theme_wimp_create_rc_style (void);
++  return _gtk_theme_wimp_create_rc_style ();
++#else
+   return engine->create_rc_style ();
++#endif
+ }
+ 
+ #define __GTK_THEMES_C__
+ #include "gtkaliasdef.c"
++
++#ifdef G_OS_WIN32
++/* redefine deprected */
++#include "gtknotebook.h"
++GType gtk_clist_get_type (void) G_GNUC_CONST;
++#define GTK_TYPE_CLIST            (gtk_clist_get_type ())
++#define GTK_IS_CLIST(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_CLIST))
++#define GTK_WIDGET_VISIBLE(wid)		  ((GTK_WIDGET_FLAGS (wid) & GTK_VISIBLE) != 0)
++void gtk_notebook_query_tab_label_packing (GtkNotebook *notebook,
++					   GtkWidget   *child,
++					   gboolean    *expand,
++					   gboolean    *fill,
++					   GtkPackType *pack_type);
++
++#include "../modules/engines/ms-windows/msw_rc_style.c"
++#include "../modules/engines/ms-windows/msw_style.c"
++#include "../modules/engines/ms-windows/msw_theme_main.c"
++#include "../modules/engines/ms-windows/xp_theme.c"
++#endif
+\ No newline at end of file
+diff --git a/modules/engines/ms-windows/msw_rc_style.c b/modules/engines/ms-windows/msw_rc_style.c
+index 1111111..2222222 100755
+--- a/modules/engines/ms-windows/msw_rc_style.c
++++ b/modules/engines/ms-windows/msw_rc_style.c
+@@ -27,7 +27,7 @@ static void msw_rc_style_init (MswRcStyle * style);
+ static void msw_rc_style_class_init (MswRcStyleClass * klass);
+ static GtkStyle *msw_rc_style_create_style (GtkRcStyle * rc_style);
+ 
+-static GtkRcStyleClass *parent_class;
++static GtkRcStyleClass *rcparent_class;
+ 
+ GType msw_type_rc_style = 0;
+ 
+@@ -62,7 +62,7 @@ msw_rc_style_class_init (MswRcStyleClass *klass)
+ {
+   GtkRcStyleClass *rc_style_class = GTK_RC_STYLE_CLASS (klass);
+ 
+-  parent_class = g_type_class_peek_parent (klass);
++  rcparent_class = g_type_class_peek_parent (klass);
+ 
+   rc_style_class->create_style = msw_rc_style_create_style;
+ }
+diff --git a/modules/engines/ms-windows/msw_theme_main.c b/modules/engines/ms-windows/msw_theme_main.c
+index 1111111..2222222 100755
+--- a/modules/engines/ms-windows/msw_theme_main.c
++++ b/modules/engines/ms-windows/msw_theme_main.c
+@@ -91,8 +91,13 @@ global_filter_func (void *xevent, GdkEvent *event, gpointer data)
+     }
+ }
+ 
+-G_MODULE_EXPORT void
+-theme_init (GTypeModule * module)
++#ifdef G_OS_WIN32
++#define MODULE_ENTRY(type, function) type _gtk_theme_wimp_ ## function
++#else
++#define MODULE_ENTRY(type, function) G_MODULE_EXPORT type theme_ ## function
++#endif
++
++MODULE_ENTRY (void, init) (GTypeModule * module)
+ {
+   msw_rc_style_register_type (module);
+   msw_style_register_type (module);
+@@ -114,8 +119,7 @@ theme_init (GTypeModule * module)
+   gdk_window_add_filter (hidden_msg_window, global_filter_func, NULL);
+ }
+ 
+-G_MODULE_EXPORT void
+-theme_exit (void)
++MODULE_ENTRY (void, exit) (void)
+ {
+   gdk_window_remove_filter (hidden_msg_window, global_filter_func, NULL);
+   gdk_window_destroy (hidden_msg_window);
+@@ -129,12 +133,12 @@ theme_exit (void)
+     }
+ }
+ 
+-G_MODULE_EXPORT GtkRcStyle *
+-theme_create_rc_style (void)
++MODULE_ENTRY (GtkRcStyle *, create_rc_style) (void)
+ {
+   return g_object_new (MSW_TYPE_RC_STYLE, NULL);
+ }
+ 
++#ifndef G_OS_WIN32
+ /* The following function will be called by GTK+ when the module
+  * is loaded and checks to see if we are compatible with the
+  * version of GTK+ that loads us.
+@@ -144,3 +148,4 @@ g_module_check_init (GModule *module)
+ {
+   return gtk_check_version (2, 0, 0);
+ }
++#endif
+\ No newline at end of file
