@@ -1,0 +1,24 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Stefan=20L=C3=B6ffler?= <st.loeffler@gmail.com>
+Date: Sat, 26 Jun 2021 19:49:25 +0200
+Subject: [PATCH 1/1] Fix static builds
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -83,7 +83,7 @@ option(USE_FLOAT "Use single precision arithmetic in the Splash backend" OFF)
+ option(BUILD_SHARED_LIBS "Build poppler as a shared library" ON)
+ option(RUN_GPERF_IF_PRESENT "Run gperf if it is found" ON)
+ if(WIN32)
+-  option(ENABLE_RELOCATABLE "Do not hardcode the poppler library location (on Windows)." ON)
++  option(ENABLE_RELOCATABLE "Do not hardcode the poppler library location (on Windows)." ${BUILD_SHARED_LIBS})
+ else()
+   set(ENABLE_RELOCATABLE OFF)
+ endif()
+
