@@ -19,6 +19,8 @@ endef
 define $(PKG)_BUILD
     $(SED) -i 's,libpng12,libpng,g'                          '$(1)/configure'
     $(SED) -i 's,^\(Libs:.*\),\1 @CAIRO_NONPKGCONFIG_LIBS@,' '$(1)/src/cairo.pc.in'
+    # regenerate for patch 2 to work
+    cd '$(SOURCE_DIR)' && NOCONFIGURE=true $(SHELL) ./autogen.sh
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
         --disable-lto \

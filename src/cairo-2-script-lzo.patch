@@ -1,0 +1,26 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Jan200101 <sentrycraft123@gmail.com>
+Date: Sat, 27 May 2023 20:39:43 +0200
+Subject: [PATCH] add lzo2 dependency to cairo-script
+
+Signed-off-by: Jan200101 <sentrycraft123@gmail.com>
+---
+ configure.ac | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/configure.ac b/configure.ac
+index 5e33c96ea..d557452cb 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -482,6 +482,7 @@ CAIRO_ENABLE_SURFACE_BACKEND(script, script, yes, [
+   # The script backend requires zlib.
+   use_script=$have_libz
+   script_NONPKGCONFIG_LIBS=-lz
++  script_REQUIRES=lzo2
+ ])
+ 
+ dnl ===========================================================================
