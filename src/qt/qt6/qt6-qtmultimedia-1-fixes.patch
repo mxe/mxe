@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 3 Apr 2023 13:57:29 +0200
-Subject: [PATCH 1/1] Use lower-case header/library names for with mingw-w64
+Subject: [PATCH 1/2] Use lower-case header/library names for with mingw-w64
  (more)
 
 
@@ -24,3 +24,41 @@ index 1111111..2222222 100644
  
  #include <system_error>
  #include <thread>
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Sean Link <sean.link@lightdeckdx.com>
+Date: Thu, 21 Mar 2024 15:34:13 +0100
+Subject: [PATCH 2/2] fix i686-w64-mingw32 build
+
+taken from https://github.com/mxe/mxe/issues/3038#issuecomment-1998456113
+
+diff --git a/src/plugins/multimedia/ffmpeg/qwincapturablewindows.cpp b/src/plugins/multimedia/ffmpeg/qwincapturablewindows.cpp
+index 1111111..2222222 100644
+--- a/src/plugins/multimedia/ffmpeg/qwincapturablewindows.cpp
++++ b/src/plugins/multimedia/ffmpeg/qwincapturablewindows.cpp
+@@ -42,11 +42,7 @@ static QString windowTitle(HWND hwnd) {
+     return QString::fromStdWString(buffer);
+ }
+ 
+-QList<QCapturableWindow> QWinCapturableWindows::windows() const
+-{
+-    QList<QCapturableWindow> result;
+-
+-    auto windowHandler = [](HWND hwnd, LPARAM lParam) {
++static int __stdcall windowHandler(HWND hwnd, LPARAM lParam) {
+         if (!canCaptureWindow(hwnd))
+             return TRUE; // Ignore window and continue enumerating
+ 
+@@ -58,7 +54,11 @@ QList<QCapturableWindow> QWinCapturableWindows::windows() const
+         windows.push_back(windowData.release()->create());
+ 
+         return TRUE;
+-    };
++}
++
++QList<QCapturableWindow> QWinCapturableWindows::windows() const
++{
++    QList<QCapturableWindow> result;
+ 
+     ::EnumWindows(windowHandler, reinterpret_cast<LPARAM>(&result));
+ 
