@@ -77,6 +77,7 @@ define $(PKG)_BUILD
         -dbus-linked \
         -no-pch \
         -v \
+        -DWINVER=0x0601 -D_WIN32_WINNT=0x0601 \
         $($(PKG)_CONFIGURE_OPTS)
 
     $(MAKE) -C '$(1)' -j '$(JOBS)'

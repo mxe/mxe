@@ -4,18 +4,10 @@ PKG             := xz
 $(PKG)_WEBSITE  := https://tukaani.org/xz/
 $(PKG)_DESCR    := XZ
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.4.2
-$(PKG)_CHECKSUM := 87947679abcf77cc509d8d1b474218fd16b72281e2797360e909deaee1ac9d05
-$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://tukaani.org/xz/$($(PKG)_FILE)
+$(PKG)_VERSION  := 5.6.1
+$(PKG)_CHECKSUM := 2398f4a8e53345325f44bdd9f0cc7401bd9025d736c6d43b372f4dea77bf75b8
+$(PKG)_GH_CONF  := tukaani-project/xz/releases,v
 $(PKG)_DEPS     := cc
-
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://tukaani.org/xz/' | \
-    $(SED) -n 's,.*xz-\([0-9][^>]*\)\.tar.*,\1,p' | \
-    head -1
-endef
 
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \

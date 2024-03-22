@@ -5,7 +5,7 @@ include src/qt/qt6/qt6-conf.mk
 PKG := qt6-qttools
 $(eval $(QT6_METADATA))
 
-$(PKG)_CHECKSUM := 49c33d96b0a44988be954269b8ce3d1a495b439726e03a6be7c0d50a686369c4
+$(PKG)_CHECKSUM := e6d49e9f52111287f77878ecb8b708cce682f10b03ba2476d9247603bc6c4746
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 $(PKG)_DEPS_$(BUILD) := qt6-conf qt6-qtbase
 $(PKG)_DEPS     := cc $($(PKG)_DEPS_$(BUILD)) qt6-qtdeclarative $(BUILD)~$(PKG)
@@ -13,6 +13,7 @@ $(PKG)_DEPS     := cc $($(PKG)_DEPS_$(BUILD)) qt6-qtdeclarative $(BUILD)~$(PKG)
 define $(PKG)_BUILD
     $(QT6_QT_CMAKE) -S '$(SOURCE_DIR)' -B '$(BUILD_DIR)' \
         -DQT_BUILD_TOOLS_WHEN_CROSSCOMPILING=ON
+    $(if $(BUILD_STATIC),'$(SED)' -i "/^ *LINK_LIBRARIES = /{s/$$/ `'$(TARGET)-pkg-config' --libs libbrotlidec`/g}" '$(BUILD_DIR)/build.ninja',)
     # not built for some reason. make dummy so install won't fail
     touch '$(BUILD_DIR)/bin/qhelpgenerator.exe'
     cmake --build '$(BUILD_DIR)' -j '$(JOBS)'

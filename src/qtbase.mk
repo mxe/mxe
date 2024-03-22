@@ -4,11 +4,11 @@ PKG             := qtbase
 $(PKG)_WEBSITE  := https://www.qt.io/
 $(PKG)_DESCR    := Qt
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.15.9
-$(PKG)_CHECKSUM := 1947deb9d98aaf46bf47e6659b3e1444ce6616974470523756c082041d396d1e
+$(PKG)_VERSION  := 5.15.13
+$(PKG)_CHECKSUM := 4cca51dcc1f22ceeee6b3e33cd1c3a60b14e85e24644dca3af89a2c2989ab809
 $(PKG)_SUBDIR   := $(PKG)-everywhere-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := https://download.qt.io/official_releases/qt/5.15/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
+$(PKG)_URL      := https://download.qt.io/archive/qt/5.15/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc dbus fontconfig freetds freetype harfbuzz jpeg libmysqlclient \
                    libpng mesa openssl pcre2 postgresql sqlite zlib zstd $(BUILD)~zstd \
                    $(if $(findstring shared,$(MXE_TARGETS)), icu4c)
@@ -16,10 +16,10 @@ $(PKG)_DEPS_$(BUILD) :=
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- https://download.qt.io/official_releases/qt/5.15/ | \
-    $(SED) -n 's,.*href="\(5\.15\.[^/]*\)/".*,\1,p' | \
+    $(WGET) -q -O- https://download.qt.io/archive/qt/5.15/ | \
+    $(SED) -n 's,.*href="\(5\.15\.[^/]\+\)/".*,\1,p' | \
     grep -iv -- '-rc' | \
-    sort |
+    sort -V |
     tail -1
 endef
 

@@ -2,11 +2,11 @@
 
 include src/qt/qt6/qt6-conf.mk
 
-PKG := qt6-qtcharts
+PKG := qt6-qthttpserver
 $(eval $(QT6_METADATA))
 
-$(PKG)_CHECKSUM := b1486262ee07b4420b8cdd1525c01800186b15d4fee0669cf544fdd5e941f5f4
-$(PKG)_DEPS     := cc qt6-conf qt6-qtbase
+$(PKG)_CHECKSUM := a2413a6a33b53289d74a00ee47b79d5a22532a0f46fbca139b216320bc49fce3
+$(PKG)_DEPS     := cc qt6-conf qt6-qtbase qt6-qtwebsockets
 
 QT6_PREFIX   = '$(PREFIX)/$(TARGET)/$(MXE_QT6_ID)'
 QT6_QT_CMAKE = '$(QT6_PREFIX)/$(if $(findstring mingw,$(TARGET)),bin,libexec)/qt-cmake-private' \

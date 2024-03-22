@@ -2,14 +2,16 @@
 
 include src/qt/qt6/qt6-conf.mk
 
-PKG := qt6-qtcharts
+PKG := qt6-qtscxml
 $(eval $(QT6_METADATA))
 
-$(PKG)_CHECKSUM := b1486262ee07b4420b8cdd1525c01800186b15d4fee0669cf544fdd5e941f5f4
-$(PKG)_DEPS     := cc qt6-conf qt6-qtbase
+$(PKG)_CHECKSUM := 094982f0ff828070b2282c97b68229ec8ff4d68b32f335ab1cba81530a40a43e
+$(PKG)_TARGETS       := $(BUILD) $(MXE_TARGETS)
+$(PKG)_DEPS_$(BUILD) := qt6-conf qt6-qtbase
+$(PKG)_DEPS          := cc $($(PKG)_DEPS_$(BUILD)) $(BUILD)~$(PKG)
 
 QT6_PREFIX   = '$(PREFIX)/$(TARGET)/$(MXE_QT6_ID)'
-QT6_QT_CMAKE = '$(QT6_PREFIX)/$(if $(findstring mingw,$(TARGET)),bin,libexec)/qt-cmake-private' \
+QT6_QT_CMAKE = '$(QT6_PREFIX)/bin/qt-cmake-private' \
                    -DCMAKE_INSTALL_PREFIX='$(QT6_PREFIX)'
 
 define $(PKG)_BUILD

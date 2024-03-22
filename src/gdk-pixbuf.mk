@@ -19,6 +19,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    LDFLAGS="`'$(TARGET)-pkg-config' --libs libjpeg libpng libtiff-4`" \
     '$(MXE_MESON_WRAPPER)' $(MXE_MESON_OPTS) \
       -Dinstalled_tests=false \
       -Dintrospection=disabled \
