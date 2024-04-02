@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Mon, 14 Dec 2020 15:09:00 +1100
-Subject: [PATCH 1/3] optionally build docs
+Subject: [PATCH 1/5] optionally build docs
 
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
@@ -26,32 +26,37 @@ index 1111111..2222222 100644
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
-Date: Mon, 3 Apr 2023 13:12:47 +0200
-Subject: [PATCH 2/3] add missing oleaut32 dependency for networklistmanager
+Date: Thu, 4 Apr 2024 10:46:22 +0200
+Subject: [PATCH 2/5] QNetworkInfo[win]: Explicitly link with oleaut32 for
+ MINGW too
 
-Required for symbols VariantInit and VariantClear.
+Following up on 2 commits that fixed static linking for MSVC but left
+out MINGW:
+    230c53ad9d7046e61b37ce63a6bc68449393bb7b
+    d9820b02072b27f830b389e503467c8220679cba
+
+Pick-to: 6.6 6.7
+Fixes: QTBUG-114243
+Change-Id: I12853355ffa1a62acce15ff660478f618c42e0a6
 
 diff --git a/src/plugins/networkinformation/networklistmanager/CMakeLists.txt b/src/plugins/networkinformation/networklistmanager/CMakeLists.txt
 index 1111111..2222222 100644
 --- a/src/plugins/networkinformation/networklistmanager/CMakeLists.txt
 +++ b/src/plugins/networkinformation/networklistmanager/CMakeLists.txt
-@@ -14,6 +14,11 @@ qt_internal_add_plugin(QNLMNIPlugin
+@@ -14,7 +14,7 @@ qt_internal_add_plugin(QNLMNIPlugin
          Qt::NetworkPrivate
  )
  
+-qt_internal_extend_target(QNLMNIPlugin CONDITION MSVC
 +qt_internal_extend_target(QNLMNIPlugin CONDITION WIN32
-+    LIBRARIES
-+        oleaut32
-+)
-+
- qt_internal_extend_target(QNLMNIPlugin CONDITION WIN32 AND MSVC AND NOT CLANG
      LIBRARIES
          runtimeobject
+         oleaut32
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 14 Feb 2022 00:44:19 +0100
-Subject: [PATCH 3/3] help openssl detection
+Subject: [PATCH 3/5] help openssl detection
 
 
 diff --git a/cmake/FindWrapOpenSSL.cmake b/cmake/FindWrapOpenSSL.cmake
@@ -67,3 +72,81 @@ index 1111111..2222222 100644
          unset(libType)
          unset(writableLib)
      endif()
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Mon, 18 Mar 2024 15:43:25 +0100
+Subject: [PATCH 4/5] fix QODBCDriver::record Unable to allocate handle
+
+Seems to have been left out by Change-Id: I7aba4472be1e2991f395eeb7e43f8dd272336694
+
+QTBUG-123478
+Change-Id: Ic028c3786203cbc1c3d7316c1ae22c12a928b170
+
+diff --git a/src/plugins/sqldrivers/odbc/qsql_odbc.cpp b/src/plugins/sqldrivers/odbc/qsql_odbc.cpp
+index 1111111..2222222 100644
+--- a/src/plugins/sqldrivers/odbc/qsql_odbc.cpp
++++ b/src/plugins/sqldrivers/odbc/qsql_odbc.cpp
+@@ -2477,7 +2477,7 @@ QSqlRecord QODBCDriver::record(const QString& tablename) const
+     if (!isOpen())
+         return fil;
+ 
+-    SqlStmtHandle hStmt;
++    SqlStmtHandle hStmt(d->hDbc);
+     if (!hStmt.isValid()) {
+         qSqlWarning("QODBCDriver::record: Unable to allocate handle"_L1, d);
+         return fil;
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Christian Ehrlicher <ch.ehrlicher@gmx.de>
+Date: Mon, 1 Apr 2024 19:06:34 +0200
+Subject: [PATCH 5/5] SQL/ODBC: don't escape a driver string
+
+We must not try to escape a driver string, the user has to make sure
+that everything is correctly escaped when passing a complete driver
+string. This fixes a regression from QTBUG-122642.
+
+Pick-to: 6.7
+Fixes: QTBUG-123444
+Change-Id: I43316c7a09060f5c8117fdc3c464d239e37d9cdf
+
+diff --git a/src/plugins/sqldrivers/odbc/qsql_odbc.cpp b/src/plugins/sqldrivers/odbc/qsql_odbc.cpp
+index 1111111..2222222 100644
+--- a/src/plugins/sqldrivers/odbc/qsql_odbc.cpp
++++ b/src/plugins/sqldrivers/odbc/qsql_odbc.cpp
+@@ -1968,7 +1968,7 @@ bool QODBCDriver::open(const QString & db,
+         connQStr = "FILEDSN="_L1 + ensureEscaped(db);
+     else if (db.contains("DRIVER="_L1, Qt::CaseInsensitive)
+             || db.contains("SERVER="_L1, Qt::CaseInsensitive))
+-        connQStr = ensureEscaped(db);
++        connQStr = db;
+     else
+         connQStr = "DSN="_L1 + ensureEscaped(db);
+ 
+diff --git a/src/sql/doc/src/sql-driver.qdoc b/src/sql/doc/src/sql-driver.qdoc
+index 1111111..2222222 100644
+--- a/src/sql/doc/src/sql-driver.qdoc
++++ b/src/sql/doc/src/sql-driver.qdoc
+@@ -404,15 +404,20 @@
+     of the ODBC driver. ODBC support can be used as a fallback for compliant
+     databases if no native driver is available.
+ 
+-    On Windows, an ODBC driver manager should be installed by default.
++    On Windows, an ODBC driver manager is installed by default.
+     For Unix systems, there are some implementations which must be
+     installed first. Note that every end user of your application is
+     required to have an ODBC driver manager installed, otherwise the
+     QODBC plugin will not work.
+ 
+     When connecting to an ODBC datasource, you should pass the name
+-    of the ODBC datasource to the QSqlDatabase::setDatabaseName()
++    of the ODBC datasource (DSN) to the QSqlDatabase::setDatabaseName()
+     function, rather than the actual database name.
++    It's also possible to pass a FILEDSN (*.dsn) filename or a complete
++    ODBC driver string. When passing a driver string you must make sure,
++    that all parameters (username, password, ...) are properly escaped.
++    Passing the username or password through the QSqlDatabase functions,
++    the escaping is done by the QODBC plugin.
+ 
+     The QODBC Plugin needs an ODBC compliant driver manager version 2.0 or
+     later. Some ODBC drivers claim to be version-2.0-compliant,
