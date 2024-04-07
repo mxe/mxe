@@ -27,6 +27,7 @@ define $(PKG)_BUILD
 
 	$(MAKE) -C '$(1)/native_build'
 
-	$(INSTALL) '$(1)/xdf.h'    '$(PREFIX)/$(TARGET)/include/'
-	$(INSTALL) '$(1)'/native_build/libxdf.$(if $(BUILD_STATIC),"a","dll*") '$(PREFIX)/$(TARGET)/lib/'
+	$(INSTALL) '$(1)/xdf.h'    			'$(PREFIX)/$(TARGET)/include/'
+	$(INSTALL) '$(1)'/native_build/libxdf.$(if $(BUILD_STATIC),"a","dll.a") '$(PREFIX)/$(TARGET)/lib/'
+	-$(INSTALL) '$(1)'/native_build/libxdf.dll	'$(PREFIX)/$(TARGET)/bin/'
 endef

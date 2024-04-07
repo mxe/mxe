@@ -49,20 +49,20 @@ define $(PKG)_BUILD_POST
 
     $(INSTALL) -m644 '$(1)/biosig4c++/libbiosig.a'		'$(PREFIX)/$(TARGET)/lib/'
     $(INSTALL) -m644 '$(1)/biosig4c++/libbiosig.def'		'$(PREFIX)/$(TARGET)/lib/'
-    # $(INSTALL) -m644 '$(1)/biosig4c++/libbiosig.dll.a'	'$(PREFIX)/$(TARGET)/lib/'
+    -$(INSTALL) -m644 '$(1)/biosig4c++/libbiosig.dll.a'		'$(PREFIX)/$(TARGET)/lib/'
     $(INSTALL) -m644 '$(1)/biosig4c++/libbiosig.dll'		'$(PREFIX)/$(TARGET)/bin/'
     $(INSTALL) -m644 '$(1)/biosig4c++/libbiosig-3.dll'		'$(PREFIX)/$(TARGET)/bin/'
 
     $(INSTALL) -m644 '$(1)/biosig4c++/libgdf.a'			'$(PREFIX)/$(TARGET)/lib/'
     $(INSTALL) -m644 '$(1)/biosig4c++/libgdf.def'		'$(PREFIX)/$(TARGET)/lib/'
-    # $(INSTALL) -m644 '$(1)/biosig4c++/libgdf.dll.a'		'$(PREFIX)/$(TARGET)/lib/'
+    -$(INSTALL) -m644 '$(1)/biosig4c++/libgdf.dll.a'		'$(PREFIX)/$(TARGET)/lib/'
     $(INSTALL) -m644 '$(1)/biosig4c++/libgdf-3.dll'		'$(PREFIX)/$(TARGET)/bin/'
     $(INSTALL) -m644 '$(1)/biosig4c++/libgdf.dll'		'$(PREFIX)/$(TARGET)/bin/'
 
     $(INSTALL) -m644 '$(1)/biosig4c++/physicalunits.h'		'$(PREFIX)/$(TARGET)/include/'
     $(INSTALL) -m644 '$(1)/biosig4c++/libphysicalunits.a'	'$(PREFIX)/$(TARGET)/lib/'
     $(INSTALL) -m644 '$(1)/biosig4c++/libphysicalunits.def'	'$(PREFIX)/$(TARGET)/lib/'
-    # $(INSTALL) -m644 '$(1)/biosig4c++/libphysicalunits.dll.a'	'$(PREFIX)/$(TARGET)/lib/'
+    -$(INSTALL) -m644 '$(1)/biosig4c++/libphysicalunits.dll.a'	'$(PREFIX)/$(TARGET)/lib/'
     $(INSTALL) -m644 '$(1)/biosig4c++/libphysicalunits-3.dll'	'$(PREFIX)/$(TARGET)/bin/'
     $(INSTALL) -m644 '$(1)/biosig4c++/libphysicalunits.dll'	'$(PREFIX)/$(TARGET)/bin/'
 
@@ -78,7 +78,6 @@ define $(PKG)_BUILD_POST
 		include/biosig.h include/biosig-dev.h include/biosig2.h include/gdftime.h  \
 		lib/libbiosig.a lib/libbiosig.def bin/libbiosig.dll lib/libbiosig.dll.a \
 		lib/libgdf.a lib/libgdf.def bin/libgdf.dll lib/libgdf.dll.a \
-		lib/libz.a lib/libcholmod.a lib/libiconv.a \
 		include/iconv.h \
 		include/physicalunits.h \
 		lib/libphysicalunits.a lib/libphysicalunits.def bin/libphysicalunits.dll lib/libphysicalunits.dll.a
@@ -94,7 +93,6 @@ define $(PKG)_BUILD_POST
     cd $(PREFIX)/$(TARGET) && cp -r \
 		lib/libbiosig.a lib/libbiosig.def bin/libbiosig.dll \
 		lib/libgdf.a lib/libgdf.def bin/libgdf.dll \
-		lib/libz.a lib/libcholmod.a lib/libiconv.a \
 		lib/libphysicalunits.a lib/libphysicalunits.def bin/libphysicalunits.dll \
 		$(PREFIX)/release/$(TARGET)/lib/
     -cd $(PREFIX)/$(TARGET) && cp -r \
@@ -110,12 +108,6 @@ define $(PKG)_BUILD_POST
     -cp $(1)/biosig4c++/mex/mex* $(PREFIX)/release/matlab/
 
     cd '$(1)/biosig4c++/win32' && zip $(PREFIX)/$($(PKG)_SUBDIR).$(TARGET).zip *.bat README
-
-    #exit -1
-    ### these cause problems when compiling stimfit
-    #rm -rf '$(PREFIX)/$(TARGET)/lib/libphysicalunits.dll.a' \
-    #	'$(PREFIX)/$(TARGET)/lib/libbiosig.dll.a' \
-    #	'$(PREFIX)/$(TARGET)/lib/libgdf.dll.a'
 
 endef
 
