@@ -29,7 +29,7 @@
     "cegui": {"version": "9726a2b505fb", "website": "http://cegui.org.uk/", "description": "Crazy Eddie’s GUI System (CEGUI)"},
     "cfitsio": {"version": "3410", "website": "https://heasarc.gsfc.nasa.gov/fitsio/", "description": ""},
     "cgal": {"version": "5.5", "website": "https://www.cgal.org/", "description": ""},
-    "chafa": {"version": "1.12.3", "website": "https://hpjansson.org/chafa/", "description": "The Chafa terminal graphics package"},
+    "chafa": {"version": "1.12.5", "website": "https://hpjansson.org/chafa/", "description": "The Chafa terminal graphics package"},
     "check": {"version": "0.15.2", "website": "https://libcheck.github.io/check/", "description": ""},
     "chipmunk": {"version": "7.0.2", "website": "https://chipmunk-physics.net/", "description": "Chipmunk Physics"},
     "chromaprint": {"version": "1.5.1", "website": "https://acoustid.org/chromaprint", "description": "Chromaprint"},
