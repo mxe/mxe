@@ -3,196 +3,9 @@ This file is part of MXE. See LICENSE.md for licensing information.
 Contains ad hoc patches for cross building.
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Marius Kittler <mariuskittler@gmx.de>
-Date: Sat, 8 Apr 2023 17:48:57 +0200
-Subject: [PATCH 1/3] Use lower-case header/library names for with mingw-w64
-
-When compiling under GNU/Linux with mingw-w64 this is required
-as the filesystem is usually case-sensitive and mingw-w64 headers
-and libraries all have lower-case names. This change shouldn't hurt
-when compiling under Windows.
-
-Change-Id: I46c64a8f2923cbe21ce3e6b922ce8b099681e528
-Reviewed-by: Oliver Wolff <oliver.wolff@qt.io>
-
-diff --git a/cmake/FindWMF.cmake b/cmake/FindWMF.cmake
-index 1111111..2222222 100644
---- a/cmake/FindWMF.cmake
-+++ b/cmake/FindWMF.cmake
-@@ -25,11 +25,11 @@ find_library(WMF_UUID_LIBRARY uuid HINTS ${CMAKE_C_IMPLICIT_LINK_DIRECTORIES})
- find_library(WMF_MSDMO_LIBRARY msdmo HINTS ${CMAKE_C_IMPLICIT_LINK_DIRECTORIES})
- find_library(WMF_OLE32_LIBRARY ole32 HINTS ${CMAKE_C_IMPLICIT_LINK_DIRECTORIES})
- find_library(WMF_OLEAUT32_LIBRARY oleaut32 HINTS ${CMAKE_C_IMPLICIT_LINK_DIRECTORIES})
--find_library(WMF_MF_LIBRARY Mf HINTS ${CMAKE_C_IMPLICIT_LINK_DIRECTORIES})
--find_library(WMF_MFUUID_LIBRARY Mfuuid HINTS ${CMAKE_C_IMPLICIT_LINK_DIRECTORIES})
--find_library(WMF_MFPLAT_LIBRARY Mfplat HINTS ${CMAKE_C_IMPLICIT_LINK_DIRECTORIES})
--find_library(WMF_MFCORE_LIBRARY Mfcore HINTS ${CMAKE_C_IMPLICIT_LINK_DIRECTORIES})
--find_library(WMF_PROPSYS_LIBRARY Propsys HINTS ${CMAKE_C_IMPLICIT_LINK_DIRECTORIES})
-+find_library(WMF_MF_LIBRARY mf HINTS ${CMAKE_C_IMPLICIT_LINK_DIRECTORIES})
-+find_library(WMF_MFUUID_LIBRARY mfuuid HINTS ${CMAKE_C_IMPLICIT_LINK_DIRECTORIES})
-+find_library(WMF_MFPLAT_LIBRARY mfplat HINTS ${CMAKE_C_IMPLICIT_LINK_DIRECTORIES})
-+find_library(WMF_MFCORE_LIBRARY mfcore HINTS ${CMAKE_C_IMPLICIT_LINK_DIRECTORIES})
-+find_library(WMF_PROPSYS_LIBRARY propsys HINTS ${CMAKE_C_IMPLICIT_LINK_DIRECTORIES})
- 
- 
- set(WMF_LIBRARIES ${WMF_STRMIIDS_LIBRARY} ${WMF_AMSTRMID_LIBRARY} ${WMF_DMOGUIDS_LIBRARY} ${WMF_UUID_LIBRARY}
-diff --git a/src/multimedia/windows/qwindowsmediadevices.cpp b/src/multimedia/windows/qwindowsmediadevices.cpp
-index 1111111..2222222 100644
---- a/src/multimedia/windows/qwindowsmediadevices.cpp
-+++ b/src/multimedia/windows/qwindowsmediadevices.cpp
-@@ -13,7 +13,7 @@
- #include <mmddk.h>
- #include <mfobjects.h>
- #include <mfidl.h>
--#include <Mferror.h>
-+#include <mferror.h>
- #include <mmdeviceapi.h>
- #include <qwindowsmfdefs_p.h>
- 
-diff --git a/src/multimedia/windows/qwindowsresampler.cpp b/src/multimedia/windows/qwindowsresampler.cpp
-index 1111111..2222222 100644
---- a/src/multimedia/windows/qwindowsresampler.cpp
-+++ b/src/multimedia/windows/qwindowsresampler.cpp
-@@ -7,7 +7,7 @@
- #include <qloggingcategory.h>
- #include <QUuid>
- 
--#include <Wmcodecdsp.h>
-+#include <wmcodecdsp.h>
- #include <mftransform.h>
- #include <mferror.h>
- 
-diff --git a/src/plugins/multimedia/ffmpeg/qwindowscamera.cpp b/src/plugins/multimedia/ffmpeg/qwindowscamera.cpp
-index 1111111..2222222 100644
---- a/src/plugins/multimedia/ffmpeg/qwindowscamera.cpp
-+++ b/src/plugins/multimedia/ffmpeg/qwindowscamera.cpp
-@@ -11,8 +11,8 @@
- 
- #include <mfapi.h>
- #include <mfidl.h>
--#include <Mferror.h>
--#include <Mfreadwrite.h>
-+#include <mferror.h>
-+#include <mfreadwrite.h>
- 
- #include <system_error>
- 
-diff --git a/src/plugins/multimedia/windows/common/mfmetadata_p.h b/src/plugins/multimedia/windows/common/mfmetadata_p.h
-index 1111111..2222222 100644
---- a/src/plugins/multimedia/windows/common/mfmetadata_p.h
-+++ b/src/plugins/multimedia/windows/common/mfmetadata_p.h
-@@ -16,7 +16,7 @@
- //
- 
- #include <qmediametadata.h>
--#include "Mfidl.h"
-+#include "mfidl.h"
- 
- QT_USE_NAMESPACE
- 
-diff --git a/src/plugins/multimedia/windows/decoder/mfaudiodecodercontrol.cpp b/src/plugins/multimedia/windows/decoder/mfaudiodecodercontrol.cpp
-index 1111111..2222222 100644
---- a/src/plugins/multimedia/windows/decoder/mfaudiodecodercontrol.cpp
-+++ b/src/plugins/multimedia/windows/decoder/mfaudiodecodercontrol.cpp
-@@ -4,7 +4,7 @@
- #include <system_error>
- #include <mferror.h>
- #include <qglobal.h>
--#include "Wmcodecdsp.h"
-+#include "wmcodecdsp.h"
- #include "mfaudiodecodercontrol_p.h"
- #include <private/qwindowsaudioutils_p.h>
- 
-diff --git a/src/plugins/multimedia/windows/mediacapture/qwindowsmediadevicereader_p.h b/src/plugins/multimedia/windows/mediacapture/qwindowsmediadevicereader_p.h
-index 1111111..2222222 100644
---- a/src/plugins/multimedia/windows/mediacapture/qwindowsmediadevicereader_p.h
-+++ b/src/plugins/multimedia/windows/mediacapture/qwindowsmediadevicereader_p.h
-@@ -17,8 +17,8 @@
- 
- #include <mfapi.h>
- #include <mfidl.h>
--#include <Mferror.h>
--#include <Mfreadwrite.h>
-+#include <mferror.h>
-+#include <mfreadwrite.h>
- 
- #include <QtCore/qobject.h>
- #include <QtCore/qmutex.h>
-diff --git a/src/plugins/multimedia/windows/mediacapture/qwindowsmediaencoder.cpp b/src/plugins/multimedia/windows/mediacapture/qwindowsmediaencoder.cpp
-index 1111111..2222222 100644
---- a/src/plugins/multimedia/windows/mediacapture/qwindowsmediaencoder.cpp
-+++ b/src/plugins/multimedia/windows/mediacapture/qwindowsmediaencoder.cpp
-@@ -8,7 +8,7 @@
- #include "mfmetadata_p.h"
- #include <QtCore/QUrl>
- #include <QtCore/QMimeType>
--#include <Mferror.h>
-+#include <mferror.h>
- #include <shobjidl.h>
- #include <private/qmediastoragelocation_p.h>
- #include <private/qmediarecorder_p.h>
-diff --git a/src/plugins/multimedia/windows/player/mfplayercontrol_p.h b/src/plugins/multimedia/windows/player/mfplayercontrol_p.h
-index 1111111..2222222 100644
---- a/src/plugins/multimedia/windows/player/mfplayercontrol_p.h
-+++ b/src/plugins/multimedia/windows/player/mfplayercontrol_p.h
-@@ -15,7 +15,7 @@
- // We mean it.
- //
- 
--#include "QUrl.h"
-+#include "qurl.h"
- #include "private/qplatformmediaplayer_p.h"
- 
- #include <QtCore/qcoreevent.h>
-diff --git a/src/plugins/multimedia/windows/player/mfplayersession.cpp b/src/plugins/multimedia/windows/player/mfplayersession.cpp
-index 1111111..2222222 100644
---- a/src/plugins/multimedia/windows/player/mfplayersession.cpp
-+++ b/src/plugins/multimedia/windows/player/mfplayersession.cpp
-@@ -32,7 +32,7 @@
- 
- #include <mmdeviceapi.h>
- #include <propvarutil.h>
--#include <Functiondiscoverykeys_devpkey.h>
-+#include <functiondiscoverykeys_devpkey.h>
- 
- //#define DEBUG_MEDIAFOUNDATION
- 
-diff --git a/src/plugins/multimedia/windows/player/mftvideo.cpp b/src/plugins/multimedia/windows/player/mftvideo.cpp
-index 1111111..2222222 100644
---- a/src/plugins/multimedia/windows/player/mftvideo.cpp
-+++ b/src/plugins/multimedia/windows/player/mftvideo.cpp
-@@ -7,7 +7,7 @@
- #include <mferror.h>
- #include <strmif.h>
- #include <uuids.h>
--#include <InitGuid.h>
-+#include <initguid.h>
- #include <d3d9.h>
- #include <qdebug.h>
- 
-diff --git a/src/plugins/multimedia/windows/qwindowsvideodevices.cpp b/src/plugins/multimedia/windows/qwindowsvideodevices.cpp
-index 1111111..2222222 100644
---- a/src/plugins/multimedia/windows/qwindowsvideodevices.cpp
-+++ b/src/plugins/multimedia/windows/qwindowsvideodevices.cpp
-@@ -8,11 +8,11 @@
- #include <private/qwindowsmultimediautils_p.h>
- #include <private/qwindowsiupointer_p.h>
- 
--#include <Dbt.h>
-+#include <dbt.h>
- 
- #include <mfapi.h>
- #include <mfreadwrite.h>
--#include <Mferror.h>
-+#include <mferror.h>
- 
- QT_BEGIN_NAMESPACE
- 
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 3 Apr 2023 13:57:29 +0200
-Subject: [PATCH 2/3] Use lower-case header/library names for with mingw-w64
+Subject: [PATCH 1/3] Use lower-case header/library names for with mingw-w64
  (more)
 
 
@@ -200,7 +13,7 @@ diff --git a/src/plugins/multimedia/ffmpeg/qffmpegscreencapture_dxgi.cpp b/src/p
 index 1111111..2222222 100644
 --- a/src/plugins/multimedia/ffmpeg/qffmpegscreencapture_dxgi.cpp
 +++ b/src/plugins/multimedia/ffmpeg/qffmpegscreencapture_dxgi.cpp
-@@ -15,8 +15,8 @@
+@@ -14,8 +14,8 @@
  #include <qwaitcondition.h>
  #include <qmutex.h>
  
@@ -208,55 +21,64 @@ index 1111111..2222222 100644
 -#include "dxgi1_2.h"
 +#include <d3d11.h>
 +#include <dxgi1_2.h>
+ 
  #include <system_error>
  #include <thread>
- #include <chrono>
-diff --git a/src/plugins/multimedia/ffmpeg/qffmpegscreencapture_uwp.cpp b/src/plugins/multimedia/ffmpeg/qffmpegscreencapture_uwp.cpp
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Sean Link <sean.link@lightdeckdx.com>
+Date: Thu, 21 Mar 2024 15:34:13 +0100
+Subject: [PATCH 2/3] fix i686-w64-mingw32 build
+
+taken from https://github.com/mxe/mxe/issues/3038#issuecomment-1998456113
+
+diff --git a/src/plugins/multimedia/ffmpeg/qwincapturablewindows.cpp b/src/plugins/multimedia/ffmpeg/qwincapturablewindows.cpp
 index 1111111..2222222 100644
---- a/src/plugins/multimedia/ffmpeg/qffmpegscreencapture_uwp.cpp
-+++ b/src/plugins/multimedia/ffmpeg/qffmpegscreencapture_uwp.cpp
-@@ -24,7 +24,7 @@ auto wait_for(Async const& async, Windows::Foundation::TimeSpan const& timeout);
- #include <Windows.Graphics.Capture.Interop.h>
- #include <windows.graphics.directx.direct3d11.interop.h>
+--- a/src/plugins/multimedia/ffmpeg/qwincapturablewindows.cpp
++++ b/src/plugins/multimedia/ffmpeg/qwincapturablewindows.cpp
+@@ -42,11 +42,7 @@ static QString windowTitle(HWND hwnd) {
+     return QString::fromStdWString(buffer);
+ }
  
--#include <D3d11.h>
-+#include <d3d11.h>
- #include <dxgi1_2.h>
- #include <dwmapi.h>
- #include <lowlevelmonitorconfigurationapi.h>
+-QList<QCapturableWindow> QWinCapturableWindows::windows() const
+-{
+-    QList<QCapturableWindow> result;
+-
+-    auto windowHandler = [](HWND hwnd, LPARAM lParam) {
++static int __stdcall windowHandler(HWND hwnd, LPARAM lParam) {
+         if (!canCaptureWindow(hwnd))
+             return TRUE; // Ignore window and continue enumerating
+ 
+@@ -58,7 +54,11 @@ QList<QCapturableWindow> QWinCapturableWindows::windows() const
+         windows.push_back(windowData.release()->create());
+ 
+         return TRUE;
+-    };
++}
++
++QList<QCapturableWindow> QWinCapturableWindows::windows() const
++{
++    QList<QCapturableWindow> result;
+ 
+     ::EnumWindows(windowHandler, reinterpret_cast<LPARAM>(&result));
+ 
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
-Date: Tue, 18 Apr 2023 00:38:02 +0200
-Subject: [PATCH 3/3] fix link list for ffmpeg libraries and static
- dependencies
+Date: Thu, 4 Apr 2024 11:31:12 +0200
+Subject: [PATCH 3/3] fix case of include path
 
-This fixes the link lists found in ffmpegmediaplugin.prl, which led
-to linking errors for applications built with cmake and qmake.
 
-The first problem affects all the ffmpeg libaries and is exemplified by:
-    -llibavformat.a -lavformat
-The filename libavformat.a has somehow found its way into the conventional
-libary list, all prefixed with the -l flag.
-
-An additional problem was that static dependencies of the ffmpeg
-libraries were missing from these lists.
-
-Both problems are fixed in FindFFmpeg.cmake by setting, for
-example, AVFORMAT_LIBRARIES to a list consisting of the libary avformat
-and its dependencies. Previously, AVFORMAT_LIBRARIES was set to the
-filename libavformat.a.
-
-diff --git a/cmake/FindFFmpeg.cmake b/cmake/FindFFmpeg.cmake
+diff --git a/src/plugins/multimedia/ffmpeg/qffmpegscreencapture_dxgi.cpp b/src/plugins/multimedia/ffmpeg/qffmpegscreencapture_dxgi.cpp
 index 1111111..2222222 100644
---- a/cmake/FindFFmpeg.cmake
-+++ b/cmake/FindFFmpeg.cmake
-@@ -146,7 +146,7 @@ macro(find_component _component _pkgconfig _library _header)
-   set(${_component}_DEFINITIONS  ${PC_${_component}_CFLAGS_OTHER}       CACHE STRING "The ${_component} CFLAGS.")
-   set(${_component}_VERSION      ${PC_${_component}_VERSION}            CACHE STRING "The ${_component} version number.")
-   set(${_component}_LIBRARY_DIRS ${${_component}_LIBRARY_DIR_FROM_FIND} CACHE STRING "The ${_component} library dirs.")
--  set(${_component}_LIBRARIES    ${${_component}_LIBRARY_FROM_FIND}     CACHE STRING "The ${_component} libraries.")
-+  set(${_component}_LIBRARIES    ${PC_${_component}_LIBRARIES}          CACHE STRING "The ${_component} libraries.")
+--- a/src/plugins/multimedia/ffmpeg/qffmpegscreencapture_dxgi.cpp
++++ b/src/plugins/multimedia/ffmpeg/qffmpegscreencapture_dxgi.cpp
+@@ -7,7 +7,7 @@
+ #include <private/qabstractvideobuffer_p.h>
+ #include <private/qmultimediautils_p.h>
+ #include <private/qwindowsmultimediautils_p.h>
+-#include <qtgui/qscreen_platform.h>
++#include <QtGui/qscreen_platform.h>
+ #include "qvideoframe.h"
  
- #  message("Libs" ${FFMPEG_DIR} ${${_component}_LIBRARIES} ${${_component}_LIBRARY_DIRS})
- 
+ #include <qloggingcategory.h>

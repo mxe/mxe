@@ -16,7 +16,7 @@ diff --git a/gdb/event-top.c b/gdb/event-top.c
 index 1111111..2222222 100644
 --- a/gdb/event-top.c
 +++ b/gdb/event-top.c
-@@ -74,6 +74,11 @@ static void async_sigtstp_handler (gdb_client_data);
+@@ -78,6 +78,11 @@ static void async_sigtstp_handler (gdb_client_data);
  #endif
  static void async_sigterm_handler (gdb_client_data arg);
  

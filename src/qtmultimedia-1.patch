@@ -10,9 +10,9 @@ diff --git a/src/plugins/plugins.pro b/src/plugins/plugins.pro
 index 1111111..2222222 100644
 --- a/src/plugins/plugins.pro
 +++ b/src/plugins/plugins.pro
-@@ -35,8 +35,9 @@     SUBDIRS += audiocapture \
+@@ -35,7 +35,8 @@ win32:!winrt {
                 windowsaudio
-
+ 
      qtConfig(directshow): SUBDIRS += directshow
 -    qtConfig(wmf): SUBDIRS += wmf
 +#    qtConfig(wmf): SUBDIRS += wmf
@@ -20,4 +20,3 @@ index 1111111..2222222 100644
  }
  
  
- winrt {

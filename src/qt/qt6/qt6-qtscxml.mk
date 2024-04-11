@@ -2,14 +2,16 @@
 
 include src/qt/qt6/qt6-conf.mk
 
-PKG := qt6-qtserialport
+PKG := qt6-qtscxml
 $(eval $(QT6_METADATA))
 
-$(PKG)_CHECKSUM := b1f02a3d8c9cc8ba2ffa7cca3749f1f147d327e8dfc633fd4ec3cb770d7981c9
-$(PKG)_DEPS     := cc qt6-conf qt6-qtbase
+$(PKG)_CHECKSUM := 725b97bbb8766df733d7588488acd92375c218eeb376a95525572b4268a9257c
+$(PKG)_TARGETS       := $(BUILD) $(MXE_TARGETS)
+$(PKG)_DEPS_$(BUILD) := qt6-conf qt6-qtbase
+$(PKG)_DEPS          := cc $($(PKG)_DEPS_$(BUILD)) $(BUILD)~$(PKG)
 
 QT6_PREFIX   = '$(PREFIX)/$(TARGET)/$(MXE_QT6_ID)'
-QT6_QT_CMAKE = '$(QT6_PREFIX)/$(if $(findstring mingw,$(TARGET)),bin,libexec)/qt-cmake-private' \
+QT6_QT_CMAKE = '$(QT6_PREFIX)/bin/qt-cmake-private' \
                    -DCMAKE_INSTALL_PREFIX='$(QT6_PREFIX)'
 
 define $(PKG)_BUILD
