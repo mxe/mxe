@@ -251,7 +251,7 @@
     "libsodium": {"version": "1.0.18", "website": "https://download.libsodium.org/doc/", "description": ""},
     "libsoup": {"version": "2.74.2", "website": "https://wiki.gnome.org/Projects/libsoup", "description": "HTTP client/server library for GNOME"},
     "libspatialindex": {"version": "1.8.5", "website": "https://libspatialindex.github.io/", "description": "libspatialindex"},
-    "libspectre": {"version": "0.2.8", "website": "https://libspectre.freedesktop.org/", "description": ""},
+    "libspectre": {"version": "0.2.12", "website": "https://libspectre.freedesktop.org/", "description": ""},
     "libsrt": {"version": "1.4.4", "website": "https://github.com/Haivision/srt", "description": ""},
     "libssh": {"version": "0.10.6", "website": "https://www.libssh.org", "description": "SSHv2 and SSHv1 protocol on client and server side"},
     "libssh2": {"version": "1.11.0", "website": "https://libssh2.org/", "description": ""},
