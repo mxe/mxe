@@ -1,0 +1,21 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Fri, 12 Apr 2024 02:07:33 +0200
+Subject: [PATCH 1/1] MXE: fix static linking
+
+
+diff --git a/fontconfig.pc.in b/fontconfig.pc.in
+index 1111111..2222222 100644
+--- a/fontconfig.pc.in
++++ b/fontconfig.pc.in
+@@ -14,5 +14,5 @@ Version: @VERSION@
+ Requires: @PKGCONFIG_REQUIRES@
+ Requires.private: @PKGCONFIG_REQUIRES_PRIVATELY@
+ Libs: -L${libdir} -lfontconfig
+-Libs.private: @ICONV_LIBS@ @PKG_EXPAT_LIBS@
++Libs.private: @ICONV_LIBS@ @PKG_EXPAT_LIBS@ -lintl -liconv
+ Cflags: -I${includedir} @ICONV_CFLAGS@ @PKG_EXPAT_CFLAGS@
