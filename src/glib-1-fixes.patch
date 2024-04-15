@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: v1993 <v19930312@gmail.com>
 Date: Fri, 15 Jun 2012 15:25:01 +0200
-Subject: [PATCH 1/5] Fix static builds
+Subject: [PATCH 1/4] Fix static builds
 
 Don't declare DllMain, use constructors from gconstructor.h instead.
 
@@ -15,7 +15,7 @@ diff --git a/gio/giomodule.c b/gio/giomodule.c
 index 1111111..2222222 100644
 --- a/gio/giomodule.c
 +++ b/gio/giomodule.c
-@@ -54,6 +54,9 @@
+@@ -51,6 +51,9 @@
  #ifdef G_OS_WIN32
  #include "gregistrysettingsbackend.h"
  #include "giowin32-priv.h"
@@ -25,7 +25,7 @@ index 1111111..2222222 100644
  #endif
  #include <glib/gstdio.h>
  
-@@ -1102,8 +1105,7 @@ extern GType _g_win32_network_monitor_get_type (void);
+@@ -1094,8 +1097,7 @@ extern GType _g_win32_network_monitor_get_type (void);
  
  static HMODULE gio_dll = NULL;
  
@@ -35,7 +35,7 @@ index 1111111..2222222 100644
  BOOL WINAPI DllMain (HINSTANCE hinstDLL,
                       DWORD     fdwReason,
                       LPVOID    lpvReserved);
-@@ -1121,7 +1123,19 @@ DllMain (HINSTANCE hinstDLL,
+@@ -1113,7 +1115,19 @@ DllMain (HINSTANCE hinstDLL,
  
    return TRUE;
  }
@@ -115,7 +115,7 @@ diff --git a/gobject/gtype.c b/gobject/gtype.c
 index 1111111..2222222 100644
 --- a/gobject/gtype.c
 +++ b/gobject/gtype.c
-@@ -4521,7 +4521,7 @@ gobject_init (void)
+@@ -4510,7 +4510,7 @@ gobject_init (void)
    _g_signal_init ();
  }
  
@@ -128,7 +128,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: aquiles2k <aj@elane2k.com>
 Date: Wed, 6 Apr 2016 22:39:53 +0300
-Subject: [PATCH 2/5] fix error "won't overwrite defined macro" on OSX
+Subject: [PATCH 2/4] fix error "won't overwrite defined macro" on OSX
 
 See https://github.com/mxe/mxe/issues/1281
 
@@ -151,7 +151,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: v1993 <v19930312@gmail.com>
 Date: Wed, 8 Dec 2021 20:08:30 +0300
-Subject: [PATCH 3/5] Fix gio linking error for some cases
+Subject: [PATCH 3/4] Fix gio linking error for some cases
 
 Happens with autotools and direct GCC call, meson doesn't have it.
 
@@ -159,7 +159,7 @@ diff --git a/gio/meson.build b/gio/meson.build
 index 1111111..2222222 100644
 --- a/gio/meson.build
 +++ b/gio/meson.build
-@@ -835,8 +835,15 @@ libgio_dep = declare_dependency(link_with : libgio,
+@@ -831,8 +831,15 @@ libgio_dep = declare_dependency(link_with : libgio,
    dependencies : [libgmodule_dep, libgobject_dep, gioenumtypes_dep],
    include_directories : [gioinc])
  
@@ -180,14 +180,14 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: v1993 <v19930312@gmail.com>
 Date: Wed, 8 Dec 2021 20:45:32 +0300
-Subject: [PATCH 4/5] Allow different bindir setting for pkg-config files
+Subject: [PATCH 4/4] Allow different bindir setting for pkg-config files
 
 
 diff --git a/gio/meson.build b/gio/meson.build
 index 1111111..2222222 100644
 --- a/gio/meson.build
 +++ b/gio/meson.build
-@@ -847,7 +847,7 @@ pkg.generate(libgio,
+@@ -843,7 +843,7 @@ pkg.generate(libgio,
    requires : ['glib-2.0', 'gobject-2.0'],
    variables : ['datadir=' + join_paths('${prefix}', get_option('datadir')),
                 'schemasdir=' + join_paths('${datadir}', schemas_subdir),
@@ -200,7 +200,7 @@ diff --git a/glib/meson.build b/glib/meson.build
 index 1111111..2222222 100644
 --- a/glib/meson.build
 +++ b/glib/meson.build
-@@ -383,7 +383,7 @@ pkg.generate(libglib,
+@@ -393,7 +393,7 @@ pkg.generate(libglib,
    libraries_private : [osx_ldflags, win32_ldflags],
    subdirs : ['glib-2.0'],
    extra_cflags : ['-I${libdir}/glib-2.0/include'] + win32_cflags,
@@ -213,7 +213,7 @@ diff --git a/meson_options.txt b/meson_options.txt
 index 1111111..2222222 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
-@@ -121,4 +121,9 @@ option('glib_checks',
+@@ -126,4 +126,9 @@ option('glib_checks',
  option('libelf',
         type : 'feature',
         value : 'auto',
@@ -225,27 +225,3 @@ index 1111111..2222222 100644
 +       type : 'string',
 +       value : 'bin',
 +       description : 'Alternate bindir value, useful for cross-compilation,')
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Hans Petter Jansson <hpj@hpjansson.org>
-Date: Fri, 8 Jul 2022 22:48:57 +0200
-Subject: [PATCH 5/5] Add -luuid to win32 dependencies
-
-Needed to prevent certain linking issues on Windows.
-
-This will also have the effect of adding it to the Libs.private line
-in the installed pkgconfig.
-
-diff --git a/meson.build b/meson.build
-index 1111111..2222222 100644
---- a/meson.build
-+++ b/meson.build
-@@ -2282,7 +2282,7 @@ if host_system == 'windows' and cc.get_id() != 'msvc' and cc.get_id() != 'clang-
-   add_project_arguments(win32_cflags, language : 'c')
- 
-   # Win32 API libs, used only by libglib and exposed in glib-2.0.pc
--  win32_ldflags = ['-lws2_32', '-lole32', '-lwinmm', '-lshlwapi']
-+  win32_ldflags = ['-lws2_32', '-lole32', '-lwinmm', '-lshlwapi', '-luuid']
- elif host_system == 'cygwin'
-   win32_ldflags = ['-luser32', '-lkernel32']
- endif

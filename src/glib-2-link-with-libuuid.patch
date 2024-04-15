@@ -1,0 +1,29 @@
+From 561f4206d4209f57123a63e033519e5a55576699 Mon Sep 17 00:00:00 2001
+From: Hans Petter Jansson <hpj@hpjansson.org>
+Date: Fri, 8 Jul 2022 22:48:57 +0200
+Subject: [PATCH] Add -luuid to win32 dependencies
+
+Needed to prevent certain linking issues on Windows.
+
+This will also have the effect of adding it to the Libs.private line
+in the installed pkgconfig.
+---
+ meson.build | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/meson.build b/meson.build
+index 05b9aca..4e45730 100644
+--- a/meson.build
++++ b/meson.build
+@@ -2282,7 +2282,7 @@ if host_system == 'windows' and cc.get_id() != 'msvc' and cc.get_id() != 'clang-
+   add_project_arguments(win32_cflags, language : 'c')
+ 
+   # Win32 API libs, used only by libglib and exposed in glib-2.0.pc
+-  win32_ldflags = ['-lws2_32', '-lole32', '-lwinmm', '-lshlwapi']
++  win32_ldflags = ['-lws2_32', '-lole32', '-lwinmm', '-lshlwapi', '-luuid']
+ elif host_system == 'cygwin'
+   win32_ldflags = ['-luser32', '-lkernel32']
+ endif
+-- 
+2.33.0
+
