@@ -4,8 +4,8 @@ PKG             := glib
 $(PKG)_WEBSITE  := https://gtk.org/
 $(PKG)_DESCR    := GLib
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.76.3
-$(PKG)_CHECKSUM := c0be444e403d7c3184d1f394f89f0b644710b5e9331b54fa4e8b5037813ad32a
+$(PKG)_VERSION  := 2.80.0
+$(PKG)_CHECKSUM := 8228a92f92a412160b139ae68b6345bd28f24434a7b5af150ebe21ff587a561d
 $(PKG)_SUBDIR   := glib-$($(PKG)_VERSION)
 $(PKG)_FILE     := glib-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.gnome.org/sources/glib/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
@@ -47,7 +47,6 @@ define $(PKG)_BUILD
         $(MXE_MESON_OPTS) \
         -Dtests=false \
         -Dforce_posix_threads=true \
-        -Druntime_bindir='../$(BUILD)/bin' \
         '$(BUILD_DIR)' '$(SOURCE_DIR)'
     '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)'
     '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)' install

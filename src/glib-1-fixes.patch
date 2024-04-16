@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: aquiles2k <aj@elane2k.com>
 Date: Wed, 6 Apr 2016 22:39:53 +0300
-Subject: [PATCH 1/4] fix error "won't overwrite defined macro" on OSX
+Subject: [PATCH 1/2] fix error "won't overwrite defined macro" on OSX
 
 See https://github.com/mxe/mxe/issues/1281
 
@@ -28,7 +28,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: v1993 <v19930312@gmail.com>
 Date: Wed, 8 Dec 2021 20:08:30 +0300
-Subject: [PATCH 2/4] Fix gio linking error for some cases
+Subject: [PATCH 2/2] Fix gio linking error for some cases
 
 Happens with autotools and direct GCC call, meson doesn't have it.
 
@@ -36,7 +36,7 @@ diff --git a/gio/meson.build b/gio/meson.build
 index 1111111..2222222 100644
 --- a/gio/meson.build
 +++ b/gio/meson.build
-@@ -875,7 +875,15 @@ libgio_dep = declare_dependency(link_with : libgio,
+@@ -880,7 +880,15 @@ libgio_dep = declare_dependency(link_with : libgio,
    ],
  )
  
@@ -50,84 +50,5 @@ index 1111111..2222222 100644
  pkg.generate(libgio,
 +  libraries_private : [windows_ldflags],
    requires : ['glib-2.0', 'gobject-2.0'],
-   variables : ['datadir=' + join_paths('${prefix}', get_option('datadir')),
-                'schemasdir=' + join_paths('${datadir}', schemas_subdir),
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: v1993 <v19930312@gmail.com>
-Date: Wed, 8 Dec 2021 20:45:32 +0300
-Subject: [PATCH 3/4] Allow different bindir setting for pkg-config files
-
-
-diff --git a/gio/meson.build b/gio/meson.build
-index 1111111..2222222 100644
---- a/gio/meson.build
-+++ b/gio/meson.build
-@@ -887,7 +887,7 @@ pkg.generate(libgio,
-   requires : ['glib-2.0', 'gobject-2.0'],
-   variables : ['datadir=' + join_paths('${prefix}', get_option('datadir')),
-                'schemasdir=' + join_paths('${datadir}', schemas_subdir),
--               'bindir=' + join_paths('${prefix}', get_option('bindir')),
-+               'bindir=' + join_paths('${prefix}', get_option('runtime_bindir')),
-                'giomoduledir=' + pkgconfig_giomodulesdir,
-                'gio=' + join_paths('${bindir}', 'gio'),
-                'gio_querymodules=@0@'.format(pkgconfig_multiarch_bindir / 'gio-querymodules'),
-diff --git a/glib/meson.build b/glib/meson.build
-index 1111111..2222222 100644
---- a/glib/meson.build
-+++ b/glib/meson.build
-@@ -440,7 +440,7 @@ pkg.generate(libglib,
-   libraries_private : [win32_ldflags],
-   subdirs : ['glib-2.0'],
-   extra_cflags : ['-I${libdir}/glib-2.0/include'] + win32_cflags,
--  variables : ['bindir=' + join_paths('${prefix}', get_option('bindir')),
-+  variables : ['bindir=' + join_paths('${prefix}', get_option('runtime_bindir')),
-                'glib_genmarshal=' + join_paths('${bindir}', 'glib-genmarshal'),
-                'gobject_query=' + join_paths('${bindir}', 'gobject-query'),
-                'glib_mkenums=' + join_paths('${bindir}', 'glib-mkenums')],
-diff --git a/meson_options.txt b/meson_options.txt
-index 1111111..2222222 100644
---- a/meson_options.txt
-+++ b/meson_options.txt
-@@ -125,3 +125,8 @@ option('multiarch',
-        type : 'boolean',
-        value : false,
-        description : 'Install some helper executables in per-architecture locations')
-+
-+option('runtime_bindir',
-+       type : 'string',
-+       value : 'bin',
-+       description : 'Alternate bindir value, useful for cross-compilation,')
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Jan200101 <sentrycraft123@gmail.com>
-Date: Tue, 23 May 2023 22:52:10 +0200
-Subject: [PATCH 4/4] fix libintl detection
-
-Signed-off-by: Jan200101 <sentrycraft123@gmail.com>
-
-diff --git a/meson.build b/meson.build
-index 1111111..2222222 100644
---- a/meson.build
-+++ b/meson.build
-@@ -2103,11 +2103,16 @@ if libintl.found()
-   if cc.has_function('ngettext', dependencies : libintl)
-     libintl_deps += [libintl]
-   else
--    libintl_pthread = cc.find_library('pthread', required : false)
--    if libintl_pthread.found() and cc.has_function('ngettext', dependencies : [libintl, libintl_pthread])
--      libintl_deps += [libintl, libintl_pthread]
-+    libintl_iconv = cc.find_library('iconv', required : false)
-+    if libintl_iconv.found() and cc.has_function('ngettext', dependencies : [libintl, libintl_iconv])
-+      libintl_deps += [libintl, libintl_iconv]
-     else
--      libintl = disabler()
-+      libintl_pthread = cc.find_library('pthread', required : false)
-+      if libintl_pthread.found() and cc.has_function('ngettext', dependencies : [libintl, libintl_pthread])
-+        libintl_deps += [libintl, libintl_pthread]
-+      else
-+        libintl = disabler()
-+      endif
-     endif
-   endif
- endif
+   variables : [
+     'schemasdir=' + '${datadir}' / schemas_subdir,
