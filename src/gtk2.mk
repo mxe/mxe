@@ -39,7 +39,7 @@ define $(PKG)_BUILD
     '$(TARGET)-gcc' \
         -W -Wall -Werror -Wno-error=deprecated-declarations -ansi \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-gtk2.exe' \
-        `'$(TARGET)-pkg-config' gtk+-2.0 gmodule-2.0 --cflags --libs`
+        `'$(TARGET)-pkg-config' gtk+-2.0 gmodule-2.0 --cflags --libs` -lstdc++
 endef
 
 $(PKG)_BUILD_SHARED =
