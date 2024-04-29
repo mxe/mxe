@@ -4,8 +4,8 @@ PKG             := ninja
 $(PKG)_WEBSITE  := https://ninja-build.org
 $(PKG)_DESCR    := A small build system with a focus on speed
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.11.1
-$(PKG)_CHECKSUM := 31747ae633213f1eda3842686f83c2aa1412e0f5691d1c14dbbcc67fe7400cea
+$(PKG)_VERSION  := 1.12.0
+$(PKG)_CHECKSUM := 8b2c86cd483dc7fcb7975c5ec7329135d210099a89bc7db0590a07b0bbfe49a5
 $(PKG)_GH_CONF  := ninja-build/ninja/tags,v
 $(PKG)_TARGETS  := $(BUILD)
 
