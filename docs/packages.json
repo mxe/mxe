@@ -306,7 +306,7 @@
     "netcdf-cxx4": {"version": "4.3.0", "website": "https://www.unidata.ucar.edu/software/netcdf/", "description": "NetCDF-CXX4"},
     "netpbm": {"version": "10.35.96", "website": "https://netpbm.sourceforge.io/", "description": "Netpbm"},
     "nettle": {"version": "3.9.1", "website": "https://www.lysator.liu.se/~nisse/nettle/", "description": ""},
-    "ninja": {"version": "1.11.1", "website": "https://ninja-build.org", "description": "A small build system with a focus on speed"},
+    "ninja": {"version": "1.12.0", "website": "https://ninja-build.org", "description": "A small build system with a focus on speed"},
     "nlopt": {"version": "2.7.1", "website": "https://nlopt.readthedocs.io/en/latest/", "description": "NLopt"},
     "nsis": {"version": "3.06.1", "website": "https://nsis.sourceforge.io/", "description": "NSIS"},
     "ocaml-cairo": {"version": "1.2.0", "website": "https://cairographics.org/cairo-ocaml/", "description": "cairo-ocaml"},
