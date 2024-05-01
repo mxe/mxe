@@ -275,7 +275,7 @@
     "lld": {"version": "system", "website": "https://lld.llvm.org", "description": "LLD Linker on host OS"},
     "llvm": {"version": "10.0.0", "website": "https://llvm.org/", "description": ""},
     "log4cxx": {"version": "0.10.0", "website": "https://logging.apache.org/log4cxx/", "description": ""},
-    "lua": {"version": "5.4.4", "website": "https://www.lua.org/", "description": "Lua"},
+    "lua": {"version": "5.4.6", "website": "https://www.lua.org/", "description": "Lua"},
     "luabind": {"version": "0.9.1", "website": "https://github.com/luabind/luabind", "description": "Luabind"},
     "luajit": {"version": "2.0.5", "website": "https://luajit.org/luajit.html", "description": "LuaJIT"},
     "lz4": {"version": "1.9.4", "website": "https://github.com/lz4/lz4", "description": "lossless compression algorithm optimized for speed"},
