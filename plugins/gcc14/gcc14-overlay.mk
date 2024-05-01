@@ -22,7 +22,7 @@ PKG             := gcc
 $(PKG)_VERSION  := 14.1.0-RC-20240430
 # release used for install dirs, will be X.0.1 for snapshots
 # change to $($(PKG)_VERSION) variable on release X.Y[>0].Z
-$(PKG)_RELEASE  := 14.1.0
+$(PKG)_RELEASE  := 14.0.1
 $(PKG)_CHECKSUM := b71a4ffd50b8a3a3a6b8024f8ca589154c98fe06584bf3ee9987ad5c0a040a66
 $(PKG)_SUBDIR   := gcc-$($(PKG)_VERSION)
 $(PKG)_FILE     := gcc-$($(PKG)_VERSION).tar.xz
