@@ -30,6 +30,7 @@ define $(PKG)_BUILD
         -Ddemos=false \
         -Dinstalled_tests=false \
         -Dbuiltin_immodules=yes \
+        -Dc_link_args='-lstdc++' \
         -Dintrospection=false \
         '$(BUILD_DIR)' '$(SOURCE_DIR)'
     '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)'
@@ -37,7 +38,7 @@ define $(PKG)_BUILD
         '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)' install
 
     # Just compile our MXE testfile
-    '$(TARGET)-gcc' \
+    '$(TARGET)-g++' \
         -W -Wall -ansi \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-gtk3.exe' \
         `'$(TARGET)-pkg-config' gtk+-3.0 --cflags --libs`
