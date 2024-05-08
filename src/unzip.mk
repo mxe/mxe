@@ -22,7 +22,8 @@ define $(PKG)_BUILD
         CC=$(TARGET)-gcc \
         RC=$(TARGET)-windres \
         USEZLIB=1 \
-        CC_CPU_OPT='-mtune=generic'
+        CC_CPU_OPT='-mtune=generic' \
+        LOCAL_UNZIP='-Wno-incompatible-pointer-types'
 
     $(INSTALL) '$(1)'/*.exe '$(PREFIX)'/$(TARGET)/bin
 endef

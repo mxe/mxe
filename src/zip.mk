@@ -22,7 +22,8 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j '$(JOBS)' -f win32/makefile.gcc \
         CC=$(TARGET)-gcc \
         RC=$(TARGET)-windres \
-        USEZLIB=1
+        USEZLIB=1 \
+        LOCAL_ZIP='-Wno-incompatible-pointer-types'
 
     $(INSTALL) '$(1)'/*.exe '$(PREFIX)'/$(TARGET)/bin
 endef
