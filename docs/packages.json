@@ -495,7 +495,7 @@
     "tre": {"version": "0.8.0", "website": "https://laurikari.net/tre/", "description": "TRE"},
     "twolame": {"version": "0.4.0", "website": "http://www.twolame.org/", "description": "TwoLAME"},
     "ucl": {"version": "1.03", "website": "https://www.oberhumer.com/opensource/ucl/", "description": "UCL"},
-    "unrtf": {"version": "0.21.9", "website": "https://www.gnu.org/software/unrtf/", "description": "unRTF"},
+    "unrtf": {"version": "0.21.10", "website": "https://www.gnu.org/software/unrtf/", "description": "unRTF"},
     "unzip": {"version": "6.10b", "website": "https://infozip.sourceforge.io/UnZip.html", "description": "Info-ZIP"},
     "upx": {"version": "3.96", "website": "https://upx.github.io/", "description": "UPX"},
     "vamp-plugin-sdk": {"version": "2.5", "website": "https://vamp-plugins.org/", "description": "Vamp Plugins SDK"},
