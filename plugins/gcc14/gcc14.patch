@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Sun, 10 May 2020 15:06:47 +1000
-Subject: [PATCH 1/3] allow native cpu detection when building with clang
+Subject: [PATCH 1/4] allow native cpu detection when building with clang
 
 function was disabled for non-gcc5 in:
 https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=b587c12551143c14f023860a1dbdf7316ae71f27;hp=43096b526a9f23008b9769372f11475ae63487bc
@@ -29,14 +29,14 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Sun, 10 May 2020 15:09:58 +1000
-Subject: [PATCH 2/3] remove hard-coded mingw from paths
+Subject: [PATCH 2/4] remove hard-coded mingw from paths
 
 
 diff --git a/gcc/config.gcc b/gcc/config.gcc
 index 1111111..2222222 100644
 --- a/gcc/config.gcc
 +++ b/gcc/config.gcc
-@@ -2181,7 +2181,7 @@ i[34567]86-*-mingw* | x86_64-*-mingw*)
+@@ -2251,7 +2251,7 @@ i[34567]86-*-mingw* | x86_64-*-mingw*)
  			tmake_file="${tmake_file} i386/t-mingw-w32"
  			;;
  	esac
@@ -49,7 +49,7 @@ diff --git a/gcc/config/i386/mingw32.h b/gcc/config/i386/mingw32.h
 index 1111111..2222222 100644
 --- a/gcc/config/i386/mingw32.h
 +++ b/gcc/config/i386/mingw32.h
-@@ -205,7 +205,7 @@ along with GCC; see the file COPYING3.  If not see
+@@ -225,7 +225,7 @@ along with GCC; see the file COPYING3.  If not see
  
  /* Override startfile prefix defaults.  */
  #ifndef STANDARD_STARTFILE_PREFIX_1
@@ -58,7 +58,7 @@ index 1111111..2222222 100644
  #endif
  #ifndef STANDARD_STARTFILE_PREFIX_2
  #define STANDARD_STARTFILE_PREFIX_2 ""
-@@ -214,7 +214,7 @@ along with GCC; see the file COPYING3.  If not see
+@@ -234,7 +234,7 @@ along with GCC; see the file COPYING3.  If not see
  /* For native mingw-version we need to take care that NATIVE_SYSTEM_HEADER_DIR
     macro contains POSIX-style path.  See bug 52947.  */
  #undef NATIVE_SYSTEM_HEADER_DIR
@@ -71,7 +71,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Liu Hao <lh_mouse@126.com>
 Date: Wed, 6 May 2020 21:49:18 +0800
-Subject: [PATCH 3/3] libgomp: Don't hard-code MS printf attributes
+Subject: [PATCH 3/4] libgomp: Don't hard-code MS printf attributes
 
 Source: https://github.com/msys2/MINGW-packages/blob/9501ee2afc8d01dc7d85383e4b22e91c30d93ca7/mingw-w64-gcc/0020-libgomp-Don-t-hard-code-MS-printf-attributes.patch
 
@@ -96,7 +96,7 @@ index 1111111..2222222 100644
  #ifdef HAVE_ATTRIBUTE_VISIBILITY
  # pragma GCC visibility push(hidden)
  #endif
-@@ -177,7 +185,7 @@ team_free (void *ptr)
+@@ -174,7 +182,7 @@ team_free (void *ptr)
  
  extern void gomp_vdebug (int, const char *, va_list);
  extern void gomp_debug (int, const char *, ...)
@@ -105,7 +105,7 @@ index 1111111..2222222 100644
  #define gomp_vdebug(KIND, FMT, VALIST) \
    do { \
      if (__builtin_expect (gomp_debug_var, 0)) \
-@@ -190,11 +198,11 @@ extern void gomp_debug (int, const char *, ...)
+@@ -187,11 +195,11 @@ extern void gomp_debug (int, const char *, ...)
    } while (0)
  extern void gomp_verror (const char *, va_list);
  extern void gomp_error (const char *, ...)
@@ -119,3 +119,316 @@ index 1111111..2222222 100644
  
  struct gomp_task;
  struct gomp_taskgroup;
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: LIU Hao <lh_mouse@126.com>
+Date: Wed, 8 May 2024 16:57:32 +0800
+Subject: [PATCH 4/4] Fix https://gcc.gnu.org/bugzilla/show_bug.cgi?id=114968
+
+Instructed-by: Jakub Jelinek <jakub@redhat.com>
+Signed-off-by: LIU Hao <lh_mouse@126.com>
+
+diff --git a/gcc/config/i386/i386.cc b/gcc/config/i386/i386.cc
+index 1111111..2222222 100644
+--- a/gcc/config/i386/i386.cc
++++ b/gcc/config/i386/i386.cc
+@@ -25799,6 +25799,20 @@ ix86_bitint_type_info (int n, struct bitint_info *info)
+   return true;
+ }
+ 
++/* Returns modified FUNCTION_TYPE for cdtor callabi.  */
++tree
++ix86_cxx_adjust_cdtor_callabi_fntype (tree fntype)
++{
++  if (TARGET_64BIT
++      || TARGET_RTD
++      || ix86_function_type_abi (fntype) != MS_ABI)
++    return fntype;
++  /* For 32-bit MS ABI add thiscall attribute.  */
++  tree attribs = tree_cons (get_identifier ("thiscall"), NULL_TREE,
++			    TYPE_ATTRIBUTES (fntype));
++  return build_type_attribute_variant (fntype, attribs);
++}
++
+ /* Implement PUSH_ROUNDING.  On 386, we have pushw instruction that
+    decrements by exactly 2 no matter what the position was, there is no pushb.
+ 
+@@ -26410,6 +26424,8 @@ static const scoped_attribute_specs *const ix86_attribute_table[] =
+ #define TARGET_C_EXCESS_PRECISION ix86_get_excess_precision
+ #undef TARGET_C_BITINT_TYPE_INFO
+ #define TARGET_C_BITINT_TYPE_INFO ix86_bitint_type_info
++#undef TARGET_CXX_ADJUST_CDTOR_CALLABI_FNTYPE
++#define TARGET_CXX_ADJUST_CDTOR_CALLABI_FNTYPE ix86_cxx_adjust_cdtor_callabi_fntype
+ #undef TARGET_PROMOTE_PROTOTYPES
+ #define TARGET_PROMOTE_PROTOTYPES hook_bool_const_tree_true
+ #undef TARGET_PUSH_ARGUMENT
+diff --git a/gcc/cp/cp-tree.h b/gcc/cp/cp-tree.h
+index 1111111..2222222 100644
+--- a/gcc/cp/cp-tree.h
++++ b/gcc/cp/cp-tree.h
+@@ -369,8 +369,7 @@ extern GTY(()) tree cp_global_trees[CPTI_MAX];
+ #define throw_fn			cp_global_trees[CPTI_THROW_FN]
+ #define rethrow_fn			cp_global_trees[CPTI_RETHROW_FN]
+ 
+-/* The type of the function-pointer argument to "__cxa_atexit" (or
+-   "std::atexit", if "__cxa_atexit" is not being used).  */
++/* The type of the function-pointer argument to "std::atexit".  */
+ #define atexit_fn_ptr_type_node         cp_global_trees[CPTI_ATEXIT_FN_PTR_TYPE]
+ 
+ /* A pointer to `std::atexit'.  */
+@@ -385,7 +384,8 @@ extern GTY(()) tree cp_global_trees[CPTI_MAX];
+ /* The declaration of the dynamic_cast runtime.  */
+ #define dynamic_cast_node		cp_global_trees[CPTI_DCAST]
+ 
+-/* The type of a destructor.  */
++/* The type of a destructor, passed to __cxa_atexit, __cxa_thread_atexit
++   or __cxa_throw.  */
+ #define cleanup_type			cp_global_trees[CPTI_CLEANUP_TYPE]
+ 
+ /* The type of the vtt parameter passed to subobject constructors and
+@@ -7065,6 +7065,7 @@ extern tree check_default_argument		(tree, tree, tsubst_flags_t);
+ extern int wrapup_namespace_globals		();
+ extern tree create_implicit_typedef		(tree, tree);
+ extern int local_variable_p			(const_tree);
++extern tree get_cxa_atexit_fn_ptr_type		();
+ extern tree register_dtor_fn			(tree);
+ extern tmpl_spec_kind current_tmpl_spec_kind	(int);
+ extern tree cxx_builtin_function		(tree decl);
+diff --git a/gcc/cp/decl.cc b/gcc/cp/decl.cc
+index 1111111..2222222 100644
+--- a/gcc/cp/decl.cc
++++ b/gcc/cp/decl.cc
+@@ -93,7 +93,7 @@ static void record_key_method_defined (tree);
+ static tree create_array_type_for_decl (tree, tree, tree, location_t);
+ static tree get_atexit_node (void);
+ static tree get_dso_handle_node (void);
+-static tree start_cleanup_fn (void);
++static tree start_cleanup_fn (tree);
+ static void end_cleanup_fn (void);
+ static tree cp_make_fname_decl (location_t, tree, int);
+ static void initialize_predefined_identifiers (void);
+@@ -9647,34 +9647,39 @@ declare_global_var (tree name, tree type)
+   return decl;
+ }
+ 
+-/* Returns the type for the argument to "__cxa_atexit" (or "atexit",
+-   if "__cxa_atexit" is not being used) corresponding to the function
++/* Returns the type for the argument to "atexit" corresponding to the function
+    to be called when the program exits.  */
+ 
+ static tree
+-get_atexit_fn_ptr_type (void)
++get_atexit_fn_ptr_type ()
+ {
+-  tree fn_type;
+-
+   if (!atexit_fn_ptr_type_node)
+     {
+-      tree arg_type;
+-      if (flag_use_cxa_atexit 
+-	  && !targetm.cxx.use_atexit_for_cxa_atexit ())
+-	/* The parameter to "__cxa_atexit" is "void (*)(void *)".  */
+-	arg_type = ptr_type_node;
+-      else
+-	/* The parameter to "atexit" is "void (*)(void)".  */
+-	arg_type = NULL_TREE;
+-      
+-      fn_type = build_function_type_list (void_type_node,
+-					  arg_type, NULL_TREE);
++      tree fn_type = build_function_type_list (void_type_node, NULL_TREE);
+       atexit_fn_ptr_type_node = build_pointer_type (fn_type);
+     }
+ 
+   return atexit_fn_ptr_type_node;
+ }
+ 
++/* Returns the type for the argument to "__cxa_atexit", "__cxa_thread_atexit"
++   or "__cxa_throw" corresponding to the destructor to be called when the
++   program exits.  */
++
++tree
++get_cxa_atexit_fn_ptr_type ()
++{
++  if (!cleanup_type)
++    {
++      tree fntype = build_function_type_list (void_type_node,
++					      ptr_type_node, NULL_TREE);
++      fntype = targetm.cxx.adjust_cdtor_callabi_fntype (fntype);
++      cleanup_type = build_pointer_type (fntype);
++    }
++
++  return cleanup_type;
++}
++
+ /* Returns a pointer to the `atexit' function.  Note that if
+    FLAG_USE_CXA_ATEXIT is nonzero, then this will actually be the new
+    `__cxa_atexit' function specified in the IA64 C++ ABI.  */
+@@ -9705,7 +9710,7 @@ get_atexit_node (void)
+       use_aeabi_atexit = targetm.cxx.use_aeabi_atexit ();
+       /* First, build the pointer-to-function type for the first
+ 	 argument.  */
+-      fn_ptr_type = get_atexit_fn_ptr_type ();
++      fn_ptr_type = get_cxa_atexit_fn_ptr_type ();
+       /* Then, build the rest of the argument types.  */
+       argtype2 = ptr_type_node;
+       if (use_aeabi_atexit)
+@@ -9788,7 +9793,7 @@ get_thread_atexit_node (void)
+ 
+      int __cxa_thread_atexit (void (*)(void *), void *, void *) */
+   tree fn_type = build_function_type_list (integer_type_node,
+-					   get_atexit_fn_ptr_type (),
++					   get_cxa_atexit_fn_ptr_type (),
+ 					   ptr_type_node, ptr_type_node,
+ 					   NULL_TREE);
+ 
+@@ -9835,7 +9840,7 @@ get_dso_handle_node (void)
+ static GTY(()) int start_cleanup_cnt;
+ 
+ static tree
+-start_cleanup_fn (void)
++start_cleanup_fn (tree fntype)
+ {
+   char name[32];
+ 
+@@ -9847,7 +9852,6 @@ start_cleanup_fn (void)
+   /* Build the name of the function.  */
+   sprintf (name, "__tcf_%d", start_cleanup_cnt++);
+   /* Build the function declaration.  */
+-  tree fntype = TREE_TYPE (get_atexit_fn_ptr_type ());
+   tree fndecl = build_lang_decl (FUNCTION_DECL, get_identifier (name), fntype);
+   DECL_CONTEXT (fndecl) = FROB_CONTEXT (current_namespace);
+   /* It's a function with internal linkage, generated by the
+@@ -9937,8 +9941,10 @@ register_dtor_fn (tree decl)
+       build_cleanup (decl);
+   
+       /* Now start the function.  */
+-      cleanup = start_cleanup_fn ();
+-      
++      cleanup = start_cleanup_fn (TREE_TYPE (ob_parm
++					     ? get_cxa_atexit_fn_ptr_type ()
++					     : get_atexit_fn_ptr_type ()));
++
+       /* Now, recompute the cleanup.  It may contain SAVE_EXPRs that refer
+ 	 to the original function, rather than the anonymous one.  That
+ 	 will make the back end think that nested functions are in use,
+@@ -9967,7 +9973,8 @@ register_dtor_fn (tree decl)
+     {
+       /* We must convert CLEANUP to the type that "__cxa_atexit"
+ 	 expects.  */
+-      cleanup = build_nop (get_atexit_fn_ptr_type (), cleanup);
++      cleanup = build_nop (ob_parm ? get_cxa_atexit_fn_ptr_type ()
++				   : get_atexit_fn_ptr_type (), cleanup);
+       /* "__cxa_atexit" will pass the address of DECL to the
+ 	 cleanup function.  */
+       mark_used (decl);
+diff --git a/gcc/cp/except.cc b/gcc/cp/except.cc
+index 1111111..2222222 100644
+--- a/gcc/cp/except.cc
++++ b/gcc/cp/except.cc
+@@ -645,11 +645,7 @@ build_throw (location_t loc, tree exp, tsubst_flags_t complain)
+ 
+       /* The CLEANUP_TYPE is the internal type of a destructor.  */
+       if (!cleanup_type)
+-	{
+-	  tree tmp = build_function_type_list (void_type_node,
+-					       ptr_type_node, NULL_TREE);
+-	  cleanup_type = build_pointer_type (tmp);
+-	}
++	cleanup_type = get_cxa_atexit_fn_ptr_type ();
+ 
+       if (!throw_fn)
+ 	{
+diff --git a/gcc/doc/tm.texi b/gcc/doc/tm.texi
+index 1111111..2222222 100644
+--- a/gcc/doc/tm.texi
++++ b/gcc/doc/tm.texi
+@@ -11117,6 +11117,14 @@ shared libraries are run in the correct order when the libraries are
+ unloaded. The default is to return false.
+ @end deftypefn
+ 
++@deftypefn {Target Hook} tree TARGET_CXX_ADJUST_CDTOR_CALLABI_FNTYPE (tree @var{fntype})
++This hook returns a possibly modified @code{FUNCTION_TYPE} for arguments
++to @code{__cxa_atexit}, @code{__cxa_thread_atexit} or @code{__cxa_throw}
++function pointers.  ABIs like mingw32 require special attributes to be added
++to function types pointed to by arguments of these functions.
++The default is to return the passed argument unmodified.
++@end deftypefn
++
+ @deftypefn {Target Hook} void TARGET_CXX_ADJUST_CLASS_AT_DEFINITION (tree @var{type})
+ @var{type} is a C++ class (i.e., RECORD_TYPE or UNION_TYPE) that has just
+ been defined.  Use this hook to make adjustments to the class (eg, tweak
+diff --git a/gcc/doc/tm.texi.in b/gcc/doc/tm.texi.in
+index 1111111..2222222 100644
+--- a/gcc/doc/tm.texi.in
++++ b/gcc/doc/tm.texi.in
+@@ -7223,6 +7223,8 @@ floating-point support; they are not included in this mechanism.
+ 
+ @hook TARGET_CXX_USE_ATEXIT_FOR_CXA_ATEXIT
+ 
++@hook TARGET_CXX_ADJUST_CDTOR_CALLABI_FNTYPE
++
+ @hook TARGET_CXX_ADJUST_CLASS_AT_DEFINITION
+ 
+ @hook TARGET_CXX_DECL_MANGLING_CONTEXT
+diff --git a/gcc/target.def b/gcc/target.def
+index 1111111..2222222 100644
+--- a/gcc/target.def
++++ b/gcc/target.def
+@@ -6498,7 +6498,7 @@ is in effect.  The default is to return false to use @code{__cxa_atexit}.",
+  hook_bool_void_false)
+ 
+ /* Returns true if target may use atexit in the same manner as
+-   __cxa_atexit  to register static destructors.  */
++   __cxa_atexit to register static destructors.  */
+ DEFHOOK
+ (use_atexit_for_cxa_atexit,
+  "This hook returns true if the target @code{atexit} function can be used\n\
+@@ -6509,6 +6509,17 @@ unloaded. The default is to return false.",
+  bool, (void),
+  hook_bool_void_false)
+ 
++/* Returns modified FUNCTION_TYPE for cdtor callabi.  */
++DEFHOOK
++(adjust_cdtor_callabi_fntype,
++ "This hook returns a possibly modified @code{FUNCTION_TYPE} for arguments\n\
++to @code{__cxa_atexit}, @code{__cxa_thread_atexit} or @code{__cxa_throw}\n\
++function pointers.  ABIs like mingw32 require special attributes to be added\n\
++to function types pointed to by arguments of these functions.\n\
++The default is to return the passed argument unmodified.",
++ tree, (tree fntype),
++ default_cxx_adjust_cdtor_callabi_fntype)
++
+ DEFHOOK
+ (adjust_class_at_definition,
+ "@var{type} is a C++ class (i.e., RECORD_TYPE or UNION_TYPE) that has just\n\
+diff --git a/gcc/targhooks.cc b/gcc/targhooks.cc
+index 1111111..2222222 100644
+--- a/gcc/targhooks.cc
++++ b/gcc/targhooks.cc
+@@ -329,6 +329,14 @@ default_cxx_get_cookie_size (tree type)
+   return cookie_size;
+ }
+ 
++/* Returns modified FUNCTION_TYPE for cdtor callabi.  */
++
++tree
++default_cxx_adjust_cdtor_callabi_fntype (tree fntype)
++{
++  return fntype;
++}
++
+ /* Return true if a parameter must be passed by reference.  This version
+    of the TARGET_PASS_BY_REFERENCE hook uses just MUST_PASS_IN_STACK.  */
+ 
+diff --git a/gcc/targhooks.h b/gcc/targhooks.h
+index 1111111..2222222 100644
+--- a/gcc/targhooks.h
++++ b/gcc/targhooks.h
+@@ -65,6 +65,7 @@ extern machine_mode default_mode_for_suffix (char);
+ 
+ extern tree default_cxx_guard_type (void);
+ extern tree default_cxx_get_cookie_size (tree);
++extern tree default_cxx_adjust_cdtor_callabi_fntype (tree);
+ 
+ extern bool hook_pass_by_reference_must_pass_in_stack
+   (cumulative_args_t, const function_arg_info &);
