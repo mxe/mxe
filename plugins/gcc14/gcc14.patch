@@ -121,12 +121,92 @@ index 1111111..2222222 100644
  struct gomp_taskgroup;
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: LIU Hao <lh_mouse@126.com>
-Date: Wed, 8 May 2024 16:57:32 +0800
-Subject: [PATCH 4/4] Fix https://gcc.gnu.org/bugzilla/show_bug.cgi?id=114968
+From: Jakub Jelinek <jakub@redhat.com>
+Date: Fri, 10 May 2024 09:21:38 +0200
+Subject: [PATCH 4/4] c++, mingw: Fix up types of dtor hooks to
+ __cxa_{,thread_}atexit/__cxa_throw on mingw ia32 [PR114968]
 
-Instructed-by: Jakub Jelinek <jakub@redhat.com>
-Signed-off-by: LIU Hao <lh_mouse@126.com>
+__cxa_atexit/__cxa_thread_atexit/__cxa_throw functions accept function
+pointers to usually directly destructors rather than wrappers around
+them.
+Now, mingw ia32 uses implicitly __attribute__((thiscall)) calling
+conventions for METHOD_TYPE (where the this pointer is passed in %ecx
+register, the rest on the stack), so these functions use:
+in config/os/mingw32/os_defines.h:
+ #if defined (__i386__)
+ #define _GLIBCXX_CDTOR_CALLABI __thiscall
+ #endif
+in libsupc++/cxxabi.h
+__cxa_atexit(void (_GLIBCXX_CDTOR_CALLABI *)(void*), void*, void*) _GLIBCXX_NOTHROW;
+__cxa_thread_atexit(void (_GLIBCXX_CDTOR_CALLABI *)(void*), void*, void *) _GLIBCXX_NOTHROW;
+__cxa_throw(void*, std::type_info*, void (_GLIBCXX_CDTOR_CALLABI *) (void *))
+__attribute__((__noreturn__));
+
+Now, mingw for some weird reason uses
+ #define TARGET_CXX_USE_ATEXIT_FOR_CXA_ATEXIT hook_bool_void_true
+so it never actually uses __cxa_atexit, but does use __cxa_thread_atexit
+and __cxa_throw.  Recent changes for modules result in more detailed
+__cxa_*atexit/__cxa_throw prototypes precreated by the compiler, and if
+that happens and one also includes <cxxabi.h>, the compiler complains about
+mismatches in the prototypes.
+
+One thing is the missing thiscall attribute on the FUNCTION_TYPE, the
+other problem is that all of atexit/__cxa_atexit/__cxa_thread_atexit
+get function pointer types created by a single function,
+get_atexit_fn_ptr_type (), which creates it depending on if atexit
+or __cxa_atexit will be used as either void(*)(void) or void(*)(void *),
+but when using atexit and __cxa_thread_atexit it uses the wrong function
+type for __cxa_thread_atexit.
+
+The following patch adds a target hook to add the thiscall attribute to the
+function pointers, and splits the get_atexit_fn_ptr_type () function into
+get_atexit_fn_ptr_type () and get_cxa_atexit_fn_ptr_type (), the former always
+creates shared void(*)(void) type, the latter creates either
+void(*)(void*) (on most targets) or void(__attribute__((thiscall))*)(void*)
+(on mingw ia32).  So that we don't waiste another GTY global tree for it,
+because cleanup_type used for the same purpose for __cxa_throw should be
+the same, the code changes it to use that type too.
+
+In register_dtor_fn then based on the decision whether to use atexit,
+__cxa_atexit or __cxa_thread_atexit it picks the right function pointer
+type, and also if it decides to emit a __tcf_* wrapper for the cleanup,
+uses that type for that wrapper so that it agrees on calling convention.
+
+2024-05-10  Jakub Jelinek  <jakub@redhat.com>
+
+	PR target/114968
+gcc/
+	* target.def (use_atexit_for_cxa_atexit): Remove spurious space
+	from comment.
+	(adjust_cdtor_callabi_fntype): New cxx target hook.
+	* targhooks.h (default_cxx_adjust_cdtor_callabi_fntype): Declare.
+	* targhooks.cc (default_cxx_adjust_cdtor_callabi_fntype): New
+	function.
+	* doc/tm.texi.in (TARGET_CXX_ADJUST_CDTOR_CALLABI_FNTYPE): Add.
+	* doc/tm.texi: Regenerate.
+	* config/i386/i386.cc (ix86_cxx_adjust_cdtor_callabi_fntype): New
+	function.
+	(TARGET_CXX_ADJUST_CDTOR_CALLABI_FNTYPE): Redefine.
+gcc/cp/
+	* cp-tree.h (atexit_fn_ptr_type_node, cleanup_type): Adjust macro
+	comments.
+	(get_cxa_atexit_fn_ptr_type): Declare.
+	* decl.cc (get_atexit_fn_ptr_type): Adjust function comment, only
+	build type for atexit argument.
+	(get_cxa_atexit_fn_ptr_type): New function.
+	(get_atexit_node): Call get_cxa_atexit_fn_ptr_type rather than
+	get_atexit_fn_ptr_type when using __cxa_atexit.
+	(get_thread_atexit_node): Call get_cxa_atexit_fn_ptr_type
+	rather than get_atexit_fn_ptr_type.
+	(start_cleanup_fn): Add ob_parm argument, call
+	get_cxa_atexit_fn_ptr_type or get_atexit_fn_ptr_type depending
+	on it and create PARM_DECL also based on that argument.
+	(register_dtor_fn): Adjust start_cleanup_fn caller, use
+	get_cxa_atexit_fn_ptr_type rather than get_atexit_fn_ptr_type
+	for use_dtor casts.
+	* except.cc (build_throw): Use get_cxa_atexit_fn_ptr_type ().
+
+(cherry picked from commit e5d8fd9ce05611093191d500ebc39f150d0ece2b)
 
 diff --git a/gcc/config/i386/i386.cc b/gcc/config/i386/i386.cc
 index 1111111..2222222 100644
@@ -203,7 +283,7 @@ index 1111111..2222222 100644
  static tree get_atexit_node (void);
  static tree get_dso_handle_node (void);
 -static tree start_cleanup_fn (void);
-+static tree start_cleanup_fn (tree);
++static tree start_cleanup_fn (bool);
  static void end_cleanup_fn (void);
  static tree cp_make_fname_decl (location_t, tree, int);
  static void initialize_predefined_identifiers (void);
@@ -281,43 +361,59 @@ index 1111111..2222222 100644
  					   ptr_type_node, ptr_type_node,
  					   NULL_TREE);
  
-@@ -9835,7 +9840,7 @@ get_dso_handle_node (void)
+@@ -9830,12 +9835,13 @@ get_dso_handle_node (void)
+ }
+ 
+ /* Begin a new function with internal linkage whose job will be simply
+-   to destroy some particular variable.  */
++   to destroy some particular variable.  OB_PARM is true if object pointer
++   is passed to the cleanup function, otherwise no argument is passed.  */
+ 
  static GTY(()) int start_cleanup_cnt;
  
  static tree
 -start_cleanup_fn (void)
-+start_cleanup_fn (tree fntype)
++start_cleanup_fn (bool ob_parm)
  {
    char name[32];
  
-@@ -9847,7 +9852,6 @@ start_cleanup_fn (void)
+@@ -9846,8 +9852,9 @@ start_cleanup_fn (void)
+ 
    /* Build the name of the function.  */
    sprintf (name, "__tcf_%d", start_cleanup_cnt++);
++  tree fntype = TREE_TYPE (ob_parm ? get_cxa_atexit_fn_ptr_type ()
++				   : get_atexit_fn_ptr_type ());
    /* Build the function declaration.  */
 -  tree fntype = TREE_TYPE (get_atexit_fn_ptr_type ());
    tree fndecl = build_lang_decl (FUNCTION_DECL, get_identifier (name), fntype);
    DECL_CONTEXT (fndecl) = FROB_CONTEXT (current_namespace);
    /* It's a function with internal linkage, generated by the
-@@ -9937,8 +9941,10 @@ register_dtor_fn (tree decl)
+@@ -9860,7 +9867,7 @@ start_cleanup_fn (void)
+      emissions this way.  */
+   DECL_DECLARED_INLINE_P (fndecl) = 1;
+   DECL_INTERFACE_KNOWN (fndecl) = 1;
+-  if (flag_use_cxa_atexit && !targetm.cxx.use_atexit_for_cxa_atexit ())
++  if (ob_parm)
+     {
+       /* Build the parameter.  */
+       tree parmdecl = cp_build_parm_decl (fndecl, NULL_TREE, ptr_type_node);
+@@ -9937,8 +9944,8 @@ register_dtor_fn (tree decl)
        build_cleanup (decl);
    
        /* Now start the function.  */
 -      cleanup = start_cleanup_fn ();
 -      
-+      cleanup = start_cleanup_fn (TREE_TYPE (ob_parm
-+					     ? get_cxa_atexit_fn_ptr_type ()
-+					     : get_atexit_fn_ptr_type ()));
++      cleanup = start_cleanup_fn (ob_parm);
 +
        /* Now, recompute the cleanup.  It may contain SAVE_EXPRs that refer
  	 to the original function, rather than the anonymous one.  That
  	 will make the back end think that nested functions are in use,
-@@ -9967,7 +9973,8 @@ register_dtor_fn (tree decl)
+@@ -9967,7 +9974,7 @@ register_dtor_fn (tree decl)
      {
        /* We must convert CLEANUP to the type that "__cxa_atexit"
  	 expects.  */
 -      cleanup = build_nop (get_atexit_fn_ptr_type (), cleanup);
-+      cleanup = build_nop (ob_parm ? get_cxa_atexit_fn_ptr_type ()
-+				   : get_atexit_fn_ptr_type (), cleanup);
++      cleanup = build_nop (get_cxa_atexit_fn_ptr_type (), cleanup);
        /* "__cxa_atexit" will pass the address of DECL to the
  	 cleanup function.  */
        mark_used (decl);
