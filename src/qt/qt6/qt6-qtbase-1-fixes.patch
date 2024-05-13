@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Mon, 14 Dec 2020 15:09:00 +1100
-Subject: [PATCH 1/5] optionally build docs
+Subject: [PATCH 1/6] optionally build docs
 
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
@@ -27,7 +27,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 4 Apr 2024 10:46:22 +0200
-Subject: [PATCH 2/5] QNetworkInfo[win]: Explicitly link with oleaut32 for
+Subject: [PATCH 2/6] QNetworkInfo[win]: Explicitly link with oleaut32 for
  MINGW too
 
 Following up on 2 commits that fixed static linking for MSVC but left
@@ -56,7 +56,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 14 Feb 2022 00:44:19 +0100
-Subject: [PATCH 3/5] help openssl detection
+Subject: [PATCH 3/6] help openssl detection
 
 
 diff --git a/cmake/FindWrapOpenSSL.cmake b/cmake/FindWrapOpenSSL.cmake
@@ -76,7 +76,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 18 Mar 2024 15:43:25 +0100
-Subject: [PATCH 4/5] fix QODBCDriver::record Unable to allocate handle
+Subject: [PATCH 4/6] fix QODBCDriver::record Unable to allocate handle
 
 Seems to have been left out by Change-Id: I7aba4472be1e2991f395eeb7e43f8dd272336694
 
@@ -100,7 +100,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Christian Ehrlicher <ch.ehrlicher@gmx.de>
 Date: Mon, 1 Apr 2024 19:06:34 +0200
-Subject: [PATCH 5/5] SQL/ODBC: don't escape a driver string
+Subject: [PATCH 5/6] SQL/ODBC: don't escape a driver string
 
 We must not try to escape a driver string, the user has to make sure
 that everything is correctly escaped when passing a complete driver
@@ -150,3 +150,34 @@ index 1111111..2222222 100644
  
      The QODBC Plugin needs an ODBC compliant driver manager version 2.0 or
      later. Some ODBC drivers claim to be version-2.0-compliant,
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Thiago Macieira <thiago.macieira@intel.com>
+Date: Mon, 11 Mar 2024 11:24:00 -0400
+Subject: [PATCH 6/6] QFutureInterface: fix build with GCC14/C++20: template-id
+ not allowed
+
+When declaring a constructor, you must use the injected name, not a
+template.
+
+qfutureinterface.h:472:37: error: template-id not allowed for constructor in C++20 [-Werror=template-id-cdtor]
+
+Pick-to: 6.6
+Change-Id: I6818d78a57394e37857bfffd17bbbf2313001cbf
+Reviewed-by: Ahmad Samir <a.samirh78@gmail.com>
+(cherry picked from commit 111c08d0eaa134652f1f1e602ead1a539614258f)
+Reviewed-by: Qt Cherry-pick Bot <cherrypick_bot@qt-project.org>
+
+diff --git a/src/corelib/thread/qfutureinterface.h b/src/corelib/thread/qfutureinterface.h
+index 1111111..2222222 100644
+--- a/src/corelib/thread/qfutureinterface.h
++++ b/src/corelib/thread/qfutureinterface.h
+@@ -469,7 +469,7 @@ template <>
+ class QFutureInterface<void> : public QFutureInterfaceBase
+ {
+ public:
+-    explicit QFutureInterface<void>(State initialState = NoState)
++    explicit QFutureInterface(State initialState = NoState)
+         : QFutureInterfaceBase(initialState)
+     { }
+ 
