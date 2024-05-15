@@ -7,7 +7,7 @@
     "apr-util": {"version": "1.5.4", "website": "https://apr.apache.org/", "description": "APR-util"},
     "armadillo": {"version": "12.0.1", "website": "https://arma.sourceforge.io/", "description": "Armadillo C++ linear algebra library"},
     "aspell": {"version": "0.60.6.1", "website": "http://aspell.net/", "description": "Aspell"},
-    "assimp": {"version": "3.2", "website": "https://assimp.sourceforge.io/", "description": "Assimp Open Asset Import Library"},
+    "assimp": {"version": "5.4.1", "website": "https://www.assimp.org/", "description": "Assimp Open Asset Import Library"},
     "atk": {"version": "2.36.0", "website": "https://gtk.org/", "description": "ATK"},
     "atkmm": {"version": "2.28.2", "website": "https://www.gtkmm.org/", "description": "ATKmm"},
     "aubio": {"version": "0.4.2", "website": "https://www.aubio.org/", "description": ""},
