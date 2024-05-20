@@ -8,7 +8,7 @@ $(PKG)_VERSION  := 3.11.0
 $(PKG)_CHECKSUM := 4b9ba79bfd4921ca820e83979db76ab3363155709444a787979e81c22285ffa9
 $(PKG)_GH_CONF  := Reference-LAPACK/lapack/tags,v
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_DEPS     := cc openblas
+$(PKG)_DEPS     := cc openblas cblas
 
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && '$(TARGET)-cmake' --trace-expand '$(SOURCE_DIR)' \
