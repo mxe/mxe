@@ -2,7 +2,7 @@
 
 PKG             := libomemo-c
 $(PKG)_WEBSITE  := https://github.com/dino/libomemo-c
-$(PKG)_DESCR    := an implementation of Signal's ratcheting forward secrecy protocol in C
+$(PKG)_DESCR    := an implementation of Signal ratcheting forward secrecy protocol in C
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.5.0
 $(PKG)_CHECKSUM := 03195a24ef7a86c339cdf9069d7f7569ed511feaf55e853bfcb797d2698ba983
