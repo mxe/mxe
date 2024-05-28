@@ -223,6 +223,7 @@
     "libmpcdec": {"version": "475", "website": "https://www.musepack.net/", "description": "Living Audio Compression"},
     "libmpeg2": {"version": "0.5.1", "website": "https://libmpeg2.sourceforge.io/", "description": "libmpeg2 - a free MPEG-2 video stream decoder"},
     "libmysqlclient": {"version": "6.1.6", "website": "https://dev.mysql.com/downloads/connector/c/", "description": ""},
+    "libnghttp2": {"version": "1.56.0", "website": "https://nghttp2.org/", "description": ""},
     "libnice": {"version": "0.1.16", "website": "https://libnice.freedesktop.org", "description": ""},
     "libntlm": {"version": "1.8", "website": "https://gitlab.com/gsasl/libntlm/", "description": "Libntlm"},
     "liboauth": {"version": "1.0.3", "website": "https://liboauth.sourceforge.io/", "description": ""},
