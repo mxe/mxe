@@ -5,11 +5,9 @@ $(PKG)_WEBSITE  := https://nghttp2.org/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.56.0
 $(PKG)_CHECKSUM := eb00ded354db1159dcccabc11b0aaeac893b7c9b154f8187e4598c4b8f3446b5
-$(PKG)_SUBDIR   := nghttp2-$($(PKG)_VERSION)
 $(PKG)_FILE     := nghttp2-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://github.com/nghttp2/nghttp2/releases/download/v$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_GH_CONF  := nghttp2/nghttp2/tags, v
 $(PKG)_DEPS     := cc
-
 
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
