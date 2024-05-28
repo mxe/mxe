@@ -97,7 +97,7 @@
     "glm": {"version": "0.9.9.0", "website": "https://glm.g-truc.net/", "description": "GLM - OpenGL Mathematics"},
     "glpk": {"version": "5.0", "website": "https://www.gnu.org/software/glpk/", "description": "GNU Linear Programming Kit"},
     "gmp": {"version": "6.3.0", "website": "https://gmplib.org/", "description": "GMP"},
-    "gnutls": {"version": "3.7.10", "website": "https://www.gnu.org/software/gnutls/", "description": "GnuTLS"},
+    "gnutls": {"version": "3.7.11", "website": "https://www.gnu.org/software/gnutls/", "description": "GnuTLS"},
     "googlemock": {"version": "1.7.0", "website": "https://github.com/google/googlemock", "description": "Google Mock"},
     "googletest": {"version": "1.8.1", "website": "https://github.com/google/googletest", "description": "Google Test"},
     "gpgme": {"version": "1.22.0", "website": "https://www.gnupg.org/related_software/gpgme/", "description": "gpgme"},
