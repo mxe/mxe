@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 0f58bb95fc330c8a46eeb3df5701b0d90c9d9bfcc42bd1cd08791d12551d4
 $(PKG)_SUBDIR   := curl-$($(PKG)_VERSION)
 $(PKG)_FILE     := curl-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://curl.haxx.se/download/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc brotli libidn2 libpsl libssh2 pthreads libnghttp2
+$(PKG)_DEPS     := cc brotli libidn2 libpsl libssh2 nghttp2 pthreads
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://curl.haxx.se/download/?C=M;O=D' | \
