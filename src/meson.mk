@@ -3,8 +3,8 @@
 PKG             := meson
 $(PKG)_WEBSITE  := https://mesonbuild.com/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.4.0
-$(PKG)_CHECKSUM := 8fd6630c25c27f1489a8a0392b311a60481a3c161aa699b330e25935b750138d
+$(PKG)_VERSION  := 1.4.1
+$(PKG)_CHECKSUM := 1b8aad738a5f6ae64294cc8eaba9a82988c1c420204484ac02ef782e5bba5f49
 $(PKG)_GH_CONF  := mesonbuild/meson/releases
 $(PKG)_TARGETS  := $(BUILD)
 $(PKG)_DEPS_$(BUILD) := ninja
