@@ -3,22 +3,22 @@
 PKG             := cfitsio
 $(PKG)_WEBSITE  := https://heasarc.gsfc.nasa.gov/fitsio/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3410
-$(PKG)_CHECKSUM := a556ac7ea1965545dcb4d41cfef8e4915eeb8c0faa1b52f7ff70870f8bb5734c
-$(PKG)_SUBDIR   := cfitsio
-$(PKG)_FILE     := cfitsio$($(PKG)_VERSION).tar.gz
+$(PKG)_VERSION  := 4.4.0
+$(PKG)_CHECKSUM := 95900cf95ae760839e7cb9678a7b2fad0858d6ac12234f934bd1cb6bfc246ba9
+$(PKG)_SUBDIR   := cfitsio-$($(PKG)_VERSION)
+$(PKG)_FILE     := cfitsio-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc
+$(PKG)_DEPS     := cc zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- "https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/?C=M;O=D" | \
     grep -i '<a href="cfitsio.*tar' | \
-    $(SED) -n 's,.*cfitsio\([0-9][^>]*\)\.tar.*,\1,p' | \
+    $(SED) -n 's,.*cfitsio-\([0-9.][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef
 
 define $(PKG)_BUILD
-    cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)'
+    cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' '-DUSE_PTHREADS=ON'
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
@@ -27,7 +27,7 @@ define $(PKG)_BUILD
     (echo 'Name: $(PKG)'; \
      echo 'Version: $($(PKG)_VERSION)'; \
      echo 'Description: A FITS File Subroutine Library'; \
-     echo 'Libs: -l$(PKG)';) \
+     echo 'Libs: -l$(PKG) -lz';) \
      > '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG).pc'
 
     '$(TARGET)-gcc' \
