@@ -5,7 +5,7 @@ include src/qt/qt6/qt6-conf.mk
 PKG := qt6-qtserialport
 $(eval $(QT6_METADATA))
 
-$(PKG)_CHECKSUM := e543a3788bfd522f2e4a111ba568214f1f5be6e55f08318c2dcd376124ea5886
+$(PKG)_CHECKSUM := 21c34cd1161cb5197bcec662d26a17647b59b6fdff5c364576883c42dbd3b4fc
 $(PKG)_DEPS     := cc qt6-conf qt6-qtbase
 
 QT6_PREFIX   = '$(PREFIX)/$(TARGET)/$(MXE_QT6_ID)'
