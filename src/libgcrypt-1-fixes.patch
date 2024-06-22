@@ -14,7 +14,7 @@ diff --git a/acinclude.m4 b/acinclude.m4
 index 1111111..2222222 100644
 --- a/acinclude.m4
 +++ b/acinclude.m4
-@@ -102,7 +102,9 @@ AC_DEFUN([GNUPG_SYS_SYMBOL_UNDERSCORE],
+@@ -65,7 +65,9 @@ AC_DEFUN([GNUPG_SYS_SYMBOL_UNDERSCORE],
  [tmp_do_check="no"
  case "${host}" in
      i?86-mingw32* | i?86-*-mingw32*)
