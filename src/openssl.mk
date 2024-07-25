@@ -5,18 +5,11 @@ $(PKG)_WEBSITE  := https://www.openssl.org/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.3.1
 $(PKG)_CHECKSUM := 777cd596284c883375a2a7a11bf5d2786fc5413255efab20c50d6ffe6d020b7e
+$(PKG)_GH_CONF  := openssl/openssl/releases,openssl-
 $(PKG)_SUBDIR   := openssl-$($(PKG)_VERSION)
 $(PKG)_FILE     := openssl-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://www.openssl.org/source/$($(PKG)_FILE)
-$(PKG)_URL_2    := https://www.openssl.org/source/old/$(call tr,$([a-z]),,$($(PKG)_VERSION))/$($(PKG)_FILE)
+$(PKG)_URL      := https://github.com/openssl/openssl/releases/download/openssl-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc zlib
-
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://www.openssl.org/source/' | \
-    $(SED) -n 's,.*openssl-\([0-9][0-9a-z.]*\)\.tar.*,\1,p' | \
-    $(SORT) -V | \
-    tail -1
-endef
 
 $(PKG)_MAKE = $(MAKE) -C '$(1)' -j '$(JOBS)'\
         CC='$(TARGET)-gcc' \
