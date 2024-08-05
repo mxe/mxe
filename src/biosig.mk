@@ -4,8 +4,8 @@
 PKG             := biosig
 $(PKG)_WEBSITE  := http://biosig.sf.net/
 $(PKG)_DESCR    := biosig
-$(PKG)_VERSION  := 2.6.0
-$(PKG)_CHECKSUM := c45d076c2113c8a082a9d5775a428b690bb7d972ae2cd22a88d13cda9e9ffaee
+$(PKG)_VERSION  := 2.6.1
+$(PKG)_CHECKSUM := 558ee17cd7b4aa1547e98e52bb85cccccb7f7a81600f9bef3a50cd5b34d0729e
 $(PKG)_SUBDIR   := biosig-$($(PKG)_VERSION)
 $(PKG)_FILE     := biosig-$($(PKG)_VERSION).src.tar.xz
 $(PKG)_URL      := https://downloads.sourceforge.net/project/biosig/BioSig%20for%20C_C%2B%2B/src/$($(PKG)_FILE)
@@ -71,6 +71,7 @@ define $(PKG)_BUILD_POST
     $(INSTALL) -m644 '$(1)/biosig4c++/save2gdf.exe'		'$(PREFIX)/$(TARGET)/bin/'
     $(INSTALL) -m644 '$(1)/biosig4c++/biosig_fhir.exe'		'$(PREFIX)/$(TARGET)/bin/'
     $(INSTALL) -m644 '$(1)/biosig4c++/biosig2gdf.exe'		'$(PREFIX)/$(TARGET)/bin/'
+    $(INSTALL) -m644 '$(1)/biosig4c++/physicalunits.exe'	'$(PREFIX)/$(TARGET)/bin/'
 
     ### make release file
     rm -f $(PREFIX)/$($(PKG)_SUBDIR).$(TARGET).zip
