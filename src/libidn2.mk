@@ -4,16 +4,16 @@ PKG             := libidn2
 $(PKG)_WEBSITE  := https://www.gnu.org/software/libidn/\#libidn2
 $(PKG)_DESCR    := implementation of IDNA2008/TR46 internationalized domain names
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.3.0
-$(PKG)_CHECKSUM := 6b222435016e2d9fce34af0b21057ebc85704c27e41a781466d9287f0627dc93
+$(PKG)_VERSION  := 2.3.7
+$(PKG)_CHECKSUM := 4c21a791b610b9519b9d0e12b8097bf2f359b12f8dd92647611a929e6bfd7d64
 $(PKG)_SUBDIR   := libidn2-$($(PKG)_VERSION)
-$(PKG)_FILE     := libidn2-$($(PKG)_VERSION).tar.lz
+$(PKG)_FILE     := libidn2-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://ftp.gnu.org/gnu/libidn/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc libiconv libunistring
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- https://gitlab.com/libidn/libidn2/tags | \
-    $(SED) -n 's,.*libidn2-\([0-9][^t]*\).tar.gz.*,\1,p' | \
+    $(SED) -n 's,.*libidn2-v\([0-9][^t]*\).tar.gz.*,\1,p' | \
     head -1
 endef
 
