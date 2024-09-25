@@ -4,10 +4,12 @@ PKG             := wxwidgets
 $(PKG)_WEBSITE  := https://www.wxwidgets.org/
 $(PKG)_DESCR    := wxWidgets
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.2.0
-$(PKG)_CHECKSUM := ae3516d75c1d8cba519ac338310e7b3a9e5896e5cdb03396bbe3ce30a42c1a4e
-$(PKG)_GH_CONF  := wxWidgets/wxWidgets/releases/latest,v,,,,.7z
+$(PKG)_VERSION  := 3.2.6
+$(PKG)_CHECKSUM := 939e5b77ddc5b6092d1d7d29491fe67010a2433cf9b9c0d841ee4d04acb9dce7
+$(PKG)_GH_CONF  := wxWidgets/wxWidgets/releases/latest,v,,,,.tar.bz2
+$(PKG)_URL      := https://github.com/wxWidgets/wxWidgets/releases/download/v$($(PKG)_VERSION)/wxWidgets-($(PKG)_VERSION).tar.bz2
 $(PKG)_DEPS     := cc expat jpeg libiconv libpng sdl tiff zlib
+
 
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/../configure' \
