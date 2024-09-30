@@ -2,8 +2,8 @@
 
 PKG             := gdb
 $(PKG)_WEBSITE  := https://www.gnu.org/software/gdb/
-$(PKG)_VERSION  := 14.2
-$(PKG)_CHECKSUM := 2d4dd8061d8ded12b6c63f55e45344881e8226105f4d2a9b234040efa5ce7772
+$(PKG)_VERSION  := 15.2
+$(PKG)_CHECKSUM := 83350ccd35b5b5a0cba6b334c41294ea968158c573940904f00b92f76345314d
 $(PKG)_SUBDIR   := gdb-$($(PKG)_VERSION)
 $(PKG)_FILE     := gdb-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://ftp.gnu.org/gnu/$(PKG)/$($(PKG)_FILE)
