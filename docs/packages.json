@@ -196,7 +196,7 @@
     "libgpg_error": {"version": "1.50", "website": "https://www.gnupg.org/related_software/libgpg-error/", "description": "libgpg-error"},
     "libgphoto2": {"version": "2.5.30", "website": "https://github.com/gphoto/libgphoto2", "description": "libgphoto2"},
     "libgsasl": {"version": "1.10.0", "website": "https://www.gnu.org/software/gsasl/", "description": "Libgsasl"},
-    "libgsf": {"version": "1.14.50", "website": "https://developer.gnome.org/gsf/", "description": ""},
+    "libgsf": {"version": "1.14.53", "website": "https://developer.gnome.org/gsf/", "description": ""},
     "libharu": {"version": "2.3.0", "website": "http://libharu.org/", "description": ""},
     "libiberty": {"version": "2.38", "website": "https://gcc.gnu.org/onlinedocs/libiberty/", "description": ""},
     "libical": {"version": "2.0.0", "website": "https://libical.github.io/libical/", "description": ""},
