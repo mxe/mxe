@@ -3,8 +3,8 @@
 PKG             := dbus
 $(PKG)_WEBSITE  := https://dbus.freedesktop.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.15.10
-$(PKG)_CHECKSUM := f700f2f1d0473f11e52f3f3e179f577f31b85419f9ae1972af8c3db0bcfde178
+$(PKG)_VERSION  := 1.15.6
+$(PKG)_CHECKSUM := f97f5845f9c4a5a1fb3df67dfa9e16b5a3fd545d348d6dc850cb7ccc9942bd8c
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://$(PKG).freedesktop.org/releases/$(PKG)/$($(PKG)_FILE)
@@ -18,11 +18,16 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \
-        -DDBUS_BUILD_TESTS:BOOL=OFF \
-        -DDBUS_DISABLE_ASSERT:BOOL=ON \
-        -DDBUS_ENABLE_DOXYGEN_DOCS:BOOL=OFF \
-        -DDBUS_ENABLE_XML_DOCS:BOOL=OFF \
-        -DCMAKE_C_FLAGS='-DPROCESS_QUERY_LIMITED_INFORMATION=0x1000'
-    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' install
+    cd '$(1)' && ./configure \
+        $(MXE_CONFIGURE_OPTS) \
+        --disable-tests \
+        --disable-verbose-mode \
+        --disable-asserts \
+        --disable-maintainer-mode \
+        --disable-silent-rules \
+        --disable-launchd \
+        --disable-doxygen-docs \
+        --disable-xml-docs \
+        CFLAGS='-DPROCESS_QUERY_LIMITED_INFORMATION=0x1000'
+    $(MAKE) -C '$(1)' -j '$(JOBS)' install
 endef
