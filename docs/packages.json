@@ -49,7 +49,7 @@
     "cunit": {"version": "2.1-3", "website": "https://cunit.sourceforge.io/", "description": ""},
     "curl": {"version": "8.10.1", "website": "https://curl.haxx.se/libcurl/", "description": "cURL"},
     "db": {"version": "18.1.40", "website": "https://www.oracle.com/technetwork/database/database-technologies/berkeleydb/overview/index.html", "description": "Oracle Berkeley DB"},
-    "dbus": {"version": "1.15.6", "website": "https://dbus.freedesktop.org/", "description": ""},
+    "dbus": {"version": "1.15.10", "website": "https://dbus.freedesktop.org/", "description": ""},
     "dcmtk": {"version": "3.6.0", "website": "https://dicom.offis.de/dcmtk.php.en", "description": "DCMTK"},
     "devil": {"version": "cba359b", "website": "https://openil.sourceforge.io/", "description": "DevIL"},
     "djvulibre": {"version": "3.5.28", "website": "https://djvu.sourceforge.io/", "description": "DjVuLibre"},
