@@ -12,7 +12,7 @@ diff --git a/cmake/QtBaseHelpers.cmake b/cmake/QtBaseHelpers.cmake
 index 1111111..2222222 100644
 --- a/cmake/QtBaseHelpers.cmake
 +++ b/cmake/QtBaseHelpers.cmake
-@@ -198,7 +198,9 @@ macro(qt_internal_qtbase_build_repo)
+@@ -205,7 +205,9 @@ macro(qt_internal_qtbase_build_repo)
          qt_internal_set_up_config_optimizations_like_in_qmake()
  
          ## Setup documentation
