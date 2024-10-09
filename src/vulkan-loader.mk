@@ -4,9 +4,9 @@ PKG             := vulkan-loader
 $(PKG)_WEBSITE  := https://github.com/KhronosGroup/$(PKG)
 $(PKG)_DESCR    := vulkan loader
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.2.166
-$(PKG)_CHECKSUM := 1094b303ead1843fd31a5c11b0f5c2f91949b0608f36619bf92c738f6d561b35
-$(PKG)_GH_CONF  := KhronosGroup/Vulkan-Loader/releases,v
+$(PKG)_VERSION  := vulkan-sdk-1.3.283.0
+$(PKG)_CHECKSUM := 59151a3cdbf8dcfe9c2ce4b5bf33358255a197f48d8d0ee8a1d8642ed9ace80f
+$(PKG)_GH_CONF  := KhronosGroup/Vulkan-Loader/tags
 $(PKG)_DEPS     := cc vulkan-headers
 
 define $(PKG)_BUILD
