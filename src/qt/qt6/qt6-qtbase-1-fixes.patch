@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Mon, 14 Dec 2020 15:09:00 +1100
-Subject: [PATCH 1/2] optionally build docs
+Subject: [PATCH 1/3] optionally build docs
 
 
 diff --git a/cmake/QtBaseHelpers.cmake b/cmake/QtBaseHelpers.cmake
@@ -27,7 +27,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 14 Feb 2022 00:44:19 +0100
-Subject: [PATCH 2/2] help openssl detection
+Subject: [PATCH 2/3] help openssl detection
 
 
 diff --git a/cmake/FindWrapOpenSSL.cmake b/cmake/FindWrapOpenSSL.cmake
@@ -43,3 +43,57 @@ index 1111111..2222222 100644
          unset(libType)
          unset(writableLib)
      endif()
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Edward Welbourne <edward.welbourne@qt.io>
+Date: Thu, 10 Oct 2024 13:06:08 +0200
+Subject: [PATCH 3/3] Pass string to ICU-wrapper as a QByteArray, not a QString
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The definition of QtTimeZoneLocale::ucalTimeZoneDisplayName() said it
+takes a QByteArray but the header-file's declaration said it takes a
+QString. That was never going to end well.
+
+Fixes: QTBUG-129896
+Change-Id: I5c15f88370f2d15efe2055ff73388c22fdc4ef46
+Reviewed-by: Mårten Nordheim <marten.nordheim@qt.io>
+(cherry picked from commit 01219276fdd3c1b6c867e97f6b8337f46ac82e28)
+Reviewed-by: Qt Cherry-pick Bot <cherrypick_bot@qt-project.org>
+
+diff --git a/src/corelib/time/qtimezonelocale_p.h b/src/corelib/time/qtimezonelocale_p.h
+index 1111111..2222222 100644
+--- a/src/corelib/time/qtimezonelocale_p.h
++++ b/src/corelib/time/qtimezonelocale_p.h
+@@ -32,7 +32,7 @@ namespace QtTimeZoneLocale {
+ #if QT_CONFIG(icu)
+ QString ucalTimeZoneDisplayName(UCalendar *ucal, QTimeZone::TimeType timeType,
+                                 QTimeZone::NameType nameType,
+-                                const QString &localeCode);
++                                const QByteArray &localeCode);
+ #else
+ // Define data types for QTZL_data_p.h
+ 
+diff --git a/src/corelib/time/qtimezoneprivate_icu.cpp b/src/corelib/time/qtimezoneprivate_icu.cpp
+index 1111111..2222222 100644
+--- a/src/corelib/time/qtimezoneprivate_icu.cpp
++++ b/src/corelib/time/qtimezoneprivate_icu.cpp
+@@ -149,7 +149,7 @@ static QTimeZonePrivate::Data ucalTimeZoneTransition(UCalendar *m_ucal,
+     QTimeZone::TimeType timeType = dst == 0 ? QTimeZone::StandardTime : QTimeZone::DaylightTime;
+     using namespace QtTimeZoneLocale;
+     tran.abbreviation = ucalTimeZoneDisplayName(m_ucal, timeType,
+-                                                QTimeZone::ShortName, QLocale().name());
++                                                QTimeZone::ShortName, QLocale().name().toUtf8());
+     return tran;
+ }
+ #endif // U_ICU_VERSION_SHORT
+@@ -258,7 +258,7 @@ QString QIcuTimeZonePrivate::displayName(QTimeZone::TimeType timeType,
+     // Technically this may be suspect, if locale isn't QLocale(), since that's
+     // what we used when constructing m_ucal; does ICU cope with inconsistency ?
+     using namespace QtTimeZoneLocale;
+-    return ucalTimeZoneDisplayName(m_ucal, timeType, nameType, locale.name());
++    return ucalTimeZoneDisplayName(m_ucal, timeType, nameType, locale.name().toUtf8());
+ }
+ 
+ int QIcuTimeZonePrivate::offsetFromUtc(qint64 atMSecsSinceEpoch) const
