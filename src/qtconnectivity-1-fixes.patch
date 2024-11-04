@@ -1,0 +1,45 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Mon, 4 Nov 2024 15:34:31 +0100
+Subject: [PATCH 1/1] fix
+
+
+diff --git a/src/bluetooth/qbluetoothservicediscoveryagent_win.cpp b/src/bluetooth/qbluetoothservicediscoveryagent_win.cpp
+index 1111111..2222222 100644
+--- a/src/bluetooth/qbluetoothservicediscoveryagent_win.cpp
++++ b/src/bluetooth/qbluetoothservicediscoveryagent_win.cpp
+@@ -50,15 +50,7 @@
+ #include <winsock2.h>
+ #include <qt_windows.h>
+ 
+-#if defined(Q_CC_MINGW)
+-// Workaround for MinGW headers declaring BluetoothSdpGetElementData incorrectly.
+-# define BluetoothSdpGetElementData _BluetoothSdpGetElementData_notok
+-# include <bluetoothapis.h>
+-# undef BluetoothSdpGetElementData
+-  extern "C" DWORD WINAPI BluetoothSdpGetElementData(LPBYTE, ULONG, PSDP_ELEMENT_DATA);
+-#else
+-# include <bluetoothapis.h>
+-#endif
++#include <bluetoothapis.h>
+ 
+ #include <ws2bth.h>
+ #include <iostream>
+@@ -206,12 +198,7 @@ static QList<QVariant> spdContainerToVariantList(LPBYTE containerStream, ULONG c
+     return sequence;
+ }
+ 
+-#if defined(Q_CC_MINGW)
+-# define SDP_CALLBACK
+-#else
+-# define SDP_CALLBACK QT_WIN_CALLBACK
+-#endif
+-static BOOL SDP_CALLBACK bluetoothSdpCallback(ULONG attributeId, LPBYTE valueStream, ULONG streamSize, LPVOID param)
++static BOOL QT_WIN_CALLBACK bluetoothSdpCallback(ULONG attributeId, LPBYTE valueStream, ULONG streamSize, LPVOID param)
+ {
+     QBluetoothServiceInfo *result = static_cast<QBluetoothServiceInfo*>(param);
+ 
