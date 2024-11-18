@@ -2,8 +2,8 @@
 
 PKG             := wget
 $(PKG)_WEBSITE  := https://www.gnu.org/software/wget/
-$(PKG)_VERSION  := 1.24.5
-$(PKG)_CHECKSUM := 57a107151e4ef94fdf94affecfac598963f372f13293ed9c74032105390b36ee
+$(PKG)_VERSION  := 1.25.0
+$(PKG)_CHECKSUM := 19225cc756b0a088fc81148dc6a40a0c8f329af7fd8483f1c7b2fe50f4e08a1f
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.lz
 $(PKG)_URL      := https://ftp.gnu.org/gnu/$(PKG)/$($(PKG)_FILE)
