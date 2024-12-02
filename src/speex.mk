@@ -4,16 +4,16 @@ PKG             := speex
 $(PKG)_WEBSITE  := https://speex.org/
 $(PKG)_DESCR    := Speex
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.2.0
-$(PKG)_CHECKSUM := eaae8af0ac742dc7d542c9439ac72f1f385ce838392dc849cae4536af9210094
+$(PKG)_VERSION  := 1.2.1
+$(PKG)_CHECKSUM := 4b44d4f2b38a370a2d98a78329fefc56a0cf93d1c1be70029217baae6628feea
 $(PKG)_SUBDIR   := speex-$($(PKG)_VERSION)
 $(PKG)_FILE     := speex-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://downloads.xiph.org/releases/speex/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://git.xiph.org/?p=speex.git;a=tags' | \
-    grep '<a class="list name"' | \
+    $(WGET) -q -O- 'https://gitlab.xiph.org/xiph/speex/-/tags' | \
+    grep '<a class="!gl-text-link"' | \
     $(SED) -n 's,.*<a[^>]*>Speex-\([0-9][^<]*\)<.*,\1,p' | \
     head -1
 endef
