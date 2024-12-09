@@ -1,0 +1,44 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Bruno Haible <bruno@clisp.org>
+Date: Sun, 1 Dec 2024 18:35:51 +0100
+Subject: [PATCH 1/1] Fix compilation error with libxml2 >= 2.12.0 and gcc >=
+ 14.
+
+Fix compilation error with libxml2 >= 2.12.0 and gcc >= 14.
+
+Reported by Sam James <sam@gentoo.org>
+at <https://savannah.gnu.org/bugs/?66506>.
+
+* gettext-tools/src/its.c: Include <libxml/xmlversion.h>.
+(structured_error): Adapt to API change.
+
+diff --git a/gettext-tools/src/its.c b/gettext-tools/src/its.c
+index 1111111..2222222 100644
+--- a/gettext-tools/src/its.c
++++ b/gettext-tools/src/its.c
+@@ -28,6 +28,7 @@
+ #include <stdint.h>
+ #include <stdlib.h>
+ 
++#include <libxml/xmlversion.h>
+ #include <libxml/xmlerror.h>
+ #include <libxml/tree.h>
+ #include <libxml/parser.h>
+@@ -82,7 +83,13 @@
+ /* ----------------------------- Error handling ----------------------------- */
+ 
+ static void
++/* Adapt to API change in libxml 2.12.0.
++   See <https://gitlab.gnome.org/GNOME/libxml2/-/issues/622>.  */
++#if LIBXML_VERSION >= 21200
++structured_error (void *data, const xmlError *err)
++#else
+ structured_error (void *data, xmlError *err)
++#endif
+ {
+   error (0, err->level == XML_ERR_FATAL ? EXIT_FAILURE : 0,
+          _("%s error: %s"), "libxml2", err->message);
