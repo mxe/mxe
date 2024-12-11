@@ -5,8 +5,8 @@ PKG             := openjpeg
 $(PKG)_WEBSITE  := https://www.openjpeg.org/
 $(PKG)_DESCR    := OpenJPEG
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.5.2
-$(PKG)_CHECKSUM := 90e3896fed910c376aaf79cdd98bdfdaf98c6472efd8e1debf0a854938cbda6a
+$(PKG)_VERSION  := 2.5.3
+$(PKG)_CHECKSUM := 368fe0468228e767433c9ebdea82ad9d801a3ad1e4234421f352c8b06e7aa707
 $(PKG)_GH_CONF  := uclouvain/openjpeg/tags,v,,version
 $(PKG)_DEPS     := cc lcms libpng tiff zlib
 
