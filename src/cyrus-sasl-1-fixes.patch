@@ -1,0 +1,196 @@
+diff -ru cyrus-sasl-2.1.28/include/Makefile.in cyrus-sasl-2.1.28.patch/include/Makefile.in
+--- cyrus-sasl-2.1.28/include/Makefile.in	2022-02-18 22:53:55.000000000 +0100
++++ cyrus-sasl-2.1.28.patch/include/Makefile.in	2023-08-05 09:38:55.230903852 +0200
+@@ -805,8 +805,7 @@
+ makemd5$(BUILD_EXEEXT): LDFLAGS=$(LDFLAGS_FOR_BUILD)
+ 
+ md5global.h: makemd5$(BUILD_EXEEXT) Makefile
+-	-rm -f $@
+-	./$< $@
++	if [ ! -f $@ ]; then ./$< $@; fi
+ 
+ # TODO: automake, don't build it
+ makemd5$(EXEEXT):
+diff -ru cyrus-sasl-2.1.28/lib/checkpw.c cyrus-sasl-2.1.28.patch/lib/checkpw.c
+--- cyrus-sasl-2.1.28/lib/checkpw.c	2022-02-18 22:53:25.000000000 +0100
++++ cyrus-sasl-2.1.28.patch/lib/checkpw.c	2023-08-05 10:43:54.757266216 +0200
+@@ -72,6 +72,8 @@
+ #include <sys/un.h>
+ #else
+ #include <string.h>
++#include <winsock.h>
++#include <windows.h>
+ #endif
+ 
+ #include <limits.h>
+@@ -88,8 +90,18 @@
+ #if defined(HAVE_PWCHECK) || defined(HAVE_SASLAUTHD) || defined(HAVE_AUTHDAEMON)
+ # include <errno.h>
+ # include <sys/types.h>
+-# include <sys/socket.h>
+-# include <sys/un.h>
++# ifndef WIN32
++#  include <sys/socket.h>
++#  include <sys/un.h>
++# else
++/* source: http://miniupnp.tuxfamily.org/forum/viewtopic.php?t=553 */
++#  define UNIX_PATH_LEN 108
++#  include <stdint.h>
++   struct sockaddr_un {
++       uint16_t sun_family;
++       char     sun_path[UNIX_PATH_LEN];
++   };
++# endif
+ # ifdef HAVE_UNISTD_H
+ #  include <unistd.h>
+ # endif
+@@ -446,6 +458,33 @@
+     return -1;
+ }
+ 
++#ifdef WIN32
++/* from plugins/ntlm.c */
++ssize_t winwritev (int fd, const struct iovec *iov, size_t iovcnt)
++{
++    ssize_t nwritten;		/* amount written */
++    ssize_t nbytes;
++    size_t i;
++
++    nbytes = 0;
++
++    for (i = 0; i < iovcnt; i++) {
++        if ((nwritten = send (fd, iov[i].iov_base, iov[i].iov_len, 0)) == SOCKET_ERROR) {
++            /* Unless socket is nonblocking, we should always write everything */
++            return (-1);
++        }
++
++        nbytes += nwritten;
++
++        if (nwritten < iov[i].iov_len) {
++            break;
++        }
++    }
++    return (nbytes);
++}
++# define writev winwritev
++#endif
++
+ /*
+  * Keep calling the writev() system call with 'fd', 'iov', and 'iovcnt'
+  * until all the data is written out or an error/timeout occurs.
+@@ -654,7 +693,7 @@
+     char *query_end = query;
+     int s;
+     struct sockaddr_un srvaddr;
+-    sasl_getopt_t *getopt;
++    sasl_getopt_t *go;
+     void *context;
+     char pwpath[sizeof(srvaddr.sun_path)];
+     const char *p = NULL;
+@@ -665,8 +704,8 @@
+ 
+     /* check to see if the user configured a rundir */
+     if (_sasl_getcallback(conn, SASL_CB_GETOPT,
+-                          (sasl_callback_ft *)&getopt, &context) == SASL_OK) {
+-	getopt(context, NULL, "saslauthd_path", &p, NULL);
++                          (sasl_callback_ft *)&go, &context) == SASL_OK) {
++	go(context, NULL, "saslauthd_path", &p, NULL);
+     }
+     if (p) {
+         if (strlen(p) >= sizeof(pwpath))
+@@ -876,6 +915,11 @@
+ 
+ static int authdaemon_blocking(int fd, int block)
+ {
++#ifdef WIN32
++	/* http://stackoverflow.com/a/15729622 */
++	u_long block_ = block;
++	ioctlsocket(fd, FIONBIO, &block_);
++#else
+     int f, r;
+ 
+     /* Get the fd's blocking bit. */
+@@ -899,7 +943,7 @@
+     r = fcntl(fd, F_SETFL, f);
+     if (r)
+ 	return -1;
+-
++#endif
+     /* Success. */
+     return 0;
+ }
+@@ -1044,7 +1088,7 @@
+ 				      const char *user_realm __attribute__((unused)))
+ {
+     const char *p = NULL;
+-    sasl_getopt_t *getopt;
++    sasl_getopt_t *go;
+     void *context;
+     int result = SASL_FAIL;
+     char *query = NULL;
+@@ -1052,8 +1096,8 @@
+ 
+     /* check to see if the user configured a rundir */
+     if (_sasl_getcallback(conn, SASL_CB_GETOPT,
+-                          (sasl_callback_ft *)&getopt, &context) == SASL_OK) {
+-	getopt(context, NULL, "authdaemond_path", &p, NULL);
++                          (sasl_callback_ft *)&go, &context) == SASL_OK) {
++	go(context, NULL, "authdaemond_path", &p, NULL);
+     }
+     if (!p) {
+ 	/*
+diff -ru cyrus-sasl-2.1.28/lib/common.c cyrus-sasl-2.1.28.patch/lib/common.c
+--- cyrus-sasl-2.1.28/lib/common.c	2022-02-18 22:50:42.000000000 +0100
++++ cyrus-sasl-2.1.28.patch/lib/common.c	2023-08-05 11:08:02.643933332 +0200
+@@ -2459,6 +2459,7 @@
+ }
+ 
+ #else /*WIN32*/
++#include <tchar.h>
+ /* Return NULL on failure */
+ static char *
+ _sasl_get_default_win_path(void *context __attribute__((unused)),
+diff -ru cyrus-sasl-2.1.28/lib/Makefile.in cyrus-sasl-2.1.28.patch/lib/Makefile.in
+--- cyrus-sasl-2.1.28/lib/Makefile.in	2022-02-18 22:53:55.000000000 +0100
++++ cyrus-sasl-2.1.28.patch/lib/Makefile.in	2023-08-05 10:25:53.613084905 +0200
+@@ -924,6 +924,7 @@
+ 	esac; done; dependency_libs=""; done; \
+ 	sed -e "/^dependency_libs=/s%=.*%='$${depdirs}$${deplibs}'%" \
+ 	libsasl2.la >TMP.$$ && mv TMP.$$ libsasl2.la
++	$(RANLIB) .libs/$@
+ 	rm -f $@
+ 	ln -s .libs/$@ $@
+ 
+diff -ru cyrus-sasl-2.1.28/Makefile.in cyrus-sasl-2.1.28.patch/Makefile.in
+--- cyrus-sasl-2.1.28/Makefile.in	2022-02-18 22:53:55.000000000 +0100
++++ cyrus-sasl-2.1.28.patch/Makefile.in	2023-08-05 10:45:24.954692867 +0200
+@@ -201,7 +201,7 @@
+ CTAGS = ctags
+ CSCOPE = cscope
+ DIST_SUBDIRS = include sasldb common lib plugins utils pwcheck sample \
+-	saslauthd
++
+ am__DIST_COMMON = $(dist_man3_MANS) $(srcdir)/Makefile.in \
+ 	$(srcdir)/config.h.in $(srcdir)/libsasl2.pc.in \
+ 	$(top_srcdir)/config/compile $(top_srcdir)/config/config.guess \
+@@ -488,7 +488,7 @@
+ @SAMPLE_TRUE@SAM = sample
+ @MACOSX_FALSE@INSTALLOSX = 
+ @MACOSX_TRUE@INSTALLOSX = install-exec-local-osx
+-SUBDIRS = include sasldb common lib plugins utils $(PWC) $(SAM) $(SAD)
++SUBDIRS = include sasldb common lib plugins utils $(PWC) $(SAM)
+ EXTRA_DIST = config doc docsrc win32 mac dlcompat-20010505 NTMakefile \
+     INSTALL.TXT libsasl2.pc.in
+ 
+diff -ru cyrus-sasl-2.1.28/plugins/ntlm.c cyrus-sasl-2.1.28.patch/plugins/ntlm.c
+--- cyrus-sasl-2.1.28/plugins/ntlm.c	2022-02-18 22:50:42.000000000 +0100
++++ cyrus-sasl-2.1.28.patch/plugins/ntlm.c	2023-08-05 10:49:01.809869475 +0200
+@@ -56,7 +56,7 @@
+ 
+ #ifdef WIN32
+ # include <process.h>	    /* for getpid */
+-  typedef int pid_t;
++  /* typedef int pid_t; */
+ #else
+ # include <unistd.h>
+ # include <sys/types.h>
