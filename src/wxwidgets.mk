@@ -4,13 +4,15 @@ PKG             := wxwidgets
 $(PKG)_WEBSITE  := https://www.wxwidgets.org/
 $(PKG)_DESCR    := wxWidgets
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.1.7
-$(PKG)_CHECKSUM := 3d666e47d86192f085c84089b850c90db7a73a5d26b684b617298d89dce84f19
+$(PKG)_VERSION  := 3.2.6
+$(PKG)_CHECKSUM := 939e5b77ddc5b6092d1d7d29491fe67010a2433cf9b9c0d841ee4d04acb9dce7
 $(PKG)_GH_CONF  := wxWidgets/wxWidgets/releases/latest,v,,,,.tar.bz2
+$(PKG)_URL      := https://github.com/wxWidgets/wxWidgets/releases/download/v$($(PKG)_VERSION)/wxWidgets-($(PKG)_VERSION).tar.bz2
 $(PKG)_DEPS     := cc expat jpeg libiconv libpng sdl tiff zlib
 
+
 define $(PKG)_BUILD
-    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/../configure' \
         $(MXE_CONFIGURE_OPTS) \
         --enable-option-checking \
         --enable-gui \
