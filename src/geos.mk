@@ -30,8 +30,8 @@ define $(PKG)_BUILD
 
     ln -sf '$(PREFIX)/$(TARGET)/bin/geos-config' '$(PREFIX)/bin/$(TARGET)-geos-config'
 
-    '$(TARGET)-gcc' \
+    '$(TARGET)-g++' \
         -W -Wall -Werror -ansi -pedantic \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-geos.exe' \
-        `'$(PREFIX)/bin/$(TARGET)-geos-config' --cflags --clibs`
+        `'$(PREFIX)/bin/$(TARGET)-geos-config' --cflags --static-clibs`
 endef
