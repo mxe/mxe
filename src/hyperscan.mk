@@ -1,7 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := hyperscan
-$(PKG)_WEBSITE  := https://01.org/hyperscan
+$(PKG)_WEBSITE  := https://www.hyperscan.io/
 $(PKG)_DESCR    := Hyperscan
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 5.4.2
