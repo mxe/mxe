@@ -86,7 +86,7 @@
     "gendef": {"version": "12.0.0", "website": "https://sourceforge.net/p/mingw-w64/wiki2/gendef/", "description": ""},
     "geoip-database": {"version": "20150317-1", "website": "https://www.maxmind.com/", "description": "GeoIP Legacy Database"},
     "geos": {"version": "3.9.5", "website": "https://trac.osgeo.org/geos/", "description": "GEOS"},
-    "gettext": {"version": "0.23", "website": "https://www.gnu.org/software/gettext/", "description": ""},
+    "gettext": {"version": "0.23.1", "website": "https://www.gnu.org/software/gettext/", "description": ""},
     "ghostscript": {"version": "10.04.0", "website": "https://www.ghostscript.com/", "description": ""},
     "giflib": {"version": "5.1.4", "website": "https://sourceforge.net/projects/libungif/", "description": ""},
     "glew": {"version": "2.1.0", "website": "https://glew.sourceforge.io/", "description": "GLEW"},
