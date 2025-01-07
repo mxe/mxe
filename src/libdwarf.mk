@@ -10,7 +10,7 @@ $(PKG)_DEPS     := cc meson-wrapper zlib zstd
 
 define $(PKG)_BUILD
     '$(MXE_MESON_WRAPPER)' $(MXE_MESON_OPTS) \
-		-Dwerror=false \
+        -Dwerror=false \
         '$(BUILD_DIR)' '$(SOURCE_DIR)'
     '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)'
     '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)' install

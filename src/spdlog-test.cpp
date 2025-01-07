@@ -1,7 +1,7 @@
 
 #include "spdlog/spdlog.h"
 
-int main() 
+int main()
 {
     spdlog::info("spdlog test");
     spdlog::error("spdlog error {}", "with format");
