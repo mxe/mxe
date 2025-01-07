@@ -7,7 +7,7 @@ $(PKG)_CHECKSUM := ffa5e49db90c9ddc0c830b66e473630c679b1b0a26a53d24981d4f0efa1c9
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.lz
 $(PKG)_URL      := https://ftp.gnu.org/gnu/wget/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc brotli gnutls libidn2 libntlm pcre2 pthreads zstd
+$(PKG)_DEPS     := cc brotli gnutls libidn2 libntlm libpsl pcre2 pthreads zstd
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://gitlab.com/gnuwget/wget2/-/tags' | \
