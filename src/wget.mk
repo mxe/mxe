@@ -16,12 +16,12 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && ./configure \
+    cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
         $(MXE_CONFIGURE_OPTS) \
         --with-ssl=gnutls \
         CFLAGS='-DIN6_ARE_ADDR_EQUAL=IN6_ADDR_EQUAL $(if $(BUILD_STATIC),-DGNUTLS_INTERNAL_BUILD,)'\
         LDFLAGS='$(if $(BUILD_SHARED),-Wl$(comma)--allow-multiple-definition,)' \
         LIBS='-lbcrypt'
-    $(MAKE) -C '$(1)/lib' -j '$(JOBS)'
-    $(MAKE) -C '$(1)/src' -j '$(JOBS)' install-binPROGRAMS
+    $(MAKE) -C '$(BUILD_DIR)/lib' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)/src' -j '$(JOBS)' install-binPROGRAMS
 endef
