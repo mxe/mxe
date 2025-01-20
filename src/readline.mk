@@ -24,7 +24,8 @@ define $(PKG)_BUILD
         $(MXE_CONFIGURE_OPTS) \
         --disable-install-examples \
         --enable-multibyte \
-        --without-curses
+        --without-curses \
+        CFLAGS='-D__USE_MINGW_ALARM -D_POSIX'
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
 endef
