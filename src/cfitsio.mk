@@ -3,8 +3,8 @@
 PKG             := cfitsio
 $(PKG)_WEBSITE  := https://heasarc.gsfc.nasa.gov/fitsio/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.4.0
-$(PKG)_CHECKSUM := 95900cf95ae760839e7cb9678a7b2fad0858d6ac12234f934bd1cb6bfc246ba9
+$(PKG)_VERSION  := 4.5.0
+$(PKG)_CHECKSUM := e4854fc3365c1462e493aa586bfaa2f3d0bb8c20b75a524955db64c27427ce09
 $(PKG)_SUBDIR   := cfitsio-$($(PKG)_VERSION)
 $(PKG)_FILE     := cfitsio-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/$($(PKG)_FILE)
@@ -18,7 +18,8 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' '-DUSE_PTHREADS=ON'
+    cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \
+        '-DUSE_PTHREADS=ON'
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
@@ -35,5 +36,3 @@ define $(PKG)_BUILD
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-cfitsio.exe' \
         `'$(TARGET)-pkg-config' cfitsio --cflags --libs`
 endef
-
-$(PKG)_BUILD_SHARED =

@@ -1,0 +1,32 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Sun, 19 Jan 2025 15:32:19 +0100
+Subject: [PATCH 1/1] replace write with fprintf(stderr)
+
+taken from https://github.com/msys2/MINGW-packages/blob/master/mingw-w64-termcap/0001-tparam-replace-write-with-fprintf.patch
+
+diff --git a/tparam.c b/tparam.c
+index 1111111..2222222 100644
+--- a/tparam.c
++++ b/tparam.c
+@@ -26,6 +26,7 @@ Boston, MA 02111-1307, USA.  */
+ #else
+ 
+ #ifdef STDC_HEADERS
++#include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
+ #else
+@@ -48,7 +49,7 @@ char *realloc ();
+ static void
+ memory_out ()
+ {
+-  write (2, "virtual memory exhausted\n", 25);
++  fprintf (stderr, "virtual memory exhausted\n");
+   exit (1);
+ }
+ 

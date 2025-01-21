@@ -36,7 +36,7 @@ diff --git a/gio/meson.build b/gio/meson.build
 index 1111111..2222222 100644
 --- a/gio/meson.build
 +++ b/gio/meson.build
-@@ -882,7 +882,15 @@ libgio_dep = declare_dependency(link_with : libgio,
+@@ -898,7 +898,15 @@ libgio_dep = declare_dependency(link_with : libgio,
    ],
  )
  
