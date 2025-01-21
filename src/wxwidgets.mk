@@ -12,7 +12,7 @@ $(PKG)_DEPS     := cc expat jpeg libiconv libpng sdl tiff zlib
 
 
 define $(PKG)_BUILD
-    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/../configure' \
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS) \
         --enable-option-checking \
         --enable-gui \
