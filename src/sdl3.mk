@@ -4,11 +4,11 @@ PKG             := sdl3
 $(PKG)_WEBSITE  := https://www.libsdl.org/
 $(PKG)_DESCR    := SDL3
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.1.6
-$(PKG)_SUBDIR   := SDL-preview-$($(PKG)_VERSION)
+$(PKG)_VERSION  := 3.2.0
+$(PKG)_SUBDIR   := SDL-release-$($(PKG)_VERSION)
 $(PKG)_FILE     := SDL3-$($(PKG)_VERSION).tar.gz
-$(PKG)_CHECKSUM := 5da5e265c150b954d007bf1465b155d9df1d0d52f10115a49bb918dc8fe2826a
-$(PKG)_GH_CONF  := libsdl-org/SDL/releases/tag,preview-,,
+$(PKG)_CHECKSUM := a8a614624531883e9288960d52713d228374c5d5b00228e410ce351bb32842c0
+$(PKG)_GH_CONF  := libsdl-org/SDL/releases/tag,release-,,
 $(PKG)_DEPS     := cc libiconv libsamplerate
 
 define $(PKG)_BUILD
