@@ -464,7 +464,7 @@
     "sdl2_mixer": {"version": "2.0.4", "website": "https://www.libsdl.org/", "description": "SDL2_mixer"},
     "sdl2_net": {"version": "2.0.1", "website": "https://www.libsdl.org/", "description": ""},
     "sdl2_ttf": {"version": "2.0.18", "website": "https://www.libsdl.org/", "description": "SDL2_ttf"},
-    "sdl3": {"version": "3.2.0", "website": "https://www.libsdl.org/", "description": "SDL3"},
+    "sdl3": {"version": "3.2.2", "website": "https://www.libsdl.org/", "description": "SDL3"},
     "sdl_gfx": {"version": "2.0.26", "website": "https://www.ferzkopp.net/joomla/content/view/19/14/", "description": "SDL_gfx"},
     "sdl_image": {"version": "1.2.12", "website": "https://www.libsdl.org/projects/SDL_image/", "description": "SDL_image"},
     "sdl_mixer": {"version": "1.2.12", "website": "https://www.libsdl.org/projects/SDL_mixer/", "description": "SDL_mixer"},
