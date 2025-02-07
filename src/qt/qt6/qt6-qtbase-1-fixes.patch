@@ -67,7 +67,7 @@ diff --git a/src/corelib/thread/qthread_win.cpp b/src/corelib/thread/qthread_win
 index 1111111..2222222 100644
 --- a/src/corelib/thread/qthread_win.cpp
 +++ b/src/corelib/thread/qthread_win.cpp
-@@ -18,17 +18,7 @@
+@@ -19,17 +19,7 @@
  #  define _MT
  #endif // _MT
  #include <process.h>
@@ -86,7 +86,7 @@ index 1111111..2222222 100644
  
  QT_BEGIN_NAMESPACE
  
-@@ -259,11 +249,13 @@ unsigned int __stdcall QT_ENSURE_STACK_ALIGNED_FOR_SSE QThreadPrivate::start(voi
+@@ -260,11 +250,13 @@ unsigned int __stdcall QT_ENSURE_STACK_ALIGNED_FOR_SSE QThreadPrivate::start(voi
      data->ensureEventDispatcher();
      data->eventDispatcher.loadRelaxed()->startingUp();
  
