@@ -3,12 +3,11 @@
 
 PKG             := stimfit
 $(PKG)_IGNORE   := 
-$(PKG)_VERSION  := 0.16.5
-# $(PKG)_CHECKSUM := 9d7e8b9ca3ab10990230b17d8a47ac2bd25d32c7d501fac1e1768980c548195e
+$(PKG)_VERSION  := 0.16.6
+$(PKG)_CHECKSUM := efd88f5c167fbeb2c00cbcb4b2a2293fa4d0ef6507617cc26262ffa0f2e08c6f
 $(PKG)_SUBDIR   := stimfit-$($(PKG)_VERSION)debian
 $(PKG)_FILE     := stimfit-$($(PKG)_VERSION)debian.tar.gz
-# $(PKG)_URL      := https://github.com/neurodroid/stimfit/archive/refs/tags/v0.16.5debian.tar.gz
-# https://github.com/neurodroid/stimfit/archive/refs/tags/v$($(PKG)_VERSION).tar.gz
+$(PKG)_URL      := https://github.com/neurodroid/stimfit/archive/refs/tags/v$($(PKG)_VERSION).tar.gz
 $(PKG)_DEPS     := cc biosig wxwidgets hdf5 fftw levmar openblas
 
 #define $(PKG)_UPDATE
