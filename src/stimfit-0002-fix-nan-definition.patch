@@ -1,0 +1,15 @@
+diff --git a/src/stimfit/gui/graph.cpp b/src/stimfit/gui/graph.cpp
+index 83c720d0..cef5b6a9 100755
+--- a/src/stimfit/gui/graph.cpp
++++ b/src/stimfit/gui/graph.cpp
+@@ -44,9 +44,7 @@
+ #include <iostream>
+ #endif
+ 
+-#if defined (_WIN32)
+-#define isnan _isnan
+-#elif !defined(isnan)
++#if !defined(isnan)
+ #define isnan std::isnan
+ #endif
+ // #define BENCHMARK // uncomment to run benchmark
