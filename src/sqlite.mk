@@ -23,8 +23,8 @@ define $(PKG)_BUILD
         --build='$(BUILD)' \
         --prefix='$(PREFIX)/$(TARGET)' \
         $(if $(BUILD_STATIC), \
-            --enable-static --disable-shared , \
-            --disable-static --enable-shared ) \
+            --disable-shared , \
+            --disable-static --out-implib ) \
         --disable-readline \
         CFLAGS="-Os -DSQLITE_THREADSAFE=1 -DSQLITE_ENABLE_COLUMN_METADATA"
     $(MAKE) -C '$(1)' -j 1 install
