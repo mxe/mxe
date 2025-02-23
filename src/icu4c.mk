@@ -28,7 +28,8 @@ define $(PKG)_BUILD_$(BUILD)
 endef
 
 define $(PKG)_BUILD_COMMON
-    rm -fv $(shell echo "$(PREFIX)/$(TARGET)"/{bin,lib}/{lib,libs,}icu'*'.{a,dll,dll.a})
+    # '?*' to avoid matching plain "libicu.a" from gcc.
+    rm -fv $(shell echo "$(PREFIX)/$(TARGET)"/{bin,lib}/{lib,libs,}icu'?*'.{a,dll,dll.a})
     cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/source/configure' \
         $(MXE_CONFIGURE_OPTS) \
         --with-cross-build='$(PREFIX)/$(BUILD)/$(PKG)' \
