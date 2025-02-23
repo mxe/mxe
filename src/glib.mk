@@ -30,6 +30,7 @@ define $(PKG)_BUILD_$(BUILD)
     '$(MXE_MESON_NATIVE_WRAPPER)' \
         --buildtype=release \
         -Dtests=false \
+        $(if $(BUILD_STATIC),-Dintrospection=disabled) \
         '$(BUILD_DIR)' '$(SOURCE_DIR)'
     '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)'
     '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)' install
