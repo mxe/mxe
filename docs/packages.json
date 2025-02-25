@@ -310,6 +310,7 @@
     "nettle": {"version": "3.9.1", "website": "https://www.lysator.liu.se/~nisse/nettle/", "description": ""},
     "nghttp2": {"version": "1.62.1", "website": "https://nghttp2.org/", "description": ""},
     "ninja": {"version": "1.12.1", "website": "https://ninja-build.org", "description": "A small build system with a focus on speed"},
+    "nlohmann-json": {"version": "3.11.3", "website": "https://json.nlohmann.me/", "description": "JSON for Modern C++"},
     "nlopt": {"version": "2.10.0", "website": "https://nlopt.readthedocs.io/en/latest/", "description": "NLopt"},
     "nsis": {"version": "3.06.1", "website": "https://nsis.sourceforge.io/", "description": "NSIS"},
     "ocaml-cairo": {"version": "1.2.0", "website": "https://cairographics.org/cairo-ocaml/", "description": "cairo-ocaml"},
