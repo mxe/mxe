@@ -23,7 +23,8 @@ define $(PKG)_BUILD
     cd '$(1)' && autoreconf -fi -I $(PREFIX)/$(TARGET)/share/aclocal
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
-        --without-x
+        --without-x \
+        CXXFLAGS="-fpermissive"
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 endef
 
