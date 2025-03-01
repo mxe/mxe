@@ -18,6 +18,7 @@ define $(PKG)_BUILD
         CC='$(TARGET)-gcc' \
         LD='$(TARGET)-ld' \
         AR='$(TARGET)-ar' \
+        CXXFLAGS='-Wno-misleading-indentation -funsigned-char' \
         CHECK_WHITESPACE= \
         exeext='.exe'
     cp '$(SOURCE_DIR)/src/upx.exe' '$(PREFIX)/$(TARGET)/bin/'
@@ -27,6 +28,7 @@ define $(PKG)_BUILD_$(BUILD)
     $(MAKE) -C '$(SOURCE_DIR)' -j '$(JOBS)' all \
         CXX='$(BUILD_CXX)' \
         CC='$(BUILD_CC)' \
+        CXXFLAGS='-Wno-misleading-indentation -funsigned-char' \
         LIBS='-L$(PREFIX)/$(BUILD)/lib -lucl -lz' \
         UPX_UCLDIR='$(PREFIX)/$(TARGET)' \
         CHECK_WHITESPACE= \
