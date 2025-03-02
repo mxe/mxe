@@ -1,0 +1,33 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+From 6837c9e5c97212b030f4aa0f343b5053f5a3bb40 Mon Sep 17 00:00:00 2001
+From: Louis Gesbert <louis.gesbert@ocamlpro.com>
+Date: Wed, 16 Oct 2019 14:24:45 +0200
+Subject: [PATCH] Rename "DllMain"
+
+---
+ gtksourceview/gtksourceview-init.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/gtksourceview/gtksourceview-init.c b/gtksourceview/gtksourceview-init.c
+index c40e319..c9b0613 100644
+--- a/gtksourceview/gtksourceview-init.c
++++ b/gtksourceview/gtksourceview-init.c
+@@ -150,12 +150,12 @@ gtksourceview_shutdown (void)
+ 
+ #if defined (G_OS_WIN32)
+ 
+-BOOL WINAPI DllMain (HINSTANCE hinstDLL,
++BOOL WINAPI gtksourceview_DllMain (HINSTANCE hinstDLL,
+ 		     DWORD     fdwReason,
+ 		     LPVOID    lpvReserved);
+ 
+ BOOL WINAPI
+-DllMain (HINSTANCE hinstDLL,
++gtksourceview_DllMain (HINSTANCE hinstDLL,
+ 	 DWORD     fdwReason,
+ 	 LPVOID    lpvReserved)
+ {
+-- 
+2.11.0
+
