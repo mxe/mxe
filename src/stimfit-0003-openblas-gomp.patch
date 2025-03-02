@@ -1,0 +1,24 @@
+diff --git a/Makefile.static.in b/Makefile.static.in
+index d7da6a5c..991f87b6 100644
+--- a/Makefile.static.in
++++ b/Makefile.static.in
+@@ -222,7 +222,9 @@ LIBS   += $(LIBLAPACK_LDFLAGS)
+ CXXFLAGS += $(CFLAGS) $(CPPFLAGS)
+ 
+ ## BIOSIG related stuff ##
+-LIBS  += $(shell $(PKGCONF) --libs libbiosig)
++LIBS  += $(shell $(PKGCONF) --libs libbiosig) -ltinyxml
++LIBS  += $(shell $(PKGCONF) --libs openblas) -lgomp
++LIBS  += -lhdf5 -lhdf5_hl
+ 
+ LIBS     += -lfftw3
+ 
+@@ -230,7 +232,7 @@ ifeq (mingw,$(findstring mingw, $(WXCONF)))
+   LIBS   += -lgfortran -lquadmath
+ endif
+ 
+-@BUILD_PYTHON_TRUE@PYTHON_DEST_DIR = ${prefix}${PYTHON_TARGET_DIR}
++PYTHON_DEST_DIR = ${prefix}${PYTHON_TARGET_DIR}
+ 
+ ##############################################################
+ ###  BUILT

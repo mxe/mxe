@@ -1,0 +1,15 @@
+diff --git a/Makefile.static.in b/Makefile.static.in
+index d7da6a5c..750fd11e 100644
+--- a/Makefile.static.in
++++ b/Makefile.static.in
+@@ -193,8 +193,8 @@ endif
+ CC       ?= $(shell $(WXCONF) --cc)
+ CXX      ?= $(shell $(WXCONF) --cxx)
+ LD        = $(shell $(WXCONF) --ld)
+-CFLAGS   += $(DEFINES) $(shell $(WXCONF) --cflags) -fstack-protector -O2
+-CPPFLAGS += $(DEFINES) $(shell $(WXCONF) --cppflags) -std=c++17 -fstack-protector -O2
++CFLAGS   += $(DEFINES) $(shell $(WXCONF) --cflags) -fstack-protector -O2 -I./
++CPPFLAGS += $(DEFINES) $(shell $(WXCONF) --cppflags) -std=c++17 -fstack-protector -O2 -I./
+ LIBS     += $(shell $(WXCONF) --libs net,adv,aui,core,base)
+ SWIG	  = @SWIG@
+ SWIG_PYTHON_OPT = @SWIG_PYTHON_OPT@
