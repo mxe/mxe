@@ -14,7 +14,7 @@ $(PKG)_DEPS     := cc xz zlib
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://gitlab.gnome.org/GNOME/libxml2/tags' | \
     $(SED) -n "s,.*<a [^>]\+>v\([0-9,\.]\+\)<.*,\\1,p" | \
-    head -1
+    $(SORT) -Vr | head -1
 endef
 
 define $(PKG)_BUILD
