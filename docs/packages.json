@@ -499,7 +499,7 @@
     "tiff": {"version": "4.7.0", "website": "https://download.osgeo.org/libtiff/", "description": "LibTIFF"},
     "tinyxml": {"version": "2.6.2", "website": "https://sourceforge.net/projects/tinyxml/", "description": ""},
     "tinyxml2": {"version": "7.0.1", "website": "http://grinninglizard.com/tinyxml2/", "description": ""},
-    "tre": {"version": "0.8.0", "website": "https://laurikari.net/tre/", "description": "TRE"},
+    "tre": {"version": "0.9.0", "website": "https://laurikari.net/tre/", "description": "TRE"},
     "twolame": {"version": "0.4.0", "website": "http://www.twolame.org/", "description": "TwoLAME"},
     "ucl": {"version": "1.03", "website": "https://www.oberhumer.com/opensource/ucl/", "description": "UCL"},
     "unrtf": {"version": "0.21.10", "website": "https://www.gnu.org/software/unrtf/", "description": "unRTF"},
