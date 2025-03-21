@@ -8,10 +8,12 @@ $(PKG)_GH_CONF  := libical/libical/releases/latest, v
 $(PKG)_DEPS     := cc icu4c
 
 define $(PKG)_BUILD
+    # ical 2 is not compatible with C++17 or newer, so the build is forced to C++11.
     cd '$(BUILD_DIR)' && '$(TARGET)-cmake' \
         -DUSE_BUILTIN_TZDATA=true \
         -DSTATIC_ONLY=$(CMAKE_STATIC_BOOL) \
         -DSHARED_ONLY=$(CMAKE_SHARED_BOOL) \
+        -DCMAKE_CXX_STANDARD=11 \
         '$(SOURCE_DIR)'
 
     # libs are built twice, causing parallel failures
