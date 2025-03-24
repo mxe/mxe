@@ -17,6 +17,12 @@ define $(PKG)_UPDATE
         head -1
 endef
 
+### TODO:
+#  lib*.dll -> bin/	# shared
+#  lib*.dll.a -> lib/	# shared
+#  lib*.a -> lib/	# static, both ?
+
+
 define $(PKG)_BUILD_PRE
     #rm -rf '$(1)'
     #git clone ~/src/biosig-code '$(1)'
@@ -38,34 +44,15 @@ define $(PKG)_BUILD_PRE
     TARGET='$(TARGET)' $(MAKE) -C '$(1)' clean
     TARGET='$(TARGET)' $(MAKE) -C '$(1)' -j '$(JOBS)' lib tools
 
-endef
-
-define $(PKG)_BUILD_POST
-
     $(INSTALL) -m644 '$(1)/biosig4c++/biosig.h'			'$(PREFIX)/$(TARGET)/include/'
     $(INSTALL) -m644 '$(1)/biosig4c++/biosig2.h'		'$(PREFIX)/$(TARGET)/include/'
     $(INSTALL) -m644 '$(1)/biosig4c++/gdftime.h'		'$(PREFIX)/$(TARGET)/include/'
     $(INSTALL) -m644 '$(1)/biosig4c++/biosig-dev.h'		'$(PREFIX)/$(TARGET)/include/'
+    $(INSTALL) -m644 '$(1)/biosig4c++/physicalunits.h'		'$(PREFIX)/$(TARGET)/include/'
 
     $(INSTALL) -m644 '$(1)/biosig4c++/libbiosig.a'		'$(PREFIX)/$(TARGET)/lib/'
-    $(INSTALL) -m644 '$(1)/biosig4c++/libbiosig.def'		'$(PREFIX)/$(TARGET)/lib/'
-    -$(INSTALL) -m644 '$(1)/biosig4c++/libbiosig.dll.a'		'$(PREFIX)/$(TARGET)/lib/'
-    $(INSTALL) -m644 '$(1)/biosig4c++/libbiosig.dll'		'$(PREFIX)/$(TARGET)/bin/'
-    $(INSTALL) -m644 '$(1)/biosig4c++/libbiosig-3.dll'		'$(PREFIX)/$(TARGET)/bin/'
-
     $(INSTALL) -m644 '$(1)/biosig4c++/libgdf.a'			'$(PREFIX)/$(TARGET)/lib/'
-    $(INSTALL) -m644 '$(1)/biosig4c++/libgdf.def'		'$(PREFIX)/$(TARGET)/lib/'
-    -$(INSTALL) -m644 '$(1)/biosig4c++/libgdf.dll.a'		'$(PREFIX)/$(TARGET)/lib/'
-    $(INSTALL) -m644 '$(1)/biosig4c++/libgdf-3.dll'		'$(PREFIX)/$(TARGET)/bin/'
-    $(INSTALL) -m644 '$(1)/biosig4c++/libgdf.dll'		'$(PREFIX)/$(TARGET)/bin/'
-
-    $(INSTALL) -m644 '$(1)/biosig4c++/physicalunits.h'		'$(PREFIX)/$(TARGET)/include/'
     $(INSTALL) -m644 '$(1)/biosig4c++/libphysicalunits.a'	'$(PREFIX)/$(TARGET)/lib/'
-    $(INSTALL) -m644 '$(1)/biosig4c++/libphysicalunits.def'	'$(PREFIX)/$(TARGET)/lib/'
-    -$(INSTALL) -m644 '$(1)/biosig4c++/libphysicalunits.dll.a'	'$(PREFIX)/$(TARGET)/lib/'
-    $(INSTALL) -m644 '$(1)/biosig4c++/libphysicalunits-3.dll'	'$(PREFIX)/$(TARGET)/bin/'
-    $(INSTALL) -m644 '$(1)/biosig4c++/libphysicalunits.dll'	'$(PREFIX)/$(TARGET)/bin/'
-
     $(INSTALL) -m644 '$(1)/biosig4c++/libbiosig.pc'		'$(PREFIX)/$(TARGET)/lib/pkgconfig/'
 
     $(INSTALL) -m644 '$(1)/biosig4c++/save2gdf.exe'		'$(PREFIX)/$(TARGET)/bin/'
@@ -73,61 +60,98 @@ define $(PKG)_BUILD_POST
     $(INSTALL) -m644 '$(1)/biosig4c++/biosig2gdf.exe'		'$(PREFIX)/$(TARGET)/bin/'
     $(INSTALL) -m644 '$(1)/biosig4c++/physicalunits.exe'	'$(PREFIX)/$(TARGET)/bin/'
 
-    ### make release file
-    rm -f $(PREFIX)/$($(PKG)_SUBDIR).$(TARGET).zip
-    cd $(PREFIX)/$(TARGET) && zip $(PREFIX)/$($(PKG)_SUBDIR).$(TARGET).zip \
-		include/biosig.h include/biosig-dev.h include/biosig2.h include/gdftime.h  \
-		lib/libbiosig.a lib/libbiosig.def bin/libbiosig.dll lib/libbiosig.dll.a \
-		lib/libgdf.a lib/libgdf.def bin/libgdf.dll lib/libgdf.dll.a \
-		include/iconv.h \
-		include/physicalunits.h \
-		lib/libphysicalunits.a lib/libphysicalunits.def bin/libphysicalunits.dll lib/libphysicalunits.dll.a
-
-    mkdir -p $(PREFIX)/release/$(TARGET)/include/
+    ### prepare release file
+    rm -rf $(PREFIX)/release/$(TARGET)/
+    mkdir -p $(PREFIX)/release/$(TARGET)/{include,bin,lib,matlab,mathematica}/
     cd $(PREFIX)/$(TARGET) && cp -r \
-		include/biosig.h include/biosig-dev.h include/biosig2.h include/gdftime.h \
-		include/iconv.h \
+		bin/save2gdf.exe bin/biosig_fhir.exe bin/biosig2gdf.exe bin/physicalunits.exe \
+		$(PREFIX)/release/$(TARGET)/bin/
+    cd $(PREFIX)/$(TARGET) && cp -r \
+		include/biosig.h include/biosig-dev.h include/biosig2.h include/gdftime.h  \
 		include/physicalunits.h \
 		$(PREFIX)/release/$(TARGET)/include/
 
-    mkdir -p $(PREFIX)/release/$(TARGET)/lib/
-    cd $(PREFIX)/$(TARGET) && cp -r \
-		lib/libbiosig.a lib/libbiosig.def bin/libbiosig.dll \
-		lib/libgdf.a lib/libgdf.def bin/libgdf.dll \
-		lib/libphysicalunits.a lib/libphysicalunits.def bin/libphysicalunits.dll \
-		$(PREFIX)/release/$(TARGET)/lib/
-    -cd $(PREFIX)/$(TARGET) && cp -r \
-		lib/libbiosig.dll.a \
-		lib/libgdf.dll.a \
-		lib/libphysicalunits.dll.a \
-		$(PREFIX)/release/$(TARGET)/lib/
-
-    mkdir -p $(PREFIX)/release/$(TARGET)/bin/
-    -cp $(PREFIX)/$(TARGET)/bin/save2gdf.exe $(PREFIX)/release/$(TARGET)/bin/
-
-    mkdir -p $(PREFIX)/release/matlab/
-    -cp $(1)/biosig4c++/mex/mex* $(PREFIX)/release/matlab/
-
-    cd '$(1)/biosig4c++/win32' && zip $(PREFIX)/$($(PKG)_SUBDIR).$(TARGET).zip *.bat README
-
 endef
 
 
-define $(PKG)_BUILD_i686-pc-mingw32
-	$($(PKG)_BUILD_PRE)
-	#HOME=/home/as TARGET=$(TARGET) $(MAKE) -C '$(1)' mexw32
-	$($(PKG)_BUILD_POST)
+define $(PKG)_BUILD_STATIC
+    $($(PKG)_BUILD_PRE)
+
+    ## TODO
+    mkdir -p $(PREFIX)/release/$(TARGET)/matlab/
+    -(cp $(1)/biosig4c++/mex/*mex* $(PREFIX)/release/$(TARGET)/matlab/)
+
+    (cd $(1)/biosig4c++ && cp -r \
+		libbiosig.a \
+		libgdf.a \
+		libphysicalunits.a \
+		$(PREFIX)/release/$(TARGET)/lib/)
+
+    # build matlab
+    -$($(PKG)_BUILD_MAT_$(TARGET))
+
+    $($(PKG)_BUILD_RELEASE)
 endef
 
-define $(PKG)_BUILD_i686-w64-mingw32
-	$($(PKG)_BUILD_PRE)
-	#TARGET=$(TARGET) $(MAKE) -C '$(1)' mexw32
-	$($(PKG)_BUILD_POST)
+
+define $(PKG)_BUILD_SHARED
+    $($(PKG)_BUILD_PRE)
+
+    ### TODO: mexw64, mathematica
+
+    $(INSTALL) -m644 '$(1)/biosig4c++/libbiosig.def'		'$(PREFIX)/$(TARGET)/lib/'
+    # $(INSTALL) -m644 '$(1)/biosig4c++/libbiosig.dll.a'		'$(PREFIX)/$(TARGET)/lib/'
+    $(INSTALL) -m644 '$(1)/biosig4c++/libbiosig.dll'		'$(PREFIX)/$(TARGET)/bin/'
+    $(INSTALL) -m644 '$(1)/biosig4c++/libbiosig-3.dll'		'$(PREFIX)/$(TARGET)/bin/'
+
+    $(INSTALL) -m644 '$(1)/biosig4c++/libgdf.def'		'$(PREFIX)/$(TARGET)/lib/'
+    # $(INSTALL) -m644 '$(1)/biosig4c++/libgdf.dll.a'		'$(PREFIX)/$(TARGET)/lib/'
+    $(INSTALL) -m644 '$(1)/biosig4c++/libgdf-3.dll'		'$(PREFIX)/$(TARGET)/bin/'
+    $(INSTALL) -m644 '$(1)/biosig4c++/libgdf.dll'		'$(PREFIX)/$(TARGET)/bin/'
+
+    $(INSTALL) -m644 '$(1)/biosig4c++/libphysicalunits.def'	'$(PREFIX)/$(TARGET)/lib/'
+    # $(INSTALL) -m644 '$(1)/biosig4c++/libphysicalunits.dll.a'	'$(PREFIX)/$(TARGET)/lib/'
+    $(INSTALL) -m644 '$(1)/biosig4c++/libphysicalunits-3.dll'	'$(PREFIX)/$(TARGET)/bin/'
+    $(INSTALL) -m644 '$(1)/biosig4c++/libphysicalunits.dll'	'$(PREFIX)/$(TARGET)/bin/'
+
+    (cd $(1)/biosig4c++ && cp -r \
+		libbiosig.dll \
+		libgdf.dll \
+		libphysicalunits.dll \
+		$(PREFIX)/release/$(TARGET)/lib/)
+
+    $($(PKG)_BUILD_RELEASE)
 endef
 
-define $(PKG)_BUILD_x86_64-w64-mingw32
-	$($(PKG)_BUILD_PRE)
-	#TARGET=$(TARGET) $(MAKE) -C '$(1)' mexw64
-	$($(PKG)_BUILD_POST)
+
+define $(PKG)_BUILD_MAT_x86_64-w64-mingw32.static
+	TARGET=$(TARGET) $(MAKE) -C '$(1)'/biosig4c++ mexw64
+	-(MLINKDIR=/usr/local/Wolfram/Mathematica/14.0.0/ TARGET=$(TARGET) $(MAKE) -C '$(1)'/biosig4c++ win32mma)
+endef
+define $(PKG)_BUILD_MAT_i686-w64-mingw32.static
+	TARGET=$(TARGET) $(MAKE) -C '$(1)'/biosig4c++ mexw32
+	-(MLINKDIR=/usr/local/Wolfram/Mathematica/14.0.0/ TARGET=$(TARGET) $(MAKE) -C '$(1)'/biosig4c++ win32mma)
+endef
+define $(PKG)_BUILD_MAT_x86_64-w64-mingw32.shared
+	TARGET=$(TARGET) $(MAKE) -C '$(1)'/biosig4c++ mexw64
+endef
+define $(PKG)_BUILD_MAT_i686-w64-mingw32.shared
+	TARGET=$(TARGET) $(MAKE) -C '$(1)'/biosig4c++ mexw32
+endef
+
+
+define $(PKG)_BUILD_RELEASE
+    ### make release file
+    rm -f $(PREFIX)/release/$($(PKG)_SUBDIR).$(TARGET).zip
+
+    ### FIXME
+    -cp $(1)/biosig4c++/mex/*mex* $(PREFIX)/release/$(TARGET)/matlab/
+    -cp $(1)/biosig4c++/mma/biosig.exe $(PREFIX)/release/$(TARGET)/mathematica/
+
+    cd '$(1)/biosig4c++/win32' && cp *.bat  $(PREFIX)/release/$(TARGET)/bin/
+    cd '$(1)/biosig4c++/win32' && cp README $(PREFIX)/release/$(TARGET)/
+
+    cd $(PREFIX)/release/ && zip -r $(PREFIX)/release/$($(PKG)_SUBDIR).$(TARGET).zip $(TARGET)
+
 endef
 
