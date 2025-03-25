@@ -5,7 +5,7 @@
 #include <portaudio.h>
 #include <stdio.h>
 
-int main()
+int main(void)
 {
     int i;
     const PaDeviceInfo *device_info;
