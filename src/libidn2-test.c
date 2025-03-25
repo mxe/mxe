@@ -11,7 +11,7 @@
 #include <idn2.h> /* idn2_lookup_ul, IDN2_OK, idn2_strerror, idn2_strerror_name */
 
 int
-main ()
+main (void)
 {
   int rc;
   char src[BUFSIZ];
