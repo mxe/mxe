@@ -14,8 +14,8 @@ index 1111111..2222222 100644
 --- a/src/plugins/multimedia/ffmpeg/qffmpegscreencapture_dxgi.cpp
 +++ b/src/plugins/multimedia/ffmpeg/qffmpegscreencapture_dxgi.cpp
 @@ -14,8 +14,8 @@
- #include <qwaitcondition.h>
  #include <qmutex.h>
+ #include <QtCore/private/qsystemerror_p.h>
  
 -#include "D3d11.h"
 -#include "dxgi1_2.h"
@@ -73,9 +73,9 @@ diff --git a/src/plugins/multimedia/ffmpeg/qffmpegscreencapture_dxgi.cpp b/src/p
 index 1111111..2222222 100644
 --- a/src/plugins/multimedia/ffmpeg/qffmpegscreencapture_dxgi.cpp
 +++ b/src/plugins/multimedia/ffmpeg/qffmpegscreencapture_dxgi.cpp
-@@ -7,7 +7,7 @@
+@@ -6,7 +6,7 @@
+ #include "qabstractvideobuffer.h"
  #include <private/qmultimediautils_p.h>
- #include <private/qwindowsmultimediautils_p.h>
  #include <private/qvideoframe_p.h>
 -#include <qtgui/qscreen_platform.h>
 +#include <QtGui/qscreen_platform.h>
