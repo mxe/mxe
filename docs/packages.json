@@ -5,7 +5,7 @@
     "alure": {"version": "1.2", "website": "https://kcat.strangesoft.net/alure.html", "description": ""},
     "apr": {"version": "1.5.2", "website": "https://apr.apache.org/", "description": "APR"},
     "apr-util": {"version": "1.5.4", "website": "https://apr.apache.org/", "description": "APR-util"},
-    "armadillo": {"version": "12.0.1", "website": "https://arma.sourceforge.io/", "description": "Armadillo C++ linear algebra library"},
+    "armadillo": {"version": "12.8.4", "website": "https://arma.sourceforge.io/", "description": "Armadillo C++ linear algebra library"},
     "aspell": {"version": "0.60.6.1", "website": "http://aspell.net/", "description": "Aspell"},
     "assimp": {"version": "5.4.1", "website": "https://www.assimp.org/", "description": "Assimp Open Asset Import Library"},
     "atk": {"version": "2.36.0", "website": "https://gtk.org/", "description": "ATK"},
