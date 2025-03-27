@@ -3,8 +3,8 @@
 
 PKG             := stimfit
 $(PKG)_IGNORE   := 
-$(PKG)_VERSION  := 0.16.6
-$(PKG)_CHECKSUM := efd88f5c167fbeb2c00cbcb4b2a2293fa4d0ef6507617cc26262ffa0f2e08c6f
+$(PKG)_VERSION  := 0.16.7
+$(PKG)_CHECKSUM := 237ba9d6237c316f489b178fc7d03e707ad164156d7183002469ca11cce4baeb
 $(PKG)_SUBDIR   := stimfit-$($(PKG)_VERSION)debian
 $(PKG)_FILE     := stimfit-$($(PKG)_VERSION)debian.tar.gz
 $(PKG)_URL      := https://github.com/neurodroid/stimfit/archive/refs/tags/v$($(PKG)_VERSION).tar.gz

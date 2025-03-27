@@ -13,12 +13,3 @@ index d7da6a5c..991f87b6 100644
  
  LIBS     += -lfftw3
  
-@@ -230,7 +232,7 @@ ifeq (mingw,$(findstring mingw, $(WXCONF)))
-   LIBS   += -lgfortran -lquadmath
- endif
- 
--@BUILD_PYTHON_TRUE@PYTHON_DEST_DIR = ${prefix}${PYTHON_TARGET_DIR}
-+PYTHON_DEST_DIR = ${prefix}${PYTHON_TARGET_DIR}
- 
- ##############################################################
- ###  BUILT
