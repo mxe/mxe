@@ -4,8 +4,8 @@ PKG             := glib
 $(PKG)_WEBSITE  := https://gtk.org/
 $(PKG)_DESCR    := GLib
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.83.3
-$(PKG)_CHECKSUM := d0c65318bb2e3fa594277cf98a71cffaf5f666c078db39dcec121757b2ba328d
+$(PKG)_VERSION  := 2.84.0
+$(PKG)_CHECKSUM := f8823600cb85425e2815cfad82ea20fdaa538482ab74e7293d58b3f64a5aff6a
 $(PKG)_SUBDIR   := glib-$($(PKG)_VERSION)
 $(PKG)_FILE     := glib-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.gnome.org/sources/glib/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
@@ -30,6 +30,7 @@ define $(PKG)_BUILD_$(BUILD)
     '$(MXE_MESON_NATIVE_WRAPPER)' \
         --buildtype=release \
         -Dtests=false \
+        $(if $(BUILD_STATIC),-Dintrospection=disabled) \
         '$(BUILD_DIR)' '$(SOURCE_DIR)'
     '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)'
     '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)' install
