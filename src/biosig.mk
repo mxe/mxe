@@ -4,8 +4,8 @@
 PKG             := biosig
 $(PKG)_WEBSITE  := http://biosig.sf.net/
 $(PKG)_DESCR    := biosig
-$(PKG)_VERSION  := 2.6.1
-$(PKG)_CHECKSUM := 558ee17cd7b4aa1547e98e52bb85cccccb7f7a81600f9bef3a50cd5b34d0729e
+$(PKG)_VERSION  := 3.9.0
+$(PKG)_CHECKSUM := e5b353a1500e6f80150e1236919aef9679410a2337ee81ed056b3f306b25611e
 $(PKG)_SUBDIR   := biosig-$($(PKG)_VERSION)
 $(PKG)_FILE     := biosig-$($(PKG)_VERSION).src.tar.xz
 $(PKG)_URL      := https://downloads.sourceforge.net/project/biosig/BioSig%20for%20C_C%2B%2B/src/$($(PKG)_FILE)
@@ -62,7 +62,7 @@ define $(PKG)_BUILD_PRE
 
     ### prepare release file
     rm -rf $(PREFIX)/release/$(TARGET)/
-    mkdir -p $(PREFIX)/release/$(TARGET)/{include,bin,lib,matlab,mathematica}/
+    mkdir -p $(PREFIX)/release/$(TARGET)/{include,bin,lib/pkgconfig,matlab,mathematica}/
     cd $(PREFIX)/$(TARGET) && cp -r \
 		bin/save2gdf.exe bin/biosig_fhir.exe bin/biosig2gdf.exe bin/physicalunits.exe \
 		$(PREFIX)/release/$(TARGET)/bin/
@@ -70,6 +70,8 @@ define $(PKG)_BUILD_PRE
 		include/biosig.h include/biosig-dev.h include/biosig2.h include/gdftime.h  \
 		include/physicalunits.h \
 		$(PREFIX)/release/$(TARGET)/include/
+    cd $(PREFIX)/$(TARGET) && cp -r \
+		'$(1)/biosig4c++/libbiosig.pc'	'$(PREFIX)/release/$(TARGET)/lib/pkgconfig/'
 
 endef
 
