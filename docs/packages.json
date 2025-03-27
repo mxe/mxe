@@ -451,6 +451,7 @@
     "qtwinextras": {"version": "5.15.16", "website": "https://www.qt.io/", "description": "Qt"},
     "qtxlsxwriter": {"version": "01eb671", "website": "https://github.com/VSRonin/QtXlsxWriter/", "description": "QtXlsxWriter"},
     "qtxmlpatterns": {"version": "5.15.16", "website": "https://www.qt.io/", "description": "Qt"},
+    "quantlib": {"version": "1.37", "website": "https://www.quantlib.org/", "description": "QuantLib"},
     "quazip": {"version": "0.8.1", "website": "https://github.com/stachenov/quazip", "description": ""},
     "qwt": {"version": "6.1.5", "website": "https://qwt.sourceforge.io/", "description": "Qwt"},
     "qwtplot3d": {"version": "d80c908", "website": "https://github.com/sintegrial/qwtplot3d", "description": "QwtPlot3D"},
