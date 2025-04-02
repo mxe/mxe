@@ -5,7 +5,7 @@ include src/qt/qt6/qt6-conf.mk
 PKG := qt6-qtimageformats
 $(eval $(QT6_METADATA))
 
-$(PKG)_CHECKSUM := 049bfb99845e4801672aca07c3c4fc4c140f932a3a33faa899419579e33ef1c8
+$(PKG)_CHECKSUM := 2047c6242a57bf97cf40079fa9f91752c137cd9ae84760faa9a2e5e8a440606f
 $(PKG)_DEPS     := cc qt6-conf qt6-qtbase jasper libmng libwebp tiff
 
 QT6_PREFIX   = '$(PREFIX)/$(TARGET)/$(MXE_QT6_ID)'
