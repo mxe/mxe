@@ -114,7 +114,7 @@
     "gstreamer": {"version": "1.20.3", "website": "https://gstreamer.freedesktop.org/modules/gstreamer.html", "description": ""},
     "gta": {"version": "1.0.8", "website": "https://www.nongnu.org/gta/", "description": ""},
     "gtk2": {"version": "2.24.29", "website": "https://gtk.org/", "description": "GTK+"},
-    "gtk3": {"version": "3.24.32", "website": "https://gtk.org/", "description": "GTK+"},
+    "gtk3": {"version": "3.24.43", "website": "https://gtk.org/", "description": "GTK+"},
     "gtkglarea": {"version": "2.0.1", "website": "https://www.mono-project.com/GtkGLArea/", "description": "GtkGLArea"},
     "gtkglext": {"version": "1.2.0", "website": "https://gtkglext.sourceforge.io/", "description": "GtkGLExt"},
     "gtkglextmm": {"version": "1.2.0", "website": "https://gtkglext.sourceforge.io/", "description": "GtkGLExtmm"},
