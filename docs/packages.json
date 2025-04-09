@@ -354,7 +354,7 @@
     "physfs": {"version": "3.0.2", "website": "https://icculus.org/physfs/", "description": ""},
     "picomodel": {"version": "1142ad8", "website": "https://code.google.com/p/picomodel/", "description": ""},
     "pire": {"version": "0.0.6", "website": "https://github.com/yandex/pire", "description": "PIRE"},
-    "pixman": {"version": "0.43.4", "website": "https://cairographics.org/", "description": ""},
+    "pixman": {"version": "0.44.2", "website": "https://cairographics.org/", "description": ""},
     "pkgconf": {"version": "da179fd", "website": "https://github.com/pkgconf/pkgconf", "description": ""},
     "plib": {"version": "1.8.5-rc1", "website": "https://plib.sourceforge.io/", "description": "Plib"},
     "plibc": {"version": "cd7ed09", "website": "https://plibc.sourceforge.io/", "description": "Plibc"},
