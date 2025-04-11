@@ -28,4 +28,5 @@ define $(PKG)_BUILD
         --disable-readline \
         CFLAGS="-Os -DSQLITE_THREADSAFE=1 -DSQLITE_ENABLE_COLUMN_METADATA"
     $(MAKE) -C '$(1)' -j 1 install
+    $(if $(BUILD_SHARED),mv $(PREFIX)/$(TARGET)/lib/libsqlite3.dll $(PREFIX)/$(TARGET)/bin/,)
 endef
