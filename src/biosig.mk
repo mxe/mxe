@@ -50,11 +50,6 @@ define $(PKG)_BUILD_PRE
     $(INSTALL) -m644 '$(1)/biosig4c++/biosig-dev.h'		'$(PREFIX)/$(TARGET)/include/'
     $(INSTALL) -m644 '$(1)/biosig4c++/physicalunits.h'		'$(PREFIX)/$(TARGET)/include/'
 
-    $(INSTALL) -m644 '$(1)/biosig4c++/libbiosig.a'		'$(PREFIX)/$(TARGET)/lib/'
-    $(INSTALL) -m644 '$(1)/biosig4c++/libgdf.a'			'$(PREFIX)/$(TARGET)/lib/'
-    $(INSTALL) -m644 '$(1)/biosig4c++/libphysicalunits.a'	'$(PREFIX)/$(TARGET)/lib/'
-    $(INSTALL) -m644 '$(1)/biosig4c++/libbiosig.pc'		'$(PREFIX)/$(TARGET)/lib/pkgconfig/'
-
     $(INSTALL) -m644 '$(1)/biosig4c++/save2gdf.exe'		'$(PREFIX)/$(TARGET)/bin/'
     $(INSTALL) -m644 '$(1)/biosig4c++/biosig_fhir.exe'		'$(PREFIX)/$(TARGET)/bin/'
     $(INSTALL) -m644 '$(1)/biosig4c++/biosig2gdf.exe'		'$(PREFIX)/$(TARGET)/bin/'
@@ -79,15 +74,14 @@ endef
 define $(PKG)_BUILD_STATIC
     $($(PKG)_BUILD_PRE)
 
+    $(INSTALL) -m644 '$(1)/biosig4c++/libbiosig.a'		'$(PREFIX)/$(TARGET)/lib/'
+    $(INSTALL) -m644 '$(1)/biosig4c++/libgdf.a'			'$(PREFIX)/$(TARGET)/lib/'
+    $(INSTALL) -m644 '$(1)/biosig4c++/libphysicalunits.a'	'$(PREFIX)/$(TARGET)/lib/'
+    $(INSTALL) -m644 '$(1)/biosig4c++/libbiosig.pc'		'$(PREFIX)/$(TARGET)/lib/pkgconfig/'
+
     ## TODO
     mkdir -p $(PREFIX)/release/$(TARGET)/matlab/
     -(cp $(1)/biosig4c++/mex/*mex* $(PREFIX)/release/$(TARGET)/matlab/)
-
-    (cd $(1)/biosig4c++ && cp -r \
-		libbiosig.a \
-		libgdf.a \
-		libphysicalunits.a \
-		$(PREFIX)/release/$(TARGET)/lib/)
 
     # build matlab
     -$($(PKG)_BUILD_MAT_$(TARGET))
