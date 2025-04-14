@@ -7,7 +7,9 @@ $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.2.7
 $(PKG)_CHECKSUM := 69a1722f874d91cd1c9e742b72df49e0fab02890782cf794791c3104cee868c6
 $(PKG)_GH_CONF  := wxWidgets/wxWidgets/releases/latest,v,,,,.tar.bz2
+$(PKG)_URL      := https://github.com/wxWidgets/wxWidgets/releases/download/v$($(PKG)_VERSION)/wxWidgets-($(PKG)_VERSION).tar.bz2
 $(PKG)_DEPS     := cc expat jpeg libiconv libpng sdl tiff zlib
+
 
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
