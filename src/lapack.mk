@@ -30,5 +30,5 @@ define $(PKG)_BUILD
     '$(TARGET)-gfortran' \
         -W -Wall -Werror -pedantic \
         '$(PWD)/src/$(PKG)-test.c' -o '$(PREFIX)/$(TARGET)/bin/test-lapacke.exe' \
-        `'$(TARGET)-pkg-config' lapacke openblas --cflags --libs`
+        `'$(TARGET)-pkg-config' lapacke --cflags --libs`
 endef
