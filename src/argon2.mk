@@ -9,9 +9,9 @@ $(PKG)_DEPS     := cc
 
 define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j '$(JOBS)' \
-        CC=$(TARGET)-gcc \
-        AR=$(TARGET)-ar \
-        PREFIX=$(PREFIX)/$(TARGET)
+        CC='$(TARGET)-gcc' \
+        AR='$(TARGET)-ar' \
+        PREFIX='$(PREFIX)/$(TARGET)'
 
-    $(MAKE) -C '$(1)' -j 1 PREFIX=$(PREFIX)/$(TARGET) install
+    $(MAKE) -C '$(1)' -j 1 PREFIX='$(PREFIX)/$(TARGET)' install
 endef
