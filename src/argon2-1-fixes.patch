@@ -1,0 +1,87 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Wed, 16 Apr 2025 12:56:05 +0200
+Subject: [PATCH 1/2] fix mingw cross detection using MXE
+
+
+diff --git a/Makefile b/Makefile
+index 1111111..2222222 100644
+--- a/Makefile
++++ b/Makefile
+@@ -62,7 +62,11 @@ $(info Building with optimizations for $(OPTTARGET))
+ endif
+ 
+ BUILD_PATH := $(shell pwd)
+-KERNEL_NAME := $(shell uname -s)
++ifeq ($(findstring mingw, $(PREFIX)), mingw)
++	KERNEL_NAME := MINGW
++else
++	KERNEL_NAME := $(shell uname -s)
++endif
+ MACHINE_NAME := $(shell uname -m)
+ 
+ LIB_NAME = argon2
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Wed, 16 Apr 2025 13:23:15 +0200
+Subject: [PATCH 2/2] fix static/shared distinction for MXE
+
+
+diff --git a/Makefile b/Makefile
+index 1111111..2222222 100644
+--- a/Makefile
++++ b/Makefile
+@@ -20,6 +20,7 @@ BENCH = bench
+ GENKAT = genkat
+ ARGON2_VERSION ?= ZERO
+ 
++
+ # installation parameters for staging area and final installation path
+ # Note; if Linux and not Debian/Ubuntu version also add lib override to make command-line
+ #       for RedHat/Fedora, add: LIBRARY_REL=lib64
+@@ -97,8 +98,15 @@ ifeq ($(findstring CYGWIN, $(KERNEL_NAME)), CYGWIN)
+ 	PC_EXTRA_LIBS ?=
+ endif
+ ifeq ($(findstring MINGW, $(KERNEL_NAME)), MINGW)
++    ifeq ($(findstring shared, $(PREFIX)), shared)
++	MXE_SHARED := 1
+ 	LIB_EXT := dll
+ 	LIB_CFLAGS := -shared -Wl,--out-implib,lib$(LIB_NAME).$(LIB_EXT).a
++    else
++	MXE_STATIC := 1
++	LIB_EXT := a
++	LIB_CFLAGS := -static -Wl
++    endif
+ 	PC_EXTRA_LIBS ?=
+ endif
+ ifeq ($(findstring MSYS, $(KERNEL_NAME)), MSYS)
+@@ -128,7 +136,14 @@ LINKED_LIB_SH := lib$(LIB_NAME).$(LINKED_LIB_EXT)
+ endif
+ 
+ 
+-LIBRARIES = $(LIB_SH) $(LIB_ST)
++ifdef MXE_SHARED
++	LIBRARIES = $(LIB_SH) $(LIB_SH).a
++else ifdef MXE_STATIC
++	LIBRARIES = $(LIB_ST)
++else
++	LIBRARIES = $(LIB_SH) $(LIB_ST)
++endif
++
+ HEADERS = include/argon2.h
+ 
+ INSTALL = install
+@@ -185,6 +200,8 @@ $(GENKAT):      $(SRC) $(SRC_GENKAT)
+ $(LIB_SH): 	$(SRC)
+ 		$(CC) $(CFLAGS) $(LIB_CFLAGS) $(LDFLAGS) $(SO_LDFLAGS) $^ -o $@
+ 
++$(LIB_SH).a:	$(LIB_SH)
++
+ $(LIB_ST): 	$(OBJ)
+ 		ar rcs $@ $^
+ 
