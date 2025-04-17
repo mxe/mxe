@@ -14,4 +14,8 @@ define $(PKG)_BUILD
         PREFIX='$(PREFIX)/$(TARGET)'
 
     $(MAKE) -C '$(1)' -j 1 PREFIX='$(PREFIX)/$(TARGET)' install
+    # Move the dll from lib to bin
+    $(if $(BUILD_SHARED), mv '$(PREFIX)/$(TARGET)/lib/libargon2.dll' '$(PREFIX)/$(TARGET)/bin/')
+    # Remove binary executable meant for host
+    rm '$(PREFIX)/$(TARGET)/bin/argon2'
 endef
