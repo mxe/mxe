@@ -6,7 +6,7 @@ $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.4.5
 $(PKG)_CHECKSUM := 07803adff502edf9b294ba1953cd99e2729d728bcb13c20f823633f7507040a6
 $(PKG)_GH_CONF  := mariadb-corporation/mariadb-connector-c/releases,v
-$(PKG)_DEPS     := cc openssl zlib zstd
+$(PKG)_DEPS     := cc dlfcn-win32 openssl zlib zstd
 
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && '$(TARGET)-cmake' \
