@@ -241,7 +241,7 @@
     "libplist": {"version": "2.0.0", "website": "https://github.com/libimobiledevice/libplist", "description": ""},
     "libpng": {"version": "1.6.47", "website": "http://www.libpng.org/", "description": ""},
     "libpsl": {"version": "0.21.5", "website": "https://github.com/rockdaboot/libpsl", "description": "C library for the Public Suffix List"},
-    "libqrencode": {"version": "4.0.2", "website": "https://fukuchi.org/works/qrencode/", "description": "a fast and compact QR Code encoding library"},
+    "libqrencode": {"version": "4.1.1", "website": "https://fukuchi.org/works/qrencode/", "description": "a fast and compact QR Code encoding library"},
     "libraw": {"version": "0.21.1", "website": "https://libraw.org", "description": "A library for reading RAW files obtained from digital photo cameras"},
     "librosco": {"version": "0.1.11", "website": "https://github.com/colinbourassa/librosco/", "description": ""},
     "librsvg": {"version": "2.40.21", "website": "https://librsvg.sourceforge.io/", "description": ""},
