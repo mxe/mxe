@@ -4,8 +4,8 @@ PKG             := wxwidgets
 $(PKG)_WEBSITE  := https://www.wxwidgets.org/
 $(PKG)_DESCR    := wxWidgets
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.2.7
-$(PKG)_CHECKSUM := 69a1722f874d91cd1c9e742b72df49e0fab02890782cf794791c3104cee868c6
+$(PKG)_VERSION  := 3.2.8
+$(PKG)_CHECKSUM := c74784904109d7229e6894c85cfa068f1106a4a07c144afd78af41f373ee0fe6
 $(PKG)_GH_CONF  := wxWidgets/wxWidgets/releases/latest,v,,,,.tar.bz2
 $(PKG)_DEPS     := cc expat jpeg libiconv libpng sdl tiff zlib
 
