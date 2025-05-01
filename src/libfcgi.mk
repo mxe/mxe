@@ -5,8 +5,8 @@ PKG             := libfcgi
 $(PKG)_WEBSITE  := https://github.com/FastCGI-Archives
 $(PKG)_DESCR    := FastCGI
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.4.5
-$(PKG)_CHECKSUM := 92b0111a98d8636e06c128444a3d4d7a720bdd54e6ee4dd0c7b67775b1b0abff
+$(PKG)_VERSION  := 2.4.6
+$(PKG)_CHECKSUM := 39af4fb21a6d695a5f0b1c4fa95776d2725f6bc6c77680943a2ab314acd505c1
 $(PKG)_GH_CONF  := FastCGI-Archives/fcgi2/tags
 $(PKG)_DEPS     := cc
 
