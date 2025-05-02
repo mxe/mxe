@@ -79,6 +79,9 @@ define $(PKG)_BUILD_$(BUILD)
     rm -rf '$(PREFIX)/$(TARGET)/$(MXE_QT6_ID)'
     '$(TARGET)-cmake' -S '$(SOURCE_DIR)' -B '$(BUILD_DIR)' \
         -G Ninja \
+        -DCMAKE_VERBOSE_MAKEFILE=ON \
+        -DCMAKE_CC_COMPILER='$(BUILD_CC)' \
+        -DCMAKE_CXX_COMPILER='$(BUILD_CXX)' \
         -DCMAKE_INSTALL_PREFIX='$(PREFIX)/$(TARGET)/$(MXE_QT6_ID)' \
         -DQT_BUILD_{TESTS,EXAMPLES}=OFF \
         -DBUILD_WITH_PCH=OFF \
