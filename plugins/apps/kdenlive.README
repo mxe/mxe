@@ -1,0 +1,16 @@
+I use the following mxe/settings.mk:
+
+kdenlive_SOURCE_TREE := /path/to/kdenlive/source
+MXE_TARGETS :=  x86_64-w64-mingw32.shared.posix
+override MXE_PLUGIN_DIRS += \
+	plugins/multimedia \
+	plugins/kdeframeworks \
+	plugins/apps
+# openssl recognition fails on Debian sid
+REQUIREMENTS := $(filter-out openssl ,$(REQUIREMENTS))
+
+then from mxe/ directory:
+
+make kdenlive
+plugins/apps/deploy_kdenlive.sh z
+

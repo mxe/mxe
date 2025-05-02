@@ -18,7 +18,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(BUILD_DIR)' && AS='$(PREFIX)/$(BUILD)/bin/nasm' '$(SOURCE_DIR)/configure'\
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure'\
         $(MXE_CONFIGURE_OPTS) \
         --cross-prefix='$(TARGET)'- \
         --enable-win32thread \
