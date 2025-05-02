@@ -15,7 +15,8 @@ define $(PKG)_BUILD
     # custom makefile so build in source
     cd '$(SOURCE_DIR)' && ./configure \
         --host='$(TARGET)' \
-        --prefix='$(PREFIX)/$(TARGET)'
+        --prefix='$(PREFIX)/$(TARGET)' \
+        CFLAGS='-std=gnu99'
     $(MAKE) -C '$(SOURCE_DIR)' -f Makefile.mxe -j '$(JOBS)' \
         $(if $(BUILD_STATIC),install-static,install-shared) \
         TARGET=$(TARGET) bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=

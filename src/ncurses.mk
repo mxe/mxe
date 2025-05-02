@@ -44,7 +44,8 @@ define $(PKG)_BUILD
         --with-pkg-config-libdir='$(PREFIX)/$(TARGET)/lib/pkgconfig' \
         $(if $(BUILD_STATIC), \
             --with-normal    --without-shared --with-static, \
-            --without-normal --without-static --with-shared)
+            --without-normal --without-static --with-shared) \
+        CFLAGS='-std=gnu99'
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 endef
@@ -55,7 +56,8 @@ define $(PKG)_BUILD_$(BUILD)
         --prefix=$(PREFIX)/$(TARGET) \
         --with-normal \
         --without-shared \
-        --with-static
+        --with-static \
+        CFLAGS='-std=gnu99'
     $(MAKE) -C '$(BUILD_DIR)/include' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)/progs'   -j '$(JOBS)' tic
     $(INSTALL) -m755 '$(BUILD_DIR)/progs/tic' '$(PREFIX)/$(TARGET)/bin'
