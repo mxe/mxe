@@ -3,8 +3,8 @@
 PKG             := cmake
 $(PKG)_WEBSITE  := https://www.cmake.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.31.6
-$(PKG)_CHECKSUM := 653427f0f5014750aafff22727fb2aa60c6c732ca91808cfb78ce22ddd9e55f0
+$(PKG)_VERSION  := 3.31.7
+$(PKG)_CHECKSUM := a6d2eb1ebeb99130dfe63ef5a340c3fdb11431cce3d7ca148524c125924cea68
 $(PKG)_SUBDIR   := cmake-$($(PKG)_VERSION)
 $(PKG)_FILE     := cmake-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://www.cmake.org/files/v$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
@@ -16,7 +16,7 @@ define $(PKG)_UPDATE
     echo '    make `make show-downstream-deps-cmake` MXE_TARGETS="$(MXE_TARGET_LIST)"' >&2;
     echo '' >&2;
     $(WGET) -q -O- 'https://www.cmake.org/cmake/resources/software.html' | \
-    $(SED) -n 's,.*cmake-\([0-9.]*\)\.tar.*,\1,p' | \
+    $(SED) -n 's,.*cmake-\(3[0-9.]*\)\.tar.*,\1,p' | \
     $(SORT) -V | \
     tail -1
 endef

@@ -6,9 +6,10 @@ $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.4.5
 $(PKG)_CHECKSUM := 07803adff502edf9b294ba1953cd99e2729d728bcb13c20f823633f7507040a6
 $(PKG)_GH_CONF  := mariadb-corporation/mariadb-connector-c/releases,v
-$(PKG)_DEPS     := cc openssl zlib zstd
+$(PKG)_DEPS     := cc dlfcn-win32 openssl zlib zstd
 
 define $(PKG)_BUILD
+    rm -rf '$(PREFIX)/$(TARGET)/include/mariadb' '$(PREFIX)/$(TARGET)/lib/mariadb'
     cd '$(BUILD_DIR)' && '$(TARGET)-cmake' \
         -DDISABLE_SHARED=$(CMAKE_STATIC_BOOL) \
         -DDISABLE_STATIC=$(CMAKE_SHARED_BOOL) \
@@ -25,6 +26,8 @@ define $(PKG)_BUILD
         mv '$(PREFIX)/$(TARGET)/lib/mariadb/libmariadbclient.a' '$(PREFIX)/$(TARGET)/lib/mariadb/libmariadb.a',
         mv '$(PREFIX)/$(TARGET)/lib/mariadb/liblibmariadb.dll.a' '$(PREFIX)/$(TARGET)/lib/mariadb/libmariadb.a'
         mv '$(PREFIX)/$(TARGET)/lib/mariadb/libmariadb.dll' '$(PREFIX)/$(TARGET)/bin/')
+    # workaround for linking to 32-bit shared libmariadb.a
+    $(if $(BUILD_SHARED), '$(SED)' -i -e 's/^#define STDCALL __stdcall/#define STDCALL/;' '$(PREFIX)/$(TARGET)/include/mariadb/mysql.h')
 
     # build test
     '$(TARGET)-g++' \

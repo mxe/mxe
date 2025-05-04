@@ -3,8 +3,8 @@
 PKG             := pixman
 $(PKG)_WEBSITE  := https://cairographics.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.44.2
-$(PKG)_CHECKSUM := 6349061ce1a338ab6952b92194d1b0377472244208d47ff25bef86fc71973466
+$(PKG)_VERSION  := 0.46.0
+$(PKG)_CHECKSUM := 02d9ff7b8458ef61731c3d355f854bbf461fd0a4d3563c51f1c1c7b00638050d
 $(PKG)_SUBDIR   := pixman-$($(PKG)_VERSION)
 $(PKG)_FILE     := pixman-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://cairographics.org/releases/$($(PKG)_FILE)

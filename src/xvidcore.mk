@@ -21,7 +21,8 @@ define $(PKG)_BUILD
         '$(SOURCE_DIR)/build/generic/configure.in'
     cd '$(SOURCE_DIR)/build/generic' && autoreconf -fi
     cd '$(SOURCE_DIR)/build/generic' && ./configure \
-        $(MXE_CONFIGURE_OPTS)
+        $(MXE_CONFIGURE_OPTS) \
+        CFLAGS='-std=gnu99'
     $(MAKE) -C '$(SOURCE_DIR)/build/generic' -j 1 BUILD_DIR='$(BUILD_DIR)' \
         $(if $(BUILD_STATIC),SHARED,STATIC)_LIB=
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/include'
