@@ -182,7 +182,7 @@
     "libdvdnav": {"version": "6.0.0", "website": "https://www.videolan.org/developers/libdvdnav.html", "description": ""},
     "libdvdread": {"version": "6.0.1", "website": "https://www.videolan.org/developers/libdvdnav.html", "description": ""},
     "libdwarf": {"version": "0.9.2", "website": "https://www.prevanders.net/", "description": ""},
-    "libepoxy": {"version": "1.5.9", "website": "https://github.com/anholt/libepoxy", "description": ""},
+    "libepoxy": {"version": "1.5.10", "website": "https://github.com/anholt/libepoxy", "description": ""},
     "libevent": {"version": "2.1.11", "website": "https://libevent.org/", "description": ""},
     "libexif": {"version": "0.6.22", "website": "https://github.com/libexif/libexif", "description": "libexif"},
     "libf2c": {"version": "1", "website": "https://www.netlib.org/f2c/", "description": ""},

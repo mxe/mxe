@@ -23,7 +23,8 @@ define $(PKG)_BUILD
         --prefix='$(PREFIX)/$(TARGET)' \
         --with-sdlpango \
         --with-sdlnet \
-        --with-rsvg
+        --with-rsvg \
+        CFLAGS='-std=gnu89'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 endef
 
