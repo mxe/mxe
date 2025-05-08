@@ -4,8 +4,8 @@ PKG             := sqlite
 $(PKG)_WEBSITE  := https://www.sqlite.org/
 $(PKG)_DESCR    := SQLite
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3490100
-$(PKG)_CHECKSUM := 106642d8ccb36c5f7323b64e4152e9b719f7c0215acf5bfeac3d5e7f97b59254
+$(PKG)_VERSION  := 3490200
+$(PKG)_CHECKSUM := 5c6d8697e8a32a1512a9be5ad2b2e7a891241c334f56f8b0fb4fc6051e1652e8
 $(PKG)_SUBDIR   := $(PKG)-autoconf-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-autoconf-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://www.sqlite.org/2025/$($(PKG)_FILE)
@@ -28,5 +28,4 @@ define $(PKG)_BUILD
         --disable-readline \
         CFLAGS="-Os -DSQLITE_THREADSAFE=1 -DSQLITE_ENABLE_COLUMN_METADATA"
     $(MAKE) -C '$(1)' -j 1 install
-    $(if $(BUILD_SHARED),mv $(PREFIX)/$(TARGET)/lib/libsqlite3.dll $(PREFIX)/$(TARGET)/bin/,)
 endef
