@@ -6,14 +6,16 @@ $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.4.5
 $(PKG)_CHECKSUM := 07803adff502edf9b294ba1953cd99e2729d728bcb13c20f823633f7507040a6
 $(PKG)_GH_CONF  := mariadb-corporation/mariadb-connector-c/releases,v
-$(PKG)_DEPS     := cc dlfcn-win32 openssl zlib zstd
+$(PKG)_DEPS     := cc dlfcn-win32 zlib zstd
 
 define $(PKG)_BUILD
     rm -rf '$(PREFIX)/$(TARGET)/include/mariadb' '$(PREFIX)/$(TARGET)/lib/mariadb'
     cd '$(BUILD_DIR)' && '$(TARGET)-cmake' \
         -DDISABLE_SHARED=$(CMAKE_STATIC_BOOL) \
         -DDISABLE_STATIC=$(CMAKE_SHARED_BOOL) \
+        -DWITH_CURL=OFF \
         -DWITH_EXTERNAL_ZLIB=ON \
+        -DWITH_SSL=SCHANNEL \
         -DWITH_UNIT_TESTS=OFF \
         '$(SOURCE_DIR)'
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1
