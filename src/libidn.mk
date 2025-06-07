@@ -4,8 +4,8 @@ PKG             := libidn
 $(PKG)_WEBSITE  := https://www.gnu.org/software/libidn/
 $(PKG)_DESCR    := Libidn
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.42
-$(PKG)_CHECKSUM := d6c199dcd806e4fe279360cb4b08349a0d39560ed548ffd1ccadda8cdecb4723
+$(PKG)_VERSION  := 1.43
+$(PKG)_CHECKSUM := bdc662c12d041b2539d0e638f3a6e741130cdb33a644ef3496963a443482d164
 $(PKG)_SUBDIR   := libidn-$($(PKG)_VERSION)
 $(PKG)_FILE     := libidn-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://ftp.gnu.org/gnu/libidn/$($(PKG)_FILE)
@@ -14,7 +14,7 @@ $(PKG)_DEPS     := cc gettext libiconv
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://git.savannah.gnu.org/gitweb/?p=libidn.git;a=tags' | \
-    $(SED) -n 's,.*<a[^>]*>\(Release \)\?\([0-9][^<]*\)<.*,\2,p' | \
+    $(SED) -n 's,.*<a[^>]*>\(libidn \)\?\([0-9][^<]*\)<.*,\2,p' | \
     head -1
 endef
 
