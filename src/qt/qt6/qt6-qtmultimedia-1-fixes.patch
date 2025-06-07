@@ -5,8 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 3 Apr 2023 13:57:29 +0200
-Subject: [PATCH 1/3] Use lower-case header/library names for with mingw-w64
- (more)
+Subject: [PATCH 1/2] Use lower-case header/library names for with mingw-w64
 
 
 diff --git a/src/plugins/multimedia/ffmpeg/qffmpegscreencapture_dxgi.cpp b/src/plugins/multimedia/ffmpeg/qffmpegscreencapture_dxgi.cpp
@@ -23,12 +22,25 @@ index 1111111..2222222 100644
 +#include <dxgi1_2.h>
  
  #include <system_error>
- #include <thread>
+ 
+diff --git a/src/plugins/multimedia/windows/player/mfplayersession.cpp b/src/plugins/multimedia/windows/player/mfplayersession.cpp
+index 1111111..2222222 100644
+--- a/src/plugins/multimedia/windows/player/mfplayersession.cpp
++++ b/src/plugins/multimedia/windows/player/mfplayersession.cpp
+@@ -30,7 +30,7 @@
+ #include <mfidl.h>
+ #include <mmdeviceapi.h>
+ #include <propvarutil.h>
+-#include <Wininet.h>
++#include <wininet.h>
+ #include <functiondiscoverykeys_devpkey.h>
+ 
+ //#define DEBUG_MEDIAFOUNDATION
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Sean Link <sean.link@lightdeckdx.com>
 Date: Thu, 21 Mar 2024 15:34:13 +0100
-Subject: [PATCH 2/3] fix i686-w64-mingw32 build
+Subject: [PATCH 2/2] fix i686-w64-mingw32 build
 
 taken from https://github.com/mxe/mxe/issues/3038#issuecomment-1998456113
 
@@ -62,23 +74,3 @@ index 1111111..2222222 100644
  
      ::EnumWindows(windowHandler, reinterpret_cast<LPARAM>(&result));
  
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Thu, 4 Apr 2024 11:31:12 +0200
-Subject: [PATCH 3/3] fix case of include path
-
-
-diff --git a/src/plugins/multimedia/ffmpeg/qffmpegscreencapture_dxgi.cpp b/src/plugins/multimedia/ffmpeg/qffmpegscreencapture_dxgi.cpp
-index 1111111..2222222 100644
---- a/src/plugins/multimedia/ffmpeg/qffmpegscreencapture_dxgi.cpp
-+++ b/src/plugins/multimedia/ffmpeg/qffmpegscreencapture_dxgi.cpp
-@@ -6,7 +6,7 @@
- #include "qabstractvideobuffer.h"
- #include <private/qmultimediautils_p.h>
- #include <private/qvideoframe_p.h>
--#include <qtgui/qscreen_platform.h>
-+#include <QtGui/qscreen_platform.h>
- #include "qvideoframe.h"
- 
- #include <qloggingcategory.h>
