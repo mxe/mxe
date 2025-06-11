@@ -4,8 +4,8 @@ PKG             := mman-win32
 $(PKG)_WEBSITE  := https://code.google.com/p/mman-win32/
 $(PKG)_DESCR    := MMA-Win32
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2d1c576
-$(PKG)_CHECKSUM := b9b7a4afdf19644b761bd66a7a0fba5cea4bdf2cba180bd9323a6029f134ccbe
+$(PKG)_VERSION  := fedbdbf
+$(PKG)_CHECKSUM := 7eb84c9df66201ffa21cd4d372ad9d529fdeac285b8b2eb70ae1be196e57ab06
 $(PKG)_GH_CONF  := alitrack/mman-win32/branches/master
 $(PKG)_DEPS     := cc
 
