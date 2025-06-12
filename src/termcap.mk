@@ -26,6 +26,7 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' \
         AR='$(TARGET)-ar' \
         oldincludedir= \
+        CFLAGS='-std=gnu89' \
         install
 
     # create pkg-config file
