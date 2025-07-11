@@ -3,10 +3,10 @@
 
 PKG             := stimfit
 $(PKG)_IGNORE   := 
-$(PKG)_VERSION  := 0.16.7
-$(PKG)_CHECKSUM := 237ba9d6237c316f489b178fc7d03e707ad164156d7183002469ca11cce4baeb
-$(PKG)_SUBDIR   := stimfit-$($(PKG)_VERSION)debian
-$(PKG)_FILE     := stimfit-$($(PKG)_VERSION)debian.tar.gz
+$(PKG)_VERSION  := 0.16.8
+$(PKG)_CHECKSUM := 977f519df92644ecac2d0be5adb34451e130c0de70f1701475fe212584a65883
+$(PKG)_SUBDIR   := stimfit-$($(PKG)_VERSION)
+$(PKG)_FILE     := stimfit-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/neurodroid/stimfit/archive/refs/tags/v$($(PKG)_VERSION).tar.gz
 $(PKG)_DEPS     := cc biosig wxwidgets hdf5 fftw levmar openblas
 
@@ -16,13 +16,15 @@ $(PKG)_DEPS     := cc biosig wxwidgets hdf5 fftw levmar openblas
 #    head -1
 #endef
 
-define $(PKG)_BUILD
+define $(PKG)_BUILD_STATIC
 
     # rm -rf '$(1)' && git clone ~/src/stimfit '$(1)'
 
+    # rm -rf '$(1)' && rsync -av ~/src/stimfit/ '$(1)'
+
     cd '$(1)' && ./autogen.sh &&  \
 	./configure CXXFLAGS="-std=gnu++17 -DwxDEBUG_LEVEL=0 -DNDEBUG " \
-		--disable-python --with-biosig --with-pslope \
+		--disable-python --with-biosig \
 		--with-hdf5-prefix=$(PREFIX)/$(TARGET) \
 		--with-wx-config=$(PREFIX)/$(TARGET)/bin/wx-config \
 		--with-sysroot=$(PREFIX)/$(TARGET)/bin \
