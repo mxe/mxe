@@ -23,7 +23,7 @@ $(PKG)_VERSION  := 13.4.0
 # release used for install dirs, will be X.0.1 for snapshots
 # change to $($(PKG)_VERSION) variable on release X.Y[>0].Z
 $(PKG)_RELEASE  := $($(PKG)_VERSION)
-$(PKG)_CHECKSUM := 0845e9621c9543a13f484e94584a49ffc0129970e9914624235fc1d061a0c083
+$(PKG)_CHECKSUM := 9c4ce6dbb040568fdc545588ac03c5cbc95a8dbf0c7aa490170843afb59ca8f5
 $(PKG)_SUBDIR   := gcc-$($(PKG)_VERSION)
 $(PKG)_FILE     := gcc-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://ftp.gnu.org/gnu/gcc/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
