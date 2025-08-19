@@ -1,0 +1,34 @@
+From ea3e3a9e7708968a761c6424c7c844536f60de3d Mon Sep 17 00:00:00 2001
+From: Vincent Pinon <vpinon@kde.org>
+Date: Tue, 4 Oct 2016 23:24:07 +0200
+Subject: [PATCH] Allow cross-compiling resource file
+
+---
+ CMakeLists.txt | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 8b28ffd2..d2daa6c9 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -30,9 +30,14 @@ option(BINARY_ICONS_RESOURCE "Install Qt binary resource files containing breeze
+ option(SKIP_INSTALL_ICONS "Skip installing the icons files" OFF)
+ 
+ if(BINARY_ICONS_RESOURCE)
+-    find_package(Qt5 NO_MODULE REQUIRED Core)
+-    add_executable(qrcAlias qrcAlias.cpp)
+-    target_link_libraries(qrcAlias PUBLIC Qt5::Core)
++    if(CMAKE_CROSSCOMPILING AND QRCALIAS_EXECUTABLE)
++        add_executable(qrcAlias IMPORTED GLOBAL)
++        set_target_properties(qrcAlias PROPERTIES IMPORTED_LOCATION ${QRCALIAS_EXECUTABLE})
++    else()
++        find_package(Qt5 NO_MODULE REQUIRED Core)
++        add_executable(qrcAlias qrcAlias.cpp)
++        target_link_libraries(qrcAlias PUBLIC Qt5::Core)
++    endif()
+ 
+ function(generate_binary_resource target outfile)
+     set(RESOURCES_WORKING_DIR ${CMAKE_CURRENT_BINARY_DIR}/res)
+-- 
+2.14.2
+
