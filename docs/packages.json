@@ -272,7 +272,7 @@
     "libwebp": {"version": "1.6.0", "website": "https://developers.google.com/speed/webp/", "description": ""},
     "libwebsockets": {"version": "2.4.2", "website": "https://libwebsockets.org/", "description": ""},
     "libxml++": {"version": "2.40.1", "website": "https://libxmlplusplus.sourceforge.io/", "description": "libxml2"},
-    "libxml2": {"version": "2.14.4", "website": "http://xmlsoft.org/", "description": ""},
+    "libxml2": {"version": "2.14.5", "website": "http://xmlsoft.org/", "description": ""},
     "libxslt": {"version": "1.1.43", "website": "https://gitlab.gnome.org/GNOME/libxslt/-/wikis", "description": ""},
     "libyaml": {"version": "0.2.5", "website": "https://github.com/yaml/libyaml", "description": "A C library for parsing and emitting YAML."},
     "libzip": {"version": "1.5.2", "website": "https://libzip.org/", "description": ""},
