@@ -96,3 +96,6 @@ file(GLOB mxe_cmake_files
 foreach(mxe_cmake_file ${mxe_cmake_files})
     include(${mxe_cmake_file})
 endforeach()
+
+## Set a default build type in case it is not specified on the commandline.
+set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Default build type")
