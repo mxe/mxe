@@ -4,8 +4,8 @@
 PKG             := biosig
 $(PKG)_WEBSITE  := http://biosig.sf.net/
 $(PKG)_DESCR    := biosig
-$(PKG)_VERSION  := 3.9.0
-$(PKG)_CHECKSUM := e5b353a1500e6f80150e1236919aef9679410a2337ee81ed056b3f306b25611e
+$(PKG)_VERSION  := 3.9.1
+$(PKG)_CHECKSUM := 896d34e7a92e16282a5837de9c8032b943a5da97c57d70fe5dd6fa1daae3c84d
 $(PKG)_SUBDIR   := biosig-$($(PKG)_VERSION)
 $(PKG)_FILE     := biosig-$($(PKG)_VERSION).src.tar.xz
 $(PKG)_URL      := https://downloads.sourceforge.net/project/biosig/BioSig%20for%20C_C%2B%2B/src/$($(PKG)_FILE)
