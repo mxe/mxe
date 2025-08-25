@@ -13,7 +13,7 @@ diff --git a/configure b/configure
 index 1111111..2222222 100755
 --- a/configure
 +++ b/configure
-@@ -587,9 +587,6 @@ process_detect() {
+@@ -621,9 +621,6 @@ process_detect() {
          }
      fi
      check_header stdio.h || die "Unable to invoke compiler: ${CC} ${CFLAGS}"

@@ -11,4 +11,5 @@ $(PKG)_DEPS     := cc
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && '$(TARGET)-cmake' '$(SOURCE_DIR)'
     '$(TARGET)-cmake' --build '$(BUILD_DIR)' --config Release --target install
+    rm -f '$(PREFIX)/$(TARGET)/bin/brotli.exe'
 endef

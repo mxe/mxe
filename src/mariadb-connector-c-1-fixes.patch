@@ -1,0 +1,137 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Thu, 10 Apr 2025 20:57:03 +0200
+Subject: [PATCH 1/5] build pc file for mingw
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -448,9 +448,7 @@ ENDIF()
+ INCLUDE(${CC_SOURCE_DIR}/plugins/CMakeLists.txt)
+ ADD_SUBDIRECTORY(include)
+ ADD_SUBDIRECTORY(libmariadb)
+-IF((NOT WIN32) OR CYGWIN)
+-  ADD_SUBDIRECTORY(mariadb_config)
+-ENDIF()
++ADD_SUBDIRECTORY(mariadb_config)
+ 
+ IF(IS_DIRECTORY ${CC_SOURCE_DIR}/unittest)
+   IF(WITH_UNIT_TESTS)
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Thu, 10 Apr 2025 21:35:56 +0200
+Subject: [PATCH 2/5] options to suppress install of static and shared
+
+
+diff --git a/libmariadb/CMakeLists.txt b/libmariadb/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/libmariadb/CMakeLists.txt
++++ b/libmariadb/CMakeLists.txt
+@@ -500,9 +500,13 @@ IF(NOT WIN32)
+   SET_TARGET_PROPERTIES(mariadbclient PROPERTIES OUTPUT_NAME "${LIBMARIADB_STATIC_NAME}")
+ ENDIF()
+ 
++IF(NOT DISABLE_STATIC)
+ INSTALL(TARGETS mariadbclient
+           COMPONENT Development
+           DESTINATION ${INSTALL_LIBDIR})
++ENDIF()
++
++IF(NOT DISABLE_SHARED)
+ IF(WIN32)
+ INSTALL(TARGETS libmariadb
+         COMPONENT SharedLibraries
+@@ -524,3 +528,4 @@ IF(MSVC)
+            CONFIGURATIONS Debug RelWithDebInfo
+            COMPONENT Development)
+ ENDIF()
++ENDIF()
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Thu, 10 Apr 2025 23:39:02 +0200
+Subject: [PATCH 3/5] add -lz to Libs.private
+
+
+diff --git a/mariadb_config/libmariadb.pc.in b/mariadb_config/libmariadb.pc.in
+index 1111111..2222222 100644
+--- a/mariadb_config/libmariadb.pc.in
++++ b/mariadb_config/libmariadb.pc.in
+@@ -15,6 +15,6 @@ Version: @CPACK_PACKAGE_VERSION@
+ Description: MariaDB Connector/C dynamic library
+ Cflags: -I${includedir}
+ Libs: -L${libdir} -lmariadb
+-Libs.private: @extra_dynamic_LDFLAGS@
++Libs.private: @extra_dynamic_LDFLAGS@ -lz
+ 
+ 
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Sun, 20 Apr 2025 13:20:50 +0200
+Subject: [PATCH 4/5] fix MINGW 32-bit build error
+
+The error was:
+
+ma_client_plugin.c: At top level:
+ma_client_plugin.c:488:1: error: conflicting types for 'mysql_load_plugin'; have 'struct st_mysql_client_plugin *(MYSQL *, const char *, int,  int, ...)' {aka 'struct st_mysql_client_plugin *(struct st_mysql *, const char *, int,  int, ...)'}
+  488 | mysql_load_plugin(MYSQL *mysql, const char *name, int type, int argc, ...)
+      | ^~~~~~~~~~~~~~~~~
+In file included from ../../mariadb-connector-c-3.4.5/include/ma_common.h:24,
+                 from ma_client_plugin.c:38:
+../../mariadb-connector-c-3.4.5/include/mysql/client_plugin.h:199:1: note: previous declaration of 'mysql_load_plugin' with type 'struct st_mysql_client_plugin *(struct st_mysql *, const char *, int,  int, ...)'
+  199 | mysql_load_plugin(struct st_mysql *mysql, const char *name, int type,
+
+The definition of st_mysql_client_plugin in ma_client_plugin.c.in had
+STDCALL, unlike both the declaration in mysql/client_plugin.h and the
+declaration in mysql.h. Removing this apparently stray STDCALL
+from the definition allows the build to complete.
+
+diff --git a/libmariadb/ma_client_plugin.c.in b/libmariadb/ma_client_plugin.c.in
+index 1111111..2222222 100644
+--- a/libmariadb/ma_client_plugin.c.in
++++ b/libmariadb/ma_client_plugin.c.in
+@@ -472,7 +472,7 @@ err:
+ 
+ 
+ /* see <mysql/client_plugin.h> for a full description */
+-struct st_mysql_client_plugin * STDCALL
++struct st_mysql_client_plugin *
+ mysql_load_plugin(MYSQL *mysql, const char *name, int type, int argc, ...)
+ {
+   struct st_mysql_client_plugin *p;
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Michal Schorm <mschorm@redhat.com>
+Date: Wed, 12 Feb 2025 15:17:39 +0100
+Subject: [PATCH 5/5] Fix compilation with GCC 15
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+| In file included from /builddir/build/BUILD/mariadb-connector-c-3.4.3-build/mariadb-connector-c-3.4.3-src/plugins/auth/dialog.c:23:
+| /builddir/build/BUILD/mariadb-connector-c-3.4.3-build/mariadb-connector-c-3.4.3-src/include/ma_global.h:687:25: error: ‘bool’ cannot be defined via ‘typedef’
+|   687 | typedef char            bool;   /* Ordinary boolean values 0 1 */
+|       |                         ^~~~
+| /builddir/build/BUILD/mariadb-connector-c-3.4.3-build/mariadb-connector-c-3.4.3-src/include/ma_global.h:687:25: note: ‘bool’ is a keyword with ‘-std=c23’ onwards
+
+diff --git a/include/ma_global.h b/include/ma_global.h
+index 1111111..2222222 100644
+--- a/include/ma_global.h
++++ b/include/ma_global.h
+@@ -683,7 +683,7 @@ typedef unsigned long	size_s; /* Size of strings (In string-funcs) */
+ typedef int		myf;	/* Type of MyFlags in my_funcs */
+ typedef char		my_bool; /* Small bool */
+ typedef unsigned long long my_ulonglong;
+-#if !defined(bool) && !defined(bool_defined) && (!defined(HAVE_BOOL) || !defined(__cplusplus))
++#if !defined(bool) && !defined(bool_defined) && (!defined(HAVE_BOOL) || !defined(__cplusplus)) && (__STDC_VERSION__ < 202300L)
+ typedef char		bool;	/* Ordinary boolean values 0 1 */
+ #endif
+ 	/* Macros for converting *constants* to the right type */

@@ -4,8 +4,8 @@ PKG             := libqrencode
 $(PKG)_WEBSITE  := https://fukuchi.org/works/qrencode/
 $(PKG)_DESCR    := a fast and compact QR Code encoding library
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.0.2
-$(PKG)_CHECKSUM := 43091fea4752101f0fe61a957310ead10a7cb4b81e170ce61e5baa73a6291ac2
+$(PKG)_VERSION  := 4.1.1
+$(PKG)_CHECKSUM := 5385bc1b8c2f20f3b91d258bf8ccc8cf62023935df2d2676b5b67049f31a049c
 $(PKG)_GH_CONF  := fukuchi/libqrencode/tags,v
 $(PKG)_DEPS     := cc pthreads
 

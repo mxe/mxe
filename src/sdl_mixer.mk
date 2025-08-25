@@ -46,8 +46,9 @@ define $(PKG)_BUILD
             , \
             --without-smpeg)
         WINDRES='$(TARGET)-windres' \
+        CFLAGS='-std=gnu89' \
         LIBS='-lvorbis -logg'
-    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(if $(BUILD_SHARED),build/libSDL_mixer.la)
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(if $(BUILD_SHARED),build/libSDL_mixer.la) CFLAGS='-std=gnu89'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install-hdrs install-lib
 
     '$(TARGET)-gcc' \

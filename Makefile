@@ -796,7 +796,7 @@ $(PREFIX)/$(3)/installed/$(1): $(PKG_MAKEFILES) \
 	        @[ -d '$(LOG_DIR)/$(TIMESTAMP)' ] || mkdir -p '$(LOG_DIR)/$(TIMESTAMP)'
 	        @touch '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'
 	        @ln -sf '$(TIMESTAMP)/$(1)_$(3)' '$(LOG_DIR)/$(1)_$(3)'
-	        @if ! (time $(PRELOAD) WINEPREFIX='$(2)/readonly' \
+	        @if ! (time $(PRELOAD) WINEPREFIX='/dev/null' \
 	               $(MAKE) -f '$(MAKEFILE)' \
 	                   'build-only-$(1)_$(3)' \
 	                   WGET=false \

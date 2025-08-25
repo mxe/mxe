@@ -36092,7 +36092,7 @@ diff --git a/meson.build b/meson.build
 index 1111111..2222222 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -763,7 +763,10 @@ if cc.has_function('ngettext')
+@@ -773,7 +773,10 @@ if cc.has_function('ngettext')
    cdata.set('HAVE_BIND_TEXTDOMAIN_CODESET', 1)
  else
    libintl_dep = cc.find_library('intl', required : false)

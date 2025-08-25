@@ -4,9 +4,9 @@ PKG             := cpp-netlib
 $(PKG)_WEBSITE  := https://cpp-netlib.org/
 $(PKG)_DESCR    := Boost C++ Networking Library
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 73d4024
-$(PKG)_CHECKSUM := 576f18cbad20ab123db68c72d1e541387a8b5d3b191698e44e2d96936a1f323b
-$(PKG)_GH_CONF  := cpp-netlib/cpp-netlib/branches/0.13-release
+$(PKG)_VERSION  := 0.13.0
+$(PKG)_CHECKSUM := 897259d9f9087acba33911aec925804e6236a7a77f5444dedde6145049605a34
+$(PKG)_GH_CONF  := cpp-netlib/cpp-netlib/tags,cpp-netlib-,-final
 $(PKG)_DEPS     := cc boost openssl
 
 define $(PKG)_BUILD

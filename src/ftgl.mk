@@ -23,7 +23,8 @@ define $(PKG)_BUILD
         $(MXE_CONFIGURE_OPTS) \
         --without-x \
         --disable-freetypetest \
-        --with-ft-prefix='$(PREFIX)/$(TARGET)'
+        --with-ft-prefix='$(PREFIX)/$(TARGET)' \
+        CXXFLAGS="-fpermissive"
     $(MAKE) -C '$(1)/src' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     $(MAKE) -C '$(1)/src' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'

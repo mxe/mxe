@@ -106,6 +106,13 @@ define $(PKG)_BUILD_mingw-w64
     $(MAKE) -C '$(BUILD_DIR).pthreads' -j 1 $(INSTALL_STRIP_TOOLCHAIN)
 
     # build rest of gcc
+
+    # Force <sys/mman.h>'s presence to false when building target libgcc to prevent
+    # a dependency on mmap(). If mman-win32 package has been installed when gcc is built
+    # (which installs sys/mman.h), gcov (from libgcc) will depend on mmap(), and fail to link
+    # (undefined reference to `mmap') when building with --coverage.
+    ac_cv_header_sys_mman_h=no \
+        $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' all-target-libgcc
     # `all-target-libstdc++-v3` sometimes has parallel failure
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' all-target-libstdc++-v3 || $(MAKE) -C '$(BUILD_DIR)' -j 1 all-target-libstdc++-v3
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'

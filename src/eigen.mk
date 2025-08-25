@@ -12,7 +12,7 @@ $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://eigen.tuxfamily.org/index.php?title=Main_Page#Download' | \
-    $(SED) -nr 's/^.*eigen-([0-9]+\.[0-9]+\.[0-9]+)\.tar\.bz2.*$/\1/p' | $(SORT) -Vr | $(SED) 1q
+    $(SED) -nr 's/^.*eigen-([0-9]+\.[0-9]+\.[0-9]+)\.tar\.bz2.*$$/\1/p' | $(SORT) -Vr | $(SED) 1q
 endef
 
 define $(PKG)_BUILD

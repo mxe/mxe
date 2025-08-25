@@ -12,9 +12,9 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 1111111..2222222 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -83,7 +83,7 @@ option(USE_FLOAT "Use single precision arithmetic in the Splash backend" OFF)
- option(BUILD_SHARED_LIBS "Build poppler as a shared library" ON)
+@@ -88,7 +88,7 @@ option(BUILD_SHARED_LIBS "Build poppler as a shared library" ON)
  option(RUN_GPERF_IF_PRESENT "Run gperf if it is found" ON)
+ option(INSTALL_GLIB_DEMO "Whether to install the poppler-glib-demo program." OFF)
  if(WIN32)
 -  option(ENABLE_RELOCATABLE "Do not hardcode the poppler library location (on Windows)." ON)
 +  option(ENABLE_RELOCATABLE "Do not hardcode the poppler library location (on Windows)." ${BUILD_SHARED_LIBS})
@@ -22,12 +22,8 @@ index 1111111..2222222 100644
    set(ENABLE_RELOCATABLE OFF)
  endif()
 
-This file is part of MXE. See LICENSE.md for licensing information.
-
-Contains ad hoc patches for cross building.
-
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: MXE
+From: "fix@me" <fix@me>
 Date: Fri, 5 May 2023 18:00:00 +0200
 Subject: [PATCH 2/2] Fix static builds involving qtimageformats
 
@@ -36,13 +32,12 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 1111111..2222222 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -203,7 +203,7 @@ if (ENABLE_QT5)
- endif()
+@@ -219,7 +219,7 @@ find_soft_mandatory_package(ENABLE_QT5 Qt5Widgets ${QT5_VERSION})
+ find_soft_mandatory_package(ENABLE_QT5 Qt5Test ${QT5_VERSION})
  
- if (ENABLE_QT6)
--  SET(QT_NO_CREATE_VERSIONLESS_TARGETS ON)
-+  SET(QT_NO_CREATE_VERSIONLESS_TARGETS ${BUILD_SHARED_LIBS})
-   find_package(Qt6 6.2 COMPONENTS Core Gui Widgets Test QUIET)
-   if (NOT (Qt6Core_FOUND AND Qt6Gui_FOUND AND Qt6Widgets_FOUND AND Qt6Test_FOUND))
-     message("-- Package Qt6Core or Qt6Gui or Qt6Widgets or Qt6Test not found")
-
+ set(QT6_VERSION "6.2")
+-SET(QT_NO_CREATE_VERSIONLESS_TARGETS ON)
++SET(QT_NO_CREATE_VERSIONLESS_TARGETS ${BUILD_SHARED_LIBS})
+ find_soft_mandatory_package(ENABLE_QT6 Qt6Core ${QT6_VERSION})
+ find_soft_mandatory_package(ENABLE_QT6 Qt6Gui ${QT6_VERSION})
+ find_soft_mandatory_package(ENABLE_QT6 Qt6Widgets ${QT6_VERSION})

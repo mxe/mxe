@@ -12,9 +12,9 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 1111111..2222222 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -82,7 +82,7 @@ option(USE_FLOAT "Use single precision arithmetic in the Splash backend" OFF)
- option(BUILD_SHARED_LIBS "Build poppler as a shared library" ON)
+@@ -88,7 +88,7 @@ option(BUILD_SHARED_LIBS "Build poppler as a shared library" ON)
  option(RUN_GPERF_IF_PRESENT "Run gperf if it is found" ON)
+ option(INSTALL_GLIB_DEMO "Whether to install the poppler-glib-demo program." OFF)
  if(WIN32)
 -  option(ENABLE_RELOCATABLE "Do not hardcode the poppler library location (on Windows)." ON)
 +  option(ENABLE_RELOCATABLE "Do not hardcode the poppler library location (on Windows)." ${BUILD_SHARED_LIBS})
@@ -32,16 +32,16 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 1111111..2222222 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -308,6 +308,9 @@ else()
+@@ -325,6 +325,9 @@ else()
    message(FATAL_ERROR "Invalid ENABLE_LIBOPENJPEG value: ${ENABLE_LIBOPENJPEG}")
  endif()
  set(ENABLE_LIBOPENJPEG "${WITH_OPENJPEG}")
 +if(ENABLE_LIBOPENJPEG AND NOT BUILD_SHARED_LIBS)
 +  add_definitions(-DOPJ_STATIC)
 +endif()
- if(ENABLE_CMS STREQUAL "lcms2")
-   find_package(LCMS2)
-   set(USE_CMS ${LCMS2_FOUND})
+ 
+ find_soft_mandatory_package(ENABLE_LCMS LCMS2 2.12)
+ set(USE_CMS ${ENABLE_LCMS})
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: brodieG <brodieG@users.noreply.github.com>
