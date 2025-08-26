@@ -27,7 +27,7 @@ $(PKG)_CHECKSUM := e0dc77297625631ac8e50fa92fffefe899a4eb702592da5c32ef04e2293ac
 $(PKG)_SUBDIR   := gcc-$($(PKG)_VERSION)
 $(PKG)_FILE     := gcc-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://ftp.gnu.org/gnu/gcc/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_URL_2    := https://www.mirrorservice.org/sites/sourceware.org/pub/gcc/snapshots/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL_2    := https://www.mirrorservice.org/sites/sourceware.org/pub/gcc/releases/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_PATCHES  := $(dir $(lastword $(MAKEFILE_LIST)))/gcc14.patch
 $(PKG)_DEPS     := binutils mingw-w64 $(addprefix $(BUILD)~,gmp isl mpc mpfr zstd)
 
