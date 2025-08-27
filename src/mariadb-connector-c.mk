@@ -3,8 +3,8 @@
 PKG             := mariadb-connector-c
 $(PKG)_WEBSITE  := https://mariadb.com
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.4.5
-$(PKG)_CHECKSUM := 07803adff502edf9b294ba1953cd99e2729d728bcb13c20f823633f7507040a6
+$(PKG)_VERSION  := 3.4.7
+$(PKG)_CHECKSUM := cf81cd1c71c3199da9d2125aee840cb6083d43e1ea4c60c4be5045bfc7824eba
 $(PKG)_GH_CONF  := mariadb-corporation/mariadb-connector-c/releases,v
 $(PKG)_DEPS     := cc dlfcn-win32 zlib zstd
 

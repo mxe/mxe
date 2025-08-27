@@ -23,19 +23,6 @@ index 1111111..2222222 100644
  
  #include <system_error>
  
-diff --git a/src/plugins/multimedia/windows/player/mfplayersession.cpp b/src/plugins/multimedia/windows/player/mfplayersession.cpp
-index 1111111..2222222 100644
---- a/src/plugins/multimedia/windows/player/mfplayersession.cpp
-+++ b/src/plugins/multimedia/windows/player/mfplayersession.cpp
-@@ -30,7 +30,7 @@
- #include <mfidl.h>
- #include <mmdeviceapi.h>
- #include <propvarutil.h>
--#include <Wininet.h>
-+#include <wininet.h>
- #include <functiondiscoverykeys_devpkey.h>
- 
- //#define DEBUG_MEDIAFOUNDATION
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Sean Link <sean.link@lightdeckdx.com>
@@ -61,8 +48,8 @@ index 1111111..2222222 100644
          if (!canCaptureWindow(hwnd))
              return TRUE; // Ignore window and continue enumerating
  
-@@ -58,7 +54,11 @@ QList<QCapturableWindow> QWinCapturableWindows::windows() const
-         windows.push_back(windowData.release()->create());
+@@ -57,7 +53,11 @@ QList<QCapturableWindow> QWinCapturableWindows::windows() const
+             windowTitle(hwnd)));
  
          return TRUE;
 -    };
