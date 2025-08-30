@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc file flac lame libltdl libmad libpng libsndfile \
-                   opencore-amr opus twolame vorbis wavpack
+                   opencore-amr opusfile twolame vorbis wavpack
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://sourceforge.net/projects/sox/files/sox/' | \
@@ -41,6 +41,7 @@ define $(PKG)_BUILD
         --with-amrnb \
         --with-flac \
         --with-oggvorbis \
+        --with-opus \
         --with-sndfile \
         --with-wavpack \
         --with-mad \
