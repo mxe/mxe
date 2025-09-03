@@ -3,12 +3,12 @@
 PKG             := x265
 $(PKG)_WEBSITE  := http://x265.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.4
-$(PKG)_CHECKSUM := 9c2aa718d78f6fecdd783f08ab83b98d3169e5f670404da4c16439306907d729
+$(PKG)_VERSION  := 4.1
+$(PKG)_CHECKSUM := a31699c6a89806b74b0151e5e6a7df65de4b49050482fe5ebf8a4379d7af8f29
 $(PKG)_SUBDIR   := x265_$($(PKG)_VERSION)
 $(PKG)_FILE     := x265_$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://bitbucket.org/multicoreware/x265/downloads/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc yasm
+$(PKG)_URL      := https://bitbucket.org/multicoreware/x265_git/downloads/$($(PKG)_FILE)
+$(PKG)_DEPS     := cc $(BUILD)~nasm
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- https://ftp.videolan.org/pub/videolan/x265/ | \
@@ -27,8 +27,7 @@ define $(PKG)_BUILD
         -DENABLE_SHARED=OFF \
         -DENABLE_ASSEMBLY=$(if $(findstring x86_64,$(TARGET)),ON,OFF) \
         -DENABLE_CLI=OFF \
-        -DWINXP_SUPPORT=ON \
-        -DENABLE_DYNAMIC_HDR10=ON \
+        -DENABLE_HDR10_PLUS=ON \
         -DMAIN12=ON
     $(MAKE) -C '$(BUILD_DIR)/12bit' -j '$(JOBS)'
     cp '$(BUILD_DIR)/12bit/libx265.a' '$(BUILD_DIR)/libx265_main12.a'
@@ -40,8 +39,7 @@ define $(PKG)_BUILD
         -DENABLE_SHARED=OFF \
         -DENABLE_ASSEMBLY=$(if $(findstring x86_64,$(TARGET)),ON,OFF) \
         -DENABLE_CLI=OFF \
-        -DWINXP_SUPPORT=ON \
-        -DENABLE_DYNAMIC_HDR10=ON
+        -DENABLE_HDR10_PLUS=ON
     $(MAKE) -C '$(BUILD_DIR)/10bit' -j '$(JOBS)'
     cp '$(BUILD_DIR)/10bit/libx265.a' '$(BUILD_DIR)/libx265_main10.a'
 
@@ -51,9 +49,8 @@ define $(PKG)_BUILD
         -DEXPORT_C_API=ON \
         -DENABLE_SHARED=$(CMAKE_SHARED_BOOL) \
         -DENABLE_ASSEMBLY=$(if $(findstring x86_64,$(TARGET)),ON,OFF) \
-        -DENABLE_CLI=OFF \
-        -DWINXP_SUPPORT=ON \
-        -DENABLE_DYNAMIC_HDR10=ON \
+        -DENABLE_CLI=ON \
+        -DENABLE_HDR10_PLUS=ON \
         -DEXTRA_LIB='x265_main10.a;x265_main12.a' \
         -DEXTRA_LINK_FLAGS=-L'$(BUILD_DIR)' \
         -DLINKED_10BIT=ON \
@@ -64,11 +61,5 @@ define $(PKG)_BUILD
         $(INSTALL) '$(BUILD_DIR)/libx265_main12.a' '$(PREFIX)/$(TARGET)/lib/libx265_main12.a' && \
         $(INSTALL) '$(BUILD_DIR)/libx265_main10.a' '$(PREFIX)/$(TARGET)/lib/libx265_main10.a' && \
         $(SED) -i 's|-lx265|-lx265 -lx265_main10 -lx265_main12|' '$(PREFIX)/$(TARGET)/lib/pkgconfig/x265.pc')
-
-    '$(TARGET)-gcc' \
-        -W -Wall -Werror \
-        '$(TOP_DIR)/src/$(PKG)-test.c' \
-        -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
-        `$(TARGET)-pkg-config --cflags --libs $(PKG)`
 endef
 
