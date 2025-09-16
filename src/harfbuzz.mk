@@ -4,8 +4,8 @@ PKG             := harfbuzz
 $(PKG)_WEBSITE  := https://wiki.freedesktop.org/www/Software/HarfBuzz/
 $(PKG)_DESCR    := HarfBuzz
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 11.4.5
-$(PKG)_CHECKSUM := 0f052eb4ab01d8bae98ba971c954becb32be57d7250f18af343b1d27892e03fa
+$(PKG)_VERSION  := 11.5.0
+$(PKG)_CHECKSUM := 2d30ba45c4c8ec4de661a1002b4f88d0841ff1a3087f34629275f5436d722109
 $(PKG)_GH_CONF  := harfbuzz/harfbuzz/releases,,,,,.tar.xz
 $(PKG)_DEPS     := cc meson-wrapper brotli cairo freetype-bootstrap glib icu4c
 
