@@ -4,8 +4,8 @@ PKG             := libatomic_ops
 $(PKG)_WEBSITE  := https://github.com/ivmai/libatomic_ops
 $(PKG)_DESCR    := The atomic_ops project (Atomic memory update operations portable implementation)
 $(PKG)_IGNORE   := 7.6%
-$(PKG)_VERSION  := 7.4.8
-$(PKG)_CHECKSUM := b985816abc69df5781d6d9fcf081e03a3a1e44032030d0a2c28f8de731e7f20f
+$(PKG)_VERSION  := 7.8.4
+$(PKG)_CHECKSUM := ea8295ac627646e37fd194d31535bbc02da60b908c8166c5e04d2461a53cb059
 $(PKG)_GH_CONF  := ivmai/libatomic_ops/tags,v
 $(PKG)_DEPS     := cc
 
