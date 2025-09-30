@@ -21,8 +21,7 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
-        $(if $(BUILD_STATIC), \
-          --disable-pixbuf-loader,) \
+        --disable-pixbuf-loader \
         --disable-gtk-doc \
         --enable-introspection=no \
         CFLAGS='-Wno-incompatible-pointer-types'
