@@ -22,7 +22,8 @@ define $(PKG)_BUILD
         -DENABLE_HDF4_FILE_TESTS=OFF \
         -DENABLE_NETCDF_4=ON \
         -DUSE_HDF5=ON \
-        -DHDF5_VERSION=$(hdf5_VERSION)
+        -DHDF5_VERSION=$(hdf5_VERSION) \
+        -DCMAKE_C_FLAGS='-std=gnu89'
 
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
