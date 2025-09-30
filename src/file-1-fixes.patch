@@ -12,7 +12,7 @@ diff --git a/src/compress.c b/src/compress.c
 index 1111111..2222222 100644
 --- a/src/compress.c
 +++ b/src/compress.c
-@@ -924,9 +924,14 @@ uncompressbuf(int fd, size_t bytes_max, size_t method, const unsigned char *old,
+@@ -1169,9 +1169,14 @@ uncompressbuf(int fd, size_t bytes_max, size_t method, int nofork,
  	 * and both must have large outputs. Thus it happens not that often).
  	 * To avoid this, be sure to create pipes with O_CLOEXEC.
  	 */
@@ -31,36 +31,36 @@ diff --git a/src/file.h b/src/file.h
 index 1111111..2222222 100644
 --- a/src/file.h
 +++ b/src/file.h
-@@ -581,8 +581,10 @@ public char * file_printable(struct magic_set *, char *, size_t,
- protected int file_os2_apptype(struct magic_set *, const char *, const void *,
-     size_t);
+@@ -618,8 +618,10 @@ file_protected char * file_printable(struct magic_set *, char *, size_t,
+ file_protected int file_os2_apptype(struct magic_set *, const char *,
+     const void *, size_t);
  #endif /* __EMX__ */
 +#ifndef WIN32
- protected int file_pipe_closexec(int *);
- protected int file_clear_closexec(int);
+ file_protected int file_pipe_closexec(int *);
+ file_protected int file_clear_closexec(int);
 +#endif
- protected char *file_strtrim(char *);
+ file_protected char *file_strtrim(char *);
  
- protected void buffer_init(struct buffer *, int, const struct stat *,
+ file_protected void buffer_init(struct buffer *, int, const struct stat *,
 diff --git a/src/funcs.c b/src/funcs.c
 index 1111111..2222222 100644
 --- a/src/funcs.c
 +++ b/src/funcs.c
-@@ -840,6 +840,7 @@ file_print_guid(char *str, size_t len, const uint64_t *guid)
+@@ -904,6 +904,7 @@ file_print_guid(char *str, size_t len, const uint64_t *guid)
  #endif
  }
  
 +#ifndef WIN32
- protected int
+ file_protected int
  file_pipe_closexec(int *fds)
  {
-@@ -864,6 +865,7 @@ file_clear_closexec(int fd) {
+@@ -930,6 +931,7 @@ file_clear_closexec(int fd) {
  	return 0;
  #endif
  }
 +#endif
  
- protected char *
+ file_protected char *
  file_strtrim(char *str)
 diff --git a/src/magic.c b/src/magic.c
 index 1111111..2222222 100644
