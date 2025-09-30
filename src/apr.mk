@@ -21,9 +21,10 @@ endef
 define $(PKG)_BUILD
     # native build for gen_test_char
     mkdir '$(BUILD_DIR).native'
-    cd '$(BUILD_DIR).native' && '$(SOURCE_DIR)/configure'
+    cd '$(BUILD_DIR).native' && '$(SOURCE_DIR)/configure' \
+        ac_cv_sizeof_off_t=4
     $(MAKE) -C '$(BUILD_DIR).native' tools/gen_test_char \
-        CFLAGS='-DNEED_ENHANCED_ESCAPES' -j '$(JOBS)'
+        CFLAGS='-std=gnu89 -DNEED_ENHANCED_ESCAPES' -j '$(JOBS)'
 
     # cross build
     cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
@@ -33,7 +34,8 @@ define $(PKG)_BUILD
         ac_cv_sizeof_size_t=4 \
         ac_cv_sizeof_ssize_t=4 \
         $(if $(POSIX_THREADS),apr_cv_mutex_robust_shared=yes)
-    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' GEN_TEST_CHAR='$(BUILD_DIR).native/tools/gen_test_char'
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' GEN_TEST_CHAR='$(BUILD_DIR).native/tools/gen_test_char' \
+        CFLAGS='-std=gnu89'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
     ln -sf '$(PREFIX)/$(TARGET)/bin/apr-1-config' '$(PREFIX)/bin/$(TARGET)-apr-1-config'
