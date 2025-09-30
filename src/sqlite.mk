@@ -26,6 +26,6 @@ define $(PKG)_BUILD
             --disable-shared , \
             --disable-static --out-implib ) \
         --disable-readline \
-        CFLAGS="-Os -DSQLITE_THREADSAFE=1 -DSQLITE_ENABLE_COLUMN_METADATA"
+        CFLAGS="-Os -DSQLITE_THREADSAFE=1 -DSQLITE_ENABLE_COLUMN_METADATA -DSQLITE_ENABLE_RTREE"
     $(MAKE) -C '$(1)' -j 1 install
 endef
