@@ -18,13 +18,13 @@ endef
 
 define $(PKG)_BUILD
     # --disable-swscale avoids circular dependency with ffmpeg. Remove if undesired.
-    cd '$(BUILD_DIR)' && AS='$(PREFIX)/$(BUILD)/bin/nasm' '$(SOURCE_DIR)/configure'\
+    cd '$(SOURCE_DIR)' && AS='$(PREFIX)/$(BUILD)/bin/nasm' '$(SOURCE_DIR)/configure'\
         $(MXE_CONFIGURE_OPTS) \
         --cross-prefix='$(TARGET)'- \
         --disable-lavf \
         --disable-swscale \
         --enable-win32thread
-    $(MAKE) -C '$(BUILD_DIR)' -j 1 uninstall
-    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
-    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
+    $(MAKE) -C '$(SOURCE_DIR)' -j 1 uninstall
+    $(MAKE) -C '$(SOURCE_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(SOURCE_DIR)' -j 1 install
 endef
