@@ -5,7 +5,7 @@ include src/qt/qt6/qt6-conf.mk
 PKG := qt6-qt5compat
 $(eval $(QT6_METADATA))
 
-$(PKG)_CHECKSUM := cb289905c689fc271ce783f8b67844040aa73d78f4f0cf8421fa713390a75b60
+$(PKG)_CHECKSUM := 091dac2124c2291c3566408720f89b1796cd458897c6acabd11f03976ad04461
 $(PKG)_DEPS     := cc qt6-conf qt6-qtbase qt6-qtshadertools
 
 QT6_PREFIX   = '$(PREFIX)/$(TARGET)/$(MXE_QT6_ID)'
