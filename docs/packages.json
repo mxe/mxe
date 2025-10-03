@@ -248,7 +248,7 @@
     "librtmp": {"version": "f1b83c1", "website": "https://rtmpdump.mplayerhq.hu/", "description": ""},
     "libsamplerate": {"version": "0.1.9", "website": "http://www.mega-nerd.com/SRC/", "description": ""},
     "libserialport": {"version": "0.1.1", "website": "https://sigrok.org/wiki/Libserialport", "description": "libserialport"},
-    "libshout": {"version": "2.4.1", "website": "https://icecast.org/", "description": ""},
+    "libshout": {"version": "2.4.6", "website": "https://icecast.org/", "description": ""},
     "libsigc++": {"version": "2.10.7", "website": "https://libsigc.sourceforge.io/", "description": ""},
     "libsigrok": {"version": "0.5.0", "website": "https://www.sigrok.org/wiki/Libsigrok", "description": "libsigrok"},
     "libslirp": {"version": "4.7.0", "website": "https://gitlab.freedesktop.org/slirp/libslirp", "description": ""},
