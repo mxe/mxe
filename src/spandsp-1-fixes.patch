@@ -1,0 +1,28 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+
+diff -urN spandsp-0.0.6/configure.ac spandsp-0.0.6-new/configure.ac
+--- spandsp-0.0.6/configure.ac	2014-06-04 16:27:54.000000000 +0200
++++ spandsp-0.0.6-new/configure.ac	2019-09-02 22:57:22.346611038 +0200
+@@ -152,9 +152,9 @@
+ 
+ AC_FUNC_ERROR_AT_LINE
+ AC_FUNC_VPRINTF
+-AC_FUNC_MALLOC
++#AC_FUNC_MALLOC
+ AC_FUNC_MEMCMP
+-AC_FUNC_REALLOC
++#AC_FUNC_REALLOC
+ AC_FUNC_SELECT_ARGTYPES
+ 
+ AX_C99_FUNC_LRINT
+@@ -368,6 +368,7 @@
+         ;;
+     mingw*)
+         COMP_VENDOR_LDFLAGS="-no-undefined -lws2_32"
++        COMP_VENDOR_CFLAGS="-DLIBSPANDSP_EXPORTS $COMP_VENDOR_CFLAGS"
+         ;;
+     *)
+         COMP_VENDOR_LDFLAGS=
