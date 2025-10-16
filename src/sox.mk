@@ -56,6 +56,7 @@ define $(PKG)_BUILD
         --without-pulseaudio \
         --without-sndio \
         --without-sunaudio \
+        CFLAGS='-std=c89' \
         LIBS='-lshlwapi -lgnurx'
 
     $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= EXTRA_PROGRAMS=
