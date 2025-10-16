@@ -4,8 +4,8 @@ PKG             := assimp
 $(PKG)_WEBSITE  := https://www.assimp.org/
 $(PKG)_DESCR    := Assimp Open Asset Import Library
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.4.1
-$(PKG)_CHECKSUM := a1bf71c4eb851ca336bba301730cd072b366403e98e3739d6a024f6313b8f954
+$(PKG)_VERSION  := 6.0.2
+$(PKG)_CHECKSUM := d1822d9a19c9205d6e8bc533bf897174ddb360ce504680f294170cc1d6319751
 $(PKG)_GH_CONF  := assimp/assimp/tags, v
 $(PKG)_DEPS     := cc minizip
 
