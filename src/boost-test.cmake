@@ -8,7 +8,7 @@ enable_language(CXX)
 set(CMAKE_CXX_STANDARD 11)
 add_executable(${TGT} ${CMAKE_CURRENT_LIST_DIR}/${PKG}-test.cpp)
 
-find_package(Boost ${PKG_VERSION} EXACT COMPONENTS chrono context serialization system thread REQUIRED)
+find_package(Boost ${PKG_VERSION} EXACT COMPONENTS chrono context serialization thread REQUIRED)
 target_link_libraries(${TGT} ${Boost_LIBRARIES})
 
 install(TARGETS ${TGT} DESTINATION bin)
