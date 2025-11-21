@@ -4,8 +4,8 @@ PKG             := sdl2_mixer
 $(PKG)_WEBSITE  := https://www.libsdl.org/
 $(PKG)_DESCR    := SDL2_mixer
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.0.4
-$(PKG)_CHECKSUM := 5605b6f230717acf6d09549671f7fe03f006700c61a61b86042888f81792e2b3
+$(PKG)_VERSION  := 2.8.1
+$(PKG)_CHECKSUM := 63804b4b2ba503865c0853f102231aeff489b1dfc6dea4750a69e2a8ef54b2bb
 $(PKG)_GH_CONF  := libsdl-org/SDL_mixer/releases/tag,release-,,
 $(PKG)_DEPS     := cc libmodplug mpg123 ogg opusfile sdl2 smpeg2 vorbis
 
