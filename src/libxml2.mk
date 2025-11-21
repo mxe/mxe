@@ -18,14 +18,18 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) -i 's,`uname`,MinGW,g' '$(1)/xml2-config.in'
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
-        --with-zlib='$(PREFIX)/$(TARGET)' \
-        --without-debug \
-        --without-python \
-        --without-threads
-    $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
-    $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
-    ln -sf '$(PREFIX)/$(TARGET)/bin/xml2-config' '$(PREFIX)/bin/$(TARGET)-xml2-config'
+        $(if $(BUILD_STATIC), \
+          --disable-pixbuf-loader,) \
+        --disable-gtk-doc \
+        --enable-introspection=no
+    $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+
+    '$(TARGET)-g++' \
+        -mwindows -W -Wall -Werror -Wno-error=deprecated-declarations \
+        -pedantic \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-librsvg.exe' \
+        `'$(TARGET)-pkg-config' librsvg-2.0 --cflags --libs` \
+        -lbcrypt
 endef
