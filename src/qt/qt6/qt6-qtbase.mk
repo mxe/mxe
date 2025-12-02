@@ -5,11 +5,11 @@ PKG             := qt6-$(PKG_BASENAME)
 $(PKG)_WEBSITE  := https://www.qt.io/
 $(PKG)_DESCR    := Qt6
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 6.9.1
-$(PKG)_CHECKSUM := 40caedbf83cc9a1959610830563565889878bc95f115868bbf545d1914acf28e
+$(PKG)_VERSION  := 6.10.1
+$(PKG)_CHECKSUM := 5a6226f7e23db51fdc3223121eba53f3f5447cf0cc4d6cb82a3a2df7a65d265d
 $(PKG)_SUBDIR   := $(PKG_BASENAME)-everywhere-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG_BASENAME)-everywhere-src-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := https://download.qt.io/archive/qt/6.9/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
+$(PKG)_URL      := https://download.qt.io/archive/qt/6.10/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 $(PKG)_DEPS     := cc freetype harfbuzz jpeg libpng mesa mariadb-connector-c openssl pcre2 sqlite zlib zstd $(BUILD)~$(PKG) \
                    $(if $(findstring shared,$(MXE_TARGETS)), icu4c)
@@ -17,8 +17,8 @@ $(PKG)_DEPS_$(BUILD) :=
 $(PKG)_OO_DEPS_$(BUILD) := ninja
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- https://download.qt.io/official_releases/qt/6.9/ | \
-    $(SED) -n 's,.*href="\(6\.[0-9]\.[^/]*\)/".*,\1,p' | \
+    $(WGET) -q -O- https://download.qt.io/official_releases/qt/6.10/ | \
+    $(SED) -n 's,.*href="\(6\.1[0-9]\.[^/]*\)/".*,\1,p' | \
     grep -iv -- '-rc' | \
     $(SORT) -V | \
     tail -1

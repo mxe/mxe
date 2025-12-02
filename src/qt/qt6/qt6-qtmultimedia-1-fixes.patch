@@ -12,9 +12,9 @@ diff --git a/src/plugins/multimedia/ffmpeg/qffmpegscreencapture_dxgi.cpp b/src/p
 index 1111111..2222222 100644
 --- a/src/plugins/multimedia/ffmpeg/qffmpegscreencapture_dxgi.cpp
 +++ b/src/plugins/multimedia/ffmpeg/qffmpegscreencapture_dxgi.cpp
-@@ -14,8 +14,8 @@
- #include <qmutex.h>
+@@ -15,8 +15,8 @@
  #include <QtCore/private/qsystemerror_p.h>
+ #include <QtCore/private/qexpected_p.h>
  
 -#include "D3d11.h"
 -#include "dxgi1_2.h"
@@ -23,19 +23,6 @@ index 1111111..2222222 100644
  
  #include <system_error>
  
-diff --git a/src/plugins/multimedia/windows/player/mfplayersession.cpp b/src/plugins/multimedia/windows/player/mfplayersession.cpp
-index 1111111..2222222 100644
---- a/src/plugins/multimedia/windows/player/mfplayersession.cpp
-+++ b/src/plugins/multimedia/windows/player/mfplayersession.cpp
-@@ -30,7 +30,7 @@
- #include <mfidl.h>
- #include <mmdeviceapi.h>
- #include <propvarutil.h>
--#include <Wininet.h>
-+#include <wininet.h>
- #include <functiondiscoverykeys_devpkey.h>
- 
- //#define DEBUG_MEDIAFOUNDATION
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Sean Link <sean.link@lightdeckdx.com>
@@ -48,7 +35,7 @@ diff --git a/src/plugins/multimedia/ffmpeg/qwincapturablewindows.cpp b/src/plugi
 index 1111111..2222222 100644
 --- a/src/plugins/multimedia/ffmpeg/qwincapturablewindows.cpp
 +++ b/src/plugins/multimedia/ffmpeg/qwincapturablewindows.cpp
-@@ -42,11 +42,7 @@ static QString windowTitle(HWND hwnd) {
+@@ -44,11 +44,7 @@ static QString windowTitle(HWND hwnd) {
      return QString::fromStdWString(buffer);
  }
  
@@ -61,8 +48,8 @@ index 1111111..2222222 100644
          if (!canCaptureWindow(hwnd))
              return TRUE; // Ignore window and continue enumerating
  
-@@ -58,7 +54,11 @@ QList<QCapturableWindow> QWinCapturableWindows::windows() const
-         windows.push_back(windowData.release()->create());
+@@ -59,7 +55,11 @@ QList<QCapturableWindow> QWinCapturableWindows::windows() const
+             windowTitle(hwnd)));
  
          return TRUE;
 -    };

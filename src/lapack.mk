@@ -14,7 +14,6 @@ define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && '$(TARGET)-cmake' --trace-expand '$(SOURCE_DIR)' \
         -DCMAKE_AR='$(PREFIX)/bin/$(TARGET)-ar' \
         -DCMAKE_RANLIB='$(PREFIX)/bin/$(TARGET)-ranlib' \
-        -DBLAS_LIBRARIES="`'$(TARGET)-pkg-config' --libs openblas`"  \
         -DCBLAS=OFF \
         -DLAPACKE=ON \
         -DTEST_FORTRAN_COMPILER:BOOL=OFF
@@ -30,5 +29,5 @@ define $(PKG)_BUILD
     '$(TARGET)-gfortran' \
         -W -Wall -Werror -pedantic \
         '$(PWD)/src/$(PKG)-test.c' -o '$(PREFIX)/$(TARGET)/bin/test-lapacke.exe' \
-        `'$(TARGET)-pkg-config' lapacke --cflags --libs`
+        `'$(TARGET)-pkg-config' lapacke openblas --cflags --libs`
 endef

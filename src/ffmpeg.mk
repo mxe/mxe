@@ -10,7 +10,7 @@ $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://ffmpeg.org/releases/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc bzip2 gnutls lame libass libbluray libbs2b libcaca \
                    libvpx opencore-amr opus sdl2 speex theora vidstab \
-                   vo-amrwbenc vorbis x264 xvidcore yasm zlib
+                   vo-amrwbenc vorbis x264 x265 xvidcore yasm zlib
 
 # DO NOT ADD fdk-aac OR openssl SUPPORT.
 # Although they are free softwares, their licenses are not compatible with
@@ -59,6 +59,7 @@ define $(PKG)_BUILD
         --enable-libvorbis \
         --enable-libvpx \
         --enable-libx264 \
+        --enable-libx265 \
         --enable-libxvid \
         --extra-ldflags="-fstack-protector" \
         $($(PKG)_CONFIGURE_OPTS)

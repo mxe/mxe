@@ -21,7 +21,8 @@ define $(PKG)_BUILD
         $(MXE_CONFIGURE_OPTS) \
         --with-default-audio=win32 \
         --with-audio=win32,sdl,dummy \
-        --enable-modules=no
+        --enable-modules=no \
+        CFLAGS='-std=gnu99'
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
 endef

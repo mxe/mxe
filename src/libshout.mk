@@ -3,8 +3,8 @@
 PKG             := libshout
 $(PKG)_WEBSITE  := https://icecast.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.4.1
-$(PKG)_CHECKSUM := f3acb8dec26f2dbf6df778888e0e429a4ce9378a9d461b02a7ccbf2991bbf24d
+$(PKG)_VERSION  := 2.4.6
+$(PKG)_CHECKSUM := 39cbd4f0efdfddc9755d88217e47f8f2d7108fa767f9d58a2ba26a16d8f7c910
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://downloads.xiph.org/releases/$(PKG)/$($(PKG)_FILE)
@@ -21,7 +21,8 @@ define $(PKG)_BUILD
     cd '$(SOURCE_DIR)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
         ac_cv_prog_PKGCONFIG='$(PREFIX)/bin/$(TARGET)-pkg-config' \
-        --disable-thread
+        --disable-thread \
+        CFLAGS='-std=gnu89'
     $(MAKE) -C '$(SOURCE_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(SOURCE_DIR)' -j 1 install
 endef

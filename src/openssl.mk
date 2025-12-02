@@ -3,8 +3,8 @@
 PKG             := openssl
 $(PKG)_WEBSITE  := https://www.openssl.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.5.2
-$(PKG)_CHECKSUM := c53a47e5e441c930c3928cf7bf6fb00e5d129b630e0aa873b08258656e7345ec
+$(PKG)_VERSION  := 3.6.0
+$(PKG)_CHECKSUM := b6a5f44b7eb69e3fa35dbf15524405b44837a481d43d81daddde3ff21fcbb8e9
 $(PKG)_GH_CONF  := openssl/openssl/releases,openssl-
 $(PKG)_SUBDIR   := openssl-$($(PKG)_VERSION)
 $(PKG)_FILE     := openssl-$($(PKG)_VERSION).tar.gz
@@ -31,6 +31,7 @@ define $(PKG)_BUILD
         zlib \
         $(if $(BUILD_STATIC),no-module no-,)shared \
         no-capieng \
+        no-tests \
         --prefix='$(PREFIX)/$(TARGET)' \
         --libdir='$(PREFIX)/$(TARGET)/lib'
     $($(PKG)_MAKE) build_sw

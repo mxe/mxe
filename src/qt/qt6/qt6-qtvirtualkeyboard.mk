@@ -5,7 +5,7 @@ include src/qt/qt6/qt6-conf.mk
 PKG := qt6-qtvirtualkeyboard
 $(eval $(QT6_METADATA))
 
-$(PKG)_CHECKSUM := 80059a38bdb836f0785292396970edc108f477a68d9a35bed8393750de3d281f
+$(PKG)_CHECKSUM := 5b9cde3188afbc01b602b9016cee95ccd536aea43a6e6cfd297b44f328b9b6df
 $(PKG)_DEPS     := cc qt6-conf qt6-qtbase qt6-qtdeclarative qt6-qtsvg
 
 QT6_PREFIX   = '$(PREFIX)/$(TARGET)/$(MXE_QT6_ID)'

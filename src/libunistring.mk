@@ -3,8 +3,8 @@
 PKG             := libunistring
 $(PKG)_WEBSITE  := https://www.gnu.org/software/libunistring/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.3
-$(PKG)_CHECKSUM := f245786c831d25150f3dfb4317cda1acc5e3f79a5da4ad073ddca58886569527
+$(PKG)_VERSION  := 1.4.1
+$(PKG)_CHECKSUM := 67d88430892527861903788868c77802a217b0959990f7449f2976126a307763
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://ftp.gnu.org/gnu/$(PKG)/$($(PKG)_FILE)
