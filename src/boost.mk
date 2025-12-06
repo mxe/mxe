@@ -4,11 +4,11 @@ PKG             := boost
 $(PKG)_WEBSITE  := https://www.boost.org/
 $(PKG)_DESCR    := Boost C++ Library
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.85.0
-$(PKG)_CHECKSUM := 7009fe1faa1697476bdc7027703a2badb84e849b7b0baad5086b087b971f8617
+$(PKG)_VERSION  := 1.89.0
+$(PKG)_CHECKSUM := 85a33fa22621b4f314f8e85e1a5e2a9363d22e4f4992925d4bb3bc631b5a0c7a
 $(PKG)_SUBDIR   := boost_$(subst .,_,$($(PKG)_VERSION))
 $(PKG)_FILE     := boost_$(subst .,_,$($(PKG)_VERSION)).tar.bz2
-$(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/boost/boost/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := https://archives.boost.io/release/$($(PKG)_VERSION)/source/$($(PKG)_FILE)
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 $(PKG)_DEPS     := cc bzip2 expat zlib
 
@@ -79,7 +79,6 @@ define $(PKG)_BUILD
         -DBOOST_THREAD_USE_LIB \
         -lboost_serialization$($(PKG)_SUFFIX) \
         -lboost_thread$($(PKG)_SUFFIX) \
-        -lboost_system$($(PKG)_SUFFIX) \
         -lboost_chrono$($(PKG)_SUFFIX) \
         -lboost_context$($(PKG)_SUFFIX)
 
@@ -101,7 +100,6 @@ define $(PKG)_BUILD_$(BUILD)
     cd '$(SOURCE_DIR)/tools/build/' && ./bootstrap.sh
 
     # minimal native build - for more features, replace:
-    # --with-system \
     # --with-filesystem \
     #
     # with:
@@ -120,7 +118,6 @@ define $(PKG)_BUILD_$(BUILD)
             threading=multi \
             runtime-link=static \
             --disable-icu \
-            --with-system \
             --with-filesystem \
             --build-dir='$(BUILD_DIR)' \
             --prefix='$(PREFIX)/$(TARGET)' \
