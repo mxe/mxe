@@ -18,6 +18,7 @@ endef
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && '$(TARGET)-cmake' '$(SOURCE_DIR)/$(PKG)-$($(PKG)_VERSION)' \
           -DLIBSBML_DEPENDENCY_DIR=$(PREFIX)/$(TARGET) \
+          -DLIBSBML_SKIP_SHARED_LIBRARY=ON \
           -DCMAKE_INSTALL_PREFIX=${PREFIX}/$(TARGET) \
           -DCMAKE_BUILD_TYPE=Release \
           -DWITH_CPP_NAMESPACE=ON \
@@ -37,13 +38,15 @@ define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && '$(TARGET)-cmake' --build . -j '$(JOBS)'
     cd '$(BUILD_DIR)' && '$(TARGET)-cmake' --install .
     
+    # Make pkg-config's -lsbml actually resolvable in the static triplet
+    cd '$(PREFIX)/$(TARGET)/lib' && \
+        ln -sf $(PKG)-static.a $(PKG).a
+    
     '$(TARGET)-g++' \
         -W -Wall -ansi -pedantic -std=c++17 \
         '$(SOURCE_DIR)$(PKG)-$($(PKG)_VERSION)/examples/c++/fbc/fbc_example1.cpp' \
         -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
-        -I'$(PREFIX)/$(TARGET)/include' \
-        -L'$(PREFIX)/$(TARGET)/lib' \
-        -lsbml-static -lbz2 -lz -lexpat
+        `'$(TARGET)-pkg-config' libsbml expat zlib --cflags --libs`
 endef
 
 
