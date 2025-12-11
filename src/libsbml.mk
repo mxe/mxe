@@ -11,8 +11,9 @@ $(PKG)_URL      := https://github.com/sbmlteam/$(PKG)/archive/refs/tags/$($(PKG)
 $(PKG)_DEPS     := cc bzip2 zlib expat
 
 define $(PKG)_UPDATE
-    echo 'TODO: write update script for $(PKG).' >&2;
-    echo $($(PKG)_VERSION)
+    $(WGET) -q -O- 'https://github.com/sbmlteam/libsbml/releases' | \
+    $(SED) -n 's,.*releases/tag/v\([0-9][^"]*\).*,\1,p' | \
+    head -1
 endef
 
 define $(PKG)_BUILD
