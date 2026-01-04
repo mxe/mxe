@@ -18,6 +18,7 @@ define $(PKG)_BUILD
         -Dexamples=disabled \
         -Dintrospection=disabled \
         -Ddoc=disabled \
+        -Dc_std=gnu99 \
         $(PKG_MESON_OPTS) \
         '$(BUILD_DIR)' '$(SOURCE_DIR)'
     '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)'

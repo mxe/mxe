@@ -1,11 +1,11 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := hyperscan
-$(PKG)_WEBSITE  := https://01.org/hyperscan
+$(PKG)_WEBSITE  := https://www.hyperscan.io/
 $(PKG)_DESCR    := Hyperscan
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.4.0
-$(PKG)_CHECKSUM := e51aba39af47e3901062852e5004d127fa7763b5dbbc16bcca4265243ffa106f
+$(PKG)_VERSION  := 5.4.2
+$(PKG)_CHECKSUM := 32b0f24b3113bbc46b6bfaa05cf7cf45840b6b59333d078cc1f624e4c40b2b99
 $(PKG)_GH_CONF  := 01org/hyperscan/tags, v
 $(PKG)_DEPS     := cc boost $(BUILD)~ragel
 

@@ -4,8 +4,8 @@ PKG             := gtk3
 $(PKG)_WEBSITE  := https://gtk.org/
 $(PKG)_DESCR    := GTK+
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.24.32
-$(PKG)_CHECKSUM := a667e13f8f86ea44455b0443f4870bf23f53f6707c1df436eb2b516c62496bff
+$(PKG)_VERSION  := 3.24.43
+$(PKG)_CHECKSUM := 7e04f0648515034b806b74ae5d774d87cffb1a2a96c468cb5be476d51bf2f3c7
 $(PKG)_SUBDIR   := gtk+-$($(PKG)_VERSION)
 $(PKG)_FILE     := gtk+-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.gnome.org/sources/gtk+/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
@@ -22,7 +22,7 @@ endef
 define $(PKG)_BUILD
     # workaround for gcc12 snapshot
     $(if $(call gte, $(word 1,$(subst ., ,$(subst -, ,$(gcc_VERSION)))), 12), \
-    	$(SED) -i '/-Werror=array-bounds/d' '$(SOURCE_DIR)/meson.build')
+        $(SED) -i '/-Werror=array-bounds/d' '$(SOURCE_DIR)/meson.build')
     # Meson configure, with additional options for GTK
     '$(MXE_MESON_WRAPPER)' $(MXE_MESON_OPTS) \
         -Dtests=false \
@@ -30,6 +30,7 @@ define $(PKG)_BUILD
         -Ddemos=false \
         -Dinstalled_tests=false \
         -Dbuiltin_immodules=yes \
+        -Dc_link_args='-lstdc++' \
         -Dintrospection=false \
         '$(BUILD_DIR)' '$(SOURCE_DIR)'
     '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)'
@@ -37,8 +38,8 @@ define $(PKG)_BUILD
         '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)' install
 
     # Just compile our MXE testfile
-    '$(TARGET)-gcc' \
-        -W -Wall -Werror -ansi \
+    '$(TARGET)-g++' \
+        -W -Wall -ansi \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-gtk3.exe' \
         `'$(TARGET)-pkg-config' gtk+-3.0 --cflags --libs`
 endef

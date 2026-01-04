@@ -5,8 +5,8 @@ include src/qt/qt6/qt6-conf.mk
 PKG := qt6-qt5compat
 $(eval $(QT6_METADATA))
 
-$(PKG)_CHECKSUM := eeb2a9e27771e15aaa7935f61a8024b46cc8e2044ae0ceacff2754c0cb806464
-$(PKG)_DEPS     := cc qt6-conf qt6-qtbase
+$(PKG)_CHECKSUM := 72396d160a153dee01b41cf0cae9ad46204cf613adb791b3ee85a7efeadffe24
+$(PKG)_DEPS     := cc qt6-conf qt6-qtbase qt6-qtshadertools
 
 QT6_PREFIX   = '$(PREFIX)/$(TARGET)/$(MXE_QT6_ID)'
 QT6_QT_CMAKE = '$(QT6_PREFIX)/$(if $(findstring mingw,$(TARGET)),bin,libexec)/qt-cmake-private' \

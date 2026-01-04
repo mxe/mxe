@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 35b1689169efbc7c3c147387e5495130f371b4bad8ec24f049d28e126d52d
 $(PKG)_SUBDIR   := .
 $(PKG)_FILE     := lzma$(subst .,,$($(PKG)_VERSION)).7z
 $(PKG)_URL      := https://www.7-zip.org/a/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc
+$(PKG)_DEPS     := cc dlfcn-win32
 $(PKG)_DEPS_$(BUILD) :=
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 

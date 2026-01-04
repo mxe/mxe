@@ -3,8 +3,8 @@
 PKG             := nettle
 $(PKG)_WEBSITE  := https://www.lysator.liu.se/~nisse/nettle/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.9.1
-$(PKG)_CHECKSUM := ccfeff981b0ca71bbd6fbcb054f407c60ffb644389a5be80d6716d5b550c6ce3
+$(PKG)_VERSION  := 3.10.2
+$(PKG)_CHECKSUM := fe9ff51cb1f2abb5e65a6b8c10a92da0ab5ab6eaf26e7fc2b675c45f1fb519b5
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://www.lysator.liu.se/~nisse/archive/$($(PKG)_FILE)
@@ -16,13 +16,14 @@ define $(PKG)_UPDATE
     $(SED) -n 's,.*nettle-\([0-9][^>]*\)\.tar.*,\1,p' | \
     grep -v 'pre' | \
     grep -v 'rc' | \
-    sort | \
+    sort -V | \
     tail -1
 endef
 
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS) \
+        CFLAGS='-std=gnu99' \
         --disable-documentation \
         $(if $(call seq,darwin,$(OS_SHORT_NAME)),gmp_cv_prog_exeext_for_build='')
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' SUBDIRS=

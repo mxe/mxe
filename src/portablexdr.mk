@@ -21,7 +21,8 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
-        AR='$(TARGET)-ar'
+        AR='$(TARGET)-ar' \
+        CFLAGS='-std=gnu89'
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
 endef

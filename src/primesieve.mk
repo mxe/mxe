@@ -4,8 +4,8 @@ PKG             := primesieve
 $(PKG)_WEBSITE  := https://primesieve.org/
 $(PKG)_DESCR    := Primesieve
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 7.4
-$(PKG)_CHECKSUM := ff9b9e8c6ca3b5c642f9a334cc399dd55830a8d9c25afd066528aa2040032399
+$(PKG)_VERSION  := 12.8
+$(PKG)_CHECKSUM := a0bf618a60a6b815c628196da9cb47e878e1414a06b4025acc5a1f9050223282
 $(PKG)_GH_CONF  := kimwalisch/primesieve/tags, v
 $(PKG)_DEPS     := cc
 

@@ -27,7 +27,8 @@ define $(PKG)_BUILD
         PKG_CONFIG='$(TARGET)-pkg-config' \
         $(if $(BUILD_SHARED),\
             lt_cv_deplibs_check_method='file_magic file format (pe-i386|pe-x86-64)' \
-            lt_cv_file_magic_cmd='$$OBJDUMP -f')
+            lt_cv_file_magic_cmd='$$OBJDUMP -f') \
+        CFLAGS='-std=gnu89'
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(MXE_DISABLE_PROGRAMS)
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install $(MXE_DISABLE_PROGRAMS)
 endef

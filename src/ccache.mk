@@ -21,7 +21,7 @@ endef
 BOOTSTRAP_PKGS += ccache
 
 $(PKG)_SYS_CONF := $(MXE_CCACHE_DIR)/etc/$(PKG).conf
-$(PKG)_USR_CONF := $(MXE_CCACHE_DIR)/$(PKG).conf
+$(PKG)_USR_CONF := $(MXE_CCACHE_CACHE_DIR)/$(PKG).conf
 
 ifeq (mxe,$(MXE_USE_CCACHE))
 define $(PKG)_BUILD_$(BUILD)

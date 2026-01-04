@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Jonas Kvinge <jonas@jkvinge.net>
 Date: Mon, 10 Oct 2022 23:06:29 +0200
-Subject: [PATCH 1/1] mingw build fixes
+Subject: [PATCH 1/2] mingw build fixes
 
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
@@ -33,7 +33,7 @@ index 1111111..2222222 100644
  set(C_FLAGS_TO_CHECK
  # Variable length arrays are way bad, most especially at run time
  "-Wvla"
-@@ -444,7 +449,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "FreeBSD")
+@@ -458,7 +463,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "FreeBSD")
      set(FREEBSD true)
  endif(CMAKE_SYSTEM_NAME MATCHES "FreeBSD")
  
@@ -42,7 +42,7 @@ index 1111111..2222222 100644
  if(CMAKE_C_COMPILER_ID MATCHES "Intel")
      SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -diag-error 10006 -diag-disable 68 -diag-disable 177 -diag-disable 186 -diag-disable 2304 -diag-disable 2305 -diag-disable 2338 -diag-disable 1418 -diag-disable 279 -diag-disable=remark")
  endif()
-@@ -466,7 +471,7 @@ endif()
+@@ -480,7 +485,7 @@ endif()
  add_subdirectory(util)
  add_subdirectory(doc/dev-reference)
  
@@ -51,7 +51,7 @@ index 1111111..2222222 100644
  # PCRE check, we have a fixed requirement for PCRE to use Chimera
  # and hscollider
  set(PCRE_REQUIRED_MAJOR_VERSION 8)
-@@ -495,7 +500,7 @@ endif()
+@@ -509,7 +514,7 @@ endif()
  configure_file(${CMAKE_MODULE_PATH}/config.h.in ${PROJECT_BINARY_DIR}/config.h)
  configure_file(src/hs_version.h.in ${PROJECT_BINARY_DIR}/hs_version.h)
  
@@ -60,7 +60,7 @@ index 1111111..2222222 100644
      # expand out library names for pkgconfig static link info
      foreach (LIB ${CMAKE_CXX_IMPLICIT_LINK_LIBRARIES})
          # this is fragile, but protects us from toolchain specific files
-@@ -518,7 +523,7 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${EXTRA_C_FLAGS}")
+@@ -532,7 +537,7 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${EXTRA_C_FLAGS}")
  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${EXTRA_CXX_FLAGS}")
  endif()
  
@@ -69,7 +69,7 @@ index 1111111..2222222 100644
  # PCRE check, we have a fixed requirement for PCRE to use Chimera
  # and hscollider
  set(PCRE_REQUIRED_MAJOR_VERSION 8)
-@@ -543,7 +548,7 @@ if (EXISTS ${CMAKE_SOURCE_DIR}/chimera/CMakeLists.txt AND BUILD_CHIMERA)
+@@ -557,7 +562,7 @@ if (EXISTS ${CMAKE_SOURCE_DIR}/chimera/CMakeLists.txt AND BUILD_CHIMERA)
  endif()
  endif()
  
@@ -418,3 +418,37 @@ index 1111111..2222222 100644
  void loadExpressions(const string &inPath, ExpressionMap &exprMap) {
      // Is our input path a file or a directory?
      struct stat st;
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Tue, 31 Dec 2024 16:41:39 +0000
+Subject: [PATCH 2/2] fix ragel generated files if host is arm64
+
+Ragel uses host's signness of "char" type, so it generates .cpp files assuming char
+is unsigned if the host is arm64. This resulted in "error: narrowing conversion"
+errors when the generated file is compiled.
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -74,6 +74,7 @@ include (${CMAKE_MODULE_PATH}/boost.cmake)
+ # -- make this work? set(python_ADDITIONAL_VERSIONS 2.7 2.6)
+ find_package(PythonInterp)
+ find_program(RAGEL ragel)
++find_program(SED sed HINTS ENV SED)
+ 
+ if(PYTHONINTERP_FOUND)
+     set(PYTHON ${PYTHON_EXECUTABLE})
+diff --git a/cmake/ragel.cmake b/cmake/ragel.cmake
+index 1111111..2222222 100644
+--- a/cmake/ragel.cmake
++++ b/cmake/ragel.cmake
+@@ -8,6 +8,7 @@ function(ragelmaker src_rl)
+         OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${src_dir}/${src_file}.cpp
+         COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/${src_dir}
+         COMMAND ${RAGEL} ${CMAKE_CURRENT_SOURCE_DIR}/${src_rl} -o ${rl_out}
++        COMMAND ${SED} -i '/_offsets/s/const char _/const unsigned char _/' ${rl_out}
+         DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${src_rl}
+         )
+     add_custom_target(ragel_${src_file} DEPENDS ${rl_out})

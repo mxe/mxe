@@ -95,3 +95,47 @@ index 1111111..2222222 100644
    end;
  
    let reorder x y = x := !x @ (List.concat (List.rev !y)) in
+
+
+diff --git a/byterun/intext.h b/byterun/intext.h
+index 11111111..22222222 100644
+--- a/byterun/intext.h
++++ b/byterun/intext.h
+@@ -159,7 +159,7 @@ struct code_fragment {
+   char digest_computed;
+ };
+ 
+-struct ext_table caml_code_fragments_table;
++extern struct ext_table caml_code_fragments_table;
+ 
+ /* </private> */
+ 
+
+diff --git a/byterun/intern.c b/byterun/intern.c
+index 11111111..22222222 100644
+--- a/byterun/intern.c
++++ b/byterun/intern.c
+@@ -70,6 +70,8 @@ static value * camlinternaloo_last_id = NULL;
+ /* Pointer to a reference holding the last object id.
+    -1 means not available (CamlinternalOO not loaded). */
+ 
++struct ext_table caml_code_fragments_table;
++
+ static char * intern_resolve_code_pointer(unsigned char digest[16],
+                                           asize_t offset);
+ static void intern_bad_code_pointer(unsigned char digest[16]) Noreturn;
+
+
+diff --git a/asmrun/signals_asm.c b/asmrun/signals_asm.c
+index 4065826e..58b6434e 100644
+--- a/asmrun/signals_asm.c
++++ b/asmrun/signals_asm.c
+@@ -176,7 +176,7 @@ DECLARE_SIGNAL_HANDLER(trap_handler)
+ #ifdef HAS_STACK_OVERFLOW_DETECTION
+ 
+ static char * system_stack_top;
+-static char sig_alt_stack[SIGSTKSZ];
++static char sig_alt_stack[32768];
+ 
+ #if defined(SYS_linux)
+ /* PR#4746: recent Linux kernels with support for stack randomization

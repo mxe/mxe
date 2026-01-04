@@ -5,8 +5,8 @@ include src/qt/qt6/qt6-conf.mk
 PKG := qt6-qtcharts
 $(eval $(QT6_METADATA))
 
-$(PKG)_CHECKSUM := 4a9b800e0af5bfded97592aa5836cfd761bf4de1ada414a603951f021d752ed9
-$(PKG)_DEPS     := cc qt6-conf qt6-qtbase
+$(PKG)_CHECKSUM := 17992278017cfb8fafef74b61e35559d29482df959ba469327a45b3bb66e2af4
+$(PKG)_DEPS     := cc qt6-conf qt6-qtbase qt6-qtdeclarative
 
 QT6_PREFIX   = '$(PREFIX)/$(TARGET)/$(MXE_QT6_ID)'
 QT6_QT_CMAKE = '$(QT6_PREFIX)/$(if $(findstring mingw,$(TARGET)),bin,libexec)/qt-cmake-private' \

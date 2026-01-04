@@ -13,7 +13,7 @@ diff --git a/configure b/configure
 index 1111111..2222222 100755
 --- a/configure
 +++ b/configure
-@@ -561,9 +561,6 @@ process_detect() {
+@@ -621,9 +621,6 @@ process_detect() {
          }
      fi
      check_header stdio.h || die "Unable to invoke compiler: ${CC} ${CFLAGS}"
@@ -21,9 +21,8 @@ index 1111111..2222222 100755
 -int main(void) {return 0;}
 -EOF
      # check system headers
-     check_header stdint.h
-     check_header pthread.h
-
+ 
+     # Use both check_header and check_lib here, since check_lib
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
@@ -42,18 +41,6 @@ index 1111111..2222222 100755
  ##
  ##  Copyright (c) 2010 The WebM project authors. All Rights Reserved.
  ##
-
-diff --git a/build/make/gen_msvs_vcxproj.sh b/build/make/gen_msvs_vcxproj.sh
-index 1111111..2222222 100755
---- a/build/make/gen_msvs_vcxproj.sh
-+++ b/build/make/gen_msvs_vcxproj.sh
-@@ -1,4 +1,4 @@
--#!/bin/bash
-+#!/usr/bin/env bash
- ##
- ##  Copyright (c) 2010 The WebM project authors. All Rights Reserved.
- ##
- 
 diff --git a/build/make/gen_msvs_sln.sh b/build/make/gen_msvs_sln.sh
 index 1111111..2222222 100755
 --- a/build/make/gen_msvs_sln.sh
@@ -63,4 +50,14 @@ index 1111111..2222222 100755
 +#!/usr/bin/env bash
  ##
  ##  Copyright (c) 2010 The WebM project authors. All Rights Reserved.
+ ##
+diff --git a/build/make/gen_msvs_vcxproj.sh b/build/make/gen_msvs_vcxproj.sh
+index 1111111..2222222 100755
+--- a/build/make/gen_msvs_vcxproj.sh
++++ b/build/make/gen_msvs_vcxproj.sh
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/usr/bin/env bash
+ ##
+ ##  Copyright (c) 2013 The WebM project authors. All Rights Reserved.
  ##

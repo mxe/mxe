@@ -31,6 +31,7 @@ define $(PKG)_BUILD
             --disable-tif-shared \
             --disable-webp-shared) \
         WINDRES='$(TARGET)-windres' \
+        CFLAGS='-std=gnu89' \
         LIBS='-lz'
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(MXE_DISABLE_PROGRAMS)
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install $(MXE_DISABLE_PROGRAMS)

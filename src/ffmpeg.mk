@@ -3,14 +3,14 @@
 PKG             := ffmpeg
 $(PKG)_WEBSITE  := https://ffmpeg.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.2.3
-$(PKG)_CHECKSUM := 217eb211c33303b37c5521a5abe1f0140854d6810c6a6ee399456cc96356795e
+$(PKG)_VERSION  := 7.1.1
+$(PKG)_CHECKSUM := 733984395e0dbbe5c046abda2dc49a5544e7e0e1e2366bba849222ae9e3a03b1
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
+$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://ffmpeg.org/releases/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc bzip2 gnutls lame libass libbluray libbs2b libcaca \
                    libvpx opencore-amr opus sdl2 speex theora vidstab \
-                   vo-amrwbenc vorbis x264 xvidcore yasm zlib
+                   vo-amrwbenc vorbis x264 x265 xvidcore yasm zlib
 
 # DO NOT ADD fdk-aac OR openssl SUPPORT.
 # Although they are free softwares, their licenses are not compatible with
@@ -40,11 +40,9 @@ define $(PKG)_BUILD
         --disable-pthreads \
         --enable-w32threads \
         --disable-doc \
-        --enable-avresample \
         --enable-gpl \
         --enable-version3 \
         --extra-libs='-mconsole' \
-        --enable-avisynth \
         --enable-gnutls \
         --enable-libass \
         --enable-libbluray \
@@ -61,6 +59,7 @@ define $(PKG)_BUILD
         --enable-libvorbis \
         --enable-libvpx \
         --enable-libx264 \
+        --enable-libx265 \
         --enable-libxvid \
         --extra-ldflags="-fstack-protector" \
         $($(PKG)_CONFIGURE_OPTS)

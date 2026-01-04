@@ -4,28 +4,133 @@ Contains ad hoc patches for cross building.
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: darealshinji <djcj@gmx.de>
-Date: Sat, 1 Jul 2017 01:26:10 +0200
-Subject: [PATCH 1/1] enable static library builds
+Date: Mon, 23 Oct 2023 12:00:00 +0200
+Subject: [PATCH 1/1] ad hoc patches
+
+* enable static library builds
+* enable pthreads
+* fix compilation error in JPEGDecoder.cpp;
+  see https://sourceforge.net/p/djvu/djvulibre-git/ci/208a8d6c212e994071dbc56ee5eea3f931eb5860/
+  and comment in libjpeg source
+  https://github.com/libjpeg-turbo/libjpeg-turbo/blob/ec32420f6b5dfa4e86883d42b209e8371e55aeb5/jmorecfg.h#L128C1-L134C1
 
 
 diff --git a/libdjvu/Makefile.am b/libdjvu/Makefile.am
 index 1111111..2222222 100644
 --- a/libdjvu/Makefile.am
 +++ b/libdjvu/Makefile.am
-@@ -35,6 +35,7 @@ libdjvulibre_la_LDFLAGS = -no-undefined -version-info $(version_info)
- if HAVE_OS_WIN32
- libdjvulibre_la_CPPFLAGS += -DDJVUAPI_EXPORT
- libdjvulibre_la_CPPFLAGS += -DDDJVUAPI_EXPORT -DMINILISPAPI_EXPORT
-+libdjvulibre_la_CPPFLAGS += $(EXTRA_CPPFLAGS)
- libdjvulibre_la_LDFLAGS += -Wl,--export-all-symbols
+@@ -29,15 +29,10 @@ libdjvulibre_la_SOURCES = Arrays.cpp BSByteStream.cpp			\
+ 
+ libdjvulibre_la_CPPFLAGS = -DDIR_DATADIR=\"$(datadir)\"
+ libdjvulibre_la_CXXFLAGS = $(JPEG_CFLAGS) $(PTHREAD_CFLAGS)
++libdjvulibre_la_CXXFLAGS += -fvisibility=hidden
+ libdjvulibre_la_LIBADD = $(JPEG_LIBS) $(PTHREAD_LIBS)
+ libdjvulibre_la_LDFLAGS = -no-undefined -version-info $(version_info)
+ 
+-if HAVE_OS_WIN32
+-libdjvulibre_la_CPPFLAGS += -DDJVUAPI_EXPORT 
+-libdjvulibre_la_CPPFLAGS += -DDDJVUAPI_EXPORT -DMINILISPAPI_EXPORT
+-libdjvulibre_la_LDFLAGS += -Wl,--export-all-symbols
+-endif
+-
+ if HAVE_OS_APPLE
+ libdjvulibre_la_LDFLAGS += -framework CoreFoundation
  endif
+diff --git a/libdjvu/DjVuGlobal.h b/libdjvu/DjVuGlobal.h
+index 1111111..2222222 100644
+--- a/libdjvu/DjVuGlobal.h
++++ b/libdjvu/DjVuGlobal.h
+@@ -71,7 +71,9 @@
+ #endif
  
-@@ -46,7 +47,7 @@ sed_process = $(SED) \
-  -e 's,@includedir\@,$(includedir),g' \
-  -e 's,@Libs\@,-L$(libdir) -ldjvulibre,g' \
-  -e 's,@Libsprivate\@,$(JPEG_LIBS) $(PTHREAD_LIBS) $(LIBS),g' \
-- -e 's,@Cflags\@,-I$(includedir) $(JPEG_CFLAGS) $(PTHREAD_CFLAGS),g' \
-+ -e 's,@Cflags\@,-I$(includedir) $(JPEG_CFLAGS) $(PTHREAD_CFLAGS) $(EXTRA_CPPFLAGS),g' \
-  < $< > $@ || (rm $@; exit 1)
+ #ifndef DJVUAPI
+-# ifdef _WIN32
++# ifdef __GNUC__
++#  define DJVUAPI __attribute__((visibility("default")))
++# elif defined(_WIN32)
+ #  ifdef DJVUAPI_EXPORT
+ #   define DJVUAPI __declspec(dllexport)
+ #  else
+diff --git a/libdjvu/ddjvuapi.h b/libdjvu/ddjvuapi.h
+index 1111111..2222222 100644
+--- a/libdjvu/ddjvuapi.h
++++ b/libdjvu/ddjvuapi.h
+@@ -69,7 +69,9 @@ extern "C" {
+ #include <stdio.h>
  
- pc_verbose = $(pc_verbose_@AM_V@)
+ #ifndef DDJVUAPI
+-# ifdef _WIN32
++# ifdef __GNUC__
++#  define DDJVUAPI __attribute__((visibility("default")))
++# elif defined(_WIN32)
+ #  ifdef DDJVUAPI_EXPORT
+ #   define DDJVUAPI __declspec(dllexport)
+ #  else
+diff --git a/libdjvu/miniexp.h b/libdjvu/miniexp.h
+index 1111111..2222222 100644
+--- a/libdjvu/miniexp.h
++++ b/libdjvu/miniexp.h
+@@ -27,7 +27,9 @@ extern "C" {
+ #endif
+ 
+ #ifndef MINILISPAPI
+-# ifdef _WIN32
++# ifdef __GNUC__
++#  define MINILISPAPI __attribute__((visibility("default")))
++# elif defined(_WIN32)
+ #  ifdef MINILISPAPI_EXPORT
+ #   define MINILISPAPI __declspec(dllexport)
+ #  else
+diff --git a/libdjvu/JPEGDecoder.cpp b/libdjvu/JPEGDecoder.cpp
+index 1111111..2222222 100644
+--- a/libdjvu/JPEGDecoder.cpp
++++ b/libdjvu/JPEGDecoder.cpp
+@@ -62,6 +62,10 @@
+ 
+ #ifdef NEED_JPEG_DECODER
+ 
++#include "GSmartPointer.h"
++#include "ByteStream.h"
++#include "GPixmap.h"
++
+ #ifdef __cplusplus
+ extern "C" {
+ #endif
+@@ -81,8 +85,6 @@
+ #endif
+ 
+ #include "JPEGDecoder.h"
+-#include "ByteStream.h"
+-#include "GPixmap.h"
+ #ifdef LIBJPEGNAME
+ #include "DjVuDynamic.h"
+ #include "GString.h"
+diff --git a/configure.ac b/configure.ac
+index 1111111..2222222 100755
+--- a/configure.ac
++++ b/configure.ac
+@@ -209,9 +209,9 @@ fi
+ # Test auxilliary packages
+ # ----------------------------------------
+ 
+-# Search for PTHREADS (when not on windows)
++# Search for PTHREADS
+ have_pthread=no
+-AM_COND_IF([HAVE_OS_WIN32],,[AC_PATH_PTHREAD([have_pthread=yes])])
++AC_PATH_PTHREAD([have_pthread=yes])
+ 
+ # Search JPEG library
+ AC_PATH_JPEG([have_jpeg="yes"], [have_jpeg="no"])
+diff --git a/libdjvu/miniexp.cpp b/libdjvu/miniexp.cpp
+index 1111111..2222222 100644
+--- a/libdjvu/miniexp.cpp
++++ b/libdjvu/miniexp.cpp
+@@ -71,7 +71,7 @@ assertfail(const char *fn, int ln)
+ /* -------------------------------------------------- */
+ 
+ #ifndef WITHOUT_THREADS
+-# ifdef _WIN32
++# if defined(_WIN32) && !defined(__MINGW32__)
+ #  include <windows.h>
+ #  define USE_WINTHREADS 1
+ # elif defined(HAVE_PTHREAD)

@@ -3,12 +3,12 @@
 PKG             := cairo
 $(PKG)_WEBSITE  := https://cairographics.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.16.0
-$(PKG)_CHECKSUM := 5e7b29b3f113ef870d1e3ecf8adf21f923396401604bda16d44be45e66052331
+$(PKG)_VERSION  := 1.18.4
+$(PKG)_CHECKSUM := 445ed8208a6e4823de1226a74ca319d3600e83f6369f99b14265006599c32ccb
 $(PKG)_SUBDIR   := cairo-$($(PKG)_VERSION)
 $(PKG)_FILE     := cairo-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://cairographics.org/releases/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc fontconfig freetype-bootstrap glib libpng lzo pixman zlib
+$(PKG)_DEPS     := cc meson-wrapper fontconfig freetype-bootstrap glib libpng lzo pixman zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://cairographics.org/releases/?C=M;O=D' | \
@@ -17,33 +17,20 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(SED) -i 's,libpng12,libpng,g'                          '$(1)/configure'
-    $(SED) -i 's,^\(Libs:.*\),\1 @CAIRO_NONPKGCONFIG_LIBS@,' '$(1)/src/cairo.pc.in'
-    cd '$(1)' && ./configure \
-        $(MXE_CONFIGURE_OPTS) \
-        --disable-lto \
-        --disable-gtk-doc \
-        --disable-test-surfaces \
-        --disable-gcov \
-        --disable-xlib \
-        --disable-xlib-xrender \
-        --disable-xcb \
-        --disable-quartz \
-        --disable-quartz-font \
-        --disable-quartz-image \
-        --disable-os2 \
-        --disable-beos \
-        --disable-directfb \
-        --disable-atomic \
-        --enable-win32 \
-        --enable-win32-font \
-        --enable-png \
-        --enable-ft \
-        --enable-ps \
-        --enable-pdf \
-        --enable-svg \
-        --disable-pthread \
-        CFLAGS="$(if $(BUILD_STATIC),-DCAIRO_WIN32_STATIC_BUILD)" \
-        LIBS="-lmsimg32 -lgdi32 `$(TARGET)-pkg-config pixman-1 --libs`"
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+    CFLAGS="-Wno-incompatible-pointer-types" \
+    '$(MXE_MESON_WRAPPER)' $(MXE_MESON_OPTS) \
+        -Dgtk_doc=false \
+        -Dtests=disabled \
+        -Dxcb=disabled \
+        -Dxlib=disabled \
+        -Dxlib-xcb=disabled \
+        -Dquartz=disabled \
+        -Dpng=enabled \
+        -Dfontconfig=enabled \
+        -Dfreetype=enabled \
+        '$(BUILD_DIR)' '$(SOURCE_DIR)'
+    $(if $(BUILD_STATIC), \
+        echo '#define CAIRO_WIN32_STATIC_BUILD 1' >> '$(BUILD_DIR)/src/cairo-features.h',)
+    '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)'
+    '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)' install
 endef

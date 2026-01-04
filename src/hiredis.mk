@@ -4,8 +4,8 @@ PKG             := hiredis
 $(PKG)_WEBSITE  := https://github.com/redis/hiredis
 $(PKG)_DESCR    := HIREDIS
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.0.2
-$(PKG)_CHECKSUM := e0ab696e2f07deb4252dda45b703d09854e53b9703c7d52182ce5a22616c3819
+$(PKG)_VERSION  := 1.2.0
+$(PKG)_CHECKSUM := 82ad632d31ee05da13b537c124f819eb88e18851d9cb0c30ae0552084811588c
 $(PKG)_GH_CONF  := redis/hiredis/releases,v
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_URL      := https://github.com/redis/hiredis/archive/v$($(PKG)_VERSION).tar.gz
@@ -18,7 +18,7 @@ define $(PKG)_BUILD
             -DENABLE_SSL=ON \
             -DCMAKE_BUILD_TYPE="Release" \
             -DENABLE_EXAMPLES=OFF \
-         '$(1)' 
+         '$(1)'
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install VERBOSE=1
 

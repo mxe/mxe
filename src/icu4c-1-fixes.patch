@@ -1,0 +1,40 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Thu, 15 Feb 2024 10:38:19 +0100
+Subject: [PATCH 1/1] MXE: disable special prefix for static libraries
+
+
+diff --git a/source/config/mh-mingw b/source/config/mh-mingw
+index 1111111..2222222 100644
+--- a/source/config/mh-mingw
++++ b/source/config/mh-mingw
+@@ -90,6 +90,10 @@ IMPORT_LIB_EXT = .dll.a
+ 
+ LIBPREFIX=lib
+ 
++## Don't want prefix for MXE because static and shared are separate targets
++STATIC_PREFIX_WHEN_USED =
++STATIC_PREFIX =
++
+ # Change the stubnames so that poorly working FAT disks and installation programs can work.
+ # This is also for backwards compatibility.
+ DATA_STUBNAME = dt
+diff --git a/source/config/mh-mingw64 b/source/config/mh-mingw64
+index 1111111..2222222 100644
+--- a/source/config/mh-mingw64
++++ b/source/config/mh-mingw64
+@@ -90,6 +90,10 @@ IMPORT_LIB_EXT = .dll.a
+ 
+ LIBPREFIX=
+ 
++## Don't want prefix for MXE because static and shared are separate targets
++STATIC_PREFIX_WHEN_USED =
++STATIC_PREFIX =
++
+ # Change the stubnames so that poorly working FAT disks and installation programs can work.
+ # This is also for backwards compatibility.
+ DATA_STUBNAME = dt

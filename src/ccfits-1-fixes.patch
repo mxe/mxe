@@ -1,0 +1,41 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Tue, 24 Dec 2024 01:33:31 +1100
+Subject: [PATCH 1/1] install shared lib correctly and disable programs
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -64,14 +64,21 @@ TARGET_LINK_LIBRARIES(${LIB_NAME} ${CFITSIO_LIBRARY}
+ SET_TARGET_PROPERTIES(${LIB_NAME} PROPERTIES
+     VERSION ${${PROJECT_NAME}_VERSION}
+ )
+-install(TARGETS ${LIB_NAME} DESTINATION ${LIB_DESTINATION})
++install(TARGETS ${LIB_NAME}
++    RUNTIME DESTINATION ${BIN_DESTINATION}
++    LIBRARY DESTINATION ${LIB_DESTINATION}
++    ARCHIVE DESTINATION ${LIB_DESTINATION}
++)
+ install(FILES ${H_FILES} DESTINATION ${INCLUDE_INSTALL_DIR})
+ 
+ ENABLE_TESTING()
+ 
+ SET(TEST_FILES file1.pha)
+ FILE(COPY ${TEST_FILES} DESTINATION ${CCfits_BINARY_DIR})
+-ADD_EXECUTABLE(cookbook cookbook.cxx)
+-INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR} "${CMAKE_SOURCE_DIR}/../")
+-TARGET_LINK_LIBRARIES(cookbook ${LIB_NAME} ${CFITSIO_LIBRARY})
+-ADD_TEST(cookbook cookbook)
++
++IF (BUILD_PROGRAMS)
++    ADD_EXECUTABLE(cookbook cookbook.cxx)
++    INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR} "${CMAKE_SOURCE_DIR}/../")
++    TARGET_LINK_LIBRARIES(cookbook ${LIB_NAME} ${CFITSIO_LIBRARY})
++    ADD_TEST(cookbook cookbook)
++ENDIF()

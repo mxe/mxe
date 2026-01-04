@@ -19,15 +19,15 @@
 
 PKG             := gcc
 # version used for tarball, will be X-YYYYMMDD for snapshots
-$(PKG)_VERSION  := 13.2.0
+$(PKG)_VERSION  := 13.4.0
 # release used for install dirs, will be X.0.1 for snapshots
 # change to $($(PKG)_VERSION) variable on release X.Y[>0].Z
 $(PKG)_RELEASE  := $($(PKG)_VERSION)
-$(PKG)_CHECKSUM := e275e76442a6067341a27f04c5c6b83d8613144004c0413528863dc6b5c743da
+$(PKG)_CHECKSUM := 9c4ce6dbb040568fdc545588ac03c5cbc95a8dbf0c7aa490170843afb59ca8f5
 $(PKG)_SUBDIR   := gcc-$($(PKG)_VERSION)
 $(PKG)_FILE     := gcc-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://ftp.gnu.org/gnu/gcc/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_URL_2    := https://www.mirrorservice.org/sites/sourceware.org/pub/gcc/snapshots/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL_2    := https://www.mirrorservice.org/sites/sourceware.org/pub/gcc/releases/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_PATCHES  := $(dir $(lastword $(MAKEFILE_LIST)))/gcc13.patch
 $(PKG)_DEPS     := binutils mingw-w64 $(addprefix $(BUILD)~,gmp isl mpc mpfr zstd)
 

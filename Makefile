@@ -41,7 +41,7 @@ OPENSSL    := openssl
 PATCH      := $(shell gpatch --help >/dev/null 2>&1 && echo g)patch
 PYTHON     := $(shell PATH="$(ORIG_PATH)" which python)
 PYTHON3    := $(shell PATH="$(ORIG_PATH)" which python3)
-PY_XY_VER  := $(shell $(PYTHON) -c "import sys; print('{0[0]}.{0[1]}'.format(sys.version_info))")
+PY_XY_VER  := $(if $(PYTHON),$(shell $(PYTHON) -c "import sys; print('{0[0]}.{0[1]}'.format(sys.version_info))"))
 SED        := $(shell gsed --help >/dev/null 2>&1 && echo g)sed
 SORT       := $(shell gsort --help >/dev/null 2>&1 && echo g)sort
 TOUCH      := $(shell gtouch --help >/dev/null 2>&1 && echo g)touch
@@ -796,7 +796,7 @@ $(PREFIX)/$(3)/installed/$(1): $(PKG_MAKEFILES) \
 	        @[ -d '$(LOG_DIR)/$(TIMESTAMP)' ] || mkdir -p '$(LOG_DIR)/$(TIMESTAMP)'
 	        @touch '$(LOG_DIR)/$(TIMESTAMP)/$(1)_$(3)'
 	        @ln -sf '$(TIMESTAMP)/$(1)_$(3)' '$(LOG_DIR)/$(1)_$(3)'
-	        @if ! (time $(PRELOAD) WINEPREFIX='$(2)/readonly' \
+	        @if ! (time $(PRELOAD) WINEPREFIX='/dev/null' \
 	               $(MAKE) -f '$(MAKEFILE)' \
 	                   'build-only-$(1)_$(3)' \
 	                   WGET=false \

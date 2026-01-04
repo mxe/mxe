@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Martin=20M=C3=BCllenhaupt?= <mm+mxe.cc@netlair.de>
 Date: Wed, 20 Feb 2019 23:04:57 +1100
-Subject: [PATCH 1/4] fix glew static linking
+Subject: [PATCH 1/5] fix glew static linking
 
 
 diff --git a/Rendering/OpenGL2/CMakeLists.txt b/Rendering/OpenGL2/CMakeLists.txt
@@ -28,7 +28,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: jan <jan@linux-a9ex>
 Date: Mon, 18 May 2020 22:38:26 +0200
-Subject: [PATCH 2/4] ODR fix: use unique names for dummy symbols.
+Subject: [PATCH 2/5] ODR fix: use unique names for dummy symbols.
 
 
 diff --git a/ThirdParty/exodusII/vtkexodusII/src/ex_create_par.c b/ThirdParty/exodusII/vtkexodusII/src/ex_create_par.c
@@ -57,7 +57,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: jan <jan@linux-a9ex>
 Date: Mon, 18 May 2020 22:38:07 +0200
-Subject: [PATCH 3/4] Added missing export to __declspec(dllexport).
+Subject: [PATCH 3/5] Added missing export to __declspec(dllexport).
 
 
 diff --git a/ThirdParty/libxml2/vtklibxml2/include/libxml/xmlexports.h b/ThirdParty/libxml2/vtklibxml2/include/libxml/xmlexports.h
@@ -77,7 +77,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Wed, 27 May 2020 18:23:33 +0200
-Subject: [PATCH 4/4] add missing include for QPainterPath
+Subject: [PATCH 4/5] add missing include for QPainterPath
 
 Qt 5.15 compatibility
 
@@ -117,3 +117,43 @@ index 1111111..2222222 100644
  #include <QPixmap>
  #include <QTextDocument>
  #include <QTextStream>
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Taj Morton <tajmorton@gmail.com>
+Date: Sat, 22 Mar 2025 06:19:34 +0000
+Subject: [PATCH 5/5] Do not re-declare touch input struct if it's defined by
+ MinGW.
+
+
+diff --git a/Rendering/OpenGL2/vtkWin32RenderWindowInteractor.cxx b/Rendering/OpenGL2/vtkWin32RenderWindowInteractor.cxx
+index 1111111..2222222 100644
+--- a/Rendering/OpenGL2/vtkWin32RenderWindowInteractor.cxx
++++ b/Rendering/OpenGL2/vtkWin32RenderWindowInteractor.cxx
+@@ -25,6 +25,8 @@
+ 
+ #include "vtkWin32OpenGLRenderWindow.h"
+ 
++#include <winuser.h>  // for touch support (if enabled)
++
+ // Mouse wheel support
+ // In an ideal world we would just have to include <zmouse.h>, but it is not
+ // always available with all compilers/headers
+@@ -58,6 +60,9 @@ VTKRENDERINGOPENGL2_EXPORT LRESULT CALLBACK vtkHandleMessage2(HWND,UINT,WPARAM,L
+ #define MOUSEEVENTF_FROMTOUCH 0xFF515700
+ #define WM_TOUCH              0x0240
+ #define TOUCH_COORD_TO_PIXEL(l)  ((l) / 100)
++
++#if WINVER < 0x0601
++// TOUCHINPUT and HTOUCHINPUT are aready defined in winuser.h under Windows 7 and MinGW64.
+ typedef struct _TOUCHINPUT {
+   LONG      x;
+   LONG      y;
+@@ -71,6 +76,8 @@ typedef struct _TOUCHINPUT {
+   DWORD     cyContact;
+ } TOUCHINPUT, *PTOUCHINPUT;
+ DECLARE_HANDLE(HTOUCHINPUT);
++#endif
++
+ //#define HTOUCHINPUT ULONG
+ #define TOUCHEVENTF_MOVE  0x0001
+ #define TOUCHEVENTF_DOWN  0x0002

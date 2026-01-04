@@ -28,8 +28,8 @@ define $(PKG)_BUILD
         AR='$(TARGET)-ar' \
         LIBS="-lportablexdr -lws2_32" \
         $(if $(BUILD_SHARED), \
-            CPPFLAGS="-DH4_F77_FUNC\(name,NAME\)=NAME -DH4_BUILT_AS_DYNAMIC_LIB=1 -DBIG_LONGS", \
-            CPPFLAGS="-DH4_F77_FUNC\(name,NAME\)=NAME -DH4_BUILT_AS_STATIC_LIB=1")
+            CPPFLAGS="-std=gnu89 -DH4_F77_FUNC\(name,NAME\)=NAME -DH4_BUILT_AS_DYNAMIC_LIB=1 -DBIG_LONGS", \
+            CPPFLAGS="-std=gnu89 -DH4_F77_FUNC\(name,NAME\)=NAME -DH4_BUILT_AS_STATIC_LIB=1")
     $(MAKE) -C '$(1)'/mfhdf/xdr -j '$(JOBS)' \
         LDFLAGS=-no-undefined
 

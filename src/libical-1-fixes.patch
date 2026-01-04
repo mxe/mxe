@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
 Date: Wed, 13 Apr 2016 20:54:43 +0300
-Subject: [PATCH 1/2] fix definitions of gmtime/gmtime_r
+Subject: [PATCH 1/3] fix definitions of gmtime/gmtime_r
 
 Fix the following error:
 config.h:508:37: error: expected initializer before '?' token
@@ -43,7 +43,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
 Date: Thu, 14 Apr 2016 01:33:47 +0300
-Subject: [PATCH 2/2] test, examples: fix linking with static library
+Subject: [PATCH 2/3] test, examples: fix linking with static library
 
 Fix errors like the following:
 
@@ -130,3 +130,129 @@ index 1111111..2222222 100644
      endif()
    endif()
  endmacro()
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Taj Morton <tajmorton@gmail.com>
+Date: Fri, 21 Mar 2025 05:11:02 +0000
+Subject: [PATCH 3/3] Remove libical-provided find for ICU, use CMake's
+ built-in find (added in CMake 3.7)
+
+CMake's version is compatible with newer versions of libicu, handling
+the dependencies between icu libraries.
+
+diff --git a/cmake/modules/FindICU.cmake b/cmake/modules/FindICU.cmake
+deleted file mode 100644
+index e62f737..0000000
+--- a/cmake/modules/FindICU.cmake
++++ /dev/null
+@@ -1,110 +0,0 @@
+-# Finds the International Components for Unicode (ICU) Library
+-#
+-#  ICU_FOUND          - True if ICU found.
+-#  ICU_I18N_FOUND     - True if ICU's internationalization library found.
+-#  ICU_INCLUDE_DIR    - Directory to include to get ICU headers
+-#                       Note: always include ICU headers as, e.g.,
+-#                       unicode/utypes.h
+-#  ICU_LIBRARY        - Library to link against for the common ICU
+-#  ICU_I18N_LIBRARY   - Library to link against for ICU internationaliation
+-#                       (note: in addition to ICU_LIBRARY)
+-#  ICU_VERSION        - ICU version MAJOR.MINOR
+-#  ICU_MAJOR_VERSION  - ICU major version
+-#  ICO_MINOR_VERSION  - ICU minor version
+-#
+-
+-if(WIN32)
+-  file(TO_CMAKE_PATH "$ENV{PROGRAMFILES}" _program_FILES_DIR)
+-endif()
+-
+-if(ICU_INCLUDE_DIR AND ICU_LIBRARY)
+-  # Already in cache, be silent
+-  set(ICU_FIND_QUIETLY TRUE)
+-endif()
+-
+-#set the root from the ICU_BASE environment
+-file(TO_NATIVE_PATH "$ENV{ICU_BASE}" icu_root)
+-#override the root from ICU_BASE defined to cmake
+-if(DEFINED ICU_BASE)
+-  file(TO_NATIVE_PATH "${ICU_BASE}" icu_root)
+-endif()
+-
+-# Look for the header file.
+-find_path(
+-  ICU_INCLUDE_DIR
+-  NAMES unicode/utypes.h
+-  HINTS
+-  ${icu_root}/include
+-  ${_program_FILES_DIR}/icu/include
+-  /usr/local/opt/icu4c/include
+-  DOC "Include directory for the ICU library"
+-)
+-mark_as_advanced(ICU_INCLUDE_DIR)
+-
+-# Look for the library.
+-find_library(
+-  ICU_LIBRARY
+-  NAMES icuuc cygicuuc cygicuuc32
+-  HINTS
+-  ${icu_root}/lib/
+-  ${_program_FILES_DIR}/icu/lib/
+-  /usr/local/opt/icu4c/lib/
+-  DOC "Libraries to link against for the common parts of ICU"
+-)
+-mark_as_advanced(ICU_LIBRARY)
+-
+-# Copy the results to the output variables.
+-if(ICU_INCLUDE_DIR AND ICU_LIBRARY)
+-  set(ICU_FOUND 1)
+-  set(ICU_LIBRARIES ${ICU_LIBRARY})
+-  set(ICU_INCLUDE_DIRS ${ICU_INCLUDE_DIR})
+-
+-  set(ICU_VERSION 0)
+-  set(ICU_MAJOR_VERSION 0)
+-  set(ICU_MINOR_VERSION 0)
+-  file(READ "${ICU_INCLUDE_DIR}/unicode/uvernum.h" _ICU_VERSION_CONENTS)
+-  string(REGEX REPLACE ".*#define U_ICU_VERSION_MAJOR_NUM ([0-9]+).*" "\\1" ICU_MAJOR_VERSION "${_ICU_VERSION_CONENTS}")
+-  string(REGEX REPLACE ".*#define U_ICU_VERSION_MINOR_NUM ([0-9]+).*" "\\1" ICU_MINOR_VERSION "${_ICU_VERSION_CONENTS}")
+-
+-  set(ICU_VERSION "${ICU_MAJOR_VERSION}.${ICU_MINOR_VERSION}")
+-
+-  # Look for the ICU internationalization libraries
+-  find_library(
+-    ICU_I18N_LIBRARY
+-    NAMES icuin icui18n cygicuin cygicuin32
+-    HINTS
+-    ${icu_root}/lib/
+-    ${_program_FILES_DIR}/icu/lib/
+-    /usr/local/opt/icu4c/lib/
+-    DOC "Libraries to link against for ICU internationalization"
+-  )
+-  mark_as_advanced(ICU_I18N_LIBRARY)
+-  if(ICU_I18N_LIBRARY)
+-    set(ICU_I18N_FOUND 1)
+-    set(ICU_LIBRARIES "${ICU_LIBRARIES} ${ICU_I18N_LIBRARY}")
+-  else()
+-    set(ICU_I18N_FOUND 0)
+-  endif()
+-else()
+-  set(ICU_FOUND 0)
+-  set(ICU_I18N_FOUND 0)
+-  set(ICU_INCLUDE_DIRS)
+-  set(ICU_LIBRARIES)
+-  set(ICU_VERSION)
+-  set(ICU_MAJOR_VERSION)
+-  set(ICU_MINOR_VERSION)
+-endif()
+-
+-if(ICU_FOUND)
+-  if(NOT ICU_FIND_QUIETLY)
+-    message(STATUS "Found ICU version ${ICU_VERSION}")
+-    message(STATUS "Found ICU header files in ${ICU_INCLUDE_DIRS}")
+-    message(STATUS "Found ICU libraries: ${ICU_LIBRARIES}")
+-  endif()
+-else()
+-  if(ICU_FIND_REQUIRED)
+-    message(FATAL_ERROR "Could not find ICU")
+-  else()
+-    message(STATUS "Optional package ICU was not found")
+-    endif()
+-endif()

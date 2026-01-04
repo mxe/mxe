@@ -21,15 +21,15 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS) \
-        $(if $(BUILD_STATIC), \
-          --disable-pixbuf-loader,) \
+        --disable-pixbuf-loader \
         --disable-gtk-doc \
-        --enable-introspection=no
+        --enable-introspection=no \
+        CFLAGS='-Wno-incompatible-pointer-types'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 
-    '$(TARGET)-gcc' \
+    '$(TARGET)-g++' \
         -mwindows -W -Wall -Werror -Wno-error=deprecated-declarations \
-        -std=c99 -pedantic \
+        -pedantic \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-librsvg.exe' \
         `'$(TARGET)-pkg-config' librsvg-2.0 --cflags --libs`
 endef

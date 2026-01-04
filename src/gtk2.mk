@@ -36,7 +36,7 @@ define $(PKG)_BUILD
     # and *.def files aren't really relevant for MXE
     rm -f '$(PREFIX)/$(TARGET)/lib/gailutil.def'
 
-    '$(TARGET)-gcc' \
+    '$(TARGET)-g++' \
         -W -Wall -Werror -Wno-error=deprecated-declarations -ansi \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-gtk2.exe' \
         `'$(TARGET)-pkg-config' gtk+-2.0 gmodule-2.0 --cflags --libs`

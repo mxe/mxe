@@ -238,8 +238,8 @@ fi
 if [ "$infile" ]; then
     for curFile in $( echo "${infile}" | tr -s ' ' | tr ' ' '\n' ); do
     if [ `uname -s` == "Darwin" ]; then
-        curString=$( find $curPath -iname *.exe -or -iname *.dll | tr '\n' ' '  )
-        else curString=$( find $curPath -iregex '.*\(dll\|exe\)' | tr '\n' ' ' )
+        curString=$( find $curFile -iname *.exe -or -iname *.dll | tr '\n' ' '  )
+        else curString=$( find $curFile -iregex '.*\(dll\|exe\)' | tr '\n' ' ' )
     fi
         str_inputFileList+=" $curString"
     done

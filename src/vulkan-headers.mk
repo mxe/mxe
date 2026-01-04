@@ -4,8 +4,8 @@ PKG             := vulkan-headers
 $(PKG)_WEBSITE  := https://github.com/KhronosGroup/$(PKG)
 $(PKG)_DESCR    := vulkan headers
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.2.169
-$(PKG)_CHECKSUM := e1acfa36056a2fa73ddc01bdac416d0188c880161e2073bbd5a86c8fbbc9bdbf
+$(PKG)_VERSION  := 1.3.280
+$(PKG)_CHECKSUM := 717b49c52dbd37c78cf2f7f0fc715292c42e74841219e6cca918cd293ad5dce4
 $(PKG)_GH_CONF  := KhronosGroup/Vulkan-Headers/releases,v
 $(PKG)_DEPS     := cc
 

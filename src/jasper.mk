@@ -4,8 +4,8 @@ PKG             := jasper
 $(PKG)_WEBSITE  := https://www.ece.uvic.ca/~mdadams/jasper/
 $(PKG)_DESCR    := JasPer
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.0.0
-$(PKG)_CHECKSUM := 977c4c2e4210f4e37313cd2232d99e73d57ab561917b3c060bcdd5e83a0a13f1
+$(PKG)_VERSION  := 4.2.8
+$(PKG)_CHECKSUM := 987e8c8b4afcff87553833b6f0fa255b5556a0ecc617b45ee1882e10c1b5ec14
 $(PKG)_GH_CONF  := mdadams/jasper/tags, version-
 $(PKG)_DEPS     := cc jpeg
 

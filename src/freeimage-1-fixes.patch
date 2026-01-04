@@ -90,7 +90,7 @@ index 1111111..2222222 100644
  CFLAGS ?= -O3 -fexceptions -DNDEBUG $(WIN32_CFLAGS)
  CFLAGS += $(INCLUDE)
 -CXXFLAGS ?= -O3 -fexceptions -Wno-ctor-dtor-privacy -DNDEBUG $(WIN32_CXXFLAGS)
-+CXXFLAGS ?= -O3 -fexceptions -Wno-ctor-dtor-privacy -Wno-narrowing -DNDEBUG $(WIN32_CXXFLAGS)
++CXXFLAGS ?= -DWIN32 --std=c++14 -O3 -fexceptions -Wno-ctor-dtor-privacy -Wno-narrowing -DNDEBUG $(WIN32_CXXFLAGS)
  CXXFLAGS += $(INCLUDE)
  RCFLAGS ?= -DNDEBUG
  LDFLAGS ?= -s -shared -static -Wl,-soname,$(SOLIBNAME) $(WIN32_LDFLAGS)

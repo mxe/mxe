@@ -3,8 +3,8 @@
 PKG             := xvidcore
 $(PKG)_WEBSITE  := https://www.xvid.com/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.3.4
-$(PKG)_CHECKSUM := 4e9fd62728885855bc5007fe1be58df42e5e274497591fec37249e1052ae316f
+$(PKG)_VERSION  := 1.3.7
+$(PKG)_CHECKSUM := abbdcbd39555691dd1c9b4d08f0a031376a3b211652c0d8b3b8aa9be1303ce2d
 $(PKG)_SUBDIR   := xvidcore
 $(PKG)_FILE     := xvidcore-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://downloads.xvid.com/downloads/$($(PKG)_FILE)
@@ -21,7 +21,8 @@ define $(PKG)_BUILD
         '$(SOURCE_DIR)/build/generic/configure.in'
     cd '$(SOURCE_DIR)/build/generic' && autoreconf -fi
     cd '$(SOURCE_DIR)/build/generic' && ./configure \
-        $(MXE_CONFIGURE_OPTS)
+        $(MXE_CONFIGURE_OPTS) \
+        CFLAGS='-std=gnu99'
     $(MAKE) -C '$(SOURCE_DIR)/build/generic' -j 1 BUILD_DIR='$(BUILD_DIR)' \
         $(if $(BUILD_STATIC),SHARED,STATIC)_LIB=
     $(INSTALL) -d '$(PREFIX)/$(TARGET)/include'

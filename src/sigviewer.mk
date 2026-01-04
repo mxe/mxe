@@ -17,10 +17,21 @@ define $(PKG)_UPDATE
     head -1
 endef
 
-define $(PKG)_BUILD
+define $(PKG)_BUILD_STATIC
     #    LIBS='-l$(PREFIX)/$(TARGET)/lib/libtinyxml.a -l$(PREFIX)/$(TARGET)/$($(PKG)_QT_DIR)/plugins/platforms/libqwindows.a'
     cd '$(1)' && CFLAGS=-fstack-protector CXXFLAGS=-fstack-protector && \
-        LIBS='-l$(PREFIX)/$(TARGET)/$($(PKG)_QT_DIR)/plugins/platforms/libqwindows.a' \
+        LIBS='-l$(PREFIX)/$(TARGET)/$($(PKG)_QT_DIR)/plugins/platforms/libqwindows.a -l$(PREFIX)/$(TARGET)/lib/libiconv.a' \
+        $(PREFIX)/$(TARGET)/$($(PKG)_QT_DIR)/bin/qmake sigviewer.pro
+
+    $(MAKE) -C '$(1)'
+
+    $(INSTALL) '$(1)'/bin/release/sigviewer.exe $(PREFIX)/$(TARGET)/bin/$(PKG).exe
+endef
+
+define $(PKG)_BUILD_SHARED_DISABLED
+    #    LIBS='-l$(PREFIX)/$(TARGET)/lib/libtinyxml.a -l$(PREFIX)/$(TARGET)/$($(PKG)_QT_DIR)/plugins/platforms/libqwindows.a'
+    cd '$(1)' && CFLAGS=-fstack-protector CXXFLAGS=-fstack-protector && \
+    LIBS='-lqwindows' \
         $(PREFIX)/$(TARGET)/$($(PKG)_QT_DIR)/bin/qmake sigviewer.pro
 
     $(MAKE) -C '$(1)'

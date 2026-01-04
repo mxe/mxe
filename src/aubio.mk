@@ -23,6 +23,7 @@ define $(PKG)_BUILD
         AR='$(TARGET)-ar'                         \
         CC='$(TARGET)-gcc'                        \
         PKGCONFIG='$(TARGET)-pkg-config'          \
+        WAFDIR=$(BUILD_DIR)/$(waf_SUBDIR)         \
         $(PYTHON2)                                \
         '$(BUILD_DIR)/$(waf_SUBDIR)/waf'          \
             configure                             \
@@ -38,7 +39,7 @@ define $(PKG)_BUILD
     # disable txt2man and doxygen
     $(SED) -i '/\(TXT2MAN\|DOXYGEN\)/d' '$(1)/build/c4che/_cache.py'
 
-    cd '$(1)' && $(PYTHON2) '$(BUILD_DIR)/$(waf_SUBDIR)/waf' build install
+    cd '$(1)' && WAFDIR=$(BUILD_DIR)/$(waf_SUBDIR) $(PYTHON2) '$(BUILD_DIR)/$(waf_SUBDIR)/waf' build install
 
     '$(TARGET)-gcc'                               \
         -W -Wall -Werror -ansi -pedantic          \

@@ -31,7 +31,7 @@ define $(PKG)_BUILD
         --disable-gtk-doc \
         GLIB_GENMARSHAL='$(PREFIX)/$(TARGET)/bin/glib-genmarshal' \
         GLIB_MKENUMS='$(PREFIX)/$(TARGET)/bin/glib-mkenums' \
-        CFLAGS='-Wno-error=deprecated-declarations $($(PKG)_EXTRA_WARNINGS) -std=c99'
+        CFLAGS='-Wno-error=deprecated-declarations -Wno-misleading-indentation $($(PKG)_EXTRA_WARNINGS) -std=c99'
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 

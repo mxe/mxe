@@ -4,9 +4,9 @@ PKG             := gcc
 $(PKG)_WEBSITE  := https://gcc.gnu.org/
 $(PKG)_DESCR    := GCC
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 11.4.0
+$(PKG)_VERSION  := 11.5.0
 $(PKG)_RELEASE  := $($(PKG)_VERSION)
-$(PKG)_CHECKSUM := 3f2db222b007e8a4a23cd5ba56726ef08e8b1f1eb2055ee72c1402cea73a8dd9
+$(PKG)_CHECKSUM := a6e21868ead545cf87f0c01f84276e4b5281d672098591c1c896241f09363478
 $(PKG)_SUBDIR   := gcc-$($(PKG)_VERSION)
 $(PKG)_FILE     := gcc-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://ftp.gnu.org/gnu/gcc/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
@@ -106,6 +106,13 @@ define $(PKG)_BUILD_mingw-w64
     $(MAKE) -C '$(BUILD_DIR).pthreads' -j 1 $(INSTALL_STRIP_TOOLCHAIN)
 
     # build rest of gcc
+
+    # Force <sys/mman.h>'s presence to false when building target libgcc to prevent
+    # a dependency on mmap(). If mman-win32 package has been installed when gcc is built
+    # (which installs sys/mman.h), gcov (from libgcc) will depend on mmap(), and fail to link
+    # (undefined reference to `mmap') when building with --coverage.
+    ac_cv_header_sys_mman_h=no \
+        $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' all-target-libgcc
     # `all-target-libstdc++-v3` sometimes has parallel failure
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' all-target-libstdc++-v3 || $(MAKE) -C '$(BUILD_DIR)' -j 1 all-target-libstdc++-v3
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'

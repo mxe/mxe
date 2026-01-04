@@ -3,14 +3,16 @@
 PKG             := libgit2
 $(PKG)_WEBSITE  := https://libgit2.github.com/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.1.0
-$(PKG)_CHECKSUM := ad73f845965cfd528e70f654e428073121a3fa0dc23caac81a1b1300277d4dba
+$(PKG)_VERSION  := 1.7.1
+$(PKG)_CHECKSUM := 17d2b292f21be3892b704dddff29327b3564f96099a1c53b00edc23160c71327
 $(PKG)_GH_CONF  := libgit2/libgit2/releases/latest,v
-$(PKG)_DEPS     := cc libssh2
+$(PKG)_DEPS     := cc libssh2 pcre2 zlib
 
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \
-        -DDLLTOOL='$(PREFIX)/bin/$(TARGET)-dlltool'
+        -DDLLTOOL='$(PREFIX)/bin/$(TARGET)-dlltool' \
+        -DUSE_SSH=ON \
+        -DREGEX_BACKEND=pcre2
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1 || $(MAKE) -C '$(BUILD_DIR)' -j 1 VERBOSE=1
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install VERBOSE=1
 endef

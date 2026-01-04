@@ -1,0 +1,50 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Thu, 3 Oct 2024 14:17:45 +0200
+Subject: [PATCH 1/1] avoid dec_init symbol clash with recent ffmpeg
+
+https://ffmpeg.org/pipermail/ffmpeg-devel/2024-March/323546.html
+
+diff --git a/src/libbluray/disc/dec.c b/src/libbluray/disc/dec.c
+index 1111111..2222222 100644
+--- a/src/libbluray/disc/dec.c
++++ b/src/libbluray/disc/dec.c
+@@ -284,7 +284,7 @@ static void _dec_load(BD_DEC *dec, BD_ENC_INFO *i)
+  *
+  */
+ 
+-BD_DEC *dec_init(struct dec_dev *dev, BD_ENC_INFO *enc_info,
++BD_DEC *libbluray_dec_init(struct dec_dev *dev, BD_ENC_INFO *enc_info,
+                  const char *keyfile_path,
+                  void *regs, void *psr_read, void *psr_write)
+ {
+diff --git a/src/libbluray/disc/dec.h b/src/libbluray/disc/dec.h
+index 1111111..2222222 100644
+--- a/src/libbluray/disc/dec.h
++++ b/src/libbluray/disc/dec.h
+@@ -45,7 +45,7 @@ struct dec_dev {
+ 
+ typedef struct bd_dec BD_DEC;
+ 
+-BD_PRIVATE BD_DEC *dec_init(struct dec_dev *dev,
++BD_PRIVATE BD_DEC *libbluray_dec_init(struct dec_dev *dev,
+                             struct bd_enc_info *enc_info,
+                             const char *keyfile_path,
+                             void *regs, void *psr_read, void *psr_write);
+diff --git a/src/libbluray/disc/disc.c b/src/libbluray/disc/disc.c
+index 1111111..2222222 100644
+--- a/src/libbluray/disc/disc.c
++++ b/src/libbluray/disc/disc.c
+@@ -348,7 +348,7 @@ BD_DISC *disc_open(const char *device_path,
+     }
+ 
+     struct dec_dev dev = { p->fs_handle, p->pf_file_open_bdrom, p, (file_openFp)disc_open_path, p->disc_root, device_path };
+-    p->dec = dec_init(&dev, enc_info, keyfile_path, regs, psr_read, psr_write);
++    p->dec = libbluray_dec_init(&dev, enc_info, keyfile_path, regs, psr_read, psr_write);
+ 
+     return p;
+ }

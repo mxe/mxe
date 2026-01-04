@@ -12,7 +12,7 @@ diff --git a/tools/build/src/tools/darwin.jam b/tools/build/src/tools/darwin.jam
 index 1111111..2222222 100644
 --- a/tools/build/src/tools/darwin.jam
 +++ b/tools/build/src/tools/darwin.jam
-@@ -138,11 +138,6 @@ rule init ( version ? : command * : options * : requirement * )
+@@ -131,11 +131,6 @@ rule init ( version ? : command * : options * : requirement * )
      common.handle-options darwin : $(condition) : $(command) : $(options) ;
  
      real-version = [ regex.split $(real-version) \\. ] ;
@@ -27,31 +27,29 @@ index 1111111..2222222 100644
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Orgad Shaneh <orgad.shaneh@audiocodes.com>
-Date: Mon, 6 Jun 2022 16:55:21 +0300
-Subject: [PATCH 2/2] Fix incomplete type error when using list and pair
+Date: Sun, 12 May 2024 13:39:03 +0300
+Subject: [PATCH 2/2] fix x86 build
 
-Example:
 
-boost::container::list<std::pair<int, int>> list;
-
-.../boost/container/allocator_traits.hpp:403:11: error: invalid use of incomplete type 'struct boost::container::dtl::pair<int, int>'
-  403 |    {  p->~T(); (void)p;  }
-      |       ~~~~^
-In file included from .../boost/container/detail/node_alloc_holder.hpp:39,
-                 from .../boost/container/list.hpp:34:
-.../boost/container/detail/is_pair.hpp:59:8: note: declaration of 'struct boost::container::dtl::pair<int, int>'
-   59 | struct pair;
-      |        ^~~~
-
-diff --git a/boost/container/list.hpp b/boost/container/list.hpp
+diff --git a/boost/charconv/detail/config.hpp b/boost/charconv/detail/config.hpp
 index 1111111..2222222 100644
---- a/boost/container/list.hpp
-+++ b/boost/container/list.hpp
-@@ -32,6 +32,7 @@
- #include <boost/container/detail/iterators.hpp>
- #include <boost/container/detail/mpl.hpp>
- #include <boost/container/detail/node_alloc_holder.hpp>
-+#include <boost/container/detail/pair.hpp>
- #include <boost/container/detail/version_type.hpp>
- #include <boost/container/detail/value_functors.hpp>
- // move
+--- a/boost/charconv/detail/config.hpp
++++ b/boost/charconv/detail/config.hpp
+@@ -79,7 +79,17 @@
+ #    define BOOST_CHARCONV_HAS_MSVC_32BIT_INTRINSICS
+ #  endif
+ #elif (defined(__x86_64__) || defined(__i386__))
++// See: https://github.com/boostorg/charconv/issues/196
++#  ifdef __MINGW32__
++extern "C" {
++#  endif
++
+ #  include <x86intrin.h>
++
++#  ifdef __MINGW32__
++}
++#  endif
++
+ #  define BOOST_CHARCONV_HAS_X86_INTRINSICS
+ #elif defined(__ARM_NEON__)
+ #  include <arm_neon.h>

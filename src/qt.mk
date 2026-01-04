@@ -8,11 +8,11 @@ $(PKG)_VERSION  := 4.8.7
 $(PKG)_CHECKSUM := e2882295097e47fe089f8ac741a95fef47e0a73a3f3cdf21b56990638f626ea0
 $(PKG)_SUBDIR   := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://download.qt.io/official_releases/qt/4.8/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := https://download.qt.io/archive/qt/4.8/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc dbus freetds jpeg libmng libpng openssl postgresql sqlite tiff zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- https://download.qt.io/official_releases/qt/4.8/ | \
+    $(WGET) -q -O- https://download.qt.io/archive/qt/4.8/ | \
     $(SED) -n 's,.*href="\(4\.[0-9]\.[^/]*\)/".*,\1,p' | \
     grep -iv -- '-rc' | \
     $(SORT) -V | \
@@ -77,6 +77,7 @@ define $(PKG)_BUILD
         -dbus-linked \
         -no-pch \
         -v \
+        -DWINVER=0x0601 -D_WIN32_WINNT=0x0601 \
         $($(PKG)_CONFIGURE_OPTS)
 
     $(MAKE) -C '$(1)' -j '$(JOBS)'

@@ -4,8 +4,8 @@ PKG             := flac
 $(PKG)_WEBSITE  := https://www.xiph.org/flac/
 $(PKG)_DESCR    := Free Lossless Audio Codec
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.4.2
-$(PKG)_CHECKSUM := e322d58a1f48d23d9dd38f432672865f6f79e73a6f9cc5a5f57fcaa83eb5a8e4
+$(PKG)_VERSION  := 1.5.0
+$(PKG)_CHECKSUM := f2c1c76592a82ffff8413ba3c4a1299b6c7ab06c734dee03fd88630485c2b920
 $(PKG)_SUBDIR   := flac-$($(PKG)_VERSION)
 $(PKG)_FILE     := flac-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://downloads.xiph.org/releases/flac/$($(PKG)_FILE)
@@ -32,6 +32,6 @@ define $(PKG)_BUILD
         --enable-cpplibs \
         --enable-ogg \
         --disable-oggtest
-    $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
-    $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+    $(MAKE) -C '$(1)' -j '$(JOBS)'
+    $(MAKE) -C '$(1)' -j 1 install
 endef

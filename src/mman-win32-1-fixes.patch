@@ -1,0 +1,24 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Sun, 19 Jan 2025 15:01:08 +0100
+Subject: [PATCH 1/1] add missing header
+
+20:9: error: implicit declaration of function 'printf' [-Wimplicit-function-declaration]
+   20 |         printf("mmap (MAP_ANONYMOUS, PROT_READ | PROT_WRITE) returned unexpected error: %d\n", errno);
+
+diff --git a/test.c b/test.c
+index 1111111..2222222 100644
+--- a/test.c
++++ b/test.c
+@@ -3,6 +3,7 @@
+ 
+ #include <errno.h>
+ #include <fcntl.h>
++#include <stdio.h>
+ #include <sys/stat.h>
+ 
+ #ifndef NULL

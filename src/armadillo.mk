@@ -4,8 +4,8 @@ PKG             := armadillo
 $(PKG)_WEBSITE  := https://arma.sourceforge.io/
 $(PKG)_DESCR    := Armadillo C++ linear algebra library
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 11.4.3
-$(PKG)_CHECKSUM := 87603263664988af41da2ca4f36205e36ea47a9281fa6cfd463115f3797a1da2
+$(PKG)_VERSION  := 12.8.4
+$(PKG)_CHECKSUM := 558fe526b990a1663678eff3af6ec93f79ee128c81a4c8aef27ad328fae61138
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/arma/$($(PKG)_FILE)
@@ -40,5 +40,5 @@ define $(PKG)_BUILD
     '$(TARGET)-g++' \
         -W -Wall -Werror -fopenmp \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
-        `'$(TARGET)-pkg-config' $(PKG) --cflags --libs` -lgomp
+        `'$(TARGET)-pkg-config' $(PKG) --cflags --libs`
 endef

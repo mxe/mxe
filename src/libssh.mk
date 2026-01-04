@@ -4,8 +4,8 @@ PKG             := libssh
 $(PKG)_WEBSITE  := https://www.libssh.org
 $(PKG)_DESCR    := SSHv2 and SSHv1 protocol on client and server side
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.10.4
-$(PKG)_CHECKSUM := c0c1f732a2f3d37f60889fa8d3a7a3b45e3b20cec3c96e1b2ffdf18ec2376968
+$(PKG)_VERSION  := 0.11.3
+$(PKG)_CHECKSUM := aac65c6ee8cfd93a54ac93a198f4c12e6a5e988954f5603ffe00b7f01caab7eb
 $(PKG)_SUBDIR   := libssh-$($(PKG)_VERSION)
 $(PKG)_FILE     := libssh-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://git.libssh.org/projects/libssh.git/snapshot/libssh-$($(PKG)_VERSION).tar.gz
@@ -49,7 +49,7 @@ define $(PKG)_BUILD
      echo 'Description: libssh'; \
      echo 'Requires: libgcrypt zlib'; \
      echo 'Libs: -lssh'; \
-     echo 'Libs.private: -lws2_32'; \
+     echo 'Libs.private: -liphlpapi -lws2_32'; \
      echo 'Cflags.private: -DLIBSSH_STATIC';) \
      > '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG).pc'
 

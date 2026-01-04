@@ -3,13 +3,11 @@
 PKG             := libffi
 $(PKG)_WEBSITE  := https://sourceware.org/libffi/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.3
-$(PKG)_CHECKSUM := 72fba7922703ddfa7a028d513ac15a85c8d54c8d67f55fa5a4802885dc652056
-$(PKG)_GH_CONF  := atgreen/libffi/tags, v
+$(PKG)_VERSION  := 3.5.2
+$(PKG)_CHECKSUM := f3a3082a23b37c293a4fcd1053147b371f2ff91fa7ea1b2a52e335676bac82dc
+$(PKG)_GH_CONF  := libffi/libffi/releases/downloads,v
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://www.mirrorservice.org/sites/sourceware.org/pub/$(PKG)/$($(PKG)_FILE)
-$(PKG)_URL_2    := https://sourceware.org/pub/$(PKG)/$($(PKG)_FILE)
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 $(PKG)_DEPS     := cc
 

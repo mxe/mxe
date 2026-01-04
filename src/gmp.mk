@@ -4,8 +4,8 @@ PKG             := gmp
 $(PKG)_WEBSITE  := https://gmplib.org/
 $(PKG)_DESCR    := GMP
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 6.2.1
-$(PKG)_CHECKSUM := fd4829912cddd12f84181c3451cc752be224643e87fac497b69edddadc49b4f2
+$(PKG)_VERSION  := 6.3.0
+$(PKG)_CHECKSUM := a3c2b80201b89e68616f4ad30bc66aee4927c3ce50e33929ca819d5c43538898
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://gmplib.org/download/$(PKG)/$($(PKG)_FILE)
@@ -25,6 +25,7 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && CC_FOR_BUILD=$(BUILD_CC) ./configure \
         $(MXE_CONFIGURE_OPTS) \
+        CFLAGS='-std=gnu99' \
         --enable-cxx \
         --without-readline
     $(MAKE) -C '$(1)' -j '$(JOBS)'
@@ -44,7 +45,9 @@ endef
 define $(PKG)_BUILD_$(BUILD)
     mkdir '$(1).build'
     cd    '$(1).build' && '$(1)/configure' \
-        $(MXE_CONFIGURE_OPTS)
+        $(MXE_CONFIGURE_OPTS) \
+        CC='$(BUILD_CC)' \
+        CFLAGS='-std=gnu99'
     $(MAKE) -C '$(1).build' -j '$(JOBS)' man1_MANS=
     $(MAKE) -C '$(1).build' -j 1 install man1_MANS=
 endef

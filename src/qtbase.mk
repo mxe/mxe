@@ -4,12 +4,12 @@ PKG             := qtbase
 $(PKG)_WEBSITE  := https://www.qt.io/
 $(PKG)_DESCR    := Qt
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.15.11
-$(PKG)_CHECKSUM := 425ad301acd91ca66c10c0dabee0704e2d0cd2801a6b670115800cbb95f84846
+$(PKG)_VERSION  := 5.15.18
+$(PKG)_CHECKSUM := 7b632550ea1048fc10c741e46e2e3b093e5ca94dfa6209e9e0848800e247023b
 $(PKG)_SUBDIR   := $(PKG)-everywhere-src-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-everywhere-opensource-src-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.qt.io/archive/qt/5.15/$($(PKG)_VERSION)/submodules/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc dbus fontconfig freetds freetype harfbuzz jpeg libmysqlclient \
+$(PKG)_DEPS     := cc dbus fontconfig freetds freetype harfbuzz jpeg mariadb-connector-c \
                    libpng mesa openssl pcre2 postgresql sqlite zlib zstd $(BUILD)~zstd \
                    $(if $(findstring shared,$(MXE_TARGETS)), icu4c)
 $(PKG)_DEPS_$(BUILD) :=
@@ -52,7 +52,6 @@ define $(PKG)_BUILD
             -nomake examples \
             -nomake tests \
             -plugin-sql-mysql \
-            -mysql_config $(PREFIX)/$(TARGET)/bin/mysql_config \
             -plugin-sql-sqlite \
             -plugin-sql-odbc \
             -plugin-sql-psql \

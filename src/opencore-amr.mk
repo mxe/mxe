@@ -3,8 +3,8 @@
 PKG             := opencore-amr
 $(PKG)_WEBSITE  := https://opencore-amr.sourceforge.io/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.1.3
-$(PKG)_CHECKSUM := 106bf811c1f36444d7671d8fd2589f8b2e0cca58a2c764da62ffc4a070595385
+$(PKG)_VERSION  := 0.1.6
+$(PKG)_CHECKSUM := 483eb4061088e2b34b358e47540b5d495a96cd468e361050fae615b1809dc4a1
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_FILE)

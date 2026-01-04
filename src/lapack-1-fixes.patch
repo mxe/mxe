@@ -1,0 +1,20 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Mon, 14 Apr 2025 14:40:55 +0200
+Subject: [PATCH 1/1] fix pkg-config
+
+
+diff --git a/lapack.pc.in b/lapack.pc.in
+index 1111111..2222222 100644
+--- a/lapack.pc.in
++++ b/lapack.pc.in
+@@ -6,4 +6,4 @@ Description: FORTRAN reference implementation of LAPACK Linear Algebra PACKage
+ Version: @LAPACK_VERSION@
+ URL: http://www.netlib.org/lapack/
+ Libs: -L${libdir} -llapack
+-Requires.private: blas
++Requires.private: openblas

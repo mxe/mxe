@@ -12,11 +12,10 @@ diff --git a/libxml-2.0.pc.in b/libxml-2.0.pc.in
 index 1111111..2222222 100644
 --- a/libxml-2.0.pc.in
 +++ b/libxml-2.0.pc.in
-@@ -8,6 +8,7 @@ Name: libXML
+@@ -8,5 +8,6 @@ Name: libXML
  Version: @VERSION@
  Description: libXML library version2.
- Requires:
+ Requires@XML_PC_PRIVATE@: @XML_PC_REQUIRES@
 +Requires.private: liblzma
- Libs: -L${libdir} @XML_LIBS@
- Libs.private: @XML_PRIVATE_LIBS@ @LIBS@
- Cflags: @XML_INCLUDEDIR@ @XML_CFLAGS@
+ Libs: @XML_LIBDIR@ @XML_LIBS@ @XML_PC_LIBS_PRIVATE@ @XML_PC_LIBS@ @LIBS@
+ Cflags: @XML_INCLUDEDIR@ @XML_PC_CFLAGS_PRIVATE@ @XML_STATIC_CFLAGS@

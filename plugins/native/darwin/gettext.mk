@@ -2,17 +2,7 @@
 
 PKG := gettext
 
-$(PKG)_VERSION  := 0.20.1
-$(info $(shell printf '%-$(PRINTF_COL_1_WIDTH)s %s\n' [warning] **$(PKG)-$($(PKG)_VERSION)**))
-$(PKG)_CHECKSUM := 53f02fbbec9e798b0faaf7c73272f83608e835c6288dd58be6c9bb54624a3800
-$(PKG)_SUBDIR   := gettext-$($(PKG)_VERSION)
-$(PKG)_FILE     := gettext-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := https://ftp.gnu.org/gnu/gettext/$($(PKG)_FILE)
-$(PKG)_URL_2    := https://ftpmirror.gnu.org/gettext/$($(PKG)_FILE)
-$(PKG)_PATCHES  := $(dir $(lastword $(MAKEFILE_LIST)))/$(PKG)-1.patch
-
 define $(PKG)_BUILD_$(BUILD)
-    cd '$(SOURCE_DIR)' && autoreconf -fi
     # causes issues with other packages so use different prefix
     # but install *.m4 files and bins to standard location
     cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
@@ -23,16 +13,4 @@ define $(PKG)_BUILD_$(BUILD)
         --datarootdir='$(PREFIX)/$(TARGET)/share'
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(MXE_DISABLE_DOCS)
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install $(MXE_DISABLE_DOCS)
-endef
-
-define $(PKG)_BUILD
-    cd '$(SOURCE_DIR)' && autoreconf -fi
-    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/gettext-runtime/configure' \
-        $(MXE_CONFIGURE_OPTS) \
-        --enable-threads=win32 \
-        --without-libexpat-prefix \
-        --without-libxml2-prefix \
-        CONFIG_SHELL=$(SHELL)
-    $(MAKE) -C '$(BUILD_DIR)/intl' -j '$(JOBS)'
-    $(MAKE) -C '$(BUILD_DIR)/intl' -j 1 install
 endef

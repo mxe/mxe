@@ -1,0 +1,26 @@
+From cf3fe6f010d12ff715913b31d570e108ba35833d Mon Sep 17 00:00:00 2001
+From: Tomas Kalibera <tomas.kalibera@gmail.com>
+Date: Wed, 26 Mar 2025 22:36:47 +0100
+Subject: [PATCH] Pass openmp compile flags from cmake to pkg-config file.
+
+---
+ CMakeLists.txt | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 38c1a8ec8..8945d249c 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -214,6 +214,9 @@ set(prefix ${CMAKE_INSTALL_PREFIX})
+ set(exec_prefix "\${prefix}")
+ set(includedir "\${prefix}/include")
+ set(libdir "\${exec_prefix}/lib")
++if (QL_ENABLE_OPENMP)
++    set(OPENMP_CXXFLAGS ${OpenMP_CXX_FLAGS})
++endif()
+ configure_file(quantlib-config.in quantlib-config @ONLY)
+ configure_file(quantlib.pc.in quantlib.pc @ONLY)
+ install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/quantlib-config TYPE BIN)
+-- 
+2.43.0
+

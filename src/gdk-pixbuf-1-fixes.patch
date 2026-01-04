@@ -12,7 +12,7 @@ diff --git a/gdk-pixbuf/gdk-pixbuf-io.c b/gdk-pixbuf/gdk-pixbuf-io.c
 index 1111111..2222222 100644
 --- a/gdk-pixbuf/gdk-pixbuf-io.c
 +++ b/gdk-pixbuf/gdk-pixbuf-io.c
-@@ -186,8 +186,9 @@ get_file_formats (void)
+@@ -190,8 +190,9 @@ get_file_formats (void)
  
  /* DllMain function needed to tuck away the gdk-pixbuf DLL handle */
  
@@ -23,15 +23,15 @@ index 1111111..2222222 100644
  BOOL WINAPI
  DllMain (HINSTANCE hinstDLL,
           DWORD     fdwReason,
-@@ -203,6 +204,8 @@ DllMain (HINSTANCE hinstDLL,
+@@ -207,6 +208,8 @@ DllMain (HINSTANCE hinstDLL,
  }
  #endif
  
 +#endif
 +
- 
- #ifdef GDK_PIXBUF_RELOCATABLE
- 
+ gchar *
+ gdk_pixbuf_get_toplevel (void)
+ {
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: v1993 <v19930312@gmail.com>
@@ -43,7 +43,7 @@ diff --git a/meson.build b/meson.build
 index 1111111..2222222 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -94,7 +94,7 @@ if cc.has_function('lrint', dependencies: mathlib_dep)
+@@ -95,7 +95,7 @@ if cc.has_function('lrint', dependencies: mathlib_dep)
    gdk_pixbuf_conf.set('HAVE_LRINT', 1)
  endif
  

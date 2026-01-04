@@ -4,9 +4,9 @@ PKG             := icu4c
 $(PKG)_WEBSITE  := https://github.com/unicode-org/icu
 $(PKG)_DESCR    := ICU4C
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 66.1
+$(PKG)_VERSION  := 74.2
 $(PKG)_MAJOR    := $(word 1,$(subst ., ,$($(PKG)_VERSION)))
-$(PKG)_CHECKSUM := 52a3f2209ab95559c1cf0a14f24338001f389615bf00e2585ef3dbc43ecf0a2e
+$(PKG)_CHECKSUM := 68db082212a96d6f53e35d60f47d38b962e9f9d207a74cfac78029ae8ff5e08c
 $(PKG)_GH_CONF  := unicode-org/icu/releases/latest,release-,,,-
 $(PKG)_SUBDIR   := icu
 $(PKG)_URL      := $($(PKG)_WEBSITE)/releases/download/release-$(subst .,-,$($(PKG)_VERSION))/icu4c-$(subst .,_,$($(PKG)_VERSION))-src.tgz
@@ -28,7 +28,8 @@ define $(PKG)_BUILD_$(BUILD)
 endef
 
 define $(PKG)_BUILD_COMMON
-    rm -fv $(shell echo "$(PREFIX)/$(TARGET)"/{bin,lib}/{lib,libs,}icu'*'.{a,dll,dll.a})
+    # '?*' to avoid matching plain "libicu.a" from gcc.
+    rm -fv $(shell echo "$(PREFIX)/$(TARGET)"/{bin,lib}/{lib,libs,}icu'?*'.{a,dll,dll.a})
     cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/source/configure' \
         $(MXE_CONFIGURE_OPTS) \
         --with-cross-build='$(PREFIX)/$(BUILD)/$(PKG)' \
@@ -47,18 +48,6 @@ define $(PKG)_BUILD_TEST
         -W -Wall -Werror -ansi -pedantic \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
         `'$(TARGET)-pkg-config' icu-uc icu-io --cflags --libs`
-endef
-
-define $(PKG)_BUILD_SHARED
-    $($(PKG)_BUILD_COMMON)
-    # icu4c installs its DLLs to lib/. Move them to bin/.
-    mv -fv $(PREFIX)/$(TARGET)/lib/icu*.dll '$(PREFIX)/$(TARGET)/bin/'
-
-    # stub data is icudt.dll, actual data is libicudt.dll - prefer actual
-    test ! -e '$(PREFIX)/$(TARGET)/lib/libicudt$($(PKG)_MAJOR).dll' \
-        || mv -fv '$(PREFIX)/$(TARGET)/lib/libicudt$($(PKG)_MAJOR).dll' '$(PREFIX)/$(TARGET)/bin/icudt$($(PKG)_MAJOR).dll'
-
-    $($(PKG)_BUILD_TEST)
 endef
 
 define $(PKG)_BUILD
