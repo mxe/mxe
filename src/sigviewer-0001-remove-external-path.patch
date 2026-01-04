@@ -1,0 +1,18 @@
+diff --git a/sigviewer.pro b/sigviewer.pro
+index 39a9bb5..e063cd9 100644
+--- a/sigviewer.pro
++++ b/sigviewer.pro
+@@ -41,11 +41,9 @@ macx {
+ }
+ 
+ INCLUDEPATH += \
+-    $$PWD/external/include \
+     $$PWD/src
+ 
+ LIBS += \
+-    -L$$PWD/external/lib \
+-    -lbiosig -lxdf
++    -lbiosig -lxdf -ltinyxml
+ 
+ RESOURCES = $$PWD/src/src.qrc
+
