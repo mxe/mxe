@@ -49,6 +49,3 @@ define $(PKG)_BUILD
         -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
         `'$(TARGET)-pkg-config' libsbml expat zlib --cflags --libs`
 endef
-
-
-
