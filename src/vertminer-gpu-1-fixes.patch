@@ -1,0 +1,43 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tony Theodore <tonyt@logyst.com>
+Date: Mon, 23 Oct 2017 00:14:05 +1100
+Subject: [PATCH] fix mingw build
+
+
+diff --git a/compat.h b/compat.h
+index 1111111..2222222 100644
+--- a/compat.h
++++ b/compat.h
+@@ -47,6 +47,7 @@ static inline int nanosleep(const struct timespec *req, struct timespec *rem)
+ }
+ #endif
+ 
++#ifndef _UNISTD_H
+ static inline int sleep(unsigned int secs)
+ {
+ 	struct timespec req, rem;
+@@ -56,6 +57,7 @@ static inline int sleep(unsigned int secs)
+ 		return 0;
+ 	return rem.tv_sec + (rem.tv_nsec ? 1 : 0);
+ }
++#endif
+ 
+ enum {
+ 	PRIO_PROCESS		= 0,
+diff --git a/vertminer.c b/vertminer.c
+index 1111111..2222222 100644
+--- a/vertminer.c
++++ b/vertminer.c
+@@ -3257,7 +3257,7 @@ static void kill_mining(void)
+ 		if (thr && PTH(thr) != 0L)
+ 			pth = &thr->pth;
+ 		thr_info_cancel(thr);
+-#ifndef WIN32
++#if !defined(WIN32) || defined(HAVE_LIBWINPTHREAD)
+ 		if (pth && *pth)
+ 			pthread_join(*pth, NULL);
+ #else
