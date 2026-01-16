@@ -18,7 +18,7 @@ index 1111111..2222222 100644
 +++ b/configure.in
 @@ -19,10 +19,19 @@ m4_pattern_forbid(^PGAC_)dnl to catch undefined macros
  
- AC_INIT([PostgreSQL], [13.6], [pgsql-bugs@lists.postgresql.org], [], [https://www.postgresql.org/])
+ AC_INIT([PostgreSQL], [13.23], [pgsql-bugs@lists.postgresql.org], [], [https://www.postgresql.org/])
  
 +dnl Buffer for MXE patch application
 +dnl   Required to ensure patch context
@@ -76,10 +76,10 @@ diff --git a/configure.in b/configure.in
 index 1111111..2222222 100644
 --- a/configure.in
 +++ b/configure.in
-@@ -1246,13 +1246,8 @@ fi
- 
- if test "$with_openssl" = yes ; then
-   dnl Order matters!
+@@ -1305,13 +1305,8 @@ if test "$with_openssl" = yes ; then
+   # Minimum required OpenSSL version is 1.0.1
+   AC_DEFINE(OPENSSL_API_COMPAT, [0x10001000L],
+             [Define to the OpenSSL API version in use. This avoids deprecation warnings from newer OpenSSL versions.])
 -  if test "$PORTNAME" != "win32"; then
 -     AC_CHECK_LIB(crypto, CRYPTO_new_ex_data, [], [AC_MSG_ERROR([library 'crypto' is required for OpenSSL])])
 -     AC_CHECK_LIB(ssl,    SSL_new, [], [AC_MSG_ERROR([library 'ssl' is required for OpenSSL])])
