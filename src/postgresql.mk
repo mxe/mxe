@@ -44,7 +44,7 @@ define $(PKG)_BUILD
         --with-zlib \
         --with-system-tzdata=/dev/null \
         CFLAGS="-DSSL_library_init=OPENSSL_init_ssl" \
-        LIBS="-lsecur32 `'$(TARGET)-pkg-config' openssl pthreads --libs`" \
+        LIBS="-lsecur32 `'$(TARGET)-pkg-config' openssl pthreads --libs` -lz -lcrypt32" \
         ac_cv_func_getaddrinfo=no
 
     # enable_thread_safety means "build internal pthreads" on windows
@@ -52,7 +52,7 @@ define $(PKG)_BUILD
     MXE_BUILD_SHARED=$(BUILD_SHARED) $(MAKE) MAKELEVEL=0 -C '$(1)'/src/interfaces/libpq -j '$(JOBS)' \
         install \
         enable_thread_safety=no \
-        PTHREAD_LIBS="`'$(TARGET)-pkg-config' pthreads --libs`"
+        PTHREAD_LIBS="`'$(TARGET)-pkg-config' pthreads --libs` -lz -lcrypt32"
     MXE_BUILD_SHARED=$(BUILD_SHARED) $(MAKE) MAKELEVEL=0 -C '$(1)'/src/port     -j '$(JOBS)' install
     MXE_BUILD_SHARED=$(BUILD_SHARED) $(MAKE) MAKELEVEL=0 -C '$(1)'/src/common   -j '$(JOBS)' install
     MXE_BUILD_SHARED=$(BUILD_SHARED) $(MAKE) MAKELEVEL=0 -C '$(1)'/src/bin/psql -j '$(JOBS)' install
