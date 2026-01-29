@@ -301,7 +301,7 @@
     "mpfr": {"version": "4.2.2", "website": "https://www.mpfr.org/", "description": ""},
     "mpg123": {"version": "1.31.1", "website": "https://www.mpg123.de/", "description": ""},
     "ms-gsl": {"version": "4.2.1", "website": "https://github.com/microsoft/gsl", "description": "guidelines support library"},
-    "muparser": {"version": "2.2.5", "website": "https://beltoforion.de/article.php?a=muparser", "description": "muParser"},
+    "muparser": {"version": "2.3.5", "website": "https://beltoforion.de/article.php?a=muparser", "description": "muParser"},
     "muparserx": {"version": "4.0.7", "website": "https://beltoforion.de/article.php?a=muparserx", "description": "muParserX"},
     "mxe-conf": {"version": "1", "website": "", "description": ""},
     "mxml": {"version": "3.1", "website": "https://michaelrsweet.github.io/mxml/", "description": "Mini-XML"},
