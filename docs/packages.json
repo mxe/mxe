@@ -372,7 +372,7 @@
     "portablexdr": {"version": "4.9.1", "website": "https://people.redhat.com/~rjones/portablexdr/", "description": "PortableXDR"},
     "portaudio": {"version": "190700_20210406", "website": "http://www.portaudio.com/", "description": ""},
     "portmidi": {"version": "217", "website": "https://portmedia.sourceforge.io/portmidi/", "description": ""},
-    "postgresql": {"version": "13.6", "website": "https://www.postgresql.org/", "description": "PostgreSQL"},
+    "postgresql": {"version": "13.23", "website": "https://www.postgresql.org/", "description": "PostgreSQL"},
     "primesieve": {"version": "12.8", "website": "https://primesieve.org/", "description": "Primesieve"},
     "proj": {"version": "8.2.1", "website": "https://trac.osgeo.org/proj/", "description": ""},
     "protobuf": {"version": "3.9.0", "website": "https://github.com/google/protobuf", "description": ""},
