@@ -31,7 +31,8 @@ define $(PKG)_BUILD
         --with-gnu-as \
         --disable-nls \
         --disable-shared \
-        --disable-werror
+        --disable-werror \
+        $(if $(findstring darwin,$(BUILD)),--with-system-zlib)
     $(TOUCH) -d2020-01-01 '$(SOURCE_DIR)/gas/doc/.dirstamp'
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 $(INSTALL_STRIP_TOOLCHAIN)
