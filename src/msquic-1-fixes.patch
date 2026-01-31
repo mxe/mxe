@@ -1,0 +1,1176 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Sean McNamara <smcnam@gmail.com>
+Date: Thu, 29 Jan 2026 23:59:19 -0500
+Subject: [PATCH 01/23] Fix CMake platform detection for x86_64 (MinGW)
+
+
+diff --git a/submodules/CMakeLists.txt b/submodules/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/submodules/CMakeLists.txt
++++ b/submodules/CMakeLists.txt
+@@ -54,7 +54,7 @@ if (WIN32)
+             set(QUIC_OPENSSL_WIN_ARCH "VC-WIN32-ARM")
+         elseif (${SYSTEM_PROCESSOR} STREQUAL "win32" OR ${SYSTEM_PROCESSOR} STREQUAL "x86")
+             set(QUIC_OPENSSL_WIN_ARCH "VC-WIN32-ONECORE")
+-        elseif (${SYSTEM_PROCESSOR} STREQUAL "x64" OR ${SYSTEM_PROCESSOR} STREQUAL "amd64")
++        elseif (${SYSTEM_PROCESSOR} STREQUAL "x64" OR ${SYSTEM_PROCESSOR} STREQUAL "amd64" OR ${SYSTEM_PROCESSOR} STREQUAL "x86_64")
+             set(QUIC_OPENSSL_WIN_ARCH "VC-WIN64A-ONECORE")
+         else()
+             message(FATAL_ERROR "Unknown Generator Platform ${SYSTEM_PROCESSOR}")
+@@ -67,7 +67,7 @@ if (WIN32)
+             set(QUIC_OPENSSL_WIN_ARCH "VC-WIN32-ARM")
+         elseif (${SYSTEM_PROCESSOR} STREQUAL "win32" OR ${SYSTEM_PROCESSOR} STREQUAL "x86")
+             set(QUIC_OPENSSL_WIN_ARCH "VC-WIN32")
+-        elseif (${SYSTEM_PROCESSOR} STREQUAL "x64" OR ${SYSTEM_PROCESSOR} STREQUAL "amd64")
++        elseif (${SYSTEM_PROCESSOR} STREQUAL "x64" OR ${SYSTEM_PROCESSOR} STREQUAL "amd64" OR ${SYSTEM_PROCESSOR} STREQUAL "x86_64")
+             set(QUIC_OPENSSL_WIN_ARCH "VC-WIN64A")
+         else()
+             message(FATAL_ERROR "Unknown Generator Platform ${SYSTEM_PROCESSOR}")
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Sean McNamara <smcnam@gmail.com>
+Date: Fri, 30 Jan 2026 00:00:32 -0500
+Subject: [PATCH 02/23] Add MinGW compiler flag support (use GCC flags instead
+ of MSVC)
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -205,7 +205,7 @@ set(QUIC_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/inc)
+ 
+ include(GNUInstallDirs)
+ 
+-if (WIN32)
++if (WIN32 AND NOT (MINGW OR CMAKE_C_COMPILER MATCHES "mingw"))
+     set(QUIC_WARNING_FLAGS /WX /W4 /sdl /wd4206 CACHE INTERNAL "")
+     set(QUIC_COMMON_FLAGS "")
+ 
+@@ -252,6 +252,11 @@ if (WIN32)
+         set(QUIC_LOGGING_TYPE "etw")
+         message(STATUS "Choosing etw as default logging type for platform")
+     endif()
++elseif (MINGW OR CMAKE_C_COMPILER MATCHES "mingw")
++    # MinGW uses GCC flags
++    set(QUIC_WARNING_FLAGS -Wall -Wextra -Wno-unknown-pragmas CACHE INTERNAL "")
++    set(QUIC_COMMON_FLAGS "")
++    set(QUIC_COMMON_DEFINES WIN32_LEAN_AND_MEAN SECURITY_WIN32)
+ else()
+ 
+     include(CheckSymbolExists)
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Sean McNamara <smcnam@gmail.com>
+Date: Fri, 30 Jan 2026 00:01:27 -0500
+Subject: [PATCH 03/23] Skip MSVC-specific release flags for MinGW
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -205,7 +205,7 @@ set(QUIC_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/inc)
+ 
+ include(GNUInstallDirs)
+ 
+-if (WIN32 AND NOT (MINGW OR CMAKE_C_COMPILER MATCHES "mingw"))
++if (MSVC)
+     set(QUIC_WARNING_FLAGS /WX /W4 /sdl /wd4206 CACHE INTERNAL "")
+     set(QUIC_COMMON_FLAGS "")
+ 
+@@ -252,7 +252,7 @@ if (WIN32 AND NOT (MINGW OR CMAKE_C_COMPILER MATCHES "mingw"))
+         set(QUIC_LOGGING_TYPE "etw")
+         message(STATUS "Choosing etw as default logging type for platform")
+     endif()
+-elseif (MINGW OR CMAKE_C_COMPILER MATCHES "mingw")
++elseif (MINGW)
+     # MinGW uses GCC flags
+     set(QUIC_WARNING_FLAGS -Wall -Wextra -Wno-unknown-pragmas CACHE INTERNAL "")
+     set(QUIC_COMMON_FLAGS "")
+@@ -593,13 +593,16 @@ if(WIN32)
+     endif()
+ 
+     set(QUIC_C_FLAGS ${QUIC_COMMON_FLAGS})
+-    set(QUIC_CXX_FLAGS ${QUIC_COMMON_FLAGS} /EHsc /permissive-)
+-
+-    # These cannot be updated until CMake 3.13
+-    set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /GL /Zi")
+-    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /GL /Zi")
+-    set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /LTCG /IGNORE:4075 /DEBUG /OPT:REF /OPT:ICF")
+-    set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} /LTCG /IGNORE:4075 /DEBUG /OPT:REF /OPT:ICF")
++    if (MSVC)
++        set(QUIC_CXX_FLAGS ${QUIC_COMMON_FLAGS} /EHsc /permissive-)
++        # These cannot be updated until CMake 3.13
++        set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /GL /Zi")
++        set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /GL /Zi")
++        set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /LTCG /IGNORE:4075 /DEBUG /OPT:REF /OPT:ICF")
++        set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} /LTCG /IGNORE:4075 /DEBUG /OPT:REF /OPT:ICF")
++    else()
++        set(QUIC_CXX_FLAGS ${QUIC_COMMON_FLAGS})
++    endif()
+ 
+     # Find the right PGO file.
+     if(NOT EXISTS "${QUIC_PGO_FILE}")
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Sean McNamara <smcnam@gmail.com>
+Date: Fri, 30 Jan 2026 10:32:45 -0500
+Subject: [PATCH 04/23] Add MinGW compatibility for platform headers
+
+- Add early QUIC_INLINE, INITCODE, PAGEDX definitions for MinGW
+- Add PASSIVE_LEVEL and DISPATCH_LEVEL constants
+- Add SAL annotation stubs (no-op for MinGW)
+- Fix MSVC-specific ui64 integer suffixes (use ULL for GCC)
+- Fix __annotation intrinsic (no-op for MinGW)
+
+diff --git a/src/inc/quic_platform.h b/src/inc/quic_platform.h
+index 1111111..2222222 100644
+--- a/src/inc/quic_platform.h
++++ b/src/inc/quic_platform.h
+@@ -64,6 +64,51 @@ typedef struct CXPLAT_SLIST_ENTRY {
+     struct CXPLAT_SLIST_ENTRY* Next;
+ } CXPLAT_SLIST_ENTRY;
+ 
++//
++// Early definitions for MinGW compatibility
++//
++#if defined(__MINGW32__) || defined(__MINGW64__)
++#define QUIC_INLINE inline
++#define INITCODE
++#define PAGEDX
++
++// Windows DDK constants (no-op for user mode)
++#define PASSIVE_LEVEL 0
++#define DISPATCH_LEVEL 2
++
++// SAL annotations (no-op for MinGW)
++#define _IRQL_requires_max_(level)
++#define _Must_inspect_result_
++#define _Success_(expr)
++#define _In_
++#define _In_z_
++#define _In_opt_
++#define _In_reads_(size)
++#define _In_reads_opt_(size)
++#define _In_reads_bytes_(size)
++#define _Out_
++#define _Out_opt_
++#define _Outptr_
++#define _Outptr_opt_
++#define _Out_writes_(size)
++#define _Out_writes_opt_(size)
++#define _Out_writes_bytes_(size)
++#define _Inout_
++#define _Inout_opt_
++#define _When_(expr, annot)
++#define _Reserved_
++#define _Out_range_(min, max)
++#define __drv_aliasesMem
++#define _Interlocked_operand_
++#define DECLSPEC_ALLOCATOR
++#define __annotation(...) ((void)0)
++#define __kernel_entry
++
++#ifndef FAST_FAIL_INVALID_REFERENCE_COUNT
++#define FAST_FAIL_INVALID_REFERENCE_COUNT 14
++#endif
++#endif
++
+ #ifndef FORCEINLINE
+ #if (_MSC_VER >= 1200)
+ #define FORCEINLINE __forceinline
+diff --git a/src/inc/quic_platform_winuser.h b/src/inc/quic_platform_winuser.h
+index 1111111..2222222 100644
+--- a/src/inc/quic_platform_winuser.h
++++ b/src/inc/quic_platform_winuser.h
+@@ -52,6 +52,13 @@ Environment:
+ #pragma warning(disable:4201)  // nonstandard extension used: nameless struct/union
+ #pragma warning(disable:4324)  // 'CXPLAT_POOL': structure was padded due to alignment specifier
+ 
++#if defined(__MINGW32__) || defined(__MINGW64__)
++#undef UNREFERENCED_PARAMETER
++#define UNREFERENCED_PARAMETER(P) (void)(P)
++#undef DBG_UNREFERENCED_PARAMETER
++#define DBG_UNREFERENCED_PARAMETER(P) (void)(P)
++#endif
++
+ #if defined(__cplusplus)
+ extern "C" {
+ #endif
+@@ -116,10 +123,10 @@ RtlNtStatusToDosError (
+ #endif // DEBUG
+ #endif // _PREFAST_
+ 
+-#ifdef __clang__
+-#define CXPLAT_STATIC_ASSERT(X,Y) _Static_assert(X,Y)
+-#else
++#if defined(__cplusplus)
+ #define CXPLAT_STATIC_ASSERT(X,Y) static_assert(X,Y)
++#else
++#define CXPLAT_STATIC_ASSERT(X,Y) _Static_assert(X,Y)
+ #endif
+ 
+ #define CXPLAT_ANALYSIS_ASSERT(X) __analysis_assert(X)
+@@ -300,8 +307,13 @@ typedef struct DECLSPEC_ALIGN(MEMORY_ALLOCATION_ALIGNMENT) CXPLAT_POOL_HEADER {
+ #endif
+ } CXPLAT_POOL_HEADER;
+ 
++#ifdef _MSC_VER
+ #define CXPLAT_POOL_FREE_FLAG   0xAAAAAAAAAAAAAAAAui64
+ #define CXPLAT_POOL_ALLOC_FLAG  0xE9E9E9E9E9E9E9E9ui64
++#else
++#define CXPLAT_POOL_FREE_FLAG   0xAAAAAAAAAAAAAAAAULL
++#define CXPLAT_POOL_ALLOC_FLAG  0xE9E9E9E9E9E9E9E9ULL
++#endif
+ 
+ typedef
+ CXPLAT_POOL_HEADER*
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Sean McNamara <smcnam@gmail.com>
+Date: Fri, 30 Jan 2026 22:03:24 -0500
+Subject: [PATCH 05/23] Skip ETW generation and submodule build when using
+ system quictls
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -473,37 +473,39 @@ string(TOLOWER ${CMAKE_GENERATOR_PLATFORM} SYSTEM_PROCESSOR)
+ endif()
+ 
+ if(WIN32)
+-    # Generate the MsQuicEtw header file.
+-    file(MAKE_DIRECTORY ${QUIC_BUILD_DIR}/inc)
+-
+-    if(NOT DEFINED CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH OR CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH)
+-        find_program(MC_EXE NAMES mc.exe)
+-        if(MC_EXE MATCHES "NOTFOUND")
+-            # If not found, then VS project generator will set %PATH% env var to WinSDK bin directory
+-            set(MC_EXE "mc.exe" CACHE STRING "mc.exe from %PATH%" FORCE)
++    if(QUIC_ENABLE_LOGGING AND QUIC_LOGGING_TYPE STREQUAL "etw")
++        # Generate the MsQuicEtw header file.
++        file(MAKE_DIRECTORY ${QUIC_BUILD_DIR}/inc)
++
++        if(NOT DEFINED CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH OR CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH)
++            find_program(MC_EXE NAMES mc.exe)
++            if(MC_EXE MATCHES "NOTFOUND")
++                # If not found, then VS project generator will set %PATH% env var to WinSDK bin directory
++                set(MC_EXE "mc.exe" CACHE STRING "mc.exe from %PATH%" FORCE)
++            endif()
++        else()
++            find_program(MC_EXE NAMES mc.exe REQUIRED)
+         endif()
+-    else()
+-        find_program(MC_EXE NAMES mc.exe REQUIRED)
+-    endif()
+ 
+-    add_custom_command(
+-        OUTPUT ${QUIC_BUILD_DIR}/inc/MsQuicEtw.h
+-        OUTPUT ${QUIC_BUILD_DIR}/inc/MsQuicEtw.rc
+-        DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/src/manifest/MsQuicEtw.man
+-        COMMAND "${MC_EXE}" -um -h ${QUIC_BUILD_DIR}/inc -r ${QUIC_BUILD_DIR}/inc ${CMAKE_CURRENT_SOURCE_DIR}/src/manifest/MsQuicEtw.man)
+-    add_custom_target(MsQuicEtw_HeaderBuild
+-        DEPENDS ${QUIC_BUILD_DIR}/inc/MsQuicEtw.h)
++        add_custom_command(
++            OUTPUT ${QUIC_BUILD_DIR}/inc/MsQuicEtw.h
++            OUTPUT ${QUIC_BUILD_DIR}/inc/MsQuicEtw.rc
++            DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/src/manifest/MsQuicEtw.man
++            COMMAND "${MC_EXE}" -um -h ${QUIC_BUILD_DIR}/inc -r ${QUIC_BUILD_DIR}/inc ${CMAKE_CURRENT_SOURCE_DIR}/src/manifest/MsQuicEtw.man)
++        add_custom_target(MsQuicEtw_HeaderBuild
++            DEPENDS ${QUIC_BUILD_DIR}/inc/MsQuicEtw.h)
+ 
+-    set_property(TARGET MsQuicEtw_HeaderBuild PROPERTY FOLDER "${QUIC_FOLDER_PREFIX}helpers")
++        set_property(TARGET MsQuicEtw_HeaderBuild PROPERTY FOLDER "${QUIC_FOLDER_PREFIX}helpers")
+ 
+-    add_library(MsQuicEtw_Header INTERFACE)
+-    target_include_directories(MsQuicEtw_Header INTERFACE
+-        $<BUILD_INTERFACE:${QUIC_BUILD_DIR}/inc>
+-        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+-    add_dependencies(MsQuicEtw_Header MsQuicEtw_HeaderBuild)
++        add_library(MsQuicEtw_Header INTERFACE)
++        target_include_directories(MsQuicEtw_Header INTERFACE
++            $<BUILD_INTERFACE:${QUIC_BUILD_DIR}/inc>
++            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
++        add_dependencies(MsQuicEtw_Header MsQuicEtw_HeaderBuild)
+ 
+-    add_library(MsQuicEtw_Resource OBJECT ${QUIC_BUILD_DIR}/inc/MsQuicEtw.rc)
+-    set_property(TARGET MsQuicEtw_Resource PROPERTY FOLDER "${QUIC_FOLDER_PREFIX}helpers")
++        add_library(MsQuicEtw_Resource OBJECT ${QUIC_BUILD_DIR}/inc/MsQuicEtw.rc)
++        set_property(TARGET MsQuicEtw_Resource PROPERTY FOLDER "${QUIC_FOLDER_PREFIX}helpers")
++    endif()
+ 
+     message(STATUS "Disabling (client) shared port support")
+     list(APPEND QUIC_COMMON_DEFINES QUIC_DISABLE_SHARED_PORT_TESTS)
+@@ -707,20 +709,28 @@ endif()
+ 
+ if(QUIC_TLS_LIB STREQUAL "quictls")
+     add_library(OpenSSL INTERFACE)
++    if (QUIC_USE_SYSTEM_LIBCRYPTO)
++        find_package(OpenSSL REQUIRED)
++        target_link_libraries(OpenSSL
++            INTERFACE
++            OpenSSL::SSL
++            OpenSSL::Crypto
++        )
++    else()
++        include(FetchContent)
+ 
+-    include(FetchContent)
+-
+-    FetchContent_Declare(
+-        OpenSSLQuic
+-        SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/submodules
+-        CMAKE_ARGS "-DQUIC_USE_SYSTEM_LIBCRYPTO=${QUIC_USE_SYSTEM_LIBCRYPTO}"
+-    )
+-    FetchContent_MakeAvailable(OpenSSLQuic)
++        FetchContent_Declare(
++            OpenSSLQuic
++            SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/submodules
++            CMAKE_ARGS "-DQUIC_USE_SYSTEM_LIBCRYPTO=${QUIC_USE_SYSTEM_LIBCRYPTO}"
++        )
++        FetchContent_MakeAvailable(OpenSSLQuic)
+ 
+-    target_link_libraries(OpenSSL
+-        INTERFACE
+-        OpenSSLQuic::OpenSSLQuic
+-    )
++        target_link_libraries(OpenSSL
++            INTERFACE
++            OpenSSLQuic::OpenSSLQuic
++        )
++    endif()
+ endif()
+ 
+ if (QUIC_USE_SYSTEM_LIBCRYPTO)
+diff --git a/src/bin/CMakeLists.txt b/src/bin/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/src/bin/CMakeLists.txt
++++ b/src/bin/CMakeLists.txt
+@@ -4,7 +4,10 @@
+ if(WIN32)
+     configure_file(winuser/msquic.rc.in ${CMAKE_CURRENT_BINARY_DIR}/msquic.rc )
+     configure_file(winuser/msquic.def.in ${CMAKE_CURRENT_BINARY_DIR}/msquic.def )
+-    set(SOURCES winuser/dllmain.c ${CMAKE_CURRENT_BINARY_DIR}/msquic.rc $<TARGET_OBJECTS:MsQuicEtw_Resource>)
++    set(SOURCES winuser/dllmain.c ${CMAKE_CURRENT_BINARY_DIR}/msquic.rc)
++    if (TARGET MsQuicEtw_Resource)
++        list(APPEND SOURCES $<TARGET_OBJECTS:MsQuicEtw_Resource>)
++    endif()
+ else()
+     set(SOURCES linux/init.c)
+ endif()
+@@ -265,10 +268,13 @@ endif()
+ file(GLOB PUBLIC_HEADERS "../inc/*.h" "../inc/*.hpp")
+ 
+ if(QUIC_TLS_LIB STREQUAL "quictls")
+-    list(APPEND OTHER_TARGETS OpenSSL OpenSSLQuic)
++    list(APPEND OTHER_TARGETS OpenSSL)
++    if (TARGET OpenSSLQuic)
++        list(APPEND OTHER_TARGETS OpenSSLQuic)
++    endif()
+ endif()
+ 
+-if(WIN32)
++if(TARGET MsQuicEtw_Header)
+     list(APPEND OTHER_TARGETS MsQuicEtw_Header)
+ endif()
+ 
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Sean McNamara <smcnam@gmail.com>
+Date: Fri, 30 Jan 2026 22:30:08 -0500
+Subject: [PATCH 06/23] MinGW: add RIO and WinSock fallbacks
+
+
+diff --git a/src/inc/quic_platform_winuser.h b/src/inc/quic_platform_winuser.h
+index 1111111..2222222 100644
+--- a/src/inc/quic_platform_winuser.h
++++ b/src/inc/quic_platform_winuser.h
+@@ -57,6 +57,231 @@ Environment:
+ #define UNREFERENCED_PARAMETER(P) (void)(P)
+ #undef DBG_UNREFERENCED_PARAMETER
+ #define DBG_UNREFERENCED_PARAMETER(P) (void)(P)
++
++//
++// MinGW headers are missing WinSock RIO types/flags and some intrinsics.
++//
++#ifndef RIO_MSG_DONT_NOTIFY
++typedef PVOID RIO_BUFFERID;
++typedef PVOID RIO_CQ;
++typedef PVOID RIO_RQ;
++
++typedef struct _RIORESULT {
++    LONG Status;
++    ULONG BytesTransferred;
++    ULONGLONG SocketContext;
++    ULONGLONG RequestContext;
++} RIORESULT, *PRIORESULT;
++
++typedef struct _RIO_BUF {
++    RIO_BUFFERID BufferId;
++    ULONG Offset;
++    ULONG Length;
++} RIO_BUF, *PRIO_BUF;
++
++#define RIO_MSG_DONT_NOTIFY 0x00000001
++#define RIO_MSG_DEFER 0x00000002
++#define RIO_MSG_WAITALL 0x00000004
++#define RIO_MSG_COMMIT_ONLY 0x00000008
++#define RIO_INVALID_BUFFERID ((RIO_BUFFERID)0xFFFFFFFF)
++#define RIO_INVALID_CQ ((RIO_CQ)0)
++#define RIO_INVALID_RQ ((RIO_RQ)0)
++#define RIO_MAX_CQ_SIZE ((DWORD)0x8000000)
++#define RIO_CORRUPT_CQ ((ULONG)0xFFFFFFFF)
++
++typedef enum _RIO_NOTIFICATION_COMPLETION_TYPE {
++    RIO_EVENT_COMPLETION = 1,
++    RIO_IOCP_COMPLETION = 2
++} RIO_NOTIFICATION_COMPLETION_TYPE, *PRIO_NOTIFICATION_COMPLETION_TYPE;
++
++typedef struct _RIO_NOTIFICATION_COMPLETION {
++    RIO_NOTIFICATION_COMPLETION_TYPE Type;
++    union {
++        struct {
++            HANDLE EventHandle;
++            BOOL NotifyReset;
++        } Event;
++        struct {
++            HANDLE IocpHandle;
++            PVOID CompletionKey;
++            PVOID Overlapped;
++        } Iocp;
++    };
++} RIO_NOTIFICATION_COMPLETION, *PRIO_NOTIFICATION_COMPLETION;
++
++typedef BOOL (PASCAL *LPFN_RIORECEIVE)(
++    RIO_RQ SocketQueue,
++    PRIO_BUF pData,
++    ULONG DataBufferCount,
++    DWORD Flags,
++    PVOID RequestContext
++    );
++
++typedef INT (PASCAL *LPFN_RIORECEIVEEX)(
++    RIO_RQ SocketQueue,
++    PRIO_BUF pData,
++    ULONG DataBufferCount,
++    PRIO_BUF pLocalAddress,
++    PRIO_BUF pRemoteAddress,
++    PRIO_BUF pControlContext,
++    PRIO_BUF pFlags,
++    DWORD Flags,
++    PVOID RequestContext
++    );
++
++typedef BOOL (PASCAL *LPFN_RIOSEND)(
++    RIO_RQ SocketQueue,
++    PRIO_BUF pData,
++    ULONG DataBufferCount,
++    DWORD Flags,
++    PVOID RequestContext
++    );
++
++typedef BOOL (PASCAL *LPFN_RIOSENDEX)(
++    RIO_RQ SocketQueue,
++    PRIO_BUF pData,
++    ULONG DataBufferCount,
++    PRIO_BUF pLocalAddress,
++    PRIO_BUF pRemoteAddress,
++    PRIO_BUF pControlContext,
++    PRIO_BUF pFlags,
++    DWORD Flags,
++    PVOID RequestContext
++    );
++
++typedef VOID (PASCAL *LPFN_RIOCLOSECOMPLETIONQUEUE)(
++    RIO_CQ CQ
++    );
++
++typedef RIO_CQ (PASCAL *LPFN_RIOCREATECOMPLETIONQUEUE)(
++    DWORD QueueSize,
++    PRIO_NOTIFICATION_COMPLETION NotificationCompletion
++    );
++
++typedef RIO_RQ (PASCAL *LPFN_RIOCREATEREQUESTQUEUE)(
++    SOCKET Socket,
++    ULONG MaxOutstandingReceive,
++    ULONG MaxReceiveDataBuffers,
++    ULONG MaxOutstandingSend,
++    ULONG MaxSendDataBuffers,
++    RIO_CQ ReceiveCQ,
++    RIO_CQ SendCQ,
++    PVOID SocketContext
++    );
++
++typedef ULONG (PASCAL *LPFN_RIODEQUEUECOMPLETION)(
++    RIO_CQ CQ,
++    PRIORESULT Array,
++    ULONG ArraySize
++    );
++
++typedef VOID (PASCAL *LPFN_RIODEREGISTERBUFFER)(
++    RIO_BUFFERID BufferId
++    );
++
++typedef INT (PASCAL *LPFN_RIONOTIFY)(
++    RIO_CQ CQ
++    );
++
++typedef RIO_BUFFERID (PASCAL *LPFN_RIOREGISTERBUFFER)(
++    PCHAR DataBuffer,
++    DWORD DataLength
++    );
++
++typedef BOOL (PASCAL *LPFN_RIORESIZECOMPLETIONQUEUE)(
++    RIO_CQ CQ,
++    DWORD QueueSize
++    );
++
++typedef BOOL (PASCAL *LPFN_RIORESIZEREQUESTQUEUE)(
++    RIO_RQ RQ,
++    DWORD MaxOutstandingReceive,
++    DWORD MaxOutstandingSend
++    );
++
++typedef struct _RIO_EXTENSION_FUNCTION_TABLE {
++    DWORD cbSize;
++    LPFN_RIORECEIVE RIOReceive;
++    LPFN_RIORECEIVEEX RIOReceiveEx;
++    LPFN_RIOSEND RIOSend;
++    LPFN_RIOSENDEX RIOSendEx;
++    LPFN_RIOCLOSECOMPLETIONQUEUE RIOCloseCompletionQueue;
++    LPFN_RIOCREATEREQUESTQUEUE RIOCreateRequestQueue;
++    LPFN_RIOCREATECOMPLETIONQUEUE RIOCreateCompletionQueue;
++    LPFN_RIODEQUEUECOMPLETION RIODequeueCompletion;
++    LPFN_RIODEREGISTERBUFFER RIODeregisterBuffer;
++    LPFN_RIOREGISTERBUFFER RIORegisterBuffer;
++    LPFN_RIORESIZECOMPLETIONQUEUE RIOResizeCompletionQueue;
++    LPFN_RIORESIZEREQUESTQUEUE RIOResizeRequestQueue;
++    LPFN_RIONOTIFY RIONotify;
++} RIO_EXTENSION_FUNCTION_TABLE, *PRIO_EXTENSION_FUNCTION_TABLE;
++
++typedef struct _RIO_CMSG_BUFFER {
++    ULONG TotalLength;
++    ULONG ControlLength;
++    UCHAR Control[1];
++} RIO_CMSG_BUFFER, *PRIO_CMSG_BUFFER;
++
++#ifndef RIO_CMSG_BASE_SIZE
++#define RIO_CMSG_BASE_SIZE FIELD_OFFSET(RIO_CMSG_BUFFER, Control)
++#endif
++
++#ifndef WSAID_MULTIPLE_RIO
++static const GUID WSAID_MULTIPLE_RIO =
++    {0x8509e081, 0x96dd, 0x4005, {0xb1, 0x65, 0x9e, 0x2e, 0xe8, 0xc7, 0x9e, 0x3f}};
++#endif
++#endif // RIO_MSG_DONT_NOTIFY
++
++#ifndef IN6ADDR_ISV4MAPPED
++#define IN6ADDR_ISV4MAPPED(sa6) IN6_IS_ADDR_V4MAPPED(&(sa6)->sin6_addr)
++#endif
++
++#ifndef IN6ADDR_SETV4MAPPED
++#define IN6ADDR_SETV4MAPPED(psa6, paddr4, scope, port)                     \
++    do {                                                                  \
++        UNREFERENCED_PARAMETER(scope);                                    \
++        (psa6)->sin6_family = AF_INET6;                                    \
++        (psa6)->sin6_port = (port);                                        \
++        (psa6)->sin6_flowinfo = 0;                                         \
++        (psa6)->sin6_scope_id = 0;                                         \
++        ZeroMemory(&(psa6)->sin6_addr, sizeof((psa6)->sin6_addr));         \
++        ((UCHAR*)&(psa6)->sin6_addr)[10] = 0xff;                           \
++        ((UCHAR*)&(psa6)->sin6_addr)[11] = 0xff;                           \
++        CopyMemory(((UCHAR*)&(psa6)->sin6_addr) + 12, (paddr4), sizeof(IN_ADDR)); \
++    } while (0)
++#endif
++
++#ifndef IN6_GET_ADDR_V4MAPPED
++#define IN6_GET_ADDR_V4MAPPED(in6) ((PUCHAR)(in6) + 12)
++#endif
++
++#ifndef InterlockedIncrementNoFence
++#define InterlockedIncrementNoFence InterlockedIncrement
++#endif
++#ifndef InterlockedDecrementRelease
++#define InterlockedDecrementRelease InterlockedDecrement
++#endif
++#ifndef InterlockedCompareExchangeNoFence
++#define InterlockedCompareExchangeNoFence InterlockedCompareExchange
++#endif
++#ifndef ReadNoFence
++#define ReadNoFence(p) (*(p))
++#endif
++#ifndef ReadPointerNoFence
++#define ReadPointerNoFence(p) (*(p))
++#endif
++#ifndef InterlockedIncrementNoFence64
++#define InterlockedIncrementNoFence64 InterlockedIncrement64
++#endif
++#ifndef InterlockedDecrementRelease64
++#define InterlockedDecrementRelease64 InterlockedDecrement64
++#endif
++#ifndef InterlockedCompareExchangeNoFence64
++#define InterlockedCompareExchangeNoFence64 InterlockedCompareExchange64
++#endif
++#ifndef ReadNoFence64
++#define ReadNoFence64(p) (*(p))
++#endif
+ #endif
+ 
+ #if defined(__cplusplus)
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Sean McNamara <smcnam@gmail.com>
+Date: Fri, 30 Jan 2026 22:39:11 -0500
+Subject: [PATCH 07/23] MinGW: add Winsock RSS and pktinfo defs
+
+
+diff --git a/src/inc/quic_platform_winuser.h b/src/inc/quic_platform_winuser.h
+index 1111111..2222222 100644
+--- a/src/inc/quic_platform_winuser.h
++++ b/src/inc/quic_platform_winuser.h
+@@ -232,6 +232,48 @@ static const GUID WSAID_MULTIPLE_RIO =
+ #endif
+ #endif // RIO_MSG_DONT_NOTIFY
+ 
++#ifndef SIO_GET_MULTIPLE_EXTENSION_FUNCTION_POINTER
++#define SIO_GET_MULTIPLE_EXTENSION_FUNCTION_POINTER _WSAIORW(IOC_WS2, 36)
++#endif
++
++#ifndef SIO_QUERY_RSS_SCALABILITY_INFO
++#define SIO_QUERY_RSS_SCALABILITY_INFO _WSAIOR(IOC_VENDOR, 210)
++#endif
++
++#ifndef SIO_QUERY_RSS_PROCESSOR_INFO
++#define SIO_QUERY_RSS_PROCESSOR_INFO _WSAIOR(IOC_WS2, 37)
++#endif
++
++#ifndef _RSS_SCALABILITY_INFO
++#define _RSS_SCALABILITY_INFO
++typedef struct _RSS_SCALABILITY_INFO {
++    BOOLEAN RssEnabled;
++} RSS_SCALABILITY_INFO, *PRSS_SCALABILITY_INFO;
++#endif
++
++#ifndef _SOCKET_PROCESSOR_AFFINITY
++#define _SOCKET_PROCESSOR_AFFINITY
++typedef struct _SOCKET_PROCESSOR_AFFINITY {
++    PROCESSOR_NUMBER Processor;
++    USHORT NumaNodeId;
++    USHORT Reserved;
++} SOCKET_PROCESSOR_AFFINITY, *PSOCKET_PROCESSOR_AFFINITY;
++#endif
++
++#ifndef __PIN_PKTINFO_DEFINED
++#define __PIN_PKTINFO_DEFINED
++typedef IN_PKTINFO* PIN_PKTINFO;
++#endif
++
++#ifndef __PIN6_PKTINFO_DEFINED
++#define __PIN6_PKTINFO_DEFINED
++typedef IN6_PKTINFO* PIN6_PKTINFO;
++#endif
++
++#ifndef GAA_FLAG_SKIP_DNS_INFO
++#define GAA_FLAG_SKIP_DNS_INFO 0x00000800
++#endif
++
+ #ifndef IN6ADDR_ISV4MAPPED
+ #define IN6ADDR_ISV4MAPPED(sa6) IN6_IS_ADDR_V4MAPPED(&(sa6)->sin6_addr)
+ #endif
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Sean McNamara <smcnam@gmail.com>
+Date: Fri, 30 Jan 2026 22:41:31 -0500
+Subject: [PATCH 08/23] MinGW: skip XDP win source and add IFI_UNSPECIFIED
+
+
+diff --git a/src/inc/quic_platform_winuser.h b/src/inc/quic_platform_winuser.h
+index 1111111..2222222 100644
+--- a/src/inc/quic_platform_winuser.h
++++ b/src/inc/quic_platform_winuser.h
+@@ -274,6 +274,10 @@ typedef IN6_PKTINFO* PIN6_PKTINFO;
+ #define GAA_FLAG_SKIP_DNS_INFO 0x00000800
+ #endif
+ 
++#ifndef IFI_UNSPECIFIED
++#define IFI_UNSPECIFIED 0
++#endif
++
+ #ifndef IN6ADDR_ISV4MAPPED
+ #define IN6ADDR_ISV4MAPPED(sa6) IN6_IS_ADDR_V4MAPPED(&(sa6)->sin6_addr)
+ #endif
+diff --git a/src/platform/CMakeLists.txt b/src/platform/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/src/platform/CMakeLists.txt
++++ b/src/platform/CMakeLists.txt
+@@ -20,7 +20,10 @@ if("${CX_PLATFORM}" STREQUAL "windows")
+        ${SYSTEM_PROCESSOR} STREQUAL "arm64ec")
+         set(SOURCES ${SOURCES} datapath_raw_dummy.c)
+     else()
+-        set(SOURCES ${SOURCES} datapath_raw.c datapath_raw_win.c datapath_raw_socket.c datapath_raw_socket_win.c datapath_raw_xdp_win.c)
++        set(SOURCES ${SOURCES} datapath_raw.c datapath_raw_win.c datapath_raw_socket.c datapath_raw_socket_win.c)
++        if (NOT MINGW)
++            set(SOURCES ${SOURCES} datapath_raw_xdp_win.c)
++        endif()
+     endif()
+ else()
+     set(SOURCES ${SOURCES} platform_posix.c storage_posix.c cgroup.c datapath_unix.c)
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Sean McNamara <smcnam@gmail.com>
+Date: Fri, 30 Jan 2026 22:43:27 -0500
+Subject: [PATCH 09/23] MinGW: add bcrypt pseudo-handle constants
+
+
+diff --git a/src/inc/quic_platform_winuser.h b/src/inc/quic_platform_winuser.h
+index 1111111..2222222 100644
+--- a/src/inc/quic_platform_winuser.h
++++ b/src/inc/quic_platform_winuser.h
+@@ -278,6 +278,19 @@ typedef IN6_PKTINFO* PIN6_PKTINFO;
+ #define IFI_UNSPECIFIED 0
+ #endif
+ 
++#ifndef BCRYPT_SHA1_ALG_HANDLE
++#define BCRYPT_SHA1_ALG_HANDLE ((BCRYPT_ALG_HANDLE)0x00000031)
++#endif
++#ifndef BCRYPT_SHA256_ALG_HANDLE
++#define BCRYPT_SHA256_ALG_HANDLE ((BCRYPT_ALG_HANDLE)0x00000041)
++#endif
++#ifndef BCRYPT_SHA384_ALG_HANDLE
++#define BCRYPT_SHA384_ALG_HANDLE ((BCRYPT_ALG_HANDLE)0x00000051)
++#endif
++#ifndef BCRYPT_SHA512_ALG_HANDLE
++#define BCRYPT_SHA512_ALG_HANDLE ((BCRYPT_ALG_HANDLE)0x00000061)
++#endif
++
+ #ifndef IN6ADDR_ISV4MAPPED
+ #define IN6ADDR_ISV4MAPPED(sa6) IN6_IS_ADDR_V4MAPPED(&(sa6)->sin6_addr)
+ #endif
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Sean McNamara <smcnam@gmail.com>
+Date: Fri, 30 Jan 2026 22:50:23 -0500
+Subject: [PATCH 10/23] MinGW: use __forceinline for FORCEINLINE
+
+
+diff --git a/src/inc/quic_platform.h b/src/inc/quic_platform.h
+index 1111111..2222222 100644
+--- a/src/inc/quic_platform.h
++++ b/src/inc/quic_platform.h
+@@ -110,7 +110,9 @@ typedef struct CXPLAT_SLIST_ENTRY {
+ #endif
+ 
+ #ifndef FORCEINLINE
+-#if (_MSC_VER >= 1200)
++#if defined(__MINGW32__) || defined(__MINGW64__)
++#define FORCEINLINE __forceinline
++#elif (_MSC_VER >= 1200)
+ #define FORCEINLINE __forceinline
+ #else
+ #define FORCEINLINE QUIC_INLINE
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Sean McNamara <smcnam@gmail.com>
+Date: Fri, 30 Jan 2026 22:52:43 -0500
+Subject: [PATCH 11/23] MinGW: skip MSVC CRT and PGO flags
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -617,42 +617,44 @@ if(WIN32)
+     endif()
+     message(STATUS "Using PGO file ${QUIC_PGO_NAME}")
+ 
+-    # Configure PGO linker flags.
+-    if(QUIC_PGO)
+-        # Configured for training mode. Use the previous PGD file if present.
+-        if(EXISTS "${QUIC_PGO_FILE}")
+-            message(STATUS "/GENPROFILE:PDG")
+-            configure_file("${QUIC_PGO_FILE}" "${QUIC_PGO_DIR}/msquic.pgd" COPYONLY)
+-            set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /GENPROFILE:\"PGD=${QUIC_PGO_DIR}/msquic.pgd\"")
++    if (MSVC)
++        # Configure PGO linker flags.
++        if(QUIC_PGO)
++            # Configured for training mode. Use the previous PGD file if present.
++            if(EXISTS "${QUIC_PGO_FILE}")
++                message(STATUS "/GENPROFILE:PDG")
++                configure_file("${QUIC_PGO_FILE}" "${QUIC_PGO_DIR}/msquic.pgd" COPYONLY)
++                set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /GENPROFILE:\"PGD=${QUIC_PGO_DIR}/msquic.pgd\"")
++            else()
++                message(STATUS "/GENPROFILE")
++                set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /GENPROFILE")
++            endif()
++            set(CMAKE_VS_SDK_LIBRARY_DIRECTORIES "$(LibraryPath);$(VC_LibraryPath_VC_${SYSTEM_PROCESSOR}_Desktop)")
+         else()
+-            message(STATUS "/GENPROFILE")
+-            set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /GENPROFILE")
+-        endif()
+-        set(CMAKE_VS_SDK_LIBRARY_DIRECTORIES "$(LibraryPath);$(VC_LibraryPath_VC_${SYSTEM_PROCESSOR}_Desktop)")
+-    else()
+-        # Just doing a normal build. Use the PGD file if present.
+-        if(EXISTS "${QUIC_PGO_FILE}")
+-            message(STATUS "Using profile-guided optimization")
+-            file(MAKE_DIRECTORY ${QUIC_PGO_DIR})
+-            configure_file("${QUIC_PGO_FILE}" "${QUIC_PGO_DIR}/msquic.pgd" COPYONLY)
+-            set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /USEPROFILE:\"PGD=${QUIC_PGO_DIR}/msquic.pgd\"")
++            # Just doing a normal build. Use the PGD file if present.
++            if(EXISTS "${QUIC_PGO_FILE}")
++                message(STATUS "Using profile-guided optimization")
++                file(MAKE_DIRECTORY ${QUIC_PGO_DIR})
++                configure_file("${QUIC_PGO_FILE}" "${QUIC_PGO_DIR}/msquic.pgd" COPYONLY)
++                set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /USEPROFILE:\"PGD=${QUIC_PGO_DIR}/msquic.pgd\"")
++            endif()
+         endif()
+-    endif()
+ 
+-    if(QUIC_STATIC_LINK_CRT)
+-        message(STATUS "Configuring for statically-linked CRT")
+-        set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+-    endif()
++        if(QUIC_STATIC_LINK_CRT)
++            message(STATUS "Configuring for statically-linked CRT")
++            set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
++        endif()
+ 
+-    if(QUIC_STATIC_LINK_PARTIAL_CRT)
+-        message(STATUS "Configuring for partially statically-linked CRT")
+-        set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /NODEFAULTLIB:libucrt.lib /DEFAULTLIB:ucrt.lib")
+-    endif()
++        if(QUIC_STATIC_LINK_PARTIAL_CRT)
++            message(STATUS "Configuring for partially statically-linked CRT")
++            set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /NODEFAULTLIB:libucrt.lib /DEFAULTLIB:ucrt.lib")
++        endif()
+ 
+-    if (NOT QUIC_STATIC_LINK_CRT AND NOT QUIC_STATIC_LINK_PARTIAL_CRT)
+-        # We are using dynamic linking. Ensure that only the release version of CRT is used.
+-        message(STATUS "Configuring for release version of dynamically linked CRT")
+-        set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreadedDLL")
++        if (NOT QUIC_STATIC_LINK_CRT AND NOT QUIC_STATIC_LINK_PARTIAL_CRT)
++            # We are using dynamic linking. Ensure that only the release version of CRT is used.
++            message(STATUS "Configuring for release version of dynamically linked CRT")
++            set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreadedDLL")
++        endif()
+     endif()
+ 
+ else() #!WIN32
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Sean McNamara <smcnam@gmail.com>
+Date: Fri, 30 Jan 2026 22:54:36 -0500
+Subject: [PATCH 12/23] MinGW: skip MSVC link flags for DLL
+
+
+diff --git a/src/bin/CMakeLists.txt b/src/bin/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/src/bin/CMakeLists.txt
++++ b/src/bin/CMakeLists.txt
+@@ -241,7 +241,7 @@ endif()
+ 
+ set_property(TARGET msquic PROPERTY FOLDER "${QUIC_FOLDER_PREFIX}libraries")
+ 
+-if(WIN32)
++if(WIN32 AND MSVC)
+     set(MSQUIC_LINK_FLAGS "/DEF:\"${CMAKE_CURRENT_BINARY_DIR}/msquic.def\"")
+ 
+     # Indicate CET Shadow Stack support for supported architectures
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Sean McNamara <smcnam@gmail.com>
+Date: Fri, 30 Jan 2026 22:57:06 -0500
+Subject: [PATCH 13/23] MinGW: link zlib for quictls
+
+
+diff --git a/src/bin/CMakeLists.txt b/src/bin/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/src/bin/CMakeLists.txt
++++ b/src/bin/CMakeLists.txt
+@@ -17,6 +17,9 @@ if(BUILD_SHARED_LIBS)
+     add_library(msquic::msquic ALIAS msquic)
+     target_include_directories(msquic PUBLIC $<INSTALL_INTERFACE:include>)
+     target_link_libraries(msquic PRIVATE core msquic_platform inc warnings logging base_link main_binary_link_args)
++    if (MINGW AND QUIC_TLS_LIB STREQUAL "quictls")
++        target_link_libraries(msquic PRIVATE z)
++    endif()
+     set_target_properties(msquic PROPERTIES OUTPUT_NAME ${QUIC_LIBRARY_NAME})
+     if (NOT WIN32)
+         set_target_properties(msquic PROPERTIES SOVERSION ${QUIC_MAJOR_VERSION} VERSION ${QUIC_FULL_VERSION})
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Sean McNamara <smcnam@gmail.com>
+Date: Fri, 30 Jan 2026 22:58:50 -0500
+Subject: [PATCH 14/23] MinGW: detect compiler for zlib link
+
+
+diff --git a/src/bin/CMakeLists.txt b/src/bin/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/src/bin/CMakeLists.txt
++++ b/src/bin/CMakeLists.txt
+@@ -17,7 +17,7 @@ if(BUILD_SHARED_LIBS)
+     add_library(msquic::msquic ALIAS msquic)
+     target_include_directories(msquic PUBLIC $<INSTALL_INTERFACE:include>)
+     target_link_libraries(msquic PRIVATE core msquic_platform inc warnings logging base_link main_binary_link_args)
+-    if (MINGW AND QUIC_TLS_LIB STREQUAL "quictls")
++    if ((MINGW OR CMAKE_C_COMPILER MATCHES "mingw") AND QUIC_TLS_LIB STREQUAL "quictls")
+         target_link_libraries(msquic PRIVATE z)
+     endif()
+     set_target_properties(msquic PROPERTIES OUTPUT_NAME ${QUIC_LIBRARY_NAME})
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Sean McNamara <smcnam@gmail.com>
+Date: Fri, 30 Jan 2026 23:01:04 -0500
+Subject: [PATCH 15/23] MinGW: stub __noop and __analysis_assert
+
+
+diff --git a/src/inc/quic_platform.h b/src/inc/quic_platform.h
+index 1111111..2222222 100644
+--- a/src/inc/quic_platform.h
++++ b/src/inc/quic_platform.h
+@@ -103,6 +103,12 @@ typedef struct CXPLAT_SLIST_ENTRY {
+ #define DECLSPEC_ALLOCATOR
+ #define __annotation(...) ((void)0)
+ #define __kernel_entry
++#ifndef __noop
++#define __noop(expr) ((void)(expr))
++#endif
++#ifndef __analysis_assert
++#define __analysis_assert(expr) ((void)(expr))
++#endif
+ 
+ #ifndef FAST_FAIL_INVALID_REFERENCE_COUNT
+ #define FAST_FAIL_INVALID_REFERENCE_COUNT 14
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Sean McNamara <smcnam@gmail.com>
+Date: Fri, 30 Jan 2026 23:03:39 -0500
+Subject: [PATCH 16/23] MinGW: link zlib after OpenSSL
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -718,6 +718,9 @@ if(QUIC_TLS_LIB STREQUAL "quictls")
+             OpenSSL::SSL
+             OpenSSL::Crypto
+         )
++        if (MINGW OR CMAKE_C_COMPILER MATCHES "mingw")
++            target_link_libraries(OpenSSL INTERFACE z)
++        endif()
+     else()
+         include(FetchContent)
+ 
+diff --git a/src/bin/CMakeLists.txt b/src/bin/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/src/bin/CMakeLists.txt
++++ b/src/bin/CMakeLists.txt
+@@ -17,9 +17,6 @@ if(BUILD_SHARED_LIBS)
+     add_library(msquic::msquic ALIAS msquic)
+     target_include_directories(msquic PUBLIC $<INSTALL_INTERFACE:include>)
+     target_link_libraries(msquic PRIVATE core msquic_platform inc warnings logging base_link main_binary_link_args)
+-    if ((MINGW OR CMAKE_C_COMPILER MATCHES "mingw") AND QUIC_TLS_LIB STREQUAL "quictls")
+-        target_link_libraries(msquic PRIVATE z)
+-    endif()
+     set_target_properties(msquic PROPERTIES OUTPUT_NAME ${QUIC_LIBRARY_NAME})
+     if (NOT WIN32)
+         set_target_properties(msquic PROPERTIES SOVERSION ${QUIC_MAJOR_VERSION} VERSION ${QUIC_FULL_VERSION})
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Sean McNamara <smcnam@gmail.com>
+Date: Fri, 30 Jan 2026 23:08:06 -0500
+Subject: [PATCH 17/23] MinGW: stub raw datapath queue helpers
+
+
+diff --git a/src/platform/datapath_raw_socket_win.c b/src/platform/datapath_raw_socket_win.c
+index 1111111..2222222 100644
+--- a/src/platform/datapath_raw_socket_win.c
++++ b/src/platform/datapath_raw_socket_win.c
+@@ -215,3 +215,24 @@ Error:
+     Callback(Context, NULL, PathId, FALSE);
+     return HRESULT_FROM_WIN32(Status);
+ }
++
++#if defined(__MINGW32__) || defined(__MINGW64__)
++_IRQL_requires_max_(PASSIVE_LEVEL)
++void
++CxPlatDpRawAssignQueue(
++    _In_ const CXPLAT_INTERFACE* Interface,
++    _Inout_ CXPLAT_ROUTE* Route
++    )
++{
++    Route->Queue = (void*)Interface;
++}
++
++_IRQL_requires_max_(DISPATCH_LEVEL)
++const CXPLAT_INTERFACE*
++CxPlatDpRawGetInterfaceFromQueue(
++    _In_ const void* Queue
++    )
++{
++    return (const CXPLAT_INTERFACE*)Queue;
++}
++#endif
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Sean McNamara <smcnam@gmail.com>
+Date: Fri, 30 Jan 2026 23:11:30 -0500
+Subject: [PATCH 18/23] MinGW: use raw dummy datapath
+
+
+diff --git a/src/platform/CMakeLists.txt b/src/platform/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/src/platform/CMakeLists.txt
++++ b/src/platform/CMakeLists.txt
+@@ -17,13 +17,12 @@ if("${CX_PLATFORM}" STREQUAL "windows")
+        QUIC_GAMECORE_BUILD OR
+        ${SYSTEM_PROCESSOR} STREQUAL "arm" OR
+        ${SYSTEM_PROCESSOR} STREQUAL "arm64" OR
+-       ${SYSTEM_PROCESSOR} STREQUAL "arm64ec")
++       ${SYSTEM_PROCESSOR} STREQUAL "arm64ec" OR
++       MINGW OR
++       CMAKE_C_COMPILER MATCHES "mingw")
+         set(SOURCES ${SOURCES} datapath_raw_dummy.c)
+     else()
+-        set(SOURCES ${SOURCES} datapath_raw.c datapath_raw_win.c datapath_raw_socket.c datapath_raw_socket_win.c)
+-        if (NOT MINGW)
+-            set(SOURCES ${SOURCES} datapath_raw_xdp_win.c)
+-        endif()
++        set(SOURCES ${SOURCES} datapath_raw.c datapath_raw_win.c datapath_raw_socket.c datapath_raw_socket_win.c datapath_raw_xdp_win.c)
+     endif()
+ else()
+     set(SOURCES ${SOURCES} platform_posix.c storage_posix.c cgroup.c datapath_unix.c)
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Sean McNamara <smcnam@gmail.com>
+Date: Fri, 30 Jan 2026 23:13:40 -0500
+Subject: [PATCH 19/23] MinGW: define IN4_IS_ADDR_LOOPBACK
+
+
+diff --git a/src/inc/quic_platform_winuser.h b/src/inc/quic_platform_winuser.h
+index 1111111..2222222 100644
+--- a/src/inc/quic_platform_winuser.h
++++ b/src/inc/quic_platform_winuser.h
+@@ -295,6 +295,10 @@ typedef IN6_PKTINFO* PIN6_PKTINFO;
+ #define IN6ADDR_ISV4MAPPED(sa6) IN6_IS_ADDR_V4MAPPED(&(sa6)->sin6_addr)
+ #endif
+ 
++#ifndef IN4_IS_ADDR_LOOPBACK
++#define IN4_IS_ADDR_LOOPBACK(a) ((BOOLEAN)(*((const UCHAR*)(a)) == 0x7f))
++#endif
++
+ #ifndef IN6ADDR_SETV4MAPPED
+ #define IN6ADDR_SETV4MAPPED(psa6, paddr4, scope, port)                     \
+     do {                                                                  \
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Sean McNamara <smcnam@gmail.com>
+Date: Fri, 30 Jan 2026 23:15:38 -0500
+Subject: [PATCH 20/23] MinGW: make QUIC_INLINE static
+
+
+diff --git a/src/inc/quic_platform.h b/src/inc/quic_platform.h
+index 1111111..2222222 100644
+--- a/src/inc/quic_platform.h
++++ b/src/inc/quic_platform.h
+@@ -68,7 +68,7 @@ typedef struct CXPLAT_SLIST_ENTRY {
+ // Early definitions for MinGW compatibility
+ //
+ #if defined(__MINGW32__) || defined(__MINGW64__)
+-#define QUIC_INLINE inline
++#define QUIC_INLINE static inline
+ #define INITCODE
+ #define PAGEDX
+ 
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Sean McNamara <smcnam@gmail.com>
+Date: Fri, 30 Jan 2026 23:20:07 -0500
+Subject: [PATCH 21/23] MinGW: guard QUIC_INLINE in winuser header
+
+
+diff --git a/src/inc/msquic_winuser.h b/src/inc/msquic_winuser.h
+index 1111111..2222222 100644
+--- a/src/inc/msquic_winuser.h
++++ b/src/inc/msquic_winuser.h
+@@ -38,7 +38,9 @@ Environment:
+ 
+ #include <stdint.h>
+ 
++#ifndef QUIC_INLINE
+ #define QUIC_INLINE inline
++#endif
+ 
+ #define SUCCESS_HRESULT_FROM_WIN32(x) \
+     ((HRESULT)(((x) & 0x0000FFFF) | (FACILITY_WIN32 << 16)))
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Sean McNamara <smcnam@gmail.com>
+Date: Fri, 30 Jan 2026 23:22:24 -0500
+Subject: [PATCH 22/23] MinGW: provide InterlockedAnd8
+
+
+diff --git a/src/inc/quic_platform_winuser.h b/src/inc/quic_platform_winuser.h
+index 1111111..2222222 100644
+--- a/src/inc/quic_platform_winuser.h
++++ b/src/inc/quic_platform_winuser.h
+@@ -345,6 +345,20 @@ typedef IN6_PKTINFO* PIN6_PKTINFO;
+ #ifndef ReadNoFence64
+ #define ReadNoFence64(p) (*(p))
+ #endif
++
++#ifndef CXPLAT_INTERLOCKED_AND8_DEFINED
++#define CXPLAT_INTERLOCKED_AND8_DEFINED
++static inline char
++CxPlatInterlockedAnd8(
++    _Inout_ volatile char* Destination,
++    _In_ char Value
++    )
++{
++    return __atomic_fetch_and(Destination, Value, __ATOMIC_SEQ_CST);
++}
++#undef InterlockedAnd8
++#define InterlockedAnd8 CxPlatInterlockedAnd8
++#endif
+ #endif
+ 
+ #if defined(__cplusplus)
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Sean McNamara <smcnam@gmail.com>
+Date: Fri, 30 Jan 2026 23:23:59 -0500
+Subject: [PATCH 23/23] MinGW: provide InterlockedOr8
+
+
+diff --git a/src/inc/quic_platform_winuser.h b/src/inc/quic_platform_winuser.h
+index 1111111..2222222 100644
+--- a/src/inc/quic_platform_winuser.h
++++ b/src/inc/quic_platform_winuser.h
+@@ -359,6 +359,20 @@ CxPlatInterlockedAnd8(
+ #undef InterlockedAnd8
+ #define InterlockedAnd8 CxPlatInterlockedAnd8
+ #endif
++
++#ifndef CXPLAT_INTERLOCKED_OR8_DEFINED
++#define CXPLAT_INTERLOCKED_OR8_DEFINED
++static inline char
++CxPlatInterlockedOr8(
++    _Inout_ volatile char* Destination,
++    _In_ char Value
++    )
++{
++    return __atomic_fetch_or(Destination, Value, __ATOMIC_SEQ_CST);
++}
++#undef InterlockedOr8
++#define InterlockedOr8 CxPlatInterlockedOr8
++#endif
+ #endif
+ 
+ #if defined(__cplusplus)
