@@ -1,0 +1,93 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "fix@me" <fix@me>
+Date: Fri, 6 Feb 2026 17:53:38 +0100
+Subject: [PATCH 1/2] 64 bit fix
+
+The patch was taken from the scummvm.org documentation, it is
+required on 64 bit systems due to the very old codebase.
+
+diff --git a/libvo/video_out_dx.c b/libvo/video_out_dx.c
+index 1111111..2222222 100644
+--- a/libvo/video_out_dx.c
++++ b/libvo/video_out_dx.c
+@@ -92,7 +92,7 @@ static long FAR PASCAL event_procedure (HWND hwnd, UINT message,
+     switch (message) {
+ 
+     case WM_WINDOWPOSCHANGED:
+-	instance = (dx_instance_t *) GetWindowLong (hwnd, GWL_USERDATA);
++	instance = (dx_instance_t *) GetWindowLongPtr (hwnd, GWLP_USERDATA);
+ 
+ 	/* update the window position and size */
+ 	point_window.x = 0;
+@@ -173,7 +173,7 @@ static int create_window (dx_instance_t * instance)
+     /* store a directx_instance pointer into the window local storage
+      * (for later use in event_handler).
+      * We need to use SetWindowLongPtr when it is available in mingw */
+-    SetWindowLong (instance->window, GWL_USERDATA, (LONG) instance);
++    SetWindowLongPtr (instance->window, GWLP_USERDATA, (LONG_PTR) instance);
+ 
+     ShowWindow (instance->window, SW_SHOW);
+ 
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "fix@me" <fix@me>
+Date: Fri, 6 Feb 2026 17:55:14 +0100
+Subject: [PATCH 2/2] libmpeg2: fix for win64
+
+https://github.com/scummvm/dockerized-bb/blob/master/toolchains/mxe/packages/libmpeg2/libmpeg2-9999-fix-win64.patc
+
+diff --git a/configure b/configure
+index 1111111..2222222 100755
+--- a/configure
++++ b/configure
+@@ -27071,7 +27071,7 @@ _ACEOF
+ cat confdefs.h >>conftest.$ac_ext
+ cat >>conftest.$ac_ext <<_ACEOF
+ /* end confdefs.h.  */
+-
++#include <stdint.h>
+ int
+ main ()
+ {
+@@ -27081,10 +27081,10 @@ static struct s {
+                 } S = {0, 0};
+                 switch (1) {
+                     case 0:
+-                    case (long)(&((struct s *)0)->b) == $ac_cv_c_attr_align_try:
++                    case (uintptr_t)(&((struct s *)0)->b) == $ac_cv_c_attr_align_try:
+                         return 0;
+                 }
+-                return (long)&S;
++                return (uintptr_t)&S;
+   ;
+   return 0;
+ }
+diff --git a/m4/keywords.m4 b/m4/keywords.m4
+index 1111111..2222222 100644
+--- a/m4/keywords.m4
++++ b/m4/keywords.m4
+@@ -72,17 +72,17 @@ AC_DEFUN([AC_C_ATTRIBUTE_ALIGNED],
+         [ac_cv_c_attribute_aligned],
+         [ac_cv_c_attribute_aligned=0
+         for ac_cv_c_attr_align_try in 2 4 8 16 32 64; do
+-            AC_TRY_COMPILE([],
++            AC_TRY_COMPILE([#include <stdint.h>],
+                 [static struct s {
+                     char a;
+                     char b __attribute__ ((aligned($ac_cv_c_attr_align_try)));
+                 } S = {0, 0};
+                 switch (1) {
+                     case 0:
+-                    case (long)(&((struct s *)0)->b) == $ac_cv_c_attr_align_try:
++                    case (uintptr_t)(&((struct s *)0)->b) == $ac_cv_c_attr_align_try:
+                         return 0;
+                 }
+-                return (long)&S;],
++                return (uintptr_t)&S;],
+                 [ac_cv_c_attribute_aligned=$ac_cv_c_attr_align_try])
+         done])
+     if test x"$ac_cv_c_attribute_aligned" != x"0"; then

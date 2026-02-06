@@ -32,7 +32,7 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 1111111..2222222 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -224,7 +224,7 @@ find_soft_mandatory_package(ENABLE_QT5 Qt5Widgets ${QT5_VERSION})
+@@ -220,7 +220,7 @@ find_soft_mandatory_package(ENABLE_QT5 Qt5Widgets ${QT5_VERSION})
  find_soft_mandatory_package(ENABLE_QT5 Qt5Test ${QT5_VERSION})
  
  set(QT6_VERSION "6.2")

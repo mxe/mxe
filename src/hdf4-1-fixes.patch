@@ -1,0 +1,81 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "fix@me" <fix@me>
+Date: Fri, 6 Feb 2026 17:10:04 +0100
+Subject: [PATCH 1/2] portability-fixes
+
+
+diff --git a/configure.ac b/configure.ac
+index 1111111..2222222 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -808,6 +808,7 @@ case "$host" in
+   *-*-solaris2*)        BAR="solaris"     ;;
+   *-apple*)             BAR="apple"       ;;
+   *-pc-cygwin*)         BAR="linux"       ;;
++  *-*-mingw*)	         BAR="linux"       ;;
+   *)                    echo "*** unknown host $host!"; exit 1 ;;
+ esac
+ src_files=""
+diff --git a/hdf/src/hdfi.h b/hdf/src/hdfi.h
+index 1111111..2222222 100644
+--- a/hdf/src/hdfi.h
++++ b/hdf/src/hdfi.h
+@@ -589,8 +589,8 @@ Please check your Makefile.
+ #include <sys/stat.h>
+ #include <unistd.h>
+ #else /* !UNIX386 */
+-#include <sys\types.h>      /* for unbuffered file I/O */
+-#include <sys\stat.h>
++#include <sys/types.h>      /* for unbuffered file I/O */
++#include <sys/stat.h>
+ #include <io.h>
+ #include <conio.h>          /* for debugging getch() calls */
+ #include <malloc.h>
+diff --git a/mfhdf/ncgen/Makefile.am b/mfhdf/ncgen/Makefile.am
+index 1111111..2222222 100644
+--- a/mfhdf/ncgen/Makefile.am
++++ b/mfhdf/ncgen/Makefile.am
+@@ -26,16 +26,6 @@ ncgen_LDFLAGS = $(LT_STATIC_EXEC) $(AM_LDFLAGS)
+ 
+ bin_PROGRAMS = ncgen
+ 
+-if HDF_BUILD_NETCDF
+-if HDF_BUILD_FORTRAN
+-noinst_PROGRAMS = ctest0 ftest0
+-else 
+-noinst_PROGRAMS = ctest0
+-endif
+-else
+-noinst_PROGRAMS = ctest0
+-endif
+-
+ ## Information for building the "ncgen" program
+ ncgen_SOURCES = close.c escapes.c generate.c genlib.c getfill.c init.c      \
+                 load.c main.c ncgentab.c
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "fix@me" <fix@me>
+Date: Fri, 6 Feb 2026 17:15:07 +0100
+Subject: [PATCH 2/2] dllimport
+
+
+diff --git a/hdf/src/H4api_adpt.h b/hdf/src/H4api_adpt.h
+index 1111111..2222222 100644
+--- a/hdf/src/H4api_adpt.h
++++ b/hdf/src/H4api_adpt.h
+@@ -150,11 +150,6 @@
+  * Under _WIN32 we have single threaded static libraries, or
+  * mutli-threaded DLLs using the multithreaded runtime DLLs.
+  **/
+-#  if defined(_MT) &&  defined(_DLL) &&!defined(_HDFDLL_)
+-/*     If the user really meant to use _HDFDLL_, but he forgot, just define it. */
+-#      define _HDFDLL_
+-#  endif
+-
+ #  if !defined(_MT) && defined(_HDFDLL_)
+ #      error To use the HDF libraries from a single-threaded project, you must use static HDF libraries
+ #      error Undefine the macro "_HDFDLL_"
