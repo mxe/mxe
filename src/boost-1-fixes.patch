@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Wed, 8 Apr 2020 00:37:10 +1000
-Subject: [PATCH 1/1] fix darwin build
+Subject: [PATCH 1/2] fix darwin build
 
 
 diff --git a/tools/build/src/tools/darwin.jam b/tools/build/src/tools/darwin.jam
@@ -24,3 +24,34 @@ index 1111111..2222222 100644
      # - GCC 4.2 and higher in Darwin does not have -Wno-long-double.
      if [ version.version-less $(real-version) : 4 2 ]
      {
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Orgad Shaneh <orgad.shaneh@audiocodes.com>
+Date: Wed, 11 Feb 2026 21:03:12 +0200
+Subject: [PATCH 2/2] Fix from_exception link on mingw
+
+Fixes the following linker error:
+from_exception:(.text+0x9b): undefined reference to `__current_exception'
+
+Source: https://github.com/boostorg/stacktrace/pull/225
+
+diff --git a/libs/stacktrace/build/Jamfile.v2 b/libs/stacktrace/build/Jamfile.v2
+index 1111111..2222222 100644
+--- a/libs/stacktrace/build/Jamfile.v2
++++ b/libs/stacktrace/build/Jamfile.v2
+@@ -29,6 +29,7 @@ lib dl ;
+ lib gcc_s ;
+ lib Dbgeng ;
+ lib ole32 ;
++lib ucrt ;
+ 
+ local LIBBACKTRACE_PATH = [ modules.peek : LIBBACKTRACE_PATH ] ;
+ lib backtrace
+@@ -264,6 +265,7 @@ lib boost_stacktrace_from_exception
+   : # requirements
+     <warnings>all
+     <target-os>linux:<library>dl
++    <target-os>windows:<library>ucrt
+ 
+     # Enable build when explicitly requested, or by default, when on x86
+     <conditional>@build-stacktrace-from-exception
