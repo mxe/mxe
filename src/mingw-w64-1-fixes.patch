@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sun, 29 Mar 2015 14:36:38 +0200
-Subject: [PATCH 1/1] workaround for -isystem flag messing up include order
+Subject: [PATCH 1/2] workaround for -isystem flag messing up include order
 
 https://bugzilla.redhat.com/show_bug.cgi?id=843436
 
@@ -29,3 +29,27 @@ index 1111111..2222222 100644
  	/* Addition rounds to 0: zero, 1: nearest, 2: +inf, 3: -inf, -1: unknown.  */
  	/* ??? This is supposed to change with calls to fesetround in <fenv.h>.  */
  	#undef FLT_ROUNDS
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Wed, 28 Jan 2026 09:13:59 +0100
+Subject: [PATCH 2/2] add missing definition SIO_UDP_NETRESET
+
+Required by openssl 3.6.1
+
+Taken from https://doxygen.reactos.org/d0/d8f/mswsock_8h_source.html
+
+diff --git a/mingw-w64-headers/include/mswsock.h b/mingw-w64-headers/include/mswsock.h
+index 1111111..2222222 100644
+--- a/mingw-w64-headers/include/mswsock.h
++++ b/mingw-w64-headers/include/mswsock.h
+@@ -39,6 +39,9 @@ extern "C" {
+ #if (_WIN32_WINNT < 0x0600) && (_WIN32_WINNT >= 0x0501)
+ #define SIO_SOCKET_CLOSE_NOTIFY _WSAIOW(IOC_VENDOR,13)
+ #endif /* >= XP && < VISTA */
++
++#define SIO_UDP_NETRESET _WSAIOW(IOC_VENDOR,15)
++
+ #if (_WIN32_WINNT >= 0x0600)
+ #define SIO_BSP_HANDLE _WSAIOR(IOC_WS2,27)
+ #define SIO_BSP_HANDLE_SELECT _WSAIOR(IOC_WS2,28)

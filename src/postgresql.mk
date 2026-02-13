@@ -4,8 +4,8 @@ PKG             := postgresql
 $(PKG)_WEBSITE  := https://www.postgresql.org/
 $(PKG)_DESCR    := PostgreSQL
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 13.6
-$(PKG)_CHECKSUM := bafc7fa3d9d4da8fe71b84c63ba8bdfe8092935c30c0aa85c24b2c08508f67fc
+$(PKG)_VERSION  := 13.23
+$(PKG)_CHECKSUM := 6ec3c82726af92b7dec873fa1cdf881eca92a4219787dfad05acb6b10e041fd6
 $(PKG)_SUBDIR   := postgresql-$($(PKG)_VERSION)
 $(PKG)_FILE     := postgresql-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://ftp.postgresql.org/pub/source/v$($(PKG)_VERSION)/$($(PKG)_FILE)
@@ -44,7 +44,7 @@ define $(PKG)_BUILD
         --with-zlib \
         --with-system-tzdata=/dev/null \
         CFLAGS="-DSSL_library_init=OPENSSL_init_ssl" \
-        LIBS="-lsecur32 `'$(TARGET)-pkg-config' openssl pthreads --libs`" \
+        LIBS="-lsecur32 `'$(TARGET)-pkg-config' openssl pthreads --libs` -lz -lcrypt32" \
         ac_cv_func_getaddrinfo=no
 
     # enable_thread_safety means "build internal pthreads" on windows
@@ -52,7 +52,7 @@ define $(PKG)_BUILD
     MXE_BUILD_SHARED=$(BUILD_SHARED) $(MAKE) MAKELEVEL=0 -C '$(1)'/src/interfaces/libpq -j '$(JOBS)' \
         install \
         enable_thread_safety=no \
-        PTHREAD_LIBS="`'$(TARGET)-pkg-config' pthreads --libs`"
+        PTHREAD_LIBS="`'$(TARGET)-pkg-config' pthreads --libs` -lz -lcrypt32"
     MXE_BUILD_SHARED=$(BUILD_SHARED) $(MAKE) MAKELEVEL=0 -C '$(1)'/src/port     -j '$(JOBS)' install
     MXE_BUILD_SHARED=$(BUILD_SHARED) $(MAKE) MAKELEVEL=0 -C '$(1)'/src/common   -j '$(JOBS)' install
     MXE_BUILD_SHARED=$(BUILD_SHARED) $(MAKE) MAKELEVEL=0 -C '$(1)'/src/bin/psql -j '$(JOBS)' install

@@ -12,7 +12,7 @@ diff --git a/tools/build/src/tools/darwin.jam b/tools/build/src/tools/darwin.jam
 index 1111111..2222222 100644
 --- a/tools/build/src/tools/darwin.jam
 +++ b/tools/build/src/tools/darwin.jam
-@@ -131,11 +131,6 @@ rule init ( version ? : command * : options * : requirement * )
+@@ -129,11 +129,6 @@ rule init ( version ? : command * : options * : requirement * )
      common.handle-options darwin : $(condition) : $(command) : $(options) ;
  
      real-version = [ regex.split $(real-version) \\. ] ;
@@ -27,29 +27,31 @@ index 1111111..2222222 100644
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Orgad Shaneh <orgad.shaneh@audiocodes.com>
-Date: Sun, 12 May 2024 13:39:03 +0300
-Subject: [PATCH 2/2] fix x86 build
+Date: Wed, 11 Feb 2026 21:03:12 +0200
+Subject: [PATCH 2/2] Fix from_exception link on mingw
 
+Fixes the following linker error:
+from_exception:(.text+0x9b): undefined reference to `__current_exception'
 
-diff --git a/boost/charconv/detail/config.hpp b/boost/charconv/detail/config.hpp
+Source: https://github.com/boostorg/stacktrace/pull/225
+
+diff --git a/libs/stacktrace/build/Jamfile.v2 b/libs/stacktrace/build/Jamfile.v2
 index 1111111..2222222 100644
---- a/boost/charconv/detail/config.hpp
-+++ b/boost/charconv/detail/config.hpp
-@@ -79,7 +79,17 @@
- #    define BOOST_CHARCONV_HAS_MSVC_32BIT_INTRINSICS
- #  endif
- #elif (defined(__x86_64__) || defined(__i386__))
-+// See: https://github.com/boostorg/charconv/issues/196
-+#  ifdef __MINGW32__
-+extern "C" {
-+#  endif
-+
- #  include <x86intrin.h>
-+
-+#  ifdef __MINGW32__
-+}
-+#  endif
-+
- #  define BOOST_CHARCONV_HAS_X86_INTRINSICS
- #elif defined(__ARM_NEON__)
- #  include <arm_neon.h>
+--- a/libs/stacktrace/build/Jamfile.v2
++++ b/libs/stacktrace/build/Jamfile.v2
+@@ -29,6 +29,7 @@ lib dl ;
+ lib gcc_s ;
+ lib Dbgeng ;
+ lib ole32 ;
++lib ucrt ;
+ 
+ local LIBBACKTRACE_PATH = [ modules.peek : LIBBACKTRACE_PATH ] ;
+ lib backtrace
+@@ -264,6 +265,7 @@ lib boost_stacktrace_from_exception
+   : # requirements
+     <warnings>all
+     <target-os>linux:<library>dl
++    <target-os>windows:<library>ucrt
+ 
+     # Enable build when explicitly requested, or by default, when on x86
+     <conditional>@build-stacktrace-from-exception

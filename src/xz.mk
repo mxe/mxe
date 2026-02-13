@@ -4,8 +4,8 @@ PKG             := xz
 $(PKG)_WEBSITE  := https://tukaani.org/xz/
 $(PKG)_DESCR    := XZ
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.8.1
-$(PKG)_CHECKSUM := 507825b599356c10dca1cd720c9d0d0c9d5400b9de300af00e4d1ea150795543
+$(PKG)_VERSION  := 5.8.2
+$(PKG)_CHECKSUM := ce09c50a5962786b83e5da389c90dd2c15ecd0980a258dd01f70f9e7ce58a8f1
 $(PKG)_GH_CONF  := tukaani-project/xz/releases,v
 $(PKG)_DEPS     := cc
 

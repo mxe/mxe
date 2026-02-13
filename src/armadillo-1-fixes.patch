@@ -13,7 +13,7 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 1111111..2222222 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -444,7 +444,9 @@ install(TARGETS armadillo EXPORT ArmadilloLibraryDepends
+@@ -578,7 +578,9 @@ install(TARGETS armadillo EXPORT ArmadilloLibraryDepends
    
  # Export the package for use from the build-tree
  # (this registers the build-tree with a global CMake-registry)

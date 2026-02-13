@@ -4,10 +4,10 @@ PKG             := graphicsmagick
 $(PKG)_WEBSITE  := http://www.graphicsmagick.org/
 $(PKG)_DESCR    := GraphicsMagick
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.3.38
-$(PKG)_CHECKSUM := 8f8c9704ef09b24a3d233b1b8f2e98a10281f196ca6d170c466bad4f89b1a3bb
+$(PKG)_VERSION  := 1.3.46
+$(PKG)_CHECKSUM := c7c706a505e9c6c3764156bb94a0c9644d79131785df15a89c9f8721d1abd061
 $(PKG)_SUBDIR   := GraphicsMagick-$($(PKG)_VERSION)
-$(PKG)_FILE     := GraphicsMagick-$($(PKG)_VERSION).tar.lz
+$(PKG)_FILE     := GraphicsMagick-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc bzip2 freetype jasper jpeg lcms libltdl libpng libxml2 pthreads tiff zlib
 

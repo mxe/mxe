@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Sat, 17 Aug 2013 20:16:41 +0200
-Subject: [PATCH 1/1] include stdio.h for FILE
+Subject: [PATCH 1/2] include stdio.h for FILE
 
 
 diff --git a/jpeglib.h b/jpeglib.h
@@ -19,5 +19,67 @@ index 1111111..2222222 100644
 +#include <stdio.h>
 +
  /* Version IDs for the JPEG library.
-  * Might be useful for tests like "#if JPEG_LIB_VERSION >= 90".
+  * Might be useful for tests like "#if JPEG_LIB_VERSION >= 100".
   */
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Timothy Gu <timothygu99@gmail.com>
+Date: Mon, 13 Oct 2014 23:11:10 -0400
+Subject: [PATCH 2/2] jmorecfg: Always include basetsd.h on Windows
+
+If you include the two files in the other order:
+
+    #include <jmorecfg.h>
+    #include <basetsd.h>
+
+The definition of INT32 etc. will clash.
+
+Signed-off-by: Timothy Gu <timothygu99@gmail.com>
+
+diff --git a/jmorecfg.h b/jmorecfg.h
+index 1111111..2222222 100644
+--- a/jmorecfg.h
++++ b/jmorecfg.h
+@@ -217,8 +217,14 @@ typedef char JOCTET;
+  * typedefs live at a different point on the speed/space tradeoff curve.)
+  */
+ 
++#ifdef _WIN32
++#include <basetsd.h>
++#endif
++
+ /* UINT8 must hold at least the values 0..255. */
+ 
++/* Microsoft and MinGW defines it in basetsd.h */
++#if !defined(_BASETSD_H_) && !defined(_BASETSD_H)
+ #ifdef HAVE_UNSIGNED_CHAR
+ typedef unsigned char UINT8;
+ #else /* not HAVE_UNSIGNED_CHAR */
+@@ -228,20 +234,27 @@ typedef char UINT8;
+ typedef short UINT8;
+ #endif /* CHAR_IS_UNSIGNED */
+ #endif /* HAVE_UNSIGNED_CHAR */
++#endif /* not _BASETSD_H */
+ 
+ /* UINT16 must hold at least the values 0..65535. */
+ 
++/* Microsoft and MinGW defines it in basetsd.h */
++#if !defined(_BASETSD_H_) && !defined(_BASETSD_H)
+ #ifdef HAVE_UNSIGNED_SHORT
+ typedef unsigned short UINT16;
+ #else /* not HAVE_UNSIGNED_SHORT */
+ typedef unsigned int UINT16;
+ #endif /* HAVE_UNSIGNED_SHORT */
++#endif /* not _BASETSD_H */
+ 
+ /* INT16 must hold at least the values -32768..32767. */
+ 
++/* Microsoft and MinGW defines it in basetsd.h */
++#if !defined(_BASETSD_H_) && !defined(_BASETSD_H)
+ #ifndef XMD_H			/* X11/xmd.h correctly defines INT16 */
+ typedef short INT16;
+ #endif
++#endif /* not _BASETSD_H */
+ 
+ /* INT32 must hold at least signed 32-bit values. */
+ 
