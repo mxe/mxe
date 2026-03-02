@@ -13,4 +13,10 @@ $(PKG)_DEPS     :=
 define $(PKG)_BUILD
     mkdir -p '$(PREFIX)/$(TARGET)/include/pystring'
     cp -v '$(SOURCE_DIR)'/*.h '$(PREFIX)/$(TARGET)/include/pystring/'
+
+    '$(TARGET)-g++' \
+        -I '$(PREFIX)/$(TARGET)/include' \
+        '$(TEST_FILE)' \
+        -o '$(PREFIX)/$(TARGET)/bin/test-pystring.exe'
+
 endef
