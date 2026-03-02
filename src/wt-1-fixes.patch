@@ -84,7 +84,7 @@ diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
 index 1111111..2222222 100644
 --- a/src/CMakeLists.txt
 +++ b/src/CMakeLists.txt
-@@ -645,7 +645,7 @@ IF(HAVE_SSL)
+@@ -646,7 +646,7 @@ IF(HAVE_SSL)
    TARGET_LINK_LIBRARIES(wt PRIVATE ${OPENSSL_LIBRARIES})
    INCLUDE_DIRECTORIES(${OPENSSL_INCLUDE_DIR})
    IF(WIN32)
