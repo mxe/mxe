@@ -19,9 +19,7 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
     '$(TARGET)-g++' \
-        -I '$(PREFIX)/$(TARGET)/include' \
-        -L '$(PREFIX)/$(TARGET)/lib' \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-imath.exe' \
-        -lImath-3_2
+        `'$(TARGET)-pkg-config' tbb --cflags --libs`
 
 endef
