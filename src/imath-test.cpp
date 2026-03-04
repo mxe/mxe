@@ -1,6 +1,7 @@
 #include <iostream>
 #include <Imath/ImathVec.h>
 #include <Imath/ImathMatrix.h>
+#include <Imath/ImathColorAlgo.h> // for hsv2rgb_d
 
 /*
     Minimal test for Imath library (versioned namespace Imath_3_2)
@@ -30,7 +31,13 @@ int main()
     Matrix44<float> mat;
     mat.makeIdentity(); // set to identity matrix
 
-    std::cout << "Matrix44 identity test completed successfully!" << std::endl;
+    std::cout << "Matrix44 identity test completed successfully!\n";
+
+    // --- Color conversion (forces linking to Imath library) ---
+    V3d hsv(0.5, 0.3, 0.8);
+    V3d rgb = hsv2rgb_d(hsv);  // <- only in library, not header-only
+    std::cout << "HSV to RGB: ("
+              << rgb.x << ", " << rgb.y << ", " << rgb.z << ")\n";
 
     return 0;
 }

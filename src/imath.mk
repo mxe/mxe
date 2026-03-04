@@ -20,6 +20,6 @@ define $(PKG)_BUILD
 
     '$(TARGET)-g++' \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-imath.exe' \
-        `'$(TARGET)-pkg-config' tbb --cflags --libs`
+        `'$(TARGET)-pkg-config' Imath --cflags --libs`
 
 endef
