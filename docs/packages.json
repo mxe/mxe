@@ -142,6 +142,7 @@
     "id3lib": {"version": "3.8.3", "website": "https://id3lib.sourceforge.io/", "description": ""},
     "ilmbase": {"version": "2.2.1", "website": "https://www.openexr.com/", "description": "IlmBase"},
     "imagemagick": {"version": "7.1.0-51", "website": "https://www.imagemagick.org/", "description": "ImageMagick"},
+    "imath": {"version": "3.2.2", "website": "https://github.com/AcademySoftwareFoundation/Imath", "description": ""},
     "intel-tbb": {"version": "c28c8be", "website": "https://www.threadingbuildingblocks.org", "description": "Intel Threading Building Blocks"},
     "isl": {"version": "0.24", "website": "https://libisl.sourceforge.io/", "description": "Integer Set Library"},
     "itk": {"version": "5.0.1", "website": "https://www.itk.org/", "description": "Insight Segmentation and Registration Toolkit (ITK)"},
