@@ -6,6 +6,7 @@ $(PKG)_WEBSITE  := https://github.com/hkunz/clew
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.11
 $(PKG)_CHECKSUM := 165f8f118e4b73560077200e570fa9dd63b5965a018e2e2713826e6a3a5f029c
+# Using fork from hkunz/clew instead of the original martijnberger/clew to work around https://github.com/martijnberger/clew/issues/19
 $(PKG)_GH_CONF  := hkunz/clew/tags
 $(PKG)_DEPS     := cc
 
