@@ -11,12 +11,26 @@ $(PKG)_TARGETS  := $(TARGET)
 $(PKG)_DEPS     :=
 
 define $(PKG)_BUILD
+    # Workaround for pystring v1.1.4: upstream CMake install target does not include the public header file.
+    # Install it manually so consumers of the library can include it.
     mkdir -p '$(PREFIX)/$(TARGET)/include/pystring'
-    cp -v '$(SOURCE_DIR)'/*.h '$(PREFIX)/$(TARGET)/include/pystring/'
+    cp '$(SOURCE_DIR)/pystring.h' '$(PREFIX)/$(TARGET)/include/pystring/'
 
+    # Configure the build with CMake.
+    cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \
+        -DBUILD_SHARED_LIBS=OFF \
+        -DPYSTRING_HEADER_ONLY=1 \
+        -DCMAKE_INSTALL_PREFIX='$(PREFIX)/$(TARGET)'
+
+    # Build and install
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' install
+
+    # compile test executable (pystring does not provice .pc file)
     '$(TARGET)-g++' \
-        -I '$(PREFIX)/$(TARGET)/include' \
         '$(TEST_FILE)' \
-        -o '$(PREFIX)/$(TARGET)/bin/test-pystring.exe'
-
+        -I '$(PREFIX)/$(TARGET)/include' \
+        -L '$(PREFIX)/$(TARGET)/lib' \
+        -lpystring \
+        -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe'
 endef
