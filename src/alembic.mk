@@ -12,6 +12,7 @@ $(PKG)_DEPS     := cc imath hdf5 zlib
 
 define $(PKG)_BUILD
     rm -f "$(BUILD_DIR)/CMakeCache.txt"
+
     cd '$(BUILD_DIR)' && '$(TARGET)-cmake' '$(SOURCE_DIR)' \
         -DCMAKE_INSTALL_PREFIX=$(PREFIX)/$(TARGET) \
         -DBUILD_SHARED_LIBS=$(CMAKE_SHARED_BOOL) \
@@ -21,19 +22,33 @@ define $(PKG)_BUILD
         -DUSE_PRMAN=OFF \
         -DUSE_MAYA=OFF \
         -DUSE_PYTHON=OFF \
-        -DImath_INCLUDE_DIR=$(PREFIX)/$(TARGET)/include \
-        -DImath_LIBRARY=$(PREFIX)/$(TARGET)/lib/libImath.a \
         -DHDF5_ROOT=$(PREFIX)/$(TARGET)
 
     $(MAKE) -C "$(BUILD_DIR)" -j "$(JOBS)"
     $(MAKE) -C "$(BUILD_DIR)" -j 1 install
 
+    # create pkg-config file (MXE static style)
+    $(INSTALL) -d '$(PREFIX)/$(TARGET)/lib/pkgconfig'
+
+    (echo 'prefix=$(PREFIX)/$(TARGET)'; \
+    echo 'exec_prefix=$${prefix}'; \
+    echo 'libdir=$${exec_prefix}/lib'; \
+    echo 'includedir=$${prefix}/include'; \
+    echo ''; \
+    echo 'Name: Alembic'; \
+    echo 'Description: Alembic C++ scene data framework'; \
+    echo 'Version: $($(PKG)_VERSION)'; \
+    echo ''; \
+    echo 'Cflags: -I$${includedir}'; \
+    echo 'Libs: -L$${libdir}'; \
+    echo 'Requires:'; \
+    echo 'Libs.private: -lAlembic -lImath-3_2 -lhdf5 -lz'; \
+    echo 'Requires.private:';) \
+    > '$(PREFIX)/$(TARGET)/lib/pkgconfig/alembic.pc'
+
+    # compile test
     '$(TARGET)-g++' \
-        -I '$(PREFIX)/$(TARGET)/include' \
-        -L '$(PREFIX)/$(TARGET)/lib' \
-        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-alembic.exe' \
-        -lAlembic \
-        -lImath-3_2 \
-        -lhdf5 \
-        -lz
+        '$(TEST_FILE)' \
+        -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
+        `'$(TARGET)-pkg-config' $(PKG) --cflags --libs`
 endef
