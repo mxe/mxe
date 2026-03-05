@@ -1,7 +1,5 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
-include src/common/pkgutils.mk
-
 PKG             := ptex
 $(PKG)_DESCR    := Pixar Ptex library for per-face textures
 $(PKG)_WEBSITE  := https://github.com/wdas/ptex
