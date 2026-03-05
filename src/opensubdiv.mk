@@ -9,7 +9,7 @@ $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3_7_0
 $(PKG)_CHECKSUM := f843eb49daf20264007d807cbc64516a1fed9cdb1149aaf84ff47691d97491f9
 $(PKG)_GH_CONF  := PixarAnimationStudios/OpenSubdiv/tags,v
-$(PKG)_DEPS     := cc onetbb zlib glfw3 clew cuew
+$(PKG)_DEPS     := cc onetbb zlib glfw3 clew cuew ptex
 
 define $(PKG)_BUILD
     # build and install the library
@@ -21,7 +21,7 @@ define $(PKG)_BUILD
         -DNO_DX=1 \
         -DNO_OPENCL=1 \
         -DNO_CUDA=1 \
-        -DNO_PTEX=1 \
+        -DNO_PTEX=0 \
         -DNO_REGRESSION=1 \
         -DNO_EXAMPLES=1 \
         -DNO_TUTORIALS=1 \
@@ -38,7 +38,7 @@ define $(PKG)_BUILD
         Pixar OpenSubdiv library for subdivision surface evaluation, \
         $($(PKG)_VERSION), \
         tbb zlib clew, \
-        -losdCPU -ltbb12 -lz -lclew -lcuew, \
+        -losdCPU -ltbb12 -lz -lclew -lcuew -lPtex, \
         ""
     )
 
