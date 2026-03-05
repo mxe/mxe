@@ -1,5 +1,7 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
+include src/common/pkgutils.mk
+
 PKG             := clew
 $(PKG)_DESCR    := OpenCL Extension Wrangler Library (CLEW) for OpenCL runtime extension loading
 $(PKG)_WEBSITE  := https://github.com/hkunz/clew
@@ -17,6 +19,17 @@ define $(PKG)_BUILD
 
     $(MAKE) -C "$(BUILD_DIR)" -j "$(JOBS)"
     $(MAKE) -C "$(BUILD_DIR)" -j 1 install
+
+    # Generate missing pkg-config (.pc) file for clew
+    $(call GENERATE_PC, \
+        $(PREFIX)/$(TARGET), \
+        clew, \
+        "OpenCL Extension Wrangler Library", \
+        $($(PKG)_VERSION), \
+        "", \
+        "-lclew", \
+        ""
+    )
 
 	# clew library already automatically compiles a test executable:
 	# $(PREFIX)/$(TARGET)/bin/clewTest.exe
