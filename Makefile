@@ -1012,6 +1012,18 @@ clean-pkg:
                       $(foreach PKG,$(PKGS),$(PKG_DIR)/$($(PKG)_FILE) $(PKG_DIR)/$($(PKG)_FILE)_$($(PKG)_CHECKSUM)), \
                       $(wildcard $(PKG_DIR)/*)))
 
+.PHONY: clean-%
+clean-%:
+	@echo "Cleaning package: $*"
+	@for TARGET_DIR in usr/*.static; do \
+		echo "  -> Cleaning $$TARGET_DIR"; \
+			rm -rf $$TARGET_DIR/installed/$* \
+			$$TARGET_DIR/include/$* \
+			$$TARGET_DIR/lib/$*-*; \
+	done
+	@find pkg -maxdepth 1 -iname "$*-*" -exec rm -rf {} +
+	@echo "Done cleaning $*"
+
 .PHONY: clean-junk
 clean-junk: clean-pkg
 	rm -rf $(LOG_DIR) $(call TMP_DIR,*)
