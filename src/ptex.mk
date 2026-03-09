@@ -10,8 +10,10 @@ $(PKG)_GH_CONF  := wdas/ptex/tags,v
 $(PKG)_DEPS     := cc zlib libdeflate
 
 define $(PKG)_BUILD
-	# Patch Windows.h include to lowercase for MinGW (https://github.com/wdas/ptex/issues/85 is fixed but no tag yet)
-    sed -i 's/#include <Windows.h>/#include <windows.h>/' '$(SOURCE_DIR)/src/ptex/PtexPlatform.h'
+	# Patch Windows.h include to lowercase for MinGW (https://github.com/wdas/ptex/issues/85)
+	sed 's|#include <Windows.h>|#include <windows.h>|' "$(SOURCE_DIR)/src/ptex/PtexPlatform.h" \
+		> tmpfile && \
+		mv tmpfile "$(SOURCE_DIR)/src/ptex/PtexPlatform.h"
 
 	cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \
 		-DCMAKE_BUILD_TYPE=Release \
