@@ -4,8 +4,8 @@ PKG             := imagemagick
 $(PKG)_WEBSITE  := https://www.imagemagick.org/
 $(PKG)_DESCR    := ImageMagick
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 7.1.0-51
-$(PKG)_CHECKSUM := 4333ef2fe63f2510988af82b726f5b1919ebd54037ea6674566c69fcceb67e11
+$(PKG)_VERSION  := 7.1.2-16
+$(PKG)_CHECKSUM := aadfa67a104d14a35339de0f2cc286c973a0f43329770c69e9667a22208750fb
 $(PKG)_GH_CONF  := ImageMagick/ImageMagick/tags
 $(PKG)_DEPS     := cc bzip2 ffmpeg fftw freetype jpeg lcms liblqr-1 libltdl \
                    libpng libraw openexr openjpeg pthreads tiff zlib

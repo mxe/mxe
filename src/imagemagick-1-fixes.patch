@@ -1,0 +1,51 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Fri, 13 Mar 2026 11:43:18 +0100
+Subject: [PATCH 1/1] add missing private dependency
+
+
+diff --git a/Magick++/lib/Magick++.pc.in b/Magick++/lib/Magick++.pc.in
+index 1111111..2222222 100644
+--- a/Magick++/lib/Magick++.pc.in
++++ b/Magick++/lib/Magick++.pc.in
+@@ -10,5 +10,5 @@ Description: Magick++ - C++ API for ImageMagick (ABI @MAGICK_ABI_SUFFIX@)
+ Version: @PACKAGE_BASE_VERSION@
+ Requires: MagickWand-@MAGICK_MAJOR_VERSION@.@MAGICK_ABI_SUFFIX@
+ Libs: -L${libdir} -l${libname}
+-Libs.private: -L${libdir} -l${libname} @MATH_LIBS@
++Libs.private: -L${libdir} -l${libname} @MATH_LIBS@ -lurlmon
+ Cflags: -I${includearchdir} -I${includedir} @MAGICK_PCFLAGS@
+diff --git a/MagickCore/ImageMagick.pc.in b/MagickCore/ImageMagick.pc.in
+index 1111111..2222222 100644
+--- a/MagickCore/ImageMagick.pc.in
++++ b/MagickCore/ImageMagick.pc.in
+@@ -11,4 +11,4 @@ URL: https://github.com/ImageMagick
+ Version: @PACKAGE_BASE_VERSION@
+ Cflags:  -I${includearchdir} -I${includedir} @MAGICK_PCFLAGS@
+ Libs: -L${libdir} -l${libname}
+-Libs.private: -L${libdir} -l${libname} @MAGICK_LIBS@ @MATH_LIBS@
++Libs.private: -L${libdir} -l${libname} @MAGICK_LIBS@ @MATH_LIBS@ -lurlmon
+diff --git a/MagickCore/MagickCore.pc.in b/MagickCore/MagickCore.pc.in
+index 1111111..2222222 100644
+--- a/MagickCore/MagickCore.pc.in
++++ b/MagickCore/MagickCore.pc.in
+@@ -12,4 +12,4 @@ URL: https://github.com/ImageMagick
+ Version: @PACKAGE_BASE_VERSION@
+ Cflags: -I${includearchdir} -I${includedir} @MAGICK_PCFLAGS@
+ Libs: -L${libdir} -l${libname}
+-Libs.private: -L${libdir} -l${libname} @MAGICK_LIBS@ @MATH_LIBS@
++Libs.private: -L${libdir} -l${libname} @MAGICK_LIBS@ @MATH_LIBS@ -lurlmon
+diff --git a/MagickWand/MagickWand.pc.in b/MagickWand/MagickWand.pc.in
+index 1111111..2222222 100644
+--- a/MagickWand/MagickWand.pc.in
++++ b/MagickWand/MagickWand.pc.in
+@@ -12,4 +12,4 @@ Version: @PACKAGE_BASE_VERSION@
+ Requires: MagickCore-@MAGICK_MAJOR_VERSION@.@MAGICK_ABI_SUFFIX@
+ Cflags: -I${includearchdir} -I${includedir} @MAGICK_PCFLAGS@
+ Libs: -L${libdir} -l${libname}
+-Libs.private: -L${libdir} -l${libname} @MAGICK_LIBS@ @MATH_LIBS@
++Libs.private: -L${libdir} -l${libname} @MAGICK_LIBS@ @MATH_LIBS@ -lurlmon
