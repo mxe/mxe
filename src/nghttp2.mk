@@ -3,8 +3,8 @@
 PKG             := nghttp2
 $(PKG)_WEBSITE  := https://nghttp2.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.68.0
-$(PKG)_CHECKSUM := 2c16ffc588ad3f9e2613c3fad72db48ecb5ce15bc362fcc85b342e48daf51013
+$(PKG)_VERSION  := 1.68.1
+$(PKG)_CHECKSUM := ceb434c1f9dfe2a9d305b6b797786fb9227484dfa88508d14ca1c50263db55d3
 $(PKG)_FILE     := nghttp2-$($(PKG)_VERSION).tar.gz
 $(PKG)_GH_CONF  := nghttp2/nghttp2/releases/tags,v
 $(PKG)_DEPS     := cc
