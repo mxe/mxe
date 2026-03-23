@@ -249,6 +249,7 @@
     "librsvg": {"version": "2.40.21", "website": "https://librsvg.sourceforge.io/", "description": ""},
     "librtmp": {"version": "f1b83c1", "website": "https://rtmpdump.mplayerhq.hu/", "description": ""},
     "libsamplerate": {"version": "0.1.9", "website": "http://www.mega-nerd.com/SRC/", "description": ""},
+    "libsbml": {"version": "5.20.5", "website": "https://sbml.org/software/libsbml/", "description": "Systems Biology Markup Language library"},
     "libserialport": {"version": "0.1.1", "website": "https://sigrok.org/wiki/Libserialport", "description": "libserialport"},
     "libshout": {"version": "2.4.6", "website": "https://icecast.org/", "description": ""},
     "libsigc++": {"version": "2.10.7", "website": "https://libsigc.sourceforge.io/", "description": ""},
