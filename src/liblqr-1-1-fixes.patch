@@ -1,0 +1,64 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "fix@me" <fix@me>
+Date: Sat, 30 Mar 2013 17:07:15 +1100
+Subject: [PATCH 1/2] add extra cflags for static build in pkg-config file
+
+This patch has been taken from:
+https://liblqr.wikidot.com/forum/t-638530/static-cflags-in-pkg-config-file
+
+diff --git a/configure.ac b/configure.ac
+index 1111111..2222222 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -140,7 +140,8 @@ AC_ARG_ENABLE([declspec],
+ 	  )],
+      [declspec=true])
+ AS_IF([test "x$declspec" = "xfalse"],
+-      [AC_DEFINE([LQR_DISABLE_DECLSPEC],[],[Disable __declspec directives])],
++      [AC_DEFINE([LQR_DISABLE_DECLSPEC],[],[Disable __declspec directives])]
++      [AC_SUBST(EXTRA_CFLAGS,-DLQR_DISABLE_DECLSPEC)],
+       [:]
+       )
+ 
+diff --git a/lqr-1.pc.in b/lqr-1.pc.in
+index 1111111..2222222 100644
+--- a/lqr-1.pc.in
++++ b/lqr-1.pc.in
+@@ -8,4 +8,4 @@ Description: LiquidRescale seam-carving library
+ Requires: glib-2.0
+ Version: @PACKAGE_VERSION@
+ Libs: -l@LIBRARY_SNAME@
+-Cflags: -I${includedir}/@LIBRARY_SNAME@
++Cflags: -I${includedir}/@LIBRARY_SNAME@ @EXTRA_CFLAGS@
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Essem <smswessem@gmail.com>
+Date: Sat, 6 Dec 2025 16:49:18 -0600
+Subject: [PATCH 2/2] Fix compilation on GCC 15
+
+
+diff --git a/lqr/lqr_energy_priv.h b/lqr/lqr_energy_priv.h
+index 1111111..2222222 100644
+--- a/lqr/lqr_energy_priv.h
++++ b/lqr/lqr_energy_priv.h
+@@ -56,11 +56,11 @@ gdouble lqr_carver_read_cached_rgba(LqrCarver *r, gint x, gint y, gint channel);
+ gdouble lqr_carver_read_cached_custom(LqrCarver *r, gint x, gint y, gint channel);
+ 
+ /* cache brightness (or luma or else) to speedup energy computation */
+-gdouble *lqr_carver_generate_rcache_bright();
+-gdouble *lqr_carver_generate_rcache_luma();
+-gdouble *lqr_carver_generate_rcache_rgba();
+-gdouble *lqr_carver_generate_rcache_custom();
+-gdouble *lqr_carver_generate_rcache();
++gdouble *lqr_carver_generate_rcache_bright(LqrCarver *r);
++gdouble *lqr_carver_generate_rcache_luma(LqrCarver *r);
++gdouble *lqr_carver_generate_rcache_rgba(LqrCarver *r);
++gdouble *lqr_carver_generate_rcache_custom(LqrCarver *r);
++gdouble *lqr_carver_generate_rcache(LqrCarver *r);
+ 
+ gfloat lqr_energy_builtin_grad_all(gint x, gint y, gint img_width, gint img_height, LqrReadingWindow *rwindow,
+                                    LqrGradFunc gf);

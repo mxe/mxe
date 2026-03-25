@@ -3,8 +3,8 @@
 PKG             := liblqr-1
 $(PKG)_WEBSITE  := https://liblqr.wikidot.com/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.4.2
-$(PKG)_CHECKSUM := 173a822efd207d72cda7d7f4e951c5000f31b10209366ff7f0f5972f7f9ff137
+$(PKG)_VERSION  := 0.4.3
+$(PKG)_CHECKSUM := 862fc5cecaa96d38d4d9279c8a6fbfc276393f0548909ee0912e41df59894471
 $(PKG)_SUBDIR   := liblqr-1-$($(PKG)_VERSION)
 $(PKG)_FILE     := liblqr-1-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://liblqr.wdfiles.com/local--files/en:download-page/$($(PKG)_FILE)

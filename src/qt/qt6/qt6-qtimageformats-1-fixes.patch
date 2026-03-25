@@ -12,10 +12,10 @@ diff --git a/src/imageformats/configure.cmake b/src/imageformats/configure.cmake
 index 1111111..2222222 100644
 --- a/src/imageformats/configure.cmake
 +++ b/src/imageformats/configure.cmake
-@@ -19,6 +19,8 @@ set_property(CACHE INPUT_webp PROPERTY STRINGS undefined no qt system)
- 
- qt_find_package(WrapJasper PROVIDED_TARGETS WrapJasper::WrapJasper MODULE_NAME imageformats QMAKE_LIB jasper)
- qt_find_package(TIFF PROVIDED_TARGETS TIFF::TIFF MODULE_NAME imageformats QMAKE_LIB tiff)
+@@ -27,6 +27,8 @@ qt_find_package(TIFF PROVIDED_TARGETS TIFF::TIFF MODULE_NAME imageformats QMAKE_
+     VCPKG_ADD_TO_FEATURE tiff
+     VCPKG_DEFAULT_FEATURES OFF
+ )
 +### <sigh>
 +target_link_libraries(TIFF::TIFF INTERFACE -ltiff -lwebp -lsharpyuv -lzstd -llzma -ljpeg -lz)
  # Threads::Threads might be brought in via a top-level CMakeLists.txt find_package dependency

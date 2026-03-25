@@ -19,6 +19,7 @@ endef
 
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && '$(TARGET)-cmake' '$(SOURCE_DIR)' \
+        -DDLLTOOL='$(PREFIX)/bin/$(TARGET)-dlltool' \
         -DALSOFT_EXAMPLES=FALSE \
         -DALSOFT_TESTS=FALSE \
         -DALSOFT_UTILS=FALSE

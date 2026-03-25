@@ -12,9 +12,9 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 1111111..2222222 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -17,10 +17,30 @@ find_package(Boost 1.54
-     system      # needed by filesystem
-     filesystem)
+@@ -4,10 +4,30 @@ project(mingw_util CXX)
+ set(CMAKE_CXX_STANDARD 17)
+ add_compile_options("-Wall")
  
 +# List all files explicitly; this will make IDEs happy (i.e. QtCreator, CLion, ...)
 +list(APPEND PEPARSERLIB_SOURCEFILES
@@ -60,7 +60,7 @@ index 1111111..2222222 100644
  
  #include <iostream>
  #include <array>
-@@ -40,13 +40,13 @@ struct section {
+@@ -48,13 +48,13 @@ struct section {
  };
  
  struct parsed_pe_internal {
@@ -79,7 +79,7 @@ index 1111111..2222222 100644
    }
  
  
-@@ -55,8 +55,8 @@ extern bool getHeader(bounded_buffer *file, pe_header &p, bounded_buffer *&rem);
+@@ -63,8 +63,8 @@ extern bool getHeader(bounded_buffer *file, pe_header &p, bounded_buffer *&rem);
  extern bool getSections( bounded_buffer  *b, 
                    bounded_buffer  *fileBegin,
                    nt_header_32    &nthdr, 

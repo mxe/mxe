@@ -5,7 +5,7 @@ include src/qt/qt6/qt6-conf.mk
 PKG := qt6-qtsvg
 $(eval $(QT6_METADATA))
 
-$(PKG)_CHECKSUM := f07ff80f38caf235187200345392ca7479445ddf49a36c3694cd52a735dad6e1
+$(PKG)_CHECKSUM := dfa8d653be07087d9407ed4a4ebae847f8953e0b7abd829f089803ab652a30e6
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 $(PKG)_DEPS     := cc qt6-conf qt6-qtbase
 

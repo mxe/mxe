@@ -4,8 +4,8 @@ PKG             := curl
 $(PKG)_WEBSITE  := https://curl.haxx.se/libcurl/
 $(PKG)_DESCR    := cURL
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 8.18.0
-$(PKG)_CHECKSUM := 40df79166e74aa20149365e11ee4c798a46ad57c34e4f68fd13100e2c9a91946
+$(PKG)_VERSION  := 8.19.0
+$(PKG)_CHECKSUM := 4eb41489790d19e190d7ac7e18e82857cdd68af8f4e66b292ced562d333f11df
 $(PKG)_SUBDIR   := curl-$($(PKG)_VERSION)
 $(PKG)_FILE     := curl-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://curl.haxx.se/download/$($(PKG)_FILE)
@@ -27,7 +27,7 @@ define $(PKG)_BUILD
         --with-libssh2 \
         --with-nghttp2 \
         CPPFLAGS="`'$(TARGET)-pkg-config' libnghttp2 --cflags`" \
-        LIBS="`'$(TARGET)-pkg-config' libpsl libbrotlidec pthreads --libs`"
+        LIBS="`'$(TARGET)-pkg-config' libpsl libbrotlidec pthreads --libs` -lnetio"
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(MXE_DISABLE_DOCS)
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install $(MXE_DISABLE_DOCS)
     ln -sf '$(PREFIX)/$(TARGET)/bin/curl-config' '$(PREFIX)/bin/$(TARGET)-curl-config'
