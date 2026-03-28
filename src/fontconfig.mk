@@ -3,18 +3,18 @@
 PKG             := fontconfig
 $(PKG)_WEBSITE  := https://fontconfig.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.16.0
-$(PKG)_CHECKSUM := 6a33dc555cc9ba8b10caf7695878ef134eeb36d0af366041f639b1da9b6ed220
+$(PKG)_VERSION  := 2.17.1
+$(PKG)_CHECKSUM := bc1a90697eb8ec6c3eed118105ef9cbdfdd676e563905bf1cb571a705598300e
 $(PKG)_SUBDIR   := fontconfig-$($(PKG)_VERSION)
-$(PKG)_FILE     := fontconfig-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := https://fontconfig.org/release/$($(PKG)_FILE)
+$(PKG)_FILE     := fontconfig-$($(PKG)_VERSION).tar.bz2
+$(PKG)_URL      := https://gitlab.freedesktop.org/fontconfig/fontconfig/-/archive/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc expat freetype-bootstrap gettext
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://fontconfig.org/release/' | \
-    $(SED) -n 's,.*fontconfig-\([0-9][^>]*\)\.tar.*,\1,p' | \
-    grep -v '\([0-9]\+\.\)\{2\}9[0-9]' | \
-    tail -1
+    $(WGET) -q -O- 'https://gitlab.freedesktop.org/fontconfig/fontconfig/tags' | \
+    $(SED) -n "s,.*<a [^>]\+>v\?\([0-9]\+\.[0-9.]\+\)<.*,\1,p" | \
+    $(SORT) -Vr | \
+    head -1
 endef
 
 define $(PKG)_BUILD
