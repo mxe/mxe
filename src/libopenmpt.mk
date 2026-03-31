@@ -4,12 +4,12 @@ PKG             := libopenmpt
 $(PKG)_WEBSITE  := https://lib.openmpt.org
 $(PKG)_DESCR    := libopenmpt
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.7.11
+$(PKG)_VERSION  := 0.7.19
 $(PKG)_SUBDIR   := libopenmpt-$($(PKG)_VERSION)+release.autotools
 $(PKG)_FILE     := libopenmpt-$($(PKG)_VERSION)+release.autotools.tar.gz
 $(PKG)_URL      := https://lib.openmpt.org/files/libopenmpt/src/$($(PKG)_FILE)
-$(PKG)_CHECKSUM := a3e85e49c71633513369a473489895c104279b9087c5545598f45a0d33e9b110
-$(PKG)_DEPS     := cc zlib mpg123 libogg libvorbis flac libsndfile portaudio
+$(PKG)_CHECKSUM := 3c619bb36b3d9cd10b5531ebb83cac7fe38386d0614f9bb1a9a758010bc162d1
+$(PKG)_DEPS     := cc zlib mpg123 ogg vorbis flac libsndfile portaudio
 
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
@@ -29,4 +29,10 @@ define $(PKG)_BUILD
         --without-sdl2
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
+endef
+define $(PKG)_TEST
+    $(TARGET)-gcc \
+        -Werror -Wextra -Wall -pedantic \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-libopenmpt.exe' \
+        `$(TARGET)-pkg-config libopenmpt --cflags --libs`
 endef
