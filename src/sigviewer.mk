@@ -3,13 +3,13 @@
 
 PKG             := sigviewer
 $(PKG)_IGNORE   := 
-$(PKG)_VERSION  := 0.6.4
-$(PKG)_CHECKSUM := e64516b0d5a2ac65b1ef496a6666cdac8919b67eecd8d5eb6b7cbf2493314367
+$(PKG)_VERSION  := 0.7.1
+$(PKG)_CHECKSUM := 43b8f68fa8e3c91a1b5af8302a1306a51bc501dcc47621f34dc97862b1c5e176
 $(PKG)_SUBDIR   := sigviewer-$($(PKG)_VERSION)
 $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_URL      := https://github.com/cbrnr/$(PKG)/archive/v$($(PKG)_VERSION).tar.gz
-$(PKG)_QT_DIR   := qt5
-$(PKG)_DEPS     := biosig libxdf qtbase
+$(PKG)_QT_DIR   := qt6
+$(PKG)_DEPS     := biosig libxdf qt6-qtbase qt6-qtsvg
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://biosig.sourceforge.net/download.html' | \
@@ -17,24 +17,9 @@ define $(PKG)_UPDATE
     head -1
 endef
 
-define $(PKG)_BUILD_STATIC
-    #    LIBS='-l$(PREFIX)/$(TARGET)/lib/libtinyxml.a -l$(PREFIX)/$(TARGET)/$($(PKG)_QT_DIR)/plugins/platforms/libqwindows.a'
-    cd '$(1)' && CFLAGS=-fstack-protector CXXFLAGS=-fstack-protector && \
-        LIBS='-l$(PREFIX)/$(TARGET)/$($(PKG)_QT_DIR)/plugins/platforms/libqwindows.a -l$(PREFIX)/$(TARGET)/lib/libiconv.a' \
-        $(PREFIX)/$(TARGET)/$($(PKG)_QT_DIR)/bin/qmake sigviewer.pro
-
-    $(MAKE) -C '$(1)'
-
-    $(INSTALL) '$(1)'/bin/release/sigviewer.exe $(PREFIX)/$(TARGET)/bin/$(PKG).exe
-endef
-
-define $(PKG)_BUILD_SHARED_DISABLED
-    #    LIBS='-l$(PREFIX)/$(TARGET)/lib/libtinyxml.a -l$(PREFIX)/$(TARGET)/$($(PKG)_QT_DIR)/plugins/platforms/libqwindows.a'
-    cd '$(1)' && CFLAGS=-fstack-protector CXXFLAGS=-fstack-protector && \
-    LIBS='-lqwindows' \
-        $(PREFIX)/$(TARGET)/$($(PKG)_QT_DIR)/bin/qmake sigviewer.pro
-
-    $(MAKE) -C '$(1)'
-
-    $(INSTALL) '$(1)'/bin/release/sigviewer.exe $(PREFIX)/$(TARGET)/bin/$(PKG).exe
+define $(PKG)_BUILD
+    cd '$(BUILD_DIR)' && '$(TARGET)-cmake' '$(SOURCE_DIR)' \
+        -DCMAKE_BUILD_TYPE="Release"
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(INSTALL) '$(BUILD_DIR)'/sigviewer.exe $(PREFIX)/$(TARGET)/bin/
 endef
