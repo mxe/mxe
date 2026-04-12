@@ -12,7 +12,7 @@ $(PKG)_CHECKSUM := 3c619bb36b3d9cd10b5531ebb83cac7fe38386d0614f9bb1a9a758010bc16
 $(PKG)_DEPS     := cc zlib mpg123 ogg vorbis flac libsndfile portaudio
 
 define $(PKG)_BUILD
-    cd '$(1)' && ./configure \
+    cd "$(BUILD_DIR)" && "$(SOURCE_DIR)/configure" \
         $(MXE_CONFIGURE_OPTS) \
         --disable-shared \
         --enable-static \
