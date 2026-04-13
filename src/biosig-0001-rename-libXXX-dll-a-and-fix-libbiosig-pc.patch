@@ -1,0 +1,50 @@
+diff --git a/biosig4c++/Makefile.in b/biosig4c++/Makefile.in
+index 1fd3b658..6d489c43 100644
+--- a/biosig4c++/Makefile.in
++++ b/biosig4c++/Makefile.in
+@@ -744,16 +744,16 @@ else
+ #############################################################
+ 
+ $(DLPRE)physicalunits${FULLDLEXT}: physicalunits.o
+-	$(LD) $(LDFLAGS) -o "$@" -s -shared -fPIC $^ $(LDLIBS) -Wl,-subsystem,windows,--output-def,libphysicalunits.def,--out-implib,physicalunits.dll.a
++	$(LD) $(LDFLAGS) -o "$@" -s -shared -fPIC $^ $(LDLIBS) -Wl,-subsystem,windows,--output-def,libphysicalunits.def,--out-implib,libphysicalunits.dll.a
+ 
+ $(DLPRE)gdf${FULLDLEXT}: gdf.o getlogin.o gdftime.o physicalunits.o
+-	$(LD) $(LDFLAGS) -o "$@" -s -shared -fPIC $^ $(LDLIBS) -Wl,-subsystem,windows,--output-def,libgdf.def,--out-implib,gdf.dll.a
++	$(LD) $(LDFLAGS) -o "$@" -s -shared -fPIC $^ $(LDLIBS) -Wl,-subsystem,windows,--output-def,libgdf.def,--out-implib,libgdf.dll.a
+ 
+ $(DLPRE)gdftime${FULLDLEXT}: gdftime.o
+-	$(CC) $(LDFLAGS) -o "$@" -s -shared -fPIC $^ $(LDLIBS) -Wl,--subsystem,windows,--output-def,libgdftime.def,--out-implib,gdftime.dll.a
++	$(CC) $(LDFLAGS) -o "$@" -s -shared -fPIC $^ $(LDLIBS) -Wl,--subsystem,windows,--output-def,libgdftime.def,--out-implib,libgdftime.dll.a
+ 
+ $(DLPRE)biosig${FULLDLEXT}: $(OBJECTS) libbiosig.pc
+-	$(LD) $(LDFLAGS) -o "$@" -s -shared -fPIC $(OBJECTS) $(LDLIBS) -Wl,-subsystem,windows,--output-def,libbiosig.def,--out-implib,biosig.dll.a
++	$(LD) $(LDFLAGS) -o "$@" -s -shared -fPIC $(OBJECTS) $(LDLIBS) -Wl,-subsystem,windows,--output-def,libbiosig.def,--out-implib,libbiosig.dll.a
+ 
+ endif
+ 
+@@ -783,9 +783,9 @@ libbiosig.pc :
+ 	mkdir -p pkgconfig
+ 	echo "# Defines libbiosig.pc"       > "$@"
+ 	echo "prefix=$(prefix)"             >>"$@"
+-	echo "exec_prefix=$(prefix)"        >>"$@"
+-	echo "libdir=$(libdir)"         >>"$@"
+-	echo "includedir=$(includedir)" >>"$@"
++	echo 'exec_prefix=$${prefix}'        >>"$@"
++	echo 'libdir=$${exec_prefix}/lib'         >>"$@"
++	echo 'includedir=$${exec_prefix}/include' >>"$@"
+ 	echo                                >>"$@"
+ 	echo "Name: libbiosig"		    >>"$@"
+ 	echo "Description: Biosig library"  >>"$@"
+@@ -1006,9 +1006,9 @@ install_libbiosig.a: libbiosig.a libphysicalunits.a libbiosig.pc
+ 
+ install_libbiosig.$(DLEXT): $(DLPRE)biosig$(FULLDLEXT)
+ 	install -d 			$(DESTDIR)$(DLDIR)/pkgconfig/
+-	install $(DLPRE)biosig$(FULLDLEXT)  $(DESTDIR)$(DLDIR)/$(DLPRE)biosig$(FULLDLEXT)
++	install $(DLPRE)libbiosig$(FULLDLEXT)  $(DESTDIR)$(DLDIR)/$(DLPRE)libbiosig$(FULLDLEXT)
+ ifneq (Darwin,$(shell uname))
+-	cd $(DESTDIR)$(DLDIR) && ln -sf $(DLPRE)biosig$(FULLDLEXT) $(DLPRE)biosig.$(DLEXT)
++	cd $(DESTDIR)$(DLDIR) && ln -sf $(DLPRE)libbiosig$(FULLDLEXT) $(DLPRE)libbiosig.$(DLEXT)
+ endif
+ 	-ldconfig
+ 

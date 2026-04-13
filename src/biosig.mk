@@ -96,17 +96,17 @@ define $(PKG)_BUILD_SHARED
     ### TODO: mexw64, mathematica
 
     $(INSTALL) -m644 '$(1)/biosig4c++/libbiosig.def'		'$(PREFIX)/$(TARGET)/lib/'
-    # $(INSTALL) -m644 '$(1)/biosig4c++/libbiosig.dll.a'		'$(PREFIX)/$(TARGET)/lib/'
+    $(INSTALL) -m644 '$(1)/biosig4c++/libbiosig.dll.a'		'$(PREFIX)/$(TARGET)/lib/'
     $(INSTALL) -m644 '$(1)/biosig4c++/libbiosig.dll'		'$(PREFIX)/$(TARGET)/bin/'
     $(INSTALL) -m644 '$(1)/biosig4c++/libbiosig-3.dll'		'$(PREFIX)/$(TARGET)/bin/'
 
     $(INSTALL) -m644 '$(1)/biosig4c++/libgdf.def'		'$(PREFIX)/$(TARGET)/lib/'
-    # $(INSTALL) -m644 '$(1)/biosig4c++/libgdf.dll.a'		'$(PREFIX)/$(TARGET)/lib/'
+    $(INSTALL) -m644 '$(1)/biosig4c++/libgdf.dll.a'		'$(PREFIX)/$(TARGET)/lib/'
     $(INSTALL) -m644 '$(1)/biosig4c++/libgdf-3.dll'		'$(PREFIX)/$(TARGET)/bin/'
     $(INSTALL) -m644 '$(1)/biosig4c++/libgdf.dll'		'$(PREFIX)/$(TARGET)/bin/'
 
     $(INSTALL) -m644 '$(1)/biosig4c++/libphysicalunits.def'	'$(PREFIX)/$(TARGET)/lib/'
-    # $(INSTALL) -m644 '$(1)/biosig4c++/libphysicalunits.dll.a'	'$(PREFIX)/$(TARGET)/lib/'
+    $(INSTALL) -m644 '$(1)/biosig4c++/libphysicalunits.dll.a'	'$(PREFIX)/$(TARGET)/lib/'
     $(INSTALL) -m644 '$(1)/biosig4c++/libphysicalunits-3.dll'	'$(PREFIX)/$(TARGET)/bin/'
     $(INSTALL) -m644 '$(1)/biosig4c++/libphysicalunits.dll'	'$(PREFIX)/$(TARGET)/bin/'
 
