@@ -1,0 +1,640 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Fri Aug 12 21:42:12 EDT 2022
+From: John Robertson <john@rrci.com.com>
+Date: Fri Aug 12 21:42:12 EDT 2022
+Subject: Changes to compile with MINGW
+
+diff -Naur nats.c-3.3.0/CMakeLists.txt nats.c-3.3.0.new/CMakeLists.txt
+--- nats.c-3.3.0/CMakeLists.txt	2022-03-15 16:59:46.000000000 -0400
++++ nats.c-3.3.0.new/CMakeLists.txt	2022-08-12 21:42:10.450511157 -0400
+@@ -22,6 +22,7 @@
+     "Release" "Debug" "MinSizeRel" "RelWithDebInfo")
+ endif()
+ 
++set(BUILD_TESTING OFF)
+ option(NATS_UPDATE_VERSION "Update the version file" OFF)
+ option(NATS_UPDATE_DOC "Update the doc template file" OFF)
+ option(NATS_COVERAGE "Code coverage" OFF)
+@@ -31,14 +32,14 @@
+ option(NATS_BUILD_TLS_FORCE_HOST_VERIFY "Forces hostname verification" ON)
+ option(NATS_BUILD_TLS_USE_OPENSSL_1_1_API "Build for OpenSSL 1.1+" OFF)
+ option(NATS_BUILD_USE_SODIUM "Build using libsodium library" OFF)
+-option(NATS_BUILD_EXAMPLES "Build examples" ON)
++option(NATS_BUILD_EXAMPLES "Build examples" OFF)
+ option(NATS_BUILD_LIBUV_EXAMPLE "Build libuv examples" OFF)
+ option(NATS_BUILD_LIBEVENT_EXAMPLE "Build libevent examples" OFF)
+ option(NATS_BUILD_STATIC_EXAMPLES "Statically link examples" OFF)
+ option(NATS_BUILD_STREAMING "Build NATS Streaming" ON)
+ option(NATS_BUILD_NO_PREFIX_CONNSTS "No prefix for connection status enum" OFF)
+ option(NATS_BUILD_LIB_STATIC "Build static library" ON)
+-option(NATS_BUILD_LIB_SHARED "Build shared library" ON)
++option(NATS_BUILD_LIB_SHARED "Build shared library" OFF)
+ option(NATS_COMPILER_HARDENING "Compiler hardening flags" OFF)
+ if(UNIX AND APPLE)
+   option(CMAKE_MACOSX_RPATH "Build with macOS RPath" ON)
+@@ -201,7 +202,7 @@
+ elseif(WIN32)
+   set(NATS_LIBDIR "lib")
+   set(NATS_INCLUDE_DIR "include")
+-  set(NATS_EXTRA_LIB "Ws2_32")
++  set(NATS_EXTRA_LIB "ws2_32")
+   set(NATS_OS "_WIN32")
+   set(NATS_PLATFORM_INCLUDE "win")
+   if(sodium_USE_STATIC_LIBS)
+diff -Naur nats.c-3.3.0/src/conn.c nats.c-3.3.0.new/src/conn.c
+--- nats.c-3.3.0/src/conn.c	2022-03-15 16:59:46.000000000 -0400
++++ nats.c-3.3.0.new/src/conn.c	2022-08-11 22:18:13.822688759 -0400
+@@ -79,7 +79,7 @@
+ _processConnInit(natsConnection *nc);
+ 
+ static void
+-_close(natsConnection *nc, natsConnStatus status, bool fromPublicClose, bool doCBs);
++noclash_close(natsConnection *nc, natsConnStatus status, bool fromPublicClose, bool doCBs);
+ 
+ static bool
+ _processOpError(natsConnection *nc, natsStatus s, bool initialConnect);
+@@ -1727,7 +1727,7 @@
+     nc->rle = true;
+     natsConn_Unlock(nc);
+ 
+-    _close(nc, NATS_CONN_STATUS_CLOSED, false, true);
++    noclash_close(nc, NATS_CONN_STATUS_CLOSED, false, true);
+ 
+     // Release to compensate for the retain in processOpError.
+     natsConn_release(nc);
+@@ -2014,7 +2014,7 @@
+ 
+                     natsConn_Unlock(nc);
+ 
+-                    _close(nc, NATS_CONN_STATUS_DISCONNECTED, false, false);
++                    noclash_close(nc, NATS_CONN_STATUS_DISCONNECTED, false, false);
+ 
+                     natsConn_Lock(nc);
+ 
+@@ -2171,7 +2171,7 @@
+ 
+     natsConn_Unlock(nc);
+ 
+-    _close(nc, NATS_CONN_STATUS_CLOSED, false, true);
++    noclash_close(nc, NATS_CONN_STATUS_CLOSED, false, true);
+ 
+     return false;
+ }
+@@ -2443,7 +2443,7 @@
+ // will be triggered. The lock should not be held entering this
+ // function. This function will handle the locking manually.
+ static void
+-_close(natsConnection *nc, natsConnStatus status, bool fromPublicClose, bool doCBs)
++noclash_close(natsConnection *nc, natsConnStatus status, bool fromPublicClose, bool doCBs)
+ {
+     struct threadsToJoin    ttj;
+     bool                    sockWasActive = false;
+@@ -2875,7 +2875,7 @@
+         natsConn_Unlock(nc);
+     }
+     if (close)
+-        _close(nc, NATS_CONN_STATUS_CLOSED, false, true);
++        noclash_close(nc, NATS_CONN_STATUS_CLOSED, false, true);
+ }
+ 
+ void
+@@ -3956,7 +3956,7 @@
+ 
+     nats_doNotUpdateErrStack(true);
+ 
+-    _close(nc, NATS_CONN_STATUS_CLOSED, true, true);
++    noclash_close(nc, NATS_CONN_STATUS_CLOSED, true, true);
+ 
+     nats_doNotUpdateErrStack(false);
+ }
+@@ -3985,7 +3985,7 @@
+ 
+     nats_doNotUpdateErrStack(true);
+ 
+-    _close(nc, NATS_CONN_STATUS_CLOSED, fromPublicDestroy, true);
++    noclash_close(nc, NATS_CONN_STATUS_CLOSED, fromPublicDestroy, true);
+ 
+     nats_doNotUpdateErrStack(false);
+ 
+diff -Naur nats.c-3.3.0/src/include/n-win.h nats.c-3.3.0.new/src/include/n-win.h
+--- nats.c-3.3.0/src/include/n-win.h	2022-03-15 16:59:46.000000000 -0400
++++ nats.c-3.3.0.new/src/include/n-win.h	2022-08-12 09:38:07.188979992 -0400
+@@ -13,6 +13,10 @@
+ 
+ #ifndef N_WIN_H_
+ #define N_WIN_H_
++#ifdef _WIN32_WINNT
++#       undef _WIN32_WINNT
++#endif
++#define _WIN32_WINNT 0x0600
+ 
+ #include <winsock2.h>
+ #include <ws2tcpip.h>
+@@ -26,6 +30,18 @@
+ #pragma comment(lib, "Ws2_32.lib")
+ #pragma warning(disable : 4996)
+ 
++#ifdef __MINGW32__
++#include <pthread.h>
++typedef pthread_t       natsThread;
++typedef pthread_key_t   natsThreadLocal;
++typedef pthread_mutex_t natsMutex;
++typedef pthread_cond_t  natsCondition;
++typedef pthread_once_t  natsInitOnceType;
++typedef socklen_t       natsSockLen;
++typedef size_t          natsRecvLen;
++
++#define NATS_ONCE_STATIC_INIT   PTHREAD_ONCE_INIT
++#else
+ typedef struct __natsThread
+ {
+     HANDLE  t;
+@@ -43,6 +59,7 @@
+ 
+ #define NATS_ONCE_TYPE          INIT_ONCE
+ #define NATS_ONCE_STATIC_INIT   INIT_ONCE_STATIC_INIT
++#endif // __MINGW32__
+ 
+ #define NATS_SOCK_INVALID               (INVALID_SOCKET)
+ #define NATS_SOCK_CLOSE(s)              closesocket((s))
+@@ -56,7 +73,7 @@
+ 
+ // Windows doesn't have those..
+ // snprintf support is introduced starting MSVC 14.0 (_MSC_VER 1900: Visual Studio 2015)
+-#if _MSC_VER < 1900
++#if ! defined(__MINGW32__) &&  _MSC_VER < 1900
+ #define snprintf    nats_snprintf
+ #endif
+ #define strcasecmp  _stricmp
+@@ -69,7 +86,7 @@
+ char*
+ nats_strcasestr(const char *haystack, const char *needle);
+ 
+-#if _MSC_VER < 1900
++#if ! defined(__MINGW32__) &&  _MSC_VER < 1900
+ int
+ nats_snprintf(char *buffer, size_t countszt, char *format, ...);
+ #endif
+diff -Naur nats.c-3.3.0/src/nats.h nats.c-3.3.0.new/src/nats.h
+--- nats.c-3.3.0/src/nats.h	2022-03-15 16:59:46.000000000 -0400
++++ nats.c-3.3.0.new/src/nats.h	2022-08-11 22:55:51.077232650 -0400
+@@ -35,6 +35,12 @@
+  *  when building the shared library.
+  */
+ #if defined(_WIN32)
++
++  #ifdef _WIN32_WINNT
++  #       undef _WIN32_WINNT
++  #endif
++  #define _WIN32_WINNT 0x0600
++
+   #include <winsock2.h>
+   #if defined(nats_EXPORTS)
+     #define NATS_EXTERN __declspec(dllexport)
+diff -Naur nats.c-3.3.0/src/win/cond.c nats.c-3.3.0.new/src/win/cond.c
+--- nats.c-3.3.0/src/win/cond.c	2022-03-15 16:59:46.000000000 -0400
++++ nats.c-3.3.0.new/src/win/cond.c	2022-08-12 09:41:00.102529123 -0400
+@@ -14,6 +14,106 @@
+ #include "../natsp.h"
+ #include "../mem.h"
+ 
++#ifdef __MINGW32__
++#include <errno.h>
++#include "../util.h"
++
++natsStatus
++natsCondition_Create(natsCondition **cond)
++{
++    natsCondition   *c = (natsCondition*) NATS_CALLOC(1, sizeof(natsCondition));
++    natsStatus      s  = NATS_OK;
++
++    if (c == NULL)
++        return nats_setDefaultError(NATS_NO_MEMORY);
++
++    if (pthread_cond_init(c, NULL) != 0)
++        s = nats_setError(NATS_SYS_ERROR, "pthread_cond_init error: %d", errno);
++
++    if (s == NATS_OK)
++        *cond = c;
++    else
++        NATS_FREE(c);
++
++    return s;
++}
++
++void
++natsCondition_Wait(natsCondition *cond, natsMutex *mutex)
++{
++    if (pthread_cond_wait(cond, mutex) != 0)
++        abort();
++}
++
++static natsStatus
++_timedWait(natsCondition *cond, natsMutex *mutex, bool isAbsolute, int64_t timeout)
++{
++    int     r;
++    struct  timespec ts;
++    int64_t target;
++
++    if (timeout <= 0)
++        return NATS_TIMEOUT;
++
++    target = (isAbsolute ? timeout : nats_setTargetTime(timeout));
++
++    ts.tv_sec = target / 1000;
++    ts.tv_nsec = (target % 1000) * 1000000;
++
++    if (ts.tv_nsec >= 1000000000L)
++    {
++        ts.tv_sec++;
++        ts.tv_nsec -= 1000000000L;
++    }
++
++    r = pthread_cond_timedwait(cond, mutex, &ts);
++
++    if (r == 0)
++        return NATS_OK;
++
++    if (r == ETIMEDOUT)
++        return NATS_TIMEOUT;
++
++    return nats_setError(NATS_SYS_ERROR, "pthread_cond_timedwait error: %d", errno);
++}
++
++natsStatus
++natsCondition_TimedWait(natsCondition *cond, natsMutex *mutex, int64_t timeout)
++{
++    return _timedWait(cond, mutex, false, timeout);
++}
++
++natsStatus
++natsCondition_AbsoluteTimedWait(natsCondition *cond, natsMutex *mutex, int64_t absoluteTime)
++{
++    return _timedWait(cond, mutex, true, absoluteTime);
++}
++
++void
++natsCondition_Signal(natsCondition *cond)
++{
++    if (pthread_cond_signal(cond) != 0)
++      abort();
++}
++
++void
++natsCondition_Broadcast(natsCondition *cond)
++{
++    if (pthread_cond_broadcast(cond) != 0)
++      abort();
++}
++
++void
++natsCondition_Destroy(natsCondition *cond)
++{
++    if (cond == NULL)
++        return;
++
++    pthread_cond_destroy(cond);
++    NATS_FREE(cond);
++}
++#else // __MINGW32__
++
+ natsStatus
+ natsCondition_Create(natsCondition **cond)
+ {
+@@ -97,3 +197,4 @@
+ 
+     NATS_FREE(cond);
+ }
++#endif // __MINGW32__
+diff -Naur nats.c-3.3.0/src/win/mutex.c nats.c-3.3.0.new/src/win/mutex.c
+--- nats.c-3.3.0/src/win/mutex.c	2022-03-15 16:59:46.000000000 -0400
++++ nats.c-3.3.0.new/src/win/mutex.c	2022-08-12 09:43:32.835707047 -0400
+@@ -14,6 +14,117 @@
+ #include "../natsp.h"
+ #include "../mem.h"
+ 
++#ifdef __MINGW32__
++natsStatus
++natsMutex_Create(natsMutex **newMutex)
++{
++    natsStatus          s = NATS_OK;
++    pthread_mutexattr_t attr;
++    natsMutex           *m = NATS_CALLOC(1, sizeof(natsMutex));
++
++    if (m == NULL)
++        return nats_setDefaultError(NATS_NO_MEMORY);
++
++    if (pthread_mutexattr_init(&attr) != 0)
++    {
++        NATS_FREE(m);
++        return nats_setError(NATS_SYS_ERROR, "pthread_mutexattr_init error: %d",
++                             errno);
++    }
++
++    if (pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE) != 0)
++    {
++        s = nats_setError(NATS_SYS_ERROR, "pthread_mutexattr_settype error: %d",
++                          errno);
++    }
++
++    if ((s == NATS_OK)
++        && (pthread_mutex_init(m, &attr) != 0))
++    {
++        s = nats_setError(NATS_SYS_ERROR, "pthread_mutex_init error: %d",
++                          errno);
++    }
++
++    if (s == NATS_OK)
++        *newMutex = m;
++    else
++    {
++        NATS_FREE(m);
++        pthread_mutexattr_destroy(&attr);
++    }
++
++    return s;
++}
++
++bool
++natsMutex_TryLock(natsMutex *m)
++{
++    if (pthread_mutex_trylock(m) == 0)
++        return true;
++
++    return false;
++}
++
++void
++natsMutex_Lock(natsMutex *m)
++{
++#if !defined(NATS_NO_SPIN)
++    if (gLockSpinCount > 0)
++    {
++        int64_t attempts = 0;
++        while (pthread_mutex_trylock(m) != 0)
++        {
++            if (++attempts <= gLockSpinCount)
++            {
++                #if defined(__x86_64__) || \
++                    defined(__mips__)
++                    __asm__ __volatile__ ("pause" ::: "memory");
++                #elif defined(__arm__) || \
++                      defined(__aarch64__)
++                    __asm__ __volatile__ ("yield" ::: "memory");
++                #elif defined(__powerpc__) || \
++                      defined(__powerpc64__)
++                    __asm__ __volatile__ ("or 27,27,27" ::: "memory");
++                #else
++                    usleep(0);
++                #endif
++            }
++            else
++            {
++                if (pthread_mutex_lock(m))
++                    abort();
++
++                break;
++            }
++        }
++    }
++    else
++#endif
++    {
++        if (pthread_mutex_lock(m))
++            abort();
++    }
++}
++
++
++void
++natsMutex_Unlock(natsMutex *m)
++{
++    if (pthread_mutex_unlock(m))
++        abort();
++}
++
++void
++natsMutex_Destroy(natsMutex *m)
++{
++    if (m == NULL)
++        return;
++
++    pthread_mutex_destroy(m);
++    NATS_FREE(m);
++}
++#else // __MINGW32__
++
+ natsStatus
+ natsMutex_Create(natsMutex **newMutex)
+ {
+@@ -63,3 +174,4 @@
+     DeleteCriticalSection(m);
+     NATS_FREE(m);
+ }
++#endif // __MINGW32__
+diff -Naur nats.c-3.3.0/src/win/strings.c nats.c-3.3.0.new/src/win/strings.c
+--- nats.c-3.3.0/src/win/strings.c	2022-03-15 16:59:46.000000000 -0400
++++ nats.c-3.3.0.new/src/win/strings.c	2022-08-11 21:31:23.613152165 -0400
+@@ -117,7 +117,7 @@
+     return res;
+ }
+ 
+-#if _MSC_VER < 1900
++#if defined(_MSC_VER) &&  _MSC_VER < 1900
+ int
+ nats_snprintf(char *buffer, size_t countszt, char *format, ...)
+ {
+diff -Naur nats.c-3.3.0/src/win/thread.c nats.c-3.3.0.new/src/win/thread.c
+--- nats.c-3.3.0/src/win/thread.c	2022-03-15 16:59:46.000000000 -0400
++++ nats.c-3.3.0.new/src/win/thread.c	2022-08-12 09:45:40.512589923 -0400
+@@ -13,10 +13,181 @@
+ 
+ #include "../natsp.h"
+ 
++#ifndef __MINGW32__
+ #include <process.h>
++#endif
+ 
+ #include "../mem.h"
+ 
++#ifdef __MINGW32__
++bool
++nats_InitOnce(natsInitOnceType *control, natsInitOnceCb cb)
++{
++    if (pthread_once(control, cb) != 0)
++        return false;
++
++    return true;
++}
++
++struct threadCtx
++{
++    natsThreadCb    entry;
++    void            *arg;
++};
++
++static void*
++_threadStart(void *arg)
++{
++    struct threadCtx *c = (struct threadCtx*) arg;
++
++    nats_setNATSThreadKey();
++
++    c->entry(c->arg);
++
++    NATS_FREE(c);
++
++    nats_ReleaseThreadMemory();
++    natsLib_Release();
++
++    return NULL;
++}
++
++natsStatus
++natsThread_Create(natsThread **thread, natsThreadCb cb, void *arg)
++{
++    struct threadCtx    *ctx = NULL;
++    natsThread          *t   = NULL;
++    natsStatus          s    = NATS_OK;
++    int                 err;
++
++    natsLib_Retain();
++    ctx = (struct threadCtx*) NATS_CALLOC(1, sizeof(*ctx));
++    t = (natsThread*) NATS_CALLOC(1, sizeof(natsThread));
++
++    if ((ctx == NULL) || (t == NULL))
++        s = nats_setDefaultError(NATS_NO_MEMORY);
++
++    if (s == NATS_OK)
++    {
++        ctx->entry  = cb;
++        ctx->arg    = arg;
++
++        err = pthread_create(t, NULL, _threadStart, ctx);
++        if (err)
++            s = nats_setError(NATS_SYS_ERROR,
++                              "pthread_create error: %d", errno);
++    }
++
++    if (s == NATS_OK)
++    {
++        *thread = t;
++    }
++    else
++    {
++        NATS_FREE(ctx);
++        NATS_FREE(t);
++        natsLib_Release();
++    }
++
++    return s;
++}
++
++void
++natsThread_Join(natsThread *t)
++{
++    // I think that 'join' should automatically detect if the call is made
++    // from the current thread. This simplify the use. That is, you don't
++    // need to do:
++    // if (!natsThread_IsCurrent(t))
++    //     natsThread_Join(t)
++
++    if (!natsThread_IsCurrent(t))
++    {
++        if (pthread_join(*t, NULL) != 0)
++            abort();
++    }
++    else
++    {
++        pthread_detach(*t);
++    }
++}
++
++void
++natsThread_Detach(natsThread *t)
++{
++    if (pthread_detach(*t) !=0)
++        abort();
++}
++
++bool
++natsThread_IsCurrent(natsThread *t)
++{
++    if (pthread_equal(pthread_self(), *t) == 0)
++        return false;
++
++    return true;
++}
++
++void
++natsThread_Yield(void)
++{
++    sched_yield();
++}
++
++void
++natsThread_Destroy(natsThread *t)
++{
++    if (t == NULL)
++        return;
++
++    NATS_FREE(t);
++}
++
++natsStatus
++natsThreadLocal_CreateKey(natsThreadLocal *tl, void (*destructor)(void*))
++{
++    int ret;
++
++    if ((ret = pthread_key_create(tl, destructor)) != 0)
++    {
++        return nats_setError(NATS_SYS_ERROR,
++                             "pthread_key_create error: %d", ret);
++    }
++
++    return NATS_OK;
++}
++
++void*
++natsThreadLocal_Get(natsThreadLocal tl)
++{
++    return pthread_getspecific(tl);
++}
++
++natsStatus
++natsThreadLocal_SetEx(natsThreadLocal tl, const void *value, bool setErr)
++{
++    int ret;
++
++    if ((ret = pthread_setspecific(tl, value)) != 0)
++    {
++        if (setErr)
++            return nats_setError(NATS_SYS_ERROR,
++                                 "pthread_setspecific: %d",
++                                 ret);
++        else
++            return NATS_SYS_ERROR;
++    }
++
++    return NATS_OK;
++}
++
++void
++natsThreadLocal_DestroyKey(natsThreadLocal tl)
++{
++    pthread_key_delete(tl);
++}
++
++#else // __MINGW32__
+ static BOOL CALLBACK
+ _initHandleFunction(PINIT_ONCE InitOnce, PVOID Parameter, PVOID *lpContext)
+ {
+@@ -195,4 +366,4 @@
+ {
+     TlsFree(tl);
+ }
+-
++#endif // __MINGW32__
