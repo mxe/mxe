@@ -403,6 +403,7 @@
     "qt6-qthttpserver": {"version": "6.11.0", "website": "https://www.qt.io/", "description": "Qt"},
     "qt6-qtimageformats": {"version": "6.11.0", "website": "https://www.qt.io/", "description": "Qt"},
     "qt6-qtmultimedia": {"version": "6.11.0", "website": "https://www.qt.io/", "description": "Qt"},
+    "qt6-qtquicktimeline": {"version": "6.11.0", "website": "https://www.qt.io/", "description": "Qt"},
     "qt6-qtscxml": {"version": "6.11.0", "website": "https://www.qt.io/", "description": "Qt"},
     "qt6-qtserialbus": {"version": "6.11.0", "website": "https://www.qt.io/", "description": "Qt"},
     "qt6-qtserialport": {"version": "6.11.0", "website": "https://www.qt.io/", "description": "Qt"},
