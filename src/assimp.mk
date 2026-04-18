@@ -7,7 +7,7 @@ $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 6.0.2
 $(PKG)_CHECKSUM := d1822d9a19c9205d6e8bc533bf897174ddb360ce504680f294170cc1d6319751
 $(PKG)_GH_CONF  := assimp/assimp/tags, v
-$(PKG)_DEPS     := cc minizip
+$(PKG)_DEPS     := cc minizip-ng
 
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && $(TARGET)-cmake \

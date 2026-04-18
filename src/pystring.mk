@@ -2,14 +2,16 @@
 # Initial package scaffold generated with the "gsrc" tool:
 # https://github.com/hkunz/git-fetcher
 
-PKG             := openexr
-$(PKG)_WEBSITE  := http://www.openexr.com/
-$(PKG)_DESCR    := High dynamic range (HDR) image file format library
-$(PKG)_VERSION  := 3.4.10
+include src/common/pkgconfig-generator.mk
+
+PKG             := pystring
+$(PKG)_WEBSITE  := https://github.com/imageworks/pystring.git
+$(PKG)_DESCR    := C++ functions matching the interface and behavior of python string methods with std::string
+$(PKG)_VERSION  := 1.1.5
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := b61ae2d0fa4872c5f5fc45618f107945df37c0eba4853263091b949c513d3319
-$(PKG)_GH_CONF  := AcademySoftwareFoundation/openexr/tags,v
-$(PKG)_DEPS     := cc imath pthreads zlib openjph libdeflate onetbb
+$(PKG)_CHECKSUM := 63c30c251b8017c897bd923826f400aee1d6e4f1c22ffbbd2104f150522a2040
+$(PKG)_GH_CONF  := imageworks/pystring/tags,v
+$(PKG)_DEPS     := cc
 
 define $(PKG)_BUILD
 
@@ -18,18 +20,25 @@ define $(PKG)_BUILD
 		-DCMAKE_INSTALL_PREFIX="$(PREFIX)/$(TARGET)" \
 		-DCMAKE_PREFIX_PATH="$(PREFIX)/$(TARGET)" \
 		-DBUILD_SHARED_LIBS=$(CMAKE_SHARED_BOOL) \
-		-DBUILD_TESTING=OFF \
-		-DOPENEXR_INSTALL=ON \
-		-DOPENEXR_INSTALL_PKG_CONFIG=ON \
-		-DOPENEXR_USE_TBB=OFF \
 		-DCMAKE_BUILD_TYPE=Release
 
 	# build package and install
 	$(MAKE) -C "$(BUILD_DIR)" -j $(JOBS)
 	$(MAKE) -C "$(BUILD_DIR)" -j 1 install
 
+	# Only needed if the project does not ship a .pc file
+	$(call GENERATE_PC, \
+		$(PREFIX)/$(TARGET), \
+		$(PKG), \
+		$($(PKG)_DESCR), \
+		$($(PKG)_VERSION), \
+		, \
+		, \
+		-lpystring, \
+	)
+
 	# compile a test program to verify the library is usable
 	"$(TARGET)-g++" -Wall -Wextra "$(TEST_FILE)" \
 		-o "$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe" \
-		`"$(TARGET)-pkg-config" OpenEXR --cflags --libs`
+		`"$(TARGET)-pkg-config" "$(PKG)" --cflags --libs`
 endef

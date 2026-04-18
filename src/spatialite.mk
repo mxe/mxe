@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := libspatialite-$($(PKG)_VERSION)
 $(PKG)_FILE     := libspatialite-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://www.gaia-gis.it/gaia-sins/libspatialite-sources/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc dlfcn-win32 freexl geos libiconv libxml2 proj sqlite zlib \
-                   minizip
+                   minizip-ng
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://www.gaia-gis.it/gaia-sins/libspatialite-sources/' | \
