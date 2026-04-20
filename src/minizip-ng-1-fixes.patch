@@ -1,0 +1,20 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+Subject: add missing -lbz2 -lz -llzma -lzstd to pkgconfig
+
+diff --git a/minizip.pc.cmakein b/minizip.pc.cmakein
+index 1111111..2222222 100644
+--- a/minizip.pc.cmakein
++++ b/minizip.pc.cmakein
+@@ -8,7 +8,7 @@ Name: @MINIZIP_TARGET@
+ Description: Zip manipulation library
+ Version: @VERSION@
+
+-Requires.private: @PC_PRIVATE_DEPS@
++Requires.private: @PC_PRIVATE_DEPS@ openssl
+ Libs: -L${libdir} -L${sharedlibdir} -l@MINIZIP_TARGET@
+-Libs.private:@PC_PRIVATE_LIBS@
++Libs.private:@PC_PRIVATE_LIBS@ -lbcrypt -lbz2 -lz -llzma -lzstd
+ Cflags: -I${includedir}

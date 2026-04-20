@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := $(PKG)-$(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://bitbucket.org/$(PKG)/$(PKG)/get/$($(PKG)_VERSION).tar.bz2
 $(PKG)_DEPS     := cc expat freeglut freeimage freetype fribidi glew \
-                   glfw3 glm libxml2 minizip pcre xerces
+                   glfw3 glm libxml2 minizip-ng pcre xerces
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://bitbucket.org/cegui/cegui/downloads' | \

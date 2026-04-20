@@ -2,14 +2,16 @@
 # Initial package scaffold generated with the "gsrc" tool:
 # https://github.com/hkunz/git-fetcher
 
-PKG             := openexr
-$(PKG)_WEBSITE  := http://www.openexr.com/
-$(PKG)_DESCR    := High dynamic range (HDR) image file format library
-$(PKG)_VERSION  := 3.4.10
+PKG             := svtav1
+$(PKG)_WEBSITE  := https://gitlab.com/AOMediaCodec/SVT-AV1.git
+$(PKG)_DESCR    := Scalable Video Technology for AV1 encoder library
+$(PKG)_VERSION  := 4.1.0
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := b61ae2d0fa4872c5f5fc45618f107945df37c0eba4853263091b949c513d3319
-$(PKG)_GH_CONF  := AcademySoftwareFoundation/openexr/tags,v
-$(PKG)_DEPS     := cc imath pthreads zlib openjph libdeflate onetbb
+$(PKG)_CHECKSUM := 6c4c0c44ff0ba3d136d6f57f3a707f9de8e9c866f50f809c1d22a43f0d8c9583
+$(PKG)_FILE     := SVT-AV1-v$($(PKG)_VERSION).tar.gz
+$(PKG)_SUBDIR   := SVT-AV1-v$($(PKG)_VERSION)
+$(PKG)_URL      := https://gitlab.com/AOMediaCodec/SVT-AV1/-/archive/v$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_DEPS     := cc pthreads
 
 define $(PKG)_BUILD
 
@@ -18,10 +20,10 @@ define $(PKG)_BUILD
 		-DCMAKE_INSTALL_PREFIX="$(PREFIX)/$(TARGET)" \
 		-DCMAKE_PREFIX_PATH="$(PREFIX)/$(TARGET)" \
 		-DBUILD_SHARED_LIBS=$(CMAKE_SHARED_BOOL) \
-		-DBUILD_TESTING=OFF \
-		-DOPENEXR_INSTALL=ON \
-		-DOPENEXR_INSTALL_PKG_CONFIG=ON \
-		-DOPENEXR_USE_TBB=OFF \
+		-DCOMPILE_C_ONLY=OFF \
+		-DLOG_QUIET=OFF \
+		-DMINIMAL_BUILD=OFF \
+		-DRTC_BUILD=OFF \
 		-DCMAKE_BUILD_TYPE=Release
 
 	# build package and install
@@ -31,5 +33,5 @@ define $(PKG)_BUILD
 	# compile a test program to verify the library is usable
 	"$(TARGET)-g++" -Wall -Wextra "$(TEST_FILE)" \
 		-o "$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe" \
-		`"$(TARGET)-pkg-config" OpenEXR --cflags --libs`
+		`"$(TARGET)-pkg-config" "SvtAv1Enc" --cflags --libs`
 endef

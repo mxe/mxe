@@ -1,0 +1,16 @@
+diff --git a/src/build-scripts/OpenImageIO.pc.in b/src/build-scripts/OpenImageIO.pc.in
+index fac3cf531..62bd1319a 100644
+--- a/src/build-scripts/OpenImageIO.pc.in
++++ b/src/build-scripts/OpenImageIO.pc.in
+@@ -6,5 +6,8 @@ includedir=${prefix}/include
+ Name: OpenImageIO
+ Description: OpenImageIO is a library for reading and writing images.
+ Version: @PROJECT_VERSION_MAJOR@.@PROJECT_VERSION_MINOR@.@PROJECT_VERSION_PATCH@.@PROJECT_VERSION_TWEAK@
+-Libs: -L${libdir} -lOpenImageIO -lOpenImageIO_Util
+-Cflags: -I${includedir}
++Requires: OpenColorIO Imath OpenEXR zlib
++Requires.private: minizip libjpeg libtiff-4 libheif libjxl libopenjp2 openjph uhdr openvdb tbb libavutil libavcodec libavformat libswscale expat pystring yaml-cpp libraw_r ptex
++Libs: -L${libdir} -lOpenImageIO -lOpenImageIO_Util -ljxl_threads -lws2_32 -lwinmm
++Libs.private: -lgif
++Cflags: -I${includedir} -DOIIO_STATIC_DEFINE
+\ No newline at end of file
