@@ -1,0 +1,103 @@
+diff --git a/lib/jxl.cmake b/lib/jxl.cmake
+index 59b2cca4..8ffd74e0 100644
+--- a/lib/jxl.cmake
++++ b/lib/jxl.cmake
+@@ -27,9 +27,14 @@ if (JPEGXL_ENABLE_TRANSCODE_JPEG OR JPEGXL_ENABLE_BOXES)
+ list(APPEND JPEGXL_DEC_INTERNAL_LIBS brotlidec brotlicommon)
+ endif()
+
++# Patch lib/jxl.cmake:
++# Add brotlicommon to JPEGXL_INTERNAL_LIBS because static linking in MXE
++# does not automatically pull transitive Brotli dependencies. Without this,
++# linking fails with undefined Brotli symbols.
+ set(JPEGXL_INTERNAL_LIBS
+   ${JPEGXL_DEC_INTERNAL_LIBS}
+   brotlienc
++  brotlicommon
+ )
+
+ if (JPEGXL_ENABLE_TRANSCODE_JPEG)
+diff --git a/lib/jxl/libjxl.pc.in b/lib/jxl/libjxl.pc.in
+index f5a9c436..ea02c496 100644
+--- a/lib/jxl/libjxl.pc.in
++++ b/lib/jxl/libjxl.pc.in
+@@ -7,7 +7,7 @@ Name: libjxl
+ Description: Loads and saves JPEG XL files
+ Version: @JPEGXL_LIBRARY_VERSION@
+ @JPEGXL_REQUIRES_TYPE@: @JPEGXL_LIBRARY_REQUIRES@
+-Libs: -L${libdir} -ljxl @JPEGXL_PUBLIC_LIBS@
++Libs: -L${libdir} -ljxl -ljxl_threads @JPEGXL_PUBLIC_LIBS@
+ Libs.private: @JPEGXL_PRIVATE_LIBS@
+ Cflags: -I${includedir}
+ Cflags.private: -DJXL_STATIC_DEFINE
+diff --git a/third_party/CMakeLists.txt b/third_party/CMakeLists.txt
+index efe3e56f..51466049 100644
+--- a/third_party/CMakeLists.txt
++++ b/third_party/CMakeLists.txt
+@@ -33,7 +33,11 @@ if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/highway/CMakeLists.txt" AND
+ else()
+   find_package(HWY 1.0.7)
+   if (NOT HWY_FOUND)
+-    message(FATAL_ERROR
++    # Patch third_party/CMakeLists.txt:
++    # Replace all FATAL_ERROR with STATUS so missing optional third-party
++    # dependencies do not abort the build. This allows MXE to rely on
++    # system-provided libraries instead of bundled ones.
++    message(STATUS
+         "Highway library (hwy) not found. Install libhwy-dev or download it "
+         "to third_party/highway from https://github.com/google/highway . "
+         "Highway is required to build JPEG XL. You can run "
+@@ -50,7 +54,7 @@ if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/brotli/c/include/brotli/decode.h" OR
+     JPEGXL_FORCE_SYSTEM_BROTLI)
+   find_package(Brotli)
+   if (NOT Brotli_FOUND)
+-    message(FATAL_ERROR
++    message(STATUS
+         "Brotli not found, install brotli-dev or download brotli source code to"
+         " third_party/brotli from https://github.com/google/brotli. You can use"
+         " ${PROJECT_SOURCE_DIR}/deps.sh to download this dependency.")
+@@ -97,7 +101,7 @@ endif()
+ # *cms
+ if (JPEGXL_ENABLE_SKCMS)
+   if( NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/skcms/skcms.h" )
+-    message(FATAL_ERROR "Please run ${PROJECT_SOURCE_DIR}/deps.sh to fetch the "
++    message(STATUS "Please run ${PROJECT_SOURCE_DIR}/deps.sh to fetch the "
+             "build dependencies.")
+   endif()
+   include(skcms.cmake)
+@@ -108,7 +112,7 @@ if (JPEGXL_ENABLE_VIEWERS OR NOT JPEGXL_ENABLE_SKCMS OR JPEGXL_ENABLE_PLUGINS)
+   if( NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/lcms/.git" OR JPEGXL_FORCE_SYSTEM_LCMS2 )
+     find_package(LCMS2 2.12)
+     if ( NOT LCMS2_FOUND )
+-      message(FATAL_ERROR "Please install lcms2 or run git submodule update --init")
++      message(STATUS "Please install lcms2 or run git submodule update --init")
+     endif ()
+   else()
+     include(lcms2.cmake)
+@@ -120,7 +124,7 @@ endif()
+ # libpng
+ if (JPEGXL_BUNDLE_LIBPNG AND EMSCRIPTEN)
+   if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/libpng/CMakeLists.txt")
+-  message(FATAL_ERROR "Please run ${PROJECT_SOURCE_DIR}/deps.sh to fetch the "
++  message(STATUS "Please run ${PROJECT_SOURCE_DIR}/deps.sh to fetch the "
+           "build dependencies.")
+   endif()
+   file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/libpng/scripts/pnglibconf.h.prebuilt" DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}/libpng")
+@@ -132,7 +136,7 @@ if (JPEGXL_BUNDLE_LIBPNG AND EMSCRIPTEN)
+   set(PNG_LIBRARIES "" PARENT_SCOPE)
+ elseif (JPEGXL_BUNDLE_LIBPNG)
+   if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/libpng/CMakeLists.txt")
+-    message(FATAL_ERROR "Please run ${PROJECT_SOURCE_DIR}/deps.sh to fetch the "
++    message(STATUS "Please run ${PROJECT_SOURCE_DIR}/deps.sh to fetch the "
+             "build dependencies.")
+   endif()
+   add_subdirectory(zlib)
+@@ -166,7 +170,7 @@ endif()
+ # sjpeg
+ if (JPEGXL_ENABLE_SJPEG)
+   if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/sjpeg/CMakeLists.txt")
+-    message(FATAL_ERROR "Please run ${PROJECT_SOURCE_DIR}/deps.sh to fetch the "
++    message(STATUS "Please run ${PROJECT_SOURCE_DIR}/deps.sh to fetch the "
+             "build dependencies.")
+   endif()
+   include(sjpeg.cmake)
