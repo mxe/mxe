@@ -3,11 +3,12 @@
 PKG             := unrtf
 $(PKG)_WEBSITE  := https://www.gnu.org/software/unrtf/
 $(PKG)_DESCR    := unRTF
-$(PKG)_VERSION  := 0.21.10
-$(PKG)_CHECKSUM := b49f20211fa69fff97d42d6e782a62d7e2da670b064951f14bbff968c93734ae
+$(PKG)_VERSION  := 0.21.11
+$(PKG)_CHECKSUM := 22419496626cb92e96af0036636ae922f6360d9249142ac396bd400bcd812ecd
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://ftp.gnu.org/gnu/$(PKG)/$($(PKG)_FILE)
+$(PKG)_URL_2    := https://www.gnu.org/software/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc libiconv
 
 define $(PKG)_UPDATE
