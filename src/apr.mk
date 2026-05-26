@@ -4,8 +4,8 @@ PKG             := apr
 $(PKG)_WEBSITE  := https://apr.apache.org/
 $(PKG)_DESCR    := APR
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.5.2
-$(PKG)_CHECKSUM := 1af06e1720a58851d90694a984af18355b65bb0d047be03ec7d659c746d6dbdb
+$(PKG)_VERSION  := 1.7.6
+$(PKG)_CHECKSUM := 6a10e7f7430510600af25fabf466e1df61aaae910bf1dc5d10c44a4433ccc81d
 $(PKG)_SUBDIR   := apr-$($(PKG)_VERSION)
 $(PKG)_FILE     := apr-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://archive.apache.org/dist/apr/$($(PKG)_FILE)
@@ -29,13 +29,14 @@ define $(PKG)_BUILD
     # cross build
     cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS) \
+        CPPFLAGS='-D_WIN32_WINNT=0x0601 -DWIN32' \
+        CFLAGS='$(CFLAGS) -Wno-error=incompatible-pointer-types' \
         ac_cv_sizeof_off_t=4 \
         ac_cv_sizeof_pid_t=4 \
         ac_cv_sizeof_size_t=4 \
         ac_cv_sizeof_ssize_t=4 \
         $(if $(POSIX_THREADS),apr_cv_mutex_robust_shared=yes)
-    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' GEN_TEST_CHAR='$(BUILD_DIR).native/tools/gen_test_char' \
-        CFLAGS='-std=gnu89'
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' GEN_TEST_CHAR='$(BUILD_DIR).native/tools/gen_test_char'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
     ln -sf '$(PREFIX)/$(TARGET)/bin/apr-1-config' '$(PREFIX)/bin/$(TARGET)-apr-1-config'

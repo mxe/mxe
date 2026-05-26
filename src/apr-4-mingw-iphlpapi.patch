@@ -1,0 +1,44 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Marco Borrini <borrinimarco74@gmail.com>
+Date: Tue, 26 May 2026 14:04:00 +0200
+Subject: [PATCH] Fix MinGW missing Iphlpapi types
+
+Provides missing types for MinGW cross-compilation without pulling in
+conflicting headers under WIN32_LEAN_AND_MEAN.
+
+diff --git a/include/arch/win32/apr_arch_misc.h b/include/arch/win32/apr_arch_misc.h
+--- a/include/arch/win32/apr_arch_misc.h
++++ b/include/arch/win32/apr_arch_misc.h
+@@ -49,6 +49,16 @@
+ 
+ #if defined(HAVE_IF_INDEXTONAME) && defined(_MSC_VER)
+ #include <Iphlpapi.h>
++#elif defined(HAVE_IF_INDEXTONAME) && defined(__MINGW32__)
++#ifndef NET_IFINDEX
++typedef ULONG NET_IFINDEX;
++#endif
++#ifndef NETIOAPI_API_
++#define NETIOAPI_API_ WINAPI
++#endif
++#ifndef IF_NAMESIZE
++#define IF_NAMESIZE 256
++#endif
+ #endif
+ 
+ struct apr_other_child_rec_t {
+diff --git a/network_io/unix/sockaddr.c b/network_io/unix/sockaddr.c
+--- a/network_io/unix/sockaddr.c
++++ b/network_io/unix/sockaddr.c
+@@ -30,7 +30,7 @@
+ #include <net/if.h>
+ #endif
+ 
+-#if defined(HAVE_IF_INDEXTONAME) && defined(_MSC_VER)
++#if defined(HAVE_IF_INDEXTONAME) && (defined(_MSC_VER) || defined(__MINGW32__))
+ #include "arch/win32/apr_arch_misc.h"
+ #endif
+ 
