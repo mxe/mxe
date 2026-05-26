@@ -1,0 +1,21 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Marco Borrini <borrinimarco74@gmail.com>
+Date: Tue, 26 May 2026 13:42:00 +0200
+Subject: [PATCH] Fix CMake minimum version for CMake 4.x compatibility
+
+Modern CMake (4.0+) has removed support for CMAKE_MINIMUM_REQUIRED
+versions below 3.5.0.
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,5 +1,5 @@
+ # CMakeLists.txt for ALURE
+-CMAKE_MINIMUM_REQUIRED(VERSION 2.4)
++CMAKE_MINIMUM_REQUIRED(VERSION 3.5.0)
+ 
+ IF(COMMAND CMAKE_POLICY)
