@@ -4,9 +4,9 @@ PKG             := openblas
 $(PKG)_WEBSITE  := https://www.openblas.net/
 $(PKG)_DESCR    := OpenBLAS
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.3.29
-$(PKG)_CHECKSUM := 38240eee1b29e2bde47ebb5d61160207dc68668a54cac62c076bb5032013b1eb
-$(PKG)_GH_CONF  := xianyi/OpenBLAS/releases/latest,v
+$(PKG)_VERSION  := 0.3.33
+$(PKG)_CHECKSUM := 6761af1d9f5d353ab4f0b7497be2643313b36c8f31caec0144bfef198e71e6ab
+$(PKG)_GH_CONF  := OpenMathLib/OpenBLAS/releases/latest,v
 $(PKG)_DEPS     := cc pthreads
 
 # openblas has it's own optimised versions of netlib lapack that
