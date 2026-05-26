@@ -10,6 +10,10 @@ $(PKG)_GH_CONF  := jackaudio/jack2/tags,v
 $(PKG)_DEPS     := cc libgnurx libsamplerate portaudio pthreads
 
 define $(PKG)_BUILD
+    # Fix Python 3.13 compatibility (imp module is removed)
+    $(SED) -i 's/import os, re, imp, sys/import os, re, sys, types/g' '$(SOURCE_DIR)/waflib/Context.py'
+    $(SED) -i 's/imp\.new_module/types.ModuleType/g' '$(SOURCE_DIR)/waflib/Context.py'
+
     # uses modified waf so can't use MXE waf package
     cd '$(SOURCE_DIR)' && \
         AR='$(TARGET)-ar' \

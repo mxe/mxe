@@ -18,10 +18,15 @@ endef
 
 # note: assembly for i686 targets is not officially supported
 define $(PKG)_BUILD
+    # disable obsolete cmake policies for CMake 4.x
+    $(SED) -i 's/cmake_policy(SET CMP0025 OLD)/#cmake_policy(SET CMP0025 OLD)/g' '$(SOURCE_DIR)/source/CMakeLists.txt'
+    $(SED) -i 's/cmake_policy(SET CMP0054 OLD)/#cmake_policy(SET CMP0054 OLD)/g' '$(SOURCE_DIR)/source/CMakeLists.txt'
+
     cd '$(BUILD_DIR)' && mkdir -p 10bit 12bit
 
     # 12 bit
     cd '$(BUILD_DIR)/12bit' && $(TARGET)-cmake '$(SOURCE_DIR)/source' \
+        -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
         -DHIGH_BIT_DEPTH=ON \
         -DEXPORT_C_API=OFF \
         -DENABLE_SHARED=OFF \
@@ -34,6 +39,7 @@ define $(PKG)_BUILD
 
     # 10 bit
     cd '$(BUILD_DIR)/10bit' && $(TARGET)-cmake '$(SOURCE_DIR)/source' \
+        -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
         -DHIGH_BIT_DEPTH=ON \
         -DEXPORT_C_API=OFF \
         -DENABLE_SHARED=OFF \
@@ -45,6 +51,7 @@ define $(PKG)_BUILD
 
     # 8bit
     cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)/source' \
+        -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
         -DHIGH_BIT_DEPTH=OFF \
         -DEXPORT_C_API=ON \
         -DENABLE_SHARED=$(CMAKE_SHARED_BOOL) \

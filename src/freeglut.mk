@@ -18,6 +18,7 @@ endef
 
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && '$(TARGET)-cmake' '$(SOURCE_DIR)' \
+        -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
         -DFREEGLUT_GLES=OFF \
         -DFREEGLUT_BUILD_DEMOS=OFF \
         -DFREEGLUT_REPLACE_GLUT=ON \
