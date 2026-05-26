@@ -1,0 +1,25 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Tue, 26 May 2026 09:00:00 +0200
+Subject: [PATCH 1/1] Do not redefine inline
+
+Redefining inline as __attribute__((__always_inline__)) breaks standard
+headers like Mingw-w64's inttypes.h which rely on the inline keyword for
+__CRT_INLINE. Modern compilers handle inlining heuristics well enough
+without forcing always_inline globally.
+
+--- a/configure.ac
++++ b/configure.ac
+@@ -102,7 +102,7 @@
+ 
+ dnl Checks for typedefs, structures, and compiler characteristics.
+ AC_C_CONST
+-AC_C_ALWAYS_INLINE
++AC_C_INLINE
+ AC_C_RESTRICT
+ AC_C_BUILTIN_EXPECT
+ AC_C_BIGENDIAN
