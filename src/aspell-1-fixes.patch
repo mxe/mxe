@@ -1,0 +1,28 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+diff -urN aspell-0.60.8.2.orig/Makefile.am aspell-0.60.8.2/Makefile.am
+--- aspell-0.60.8.2.orig/Makefile.am	2026-05-26 21:36:33.296029144 +0200
++++ aspell-0.60.8.2/Makefile.am	2026-05-26 21:36:37.031965196 +0200
+@@ -217,7 +217,7 @@
+ else # not COMPILE_IN_FILTERS
+ 
+ dynamic_optfiles += ${optfiles}
+-filter_ldflags = -module -avoid-version
++filter_ldflags = -module -avoid-version -no-undefined
+ 
+ ### Add name of filter library containing your filter. Name always
+ ### must look like lib<filtername>-filter.la see development manual
+diff -urN aspell-0.60.8.2.orig/Makefile.in aspell-0.60.8.2/Makefile.in
+--- aspell-0.60.8.2.orig/Makefile.in	2026-05-26 21:36:33.295951550 +0200
++++ aspell-0.60.8.2/Makefile.in	2026-05-26 21:36:37.032243864 +0200
+@@ -804,7 +804,7 @@
+   modules/filter/modes/nroff.amf\
+   modules/filter/modes/texinfo.amf
+ 
+-@COMPILE_IN_FILTERS_FALSE@filter_ldflags = -module -avoid-version
++@COMPILE_IN_FILTERS_FALSE@filter_ldflags = -module -avoid-version -no-undefined
+ 
+ ### Add name of filter library containing your filter. Name always
+ ### must look like lib<filtername>-filter.la see development manual
