@@ -1,0 +1,29 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Marco Borrini <borrinimarco74@gmail.com>
+Date: Tue, 26 May 2026 14:39:00 +0200
+Subject: [PATCH] Fix permissions for installed shared libraries
+
+diff --git a/Makefile b/Makefile
+--- a/Makefile
++++ b/Makefile
+@@ -236,7 +236,15 @@ install: $(RUN) libs
+ 	$(INSTALL) -d $(INST_INCLUDE)
+ 	$(INSTALL) -m 0644 $(HEADERS) $(INST_INCLUDE)
+ 	$(INSTALL) -d $(INST_LIBRARY)
+-	$(INSTALL) -m 0644 $(LIBRARIES) $(INST_LIBRARY)
++ifdef MXE_SHARED
++	$(INSTALL) -m 0755 $(LIB_SH) $(INST_LIBRARY)
++	$(INSTALL) -m 0644 $(LIB_SH).a $(INST_LIBRARY)
++else ifdef MXE_STATIC
++	$(INSTALL) -m 0644 $(LIB_ST) $(INST_LIBRARY)
++else
++	$(INSTALL) -m 0755 $(LIB_SH) $(INST_LIBRARY)
++	$(INSTALL) -m 0644 $(LIB_ST) $(INST_LIBRARY)
++endif
+ ifdef LINKED_LIB_SH
+ 	cd $(INST_LIBRARY) && ln -s $(notdir $(LIB_SH) $(LINKED_LIB_SH))
+ endif
