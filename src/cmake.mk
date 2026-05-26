@@ -3,8 +3,8 @@
 PKG             := cmake
 $(PKG)_WEBSITE  := https://www.cmake.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.31.12
-$(PKG)_CHECKSUM := 5f3fd5a54dfa65602bdbed64f981a72673cc19f2d304cc2955cf0dfa0cfd8272
+$(PKG)_VERSION  := 4.3.2
+$(PKG)_CHECKSUM := b0231eb39b3c3cabdc568c619df78208a7bd95ea10c9b2236d61218bac1b367d
 $(PKG)_SUBDIR   := cmake-$($(PKG)_VERSION)
 $(PKG)_FILE     := cmake-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://www.cmake.org/files/v$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
@@ -15,8 +15,8 @@ define $(PKG)_UPDATE
     echo 'NOTE: Please ensure all cmake packages build after updating with:' >&2;
     echo '    make `make show-downstream-deps-cmake` MXE_TARGETS="$(MXE_TARGET_LIST)"' >&2;
     echo '' >&2;
-    $(WGET) -q -O- 'https://www.cmake.org/cmake/resources/software.html' | \
-    $(SED) -n 's,.*cmake-\(3[0-9.]*\)\.tar.*,\1,p' | \
+    $(WGET) -q -O- 'https://cmake.org/download/' | \
+    $(SED) -n 's,.*cmake-\([0-9.]*\)\.tar.*,\1,p' | \
     $(SORT) -V | \
     tail -1
 endef
