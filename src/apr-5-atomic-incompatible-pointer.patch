@@ -1,0 +1,132 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+diff -urN apr-1.7.6.orig/atomic/win32/apr_atomic.c apr-1.7.6/atomic/win32/apr_atomic.c
+--- apr-1.7.6.orig/atomic/win32/apr_atomic.c	2026-05-26 21:26:31.176241303 +0200
++++ apr-1.7.6/atomic/win32/apr_atomic.c	2026-05-26 21:26:45.118841132 +0200
+@@ -23,11 +23,7 @@
+ 
+ APR_DECLARE(apr_uint32_t) apr_atomic_add32(volatile apr_uint32_t *mem, apr_uint32_t val)
+ {
+-#if (defined(_M_IA64) || defined(_M_AMD64))
+-    return InterlockedExchangeAdd(mem, val);
+-#else
+-    return InterlockedExchangeAdd((long *)mem, val);
+-#endif
++    return InterlockedExchangeAdd((long volatile *)mem, val);
+ }
+ 
+ /* Of course we want the 2's compliment of the unsigned value, val */
+@@ -37,39 +33,23 @@
+ 
+ APR_DECLARE(void) apr_atomic_sub32(volatile apr_uint32_t *mem, apr_uint32_t val)
+ {
+-#if (defined(_M_IA64) || defined(_M_AMD64))
+-    InterlockedExchangeAdd(mem, -val);
+-#else
+-    InterlockedExchangeAdd((long *)mem, -val);
+-#endif
++    InterlockedExchangeAdd((long volatile *)mem, -val);
+ }
+ 
+ APR_DECLARE(apr_uint32_t) apr_atomic_inc32(volatile apr_uint32_t *mem)
+ {
+     /* we return old value, win32 returns new value :( */
+-#if (defined(_M_IA64) || defined(_M_AMD64)) && !defined(RC_INVOKED)
+-    return InterlockedIncrement(mem) - 1;
+-#else
+-    return InterlockedIncrement((long *)mem) - 1;
+-#endif
++    return InterlockedIncrement((long volatile *)mem) - 1;
+ }
+ 
+ APR_DECLARE(int) apr_atomic_dec32(volatile apr_uint32_t *mem)
+ {
+-#if (defined(_M_IA64) || defined(_M_AMD64)) && !defined(RC_INVOKED)
+-    return InterlockedDecrement(mem);
+-#else
+-    return InterlockedDecrement((long *)mem);
+-#endif
++    return InterlockedDecrement((long volatile *)mem);
+ }
+ 
+ APR_DECLARE(void) apr_atomic_set32(volatile apr_uint32_t *mem, apr_uint32_t val)
+ {
+-#if (defined(_M_IA64) || defined(_M_AMD64)) && !defined(RC_INVOKED)
+-    InterlockedExchange(mem, val);
+-#else
+-    InterlockedExchange((long*)mem, val);
+-#endif
++    InterlockedExchange((long volatile *)mem, val);
+ }
+ 
+ APR_DECLARE(apr_uint32_t) apr_atomic_read32(volatile apr_uint32_t *mem)
+@@ -80,11 +60,7 @@
+ APR_DECLARE(apr_uint32_t) apr_atomic_cas32(volatile apr_uint32_t *mem, apr_uint32_t with,
+                                            apr_uint32_t cmp)
+ {
+-#if (defined(_M_IA64) || defined(_M_AMD64)) && !defined(RC_INVOKED)
+-    return InterlockedCompareExchange(mem, with, cmp);
+-#else
+-    return InterlockedCompareExchange((long*)mem, with, cmp);
+-#endif
++    return InterlockedCompareExchange((long volatile *)mem, with, cmp);
+ }
+ 
+ APR_DECLARE(void *) apr_atomic_casptr(volatile void **mem, void *with, const void *cmp)
+@@ -98,11 +74,7 @@
+ 
+ APR_DECLARE(apr_uint32_t) apr_atomic_xchg32(volatile apr_uint32_t *mem, apr_uint32_t val)
+ {
+-#if (defined(_M_IA64) || defined(_M_AMD64)) && !defined(RC_INVOKED)
+-    return InterlockedExchange(mem, val);
+-#else
+-    return InterlockedExchange((long *)mem, val);
+-#endif
++    return InterlockedExchange((long volatile *)mem, val);
+ }
+ 
+ APR_DECLARE(void*) apr_atomic_xchgptr(volatile void **mem, void *with)
+diff -urN apr-1.7.6.orig/misc/win32/misc.c apr-1.7.6/misc/win32/misc.c
+--- apr-1.7.6.orig/misc/win32/misc.c	2026-05-26 21:26:31.176317291 +0200
++++ apr-1.7.6/misc/win32/misc.c	2026-05-26 21:26:42.571123034 +0200
+@@ -188,7 +188,7 @@
+ 
+         dll_handle = LoadLibrary(dll->dll_name);
+ 
+-        cached_dll_handle = InterlockedCompareExchangePointer(&dll->dll_handle,
++        cached_dll_handle = InterlockedCompareExchangePointer((void * volatile *)&dll->dll_handle,
+                                                               dll_handle,
+                                                               INVALID_HANDLE_VALUE);
+         if (cached_dll_handle == INVALID_HANDLE_VALUE) {
+diff -urN apr-1.7.6.orig/misc/win32/start.c apr-1.7.6/misc/win32/start.c
+--- apr-1.7.6.orig/misc/win32/start.c	2026-05-26 21:26:31.176342783 +0200
++++ apr-1.7.6/misc/win32/start.c	2026-05-26 21:26:42.571344642 +0200
+@@ -69,8 +69,8 @@
+ 
+     assert(newlen && !wsize);
+ 
+-    *retarr = env = apr_malloc_dbg((args + 1) * sizeof(char*),
+-                                   __FILE__, __LINE__);
++    *retarr = (const char * const *)(env = apr_malloc_dbg((args + 1) * sizeof(char*),
++                                   __FILE__, __LINE__));
+     for (arg = 0; arg < args; ++arg) {
+         char* p = pstrs;
+         int len = 0;
+@@ -126,13 +126,13 @@
+         if (sysstr) {
+             wstrs = CommandLineToArgvW(sysstr, &wstrc);
+             if (wstrs) {
+-                *argc = apr_wastrtoastr(argv, wstrs, wstrc);
++                *argc = apr_wastrtoastr(argv, (const wchar_t * const *)wstrs, wstrc);
+                 GlobalFree(wstrs);
+             }
+         }
+ 
+         sysstr = GetEnvironmentStringsW();
+-        dupenv = warrsztoastr(&_environ, sysstr);
++        dupenv = warrsztoastr((const char * const * *)&_environ, sysstr);
+ 
+         if (env) {
+             *env = apr_malloc_dbg((dupenv + 1) * sizeof (char *),

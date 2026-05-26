@@ -30,7 +30,7 @@ define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS) \
         CPPFLAGS='-D_WIN32_WINNT=0x0601 -DWIN32' \
-        CFLAGS='$(CFLAGS) -Wno-error=incompatible-pointer-types' \
+        CFLAGS='$(CFLAGS)' \
         ac_cv_sizeof_off_t=4 \
         ac_cv_sizeof_pid_t=4 \
         ac_cv_sizeof_size_t=4 \
