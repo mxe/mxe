@@ -3,7 +3,7 @@ This file is part of MXE. See LICENSE.md for licensing information.
 Contains ad hoc patches for cross building.
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: MXE
+From: Marco Borrini <borrinimarco74@gmail.com>
 Date: Tue, 26 May 2026 09:00:00 +0200
 Subject: [PATCH 1/1] Do not redefine inline
 
