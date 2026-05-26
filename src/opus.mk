@@ -3,20 +3,17 @@
 PKG             := opus
 $(PKG)_WEBSITE  := https://opus-codec.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.3.1
-$(PKG)_CHECKSUM := 65b58e1e25b2a114157014736a3d9dfeaad8d41be1c8179866f144a2fb44ff9d
+$(PKG)_VERSION  := 1.6.1
+$(PKG)_CHECKSUM := 6ffcb593207be92584df15b32466ed64bbec99109f007c82205f0194572411a1
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://archive.mozilla.org/pub/$(PKG)/$($(PKG)_FILE)
+$(PKG)_URL      := https://downloads.xiph.org/releases/opus/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://archive.mozilla.org/pub/opus/?C=M;O=D' | \
-    $(SED) -n 's,.*opus-\([0-9][^>]*\)\.tar.*,\1,p' | \
-    grep -v 'alpha' | \
-    grep -v 'beta' | \
-    grep -v 'rc' | \
-    $(SORT) -Vr | \
+    $(WGET) -q -O- 'https://api.github.com/repos/xiph/opus/tags' | \
+    grep 'name' | \
+    $(SED) -n 's,.*"v\([0-9.]*\)".*,\1,p' | \
     head -1
 endef
 
