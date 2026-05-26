@@ -34,7 +34,6 @@ define $(PKG)_BUILD_COMMON
         $(MXE_CONFIGURE_OPTS) \
         --with-cross-build='$(PREFIX)/$(BUILD)/$(PKG)' \
         --enable-icu-config=no \
-        CXXFLAGS='--std=gnu++0x' \
         SHELL=$(SHELL) \
         LIBS='-lstdc++' \
         $($(PKG)_CONFIGURE_OPTS)
@@ -47,7 +46,7 @@ define $(PKG)_BUILD_TEST
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
-        `'$(TARGET)-pkg-config' icu-uc icu-io --cflags --libs`
+        `'$(TARGET)-pkg-config' icu-uc icu-i18n icu-io --cflags --libs`
 endef
 
 define $(PKG)_BUILD
