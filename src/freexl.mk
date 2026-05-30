@@ -4,12 +4,12 @@ PKG             := freexl
 $(PKG)_WEBSITE  := https://www.gaia-gis.it/fossil/freexl/index
 $(PKG)_DESCR    := FreeXL
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.0.5
-$(PKG)_CHECKSUM := 3dc9b150d218b0e280a3d6a41d93c1e45f4d7155829d75f1e5bf3e0b0de6750d
+$(PKG)_VERSION  := 2.0.0
+$(PKG)_CHECKSUM := 176705f1de58ab7c1eebbf5c6de46ab76fcd8b856508dbd28f5648f7c6e1a7f0
 $(PKG)_SUBDIR   := freexl-$($(PKG)_VERSION)
 $(PKG)_FILE     := freexl-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://www.gaia-gis.it/gaia-sins/freexl-sources/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc libiconv
+$(PKG)_DEPS     := cc expat libiconv minizip
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://www.gaia-gis.it/gaia-sins/freexl-sources/' | \
@@ -19,7 +19,8 @@ endef
 
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
-        $(MXE_CONFIGURE_OPTS)
+        $(MXE_CONFIGURE_OPTS) \
+        LIBS="`'$(TARGET)-pkg-config' --libs minizip`"
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(MXE_DISABLE_PROGRAMS)
     $(MAKE) -C '$(BUILD_DIR)' -j 1 $(INSTALL_STRIP_LIB)
 
