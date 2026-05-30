@@ -1,16 +1,16 @@
+# CHECKED #
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := ncurses
 $(PKG)_WEBSITE  := https://www.gnu.org/software/ncurses/
 $(PKG)_DESCR    := Ncurses
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := fe7c48d
-$(PKG)_CHECKSUM := 79748d95d231a57c7dbb0e3537afeb11187427589584ac8551049f513889cb57
-$(PKG)_GH_CONF  := mirror/ncurses/branches/master
-# $(PKG)_VERSION  := 5.9
-# $(PKG)_SUBDIR   := ncurses-$($(PKG)_VERSION)
-# $(PKG)_FILE     := ncurses-$($(PKG)_VERSION).tar.gz
-# $(PKG)_URL      := https://ftp.gnu.org/gnu/ncurses/$($(PKG)_FILE)
+$(PKG)_VERSION  := 6.6
+$(PKG)_CHECKSUM := 355b4cbbed880b0381a04c46617b7656e362585d52e9cf84a67e2009b749ff11
+# $(PKG)_GH_CONF  := mirror/ncurses/branches/master
+$(PKG)_SUBDIR   := ncurses-$($(PKG)_VERSION)
+$(PKG)_FILE     := ncurses-$($(PKG)_VERSION).tar.gz
+$(PKG)_URL      := https://ftp.gnu.org/gnu/ncurses/$($(PKG)_FILE)
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 $(PKG)_DEPS     := cc libgnurx $(BUILD)~$(PKG)
 

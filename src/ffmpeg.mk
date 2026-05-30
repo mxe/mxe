@@ -1,16 +1,17 @@
+# CHECKED #
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := ffmpeg
 $(PKG)_WEBSITE  := https://ffmpeg.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 7.1.1
-$(PKG)_CHECKSUM := 733984395e0dbbe5c046abda2dc49a5544e7e0e1e2366bba849222ae9e3a03b1
+$(PKG)_VERSION  := 8.1.1
+$(PKG)_CHECKSUM := b6863adde98898f42602017462871b5f6333e65aec803fdd7a6308639c52edf3
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://ffmpeg.org/releases/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc bzip2 gnutls lame libass libbluray libbs2b libcaca \
                    libvpx opencore-amr opus sdl2 speex theora vidstab \
-                   vo-amrwbenc vorbis x264 x265 xvidcore yasm zlib
+                   vo-amrwbenc vorbis x264 x265 xvidcore $(BUILD)~nasm zlib
 
 # DO NOT ADD fdk-aac OR openssl SUPPORT.
 # Although they are free softwares, their licenses are not compatible with
@@ -35,7 +36,7 @@ define $(PKG)_BUILD
         $(if $(BUILD_STATIC), \
             --enable-static --disable-shared , \
             --disable-static --enable-shared ) \
-        --yasmexe='$(TARGET)-yasm' \
+        --x86asmexe='$(PREFIX)/$(BUILD)/bin/nasm' \
         --disable-debug \
         --disable-pthreads \
         --enable-w32threads \

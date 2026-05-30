@@ -1,10 +1,11 @@
+# CHECKED #
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := gst-plugins-bad
 $(PKG)_WEBSITE  := https://gstreamer.freedesktop.org/modules/gst-plugins-bad.html
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.20.3
-$(PKG)_CHECKSUM := 7a11c13b55dd1d2386dd902219e41cbfcdda8e1e0aa3e738186c95074b35da4f
+$(PKG)_VERSION  := 1.28.3
+$(PKG)_CHECKSUM := 4213f43ddb875bb141e5040e97735579d74665bec3d17b51052aade395b83f00
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://gstreamer.freedesktop.org/src/$(PKG)/$($(PKG)_FILE)
@@ -24,6 +25,7 @@ define $(PKG)_BUILD
         -Dintrospection=disabled \
         -Ddoc=disabled \
         -Dd3d11=disabled \
+        -Dhip=disabled \
         $(PKG_MESON_OPTS) \
         '$(BUILD_DIR)' '$(SOURCE_DIR)'
     '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)'

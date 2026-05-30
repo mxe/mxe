@@ -2,7 +2,7 @@
  * This file is part of MXE. See LICENSE.md for licensing information.
  */
 
-#include <modplug.h>
+#include <libmodplug/modplug.h>
 
 int main(int argc, char *argv[])
 {

@@ -5,11 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <hdf5.h>
-#if H5_VERS_MINOR > 6
-  #include <hdf5_hl.h>
-#else
-  #include <H5TA.h>
-#endif
+#include <hdf5_hl.h>
 
 /*
 #include <cmath>

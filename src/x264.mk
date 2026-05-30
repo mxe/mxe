@@ -1,10 +1,11 @@
+# CHECKED #
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := x264
 $(PKG)_WEBSITE  := https://www.videolan.org/developers/x264.html
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := b35605ace3ddf7c1a5d67a2eb553f034aef41d55
-$(PKG)_CHECKSUM := 6eeb82934e69fd51e043bd8c5b0d152839638d1ce7aa4eea65a3fedcf83ff224
+$(PKG)_VERSION  := 0480cb05fa188d37ae87e8f4fd8f1aea3711f7ee
+$(PKG)_CHECKSUM := f05c59f2e83d494c36307025dca2d3afc6b4d185f3a3453d06cc4fecd7094057
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://code.videolan.org/videolan/x264/-/archive/$($(PKG)_VERSION)/$($(PKG)_FILE)

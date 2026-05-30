@@ -1,14 +1,15 @@
+# CHECKED #
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libbluray
 $(PKG)_WEBSITE  := https://www.videolan.org/developers/libbluray.html
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.3.4
-$(PKG)_CHECKSUM := 478ffd68a0f5dde8ef6ca989b7f035b5a0a22c599142e5cd3ff7b03bbebe5f2b
+$(PKG)_VERSION  := 1.4.1
+$(PKG)_CHECKSUM := 76b5dc40097f28dca4ebb009c98ed51321b2927453f75cc72cf74acd09b9f449
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $($(PKG)_SUBDIR).tar.bz2
+$(PKG)_FILE     := $($(PKG)_SUBDIR).tar.xz
 $(PKG)_URL      := https://download.videolan.org/pub/videolan/libbluray/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc freetype libxml2
+$(PKG)_DEPS     := cc meson-wrapper freetype libudfread libxml2
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://download.videolan.org/pub/videolan/libbluray/' | \
@@ -18,15 +19,14 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && ./configure \
-        $(MXE_CONFIGURE_OPTS) \
-        --disable-examples \
-        --with-freetype \
-        --with-libxml2 \
-        --disable-bdjava-jar \
-        --disable-bdjava
-    $(MAKE) -C '$(1)' -j '$(JOBS)' LDFLAGS='-no-undefined'
-    $(MAKE) -C '$(1)' -j 1 install
+    '$(MXE_MESON_WRAPPER)' $(MXE_MESON_OPTS) \
+        -Denable_examples=false \
+        -Dbdj_jar=disabled \
+        -Dfreetype=enabled \
+        -Dlibxml2=enabled \
+        '$(BUILD_DIR)' '$(SOURCE_DIR)'
+    '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)'
+    '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)' install
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror \

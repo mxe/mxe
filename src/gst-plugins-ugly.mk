@@ -1,10 +1,11 @@
+# CHECKED #
 #This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := gst-plugins-ugly
 $(PKG)_WEBSITE  := https://gstreamer.freedesktop.org/modules/gst-plugins-ugly.html
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.20.1
-$(PKG)_CHECKSUM := 42035145e29983308d2828207bb4ef933ed0407bb587fb3a569738c6a57fdb19
+$(PKG)_VERSION  := 1.28.3
+$(PKG)_CHECKSUM := 0c04763200467b9b61a916b33646a6916a97cc9869d8b6dca57427b1f2734dee
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://gstreamer.freedesktop.org/src/$(PKG)/$($(PKG)_FILE)

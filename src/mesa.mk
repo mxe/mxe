@@ -1,10 +1,11 @@
+# CHECKED #
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := mesa
 $(PKG)_WEBSITE  := https://mesa3d.org
 $(PKG)_DESCR    := The Mesa 3D Graphics Library
-$(PKG)_VERSION  := 23.1.7
-$(PKG)_CHECKSUM := 409641eadf0ed1c7794797a6f5a0b0195b5580b282166e5ec5629c6bcda6acd3
+$(PKG)_VERSION  := 26.1.1
+$(PKG)_CHECKSUM := 8bd36c031cc6d0edfec04617527609454ee3a09ad53bdf983b45fc2c1e129b2e
 $(PKG)_SUBDIR   := mesa-$($(PKG)_VERSION)
 $(PKG)_FILE     := mesa-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://archive.mesa3d.org/$($(PKG)_FILE)
@@ -17,6 +18,7 @@ endef
 define $(PKG)_BUILD
     '$(MXE_MESON_WRAPPER)' $(MXE_MESON_OPTS) \
         -Dllvm=false \
+        -Dgallium-drivers=softpipe \
         -Dbuild-tests=false \
         $(PKG_MESON_OPTS) \
         '$(BUILD_DIR)' '$(SOURCE_DIR)'

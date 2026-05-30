@@ -1,19 +1,22 @@
+# CHECKED #
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := x265
 $(PKG)_WEBSITE  := http://x265.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.1
-$(PKG)_CHECKSUM := a31699c6a89806b74b0151e5e6a7df65de4b49050482fe5ebf8a4379d7af8f29
+$(PKG)_VERSION  := 4.2
+$(PKG)_CHECKSUM := 40b1ea0453e0309f0eba934e0ddf533f8f6295966679e8894e8f1c1c8d5e1210
 $(PKG)_SUBDIR   := x265_$($(PKG)_VERSION)
 $(PKG)_FILE     := x265_$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://bitbucket.org/multicoreware/x265_git/downloads/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc $(BUILD)~nasm
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- https://ftp.videolan.org/pub/videolan/x265/ | \
-    $(SED) -n 's,.*">x265_\([0-9][^<]*\)\.t.*,\1,p' | \
-    tail -1
+    git ls-remote --tags https://bitbucket.org/multicoreware/x265_git.git | \
+    $(SED) -n 's,.*refs/tags/\([0-9][^{]*\).*,\1,p' | \
+    grep -v '\^' | \
+    $(SORT) -Vr | \
+    head -1
 endef
 
 # note: assembly for i686 targets is not officially supported

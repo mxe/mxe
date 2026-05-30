@@ -1,13 +1,14 @@
+# CHECKED #
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := mpc
 $(PKG)_WEBSITE  := http://www.multiprecision.org/
 $(PKG)_DESCR    := GNU MPC
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.3.1
-$(PKG)_CHECKSUM := ab642492f5cf882b74aa0cb730cd410a81edcdbec895183ce930e706c1c759b8
+$(PKG)_VERSION  := 1.4.1
+$(PKG)_CHECKSUM := 91204cd32f164bd3b7c992d4a6a8ce6519511aadab30f78b6982d0bf8d73e931
 $(PKG)_SUBDIR   := mpc-$($(PKG)_VERSION)
-$(PKG)_FILE     := mpc-$($(PKG)_VERSION).tar.gz
+$(PKG)_FILE     := mpc-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://ftp.gnu.org/gnu/mpc/$($(PKG)_FILE)
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 $(PKG)_DEPS     := cc gmp mpfr

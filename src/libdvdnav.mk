@@ -1,12 +1,13 @@
+# CHECKED #
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := libdvdnav
 $(PKG)_WEBSITE  := https://www.videolan.org/developers/libdvdnav.html
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 6.0.0
-$(PKG)_CHECKSUM := f0a2711b08a021759792f8eb14bb82ff8a3c929bf88c33b64ffcddaa27935618
+$(PKG)_VERSION  := 7.0.0
+$(PKG)_CHECKSUM := a2a18f5ad36d133c74bf9106b6445806fa253b09141a46392550394b647b221e
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
+$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.videolan.org/pub/videolan/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc libdvdread
 
@@ -19,9 +20,11 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    # build and install the library
-    cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
-        $(MXE_CONFIGURE_OPTS)
-    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' LDFLAGS=-no-undefined
-    $(MAKE) -C '$(BUILD_DIR)' -j 1 install LDFLAGS=-no-undefined
+    '$(MXE_MESON_WRAPPER)' $(MXE_MESON_OPTS) \
+        -Denable_docs=false \
+        -Denable_examples=false \
+        $(PKG_MESON_OPTS) \
+        '$(BUILD_DIR)' '$(SOURCE_DIR)'
+    '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)'
+    '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)' install
 endef

@@ -1,3 +1,4 @@
+# CHECKED #
 This file is part of MXE. See LICENSE.md for licensing information.
 
 Contains ad hoc patches for cross building.
@@ -5,7 +6,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Mon, 14 Dec 2020 15:09:00 +1100
-Subject: [PATCH 1/2] optionally build docs
+Subject: [PATCH 1/3] optionally build docs
 
 
 diff --git a/cmake/QtBaseHelpers.cmake b/cmake/QtBaseHelpers.cmake
@@ -27,7 +28,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Mon, 14 Feb 2022 00:44:19 +0100
-Subject: [PATCH 2/2] help openssl detection
+Subject: [PATCH 2/3] help openssl detection
 
 
 diff --git a/cmake/FindWrapOpenSSL.cmake b/cmake/FindWrapOpenSSL.cmake
@@ -43,3 +44,50 @@ index 1111111..2222222 100644
          unset(libType)
          unset(writableLib)
      endif()
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Marco Borrini <borrinimarco74@gmail.com>
+Date: Sat, 30 May 2026 12:00:00 +0200
+Subject: [PATCH 3/3] fix opaque ASN1_INTEGER and ASN1_OCTET_STRING access in openssl backend
+
+diff --git a/src/plugins/tls/openssl/qx509_openssl.cpp b/src/plugins/tls/openssl/qx509_openssl.cpp
+index 1111111..2222222 100644
+--- a/src/plugins/tls/openssl/qx509_openssl.cpp
++++ b/src/plugins/tls/openssl/qx509_openssl.cpp
+@@ -331,8 +331,8 @@ QVariant QTlsPrivate::X509CertificateOpenSSL::extensionValue(const QSslCertifica
+ 
+             // keyid
+             if (auth_key->keyid) {
+-                QByteArray keyid(reinterpret_cast<const char *>(auth_key->keyid->data),
+-                                 auth_key->keyid->length);
++                QByteArray keyid(reinterpret_cast<const char *>(q_ASN1_STRING_get0_data(auth_key->keyid)),
++                                 q_ASN1_STRING_length(auth_key->keyid));
+                 result["keyid"_L1] = keyid.toHex();
+             }
+ 
+@@ -465,10 +465,10 @@ QMultiMap<QSsl::AlternativeNameEntryType, QString> QTlsPrivate::X509CertificateO
+             QHostAddress ipAddress;
+             switch (len) {
+             case 4: // IPv4
+-                ipAddress = QHostAddress(qFromBigEndian(*reinterpret_cast<quint32 *>(genName->d.iPAddress->data)));
++                ipAddress = QHostAddress(qFromBigEndian(*reinterpret_cast<const quint32 *>(q_ASN1_STRING_get0_data(genName->d.iPAddress))));
+                 break;
+             case 16: // IPv6
+-                ipAddress = QHostAddress(reinterpret_cast<quint8 *>(genName->d.iPAddress->data));
++                ipAddress = QHostAddress(reinterpret_cast<const quint8 *>(q_ASN1_STRING_get0_data(genName->d.iPAddress)));
+                 break;
+             default: // Unknown IP address format
+                 break;
+@@ -562,9 +562,9 @@ void q_X509_free(X509 *a)
+ 
+     if (ASN1_INTEGER *serialNumber = q_X509_get_serialNumber(x509)) {
+         QByteArray hexString;
+-        hexString.reserve(serialNumber->length * 3);
+-        for (int a = 0; a < serialNumber->length; ++a) {
+-            hexString += QByteArray::number(serialNumber->data[a], 16).rightJustified(2, '0');
++        hexString.reserve(q_ASN1_STRING_length(serialNumber) * 3);
++        for (int a = 0; a < q_ASN1_STRING_length(serialNumber); ++a) {
++            hexString += QByteArray::number(q_ASN1_STRING_get0_data(serialNumber)[a], 16).rightJustified(2, '0');
+             hexString += ':';
+         }
+         hexString.chop(1);

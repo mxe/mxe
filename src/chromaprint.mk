@@ -1,11 +1,12 @@
+# CHECKED #
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := chromaprint
 $(PKG)_WEBSITE  := https://acoustid.org/chromaprint
 $(PKG)_DESCR    := Chromaprint
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.5.1
-$(PKG)_CHECKSUM := a1aad8fa3b8b18b78d3755b3767faff9abb67242e01b478ec9a64e190f335e1c
+$(PKG)_VERSION  := 1.6.0
+$(PKG)_CHECKSUM := 65bfce4a35b2e673dbcda917b6aa577e2f145cf805243d19e6a50fea2a520c2a
 $(PKG)_GH_CONF  := acoustid/chromaprint/tags, v
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz

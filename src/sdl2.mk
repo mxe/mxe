@@ -1,14 +1,21 @@
+# CHECKED #
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := sdl2
 $(PKG)_WEBSITE  := https://www.libsdl.org/
 $(PKG)_DESCR    := SDL2
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.26.2
+$(PKG)_VERSION  := 2.32.10
 $(PKG)_SUBDIR   := SDL2-$($(PKG)_VERSION)
 $(PKG)_FILE     := SDL2-$($(PKG)_VERSION).tar.gz
-$(PKG)_CHECKSUM := 95d39bc3de037fbdfa722623737340648de4f180a601b0afad27645d150b99e0
+$(PKG)_CHECKSUM := 5f5993c530f084535c65a6879e9b26ad441169b3e25d789d83287040a9ca5165
 $(PKG)_GH_CONF  := libsdl-org/SDL/releases/tag,release-,,
+define $(PKG)_UPDATE
+    $(WGET) -q -O- 'https://api.github.com/repos/libsdl-org/SDL/releases' | \
+    $(SED) -n 's,.*"tag_name": "release-\(2\.[0-9][^"]*\)".*,\1,p' | \
+    $(SORT) -Vr | \
+    head -1
+endef
 $(PKG)_DEPS     := cc libiconv libsamplerate
 
 define $(PKG)_BUILD

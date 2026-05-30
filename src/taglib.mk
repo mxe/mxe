@@ -1,12 +1,13 @@
+# CHECKED #
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := taglib
 $(PKG)_WEBSITE  := https://taglib.org/
 $(PKG)_DESCR    := TagLib
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.12
-$(PKG)_CHECKSUM := b5a56f78a8bd962aaaec992b25a031f541b949b6eb30aa232bd6d5fa17cf8fa8
-$(PKG)_GH_CONF  := taglib/taglib/tags, v
+$(PKG)_VERSION  := 2.3
+$(PKG)_CHECKSUM := 7349f6fd942418bc7009ebe743eb7c9d055f02921ec56fa436ec25007c47fd38
+$(PKG)_GH_CONF  := taglib/taglib/releases, v
 $(PKG)_DEPS     := cc zlib
 
 define $(PKG)_BUILD

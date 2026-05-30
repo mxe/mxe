@@ -1,11 +1,12 @@
+# CHECKED #
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := vidstab
 $(PKG)_WEBSITE  := http://public.hronopik.de/vid.stab/features.php?lang=en
 $(PKG)_DESCR    := vid.stab video stablizer
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.1.0
-$(PKG)_CHECKSUM := 14d2a053e56edad4f397be0cb3ef8eb1ec3150404ce99a426c4eb641861dc0bb
+$(PKG)_VERSION  := 1.1.1
+$(PKG)_CHECKSUM := 9001b6df73933555e56deac19a0f225aae152abbc0e97dc70034814a1943f3d4
 $(PKG)_GH_CONF  := georgmartius/vid.stab/tags,v
 $(PKG)_DEPS     := cc
 

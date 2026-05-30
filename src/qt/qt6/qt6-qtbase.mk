@@ -1,3 +1,4 @@
+# CHECKED #
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG_BASENAME    := qtbase
@@ -31,6 +32,7 @@ define $(PKG)_BUILD
     PKG_CONFIG_SYSROOT_DIR="/" \
     PKG_CONFIG_LIBDIR="$(PREFIX)/$(TARGET)/lib/pkgconfig" \
     '$(TARGET)-cmake' -S '$(SOURCE_DIR)' -B '$(BUILD_DIR)' \
+        -DCMAKE_CXX_FLAGS='-fpermissive' \
         -G Ninja \
         -DCMAKE_INSTALL_PREFIX='$(PREFIX)/$(TARGET)/$(MXE_QT6_ID)' \
         -DQT_HOST_PATH='$(PREFIX)/$(BUILD)/$(MXE_QT6_ID)' \

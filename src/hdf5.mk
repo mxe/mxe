@@ -1,20 +1,14 @@
+# CHECKED #
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := hdf5
 $(PKG)_WEBSITE  := https://www.hdfgroup.org/hdf5/
 $(PKG)_DESCR    := HDF5
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.14.6
-$(PKG)_CHECKSUM := e4defbac30f50d64e1556374aa49e574417c9e72c6b1de7a4ff88c4b1bea6e9b
-$(PKG)_SUBDIR   := hdf5-$($(PKG)_VERSION)
-$(PKG)_FILE     := hdf5-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://github.com/HDFGroup/hdf5/releases/download/hdf5_$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_VERSION  := 2.1.1
+$(PKG)_CHECKSUM := 5849ed7a81be6bc84ff8aa65dd966430adf0daf71e6bcb734b7a37474f92c859
+$(PKG)_GH_CONF  := HDFGroup/hdf5/releases/latest
 $(PKG)_DEPS     := cc pthreads zlib
-
-define $(PKG)_UPDATE
-    echo 'TODO: write update script for $(PKG).' >&2;
-    echo $($(PKG)_VERSION)
-endef
 
 define $(PKG)_BUILD
     mkdir '$(1)/.build'
