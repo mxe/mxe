@@ -1,0 +1,13 @@
+--- a/src/sound-theme-spec.c
++++ b/src/sound-theme-spec.c
+@@ -34,6 +34,10 @@
+ #include "llist.h"
+ #include "cache.h"
+ 
++#ifndef LC_MESSAGES
++#define LC_MESSAGES LC_ALL
++#endif
++
+ #define DEFAULT_THEME "freedesktop"
+ #define FALLBACK_THEME "freedesktop"
+ #define DEFAULT_OUTPUT_PROFILE "stereo"

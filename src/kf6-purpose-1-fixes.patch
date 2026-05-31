@@ -1,0 +1,48 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Sun, 31 May 2026 10:00:00 +0200
+Subject: [PATCH 1/1] Link Qt6::DBus for plugins
+
+When USE_DBUS is ON, youtubeplugin and nextcloudplugin require
+QDBusConnection but don't explicitly link against Qt6::DBus.
+On UNIX it's inherited from KIO, but on Windows KIO doesn't link DBus.
+
+---
+ src/plugins/nextcloud/CMakeLists.txt | 4 ++++
+ src/plugins/youtube/CMakeLists.txt | 4 ++++
+ 2 files changed, 8 insertions(+)
+
+diff --git a/src/plugins/nextcloud/CMakeLists.txt b/src/plugins/nextcloud/CMakeLists.txt
+index 1234567..89abcdef 100644
+--- a/src/plugins/nextcloud/CMakeLists.txt
++++ b/src/plugins/nextcloud/CMakeLists.txt
+@@ -6,6 +6,10 @@
+ add_share_plugin(nextcloudplugin nextcloudplugin.cpp nextcloudjob.cpp)
+ target_link_libraries(nextcloudplugin KF6::KIOCore KF6::I18n KF6::Purpose)
+ 
++if(USE_DBUS)
++    target_link_libraries(nextcloudplugin Qt6::DBus)
++endif()
++
+ if (KAccounts6_FOUND)
+     target_compile_definitions(nextcloudplugin PRIVATE -DHAVE_KACCOUNTS=1)
+     target_link_libraries(nextcloudplugin KAccounts6)
+diff --git a/src/plugins/youtube/CMakeLists.txt b/src/plugins/youtube/CMakeLists.txt
+index 1234567..89abcdef 100644
+--- a/src/plugins/youtube/CMakeLists.txt
++++ b/src/plugins/youtube/CMakeLists.txt
+@@ -6,6 +6,10 @@
+ add_share_plugin(youtubeplugin youtubeplugin.cpp youtubejob.cpp youtubejobcomposite.cpp)
+ target_link_libraries(youtubeplugin KF6::WidgetsAddons KF6::KIOCore Qt6::Network KF6::I18n KF6::Purpose)
+ 
++if(USE_DBUS)
++    target_link_libraries(youtubeplugin Qt6::DBus)
++endif()
++
+ if (KAccounts6_FOUND)
+     target_compile_definitions(youtubeplugin PRIVATE -DHAVE_KACCOUNTS=1)
+     target_link_libraries(youtubeplugin KAccounts6)

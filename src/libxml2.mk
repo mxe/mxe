@@ -11,7 +11,20 @@ $(PKG)_FILE     := libxml2-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.gnome.org/sources/libxml2/2.14/$($(PKG)_FILE)
 $(PKG)_URL_2    := https://ftp.osuosl.org/pub/blfs/conglomeration/libxml2/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc libiconv xz zlib
+$(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
+$(PKG)_DEPS_$(BUILD) := zlib libiconv
 
+define $(PKG)_BUILD_$(BUILD)
+    cd '$(1)' && ./configure \
+        $(MXE_CONFIGURE_OPTS) \
+        --without-debug \
+        --without-python \
+        --without-threads \
+        --without-zlib \
+        --without-lzma
+    $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= CFLAGS='-O2 -fPIC' CXXFLAGS='-O2 -fPIC'
+    $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= CFLAGS='-O2 -fPIC' CXXFLAGS='-O2 -fPIC'
+endef
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://gitlab.gnome.org/GNOME/libxml2/tags' | \
     $(SED) -n "s,.*<a [^>]\+>v\([0-9,\.]\+\)<.*,\\1,p" | \

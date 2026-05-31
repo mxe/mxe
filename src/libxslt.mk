@@ -9,7 +9,20 @@ $(PKG)_SUBDIR   := libxslt-$($(PKG)_VERSION)
 $(PKG)_FILE     := libxslt-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.gnome.org/sources/libxslt/1.1/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc libgcrypt libxml2
+$(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
+$(PKG)_DEPS_$(BUILD) := libxml2
 
+define $(PKG)_BUILD_$(BUILD)
+    cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
+        $(MXE_CONFIGURE_OPTS) \
+        --without-debug \
+        --with-libxml-prefix='$(PREFIX)/$(TARGET)' \
+        --without-python \
+        --without-crypto \
+        --without-plugins
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= CFLAGS='-O2 -fPIC' CXXFLAGS='-O2 -fPIC'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= CFLAGS='-O2 -fPIC' CXXFLAGS='-O2 -fPIC'
+endef
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://gitlab.gnome.org/GNOME/libxslt/tags' | \
     $(SED) -n "s,.*<a [^>]\+>v\([0-9,\.]\+\)<.*,\\1,p" | \

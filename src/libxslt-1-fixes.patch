@@ -12,12 +12,16 @@ diff --git a/libxslt/security.c b/libxslt/security.c
 index 1111111..2222222 100644
 --- a/libxslt/security.c
 +++ b/libxslt/security.c
-@@ -327,7 +327,7 @@ xsltCheckWritePath(xsltSecurityPrefsPtr sec,
+@@ -327,7 +327,11 @@ xsltCheckWritePath(xsltSecurityPrefsPtr sec,
  	    }
  	    ret = xsltCheckWritePath(sec, ctxt, directory);
  	    if (ret == 1)
 -		ret = mkdir(directory, 0755);
++#if defined(_WIN32) || defined(__MINGW32__)
 +		ret = _mkdir(directory);
++#else
++		ret = mkdir(directory, 0755);
++#endif
  	}
  	xmlFree(directory);
  	if (ret < 0)

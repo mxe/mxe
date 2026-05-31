@@ -12,7 +12,8 @@ $(PKG)_DEPS     := cc
 define $(PKG)_BUILD
     # build and install the library
     cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \
-        -DBUILD_TESTS=OFF
+        -DBUILD_TESTS=OFF \
+        -DCMAKE_POLICY_VERSION_MINIMUM=3.5
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 

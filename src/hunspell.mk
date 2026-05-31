@@ -8,6 +8,8 @@ $(PKG)_VERSION  := 1.7.2
 $(PKG)_CHECKSUM := 69fa312d3586c988789266eaf7ffc9861d9f6396c31fc930a014d551b59bbd6e
 $(PKG)_GH_CONF  := hunspell/hunspell/tags, v
 $(PKG)_DEPS     := cc gettext libiconv pthreads readline
+$(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
+$(PKG)_DEPS_$(BUILD) :=
 
 define $(PKG)_BUILD
     # Note: the configure file doesn't pick up pdcurses, so "ui" is disabled
@@ -26,4 +28,17 @@ define $(PKG)_BUILD
         $(if $(BUILD_STATIC), -DHUNSPELL_STATIC) \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-hunspell.exe' \
         `'$(TARGET)-pkg-config' hunspell --cflags --libs`
+endef
+
+define $(PKG)_BUILD_$(BUILD)
+    cd '$(SOURCE_DIR)' && autoreconf -fi
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
+        $(MXE_CONFIGURE_OPTS) \
+        --with-warnings \
+        --without-ui \
+        --without-readline \
+        CFLAGS='-fPIC' \
+        CXXFLAGS='-fPIC'
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(MXE_DISABLE_CRUFT)
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install $(MXE_DISABLE_CRUFT)
 endef
