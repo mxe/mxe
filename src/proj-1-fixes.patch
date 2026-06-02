@@ -3,65 +3,50 @@ This file is part of MXE. See LICENSE.md for licensing information.
 Contains ad hoc patches for cross building.
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: brodieG <brodieG@users.noreply.github.com>
-Date: Sat, 21 Jan 2023 13:25:31 +0000
-Subject: [PATCH 1/2] add dependencies via pc file
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Sun, 31 May 2026 12:13:37 +0200
+Subject: [PATCH 1/2] fix output name for mingw
 
 
-diff --git a/proj.pc.in b/proj.pc.in
+diff --git a/src/lib_proj.cmake b/src/lib_proj.cmake
 index 1111111..2222222 100644
---- a/proj.pc.in
-+++ b/proj.pc.in
-@@ -8,7 +8,8 @@ datadir=@datadir@/@PACKAGE@
- Name: PROJ
- Description: Coordinate transformation software library
- Requires:
-+Requires.private: sqlite3 libtiff-4 libcurl
- Version: @VERSION@
- Libs: -L${libdir} -lproj
--Libs.private: @EXTRA_LIBS@
-+Libs.private: -lstdc++
- Cflags: -I${includedir}
+--- a/src/lib_proj.cmake
++++ b/src/lib_proj.cmake
+@@ -517,7 +517,7 @@ target_include_directories(proj INTERFACE
+   $<BUILD_INTERFACE:${PROJ_SOURCE_DIR}/include>
+   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+ 
+-if(WIN32)
++if(WIN32 AND NOT MINGW)
+     if (MINGW AND BUILD_SHARED_LIBS)
+         option(APPEND_SOVERSION "Whether to include shared object version as a suffix in the name of the PROJ shared library name." OFF)
+     endif()
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
-Date: Tue, 30 Sep 2025 23:58:05 +0200
-Subject: [PATCH 2/2] add missing header
+Date: Sun, 31 May 2026 13:13:16 +0200
+Subject: [PATCH 2/2] MXE hack: fix curl deps
 
 
-diff --git a/src/filemanager.cpp b/src/filemanager.cpp
+diff --git a/src/lib_proj.cmake b/src/lib_proj.cmake
 index 1111111..2222222 100644
---- a/src/filemanager.cpp
-+++ b/src/filemanager.cpp
-@@ -36,6 +36,7 @@
- #include <algorithm>
- #include <limits>
- #include <string>
-+#include <cstdint>
+--- a/src/lib_proj.cmake
++++ b/src/lib_proj.cmake
+@@ -608,14 +608,9 @@ endif()
  
- #include "filemanager.hpp"
- #include "proj.h"
-diff --git a/src/proj_json_streaming_writer.hpp b/src/proj_json_streaming_writer.hpp
-index 1111111..2222222 100644
---- a/src/proj_json_streaming_writer.hpp
-+++ b/src/proj_json_streaming_writer.hpp
-@@ -33,6 +33,7 @@
+ if(CURL_ENABLED)
+   target_compile_definitions(proj PRIVATE -DCURL_ENABLED)
+-  target_link_libraries(proj PRIVATE CURL::libcurl)
+-  target_link_libraries(proj
+-    PRIVATE
+-      $<$<CXX_COMPILER_ID:MSVC>:ws2_32>
+-      $<$<CXX_COMPILER_ID:MSVC>:wldap32>
+-      $<$<CXX_COMPILER_ID:MSVC>:advapi32>
+-      $<$<CXX_COMPILER_ID:MSVC>:crypt32>
+-      $<$<CXX_COMPILER_ID:MSVC>:normaliz>)
++  set(MXE_CURL_LIBS "" CACHE STRING "mxe curl libs")
++  print_variable(MXE_CURL_LIBS)
++  target_link_libraries(proj PRIVATE ${MXE_CURL_LIBS})
+ endif()
  
- #include <vector>
- #include <string>
-+#include <cstdint>
- 
- #define CPL_DLL
- 
-diff --git a/src/projections/s2.cpp b/src/projections/s2.cpp
-index 1111111..2222222 100644
---- a/src/projections/s2.cpp
-+++ b/src/projections/s2.cpp
-@@ -52,6 +52,7 @@
- 
- #include <errno.h>
- #include <cmath>
-+#include <cstdint>
- 
- #include "proj.h"
- #include "proj_internal.h"
+ if(EMSCRIPTEN_FETCH_ENABLED)
