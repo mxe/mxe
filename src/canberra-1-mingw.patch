@@ -1,3 +1,4 @@
+# CHECKED #
 --- a/src/sound-theme-spec.c
 +++ b/src/sound-theme-spec.c
 @@ -34,6 +34,10 @@
