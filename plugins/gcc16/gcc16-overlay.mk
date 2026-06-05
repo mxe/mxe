@@ -31,7 +31,7 @@ $(PKG)_URL_2    := https://www.mirrorservice.org/sites/sourceware.org/pub/gcc/re
 $(PKG)_PATCHES  := $(dir $(lastword $(MAKEFILE_LIST)))/gcc16.patch
 $(PKG)_DEPS     := binutils mingw-w64 $(addprefix $(BUILD)~,gmp isl mpc mpfr zstd)
 
-_$(PKG)_CONFIGURE_OPTS = --with-zstd='$(PREFIX)/$(BUILD)'
+_$(PKG)_CONFIGURE_OPTS = --with-zstd='$(PREFIX)/$(BUILD)' --enable-tls
 
 # copy db-2-install-exe.patch to gcc7 plugin when gcc10 is default
 db_PATCHES := $(TOP_DIR)/src/db-1-fix-including-winioctl-h-lowcase.patch
