@@ -24,7 +24,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    # Patch per evitare che KPat vada in crash/exit(1) su Windows a causa dell'assenza di DBus
+    # Patch to prevent KPat from crashing/exiting(1) on Windows due to missing DBus
     $(SED) -i 's/KDBusService::Multiple/KDBusService::Multiple | KDBusService::NoExitOnFailure/' '$(SOURCE_DIR)/src/main.cpp'
     
     cd '$(BUILD_DIR)' && $(KF6_CMAKE) -S '$(SOURCE_DIR)' -B '$(BUILD_DIR)' \
@@ -34,34 +34,34 @@ define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && $(TARGET)-cmake --build . -j '$(JOBS)'
     cd '$(BUILD_DIR)' && $(TARGET)-cmake --install .
     
-    # --- FASE DI DEPLOYMENT ---
-    # Creiamo la cartella dist per l'app standalone
+    # --- DEPLOYMENT PHASE ---
+    # Create the dist folder for the standalone app
     mkdir -p '$(PREFIX)/$(TARGET)/dist/kpat'
     
-    # Copiamo l'eseguibile principale
+    # Copy the main executable
     cp '$(PREFIX)/$(TARGET)/qt6/bin/kpat.exe' '$(PREFIX)/$(TARGET)/dist/kpat/'
-    # Risolviamo e copiamo SOLO le DLL strettamente necessarie per kpat.exe
+    # Resolve and copy ONLY the strictly necessary DLLs using the native MXE tool
     '$(TOP_DIR)/tools/copydlldeps.sh' -c \
         -d '$(PREFIX)/$(TARGET)/dist/kpat/' \
         -S "$(PREFIX)/$(TARGET)/qt6/bin $(PREFIX)/$(TARGET)/bin" \
         -f '$(PREFIX)/$(TARGET)/dist/kpat/kpat.exe'
     
-    # Copiamo TUTTI i plugin Qt6/KF6 mantenendo la struttura (platforms, imageformats, styles, ecc.)
+    # Copy ALL Qt6/KF6 plugins preserving the structure (platforms, imageformats, styles, etc.)
     cp -r '$(PREFIX)/$(TARGET)/qt6/plugins/'* '$(PREFIX)/$(TARGET)/dist/kpat/' || true
     
-    # Copiamo i moduli QML
+    # Copy QML modules
     cp -r '$(PREFIX)/$(TARGET)/qt6/qml' '$(PREFIX)/$(TARGET)/dist/kpat/' || true
     
-    # Risolviamo le dipendenze di tutte le DLL appena copiate (plugins e qml)
+    # Resolve dependencies for all newly copied DLLs (plugins and qml)
     '$(TOP_DIR)/tools/copydlldeps.sh' -c \
         -d '$(PREFIX)/$(TARGET)/dist/kpat/' \
         -S "$(PREFIX)/$(TARGET)/qt6/bin $(PREFIX)/$(TARGET)/bin" \
         -F '$(PREFIX)/$(TARGET)/dist/kpat/'
     
-    # Copiamo TUTTI i file data (traduzioni, ui, icone, ecc.)
+    # Copy ALL data files (translations, ui, icons, etc.)
     cp -r '$(PREFIX)/$(TARGET)/qt6/bin/data' '$(PREFIX)/$(TARGET)/dist/kpat/' || true
     
-    # Creiamo il file qt.conf per risolvere i percorsi hardcoded in ambiente standalone
+    # Create the qt.conf file to resolve hardcoded paths in a standalone environment
     echo "[Paths]" > '$(PREFIX)/$(TARGET)/dist/kpat/qt.conf'
     echo "Prefix = ." >> '$(PREFIX)/$(TARGET)/dist/kpat/qt.conf'
     echo "Plugins = ." >> '$(PREFIX)/$(TARGET)/dist/kpat/qt.conf'
