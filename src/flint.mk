@@ -3,8 +3,8 @@
 PKG             := flint
 $(PKG)_WEBSITE  := https://www.flintlib.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.1.3-p1
-$(PKG)_CHECKSUM := 5763d4b68be20360da5f5ab41f2b3c481208fe3356fbbbe65bcf168b17acd96f
+$(PKG)_VERSION  := 3.5.0
+$(PKG)_CHECKSUM := 3982f385f00610a944e0152eb0a29893b2366fa640e8f5f3076c47564cf7e2a6
 $(PKG)_GH_CONF  := flintlib/flint/releases,v
 $(PKG)_DEPS     := cc gmp mpfr pthreads
 

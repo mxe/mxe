@@ -1,3 +1,4 @@
+# CHECKED #
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := freecell-solver
@@ -12,7 +13,7 @@ $(PKG)_URL      := https://downloads.sourceforge.net/project/fc-solve/fc-solve/$
 $(PKG)_DEPS     := cc rinutils
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://fc-solve.shlomifish.org/downloads/fc-solve/' | \
+    $(WGET) -q -O- 'https://sourceforge.net/projects/fc-solve/rss?path=/fc-solve' | \
     grep -o 'freecell-solver-[0-9.]*\.tar\.xz' | \
     $(SED) 's/freecell-solver-//; s/\.tar\.xz//' | \
     $(SORT) -V | \

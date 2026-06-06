@@ -1,11 +1,12 @@
+# CHECKED #
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := fmt
 $(PKG)_WEBSITE  := https://github.com/fmtlib/$(PKG)
 $(PKG)_DESCR    := A modern formatting library
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 9.1.0
-$(PKG)_CHECKSUM := 5dea48d1fcddc3ec571ce2058e13910a0d4a6bab4cc09a809d8b1dd1c88ae6f2
+$(PKG)_VERSION  := 12.1.0
+$(PKG)_CHECKSUM := ea7de4299689e12b6dddd392f9896f08fb0777ac7168897a244a6d6085043fea
 $(PKG)_GH_CONF  := fmtlib/fmt/releases
 $(PKG)_DEPS     := cc
 

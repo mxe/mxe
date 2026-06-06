@@ -4,8 +4,8 @@ PKG             := freeimage
 $(PKG)_WEBSITE  := https://freeimage.sourceforge.io/
 $(PKG)_DESCR    := FreeImage
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.15.4
-$(PKG)_CHECKSUM := eb6361519d33131690a0e726b085a05825e5adf9fb72c752d8d39100e48dc829
+$(PKG)_VERSION  := 3.18.0
+$(PKG)_CHECKSUM := f41379682f9ada94ea7b34fe86bf9ee00935a3147be41b6569c9605a53e438fd
 $(PKG)_SUBDIR   := FreeImage
 $(PKG)_FILE     := FreeImage$(subst .,,$($(PKG)_VERSION)).zip
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/freeimage/Source Distribution/$($(PKG)_VERSION)/$($(PKG)_FILE)
@@ -18,6 +18,10 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD_STATIC
+    $(SED) -i '1i #include <string.h>' '$(1)/Source/OpenEXR/IlmImf/ImfAutoArray.h'
+    $(SED) -i 's/^CXXFLAGS ?=.*/CXXFLAGS ?= -std=c++14 -Wno-narrowing -O3 -fexceptions -Wno-ctor-dtor-privacy -DNDEBUG $$(WIN32_CXXFLAGS)/' '$(1)/Makefile.mingw'
+    $(SED) -i 's/^CXXFLAGS ?=.*/CXXFLAGS ?= -std=c++14 -Wno-narrowing -O3 -fPIC -fexceptions -fvisibility=hidden -Wno-ctor-dtor-privacy -DFREEIMAGE_LIB/' '$(1)/Makefile.fip'
+
     $(MAKE) -C '$(1)' -j '$(JOBS)' -f Makefile.mingw \
         CXX='$(TARGET)-g++' \
         CC='$(TARGET)-gcc' \
@@ -67,6 +71,9 @@ define $(PKG)_BUILD_STATIC
 endef
 
 define $(PKG)_BUILD_SHARED
+    $(SED) -i '1i #include <string.h>' '$(1)/Source/OpenEXR/IlmImf/ImfAutoArray.h'
+    $(SED) -i 's/^CXXFLAGS ?=.*/CXXFLAGS ?= -std=c++14 -Wno-narrowing -O3 -fexceptions -Wno-ctor-dtor-privacy -DNDEBUG $$(WIN32_CXXFLAGS)/' '$(1)/Makefile.mingw'
+    $(SED) -i 's/^CXXFLAGS ?=.*/CXXFLAGS ?= -std=c++14 -Wno-narrowing -O3 -fPIC -fexceptions -fvisibility=hidden -Wno-ctor-dtor-privacy -DFREEIMAGE_LIB/' '$(1)/Makefile.fip'
     $(SED) -i 's,-shared -static,-shared,' '$(1)/Makefile.mingw'
     $(MAKE) -C '$(1)' -j '$(JOBS)' -f Makefile.mingw \
         CXX='$(TARGET)-g++' \
