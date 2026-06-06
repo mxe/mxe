@@ -10,8 +10,9 @@ $(PKG)_GH_CONF  := g-truc/glm/tags
 $(PKG)_DEPS     := cc
 
 define $(PKG)_BUILD
-    cd '$(BUILD_DIR)' && $(TARGET)-cmake \
-        '$(SOURCE_DIR)'
+    cd '$(BUILD_DIR)' && '$(TARGET)-cmake' '$(SOURCE_DIR)' \
+        -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+        -DGLM_TEST_ENABLE=OFF
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 

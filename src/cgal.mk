@@ -1,10 +1,11 @@
+# CHECKED #
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := cgal
 $(PKG)_WEBSITE  := https://www.cgal.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.5
-$(PKG)_CHECKSUM := 40aec3401a8ed57ae6fd5185dfbb6c360b3aa653860407a9add074cf8e007108
+$(PKG)_VERSION  := 6.1.1
+$(PKG)_CHECKSUM := 37e9fffe48a83209b070e1914c6aa0a7bae8076749712ab78b53245e176e0e0e
 $(PKG)_GH_CONF  := CGAL/cgal/releases, v
 $(PKG)_SUBDIR   := CGAL-$($(PKG)_VERSION)
 $(PKG)_FILE     := CGAL-$($(PKG)_VERSION)-library.tar.xz

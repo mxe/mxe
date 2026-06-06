@@ -1,20 +1,15 @@
+# CHECKED #
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := cminpack
 $(PKG)_WEBSITE  := http://devernay.free.fr/hacks/cminpack/cminpack.html
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.3.4
-$(PKG)_CHECKSUM := 3b517bf7dca68cc9a882883db96dac0a0d37d72aba6dfb0c9c7e78e67af503ca
+$(PKG)_VERSION  := 1.3.11
+$(PKG)_CHECKSUM := 45675fac0a721a1c7600a91a9842fe1ab313069db163538f2923eaeddb0f46de
+$(PKG)_GH_CONF  := devernay/cminpack/tags, v
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := http://devernay.free.fr/hacks/cminpack/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc
-
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://devernay.free.fr/hacks/cminpack/index.html' | \
-    $(SED) -n 's,.*cminpack-\([0-9.]*\)\.tar.*,\1,p' | \
-    head -1
-endef
 
 define $(PKG)_BUILD_STATIC
     cd '$(1)' && '$(TARGET)-cmake'

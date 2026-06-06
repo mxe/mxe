@@ -1,15 +1,18 @@
+# CHECKED #
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := file
 $(PKG)_WEBSITE  := https://www.darwinsys.com/file/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.46
-$(PKG)_CHECKSUM := c9cc77c7c560c543135edc555af609d5619dbef011997e988ce40a3d75d86088
+$(PKG)_VERSION  := 5.47
+$(PKG)_CHECKSUM := 45672fec165cb4cc1358a2d76b5d57d22876dcb97ab169427ac385cbe1d5597a
 $(PKG)_SUBDIR   := file-$($(PKG)_VERSION)
 $(PKG)_FILE     := file-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://astron.com/pub/file/$($(PKG)_FILE)
 $(PKG)_URL_2    := https://distfiles.macports.org/file/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc libgnurx
+$(PKG)_DEPS     := cc libgnurx $(BUILD)~$(PKG)
+$(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
+$(PKG)_DEPS_$(BUILD) :=
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://astron.com/pub/file/' | \
@@ -20,24 +23,25 @@ endef
 
 define $(PKG)_BUILD
     cd '$(1)' && autoreconf -fi
-
-    # "file" needs a runnable version of the "file" utility
-    # itself. This must match the source code regarding its
-    # version. Therefore we build a native one ourselves first.
-
-    cp -Rp '$(1)' '$(1).native'
-    cd '$(1).native' && ./configure \
-        --disable-shared
-    $(MAKE) -C '$(1).native/src' -j '$(JOBS)'
-
     cd '$(1)' && ./configure \
-        $(MXE_CONFIGURE_OPTS) \
-        CFLAGS='-std=gnu89 -DHAVE_PREAD'
-    $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= man_MANS= FILE_COMPILE='$(1).native/src/file'
-    $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= man_MANS=
+        $(if $(BUILD_CROSS), \
+            $(MXE_CONFIGURE_OPTS) \
+            CFLAGS='-std=gnu99 -Wno-error=incompatible-pointer-types' \
+            WARNINGS= \
+        , \
+            --prefix='$(PREFIX)/$(TARGET)' \
+            --disable-shared \
+        )
 
-    '$(TARGET)-gcc' \
-        -W -Wall -Werror -ansi -pedantic \
-        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-file.exe' \
-        -lmagic -lgnurx -lshlwapi
+    $(if $(BUILD_CROSS), \
+        $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= man_MANS= FILE_COMPILE='$(PREFIX)/$(BUILD)/bin/file' \
+        && $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= man_MANS= \
+        && '$(TARGET)-gcc' \
+            -W -Wall -Werror -ansi -pedantic \
+            '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-file.exe' \
+            -lmagic -lgnurx -lshlwapi \
+    , \
+        $(MAKE) -C '$(1)' -j '$(JOBS)' \
+        && $(MAKE) -C '$(1)' -j 1 install \
+    )
 endef

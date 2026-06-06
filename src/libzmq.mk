@@ -12,6 +12,7 @@ $(PKG)_DEPS     := cc libsodium
 define $(PKG)_BUILD
     # build and install the library
     cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \
+        -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
         -DBUILD_TESTS=OFF \
         -DCMAKE_CXX_FLAGS='-D_WIN32_WINNT=0x0600' \
         -DWITH_DOC=OFF \

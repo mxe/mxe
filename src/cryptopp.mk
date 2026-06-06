@@ -1,11 +1,12 @@
+# CHECKED #
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := cryptopp
 $(PKG)_WEBSITE  := https://www.cryptopp.com/
 $(PKG)_DESCR    := Crypto++ Library
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 8.4.0
-$(PKG)_CHECKSUM := 6687dfc1e33b084aeab48c35a8550b239ee5f73a099a3b6a0918d70b8a89e654
+$(PKG)_VERSION  := 8.9.0
+$(PKG)_CHECKSUM := ab5174b9b5c6236588e15a1aa1aaecb6658cdbe09501c7981ac8db276a24d9ab
 $(PKG)_GH_CONF  := weidai11/cryptopp/tags,CRYPTOPP_,,,_
 $(PKG)_DEPS     := cc
 

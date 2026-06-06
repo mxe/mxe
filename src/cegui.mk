@@ -1,30 +1,24 @@
+# CHECKED #
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := cegui
 $(PKG)_WEBSITE  := http://cegui.org.uk/
 $(PKG)_DESCR    := Crazy Eddie’s GUI System (CEGUI)
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 9726a2b505fb
-$(PKG)_CHECKSUM := 14b3da7f1f89693192cd9afbf2126f4519508245ed156de893828e31ce676e9e
-$(PKG)_SUBDIR   := $(PKG)-$(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$(PKG)-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := https://bitbucket.org/$(PKG)/$(PKG)/get/$($(PKG)_VERSION).tar.bz2
+$(PKG)_VERSION  := 0.8.7
+$(PKG)_CHECKSUM := 7be289d2d8562e7d20bd155d087d6ccb0ba62f7e99cc25d20684b8edf2ba15cd
+$(PKG)_SUBDIR   := $(PKG)-$(subst .,-,$($(PKG)_VERSION))
+$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
+$(PKG)_URL      := https://github.com/cegui/cegui/archive/refs/tags/v$(subst .,-,$($(PKG)_VERSION)).tar.gz
 $(PKG)_DEPS     := cc expat freeglut freeimage freetype fribidi glew \
                    glfw3 glm libxml2 minizip pcre xerces
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://bitbucket.org/cegui/cegui/downloads' | \
-    $(SED) -n 's,.*href=.*get/v\([0-9]*-[0-9]*-[0-9]*\)\.tar.*,\1,p' | \
-    $(SED) 's,-,.,g' | \
+    $(WGET) -q -O- 'https://api.github.com/repos/cegui/cegui/git/refs/tags/' | \
+    $(SED) -n 's,.*"refs/tags/v0-8-\([0-9]*\)".*,\1,p' | \
     $(SORT) -V | \
-    tail -1
-endef
-
-# track dev branch v0-8 until next release
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://bitbucket.org/cegui/cegui/commits/branch/v0-8' | \
-    $(SED) -n 's,.*cegui/cegui/commits/\([^?]\{12\}\).*at=.*,\1,p' | \
-    head -1
+    tail -1 | \
+    awk '{print "0.8."$$1}'
 endef
 
 # Use pkg-config to set FREEIMAGE_LIB and GLEW_STATIC to prevent "_imp__" errors
@@ -33,6 +27,7 @@ endef
 # boost and sdl2 aren't detected
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && '$(TARGET)-cmake' \
+        -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
         -DCEGUI_BUILD_SHARED_CONFIGURATION=$(CMAKE_SHARED_BOOL) \
         -DCEGUI_BUILD_STATIC_CONFIGURATION=$(CMAKE_STATIC_BOOL) \
         -DCEGUI_BUILD_STATIC_FACTORY_MODULE=$(CMAKE_STATIC_BOOL) \
@@ -65,8 +60,11 @@ define $(PKG)_BUILD
         -DCEGUI_BUILD_RENDERER_OPENGL=ON \
         -DCEGUI_BUILD_RENDERER_OPENGL3=ON \
         -DCEGUI_BUILD_RENDERER_OPENGLES=OFF \
-        -DCMAKE_CXX_FLAGS="`$(TARGET)-pkg-config --cflags glew freeimage`" \
-        $(SOURCE_DIR)
+        -DCMAKE_CXX_FLAGS="`$(TARGET)-pkg-config --cflags glew freeimage freetype2 libpcre`" \
+        -DFREETYPE_H_PATH_ft2build='$(PREFIX)/$(TARGET)/include/freetype2' \
+        -DFREETYPE_H_PATH_ftconfig='$(PREFIX)/$(TARGET)/include/freetype2' \
+        -DFREETYPE_INCLUDE_DIR='$(PREFIX)/$(TARGET)/include/freetype2' \
+        '$(SOURCE_DIR)'
 
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install VERBOSE=1

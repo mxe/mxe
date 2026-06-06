@@ -1,20 +1,22 @@
+# CHECKED #
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := cfitsio
 $(PKG)_WEBSITE  := https://heasarc.gsfc.nasa.gov/fitsio/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.6.3
-$(PKG)_CHECKSUM := fad44fff274fdda5ffcc0c0fff3bc3c596362722b9292fc8944db91187813600
+$(PKG)_VERSION  := 4.6.4
+$(PKG)_CHECKSUM := 227b637b91c9820ea96f39a65eb087f053de567d82f4338e2884f123f8183c55
 $(PKG)_SUBDIR   := cfitsio-$($(PKG)_VERSION)
 $(PKG)_FILE     := cfitsio-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- "https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/?C=M;O=D" | \
-    grep -i '<a href="cfitsio.*tar' | \
-    $(SED) -n 's,.*cfitsio-\([0-9.][^>]*\)\.tar.*,\1,p' | \
-    head -1
+    $(WGET) -q -O- "https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/" | \
+    grep -i '<a href="cfitsio-[0-9].*tar' | \
+    $(SED) -n 's,.*cfitsio-\([0-9][0-9.]*\)\.tar.*,\1,p' | \
+    $(SORT) -V | \
+    tail -1
 endef
 
 define $(PKG)_BUILD

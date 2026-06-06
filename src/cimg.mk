@@ -1,11 +1,12 @@
+# CHECKED #
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := cimg
 $(PKG)_WEBSITE  := http://cimg.eu/
 $(PKG)_DESCR    := CImg Library
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.7.1
-$(PKG)_CHECKSUM := 3ff9805ca2534775e3a41acfff9b2c6435e43dce7e84c0532fcdff62a68481d3
+$(PKG)_VERSION  := 3.7.6
+$(PKG)_CHECKSUM := ff1711da822b2b5f3bb68eed7c9b6b6c9391a7865ef6e34cf3e05659834ff0f3
 $(PKG)_SUBDIR   := CImg-$($(PKG)_VERSION)
 $(PKG)_FILE     := CImg_$($(PKG)_VERSION).zip
 $(PKG)_URL      := http://cimg.eu/files/$($(PKG)_FILE)

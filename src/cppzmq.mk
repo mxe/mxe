@@ -1,11 +1,12 @@
+# CHECKED #
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := cppzmq
 $(PKG)_WEBSITE  := https://github.com/zeromq/cppzmq
 $(PKG)_DESCR    := C++ binding for 0MQ
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.2.2
-$(PKG)_CHECKSUM := 3ef50070ac5877c06c6bb25091028465020e181bbfd08f110294ed6bc419737d
+$(PKG)_VERSION  := 4.11.0
+$(PKG)_CHECKSUM := 0fff4ff311a7c88fdb76fceefba0e180232d56984f577db371d505e4d4c91afd
 $(PKG)_GH_CONF  := zeromq/cppzmq/tags,v
 $(PKG)_DEPS     := cc libzmq
 

@@ -1,11 +1,12 @@
+# CHECKED #
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := chipmunk
 $(PKG)_WEBSITE  := https://chipmunk-physics.net/
 $(PKG)_DESCR    := Chipmunk Physics
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 7.0.2
-$(PKG)_CHECKSUM := 6b6d8d5d910c4442fb9c8c4c46a178126d8c21d075cdb3ce439a7f8d8757b0ca
+$(PKG)_VERSION  := 7.0.3
+$(PKG)_CHECKSUM := 1e6f093812d6130e45bdf4cb80280cb3c93d1e1833d8cf989d554d7963b7899a
 $(PKG)_GH_CONF  := slembcke/Chipmunk2D/tags, Chipmunk-
 $(PKG)_DEPS     := cc
 

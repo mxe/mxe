@@ -1,10 +1,11 @@
+# CHECKED #
 # This file is part of MXE. See LICENSE.md for licensing information.
 
 PKG             := cmake
 $(PKG)_WEBSITE  := https://www.cmake.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.3.2
-$(PKG)_CHECKSUM := b0231eb39b3c3cabdc568c619df78208a7bd95ea10c9b2236d61218bac1b367d
+$(PKG)_VERSION  := 4.3.3
+$(PKG)_CHECKSUM := cba4bb7a44edf2877bb6f059932896383babe435b3a8c3b5df48b4aa41c9bb85
 $(PKG)_SUBDIR   := cmake-$($(PKG)_VERSION)
 $(PKG)_FILE     := cmake-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://www.cmake.org/files/v$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
