@@ -45,6 +45,24 @@ if [ ! $( echo $compiler | grep -q "shared" ) ]; then
 fi
 ```
 
+Test & example
+==============
+
+Let us compile password manager [KeePassX](https://www.keepassx.org) in
+shared mode (i686-w64-mingw32.shared) and gather all its DLL dependencies.
+
+```bash
+$ make keepassx MXE_PLUGIN_DIRS=plugins/apps \
+    MXE_TARGETS='i686-w64-mingw32.shared'
+$ ./tools/copydlldeps.sh --copy --destdir keepassx-bundle \
+    --infile usr/i686-w64-mingw32.shared/bin/KeePassX.exe \
+    --recursivesrcdir usr/i686-w64-mingw32.shared/
+$ cp -r usr/i686-w64-mingw32.shared/bin/{KeePassX.exe,share} keepassx-bundle
+```
+
+Copy directory `keepassx-bundle` to Windows machine and make sure
+file `KeePassX.exe` is usable.
+
 Additional hints
 ================
 
