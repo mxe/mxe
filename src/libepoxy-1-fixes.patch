@@ -2,29 +2,174 @@ This file is part of MXE. See LICENSE.md for licensing information.
 
 Contains ad hoc patches for cross building.
 
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: v1993 <v19930312@gmail.com>
-Date: Mon, 6 Dec 2021 22:38:14 +0300
-Subject: [PATCH 1/1] Fix static builds on Windows
+Backport pull request https://github.com/anholt/libepoxy/pull/265
+See also https://github.com/anholt/libepoxy/issues/200 for more information
 
-
-diff --git a/src/dispatch_wgl.c b/src/dispatch_wgl.c
-index 1111111..2222222 100644
---- a/src/dispatch_wgl.c
-+++ b/src/dispatch_wgl.c
-@@ -89,6 +89,7 @@ epoxy_handle_external_wglMakeCurrent(void)
-     }
- }
+--- a/src/dispatch_common.h	2025-03-21 21:06:32.211224240 +0100
++++ b/src/dispatch_common.h	2025-03-21 21:09:03.147738236 +0100
+@@ -22,7 +22,11 @@
+  */
  
-+#ifdef DLL_EXPORT
- /**
-  * This global symbol is apparently looked up by Windows when loading
-  * a DLL, but it doesn't declare the prototype.
-@@ -140,6 +141,7 @@ DllMain(HINSTANCE dll, DWORD reason, LPVOID reserved)
- 
-     return TRUE;
- }
+ #include "config.h"
+-
++#ifdef __GNUC__
++#define EPOXY_THREADLOCAL __thread
++#elif defined (_MSC_VER)
++#define EPOXY_THREADLOCAL __declspec(thread)
 +#endif
+ #ifdef _WIN32
+ #define PLATFORM_HAS_EGL ENABLE_EGL
+ #define PLATFORM_HAS_GLX ENABLE_GLX
+
+
+--- a/src/dispatch_wgl.c	2025-03-21 20:47:46.951392317 +0100
++++ b/src/dispatch_wgl.c	2025-03-21 21:11:12.224177791 +0100
+@@ -27,8 +27,6 @@
+ 
+ #include "dispatch_common.h"
+ 
+-static bool first_context_current = false;
+-static bool already_switched_to_dispatch_table = false;
+ 
+ /**
+  * If we can determine the WGL extension support from the current
+@@ -75,70 +73,8 @@
+ void
+ epoxy_handle_external_wglMakeCurrent(void)
+ {
+-    if (!first_context_current) {
+-        first_context_current = true;
+-    } else {
+-        if (!already_switched_to_dispatch_table) {
+-            already_switched_to_dispatch_table = true;
+-            gl_switch_to_dispatch_table();
+-            wgl_switch_to_dispatch_table();
+-        }
+-
+-        gl_init_dispatch_table();
+-        wgl_init_dispatch_table();
+-    }
+-}
+-
+-/**
+- * This global symbol is apparently looked up by Windows when loading
+- * a DLL, but it doesn't declare the prototype.
+- */
+-BOOL WINAPI
+-DllMain(HINSTANCE dll, DWORD reason, LPVOID reserved);
+-
+-BOOL WINAPI
+-DllMain(HINSTANCE dll, DWORD reason, LPVOID reserved)
+-{
+-    void *data;
+-
+-    switch (reason) {
+-    case DLL_PROCESS_ATTACH:
+-        gl_tls_index = TlsAlloc();
+-        if (gl_tls_index == TLS_OUT_OF_INDEXES)
+-            return FALSE;
+-        wgl_tls_index = TlsAlloc();
+-        if (wgl_tls_index == TLS_OUT_OF_INDEXES)
+-            return FALSE;
+-
+-        first_context_current = false;
+-
+-        /* FALLTHROUGH */
+-
+-    case DLL_THREAD_ATTACH:
+-        data = LocalAlloc(LPTR, gl_tls_size);
+-        TlsSetValue(gl_tls_index, data);
+-
+-        data = LocalAlloc(LPTR, wgl_tls_size);
+-        TlsSetValue(wgl_tls_index, data);
+-
+-        break;
+-
+-    case DLL_THREAD_DETACH:
+-    case DLL_PROCESS_DETACH:
+-        data = TlsGetValue(gl_tls_index);
+-        LocalFree(data);
+-
+-        data = TlsGetValue(wgl_tls_index);
+-        LocalFree(data);
+-
+-        if (reason == DLL_PROCESS_DETACH) {
+-            TlsFree(gl_tls_index);
+-            TlsFree(wgl_tls_index);
+-        }
+-        break;
+-    }
+-
+-    return TRUE;
++  gl_init_dispatch_table();
++  wgl_init_dispatch_table();
+ }
  
  WRAPPER_VISIBILITY (BOOL)
- WRAPPER(epoxy_wglMakeCurrent)(HDC hdc, HGLRC hglrc)
+
+
+--- a/src/gen_dispatch.py	2025-03-21 21:06:56.891308288 +0100
++++ b/src/gen_dispatch.py	2025-04-26 17:41:01.189074677 +0200
+@@ -639,7 +639,7 @@
+                                                                        func.args_list))
+ 
+     def write_function_pointer(self, func):
+-        self.outln('{0} epoxy_{1} = epoxy_{1}_global_rewrite_ptr;'.format(func.ptr_type, func.wrapped_name))
++        self.outln('{0} epoxy_{1} = EPOXY_DISPATCH_PTR(epoxy_{1});'.format(func.ptr_type, func.wrapped_name))
+         self.outln('')
+ 
+     def write_provider_enums(self):
+@@ -816,25 +816,30 @@
+             self.write_thunks(func)
+         self.outln('')
+ 
++        self.outln('#define EPOXY_DISPATCH_PTR(name) name##_global_rewrite_ptr')
++
+         self.outln('#if USING_DISPATCH_TABLE')
+ 
++        self.outln('#undef EPOXY_DISPATCH_PTR')
++        self.outln('#define EPOXY_DISPATCH_PTR(name) name##_dispatch_table_thunk')
++
+         self.outln('static struct dispatch_table resolver_table = {')
+         for func in self.sorted_functions:
+             self.outln('    epoxy_{0}_dispatch_table_rewrite_ptr, /* {0} */'.format(func.wrapped_name))
+         self.outln('};')
+         self.outln('')
+ 
+-        self.outln('uint32_t {0}_tls_index;'.format(self.target))
+-        self.outln('uint32_t {0}_tls_size = sizeof(struct dispatch_table);'.format(self.target))
+-        self.outln('')
+-
++        self.outln('EPOXY_THREADLOCAL struct dispatch_table {0}_tls_data = {{'.format(self.target))
++        for func in self.sorted_functions:
++            self.outln('    epoxy_{0}_dispatch_table_rewrite_ptr, /* {0} */'.format(func.wrapped_name))
++        self.outln('};')
+         self.outln('static inline struct dispatch_table *')
+         self.outln('get_dispatch_table(void)')
+         self.outln('{')
+-        self.outln('	return TlsGetValue({0}_tls_index);'.format(self.target))
++        self.outln('	return &{0}_tls_data;'.format(self.target))
+         self.outln('}')
+         self.outln('')
+-
++        
+         self.outln('void')
+         self.outln('{0}_init_dispatch_table(void)'.format(self.target))
+         self.outln('{')
+@@ -843,16 +848,6 @@
+         self.outln('}')
+         self.outln('')
+ 
+-        self.outln('void')
+-        self.outln('{0}_switch_to_dispatch_table(void)'.format(self.target))
+-        self.outln('{')
+-
+-        for func in self.sorted_functions:
+-            self.outln('    epoxy_{0} = epoxy_{0}_dispatch_table_thunk;'.format(func.wrapped_name))
+-
+-        self.outln('}')
+-        self.outln('')
+-
+         self.outln('#endif /* !USING_DISPATCH_TABLE */')
+ 
+         for func in self.sorted_functions:
