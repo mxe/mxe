@@ -3,8 +3,8 @@
 PKG             := libffi
 $(PKG)_WEBSITE  := https://sourceware.org/libffi/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.5.2
-$(PKG)_CHECKSUM := f3a3082a23b37c293a4fcd1053147b371f2ff91fa7ea1b2a52e335676bac82dc
+$(PKG)_VERSION  := 3.6.0
+$(PKG)_CHECKSUM := 31ff1fe32deaebfbb388727f32677bb254bf2a41382c51464c0b1837c9ee9828
 $(PKG)_GH_CONF  := libffi/libffi/releases/downloads,v
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
