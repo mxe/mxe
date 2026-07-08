@@ -4,8 +4,8 @@
 PKG             := biosig
 $(PKG)_WEBSITE  := http://biosig.sf.net/
 $(PKG)_DESCR    := biosig
-$(PKG)_VERSION  := 3.9.5
-$(PKG)_CHECKSUM := dfdb7aec5ac9681f25e3c186a5b356d5ec86cda87cdcb034d38e838f875cc3f1
+$(PKG)_VERSION  := 3.9.6
+$(PKG)_CHECKSUM := 916e1e7bfbb321ec11c6fb54d6d2582b35d07950a2c7ba15dad34ee722016e65
 $(PKG)_SUBDIR   := biosig-$($(PKG)_VERSION)
 $(PKG)_FILE     := biosig-$($(PKG)_VERSION).src.tar.xz
 $(PKG)_URL      := https://downloads.sourceforge.net/project/biosig/BioSig%20for%20C_C%2B%2B/src/$($(PKG)_FILE)
@@ -24,7 +24,7 @@ endef
 
 
 define $(PKG)_BUILD_PRE
-    #rm -rf '$(1)'
+    # rm -rf '$(1)'
     #git clone ~/src/biosig-code '$(1)'
     # rsync -av ~/src/biosig-code/ '$(1)'/
     # rm -rf '$(1)'
