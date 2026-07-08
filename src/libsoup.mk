@@ -4,9 +4,9 @@ PKG             := libsoup
 $(PKG)_WEBSITE  := https://wiki.gnome.org/Projects/libsoup
 $(PKG)_DESCR    := HTTP client/server library for GNOME
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.74.2
-$(PKG)_APIVER   := 2.4
-$(PKG)_CHECKSUM := c9dc5d6499377598b5189acb787dd37c14484f8a50e399d94451c13b4af88b0f
+$(PKG)_VERSION  := 3.7.1
+$(PKG)_APIVER   := 3.0
+$(PKG)_CHECKSUM := a5ac782c54033874920514e946a474f08142f528f63e8ace71c65297abcd7597
 $(PKG)_GH_CONF  := GNOME/libsoup/tags,,,pre\|SOUP\|base
 $(PKG)_DEPS     := cc meson-wrapper glib libpsl libxml2 sqlite
 
@@ -19,7 +19,6 @@ define $(PKG)_BUILD
         -Dgssapi=disabled \
         -Dsysprof=disabled \
         -Dtls_check=false \
-        -Dc_std=gnu89 \
         '$(BUILD_DIR)' '$(SOURCE_DIR)'
     '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)'
     '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)' install

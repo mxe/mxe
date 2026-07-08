@@ -3,8 +3,8 @@
 PKG             := minizip
 $(PKG)_WEBSITE  := https://www.winimage.com/zLibDll/minizip.html
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.2.1
-$(PKG)_CHECKSUM := 3cc35c2cb925dbe67cc801e3234b31b0f30197812a99377352fa1b551ab3d011
+$(PKG)_VERSION  := 4.2.2
+$(PKG)_CHECKSUM := 71af7b9799856d8b03619df3949e9c1be9703f8de0795af71399ba283cb27aac
 $(PKG)_GH_CONF  := zlib-ng/minizip-ng/releases
 $(PKG)_DEPS     := cc bzip2 openssl xz zlib zstd
 

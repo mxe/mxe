@@ -12,8 +12,8 @@ $(PKG)_DEPS     := cc minizip
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && $(TARGET)-cmake \
         -DASSIMP_BUILD_TESTS=OFF \
-        -DCMAKE_C_FLAGS='-Wno-error=array-bounds -Wno-error=maybe-uninitialized -Wno-error=unused-but-set-variable= -Wno-error=uninitialized' \
-        -DCMAKE_CXX_FLAGS='-Wno-error=array-bounds -Wno-error=maybe-uninitialized -Wno-error=unused-but-set-variable= -Wno-error=uninitialized' \
+        -DCMAKE_C_FLAGS='-Wno-error=array-bounds -Wno-error=maybe-uninitialized -Wno-error=unused-but-set-variable -Wno-error=uninitialized' \
+        -DCMAKE_CXX_FLAGS='-Wno-error=array-bounds -Wno-error=maybe-uninitialized -Wno-error=unused-but-set-variable -Wno-error=uninitialized' \
         '$(SOURCE_DIR)'
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install

@@ -33,6 +33,7 @@ define $(PKG)_B2_CROSS_BUILD
         address-model=$(BITS) \
         architecture=x86 \
         binary-format=pe \
+        linkflags="-lws2_32" \
         link=$(if $(BUILD_STATIC),static,shared) \
         target-os=windows \
         threadapi=win32 \

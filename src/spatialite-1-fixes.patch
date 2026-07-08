@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: brodieG <brodieG@users.noreply.github.com>
 Date: Sun, 15 May 2022 12:57:55 +0000
-Subject: [PATCH 1/3] Makes sure to link against all of geos' libs as...
+Subject: [PATCH 1/5] Makes sure to link against all of geos' libs as...
 
 well as the stdc++ lib.  Originally by:
 
@@ -16,7 +16,7 @@ diff --git a/configure.ac b/configure.ac
 index 1111111..2222222 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -345,13 +345,13 @@ if test x"$enable_geos" != "xno"; then
+@@ -332,13 +332,13 @@ if test x"$enable_geos" != "xno"; then
    CPPFLAGS_SAVE="$CPPFLAGS"
    CPPFLAGS="$GEOS_CFLAGS"
    AC_CHECK_HEADERS([geos_c.h],, [AC_MSG_ERROR([could not find geos_c.h - you may need to specify the directory of a geos-config file using --with-geosconfig])])
@@ -37,22 +37,9 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: brodieG <brodieG@users.noreply.github.com>
 Date: Sun, 15 May 2022 13:02:00 +0000
-Subject: [PATCH 2/3] use lower case for windows headers
+Subject: [PATCH 2/5] use lower case for windows headers
 
 
-diff --git a/src/gaiageo/gg_shape.c b/src/gaiageo/gg_shape.c
-index 1111111..2222222 100644
---- a/src/gaiageo/gg_shape.c
-+++ b/src/gaiageo/gg_shape.c
-@@ -58,7 +58,7 @@ the terms of any one of the MPL, the GPL or the LGPL.
- #endif
- 
- #ifdef _WIN32
--#include <Windows.h>
-+#include <windows.h>
- #endif
- 
- #if OMIT_ICONV == 0		/* if ICONV is disabled no SHP support is available */
 diff --git a/test/scandir4win.h b/test/scandir4win.h
 index 1111111..2222222 100644
 --- a/test/scandir4win.h
@@ -70,7 +57,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: brodieG <brodieG@users.noreply.github.com>
 Date: Sat, 28 May 2022 12:27:03 +0000
-Subject: [PATCH 3/3] fix minizip reference for MXE minizip
+Subject: [PATCH 3/5] fix minizip reference for MXE minizip
 
 Spatialite assumes minizip is winimage.com one, whereas MXE
 uses minizip-ng which installs directly to includes instead
@@ -106,7 +93,7 @@ diff --git a/configure.ac b/configure.ac
 index 1111111..2222222 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -441,7 +441,7 @@ AC_ARG_ENABLE(minizip, [AS_HELP_STRING(
+@@ -450,7 +450,7 @@ AC_ARG_ENABLE(minizip, [AS_HELP_STRING(
    [--enable-minizip], [enables MiniZIP inclusion [default=yes]])],
    [], [enable_minizip=yes])
  if test x"$enable_minizip" != "xno"; then
@@ -119,7 +106,7 @@ diff --git a/fakeconfig.h b/fakeconfig.h
 index 1111111..2222222 100644
 --- a/fakeconfig.h
 +++ b/fakeconfig.h
-@@ -92,7 +92,7 @@
+@@ -95,7 +95,7 @@
  /* Define to 1 if you have the `memset' function. */
  #define HAVE_MEMSET 1
  
@@ -132,7 +119,7 @@ diff --git a/fakeconfig.h.in b/fakeconfig.h.in
 index 1111111..2222222 100644
 --- a/fakeconfig.h.in
 +++ b/fakeconfig.h.in
-@@ -91,7 +91,7 @@
+@@ -94,7 +94,7 @@
  /* Define to 1 if you have the `memset' function. */
  #undef HAVE_MEMSET
  
@@ -154,3 +141,49 @@ index 1111111..2222222 100644
  #endif
  
  #if defined(_WIN32) && !defined(__MINGW32__)
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Sat, 30 May 2026 16:44:23 +0200
+Subject: [PATCH 4/5] libxml2 compatibility fix
+
+https://www.gaia-gis.it/fossil/libspatialite/info/9e29648e67083deb0446aefeaa2a5fdf3f5ef358
+
+diff --git a/src/wfs/wfs_in.c b/src/wfs/wfs_in.c
+index 1111111..2222222 100644
+--- a/src/wfs/wfs_in.c
++++ b/src/wfs/wfs_in.c
+@@ -4637,7 +4637,9 @@ SPATIALITE_DECLARE void
+ reset_wfs_http_connection (void)
+ {
+ /* Resets the libxml2 "nano HTTP": useful when changing the HTTP_PROXY settings */
++#ifdef LIBXML_HTTP_ENABLED
+     xmlNanoHTTPCleanup ();
++#endif
+ }
+ 
+ #else /* LIBXML2 isn't enabled */
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Sat, 30 May 2026 15:19:18 +0200
+Subject: [PATCH 5/5] static
+
+
+diff --git a/configure.ac b/configure.ac
+index 1111111..2222222 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -335,10 +335,10 @@ if test x"$enable_geos" != "xno"; then
+   CPPFLAGS="$CPPFLAGS_SAVE -I`$GEOSCONFIG --includes`"
+   # Ensure we can link against libgeos_c
+   LIBS_SAVE="$LIBS"
+-  LIBS="$GEOS_LDFLAGS `$GEOSCONFIG --clibs`"
++  LIBS="$GEOS_LDFLAGS `$GEOSCONFIG --static-clibs`"
+   AC_SEARCH_LIBS(GEOSCoveredBy,geos_c,,AC_MSG_ERROR([could not find libgeos_c (or obsolete 'libgeos_c' < v.3.3.0 found) - you may need to specify the directory of a geos-config file using --with-geosconfig]))
+   LIBS="$LIBS_SAVE"
+-  LIBS="$LIBS $GEOS_LDFLAGS `$GEOSCONFIG --clibs`"
++  LIBS="$LIBS $GEOS_LDFLAGS `$GEOSCONFIG --static-clibs`"
+ 
+   #-----------------------------------------------------------------------
+   #   --enable-controlpoints
