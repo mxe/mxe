@@ -1,0 +1,147 @@
+diff --git a/biosig4c++/Makefile.in b/biosig4c++/Makefile.in
+index e692f579..e0d5ad64 100644
+--- a/biosig4c++/Makefile.in
++++ b/biosig4c++/Makefile.in
+@@ -221,6 +221,8 @@ DEFINES      += $(DEFINES_ALL)
+ #DEFINES      += -D=WITH_TIMESTAMPCHANNEL
+ ### Mingw,MXE, etc. must avoid name space conflict concerning SOPEN ###
+ #DEFINES      += -D=NO_OLDNAMES
++# -DUSE_STD_CXX_INCLUDES
++# -DUSE_STRINGSTREAM
+ 
+ #DEFINES      += -D=WITH_CURL
+ DEFINES      += -D=__4HAERTEL__
+@@ -516,7 +518,7 @@ TARGET = save2gdf${BINEXT} libbiosig.${LIBEXT}
+ 
+ LIB_OBJECTS  = libbiosig.pc
+ ifeq (@STATIC_LIBS@,yes)
+-	LIB_OBJECTS += libbiosig.a libgdf.a libphysicalunits.a libbiosig.pc
++	LIB_OBJECTS += libbiosig.a libgdf.a libphysicalunits.a
+ endif
+ ifeq (@SHARED_LIBS@,yes)
+ 	LIB_OBJECTS += $(DLPRE)biosig.$(DLEXT) $(DLPRE)gdf.$(DLEXT) $(DLPRE)physicalunits.$(DLEXT)
+@@ -727,12 +729,12 @@ ifeq (,$(findstring Darwin, $(shell uname)))   # not on MacOSX
+ 	ln -sf "$<" "$@"
+ endif
+ 
+-ifneq ($(TARGETPLATFORM),windows)
+ ifeq (@SHARED_LIBS@,yes)
++ifneq ($(TARGETPLATFORM),windows)
+ $(DLPRE)biosig${FULLDLEXT}:$(OBJECTS)
+ 	$(LD) $(LDFLAGS) ${SONAME_PREFIX}"$@" $^ $(SHAREDLIB) $(LDLIBS) -o "$@"
+ 
+-$(DLPRE)gdf${FULLDLEXT}: gdf.o gdftime.o physicalunits.o getlogin.o
++$(DLPRE)gdf${FULLDLEXT}: gdf.o gdftime.o physicalunits.o getlogin.o string_isutf8.o
+ 	$(LD) $(LDFLAGS) ${SONAME_PREFIX}"$@" $^ $(SHAREDLIB) $(LDLIBS) -o "$@"
+ 
+ $(DLPRE)gdftime${FULLDLEXT}:gdftime.o
+@@ -740,7 +742,6 @@ $(DLPRE)gdftime${FULLDLEXT}:gdftime.o
+ 
+ $(DLPRE)physicalunits${FULLDLEXT}:physicalunits.o
+ 	$(LD) $(LDFLAGS) ${SONAME_PREFIX}"$@" $^ $(SHAREDLIB) $(LDLIBS) -o "$@"
+-endif
+ else
+ #############################################################
+ #	Windows DLL (mingw, cygwin
+@@ -749,7 +750,7 @@ else
+ $(DLPRE)physicalunits${FULLDLEXT}: physicalunits.o
+ 	$(LD) $(LDFLAGS) -o "$@" -s -shared -fPIC $^ $(LDLIBS) -Wl,-subsystem,windows,--output-def,libphysicalunits.def,--out-implib,libphysicalunits.dll.a
+ 
+-$(DLPRE)gdf${FULLDLEXT}: gdf.o getlogin.o gdftime.o physicalunits.o
++$(DLPRE)gdf${FULLDLEXT}: gdf.o getlogin.o gdftime.o physicalunits.o string_isutf8.o
+ 	$(LD) $(LDFLAGS) -o "$@" -s -shared -fPIC $^ $(LDLIBS) -Wl,-subsystem,windows,--output-def,libgdf.def,--out-implib,libgdf.dll.a
+ 
+ $(DLPRE)gdftime${FULLDLEXT}: gdftime.o
+@@ -759,6 +760,7 @@ $(DLPRE)biosig${FULLDLEXT}: $(OBJECTS) libbiosig.pc
+ 	$(LD) $(LDFLAGS) -o "$@" -s -shared -fPIC $(OBJECTS) $(LDLIBS) -Wl,-subsystem,windows,--output-def,libbiosig.def,--out-implib,libbiosig.dll.a
+ 
+ endif
++endif
+ 
+ #############################################################
+ #	Static Libaries
+@@ -773,7 +775,7 @@ libphysicalunits.a: physicalunits.o
+ #	-$(DELETE) "$@"
+ #	$(AR) "$@" "$<"
+ 
+-libgdf.a: gdf.o getlogin.o gdftime.o physicalunits.o
++libgdf.a: gdf.o getlogin.o gdftime.o physicalunits.o string_isutf8.o
+ 	-$(DELETE) "$@"
+ 	$(AR) "$@" gdf.o gdftime.o physicalunits.o
+ 
+@@ -802,17 +804,17 @@ libbiosig.pc :
+ 	echo "Libs.private: $(LDLIBS)"      >> "$@"
+ 
+ ## save2gdf, pdp2gdf
+-%${BINEXT}: %.c $(DLPRE)biosig$(FULLDLEXT)
++%${BINEXT}: %.c libbiosig
+ 	$(CC) $(DEFINES) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) "$<" -L. -lbiosig -lstdc++ $(LDLIBS) -o "$@"
+ 
+ physicalunits${BINEXT} : pu.c physicalunits.o
+ 	$(CC) $(DEFINES) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) $^ $(LDLIBS) -o "$@"
+ 
+ ifeq (1,@HAVE_LIBB64@)
+-biosig_fhir${BINEXT}: biosig_fhir.c $(DLPRE)biosig$(FULLDLEXT)
++biosig_fhir${BINEXT}: biosig_fhir.c libbiosig
+ 	$(CC) $(DEFINES) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) "$<" -L. -lbiosig -lstdc++ -lb64 $(LDLIBS) -o "$@"
+ else
+-biosig_fhir${BINEXT}: biosig_fhir.c libb64-1.2.1/src/cencode.c $(DLPRE)biosig$(FULLDLEXT)
++biosig_fhir${BINEXT}: biosig_fhir.c libb64-1.2.1/src/cencode.c libbiosig
+ 	$(CC) $(DEFINES) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -Ilibb64-1.2.1/include/ "$<" libb64-1.2.1/src/cencode.c -L. -lbiosig -lstdc++ $(LDLIBS) -o "$@"
+ endif
+ 
+diff --git a/biosig4c++/python/README.md.in b/biosig4c++/python/README.md.in
+index 57a58d2f..50b398d4 100644
+--- a/biosig4c++/python/README.md.in
++++ b/biosig4c++/python/README.md.in
+@@ -48,11 +48,28 @@ or if you want to install in your own venv
+ ```
+   import biosig
+   import json
++  import tomllib
+ ```
+ ## read header/metainformation
+ ```
+   HDR=json.loads(biosig.header(FILENAME))
+ ```
++If some text fields are not ASCII/UTF8 encoded, this might not work. If that is the case, use
++```
++	CODEX = 'ISO-8859-15'
++	HDR = json.loads(biosig.jsonheader(FILENAME,CODEX))
++```
++or
++```
++	CODEX = 'ISO-8859-15'
++	tomlHDR = biosig.tomlheader(FILENAME,CODEX)
++	H2 = tomllib.loads(tomlHDR)
++	H2['CHANNEL']
++
++```
++
++
++
+ ## read data
+ ```
+   DATA=biosig.data(FILENAME)
+diff --git a/configure.ac b/configure.ac
+index 13696156..2e3e318b 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -22,7 +22,6 @@ AC_PROG_MAKE_SET
+ # Checks for libraries.
+ AC_CHECK_LIB([asound],  [snd_pcm_open])
+ AC_CHECK_LIB([b64],     [base64_encode_block], AC_SUBST(HAVE_LIBB64,     "1") )
+-AC_CHECK_LIB([cholmod], [cholmod_start],       AC_SUBST(HAVE_LIBCHOLMOD, "1") )
+ AC_CHECK_LIB([dcmdata], [dcmEnableOtherLongVRGeneration], AC_SUBST(HAVE_LIBDCMTK, "1") )
+ # AC_CHECK_LIB([hdf5],    [H5open],              AC_SUBST(HAVE_LIBHDF5,    "1") )
+ # AC_CHECK_LIB([matio],   [Mat_Open],            AC_SUBST(HAVE_LIBMATIO,   "1") )
+@@ -42,7 +41,8 @@ AC_CHECK_LIB([z],       [gzopen],              AC_SUBST(HAVE_LIBZ,       "1") )
+ # FIXME: Replace `main' with a function in `-lgdcmMSFF':
+ #AC_CHECK_LIB([gdcmMSFF], [main])
+ 
+-AC_CHECK_LIB([iconv], [iconv_open])
++# AC_CHECK_HEADER([dcmtk/config/osconfig.h], AC_SUBST(HAVE_LIBDCMTK, "1"), [AC_MSG_ERROR([can not find dcmtk/config/osconfig.h])])
++AC_CHECK_HEADER([suitesparse/cholmod.h], AC_SUBST(HAVE_LIBCHOLMOD, "1"), [AC_MSG_ERROR([can not find cholmod.h])])
+ AC_CHECK_HEADER([iconv.h], ,[AC_MSG_ERROR([can not find iconv.h])])
+ AC_CHECK_LIB([tinyxml] , [main],        AC_SUBST(HAVE_LIBTINYXML, "1")  [TEST_LIBS="$TEST_LIBS -ltinyxml"],   AC_MSG_WARN([libtinyxml is not installed.]))
+ # AC_CHECK_LIB([xml2] , [xmlReadFile],        AC_SUBST(HAVE_LIBXML2, "1") )

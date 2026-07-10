@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 916e1e7bfbb321ec11c6fb54d6d2582b35d07950a2c7ba15dad34ee722016
 $(PKG)_SUBDIR   := biosig-$($(PKG)_VERSION)
 $(PKG)_FILE     := biosig-$($(PKG)_VERSION).src.tar.xz
 $(PKG)_URL      := https://downloads.sourceforge.net/project/biosig/BioSig%20for%20C_C%2B%2B/src/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc             zlib libiconv libb64              tinyxml suitesparse dcmtk
+$(PKG)_DEPS     := cc             zlib libiconv libb64              tinyxml suitesparse
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://biosig.sourceforge.io/download.html' | \
