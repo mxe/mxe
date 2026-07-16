@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 34d612edc4a1ed7aa032fc0b9ab7ca52803032f94b1a47e37ee5d49a1db4c
 $(PKG)_SUBDIR   := fontconfig-$($(PKG)_VERSION)
 $(PKG)_FILE     := fontconfig-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://gitlab.freedesktop.org/fontconfig/fontconfig/-/archive/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc expat freetype-bootstrap gettext
+$(PKG)_DEPS     := cc expat freetype-bootstrap gettext libiconv
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://gitlab.freedesktop.org/fontconfig/fontconfig/tags' | \
@@ -21,6 +21,7 @@ define $(PKG)_BUILD
     '$(MXE_MESON_WRAPPER)' $(MXE_MESON_OPTS) \
         -Dtests=disabled \
         -Ddoc=disabled \
+        -Diconv=enabled \
         '$(BUILD_DIR)' '$(SOURCE_DIR)'
     '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)'
     '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)' install
