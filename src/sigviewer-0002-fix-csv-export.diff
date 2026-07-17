@@ -1,0 +1,41 @@
+diff --git a/changelog.txt b/changelog.txt
+index 3b52178..3ddfa74 100644
+--- a/changelog.txt
++++ b/changelog.txt
+@@ -1,3 +1,6 @@
++Version X.X.X
++(B) Fix crash when exporting events to CSV
++
+ Version 0.6.4
+ (+) Re-enable import/export event from/to EVT
+ 
+diff --git a/src/gui_impl/commands/save_gui_command.cpp b/src/gui_impl/commands/save_gui_command.cpp
+index 8c37f8a..87e5aa9 100644
+--- a/src/gui_impl/commands/save_gui_command.cpp
++++ b/src/gui_impl/commands/save_gui_command.cpp
+@@ -299,14 +299,17 @@ void SaveGuiCommand::exportEventsToCSV ()
+ 
+         for (unsigned int i = 0; i < event_manager_pt->getNumberOfEvents(); i++)
+         {
+-            row tmp = {
+-                event_manager_pt->getEvent(i)->getPosition(),
+-                event_manager_pt->getEvent(i)->getDuration(),
+-                event_manager_pt->getEvent(i)->getChannel(),
+-                event_manager_pt->getEvent(i)->getType(),
+-                event_manager_pt->getNameOfEvent(i)
+-            };
+-            events.append(tmp);
++            auto evt = event_manager_pt->getEvent(i);
++            if (evt != NULL) {
++                row tmp = {
++                    evt->getPosition(),
++                    evt->getDuration(),
++                    evt->getChannel(),
++                    evt->getType(),
++                    event_manager_pt->getNameOfEvent(i)
++                };
++                events.append(tmp);
++            }
+         }
+ 
+         std::sort(events.begin(),
