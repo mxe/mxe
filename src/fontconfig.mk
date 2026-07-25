@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 34d612edc4a1ed7aa032fc0b9ab7ca52803032f94b1a47e37ee5d49a1db4c
 $(PKG)_SUBDIR   := fontconfig-$($(PKG)_VERSION)
 $(PKG)_FILE     := fontconfig-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://gitlab.freedesktop.org/fontconfig/fontconfig/-/archive/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc expat freetype-bootstrap gettext libiconv meson
+$(PKG)_DEPS     := cc expat freetype-bootstrap gettext libiconv meson-wrapper
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://gitlab.freedesktop.org/fontconfig/fontconfig/tags' | \
