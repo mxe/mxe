@@ -73,7 +73,7 @@ define $(PKG)_BUILD
         -system-libtiff \
         -system-libmng \
         -system-sqlite \
-        -openssl-linked \
+        -no-openssl \
         -dbus-linked \
         -no-pch \
         -v \
