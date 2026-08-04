@@ -1,0 +1,31 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Marco Borrini <borrinimarco74@gmail.com>
+Date: Tue, 4 Aug 2026 17:28:00 +0200
+Subject: [PATCH 1/1] Explicitly link Qt6::Quick and Qt6::Qml to fix link order
+
+In static builds, kmahjongg transitively depends on Qt6::Quick through
+KDEGames6. Due to CMake's dependency resolution, Qt6::Qml ends up being
+placed before Qt6::Quick on the linker line, leading to undefined
+references to QQmlParserStatus. Explicitly adding Qt6::Quick and Qt6::Qml
+to the kmahjongg target fixes the link order. Only for static builds so
+we don't break dynamic builds that don't need this direct linkage.
+
+diff -ur kmahjongg-orig/src/CMakeLists.txt kmahjongg-new/src/CMakeLists.txt
+--- kmahjongg-orig/src/CMakeLists.txt	2026-06-27 09:47:52.000000000 +0200
++++ kmahjongg-new/src/CMakeLists.txt	2026-08-04 17:28:54.100630258 +0200
+@@ -57,6 +57,11 @@
+     Qt6::Gui
+ )
+ 
++if (NOT BUILD_SHARED_LIBS)
++    find_package(Qt6 COMPONENTS Quick Qml REQUIRED)
++    target_link_libraries(kmahjongg Qt6::Quick Qt6::Qml)
++endif()
++
+ install(TARGETS kmahjongg  ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
+ 
+ install(FILES kmahjongg.kcfg  DESTINATION  ${KDE_INSTALL_KCFGDIR})
