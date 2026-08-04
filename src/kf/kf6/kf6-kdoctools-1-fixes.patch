@@ -1,0 +1,64 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Marco Borrini <borrinimarco74@gmail.com>
+Date: Tue, 4 Aug 2026 09:40:00 +0200
+Subject: [PATCH 1/1] Fix static build for libxml2/libxslt and KF6DocTools
+
+1. In static builds, libxml2 and libxslt headers require macros like
+   LIBXML_STATIC to avoid __imp_ decorations.
+2. KF6DocTools was hardcoded to build as a SHARED library. We remove
+   the SHARED keyword so it respects the BUILD_SHARED_LIBS property.
+3. CMake's FindLibXml2 and FindLibXslt drop static transitive deps
+   (like iconv and bcrypt). We inject them via pkg_check_modules.
+   NOTE: these additions must be guarded by WIN32 AND NOT BUILD_SHARED_LIBS
+   otherwise they break the native linux tool builds in MXE.
+
+diff -ur kdoctools-6.28.0/CMakeLists.txt kdoctools-6.28.0-new/CMakeLists.txt
+--- kdoctools-6.28.0/CMakeLists.txt	2026-07-03 12:54:45.000000000 +0200
++++ kdoctools-6.28.0-new/CMakeLists.txt	2026-08-04 11:57:29.216216828 +0200
+@@ -44,6 +44,10 @@
+ set(REQUIRED_QT_VERSION 6.9.0)
+ find_package(Qt6Core ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE)
+ 
++if(WIN32 AND NOT BUILD_SHARED_LIBS)
++    add_definitions(-DLIBXML_STATIC -DLIBXSLT_STATIC -DLIBEXSLT_STATIC)
++endif()
++
+ # KF6 frameworks
+ if (NOT MEINPROC_NO_KARCHIVE)
+    find_package(KF6Archive ${KF_DEP_VERSION} REQUIRED)
+@@ -69,6 +73,19 @@
+                        PURPOSE "Required by the KDE help system to process DocBook XML"
+                       )
+ 
++if(WIN32 AND NOT BUILD_SHARED_LIBS)
++    find_package(PkgConfig QUIET)
++    if(PKG_CONFIG_FOUND)
++        pkg_check_modules(PC_LIBXML2 QUIET libxml-2.0)
++        pkg_check_modules(PC_LIBXSLT QUIET libxslt)
++        pkg_check_modules(PC_LIBEXSLT QUIET libexslt)
++        list(APPEND LIBXML2_LIBRARIES ${PC_LIBXML2_LIBRARIES})
++        list(APPEND LIBXSLT_LIBRARIES ${PC_LIBXSLT_LIBRARIES})
++        list(APPEND LIBXSLT_EXSLT_LIBRARIES ${PC_LIBEXSLT_LIBRARIES})
++    endif()
++endif()
++
++
+ if (NOT LIBXML2_XMLLINT_EXECUTABLE)
+    message(FATAL_ERROR "xmllint is required to process DocBook XML")
+ endif()
+diff -ur kdoctools-6.28.0/src/CMakeLists.txt kdoctools-6.28.0-new/src/CMakeLists.txt
+--- kdoctools-6.28.0/src/CMakeLists.txt	2026-07-03 12:54:45.000000000 +0200
++++ kdoctools-6.28.0-new/src/CMakeLists.txt	2026-08-04 11:57:29.216365545 +0200
+@@ -32,7 +32,7 @@
+ )
+ 
+ # needed by KIO, need to export it
+-add_library(KF6DocTools SHARED xslt.cpp xslt_kde.cpp ${kdoctoolslog_core_SRCS})
++add_library(KF6DocTools xslt.cpp xslt_kde.cpp ${kdoctoolslog_core_SRCS})
+ add_library(KF6::DocTools ALIAS KF6DocTools)
+ 
+ set_target_properties(KF6DocTools PROPERTIES
