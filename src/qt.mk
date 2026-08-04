@@ -133,6 +133,7 @@ define $(PKG)_BUILD
     '$(TARGET)-g++' \
         -W -Wall -Werror -std=c++0x -pedantic \
         -Wno-deprecated-copy \
+        -Wno-error=template-id-cdtor \
         '$(TOP_DIR)/src/qt-test.cpp' \
         '$(1)/test-$(PKG)-pkgconfig/moc_qt-test.cpp' \
         '$(1)/test-$(PKG)-pkgconfig/qrc_qt-test.cpp' \
