@@ -3,12 +3,12 @@
 PKG             := dbus
 $(PKG)_WEBSITE  := https://dbus.freedesktop.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.15.6
-$(PKG)_CHECKSUM := f97f5845f9c4a5a1fb3df67dfa9e16b5a3fd545d348d6dc850cb7ccc9942bd8c
+$(PKG)_VERSION  := 1.16.2
+$(PKG)_CHECKSUM := 0ba2a1a4b16afe7bceb2c07e9ce99a8c2c3508e5dec290dbb643384bd6beb7e2
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://$(PKG).freedesktop.org/releases/$(PKG)/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc expat
+$(PKG)_DEPS     := cc expat meson-wrapper
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://cgit.freedesktop.org/dbus/dbus/refs/tags' | \
@@ -18,16 +18,15 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && ./configure \
-        $(MXE_CONFIGURE_OPTS) \
-        --disable-tests \
-        --disable-verbose-mode \
-        --disable-asserts \
-        --disable-maintainer-mode \
-        --disable-silent-rules \
-        --disable-launchd \
-        --disable-doxygen-docs \
-        --disable-xml-docs \
-        CFLAGS='-DPROCESS_QUERY_LIMITED_INFORMATION=0x1000'
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install
+    CFLAGS='$(CFLAGS) -DPROCESS_QUERY_LIMITED_INFORMATION=0x1000' \
+    '$(MXE_MESON_WRAPPER)' \
+        $(MXE_MESON_OPTS) \
+        -Dmodular_tests=disabled \
+        -Dverbose_mode=false \
+        -Dasserts=false \
+        -Dlaunchd=disabled \
+        -Ddoxygen_docs=disabled \
+        -Dxml_docs=disabled \
+        '$(BUILD_DIR)' '$(1)'
+    '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)' install
 endef
