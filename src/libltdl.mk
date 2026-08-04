@@ -21,4 +21,5 @@ define $(PKG)_BUILD
         --enable-ltdl-install
     $(MAKE) -C '$(1)/libltdl' -j '$(JOBS)'
     $(MAKE) -C '$(1)/libltdl' -j 1 install
+    $(SED) -i 's, [^ ]*tmp-[^ ]*\.a,,g' '$(PREFIX)/$(TARGET)/lib/libltdl.la'
 endef
