@@ -1,0 +1,33 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Marco Borrini <borrinimarco74@gmail.com>
+Date: Tue, 4 Aug 2026 08:22:00 +0200
+Subject: [PATCH 2/2] Fix CMake definitions and missing transitive dependencies
+
+This patch fixes two bugs in DBus1Config.pkgconfig.in that break static builds:
+1) CFLAGS_OTHER (containing -DDBUS_STATIC_BUILD and -pthread) is incorrectly
+   assigned to INTERFACE_COMPILE_DEFINITIONS, which prefixes items with -D.
+   We change it to INTERFACE_COMPILE_OPTIONS.
+2) dbus-1 is incorrectly declared as SHARED IMPORTED and its transitive
+   dependencies (like iphlpapi, ws2_32) from pkg-config are discarded. We
+   declare it as UNKNOWN IMPORTED and properly inject INTERFACE_LINK_LIBRARIES.
+
+diff -ur dbus-orig/cmake/DBus1Config.pkgconfig.in dbus-new/cmake/DBus1Config.pkgconfig.in
+--- dbus-orig/cmake/DBus1Config.pkgconfig.in	2026-08-04 06:21:46.666073220 +0200
++++ dbus-new/cmake/DBus1Config.pkgconfig.in	2026-08-04 08:22:23.675360231 +0200
+@@ -73,8 +73,10 @@
+ set(DBus1_INCLUDE_DIRS "${DBus1_INCLUDE_DIR}" "${DBus1_ARCH_INCLUDE_DIR}")
+ 
+ # setup imported target
+-add_library(dbus-1 SHARED IMPORTED)
++add_library(dbus-1 UNKNOWN IMPORTED)
+ set_property(TARGET dbus-1 APPEND PROPERTY IMPORTED_LOCATION ${DBus1_LIBRARY})
+ set_property(TARGET dbus-1 APPEND PROPERTY IMPORTED_IMPLIB ${DBus1_LIBRARY})
+ set_property(TARGET dbus-1 APPEND PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${DBus1_INCLUDE_DIRS})
+-set_property(TARGET dbus-1 APPEND PROPERTY INTERFACE_COMPILE_DEFINITIONS ${DBus1_DEFINITIONS})
++set_property(TARGET dbus-1 APPEND PROPERTY INTERFACE_COMPILE_OPTIONS ${DBus1_DEFINITIONS})
++list(REMOVE_ITEM PC_DBUS1_LIBRARIES dbus-1)
++set_property(TARGET dbus-1 APPEND PROPERTY INTERFACE_LINK_LIBRARIES ${PC_DBUS1_LIBRARIES})
