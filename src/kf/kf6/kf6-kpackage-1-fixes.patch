@@ -1,0 +1,25 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Marco Borrini <borrinimarco74@gmail.com>
+Date: Tue, 4 Aug 2026 15:51:00 +0200
+Subject: [PATCH 1/1] Remove legacy kpackage_common_STATIC install target
+
+KF6Package refactored its targets and no longer builds a separate
+kpackage_common_STATIC target. However, the static build install rules
+erroneously still attempted to install it, causing CMake configuration
+to fail during static builds.
+
+diff -ur kpackage-6.28.0/src/kpackage/CMakeLists.txt kpackage-6.28.0-new/src/kpackage/CMakeLists.txt
+--- kpackage-6.28.0/src/kpackage/CMakeLists.txt	2026-07-03 12:58:54.000000000 +0200
++++ kpackage-6.28.0-new/src/kpackage/CMakeLists.txt	2026-08-04 15:51:16.887234409 +0200
+@@ -87,6 +87,4 @@
+         DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF}/KPackage/KPackage COMPONENT Devel)
+ 
+ install(TARGETS KF6Package EXPORT KF6PackageTargets ${KF_INSTALL_TARGETS_DEFAULT_ARGS})
+-if (NOT BUILD_SHARED_LIBS)
+-    install(TARGETS kpackage_common_STATIC EXPORT KF6PackageTargets ${KF_INSTALL_TARGETS_DEFAULT_ARGS})
+-endif()
++
