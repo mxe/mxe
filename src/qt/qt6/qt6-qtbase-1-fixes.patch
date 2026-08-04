@@ -477,3 +477,32 @@ index 1111111..2222222 100644
  
  struct LoadedOpenSsl {
      std::unique_ptr<QSystemLibrary> ssl, crypto;
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Marco Borrini <borrinimarco74@gmail.com>
+Date: Tue, 4 Aug 2026 06:54:00 +0200
+Subject: [PATCH 4/4] Fix Freetype transitive dependencies for static builds
+
+CMake's FindFreetype does not query pkg-config for transitive static
+dependencies (like brotli, bz2, harfbuzz) causing undefined references
+when other targets link against Qt6::Gui statically. We patch the Qt
+wrapper to inject them using pkg_check_modules.
+
+diff -ur qtbase-orig/cmake/FindWrapSystemFreetype.cmake qtbase-new/cmake/FindWrapSystemFreetype.cmake
+--- qtbase-orig/cmake/FindWrapSystemFreetype.cmake
++++ qtbase-new/cmake/FindWrapSystemFreetype.cmake
+@@ -47,6 +47,14 @@
+     add_library(WrapSystemFreetype::WrapSystemFreetype INTERFACE IMPORTED)
+     target_link_libraries(WrapSystemFreetype::WrapSystemFreetype
+                           INTERFACE "${__freetype_target_name}")
++    find_package(PkgConfig QUIET)
++    if(PKG_CONFIG_FOUND)
++        pkg_check_modules(PC_FREETYPE QUIET freetype2)
++        if(PC_FREETYPE_FOUND)
++            list(REMOVE_ITEM PC_FREETYPE_LIBRARIES freetype)
++            target_link_libraries(WrapSystemFreetype::WrapSystemFreetype INTERFACE ${PC_FREETYPE_LIBRARIES})
++        endif()
++    endif()
+ endif()
+ unset(__freetype_target_name)
+ unset(__freetype_found)
