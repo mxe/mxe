@@ -28,8 +28,7 @@ define $(PKG)_BUILD
         mv '$(PREFIX)/$(TARGET)/lib/mariadb/libmariadbclient.a' '$(PREFIX)/$(TARGET)/lib/mariadb/libmariadb.a',
         mv '$(PREFIX)/$(TARGET)/lib/mariadb/liblibmariadb.dll.a' '$(PREFIX)/$(TARGET)/lib/mariadb/libmariadb.a'
         mv '$(PREFIX)/$(TARGET)/lib/mariadb/libmariadb.dll' '$(PREFIX)/$(TARGET)/bin/')
-    # workaround for linking to 32-bit shared libmariadb.a
-    $(if $(BUILD_SHARED), '$(SED)' -i -e 's/^#define STDCALL __stdcall/#define STDCALL/;' '$(PREFIX)/$(TARGET)/include/mariadb/mysql.h')
+
 
     # build test
     '$(TARGET)-g++' \
