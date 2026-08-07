@@ -9,6 +9,7 @@ $(PKG)_CHECKSUM := 81b09d6dd9f1ed9301f8c55a968a488d0491f264dc2bab19a7e407ac67009
 $(PKG)_GH_CONF  := wxWidgets/wxWidgets/releases/latest,v,,,,.tar.bz2
 $(PKG)_DEPS     := cc expat jpeg libiconv libpng sdl tiff zlib
 
+
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS) \
