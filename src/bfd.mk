@@ -17,6 +17,13 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
+    # libbfd links against libsframe since binutils 2.41; build it here since
+    # this package only configures/builds the bfd subdir, not all of binutils.
+    cd '$(1)/libsframe' && ./configure \
+        --host='$(TARGET)' \
+        --disable-shared
+    $(MAKE) -C '$(1)/libsframe' -j '$(JOBS)'
+
     cd '$(1)/bfd' && ./configure \
         --host='$(TARGET)' \
         --target='$(TARGET)' \
