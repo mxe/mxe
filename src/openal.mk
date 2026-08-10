@@ -3,8 +3,8 @@
 PKG             := openal
 $(PKG)_WEBSITE  := https://openal-soft.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.19.1
-$(PKG)_CHECKSUM := 5c2f87ff5188b95e0dc4769719a9d89ce435b8322b4478b95dd4b427fe84b2e9
+$(PKG)_VERSION  := 1.23.1
+$(PKG)_CHECKSUM := 796f4b89134c4e57270b7f0d755f0fa3435b90da437b745160a49bd41c845b21
 $(PKG)_SUBDIR   := openal-soft-$($(PKG)_VERSION)
 $(PKG)_FILE     := openal-soft-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://openal-soft.org/openal-releases/$($(PKG)_FILE)
@@ -22,7 +22,8 @@ define $(PKG)_BUILD
         -DDLLTOOL='$(PREFIX)/bin/$(TARGET)-dlltool' \
         -DALSOFT_EXAMPLES=FALSE \
         -DALSOFT_TESTS=FALSE \
-        -DALSOFT_UTILS=FALSE
+        -DALSOFT_UTILS=FALSE \
+        -DCMAKE_CXX_FLAGS="-include cstdint"
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' || $(MAKE) -C '$(BUILD_DIR)' -j 1
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 

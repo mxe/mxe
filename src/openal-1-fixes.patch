@@ -3,61 +3,33 @@ This file is part of MXE. See LICENSE.md for licensing information.
 Contains ad hoc patches for cross building.
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Tony Theodore <tonyt@logyst.com>
-Date: Sun, 13 Oct 2019 16:21:22 +1100
-Subject: [PATCH 1/2] fix *.pc libs
+From: Marco Borrini <borrinimarco74@gmail.com>
+Date: Tue, 4 Aug 2026 16:33:00 +0200
+Subject: [PATCH 1/1] Add libstdc++ and Windows libraries to pkg-config private libs
 
+When building OpenAL as a static library with a C++ compiler, consumers
+that link it using a C compiler via pkg-config (e.g., test-openal.c in MXE)
+need to link against the C++ standard library, otherwise they will fail
+with undefined references to std:: symbols and __cxa exceptions.
 
-diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 1111111..2222222 100644
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -1101,6 +1101,7 @@ IF(HAVE_WINDOWS_H)
-             SET(ALC_OBJS  ${ALC_OBJS} Alc/backends/dsound.c)
-             ADD_BACKEND_LIBS(${DSOUND_LIBRARIES})
-             SET(INC_PATHS ${INC_PATHS} ${DSOUND_INCLUDE_DIRS})
-+            SET(PKG_CONFIG_LIBS "${PKG_CONFIG_LIBS} -luuid -lole32")
-         ENDIF()
-     ENDIF()
- 
+In addition, standard Windows libraries (ole32, uuid, shell32) are required
+by OpenAL internally, but are not explicitly injected by CMake into
+pkg-config when compiling a static library, because CMake assumes it will
+always handle linking when consumers use CMake instead of pkg-config.
 
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Thu, 28 May 2020 13:50:18 +0200
-Subject: [PATCH 2/2] gcc 10 compatibility: add missing "extern"
-
-Related to:
-        Default to -fno-common
-        https://gcc.gnu.org/gcc-10/porting_to.html
-
-diff --git a/Alc/bformatdec.c b/Alc/bformatdec.c
-index 1111111..2222222 100644
---- a/Alc/bformatdec.c
-+++ b/Alc/bformatdec.c
-@@ -10,6 +10,9 @@
- #include "threads.h"
- #include "almalloc.h"
+diff -ur openal-soft-1.25.2-orig/CMakeLists.txt openal-soft-1.25.2-new/CMakeLists.txt
+--- openal-soft-1.25.2-orig/CMakeLists.txt	2026-08-04 16:33:39.319656642 +0200
++++ openal-soft-1.25.2-new/CMakeLists.txt	2026-08-04 16:33:47.363418526 +0200
+@@ -1559,6 +1559,12 @@
+             set(PKG_CONFIG_PRIVATE_LIBS "${PKG_CONFIG_PRIVATE_LIBS} -l${FLAG}")
+         endif()
+     endforeach()
++    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
++        set(PKG_CONFIG_PRIVATE_LIBS "${PKG_CONFIG_PRIVATE_LIBS} -lstdc++")
++    endif()
++    if(WIN32)
++        set(PKG_CONFIG_PRIVATE_LIBS "${PKG_CONFIG_PRIVATE_LIBS} -lole32 -luuid -lshell32")
++    endif()
+ endif()
  
-+const ALfloat N3D2N3DScale[MAX_AMBI_COEFFS];
-+const ALfloat SN3D2N3DScale[MAX_AMBI_COEFFS];
-+const ALfloat FuMa2N3DScale[MAX_AMBI_COEFFS];
- 
- /* NOTE: These are scale factors as applied to Ambisonics content. Decoder
-  * coefficients should be divided by these values to get proper N3D scalings.
-diff --git a/Alc/bformatdec.h b/Alc/bformatdec.h
-index 1111111..2222222 100644
---- a/Alc/bformatdec.h
-+++ b/Alc/bformatdec.h
-@@ -24,9 +24,9 @@
- /* NOTE: These are scale factors as applied to Ambisonics content. Decoder
-  * coefficients should be divided by these values to get proper N3D scalings.
-  */
--const ALfloat N3D2N3DScale[MAX_AMBI_COEFFS];
--const ALfloat SN3D2N3DScale[MAX_AMBI_COEFFS];
--const ALfloat FuMa2N3DScale[MAX_AMBI_COEFFS];
-+extern const ALfloat N3D2N3DScale[MAX_AMBI_COEFFS];
-+extern const ALfloat SN3D2N3DScale[MAX_AMBI_COEFFS];
-+extern const ALfloat FuMa2N3DScale[MAX_AMBI_COEFFS];
- 
- 
- struct AmbDecConf;
+ if(UNIX_ELF)
