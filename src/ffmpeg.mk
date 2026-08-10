@@ -3,14 +3,14 @@
 PKG             := ffmpeg
 $(PKG)_WEBSITE  := https://ffmpeg.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 7.1.1
-$(PKG)_CHECKSUM := 733984395e0dbbe5c046abda2dc49a5544e7e0e1e2366bba849222ae9e3a03b1
+$(PKG)_VERSION  := 9.0
+$(PKG)_CHECKSUM := 7f607a00dd0d28a729d5a4811205812eef01cf6ef6155025febb6f36a9062d52
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://ffmpeg.org/releases/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc bzip2 gnutls lame libass libbluray libbs2b libcaca \
-                   libvpx opencore-amr opus sdl2 speex theora vidstab \
-                   vo-amrwbenc vorbis x264 x265 xvidcore yasm zlib
+                   libvpx opencore-amr $(BUILD)~nasm opus sdl2 speex theora vidstab \
+                   vo-amrwbenc vorbis x264 x265 xvidcore zlib
 
 # DO NOT ADD fdk-aac OR openssl SUPPORT.
 # Although they are free softwares, their licenses are not compatible with
@@ -35,14 +35,13 @@ define $(PKG)_BUILD
         $(if $(BUILD_STATIC), \
             --enable-static --disable-shared , \
             --disable-static --enable-shared ) \
-        --yasmexe='$(TARGET)-yasm' \
         --disable-debug \
         --disable-pthreads \
         --enable-w32threads \
         --disable-doc \
         --enable-gpl \
         --enable-version3 \
-        --extra-libs='-mconsole' \
+        --extra-libs="`'$(TARGET)-pkg-config' --libs libmpg123` -mconsole" \
         --enable-gnutls \
         --enable-libass \
         --enable-libbluray \

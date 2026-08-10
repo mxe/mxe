@@ -4,8 +4,8 @@ PKG             := pango
 $(PKG)_WEBSITE  := https://www.pango.org/
 $(PKG)_DESCR    := Pango
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.58.0
-$(PKG)_CHECKSUM := bc5bad6213ad4886a47d1e80292fd850b64159b50db67917a43d9ea80ee2298a
+$(PKG)_VERSION  := 1.58.2
+$(PKG)_CHECKSUM := 342385b6ca3b7c73455d7c80a13b7dbe4489e00bc3bd4c5bd6ed4dce421e374a
 $(PKG)_SUBDIR   := pango-$($(PKG)_VERSION)
 $(PKG)_FILE     := pango-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.gnome.org/sources/pango/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
@@ -14,6 +14,7 @@ $(PKG)_DEPS     := cc meson-wrapper cairo fontconfig freetype glib harfbuzz frib
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://gitlab.gnome.org/GNOME/pango/tags' | \
     $(SED) -n "s,.*<a [^>]\+>v\?\([0-9]\+\.[0-9.]\+\)<.*,\1,p" | \
+    $(SORT) -Vr | \
     head -1
 endef
 

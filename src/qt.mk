@@ -28,7 +28,7 @@ define $(PKG)_BUILD
     cd '$(1)' && QTDIR='$(1)' ./bin/syncqt
     cd '$(1)' && \
         OPENSSL_LIBS="`'$(TARGET)-pkg-config' --libs-only-l openssl`" \
-        PSQL_LIBS="-lpq -lpgport -lpgcommon -lsecur32 `'$(TARGET)-pkg-config' --libs-only-l openssl pthreads` -lws2_32" \
+        PSQL_LIBS="-lpq -lpgcommon -lpgport -lsecur32 `'$(TARGET)-pkg-config' --libs-only-l openssl pthreads` -lws2_32" \
         SYBASE_LIBS="-lsybdb `'$(TARGET)-pkg-config' --libs-only-l openssl` -liconv -lws2_32" \
         CXXFLAGS="-std=gnu++98" \
         MAKE=$(MAKE) \
@@ -73,7 +73,7 @@ define $(PKG)_BUILD
         -system-libtiff \
         -system-libmng \
         -system-sqlite \
-        -openssl-linked \
+        -no-openssl \
         -dbus-linked \
         -no-pch \
         -v \
@@ -133,6 +133,7 @@ define $(PKG)_BUILD
     '$(TARGET)-g++' \
         -W -Wall -Werror -std=c++0x -pedantic \
         -Wno-deprecated-copy \
+        -Wno-error=template-id-cdtor \
         '$(TOP_DIR)/src/qt-test.cpp' \
         '$(1)/test-$(PKG)-pkgconfig/moc_qt-test.cpp' \
         '$(1)/test-$(PKG)-pkgconfig/qrc_qt-test.cpp' \

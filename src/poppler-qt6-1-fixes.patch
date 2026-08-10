@@ -12,7 +12,7 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 8e7b17c..b5e5ad8 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -87,7 +87,7 @@ option(BUILD_SHARED_LIBS "Build poppler as a shared library" ON)
+@@ -88,7 +88,7 @@ option(BUILD_SHARED_LIBS "Build poppler as a shared library" ON)
  option(RUN_GPERF_IF_PRESENT "Run gperf if it is found" ON)
  option(INSTALL_GLIB_DEMO "Whether to install the poppler-glib-demo program." OFF)
  if(WIN32)
@@ -32,7 +32,7 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
 index b5e5ad8..9ea615a 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -204,7 +204,7 @@ find_soft_mandatory_package(ENABLE_QT5 Qt5Xml ${QT5_VERSION})
+@@ -205,7 +205,7 @@ find_soft_mandatory_package(ENABLE_QT5 Qt5Xml ${QT5_VERSION})
  find_soft_mandatory_package(ENABLE_QT5 Qt5Widgets ${QT5_VERSION})
  find_soft_mandatory_package(ENABLE_QT5 Qt5Test ${QT5_VERSION})
  

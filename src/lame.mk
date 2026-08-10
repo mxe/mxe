@@ -3,8 +3,8 @@
 PKG             := lame
 $(PKG)_WEBSITE  := https://lame.sourceforge.io/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.101
-$(PKG)_CHECKSUM := 7578af6eebd578b2bd64e468fac4ae1f03670a7e028166e67f855674b9b6aeac
+$(PKG)_VERSION  := 4.0
+$(PKG)_CHECKSUM := 3df5124d5ad3a98312ffd7ba6a9b36230e4f8a3e66d3ce0f425e336c32d216eb
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
@@ -21,7 +21,6 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(SOURCE_DIR)' && autoreconf -fi -I'$(PREFIX)/$(BUILD)/share/aclocal'
     cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS) \
         --disable-frontend \
