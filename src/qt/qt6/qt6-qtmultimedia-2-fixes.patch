@@ -1,0 +1,29 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Marco Borrini <borrinimarco74@gmail.com>
+Date: Tue, 11 Aug 2026 08:40:00 +0200
+Subject: [PATCH 1/1] Fix i686-w64-mingw32 build for qtmultimedia qwindows_propertystore
+
+Add __stdcall specialization for first_arg_is_ptr to match the Windows API
+calling convention on 32-bit architectures.
+
+diff --git a/src/multimedia/windows/qwindows_propertystore.cpp b/src/multimedia/windows/qwindows_propertystore.cpp
+--- a/src/multimedia/windows/qwindows_propertystore.cpp
++++ b/src/multimedia/windows/qwindows_propertystore.cpp
+@@ -86,6 +86,13 @@
+ {
+ };
+ 
++#if defined(__i386__)
++template <typename Result, typename Arg, typename... Args>
++struct first_arg_is_ptr<Result (__stdcall *)(Arg, Args...)> : std::bool_constant<std::is_pointer_v<Arg>>
++{
++};
++#endif
++
+ auto wrapPropVariantArg(const PROPVARIANT &arg)
+ {
+     if constexpr (first_arg_is_ptr<decltype(&PropVariantToGUID)>::value) {
