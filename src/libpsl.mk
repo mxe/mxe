@@ -14,6 +14,8 @@ define $(PKG)_BUILD
     LDFLAGS=-liconv '$(MXE_MESON_WRAPPER)' $(MXE_MESON_OPTS) \
         -Druntime=libidn2 \
         -Dbuiltin=true \
+        -Ddocs=false \
+        -Dtests=false \
         $(PKG_MESON_OPTS) \
         '$(BUILD_DIR)' '$(SOURCE_DIR)'
     '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)'
