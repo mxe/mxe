@@ -19,6 +19,7 @@ define $(PKG)_BUILD
         -Dbuild-tests=false \
         -Ddemos=false \
         -Dintrospection=disabled \
+        -Dc_args='-Wno-incompatible-pointer-types' \
         '$(BUILD_DIR)' '$(SOURCE_DIR)'
     '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)'
     DESTDIR="/" \
