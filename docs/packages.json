@@ -17,7 +17,7 @@
     "binutils": {"version": "2.47", "website": "https://www.gnu.org/software/binutils/", "description": "GNU Binutils"},
     "blas": {"version": "3.12.1", "website": "https://www.netlib.org/blas/", "description": "Reference BLAS (Basic Linear Algebra Subprograms)"},
     "blosc": {"version": "1.21.6", "website": "https://www.blosc.org", "description": ""},
-    "boost": {"version": "1.90.0", "website": "https://www.boost.org/", "description": "Boost C++ Library"},
+    "boost": {"version": "1.92.0", "website": "https://www.boost.org/", "description": "Boost C++ Library"},
     "botan2": {"version": "2.19.5", "website": "https://botan.randombit.net/", "description": "botan2"},
     "box2d": {"version": "2.3.1", "website": "https://www.box2d.org/", "description": ""},
     "brotli": {"version": "1.2.0", "website": "https://github.com/google/brotli", "description": ""},
