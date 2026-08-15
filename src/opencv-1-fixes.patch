@@ -5,14 +5,14 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Jonas Kvinge <jonas@jkvinge.net>
 Date: Tue, 11 Oct 2022 01:26:11 +0200
-Subject: [PATCH 1/1] MinGW build fixes
+Subject: [PATCH 1/2] MinGW build fixes
 
 
 diff --git a/cmake/OpenCVCompilerOptions.cmake b/cmake/OpenCVCompilerOptions.cmake
 index 1111111..2222222 100644
 --- a/cmake/OpenCVCompilerOptions.cmake
 +++ b/cmake/OpenCVCompilerOptions.cmake
-@@ -126,8 +126,6 @@ if(CV_GCC OR CV_CLANG)
+@@ -144,8 +144,6 @@ if(CV_GCC OR CV_CLANG OR CV_ICX)
    add_extra_compiler_option(-Wformat)
    add_extra_compiler_option(-Wformat-security -Wformat)
    add_extra_compiler_option(-Wmissing-declarations)
@@ -35,8 +35,8 @@ index 1111111..2222222 100644
 +endif()
 +
  # --- zlib (required) ---
- if(BUILD_ZLIB)
-   ocv_clear_vars(ZLIB_FOUND)
+ if(WITH_ZLIB_NG)
+   ocv_clear_vars(ZLIB_LIBRARY ZLIB_LIBRARIES ZLIB_INCLUDE_DIR)
 diff --git a/cmake/OpenCVFindLibsVideo.cmake b/cmake/OpenCVFindLibsVideo.cmake
 index 1111111..2222222 100644
 --- a/cmake/OpenCVFindLibsVideo.cmake
@@ -53,7 +53,7 @@ diff --git a/cmake/OpenCVModule.cmake b/cmake/OpenCVModule.cmake
 index 1111111..2222222 100644
 --- a/cmake/OpenCVModule.cmake
 +++ b/cmake/OpenCVModule.cmake
-@@ -602,12 +602,16 @@ function(__ocv_resolve_dependencies)
+@@ -625,12 +625,16 @@ function(__ocv_resolve_dependencies)
    # process private deps
    foreach(m ${OPENCV_MODULES_BUILD})
      foreach(d ${OPENCV_MODULE_${m}_PRIVATE_REQ_DEPS})
@@ -76,7 +76,7 @@ diff --git a/modules/core/src/lapack.cpp b/modules/core/src/lapack.cpp
 index 1111111..2222222 100644
 --- a/modules/core/src/lapack.cpp
 +++ b/modules/core/src/lapack.cpp
-@@ -628,7 +628,7 @@ void hal::SVD32f(float* At, size_t astep, float* W, float* U, size_t ustep, floa
+@@ -578,7 +578,7 @@ void hal::SVD32f(float* At, size_t astep, float* W, float* U, size_t ustep, floa
  void hal::SVD64f(double* At, size_t astep, double* W, double* U, size_t ustep, double* Vt, size_t vstep, int m, int n, int n1)
  {
      CALL_HAL(SVD64f, cv_hal_SVD64f, At, astep, W, U, ustep, Vt, vstep, m, n, decodeSVDParameters(U, Vt, m, n, n1))
@@ -102,7 +102,7 @@ diff --git a/modules/dnn/CMakeLists.txt b/modules/dnn/CMakeLists.txt
 index 1111111..2222222 100644
 --- a/modules/dnn/CMakeLists.txt
 +++ b/modules/dnn/CMakeLists.txt
-@@ -67,7 +67,7 @@ if(MSVC)
+@@ -73,7 +73,7 @@ if(MSVC)
      ocv_warnings_disable(CMAKE_CXX_FLAGS /wd4592)  # symbol will be dynamically initialized (implementation limitation)
    endif()
  else()
@@ -111,3 +111,23 @@ index 1111111..2222222 100644
                                         -Wunused-parameter -Wsign-compare
    )
  endif()
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Sat, 15 Aug 2026 13:29:40 +0200
+Subject: [PATCH 2/2] avoid multiple definition at linking
+
+
+diff --git a/modules/videoio/src/cap_dshow.cpp b/modules/videoio/src/cap_dshow.cpp
+index 1111111..2222222 100644
+--- a/modules/videoio/src/cap_dshow.cpp
++++ b/modules/videoio/src/cap_dshow.cpp
+@@ -156,7 +156,7 @@ DEFINE_GUID(CLSID_SampleGrabber,0xc1f400a0,0x3f08,0x11d3,0x9f,0x0b,0x00,0x60,0x0
+ DEFINE_GUID(CLSID_SystemDeviceEnum,0x62be5d10,0x60eb,0x11d0,0xbd,0x3b,0x00,0xa0,0xc9,0x11,0xce,0x86);
+ DEFINE_GUID(CLSID_VideoInputDeviceCategory,0x860bb310,0x5d01,0x11d0,0xbd,0x3b,0x00,0xa0,0xc9,0x11,0xce,0x86);
+ DEFINE_GUID(FORMAT_VideoInfo,0x05589f80,0xc356,0x11ce,0xbf,0x01,0x00,0xaa,0x00,0x55,0x59,0x5a);
+-DEFINE_GUID(IID_IAMAnalogVideoDecoder,0xc6e13350,0x30ac,0x11d0,0xa1,0x8c,0x00,0xa0,0xc9,0x11,0x89,0x56);
++//DEFINE_GUID(IID_IAMAnalogVideoDecoder,0xc6e13350,0x30ac,0x11d0,0xa1,0x8c,0x00,0xa0,0xc9,0x11,0x89,0x56);
+ DEFINE_GUID(IID_IAMCameraControl,0xc6e13370,0x30ac,0x11d0,0xa1,0x8c,0x00,0xa0,0xc9,0x11,0x89,0x56);
+ DEFINE_GUID(IID_IAMCrossbar,0xc6e13380,0x30ac,0x11d0,0xa1,0x8c,0x00,0xa0,0xc9,0x11,0x89,0x56);
+ DEFINE_GUID(IID_IAMStreamConfig,0xc6e13340,0x30ac,0x11d0,0xa1,0x8c,0x00,0xa0,0xc9,0x11,0x89,0x56);
