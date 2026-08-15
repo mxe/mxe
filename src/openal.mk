@@ -3,8 +3,8 @@
 PKG             := openal
 $(PKG)_WEBSITE  := https://openal-soft.org/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.23.1
-$(PKG)_CHECKSUM := 796f4b89134c4e57270b7f0d755f0fa3435b90da437b745160a49bd41c845b21
+$(PKG)_VERSION  := 1.25.2
+$(PKG)_CHECKSUM := 1dbaac44e7579d5bc8847ca8db4b2e8b9fd3961041f35ee20def4958301e1089
 $(PKG)_SUBDIR   := openal-soft-$($(PKG)_VERSION)
 $(PKG)_FILE     := openal-soft-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://openal-soft.org/openal-releases/$($(PKG)_FILE)
