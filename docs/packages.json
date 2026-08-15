@@ -237,6 +237,7 @@
     "liboil": {"version": "0.3.17", "website": "https://liboil.freedesktop.org/", "description": ""},
     "libomemo": {"version": "0.7.0", "website": "https://github.com/gkdr/libomemo", "description": "Implementation of OMEMO in C"},
     "libomemo-c": {"version": "0.5.0", "website": "https://github.com/dino/libomemo-c", "description": "an implementation of Signal ratcheting forward secrecy protocol in C"},
+    "libopusenc": {"version": "0.3", "website": "https://opus-codec.org/", "description": "High-level API for encoding .opus files"},
     "libotr": {"version": "4.1.1", "website": "https://otr.cypherpunks.ca/", "description": "Off-the-Record Messaging"},
     "libpano13": {"version": "2.9.18", "website": "https://panotools.sourceforge.io/", "description": ""},
     "libpaper": {"version": "1.1.24+nmu5", "website": "https://packages.debian.org/unstable/libpaper1", "description": ""},
