@@ -224,7 +224,7 @@
     "liblsmash": {"version": "2.14.5", "website": "https://l-smash.github.io/l-smash/", "description": "L-SMASH"},
     "libltdl": {"version": "2.6.2", "website": "https://www.gnu.org/software/libtool/manual/html_node/Using-libltdl.html", "description": "GNU Libtool Library (libltdl)"},
     "libmad": {"version": "0.15.1b", "website": "https://www.underbit.com/products/mad/", "description": ""},
-    "libmicrohttpd": {"version": "0.9.38", "website": "https://www.gnu.org/software/libmicrohttpd/", "description": "GNU Libmicrohttpd"},
+    "libmicrohttpd": {"version": "1.0.10", "website": "https://www.gnu.org/software/libmicrohttpd/", "description": "GNU Libmicrohttpd"},
     "libmikmod": {"version": "3.3.7", "website": "http://mikmod.raphnet.net/", "description": "libMikMod"},
     "libmms": {"version": "0.6.4", "website": "https://sourceforge.net/projects/libmms/", "description": "a library for downloading (streaming) media files using the mmst and mmsh protocols"},
     "libmng": {"version": "2.0.3", "website": "https://www.libmng.com/", "description": ""},
