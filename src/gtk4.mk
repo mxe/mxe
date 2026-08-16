@@ -4,8 +4,8 @@ PKG             := gtk4
 $(PKG)_WEBSITE  := https://gtk.org/
 $(PKG)_DESCR    := GTK4
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 4.11.2
-$(PKG)_CHECKSUM := 4a481da6b65b6add3f59966b0bb27e8139c381d0699402df662df2ce1c9e6913
+$(PKG)_VERSION  := 4.18.6
+$(PKG)_CHECKSUM := e1817c650ddc3261f9a8345b3b22a26a5d80af154630dedc03cc7becefffd0fa
 $(PKG)_SUBDIR   := gtk-$($(PKG)_VERSION)
 $(PKG)_FILE     := gtk-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.gnome.org/sources/gtk/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
@@ -17,8 +17,9 @@ define $(PKG)_BUILD
         -Dbuild-testsuite=false \
         -Dbuild-examples=false \
         -Dbuild-tests=false \
-        -Ddemos=false \
+        -Dbuild-demos=false \
         -Dintrospection=disabled \
+        -Dvulkan=disabled \
         -Dc_args='-Wno-incompatible-pointer-types' \
         '$(BUILD_DIR)' '$(SOURCE_DIR)'
     '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)'
