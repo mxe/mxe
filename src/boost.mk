@@ -68,9 +68,6 @@ define $(PKG)_BUILD
     $($(PKG)_B2_CROSS_BUILD) -a -j '$(JOBS)' \
     || $($(PKG)_B2_CROSS_BUILD) -j '1'
 
-    $(if $(BUILD_SHARED), \
-        mv -fv '$(PREFIX)/$(TARGET)/lib/'libboost_*.dll '$(PREFIX)/$(TARGET)/bin/')
-
     # setup cmake toolchain
     echo 'set(Boost_THREADAPI "win32")' > '$(CMAKE_TOOLCHAIN_DIR)/$(PKG).cmake'
 
