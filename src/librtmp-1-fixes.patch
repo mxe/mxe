@@ -1,0 +1,51 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Sat, 15 Aug 2026 11:18:02 +0200
+Subject: [PATCH 1/1] fix gnutls compatibility
+
+
+diff --git a/librtmp/handshake.h b/librtmp/handshake.h
+index 1111111..2222222 100644
+--- a/librtmp/handshake.h
++++ b/librtmp/handshake.h
+@@ -52,7 +52,7 @@ typedef arc4_context *	RC4_handle;
+ #define HMAC_CTX	struct hmac_sha256_ctx
+ #define HMAC_setup(ctx, key, len)	hmac_sha256_set_key(&ctx, len, key)
+ #define HMAC_crunch(ctx, buf, len)	hmac_sha256_update(&ctx, len, buf)
+-#define HMAC_finish(ctx, dig, dlen)	dlen = SHA256_DIGEST_LENGTH; hmac_sha256_digest(&ctx, SHA256_DIGEST_LENGTH, dig)
++#define HMAC_finish(ctx, dig, dlen)	dlen = SHA256_DIGEST_LENGTH; hmac_sha256_digest(&ctx, dig)
+ #define HMAC_close(ctx)
+ 
+ typedef struct arcfour_ctx*	RC4_handle;
+diff --git a/librtmp/hashswf.c b/librtmp/hashswf.c
+index 1111111..2222222 100644
+--- a/librtmp/hashswf.c
++++ b/librtmp/hashswf.c
+@@ -51,7 +51,7 @@
+ #define HMAC_CTX	struct hmac_sha256_ctx
+ #define HMAC_setup(ctx, key, len)	hmac_sha256_set_key(&ctx, len, key)
+ #define HMAC_crunch(ctx, buf, len)	hmac_sha256_update(&ctx, len, buf)
+-#define HMAC_finish(ctx, dig, dlen)	dlen = SHA256_DIGEST_LENGTH; hmac_sha256_digest(&ctx, SHA256_DIGEST_LENGTH, dig)
++#define HMAC_finish(ctx, dig, dlen)	dlen = SHA256_DIGEST_LENGTH; hmac_sha256_digest(&ctx, dig)
+ #define HMAC_close(ctx)
+ #else	/* USE_OPENSSL */
+ #include <openssl/ssl.h>
+diff --git a/librtmp/rtmp.c b/librtmp/rtmp.c
+index 1111111..2222222 100644
+--- a/librtmp/rtmp.c
++++ b/librtmp/rtmp.c
+@@ -2491,8 +2491,8 @@ b64enc(const unsigned char *input, int length, char *output, int maxsize)
+ #elif defined(USE_GNUTLS)
+ typedef struct md5_ctx	MD5_CTX;
+ #define MD5_Init(ctx)	md5_init(ctx)
+-#define MD5_Update(ctx,data,len)	md5_update(ctx,len,data)
+-#define MD5_Final(dig,ctx)	md5_digest(ctx,MD5_DIGEST_LENGTH,dig)
++#define MD5_Update(ctx,data,len)	md5_update(ctx,len,(unsigned char *)data)
++#define MD5_Final(dig,ctx)	md5_digest(ctx,dig)
+ #else
+ #endif
+ 

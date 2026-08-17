@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Boris Nagaev <bnagaev@gmail.com>
 Date: Fri, 30 Dec 2016 19:59:12 +0100
-Subject: [PATCH 1/1] fix neon headers location
+Subject: [PATCH 1/2] fix neon headers location
 
 See https://github.com/mxe/mxe/issues/1619
 
@@ -39,3 +39,54 @@ index 1111111..2222222 100644
  
  #define GST_TYPE_NEONHTTP_SRC \
    (gst_neonhttp_src_get_type())
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Sat, 15 Aug 2026 13:49:39 +0200
+Subject: [PATCH 2/2] build fix for no HAVE_GST_CUDA
+
+
+diff --git a/sys/hip/gsthipmemorycopy.cpp b/sys/hip/gsthipmemorycopy.cpp
+index 1111111..2222222 100644
+--- a/sys/hip/gsthipmemorycopy.cpp
++++ b/sys/hip/gsthipmemorycopy.cpp
+@@ -596,6 +596,9 @@ gst_hip_memory_copy_before_transform (GstBaseTransform * trans,
+     return;
+ 
+   auto mem = gst_buffer_peek_memory (buffer, 0);
++#ifndef HAVE_GST_CUDA
++  if (0) {
++#else
+   if (priv->in_type == MemoryType::CUDA) {
+     if (!gst_is_cuda_memory (mem)) {
+       GST_WARNING_OBJECT (self, "Input memory is not cuda");
+@@ -632,6 +635,7 @@ gst_hip_memory_copy_before_transform (GstBaseTransform * trans,
+       gst_clear_object (&old_dev);
+       need_reconfigure = true;
+     }
++#endif
+   } else if (priv->in_type == MemoryType::HIP) {
+     if (!gst_is_hip_memory (mem)) {
+       GST_WARNING_OBJECT (self, "Input memory is not hip");
+@@ -652,12 +656,12 @@ gst_hip_memory_copy_before_transform (GstBaseTransform * trans,
+       }
+ 
+ 
++#ifdef HAVE_GST_CUDA
+       gst_clear_object (&priv->device);
+       priv->device = (GstHipDevice *) gst_object_ref (hmem->device);
+ 
+       auto new_dev_id = gst_hip_device_get_device_id (priv->device);
+       gst_clear_object (&priv->cuda_ctx);
+-
+       priv->target_id = new_dev_id;
+       priv->target_vendor = GST_HIP_VENDOR_NVIDIA;
+       priv->search_type = DeviceSearchType::DEVICE_ID;
+@@ -668,6 +672,7 @@ gst_hip_memory_copy_before_transform (GstBaseTransform * trans,
+         GST_WARNING_OBJECT (self, "Couldn't get cuda context");
+         priv->transfer_type = TransferType::SYSTEM;
+       }
++#endif
+ 
+       need_reconfigure = true;
+     }

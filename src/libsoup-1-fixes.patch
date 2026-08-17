@@ -12,7 +12,7 @@ diff --git a/meson.build b/meson.build
 index 1111111..2222222 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -379,7 +379,6 @@ if xgettext.found()
+@@ -380,7 +380,6 @@ if xgettext.found()
    subdir('po')
  endif
  

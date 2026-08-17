@@ -1,0 +1,29 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Marco Borrini <borrinimarco74@gmail.com>
+Date: Tue, 11 Aug 2026 10:45:00 +0200
+Subject: [PATCH 1/1] Fix i686 build: add x86 architecture to FindWebView2
+
+Recognize i686/x86/i386 as valid architectures for WebView2 SDK and map
+them to the x86 directory.
+
+diff --git a/cmake/FindWebView2.cmake b/cmake/FindWebView2.cmake
+--- a/cmake/FindWebView2.cmake
++++ b/cmake/FindWebView2.cmake
+@@ -9,10 +9,13 @@
+ function(get_cpu_arch result arch)
+     set(arm64List arm64 ARM64 aarch64)
+     set(x64List x86_64 AMD64 x86_64h)
++    set(x86List x86 i386 i686)
+     if(arch IN_LIST x64List)
+         set(${result} "x64" PARENT_SCOPE)
+     elseif(arch IN_LIST arm64List)
+         set(${result} "arm64" PARENT_SCOPE)
++    elseif(arch IN_LIST x86List)
++        set(${result} "x86" PARENT_SCOPE)
+     else()
+         message(FATAL_ERROR "Unknown architecture: ${arch}")
+     endif()

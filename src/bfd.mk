@@ -21,8 +21,11 @@ define $(PKG)_BUILD
     # this package only configures/builds the bfd subdir, not all of binutils.
     cd '$(1)/libsframe' && ./configure \
         --host='$(TARGET)' \
+        --prefix='$(PREFIX)/$(TARGET)' \
+        --enable-install-libbfd \
         --disable-shared
     $(MAKE) -C '$(1)/libsframe' -j '$(JOBS)'
+    $(MAKE) -C '$(1)/libsframe' -j 1 install
 
     cd '$(1)/bfd' && ./configure \
         --host='$(TARGET)' \
