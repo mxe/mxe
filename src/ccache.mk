@@ -28,10 +28,12 @@ define $(PKG)_BUILD_$(BUILD)
     # remove any previous symlinks
     rm -fv '$(PREFIX)/$(BUILD)/bin/$(BUILD_CC)' '$(PREFIX)/$(BUILD)/bin/$(BUILD_CXX)'
 
-    # minimal reqs build with bundled zlib
+    # minimal reqs build
+    # Use system zlib on macOS (bundled zlib has fdopen macro conflicts with modern Xcode)
+    # Use bundled zlib on Linux for hermetic builds
     cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
         $(MXE_CONFIGURE_OPTS) \
-        --with-bundled-zlib \
+        $(if $(findstring darwin,$(BUILD)),--without-bundled-zlib,--with-bundled-zlib) \
         --disable-man \
         --prefix='$(MXE_CCACHE_DIR)' \
         --sysconfdir='$(dir $($(PKG)_SYS_CONF))'

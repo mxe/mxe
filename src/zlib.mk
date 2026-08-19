@@ -12,10 +12,10 @@ $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 $(PKG)_DEPS_$(BUILD) :=
 
 define $(PKG)_BUILD
-    cd '$(1)' && CHOST='$(TARGET)' ./configure \
+    cd '$(1)' && CHOST='$(TARGET)' CC='$(PREFIX)/bin/$(TARGET)-gcc' AR='$(PREFIX)/bin/$(TARGET)-ar' RANLIB='$(PREFIX)/bin/$(TARGET)-ranlib' ./configure \
         --prefix='$(PREFIX)/$(TARGET)' \
         --static
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install
+    $(MAKE) -C '$(1)' -j '$(JOBS)' CC='$(PREFIX)/bin/$(TARGET)-gcc' AR='$(PREFIX)/bin/$(TARGET)-ar' RANLIB='$(PREFIX)/bin/$(TARGET)-ranlib' install
 endef
 
 define $(PKG)_BUILD_SHARED
