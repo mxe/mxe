@@ -12,7 +12,7 @@ $(PKG)_TARGETS   := $(BUILD) $(MXE_TARGETS)
 $(PKG)_IGNORE    := 
 
 define $(PKG)_BUILD
-    $(KF6_CMAKE) -S '$(SOURCE_DIR)' -B '$(BUILD_DIR)'
+    $(KF6_CMAKE) -DWITH_OPENSSL=OFF -S '$(SOURCE_DIR)' -B '$(BUILD_DIR)'
     
     cd '$(BUILD_DIR)' && '$(TARGET)-cmake' --build . -j '$(JOBS)'
     cd '$(BUILD_DIR)' && '$(TARGET)-cmake' --install .
