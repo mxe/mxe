@@ -6,7 +6,7 @@ PKG              := kf6-kirigami
 $(eval $(call KF6_METADATA))
 
 $(PKG)_CHECKSUM  := 30fc6bd928a7124ace334944c8b45748603d37e45464db874903d7eb91f41d36
-$(PKG)_DEPS      := kf6-conf kf6-extra-cmake-modules qt6-qtbase qt6-qtdeclarative qt6-qtsvg qt6-qtshadertools
+$(PKG)_DEPS      := kf6-conf kf6-extra-cmake-modules qt6-qtbase qt6-qttools qt6-qtdeclarative qt6-qtsvg qt6-qtshadertools
 $(PKG)_TARGETS   := $(MXE_TARGETS)
 $(PKG)_IGNORE    := 
 
