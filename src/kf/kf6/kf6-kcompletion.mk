@@ -6,7 +6,7 @@ PKG              := kf6-kcompletion
 $(eval $(call KF6_METADATA))
 
 $(PKG)_CHECKSUM  := 8aa9cbc36139adfa8e3b2c744cc94714afe154d21cef8a3a2d5f4d311be7cc3c
-$(PKG)_DEPS      := kf6-conf kf6-extra-cmake-modules qt6-qtbase kf6-kconfig kf6-kwidgetsaddons kf6-kcodecs
+$(PKG)_DEPS      := kf6-conf kf6-extra-cmake-modules qt6-qtbase qt6-qttools kf6-kconfig kf6-kwidgetsaddons kf6-kcodecs
 $(PKG)_TARGETS   := $(MXE_TARGETS)
 $(PKG)_IGNORE    := 
 
