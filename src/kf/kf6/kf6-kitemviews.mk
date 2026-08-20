@@ -6,7 +6,7 @@ PKG              := kf6-kitemviews
 $(eval $(call KF6_METADATA))
 
 $(PKG)_CHECKSUM  := 2b474a0a0ca1d59111ab864d4f05100e0056b5204d52dfbab6776ca0fbfdd402
-$(PKG)_DEPS      := kf6-conf kf6-extra-cmake-modules qt6-qtbase
+$(PKG)_DEPS      := kf6-conf kf6-extra-cmake-modules qt6-qtbase qt6-qttools
 $(PKG)_TARGETS   := $(MXE_TARGETS)
 $(PKG)_IGNORE    := 
 
