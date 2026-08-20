@@ -6,7 +6,7 @@ PKG              := kf6-kbookmarks
 $(eval $(call KF6_METADATA))
 
 $(PKG)_CHECKSUM  := d7f4048860ef00bc5d135e284dc6b1307d03199c2c13020994b17e38e3741f5c
-$(PKG)_DEPS      := kf6-conf kf6-extra-cmake-modules qt6-qtbase kf6-kconfig kf6-kcoreaddons kf6-kwidgetsaddons
+$(PKG)_DEPS      := kf6-conf kf6-extra-cmake-modules qt6-qtbase qt6-qttools kf6-kconfig kf6-kcoreaddons kf6-kwidgetsaddons
 $(PKG)_TARGETS   := $(MXE_TARGETS)
 $(PKG)_IGNORE    := 
 
