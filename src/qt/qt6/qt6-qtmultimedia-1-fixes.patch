@@ -75,9 +75,9 @@ diff --git a/src/multimedia/windows/qwindows_propertystore.cpp b/src/multimedia/
 index 1111111..2222222 100644
 --- a/src/multimedia/windows/qwindows_propertystore.cpp
 +++ b/src/multimedia/windows/qwindows_propertystore.cpp
-@@ -86,6 +86,13 @@ struct first_arg_is_ptr<Result (*)(Arg, Args...)> : std::bool_constant<std::is_p
- {
- };
+@@ -71,6 +71,13 @@ namespace {
+ // mingw workaround: PropVariantToGUID does not provide correct signature
+ // https://github.com/mingw-w64/mingw-w64/issues/153
  
 +#if defined(__i386__)
 +template <typename Result, typename Arg, typename... Args>
@@ -88,4 +88,4 @@ index 1111111..2222222 100644
 +
  auto wrapPropVariantArg(const PROPVARIANT &arg)
  {
-     if constexpr (first_arg_is_ptr<decltype(&PropVariantToGUID)>::value) {
+     if constexpr (std::is_invocable_v<decltype(PropVariantToGUID), const PROPVARIANT *, GUID *>)
