@@ -35,7 +35,7 @@ define $(PKG)_BUILD
     echo 'NETPBMLIBTYPE=unixstatic'         >> '$(1)/Makefile.config'
     echo 'NETPBMLIBSUFFIX=a'                >> '$(1)/Makefile.config'
     # Build only the library
-    $(MAKE) -C '$(1)' -j1 PROG_SUBDIRS=
+    $(MAKE) -C '$(1)' -j1 PROG_SUBDIRS= CFLAGS='-std=c99'
     # Package everything into a package directory. Use '-i' to ignore
     # failures that happen because we did not build all the tools.
     $(MAKE) -C '$(1)' -j1 -i package pkgdir='$(1)/mxe-pkgdir'
