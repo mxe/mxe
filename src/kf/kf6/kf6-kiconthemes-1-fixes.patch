@@ -1,0 +1,27 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Marco Borrini <borrinimarco74@gmail.com>
+Date: Tue, 4 Aug 2026 12:56:00 +0200
+Subject: [PATCH 1/1] Fix static build for KIconEnginePlugin
+
+Remove the hardcoded MODULE library type for KIconEnginePlugin, which
+causes the plugin to be built as a shared library even in static builds.
+This leads to "export ordinal too large" errors when linking statically
+against the entirety of Qt6 on Windows. Removing it allows CMake to follow
+the BUILD_SHARED_LIBS property.
+
+diff -ur kiconthemes-6.28.0/src/CMakeLists.txt kiconthemes-6.28.0-new/src/CMakeLists.txt
+--- kiconthemes-6.28.0/src/CMakeLists.txt	2026-07-03 12:55:38.000000000 +0200
++++ kiconthemes-6.28.0-new/src/CMakeLists.txt	2026-08-04 12:55:43.134419329 +0200
+@@ -102,7 +102,7 @@
+ )
+ 
+ if(NOT IOS)
+-    add_library(KIconEnginePlugin MODULE kiconengineplugin.cpp)
++    add_library(KIconEnginePlugin kiconengineplugin.cpp)
+     target_link_libraries(KIconEnginePlugin
+         PRIVATE
+             Qt6::Gui
