@@ -106,6 +106,9 @@ MXE_CCACHE_CACHE_DIR := $(MXE_CCACHE_DIR)/ccache
 # MXE_QT6_ID := qt6.2
 MXE_QT6_ID := qt6
 
+# set to major for KF
+MXE_KF6_ID := kf6
+
 # define some whitespace variables
 define newline
 
@@ -445,6 +448,7 @@ JOBS   ?= $(call LIST_NMIN, $(DEFAULT_MAX_JOBS) $(NPROCS))
 override MXE_PLUGIN_DIRS := \
     $(realpath $(TOP_DIR)/src) \
     $(realpath $(TOP_DIR)/src/qt/$(MXE_QT6_ID)) \
+    $(realpath $(TOP_DIR)/src/kf/$(MXE_KF6_ID)) \
     $(MXE_PLUGIN_DIRS)
 
 # Build native requirements for certain systems
