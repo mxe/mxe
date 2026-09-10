@@ -1,0 +1,26 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Marco Borrini <borrinimarco74@gmail.com>
+Date: Tue, 4 Aug 2026 17:14:00 +0200
+Subject: [PATCH 1/1] Remove SHARED hardcoded keyword from KMahjongglib
+
+KMahjongglib explicitly defined itself as a SHARED library, which caused
+issues during static builds (export ordinal too large) when it tried to
+link a DLL with all static Qt dependencies. Removing SHARED allows it to
+respect BUILD_SHARED_LIBS.
+
+diff -ur libkmahjongg-orig/src/CMakeLists.txt libkmahjongg-new/src/CMakeLists.txt
+--- libkmahjongg-orig/src/CMakeLists.txt	2026-06-26 12:10:40.000000000 +0200
++++ libkmahjongg-new/src/CMakeLists.txt	2026-08-04 17:13:40.916387651 +0200
+@@ -21,7 +21,7 @@
+     SOVERSION 6
+ )
+ 
+-add_library(KMahjongglib SHARED)
++add_library(KMahjongglib)
+ set_target_properties(KMahjongglib PROPERTIES
+     VERSION     ${KMAHJONGGLIB_VERSION}
+     SOVERSION   ${KMAHJONGGLIB_SOVERSION}
