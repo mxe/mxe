@@ -1,0 +1,144 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Marco Borrini <borrinimarco74@gmail.com>
+Date: Tue, 4 Aug 2026 17:04:00 +0200
+Subject: [PATCH 1/1] Add AL_LIBTYPE_STATIC and PkgConfig for libsndfile and OpenAL
+
+When building KDEGames statically, it links to OpenAL statically.
+The OpenAL headers on Windows use __declspec(dllimport) for functions
+like alcGetError unless AL_LIBTYPE_STATIC is defined.
+This patch defines AL_LIBTYPE_STATIC when building statically.
+
+Additionally, FindSndFile did not use PkgConfig to find libsndfile,
+which is a problem in a static build because libsndfile has private
+dependencies like libopus, libvorbis, and libogg which need to be linked.
+
+Similarly, CMake's FindOpenAL does not pull in pkg-config dependencies,
+which causes linking to fail due to missing Windows libraries like avrt.
+This patch leverages pkg-config for OpenAL in CMakeLists.txt to pull in
+the correct linker flags for static builds.
+
+Finally, KDEGames and KDEGamesPrivate were explicitly defining themselves
+as SHARED libraries, which caused issues during static builds (export ordinal too large)
+when it tried to link a DLL with all static Qt dependencies. Removing SHARED allows
+them to respect BUILD_SHARED_LIBS.
+
+diff -ur libkdegames-orig/cmake/modules/FindSndFile.cmake libkdegames-new/cmake/modules/FindSndFile.cmake
+--- libkdegames-orig/cmake/modules/FindSndFile.cmake	2026-08-04 16:51:22.156207696 +0200
++++ libkdegames-new/cmake/modules/FindSndFile.cmake	2026-08-04 16:55:56.771474126 +0200
+@@ -11,37 +11,32 @@
+ # SPDX-License-Identifier: BSD-3-Clause
+ #
+ 
++find_package(PkgConfig QUIET)
++if (PKG_CONFIG_FOUND)
++    pkg_check_modules(PC_SNDFILE QUIET sndfile)
++endif()
++
+ find_path(SNDFILE_INCLUDE_DIR
+     NAMES
+       sndfile.h
+     PATHS
+-      /usr/include
+-      /usr/local/include
+-      /opt/local/include
+-      /sw/include
++      HINTS ${PC_SNDFILE_INCLUDEDIR} ${PC_SNDFILE_INCLUDE_DIRS}
+ )
+ 
+ find_library(SNDFILE_LIBRARY
+-    NAMES
+-      sndfile sndfile-1
+-    PATHS
+-      /usr/lib
+-      /usr/local/lib
+-      /opt/local/lib
+-      /sw/lib
++      NAMES sndfile sndfile-1
++      HINTS ${PC_SNDFILE_LIBDIR} ${PC_SNDFILE_LIBRARY_DIRS}
+ )
+ 
+-set(SNDFILE_INCLUDE_DIRS
+-    ${SNDFILE_INCLUDE_DIR}
+-)
+-set(SNDFILE_LIBRARIES
+-    ${SNDFILE_LIBRARY}
+-)
++set(SNDFILE_INCLUDE_DIRS ${SNDFILE_INCLUDE_DIR})
++
++if (PC_SNDFILE_FOUND)
++    set(SNDFILE_LIBRARIES ${PC_SNDFILE_STATIC_LDFLAGS} ${PC_SNDFILE_LDFLAGS})
++else()
++    set(SNDFILE_LIBRARIES ${SNDFILE_LIBRARY})
++endif()
+ 
+-INCLUDE(FindPackageHandleStandardArgs)
+-# handle the QUIETLY and REQUIRED arguments and set SNDFILE_FOUND to TRUE if
+-# all listed variables are TRUE
+-FIND_PACKAGE_HANDLE_STANDARD_ARGS(SndFile DEFAULT_MSG SNDFILE_LIBRARY SNDFILE_INCLUDE_DIR)
++include(FindPackageHandleStandardArgs)
++FIND_PACKAGE_HANDLE_STANDARD_ARGS(SndFile DEFAULT_MSG SNDFILE_LIBRARIES SNDFILE_INCLUDE_DIR)
+ 
+-# show the SNDFILE_INCLUDE_DIRS and SNDFILE_LIBRARIES variables only in the advanced view
+ mark_as_advanced(SNDFILE_INCLUDE_DIRS SNDFILE_LIBRARIES)
+diff -ur libkdegames-orig/CMakeLists.txt libkdegames-new/CMakeLists.txt
+--- libkdegames-orig/CMakeLists.txt	2026-08-04 16:51:22.166380377 +0200
++++ libkdegames-new/CMakeLists.txt	2026-08-04 17:01:34.240695904 +0200
+@@ -94,9 +94,19 @@
+ find_package(OpenAL)
+ set_package_properties(OpenAL PROPERTIES
+     URL "https://www.openal.org/"
++    DESCRIPTION "OpenAL API"
+     TYPE REQUIRED
++    PURPOSE "Support for the KGameAudio system"
+ )
+ 
++find_package(PkgConfig QUIET)
++if (PKG_CONFIG_FOUND)
++    pkg_check_modules(PC_OPENAL QUIET openal)
++    if (PC_OPENAL_FOUND)
++        set(OPENAL_LIBRARY ${PC_OPENAL_STATIC_LDFLAGS} ${PC_OPENAL_LDFLAGS})
++    endif()
++endif()
++
+ find_package(SndFile)
+ set_package_properties(SndFile PROPERTIES
+     URL "http://www.mega-nerd.com/libsndfile/"
+diff -ur libkdegames-orig/src/CMakeLists.txt libkdegames-new/src/CMakeLists.txt
+--- libkdegames-orig/src/CMakeLists.txt	2026-08-04 16:51:22.171442448 +0200
++++ libkdegames-new/src/CMakeLists.txt	2026-08-04 17:04:01.268195283 +0200
+@@ -18,7 +18,7 @@
+ configure_file(libkdegames_capabilities.h.in ${CMAKE_CURRENT_BINARY_DIR}/libkdegames_capabilities.h)
+ configure_file(highscore/config-highscore.h.in ${CMAKE_CURRENT_BINARY_DIR}/highscore/config-highscore.h )
+ 
+-add_library(KDEGames SHARED)
++add_library(KDEGames)
+ 
+ set_target_properties(KDEGames PROPERTIES
+     OUTPUT_NAME ${KDEGAMES_OUTPUT_NAME}
+@@ -144,6 +144,10 @@
+         ${CMAKE_CURRENT_BINARY_DIR}/highscore
+ )
+ 
++if (NOT BUILD_SHARED_LIBS)
++    target_compile_definitions(KDEGames PRIVATE AL_LIBTYPE_STATIC)
++endif()
++
+ install(TARGETS KDEGames EXPORT KDEGamesTargets ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
+ 
+ 
+diff -ur libkdegames-orig/src/private/CMakeLists.txt libkdegames-new/src/private/CMakeLists.txt
+--- libkdegames-orig/src/private/CMakeLists.txt	2026-08-04 16:51:22.171239700 +0200
++++ libkdegames-new/src/private/CMakeLists.txt	2026-08-04 17:04:01.578190019 +0200
+@@ -6,7 +6,7 @@
+     add_subdirectory(tests)
+ endif()
+ 
+-add_library(KDEGamesPrivate SHARED)
++add_library(KDEGamesPrivate)
+ 
+ set_target_properties(KDEGamesPrivate PROPERTIES
+     OUTPUT_NAME ${KDEGAMESPRIVATE_OUTPUT_NAME}
