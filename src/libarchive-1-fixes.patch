@@ -9,12 +9,13 @@ Subject: [PATCH 1/1] fix pkg-config
 
 
 diff --git a/build/pkgconfig/libarchive.pc.in b/build/pkgconfig/libarchive.pc.in
-index 1111111..2222222 100644
+index 1f51e77f..d6256584 100644
 --- a/build/pkgconfig/libarchive.pc.in
 +++ b/build/pkgconfig/libarchive.pc.in
-@@ -9,4 +9,4 @@ Version: @VERSION@
+@@ -9,5 +9,5 @@ Version: @VERSION@
  Cflags: -I${includedir}
  Cflags.private: -DLIBARCHIVE_STATIC
  Libs: -L${libdir} -larchive
 -Libs.private: @LIBS@
 +Libs.private: @LIBS@ -liconv
+ Requires.private: @LIBSREQUIRED@
