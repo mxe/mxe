@@ -2,25 +2,25 @@
 
 PKG             := libxml++
 $(PKG)_WEBSITE  := https://libxmlplusplus.sourceforge.io/
-$(PKG)_DESCR    := libxml2
+$(PKG)_DESCR    := libxml++
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.40.1
-$(PKG)_CHECKSUM := 4ad4abdd3258874f61c2e2a41d08e9930677976d303653cd1670d3e9f35463e9
+$(PKG)_VERSION  := 5.6.1
+$(PKG)_CHECKSUM := 4996e8a73995e8a4cd656c8591dce38181146edfc30cb47c97d1db3c56990ad7
 $(PKG)_SUBDIR   := libxml++-$($(PKG)_VERSION)
 $(PKG)_FILE     := libxml++-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := https://download.gnome.org/sources/libxml++/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc glibmm libxml2
+$(PKG)_URL      := https://github.com/libxmlplusplus/libxmlplusplus/releases/download/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_DEPS     := cc meson-wrapper libxml2
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://gitlab.gnome.org/GNOME/libxml++/tags' | \
+    $(WGET) -q -O- 'https://github.com/libxmlplusplus/libxmlplusplus/tags' | \
     $(SED) -n "s,.*<a [^>]\+>v\?\([0-9]\+\.[0-9.]\+\)<.*,\1,p" | \
     head -1
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && CXX="$(TARGET)-g++ -mthreads" ./configure \
-        $(MXE_CONFIGURE_OPTS) \
-        MAKE=$(MAKE)
-    $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
-    $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+    '$(MXE_MESON_WRAPPER)' $(MXE_MESON_OPTS) \
+        -Dbuild-examples=false \
+        '$(BUILD_DIR)' '$(SOURCE_DIR)' && \
+    '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)' && \
+    '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)' install
 endef
