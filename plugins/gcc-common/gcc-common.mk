@@ -1,17 +1,6 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
-PKG             := gcc
-$(PKG)_WEBSITE  := https://gcc.gnu.org/
-$(PKG)_DESCR    := GCC
-$(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 11.5.0
-$(PKG)_RELEASE  := $($(PKG)_VERSION)
-$(PKG)_CHECKSUM := a6e21868ead545cf87f0c01f84276e4b5281d672098591c1c896241f09363478
-$(PKG)_SUBDIR   := gcc-$($(PKG)_VERSION)
-$(PKG)_FILE     := gcc-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := https://ftp.gnu.org/gnu/gcc/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_URL_2    := https://www.mirrorservice.org/sites/sourceware.org/pub/gcc/releases/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_DEPS     := binutils mingw-w64 $(addprefix $(BUILD)~,gmp isl mpc mpfr)
+$(PKG)_TEST_FILE := $(realpath $(TOP_DIR)/plugins/gcc-common/gcc-test.c)
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://ftp.gnu.org/gnu/gcc/?C=M;O=D' | \
