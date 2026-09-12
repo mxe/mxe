@@ -8,7 +8,7 @@ $(eval $(QT6_METADATA))
 $(PKG)_CHECKSUM := 9ea75af35c512f7e09e61c8c3af3997f13b4d43bb099cf43fcec470126b4041e
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 $(PKG)_DEPS_$(BUILD) := qt6-conf qt6-qtbase
-$(PKG)_DEPS     := cc $($(PKG)_DEPS_$(BUILD)) qt6-qtdeclarative $(BUILD)~$(PKG)
+$(PKG)_DEPS     := cc $($(PKG)_DEPS_$(BUILD)) qt6-qtdeclarative qt6-qtimageformats $(BUILD)~$(PKG)
 
 define $(PKG)_BUILD
     $(QT6_QT_CMAKE) -S '$(SOURCE_DIR)' -B '$(BUILD_DIR)' \
@@ -16,7 +16,7 @@ define $(PKG)_BUILD
         -DMySQL_LIBRARY_DIR='$(PREFIX)/$(TARGET)/lib/mariadb' \
         -DMySQL_LIBRARY=$(if $(BUILD_STATIC),"`$(TARGET)-pkg-config --libs libmariadb`",'$(PREFIX)/$(TARGET)/lib/mariadb/libmariadb.a') \
         -DQT_BUILD_TOOLS_WHEN_CROSSCOMPILING=ON
-    $(if $(BUILD_STATIC),'$(SED)' -i "/^ *LINK_LIBRARIES = /{s/$$/ `'$(TARGET)-pkg-config' --libs libbrotlidec` -llzma/g}" '$(BUILD_DIR)/build.ninja',)
+    $(if $(BUILD_STATIC),'$(SED)' -i "/^ *LINK_LIBRARIES = /{s/$$/ `'$(TARGET)-pkg-config' --libs libbrotlidec libtiff-4` -llzma/g}" '$(BUILD_DIR)/build.ninja',)
     # not built for some reason. make dummy so install won't fail
     touch '$(BUILD_DIR)/bin/qhelpgenerator.exe'
     cmake --build '$(BUILD_DIR)' -j '$(JOBS)'
