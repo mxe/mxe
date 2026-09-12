@@ -1,27 +1,10 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
-# generic library prerequisite versions are in:
-#     https://web.archive.org/web/YYYYMMDDhhmmss/http://gcc.gnu.org/install/prerequisites.html
-#
-# specific tested versions are in `contrib/download_prerequisites` script
-#     https://gcc.gnu.org/git/?p=gcc.git;a=history;f=contrib/download_prerequisites
-#
-# mxe versions are currently sufficient, if we need to pin these in the future,
-# simply expanded variables (*_SUBDIR, *_FILE, etc.) need to be set
-#
-# PKG             := isl
-# $(PKG)_VERSION  := 0.16.1
-# $(PKG)_CHECKSUM := 412538bb65c799ac98e17e8cfcdacbb257a57362acfaaff254b0fcae970126d2
-# $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
-# $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
-# $(PKG)_URL      := https://libisl.sourceforge.io/$($(PKG)_FILE)
-# $(PKG)_URL_2    := https://gcc.gnu.org/pub/gcc/infrastructure/$($(PKG)_FILE)
-
 PKG             := gcc
-# version used for tarball, will be X-YYYYMMDD for snapshots
+$(PKG)_WEBSITE  := https://gcc.gnu.org/
+$(PKG)_DESCR    := GCC
+$(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 14.4.0
-# release used for install dirs, will be X.0.1 for snapshots
-# change to $($(PKG)_VERSION) variable on release X.Y[>0].Z
 $(PKG)_RELEASE  := $($(PKG)_VERSION)
 $(PKG)_CHECKSUM := 752b6f567beac83159c77a7680b1316bdd784738bff9a9d070112c09da90f6d9
 $(PKG)_SUBDIR   := gcc-$($(PKG)_VERSION)
@@ -44,3 +27,7 @@ guile_EXTRA_WARNINGS = -Wno-error=misleading-indentation
 gtkmm2_EXTRA_WARNINGS = -Wno-error=cast-function-type
 gtkmm3_EXTRA_WARNINGS = -Wno-error=cast-function-type
 gtkglextmm_EXTRA_WARNINGS = -Wno-error=cast-function-type
+
+# Shared GCC build logic. Must be included at the end of the file 
+# so it can access the package variables defined above.
+include $(TOP_DIR)/plugins/gcc-common/gcc-common.mk

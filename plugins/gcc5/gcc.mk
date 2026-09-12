@@ -42,3 +42,7 @@ $(PKG)_URL      := https://ftp.gnu.org/gnu/gcc/gcc-$($(PKG)_VERSION)/$($(PKG)_FI
 $(PKG)_URL_2    := https://www.mirrorservice.org/sites/sourceware.org/pub/gcc/releases/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_PATCHES  := $(dir $(lastword $(MAKEFILE_LIST)))/gcc5.patch
 
+
+# Shared GCC build logic. Must be included at the end of the file 
+# so it can access the package variables defined above.
+include $(TOP_DIR)/plugins/gcc-common/gcc-common.mk

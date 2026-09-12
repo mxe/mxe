@@ -20,3 +20,7 @@ $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://libisl.sourceforge.io/$($(PKG)_FILE)
 $(PKG)_URL_2    := https://gcc.gnu.org/pub/gcc/infrastructure/$($(PKG)_FILE)
+
+# Shared GCC build logic. Must be included at the end of the file 
+# so it can access the package variables defined above.
+include $(TOP_DIR)/plugins/gcc-common/gcc-common.mk

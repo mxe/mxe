@@ -17,23 +17,20 @@ $(PKG)_URL      := https://libisl.sourceforge.io/$($(PKG)_FILE)
 $(PKG)_URL_2    := https://gcc.gnu.org/pub/gcc/infrastructure/$($(PKG)_FILE)
 
 PKG             := gcc
-$(PKG)_VERSION  := 9.5.0
+$(PKG)_VERSION  := 6.5.0
 $(PKG)_RELEASE  := $($(PKG)_VERSION)
-$(PKG)_CHECKSUM := 27769f64ef1d4cd5e2be8682c0c93f9887983e6cfd1a927ce5a0a2915a95cf8f
+$(PKG)_CHECKSUM := 7ef1796ce497e89479183702635b14bb7a46b53249209a5e0f999bebf4740945
 $(PKG)_SUBDIR   := gcc-$($(PKG)_VERSION)
 $(PKG)_FILE     := gcc-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://ftp.gnu.org/gnu/gcc/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_URL_2    := https://www.mirrorservice.org/sites/sourceware.org/pub/gcc/releases/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_PATCHES  := $(dir $(lastword $(MAKEFILE_LIST)))/gcc9.patch
+$(PKG)_PATCHES  := $(dir $(lastword $(MAKEFILE_LIST)))/gcc6.patch
 
-# copy db-2-install-exe.patch to gcc7 plugin when gcc9 is default
-db_PATCHES := $(TOP_DIR)/src/db-1-fix-including-winioctl-h-lowcase.patch
-
-# set these in respective makefiles when gcc9 becomes default
-# remove from here and leave them blank for gcc5 plugin
-libssh_EXTRA_WARNINGS = -Wno-error=implicit-fallthrough
+# set these in respective makefiles if gcc6 becomes default
+# and leave them blank for gcc5 plugin
 gtkimageview_EXTRA_WARNINGS = -Wno-error=misleading-indentation
 guile_EXTRA_WARNINGS = -Wno-error=misleading-indentation
-gtkmm2_EXTRA_WARNINGS = -Wno-error=cast-function-type
-gtkmm3_EXTRA_WARNINGS = -Wno-error=cast-function-type
-gtkglextmm_EXTRA_WARNINGS = -Wno-error=cast-function-type
+
+# Shared GCC build logic. Must be included at the end of the file 
+# so it can access the package variables defined above.
+include $(TOP_DIR)/plugins/gcc-common/gcc-common.mk
