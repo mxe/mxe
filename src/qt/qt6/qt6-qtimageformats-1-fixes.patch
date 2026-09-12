@@ -17,7 +17,7 @@ index 1111111..2222222 100644
      VCPKG_DEFAULT_FEATURES OFF
  )
 +### <sigh>
-+target_link_libraries(TIFF::TIFF INTERFACE -ltiff -lwebp -lsharpyuv -lzstd -llzma -ljpeg -lz)
++target_link_libraries(TIFF::TIFF INTERFACE -ltiff -lwebp -lsharpyuv -lzstd -llzma -ljpeg -ldeflate -lz -lm)
  # Threads::Threads might be brought in via a top-level CMakeLists.txt find_package dependency
  # in which case if the system WebpConfig.cmake depends Threads, it shouldn't try to promote it to
  # global to avoid a 'global promotion of a target in a different subdirectory' error.
