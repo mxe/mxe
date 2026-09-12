@@ -29,16 +29,6 @@ $(PKG)_DEPS     := binutils mingw-w64 $(addprefix $(BUILD)~,gmp isl mpc mpfr zst
 
 _$(PKG)_CONFIGURE_OPTS = --with-zstd='$(PREFIX)/$(BUILD)'
 
-
-# set these in respective makefiles when gcc10 becomes default
-# remove from here and leave them blank for gcc5 plugin
-libssh_EXTRA_WARNINGS = -Wno-error=implicit-fallthrough
-gtkimageview_EXTRA_WARNINGS = -Wno-error=misleading-indentation
-guile_EXTRA_WARNINGS = -Wno-error=misleading-indentation
-gtkmm2_EXTRA_WARNINGS = -Wno-error=cast-function-type
-gtkmm3_EXTRA_WARNINGS = -Wno-error=cast-function-type
-gtkglextmm_EXTRA_WARNINGS = -Wno-error=cast-function-type
-
 # Shared GCC build logic. Must be included at the end of the file 
 # so it can access the package variables defined above.
 include $(TOP_DIR)/plugins/gcc-common/gcc-common.mk

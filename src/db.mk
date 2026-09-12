@@ -11,6 +11,10 @@ $(PKG)_FILE     := db-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://download.oracle.com/berkeley-db/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc
 
+$(PKG)_EXTRA_WARNINGS := \
+    -Wno-incompatible-pointer-types \
+    -Wno-old-style-definition
+
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://www.oracle.com/technetwork/database/database-technologies/berkeleydb/downloads/index.html' | \
     $(SED) -n 's,.*/db-\([0-9\.]\+\)\.tar.gz.*,\1,p' | \
@@ -25,8 +29,8 @@ define $(PKG)_BUILD
         --enable-cryptography \
         --disable-replication \
         --with-mutex=$(subst i686,x86,$(PROCESSOR))/gcc-assembly \
-        $(PKG_CONFIGURE_OPTS) \
-        CFLAGS='-Wno-old-style-definition -Wno-incompatible-pointer-types'
+        CFLAGS='-O3 $($(PKG)_EXTRA_WARNINGS)' \
+        $(PKG_CONFIGURE_OPTS)
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' UTIL_PROGS=
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install_include install_lib
 endef

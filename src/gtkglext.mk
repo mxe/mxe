@@ -11,6 +11,10 @@ $(PKG)_FILE     := gtkglext-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/gtkglext/gtkglext/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc gtk2
 
+$(PKG)_EXTRA_WARNINGS := \
+    -Wno-incompatible-pointer-types \
+    -Wno-implicit-function-declaration
+
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://gitlab.gnome.org/Archive/gtkglext/tags' | \
     $(SED) -n "s,.*<a [^>]\+>v\?\([0-9]\+\.[0-9.]\+\)<.*,\1,p" | \
@@ -30,7 +34,7 @@ define $(PKG)_BUILD
         --disable-gtk-doc \
         --disable-man \
         --disable-glibtest \
-        CFLAGS='-Wno-incompatible-pointer-types -Wno-implicit-function-declaration'
+        CFLAGS='-O2 -g $($(PKG)_EXTRA_WARNINGS)'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install \
         bin_PROGRAMS= \
         sbin_PROGRAMS= \

@@ -5,11 +5,14 @@ $(PKG)_WEBSITE  := https://www.libssh.org
 $(PKG)_DESCR    := SSHv2 and SSHv1 protocol on client and server side
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.12.2
-$(PKG)_CHECKSUM := 6d3c4025c746dd31571f1e241d4c15e4e23a4c45fc2b725fdec42b678d7205c5
+$(PKG)_CHECKSUM := 49560f677d96e3706a904ac2de1116e25f3680937d51e5c92198fcba4a1c1e9f
 $(PKG)_SUBDIR   := libssh-$($(PKG)_VERSION)
-$(PKG)_FILE     := libssh-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://git.libssh.org/projects/libssh.git/snapshot/libssh-$($(PKG)_VERSION).tar.gz
+$(PKG)_FILE     := libssh-$($(PKG)_VERSION).tar.xz
+$(PKG)_URL      := https://www.libssh.org/files/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc libgcrypt zlib
+
+$(PKG)_EXTRA_WARNINGS := \
+    -Wno-implicit-fallthrough
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://git.libssh.org/projects/libssh.git/refs/tags' | \
