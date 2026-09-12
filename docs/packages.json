@@ -313,7 +313,7 @@
     "libvpx": {"version": "1.17.0", "website": "https://www.webmproject.org/code/", "description": "vpx"},
     "libwebp": {"version": "1.6.0", "website": "https://developers.google.com/speed/webp/", "description": ""},
     "libwebsockets": {"version": "2.4.2", "website": "https://libwebsockets.org/", "description": ""},
-    "libxml++": {"version": "2.40.1", "website": "https://libxmlplusplus.sourceforge.io/", "description": "libxml2"},
+    "libxml++": {"version": "5.6.1", "website": "https://libxmlplusplus.sourceforge.io/", "description": "libxml++"},
     "libxml2": {"version": "2.15.4", "website": "http://xmlsoft.org/", "description": ""},
     "libxslt": {"version": "1.1.45", "website": "https://gitlab.gnome.org/GNOME/libxslt/-/wikis", "description": ""},
     "libyaml": {"version": "0.2.5", "website": "https://github.com/yaml/libyaml", "description": "A C library for parsing and emitting YAML."},
