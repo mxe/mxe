@@ -38,40 +38,40 @@ define $(PKG)_BUILD
     
     # --- DEPLOYMENT PHASE ---
     # Create the dist folder for the standalone app
-    mkdir -p '$(TOP_DIR)/plugins/apps/$(PKG)/bundle/$(TARGET)'
+    mkdir -p '$(PREFIX)/$(TARGET)/bundle/$(PKG)'
     
     # Copy the main executable
-    cp '$(PREFIX)/$(TARGET)/qt6/bin/kmahjongg.exe' '$(TOP_DIR)/plugins/apps/$(PKG)/bundle/$(TARGET)/'
+    cp '$(PREFIX)/$(TARGET)/qt6/bin/kmahjongg.exe' '$(PREFIX)/$(TARGET)/bundle/$(PKG)/'
     
     # Resolve and copy ONLY the strictly necessary DLLs using the native MXE tool
     '$(TOP_DIR)/tools/copydlldeps.sh' -c \
-        -d '$(TOP_DIR)/plugins/apps/$(PKG)/bundle/$(TARGET)/' \
+        -d '$(PREFIX)/$(TARGET)/bundle/$(PKG)/' \
         -S "$(PREFIX)/$(TARGET)/qt6/bin $(PREFIX)/$(TARGET)/bin" \
-        -f '$(TOP_DIR)/plugins/apps/$(PKG)/bundle/$(TARGET)/kmahjongg.exe'
+        -f '$(PREFIX)/$(TARGET)/bundle/$(PKG)/kmahjongg.exe'
     
     # Copy Qt6/KF6 plugins
-    cp -r '$(PREFIX)/$(TARGET)/qt6/plugins' '$(TOP_DIR)/plugins/apps/$(PKG)/bundle/$(TARGET)/' || true
+    cp -r '$(PREFIX)/$(TARGET)/qt6/plugins' '$(PREFIX)/$(TARGET)/bundle/$(PKG)/' || true
     
     # Copy QML modules
-    cp -r '$(PREFIX)/$(TARGET)/qt6/qml' '$(TOP_DIR)/plugins/apps/$(PKG)/bundle/$(TARGET)/' || true
+    cp -r '$(PREFIX)/$(TARGET)/qt6/qml' '$(PREFIX)/$(TARGET)/bundle/$(PKG)/' || true
     
     # Resolve dependencies for all newly copied DLLs (plugins and qml)
     '$(TOP_DIR)/tools/copydlldeps.sh' -c \
-        -d '$(TOP_DIR)/plugins/apps/$(PKG)/bundle/$(TARGET)/' \
+        -d '$(PREFIX)/$(TARGET)/bundle/$(PKG)/' \
         -S "$(PREFIX)/$(TARGET)/qt6/bin $(PREFIX)/$(TARGET)/bin" \
-        -F '$(TOP_DIR)/plugins/apps/$(PKG)/bundle/$(TARGET)/'
+        -F '$(PREFIX)/$(TARGET)/bundle/$(PKG)/'
     
     # Copy specific data files required by kmahjongg directly into the app folder
-    mkdir -p '$(TOP_DIR)/plugins/apps/$(PKG)/bundle/$(TARGET)/data'
-    cp -r '$(PREFIX)/$(TARGET)/qt6/bin/data/kmahjongg' '$(TOP_DIR)/plugins/apps/$(PKG)/bundle/$(TARGET)/data/' || true
-    cp -r '$(PREFIX)/$(TARGET)/qt6/bin/data/kmahjongglib' '$(TOP_DIR)/plugins/apps/$(PKG)/bundle/$(TARGET)/data/' || true
-    cp -r '$(PREFIX)/$(TARGET)/qt6/bin/data/icons' '$(TOP_DIR)/plugins/apps/$(PKG)/bundle/$(TARGET)/data/' || true
-    cp -r '$(PREFIX)/$(TARGET)/qt6/bin/data/locale' '$(TOP_DIR)/plugins/apps/$(PKG)/bundle/$(TARGET)/data/' || true
+    mkdir -p '$(PREFIX)/$(TARGET)/bundle/$(PKG)/data'
+    cp -r '$(PREFIX)/$(TARGET)/qt6/bin/data/kmahjongg' '$(PREFIX)/$(TARGET)/bundle/$(PKG)/data/' || true
+    cp -r '$(PREFIX)/$(TARGET)/qt6/bin/data/kmahjongglib' '$(PREFIX)/$(TARGET)/bundle/$(PKG)/data/' || true
+    cp -r '$(PREFIX)/$(TARGET)/qt6/bin/data/icons' '$(PREFIX)/$(TARGET)/bundle/$(PKG)/data/' || true
+    cp -r '$(PREFIX)/$(TARGET)/qt6/bin/data/locale' '$(PREFIX)/$(TARGET)/bundle/$(PKG)/data/' || true
     
     # Create the qt.conf file to resolve hardcoded paths in a standalone environment
-    echo "[Paths]" > '$(TOP_DIR)/plugins/apps/$(PKG)/bundle/$(TARGET)/qt.conf'
-    echo "Prefix = ." >> '$(TOP_DIR)/plugins/apps/$(PKG)/bundle/$(TARGET)/qt.conf'
-    echo "Plugins = plugins" >> '$(TOP_DIR)/plugins/apps/$(PKG)/bundle/$(TARGET)/qt.conf'
-    echo "Data = data" >> '$(TOP_DIR)/plugins/apps/$(PKG)/bundle/$(TARGET)/qt.conf'
-    echo "Qml2Imports = qml" >> '$(TOP_DIR)/plugins/apps/$(PKG)/bundle/$(TARGET)/qt.conf'
+    echo "[Paths]" > '$(PREFIX)/$(TARGET)/bundle/$(PKG)/qt.conf'
+    echo "Prefix = ." >> '$(PREFIX)/$(TARGET)/bundle/$(PKG)/qt.conf'
+    echo "Plugins = plugins" >> '$(PREFIX)/$(TARGET)/bundle/$(PKG)/qt.conf'
+    echo "Data = data" >> '$(PREFIX)/$(TARGET)/bundle/$(PKG)/qt.conf'
+    echo "Qml2Imports = qml" >> '$(PREFIX)/$(TARGET)/bundle/$(PKG)/qt.conf'
 endef
