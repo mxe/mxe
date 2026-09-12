@@ -25,6 +25,7 @@ define $(PKG)_BUILD
         --enable-cryptography \
         --disable-replication \
         --with-mutex=$(subst i686,x86,$(PROCESSOR))/gcc-assembly \
+        CFLAGS='-O3 -Wno-error=incompatible-pointer-types' \
         $(PKG_CONFIGURE_OPTS)
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' UTIL_PROGS=
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install_include install_lib
