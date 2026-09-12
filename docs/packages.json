@@ -160,6 +160,8 @@
     "json-glib": {"version": "1.10.8", "website": "https://wiki.gnome.org/action/show/Projects/JsonGlib", "description": "JSON-Glib"},
     "json_spirit": {"version": "4.08", "website": "https://www.codeproject.com/Articles/20027/JSON-Spirit-A-C-JSON-Parser-Generator-Implemented", "description": ""},
     "jsoncpp": {"version": "1.9.5", "website": "https://github.com/open-source-parsers/jsoncpp", "description": "A C++ library for interacting with JSON"},
+    "kde-libkdegames": {"version": "26.04.3", "website": "https://invent.kde.org/games/libkdegames", "description": "KDE Games Library"},
+    "kde-libkmahjongg": {"version": "26.04.3", "website": "https://apps.kde.org/it/kmahjongg/", "description": "KMahjongg library"},
     "kf6": {"version": "6.28.0", "website": "https://kde.org/", "description": "KDE Frameworks 6"},
     "kf6-attica": {"version": "6.28.0", "website": "https://kde.org/", "description": "KDE Frameworks 6"},
     "kf6-breeze-icons": {"version": "6.28.0", "website": "https://kde.org/", "description": "KDE Frameworks 6"},
