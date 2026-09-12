@@ -29,8 +29,6 @@ $(PKG)_DEPS     := binutils mingw-w64 $(addprefix $(BUILD)~,gmp isl mpc mpfr zst
 
 _$(PKG)_CONFIGURE_OPTS = --with-zstd='$(PREFIX)/$(BUILD)'
 
-# copy db-2-install-exe.patch to gcc7 plugin when gcc10 is default
-db_PATCHES := $(TOP_DIR)/src/db-1-fix-including-winioctl-h-lowcase.patch
 
 # set these in respective makefiles when gcc10 becomes default
 # remove from here and leave them blank for gcc5 plugin

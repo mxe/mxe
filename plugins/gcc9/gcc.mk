@@ -26,8 +26,6 @@ $(PKG)_URL      := https://ftp.gnu.org/gnu/gcc/gcc-$($(PKG)_VERSION)/$($(PKG)_FI
 $(PKG)_URL_2    := https://www.mirrorservice.org/sites/sourceware.org/pub/gcc/releases/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_PATCHES  := $(dir $(lastword $(MAKEFILE_LIST)))/gcc9.patch
 
-# copy db-2-install-exe.patch to gcc7 plugin when gcc9 is default
-db_PATCHES := $(TOP_DIR)/src/db-1-fix-including-winioctl-h-lowcase.patch
 
 # set these in respective makefiles when gcc9 becomes default
 # remove from here and leave them blank for gcc5 plugin
