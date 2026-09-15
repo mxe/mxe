@@ -5,6 +5,7 @@
 [license-page]: LICENSE.md
 [license-badge]: https://img.shields.io/badge/License-MIT-brightgreen.svg
 
+[![IRC Chat](https://img.shields.io/badge/irc.libera.chat-%23mxe-blue.svg)](https://web.libera.chat/#mxe)
 [![Async Chat (Trial))](https://img.shields.io/badge/zulip-join_chat-brightgreen.svg)](https://mxe.zulipchat.com/)
 
 MXE (M cross environment) is a GNU Makefile that compiles a cross
