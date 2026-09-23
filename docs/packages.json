@@ -1,5 +1,6 @@
 {
     "a52dec": {"version": "0.7.4", "website": "https://liba52.sourceforge.io/", "description": "a52dec (aka. liba52)"},
+    "abseil-cpp": {"version": "20240722.1", "website": "https://abseil.io/", "description": "Abseil C++ common libraries"},
     "adwaita-icon-theme": {"version": "3.36.1", "website": "https://gtk.org/", "description": "GTK+"},
     "agg": {"version": "2.5", "website": "https://antigrain.com/", "description": "Anti-Grain Geometry"},
     "alure": {"version": "1.2", "website": "https://kcat.strangesoft.net/alure.html", "description": ""},
@@ -573,6 +574,7 @@
     "vulkan-loader": {"version": "vulkan-sdk-1.3.283.0", "website": "https://github.com/KhronosGroup/vulkan-loader", "description": "vulkan loader"},
     "waf": {"version": "1.8.17", "website": "https://waf.io/", "description": "Waf: the meta build system"},
     "wavpack": {"version": "5.9.0", "website": "http://www.wavpack.com/", "description": "WavPack"},
+    "webrtc-audio-processing": {"version": "1.3", "website": "https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing", "description": "WebRTC audio processing module - AEC3, noise suppression, AGC"},
     "wget": {"version": "1.25.0", "website": "https://www.gnu.org/software/wget/", "description": ""},
     "wget2": {"version": "2.2.1", "website": "https://www.gnu.org/software/wget/", "description": ""},
     "widl": {"version": "14.0.0", "website": "https://www.winehq.org/docs/widl/", "description": "Wine IDL Compiler"},
