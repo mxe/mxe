@@ -1,0 +1,54 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Wed, 23 Sep 2026 21:39:39 +0200
+Subject: [PATCH 1/2] add missing header for uint32_t and its ilk
+
+
+diff --git a/webrtc/api/task_queue/task_queue_base.h b/webrtc/api/task_queue/task_queue_base.h
+index 1111111..2222222 100644
+--- a/webrtc/api/task_queue/task_queue_base.h
++++ b/webrtc/api/task_queue/task_queue_base.h
+@@ -15,6 +15,7 @@
+ #include "api/task_queue/queued_task.h"
+ #include "rtc_base/system/rtc_export.h"
+ #include "rtc_base/thread_annotations.h"
++#include <cstdint>
+ 
+ namespace webrtc {
+ 
+diff --git a/webrtc/rtc_base/system/file_wrapper.h b/webrtc/rtc_base/system/file_wrapper.h
+index 1111111..2222222 100644
+--- a/webrtc/rtc_base/system/file_wrapper.h
++++ b/webrtc/rtc_base/system/file_wrapper.h
+@@ -15,6 +15,7 @@
+ #include <stdio.h>
+ 
+ #include <string>
++#include <cstdint>
+ 
+ // Implementation that can read (exclusive) or write from/to a file.
+ 
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Wed, 23 Sep 2026 21:49:57 +0200
+Subject: [PATCH 2/2] add -fext-numeric-literals to CFLAGS, including in .pc
+ file
+
+
+diff --git a/meson.build b/meson.build
+index 1111111..2222222 100644
+--- a/meson.build
++++ b/meson.build
+@@ -99,6 +99,7 @@ elif host_system == 'windows'
+   platform_cflags += ['-DNOMINMAX']
+   # Ensure M_PI etc are defined
+   platform_cflags += ['-D_USE_MATH_DEFINES']
++  platform_cflags += ['-fext-numeric-literals']
+   os_deps += [cc.find_library('winmm')]
+   have_win = true
+ endif
