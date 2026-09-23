@@ -1,0 +1,30 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Thu Jan 11 12:24:28 EST 2024
+From: John Robertson <john@rrci.com.com>
+Date: Thu Jan 11 12:25:04 EST 2024
+Subject: Fix segfault in ntdll.dll
+
+--- readline-8.2/nls.c	2022-08-15 09:38:51.000000000 -0400
++++ readline-8.2.new/nls.c	2024-01-11 12:29:18.695482039 -0500
+@@ -140,14 +140,16 @@
+     lspec = setlocale (LC_CTYPE, (char *)NULL);
+   if (lspec == 0)
+     lspec = "";
+-  ret = setlocale (LC_CTYPE, lspec);	/* ok, since it does not change locale */
++  if(!(ret = setlocale (LC_CTYPE, lspec)))	/* ok, since it does not change locale */
++     ret= setlocale(LC_CTYPE, "C");
+ #else
+   ret = (lspec == 0 || *lspec == 0) ? RL_DEFAULT_LOCALE : lspec;
+ #endif
+ 
+   _rl_utf8locale = (ret && *ret) ? utf8locale (ret) : 0;
+ 
+-  _rl_current_locale = savestring (ret);
++  if(ret)
++   _rl_current_locale = savestring (ret);
+   return ret;
+ }
+ 
