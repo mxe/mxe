@@ -24,7 +24,7 @@
     "brotli": {"version": "1.2.0", "website": "https://github.com/google/brotli", "description": ""},
     "bullet": {"version": "2.82-r2704", "website": "https://bulletphysics.org/", "description": "Bullet physics, version 2"},
     "bzip2": {"version": "1.0.8", "website": "https://en.wikipedia.org/wiki/Bzip2", "description": ""},
-    "cairo": {"version": "1.18.4", "website": "https://cairographics.org/", "description": ""},
+    "cairo": {"version": "1.18.6", "website": "https://cairographics.org/", "description": ""},
     "cairomm": {"version": "1.14.6", "website": "https://cairographics.org/cairomm/", "description": ""},
     "canberra": {"version": "0.30", "website": "http://0pointer.de/lennart/projects/libcanberra/", "description": "libcanberra"},
     "cblas": {"version": "3.12.1", "website": "https://www.netlib.org/blas/", "description": "C interface to Reference BLAS"},
