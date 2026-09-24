@@ -32,7 +32,7 @@ diff --git a/src/win32/cairo-win32-font.c b/src/win32/cairo-win32-font.c
 index 1111111..2222222 100644
 --- a/src/win32/cairo-win32-font.c
 +++ b/src/win32/cairo-win32-font.c
-@@ -1679,6 +1679,10 @@ _cairo_win32_font_face_hash_table_destroy (void)
+@@ -1677,6 +1677,10 @@ _cairo_win32_font_face_hash_table_destroy (void)
  {
      cairo_hash_table_t *hash_table;
  
@@ -43,7 +43,7 @@ index 1111111..2222222 100644
      /* We manually acquire the lock rather than calling
       * _cairo_win32_font_face_hash_table_lock simply to avoid creating
       * the table only to destroy it again. */
-@@ -1694,6 +1698,10 @@ _cairo_win32_font_face_hash_table_destroy (void)
+@@ -1692,6 +1696,10 @@ _cairo_win32_font_face_hash_table_destroy (void)
  static cairo_hash_table_t *
  _cairo_win32_font_face_hash_table_lock (void)
  {
@@ -68,7 +68,7 @@ diff --git a/src/meson.build b/src/meson.build
 index 1111111..2222222 100644
 --- a/src/meson.build
 +++ b/src/meson.build
-@@ -264,6 +264,7 @@ libcairo_dep = declare_dependency(link_with: libcairo,
+@@ -266,6 +266,7 @@ libcairo_dep = declare_dependency(link_with: libcairo,
  pkgmod.generate(libcairo,
    description: 'Multi-platform 2D graphics library',
    subdirs: [meson.project_name()],
