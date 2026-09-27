@@ -17,12 +17,12 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 1111111..2222222 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -74,7 +74,7 @@ set(PKG_EXTRA_LIBS "${PKG_EXTRA_LIBS} ${ORC_LIBRARIES}")
+@@ -90,7 +90,7 @@ if(USE_OMP AND OPENMP_FOUND)
+ if(TARGET OpenMP::OpenMP_C)
+ target_link_libraries(vidstab OpenMP::OpenMP_C)
  endif()
- if(USE_OMP)
- target_link_libraries(vidstab gomp)
--set(PKG_EXTRA_LIBS "${PKG_EXTRA_LIBS} -lgomp")
-+set(PKG_EXTRA_LIBS "${PKG_EXTRA_LIBS} -lgomp -lpthread")
+-set(PKG_EXTRA_LIBS "${PKG_EXTRA_LIBS} ${OpenMP_C_FLAGS}")
++set(PKG_EXTRA_LIBS "${PKG_EXTRA_LIBS} ${OpenMP_C_FLAGS} -lpthread")
  endif()
  
  

@@ -4,8 +4,8 @@ PKG             := vidstab
 $(PKG)_WEBSITE  := http://public.hronopik.de/vid.stab/features.php?lang=en
 $(PKG)_DESCR    := vid.stab video stablizer
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.1.0
-$(PKG)_CHECKSUM := 14d2a053e56edad4f397be0cb3ef8eb1ec3150404ce99a426c4eb641861dc0bb
+$(PKG)_VERSION  := 1.1.2
+$(PKG)_CHECKSUM := 96db34d48a9e3aa13736a48744b56dfb76731ac9bb5193c716de8534c9fd709d
 $(PKG)_GH_CONF  := georgmartius/vid.stab/tags,v
 $(PKG)_DEPS     := cc
 
