@@ -21,7 +21,8 @@ endef
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \
         -DBUILD_TESTING=OFF \
-        -DBUILD_PROGRAMS=OFF
+        -DBUILD_PROGRAMS=OFF \
+        -DCMAKE_POLICY_VERSION_MINIMUM=3.5
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 endef

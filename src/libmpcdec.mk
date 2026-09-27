@@ -16,6 +16,7 @@ define $(PKG)_BUILD
     '$(TARGET)-cmake' -S '$(SOURCE_DIR)' -B '$(BUILD_DIR)' \
         -DCMAKE_BUILD_TYPE='$(MXE_BUILD_TYPE)' \
         -DCMAKE_INSTALL_PREFIX='$(PREFIX)/$(TARGET)' \
+        -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
         $(if $(BUILD_SHARED),-DSHARED=ON)
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install

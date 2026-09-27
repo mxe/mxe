@@ -27,7 +27,8 @@ define $(PKG)_BUILD
         -DEXAMPLES=no \
         -DFTDIPP=no \
         -DFTDI_EEPROM=no \
-        -DPYTHON_BINDINGS=no
+        -DPYTHON_BINDINGS=no \
+        -DCMAKE_POLICY_VERSION_MINIMUM=3.5
     $(MAKE) -C '$(1)' -j '$(JOBS)' install VERBOSE=1
 
     '$(TARGET)-gcc' \

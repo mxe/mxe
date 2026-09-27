@@ -65,7 +65,8 @@ define $(PKG)_BUILD
         -DHDF5_USE_STATIC_LIBRARIES:BOOL=$(if $(BUILD_SHARED),OFF,ON) \
         -DBLA_STATIC=$(if $(BUILD_SHARED),OFF,ON) \
         -DBLA_VENDOR="OpenBLAS" \
-        -DLAPACK_LIBRARIES="`'$(TARGET)-pkg-config' lapack --cflags --libs` -lgfortran -lquadmath"
+        -DLAPACK_LIBRARIES="`'$(TARGET)-pkg-config' lapack --cflags --libs` -lgfortran -lquadmath" \
+        -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 
     # Known not to work or disabled in previous versions
     # -DGDAL_USE_THREADS:BOOL=ON \

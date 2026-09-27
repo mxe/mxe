@@ -28,7 +28,8 @@ define $(PKG)_BUILD
         -DUSE_CUSTOM_VECOR_MATH=OFF \
         -DUSE_DOUBLE_PRECISION=OFF \
         -DUSE_GLUT=OFF \
-        -DUSE_GRAPHICAL_BENCHMARK=OFF
+        -DUSE_GRAPHICAL_BENCHMARK=OFF \
+        -DCMAKE_POLICY_VERSION_MINIMUM=3.5
     $(MAKE) -C '$(1)' -j '$(JOBS)' install VERBOSE=1
 
     '$(TARGET)-g++' \

@@ -19,6 +19,7 @@ endef
 
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \
+        -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
         -DDYNLOAD=$(CMAKE_SHARED_BOOL) \
         -DBUILD_SHARED=$(CMAKE_SHARED_BOOL) \
         -DBUILD_STATIC=$(CMAKE_STATIC_BOOL) \

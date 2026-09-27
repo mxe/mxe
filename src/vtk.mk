@@ -32,6 +32,7 @@ define $(PKG)_BUILD_$(BUILD)
         -DBUILD_TESTING=FALSE \
         -DVTK_USE_X=OFF \
         -DVTK_DEFAULT_RENDER_WINDOW_OFFSCREEN=ON \
+        -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
         -DCMAKE_BUILD_TYPE="Release"
     $(MAKE) -C '$(PREFIX)/$(BUILD)/vtkCompileTools' -j '$(JOBS)' VERBOSE=1 vtkCompileTools
 endef
@@ -59,6 +60,7 @@ define $(PKG)_BUILD
         -DVTK_FORBID_DOWNLOADS=ON \
         -DBUILD_EXAMPLES=OFF \
         -DBUILD_TESTING=OFF \
+        -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
         $(PKG_CONFIGURE_OPTS)
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install VERBOSE=1

@@ -24,6 +24,7 @@ define $(PKG)_BUILD
         -DRAGEL='$(PREFIX)/$(BUILD)/bin/ragel' \
         -DCMAKE_C_FLAGS="`$($(PKG)_ARCH_FLAGS)`" \
         -DCMAKE_CXX_FLAGS="`$($(PKG)_ARCH_FLAGS)`" \
+        -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
         '$(SOURCE_DIR)'
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install

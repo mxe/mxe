@@ -19,6 +19,7 @@ define $(PKG)_BUILD
         -Denable-libsndfile=ON \
         -Denable-portaudio=ON \
         -Denable-readline=ON \
+        -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
         $($(PKG)_CONFIGURE_OPTS)
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install VERBOSE=1

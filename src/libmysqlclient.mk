@@ -32,6 +32,7 @@ define $(PKG)_BUILD
         -DENABLE_DTRACE=OFF \
         -DWITH_ZLIB=system \
         -DCMAKE_C_FLAGS='-Wno-incompatible-pointer-types -Wno-implicit-function-declaration' \
+        -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
         '$(1)'
 
     # def file created by cmake creates link errors

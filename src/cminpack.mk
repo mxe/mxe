@@ -16,8 +16,9 @@ define $(PKG)_UPDATE
     head -1
 endef
 
-define $(PKG)_BUILD_STATIC
-    cd '$(1)' && '$(TARGET)-cmake'
+define $(PKG)_BUILD_STATIC_DISABLED
+    cd '$(1)' && '$(TARGET)-cmake' \
+        -DCMAKE_POLICY_VERSION_MINIMUM=3.5
     $(MAKE) -C '$(1)' -j $(JOBS)
 
     $(INSTALL) -d                         '$(PREFIX)/$(TARGET)/lib'
@@ -26,8 +27,9 @@ define $(PKG)_BUILD_STATIC
     $(INSTALL) -m644 '$(1)/cminpack.h'    '$(PREFIX)/$(TARGET)/include/'
 endef
 
-define $(PKG)_BUILD_SHARED
-    cd '$(1)' && '$(TARGET)-cmake' -DUSE_FPIC=ON -DSHARED_LIBS=ON -DBUILD_EXAMPLES=OFF
+define $(PKG)_BUILD_SHARED_DISABLED
+    cd '$(1)' && '$(TARGET)-cmake' -DUSE_FPIC=ON -DSHARED_LIBS=ON -DBUILD_EXAMPLES=OFF \
+        -DCMAKE_POLICY_VERSION_MINIMUM=3.5
     $(MAKE) -C '$(1)' -j $(JOBS)
 
     $(INSTALL) -d                             '$(PREFIX)/$(TARGET)/bin'

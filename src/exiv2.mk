@@ -12,7 +12,8 @@ $(PKG)_DEPS     := cc expat gettext mman-win32 zlib
 define $(PKG)_BUILD
     $(TARGET)-cmake -S '$(SOURCE_DIR)' -B '$(BUILD_DIR)' \
         -DEXIV2_ENABLE_WIN_UNICODE=ON \
-        -DEXIV2_BUILD_SAMPLES=OFF
+        -DEXIV2_BUILD_SAMPLES=OFF \
+        -DCMAKE_POLICY_VERSION_MINIMUM=3.5
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 endef

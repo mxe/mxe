@@ -14,7 +14,8 @@ define $(PKG)_BUILD
    cd '$(1)/build' && '$(TARGET)-cmake' .. \
        -DINSTALL_CMAKE_DIR='$(PREFIX)/$(TARGET)/cmake/cppnetlib' \
        -DCPP-NETLIB_BUILD_EXAMPLES=OFF \
-       -DCPP-NETLIB_BUILD_TESTS=OFF
+       -DCPP-NETLIB_BUILD_TESTS=OFF \
+       -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 
    $(MAKE) -C '$(1)/build' -j '$(JOBS)' install
 endef

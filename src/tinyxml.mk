@@ -20,7 +20,9 @@ endef
 
 define $(PKG)_BUILD
     mkdir '$(1).build'
-    cd '$(1).build' && '$(TARGET)-cmake' '$(1)'
+    cd '$(1).build' && '$(TARGET)-cmake' \
+        -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+        '$(1)'
     $(MAKE) -C '$(1).build' install
 
     '$(TARGET)-g++' \

@@ -66,6 +66,7 @@ define $(PKG)_BUILD
         -DCEGUI_BUILD_RENDERER_OPENGL3=ON \
         -DCEGUI_BUILD_RENDERER_OPENGLES=OFF \
         -DCMAKE_CXX_FLAGS="`$(TARGET)-pkg-config --cflags glew freeimage`" \
+        -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
         $(SOURCE_DIR)
 
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1

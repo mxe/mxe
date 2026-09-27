@@ -9,7 +9,9 @@ $(PKG)_GH_CONF  := andrewrk/liblaxjson/tags
 $(PKG)_DEPS     := cc
 
 define $(PKG)_BUILD
-    cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)'
+    cd '$(BUILD_DIR)' && $(TARGET)-cmake \
+        -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+        '$(SOURCE_DIR)'
 
     '$(TARGET)-cmake' --build '$(BUILD_DIR)' -- -j '$(JOBS)'
 

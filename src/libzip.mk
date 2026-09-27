@@ -14,7 +14,8 @@ define $(PKG)_BUILD
         -DCMAKE_INSTALL_INCLUDEDIR='include/$(PKG)' \
         -DENABLE_GNUTLS=OFF \
         -DENABLE_OPENSSL=OFF \
-        -DENABLE_COMMONCRYPTO=OFF
+        -DENABLE_COMMONCRYPTO=OFF \
+        -DCMAKE_POLICY_VERSION_MINIMUM=3.5
     $(MAKE) -C '$(BUILD_DIR)/lib' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)/lib' -j 1 install
 
