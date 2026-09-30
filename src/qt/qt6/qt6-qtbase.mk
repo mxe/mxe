@@ -50,6 +50,7 @@ define $(PKG)_BUILD
         -DFEATURE_opengl_dynamic=ON \
         -DFEATURE_openssl=ON \
         -DFEATURE_openssl_linked=ON \
+        -DFEATURE_waylandscanner=OFF \
         -DOPENSSL_USE_STATIC_LIBS=TRUE \
         -DFEATURE_system_pcre2=ON \
         -DFEATURE_pkg_config=ON \
@@ -85,7 +86,7 @@ define $(PKG)_BUILD_$(BUILD)
         -DCMAKE_INSTALL_PREFIX='$(PREFIX)/$(TARGET)/$(MXE_QT6_ID)' \
         -DQT_BUILD_{TESTS,EXAMPLES}=OFF \
         -DBUILD_WITH_PCH=OFF \
-        -DFEATURE_{eventfd,glib,harfbuzz,icu,opengl,openssl,zstd}=OFF \
+        -DFEATURE_{eventfd,glib,harfbuzz,icu,opengl,openssl,wayland,waylandscanner,xcb,zstd}=OFF \
         -DFEATURE_sql_{db2,ibase,mysql,oci,odbc,psql,sqlite}=OFF \
         $(PKG_CMAKE_OPTS)
     '$(TARGET)-cmake' --build '$(BUILD_DIR)' -j '$(JOBS)'
