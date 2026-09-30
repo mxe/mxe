@@ -11,6 +11,11 @@ $(PKG)_FILE     := gtkmm-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.gnome.org/sources/gtkmm/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc atkmm cairomm gtk2 libsigc++ pangomm
 
+$(PKG)_EXTRA_WARNINGS := \
+    -Wno-cast-function-type \
+    -Wno-deprecated \
+    -Wno-deprecated-declarations
+
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://gitlab.gnome.org/GNOME/gtkmm/-/tags?sort=updated_desc&search=^2.' | \
     $(SED) -n "s,.*<a [^>]\+>v\?\([0-9]\+\.[0-9.]\+\)<.*,\1,p" | \
@@ -28,8 +33,7 @@ define $(PKG)_BUILD
     $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= doc_install='# DISABLED: doc-install.pl'
 
     '$(TARGET)-g++' \
-        -W -Wall -Wno-deprecated-declarations -Werror -pedantic -std=c++11 \
-        -Wno-error=deprecated \
+        -W -Wall -Werror -pedantic -std=c++11 \
         $($(PKG)_EXTRA_WARNINGS) \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-gtkmm2.exe' \
         `'$(TARGET)-pkg-config' gtkmm-2.4 --cflags --libs`

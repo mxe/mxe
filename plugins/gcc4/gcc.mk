@@ -20,3 +20,17 @@ $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := https://libisl.sourceforge.io/$($(PKG)_FILE)
 $(PKG)_URL_2    := https://gcc.gnu.org/pub/gcc/infrastructure/$($(PKG)_FILE)
+
+# The following warning flags are defined in src/*.mk for modern GCCs.
+# Since legacy GCC compilers do not support them and would fail with an
+# "unrecognized command line option" error, we must explicitly clear them here.
+libssh_EXTRA_WARNINGS =
+gtkimageview_EXTRA_WARNINGS =
+guile_EXTRA_WARNINGS =
+gtkmm2_EXTRA_WARNINGS =
+gtkmm3_EXTRA_WARNINGS =
+gtkglextmm_EXTRA_WARNINGS =
+
+# Shared GCC build logic. Must be included at the end of the file 
+# so it can access the package variables defined above.
+include $(TOP_DIR)/plugins/gcc-common/gcc-common.mk

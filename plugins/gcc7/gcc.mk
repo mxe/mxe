@@ -17,23 +17,22 @@ $(PKG)_URL      := https://libisl.sourceforge.io/$($(PKG)_FILE)
 $(PKG)_URL_2    := https://gcc.gnu.org/pub/gcc/infrastructure/$($(PKG)_FILE)
 
 PKG             := gcc
-$(PKG)_VERSION  := 9.5.0
+$(PKG)_VERSION  := 7.5.0
 $(PKG)_RELEASE  := $($(PKG)_VERSION)
-$(PKG)_CHECKSUM := 27769f64ef1d4cd5e2be8682c0c93f9887983e6cfd1a927ce5a0a2915a95cf8f
+$(PKG)_CHECKSUM := b81946e7f01f90528a1f7352ab08cc602b9ccc05d4e44da4bd501c5a189ee661
 $(PKG)_SUBDIR   := gcc-$($(PKG)_VERSION)
 $(PKG)_FILE     := gcc-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://ftp.gnu.org/gnu/gcc/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_URL_2    := https://www.mirrorservice.org/sites/sourceware.org/pub/gcc/releases/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_PATCHES  := $(dir $(lastword $(MAKEFILE_LIST)))/gcc9.patch
+$(PKG)_PATCHES  := $(dir $(lastword $(MAKEFILE_LIST)))/gcc7.patch
 
-# copy db-2-install-exe.patch to gcc7 plugin when gcc9 is default
-db_PATCHES := $(TOP_DIR)/src/db-1-fix-including-winioctl-h-lowcase.patch
+# The following warning flags are defined in src/*.mk for modern GCCs.
+# Since legacy GCC compilers do not support them and would fail with an
+# "unrecognized command line option" error, we must explicitly clear them here.
+gtkmm2_EXTRA_WARNINGS =
+gtkmm3_EXTRA_WARNINGS =
+gtkglextmm_EXTRA_WARNINGS =
 
-# set these in respective makefiles when gcc9 becomes default
-# remove from here and leave them blank for gcc5 plugin
-libssh_EXTRA_WARNINGS = -Wno-error=implicit-fallthrough
-gtkimageview_EXTRA_WARNINGS = -Wno-error=misleading-indentation
-guile_EXTRA_WARNINGS = -Wno-error=misleading-indentation
-gtkmm2_EXTRA_WARNINGS = -Wno-error=cast-function-type
-gtkmm3_EXTRA_WARNINGS = -Wno-error=cast-function-type
-gtkglextmm_EXTRA_WARNINGS = -Wno-error=cast-function-type
+# Shared GCC build logic. Must be included at the end of the file 
+# so it can access the package variables defined above.
+include $(TOP_DIR)/plugins/gcc-common/gcc-common.mk

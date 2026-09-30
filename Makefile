@@ -102,6 +102,9 @@ MXE_CCACHE_DIR      := $(PWD)/.ccache
 MXE_CCACHE_BASE_DIR := $(PWD)
 MXE_CCACHE_CACHE_DIR := $(MXE_CCACHE_DIR)/ccache
 
+# set to major for GCC
+MXE_GCC_ID := gcc16
+
 # set to major.minor for LTS
 # MXE_QT6_ID := qt6.2
 MXE_QT6_ID := qt6
@@ -420,6 +423,10 @@ else
         echo '# See plugins/README.md for further information.'; \
         echo '#override MXE_PLUGIN_DIRS += plugins/apps plugins/native'; \
         echo; \
+        echo '# The compiler is now managed via plugins (default: gcc16).'; \
+        echo '# Append a different gcc plugin to override the default (e.g. plugins/gcc11).'; \
+        echo '#override MXE_PLUGIN_DIRS += plugins/gcc11'; \
+        echo; \
         echo '# This variable controls the download mirror for SourceForge,'; \
         echo '# when it is used. Enabling the value below means auto.'; \
         echo '#SOURCEFORGE_MIRROR := downloads.sourceforge.net'; \
@@ -447,6 +454,7 @@ JOBS   ?= $(call LIST_NMIN, $(DEFAULT_MAX_JOBS) $(NPROCS))
 # Core packages.
 override MXE_PLUGIN_DIRS := \
     $(realpath $(TOP_DIR)/src) \
+    $(realpath $(TOP_DIR)/plugins/$(MXE_GCC_ID)) \
     $(realpath $(TOP_DIR)/src/qt/$(MXE_QT6_ID)) \
     $(realpath $(TOP_DIR)/src/kf/$(MXE_KF6_ID)) \
     $(MXE_PLUGIN_DIRS)
