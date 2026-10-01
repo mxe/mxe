@@ -3,17 +3,12 @@
 PKG             := pkgconf
 $(PKG)_WEBSITE  := https://github.com/pkgconf/pkgconf
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := da179fd
-$(PKG)_CHECKSUM := 91b2e5d7ce06583d5920c373b61d7d6554cd085cbd61ed176c7ff7ff3032523d
-$(PKG)_GH_CONF  := pkgconf/pkgconf/branches/master
+$(PKG)_VERSION  := 2.3.0
+$(PKG)_CHECKSUM := 0ee103cd390c3ee0e77a7a1c71dcb79a50a426fa2a648f6d07f2678c23adc5e3
+$(PKG)_GH_CONF  := pkgconf/pkgconf/tags, pkgconf-
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 $(PKG)_DEPS     := $(BUILD)~$(PKG)
 $(PKG)_DEPS_$(BUILD) := libtool
-
-define $(PKG)_UPDATE
-    echo 'Warning: Updates are temporarily disabled for package pkgconf.' >&2;
-    echo $(pkgconf_VERSION)
-endef
 
 define $(PKG)_BUILD
     # create pkg-config script
