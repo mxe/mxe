@@ -1,0 +1,167 @@
+diff --git a/.github/workflows/cppcmake.yml b/.github/workflows/cppcmake.yml
+index f6761da..7353f90 100644
+--- a/.github/workflows/cppcmake.yml
++++ b/.github/workflows/cppcmake.yml
+@@ -6,7 +6,7 @@ on:
+     - v*.*
+   pull_request:
+     branches:
+-    - master
++    - main
+ 
+ jobs:
+   build:
+@@ -16,13 +16,13 @@ jobs:
+       matrix:
+         config:
+           - {name: "ubuntu-latest", os: ubuntu-latest, cmake_extra: ""}
+-          - {name: "windows-x64", os: windows-latest, cmake_extra: "-T v140"}
+-          - {name: "windows-32", os: windows-latest, cmake_extra: "-T v140 -A Win32"}
++          - {name: "windows-x64", os: windows-latest, cmake_extra: "-T v143"}
++          - {name: "windows-32", os: windows-latest, cmake_extra: "-T v143 -A Win32"}
+           - {name: "macOS-latest", os: macOS-latest, cmake_extra: ""}
+       fail-fast: false
+     
+     steps:
+-    - uses: actions/checkout@v2
++    - uses: actions/checkout@v3
+     
+     - name: CMake version
+       run: cmake --version
+@@ -42,7 +42,7 @@ jobs:
+       run: cmake --build build --config Release -j --target package
+       
+     - name: Upload Artifact
+-      uses: actions/upload-artifact@master
++      uses: actions/upload-artifact@v3
+       # if: "!startsWith(github.ref, 'refs/heads')"
+       with:
+         name: pkg-${{ matrix.config.name }}
+@@ -59,7 +59,7 @@ jobs:
+     
+     - name: Download Artifacts
+       if: startsWith(github.ref, 'refs/tags/')
+-      uses: actions/download-artifact@v2
++      uses: actions/download-artifact@v3
+       
+     - name: Create Release
+       if: startsWith(github.ref, 'refs/tags/')
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 98cc03f..79b7fe0 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -37,28 +37,38 @@ else()
+ 	target_include_directories(xdf PRIVATE pugixml)
+ endif()
+ 
+-target_compile_features(xdf PUBLIC cxx_std_11)
++target_compile_features(xdf PUBLIC cxx_std_20)
+ set_target_properties(xdf PROPERTIES OUTPUT_NAME xdf PUBLIC_HEADER xdf.h)
+ target_include_directories(xdf PUBLIC
+ 	$<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}>
+ 	$<INSTALL_INTERFACE:include>
+ )
++include(CMakePackageConfigHelpers)
+ include(GNUInstallDirs)
++configure_package_config_file(
++    ${CMAKE_CURRENT_LIST_DIR}/libxdfConfig.cmake.in
++    ${CMAKE_CURRENT_BINARY_DIR}/libxdfConfig.cmake
++    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
++)
+ install(TARGETS xdf
+-	EXPORT "${PROJECT_NAME}Config"
++	EXPORT "${PROJECT_NAME}Targets"
+ 	ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+ 	LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+ 	PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+ )
+-install(EXPORT "${PROJECT_NAME}Config"
++install(EXPORT "${PROJECT_NAME}Targets"
+ 	COMPONENT ${PROJECT_NAME}
+ 	NAMESPACE "XDF::"
+ 	DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+ )
++install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libxdfConfig.cmake
++    COMPONENT ${PROJECT_NAME}
++    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
++)
+ 
+ # set(CPACK_STRIP_FILES ON)
+ # set(CPACK_ARCHIVE_COMPONENT_INSTALL ON)
+-set(CPACK_PACKAGE_CONTACT "yl3842@columbia.edu")
++set(CPACK_PACKAGE_CONTACT "yida.lin@outlook.com")
+ if(APPLE)
+     set(CPACK_GENERATOR TBZ2)
+ elseif(WIN32)
+diff --git a/README.md b/README.md
+index 2c22ce6..084c114 100644
+--- a/README.md
++++ b/README.md
+@@ -131,4 +131,4 @@ Bibtex format:
+ ```
+ 
+ ## <a name="support"></a>Support
+-[Email author](mailto:yl3842@columbia.edu) or report a new [issue](https://github.com/Yida-Lin/libxdf/issues).
++[Email author](mailto:yida.lin@outlook.com) or report a new [issue](https://github.com/Yida-Lin/libxdf/issues).
+diff --git a/libxdfConfig.cmake.in b/libxdfConfig.cmake.in
+new file mode 100644
+index 0000000..84331f0
+--- /dev/null
++++ b/libxdfConfig.cmake.in
+@@ -0,0 +1,9 @@
++@PACKAGE_INIT@
++
++include(CMakeFindDependencyMacro)
++
++find_dependency(pugixml)
++
++if(NOT TARGET XDF::xdf)
++    include("${CMAKE_CURRENT_LIST_DIR}/libxdfTargets.cmake")
++endif()
+diff --git a/xdf.cpp b/xdf.cpp
+index 96c3c81..1891640 100644
+--- a/xdf.cpp
++++ b/xdf.cpp
+@@ -612,8 +612,10 @@ void Xdf::syncTimeStamps()
+         }
+         else
+         {
+-            streams[k].info.first_timestamp = streams[k].time_stamps.front();
+-            streams[k].info.last_timestamp = streams[k].time_stamps.back();
++            if (streams[k].time_stamps.size() > 0) {
++                streams[k].info.first_timestamp = streams[k].time_stamps.front();
++            	streams[k].info.last_timestamp = streams[k].time_stamps.back();
++            }	
+         }
+     }
+ }
+@@ -712,7 +714,7 @@ void Xdf::resample(int userSrate)
+ //function of reading the length of each chunk
+ uint64_t Xdf::readLength(std::ifstream &file)
+ {
+-    uint8_t bytes;
++    uint8_t bytes = 0;
+     Xdf::readBin(file, &bytes);
+     uint64_t length = 0;
+ 
+@@ -1002,7 +1004,7 @@ int Xdf::writeEventsToXDF(std::string file_path)
+         }
+     }
+ 
+-    std::cout << "Succesfully wrote to XDF file." << std::endl;
++    std::cout << "Successfully wrote to XDF file." << std::endl;
+ 
+     return 0; //Success
+ }
+diff --git a/xdf.h b/xdf.h
+index 86892f3..47e73a1 100644
+--- a/xdf.h
++++ b/xdf.h
+@@ -26,6 +26,7 @@
+ #include <vector>
+ #include <map>
+ #include <set>
++#include <cstdint>
+ 
+ /*! \class Xdf
+  *
