@@ -29,7 +29,8 @@ define $(PKG)_BUILD
         --with-gdktarget=win32 \
         --disable-gtk-doc \
         --disable-man \
-        --disable-glibtest
+        --disable-glibtest \
+        CFLAGS='-Wno-incompatible-pointer-types -Wno-implicit-function-declaration'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install \
         bin_PROGRAMS= \
         sbin_PROGRAMS= \

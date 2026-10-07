@@ -25,7 +25,8 @@ define $(PKG)_BUILD
         --enable-cryptography \
         --disable-replication \
         --with-mutex=$(subst i686,x86,$(PROCESSOR))/gcc-assembly \
-        $(PKG_CONFIGURE_OPTS)
+        $(PKG_CONFIGURE_OPTS) \
+        CFLAGS='-Wno-old-style-definition -Wno-incompatible-pointer-types'
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' UTIL_PROGS=
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install_include install_lib
 endef

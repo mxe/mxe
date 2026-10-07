@@ -61,6 +61,7 @@ define $(PKG)_BUILD
         -DBUILD_EXAMPLES=OFF \
         -DBUILD_TESTING=OFF \
         -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+        -DCMAKE_CXX_FLAGS='-Wno-template-body' \
         $(PKG_CONFIGURE_OPTS)
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install VERBOSE=1

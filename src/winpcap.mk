@@ -19,8 +19,8 @@ endef
 
 define $(PKG)_BUILD
     # build
-    cd '$(1)' && $(TARGET)-gcc -ICommon -IpacketNtx/Dll -O -c '$(1)/packetNtx/Dll/Packet32.c' -D_WINNT4
-    cd '$(1)' && $(TARGET)-gcc -ICommon -IpacketNtx/Dll -O -c '$(1)/packetNtx/Dll/AdInfo.c'
+    cd '$(1)' && $(TARGET)-gcc -ICommon -IpacketNtx/Dll -O -c '$(1)/packetNtx/Dll/Packet32.c' -D_WINNT4 -Wno-implicit-function-declaration
+    cd '$(1)' && $(TARGET)-gcc -ICommon -IpacketNtx/Dll -O -c '$(1)/packetNtx/Dll/AdInfo.c' -Wno-implicit-function-declaration
     cd '$(1)' && $(TARGET)-gcc -ICommon -IpacketNtx/Dll -O -c '$(1)/packetNtx/Dll/NpfImExt.c'
     $(TARGET)-ar rc '$(1)/libpacket.a' '$(1)/Packet32.o' '$(1)/AdInfo.o' '$(1)/NpfImExt.o'
     $(TARGET)-ranlib '$(1)/libpacket.a'
