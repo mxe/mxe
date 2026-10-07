@@ -12,14 +12,14 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 1111111..2222222 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -6,6 +6,7 @@ OPTION(DISABLE_TESTS "If tests should be compiled or not" OFF)
+@@ -30,6 +30,7 @@ OPTION(DISABLE_TESTS "If tests should be compiled or not" OFF)
  OPTION(ENABLE_SSL_TESTS "Should we test SSL connections" OFF)
  OPTION(ENABLE_EXAMPLES "Enable building hiredis examples" OFF)
  OPTION(ENABLE_ASYNC_TESTS "Should we run all asynchronous API tests" OFF)
 +OPTION(BUILD_SHARED_LIBS "Build hiredis as a shared library" ON)
- 
- MACRO(getVersionBit name)
-   SET(VERSION_REGEX "^#define ${name} (.+)$")
+ # Historically, the NuGet file was always install; default
+ # to ON for those who rely on that historical behaviour.
+ OPTION(ENABLE_NUGET "Install NuGET packaging details" ON)
 diff --git a/hiredis.pc.in b/hiredis.pc.in
 index 1111111..2222222 100644
 --- a/hiredis.pc.in
