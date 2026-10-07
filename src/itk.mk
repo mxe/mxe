@@ -4,8 +4,8 @@ PKG             := itk
 $(PKG)_WEBSITE  := https://www.itk.org/
 $(PKG)_DESCR    := Insight Segmentation and Registration Toolkit (ITK)
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 5.0.1
-$(PKG)_CHECKSUM := c6b3c33ecc73104c906e0e1a1bfaa41a09af24bf53a4ec5e5c265d7e82bdf69f
+$(PKG)_VERSION  := 5.4.7
+$(PKG)_CHECKSUM := c953ad7957c481dbb17cfebf03fc61e5252b2be7ccf6757d1234b48ac99914f8
 $(PKG)_GH_CONF  := InsightSoftwareConsortium/ITK/releases/latest, v
 $(PKG)_DEPS     := cc expat hdf5 jpeg libpng tiff zlib
 
@@ -21,6 +21,8 @@ define $(PKG)_BUILD
         -DITK_USE_SYSTEM_PNG=TRUE \
         -DITK_USE_SYSTEM_TIFF=TRUE \
         -DITK_USE_SYSTEM_ZLIB=TRUE \
+        -DHAVE_CLOCK_GETTIME_RUN=TRUE \
+        -Dhave_sse2_extensions_var_EXITCODE=TRUE \
         -DCMAKE_POLICY_VERSION_MINIMUM=3.5
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install VERBOSE=1
