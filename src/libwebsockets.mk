@@ -8,7 +8,7 @@ $(PKG)_CHECKSUM := 73012d7fcf428dedccc816e83a63a01462e27819d5537b8e0d0c7264bfacf
 $(PKG)_GH_CONF  := warmcat/libwebsockets/tags, v
 $(PKG)_DEPS     := cc openssl zlib
 
-define $(PKG)_BUILD
+define $(PKG)_BUILD_DISABLED
     # build and install the library
     cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \
         -DLWS_WITH_STATIC=$(CMAKE_STATIC_BOOL) \

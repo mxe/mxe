@@ -16,7 +16,7 @@ define $(PKG)_UPDATE
     head -1
 endef
 
-define $(PKG)_BUILD
+define $(PKG)_BUILD_DISABLED
     # native build for tool comp_err
     # See https://bugs.mysql.com/bug.php?id=61340
     mkdir '$(1).native'

@@ -31,7 +31,7 @@ endef
 # freeimage and xerces don't have shared builds - disable with $(CMAKE_STATIC_BOOL)
 # devil appears to be dead, tinyxml is deprecated, lua needs toluapp
 # boost and sdl2 aren't detected
-define $(PKG)_BUILD
+define $(PKG)_BUILD_DISABLED
     cd '$(BUILD_DIR)' && '$(TARGET)-cmake' \
         -DCEGUI_BUILD_SHARED_CONFIGURATION=$(CMAKE_SHARED_BOOL) \
         -DCEGUI_BUILD_STATIC_CONFIGURATION=$(CMAKE_STATIC_BOOL) \
