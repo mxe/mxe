@@ -10,7 +10,7 @@ $(PKG)_SUBDIR   := gdal-$($(PKG)_VERSION)
 $(PKG)_FILE     := gdal-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.osgeo.org/gdal/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc armadillo curl expat geos giflib gta hdf4 hdf5 \
-                   jpeg json-c libgeotiff libmysqlclient libpng libxml2 \
+                   jpeg json-c libgeotiff libpng libxml2 \
                    netcdf openjpeg postgresql proj spatialite sqlite tiff zlib \
                    poppler freetype
 
@@ -44,7 +44,7 @@ define $(PKG)_BUILD
         -DGDAL_USE_JAVA:BOOL=ON \
         -DGDAL_USE_LIBLZMA:BOOL=ON \
         -DGDAL_USE_LIBXML2:BOOL=ON \
-        -DGDAL_USE_MYSQL:BOOL=ON \
+        -DGDAL_USE_MYSQL:BOOL=OFF \
         -DGDAL_USE_NETCDF:BOOL=ON \
         -DGDAL_USE_ODBC:BOOL=ON \
         -DGDAL_USE_OPENJPEG:BOOL=ON \
