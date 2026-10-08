@@ -3,9 +3,9 @@
 PKG             := llvm
 $(PKG)_WEBSITE  := https://llvm.org/
 $(PKG)_DESCR    := Compiler infrastructure and toolchain libraries used for building compilers and JIT-based systems.
-$(PKG)_VERSION  := 22.1.3
+$(PKG)_VERSION  := 23.1.3
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 7e144bd6da8177757434cc0dfd1476122f143413df379c6d6cf03843512b5a9e
+$(PKG)_CHECKSUM := 791b560dee8f65fdf7b19ad5db0b4ac627467824d8b687957d8a437b806103f0
 $(PKG)_GH_CONF  := llvm/llvm-project/tags,llvmorg-
 $(PKG)_DEPS     := cc curl icu4c isl libxml2 pkgconf protobuf zlib zstd
 
