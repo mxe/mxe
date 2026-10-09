@@ -34,8 +34,9 @@ define $(PKG)_BUILD
 endef
 
 define $(PKG)_BUILD_$(BUILD)
+    # Feature qdoc is required by the target qttools. This requires clang.
     $(QT6_QT_CMAKE) -S '$(SOURCE_DIR)' -B '$(BUILD_DIR)' \
-        -DFEATURE_linguist=ON \
+        -DFEATURE_{clang,linguist,qdoc}=ON \
         -DFEATURE_designer=OFF
     cmake --build '$(BUILD_DIR)' -j '$(JOBS)'
     cmake --install '$(BUILD_DIR)'
