@@ -32,7 +32,8 @@ define $(PKG)_BUILD
     $(MAKE) -C "$(BUILD_DIR)" -j 1 install
 
     # compile a test program to verify the library is usable
-    "$(TARGET)-g++" -Wall -Wextra "$(TEST_FILE)" \
-        `"$(PREFIX)/$(TARGET)/bin/llvm-config.exe" --cxxflags --libs core support irreader --system-libs` \
-        -o "$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe"
+    # FIXME: llvm-config.exe is a Windows exectuable which cannot run on build OS
+    #"$(TARGET)-g++" -Wall -Wextra "$(TEST_FILE)" \
+    #    `"$(PREFIX)/$(TARGET)/bin/llvm-config.exe" --cxxflags --libs core support irreader --system-libs` \
+    #    -o "$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe"
 endef
