@@ -4,8 +4,8 @@ PKG             := coda
 $(PKG)_WEBSITE  := https://stcorp.nl/coda/
 $(PKG)_DESCR    := CODA
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.18.3
-$(PKG)_CHECKSUM := e0f72ed7927431748907b57b3fcfa7515ee071162f138e784555d6ca377b9ffe
+$(PKG)_VERSION  := 2.25.7
+$(PKG)_CHECKSUM := 8d2d8517c0bd4b1c71a65f361f6a6f509f0e91fd5d2f2f744f81c783b5b7630e
 $(PKG)_GH_CONF  := stcorp/coda/releases/latest
 $(PKG)_DEPS     := cc
 
@@ -16,7 +16,8 @@ define $(PKG)_BUILD
         --disable-matlab \
         --disable-python \
         --without-hdf5 \
-        --without-hdf4
+        --without-hdf4 \
+	CFLAGS='-Wno-implicit-function-declaration'
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install-libLTLIBRARIES install-nodist_includeHEADERS install-fortranDATA
 
