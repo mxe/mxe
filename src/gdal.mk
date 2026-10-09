@@ -12,7 +12,7 @@ $(PKG)_URL      := https://download.osgeo.org/gdal/$($(PKG)_VERSION)/$($(PKG)_FI
 $(PKG)_DEPS     := cc armadillo curl expat geos giflib gta hdf4 hdf5 \
                    jpeg json-c libgeotiff libpng libxml2 \
                    netcdf openjpeg postgresql proj spatialite sqlite tiff zlib \
-                   poppler freetype
+                   freetype
 
 define $(PKG)_UPDATE
         $(WGET) -q -O- 'https://download.osgeo.org/gdal/CURRENT' | \
@@ -24,7 +24,7 @@ define $(PKG)_BUILD
     # Explicitly enable packages known to work to avoid CMake auto-detection
     # enabling a package that might not work
     cd '$(BUILD_DIR)' && $(TARGET)-cmake --trace-expand '$(SOURCE_DIR)' \
-        -DCMAKE_CXX_FLAGS='-Wno-deprecated-copy -Wno-class-memaccess $(if $(BUILD_STATIC),-DOPJ_STATIC -DCURL_STATICLIB,)' \
+        -DCMAKE_CXX_FLAGS='-Wno-deprecated-copy -Wno-class-memaccess -fpermissive $(if $(BUILD_STATIC),-DOPJ_STATIC -DCURL_STATICLIB,)' \
         -DCMAKE_C_FLAGS='-Wno-format' \
         -DGDAL_USE_EXTERNAL_LIBS:BOOL=OFF\
         -DGDAL_USE_ARMADILLO:BOOL=ON \
@@ -53,7 +53,7 @@ define $(PKG)_BUILD
         -DGDAL_USE_PNG:BOOL=ON \
         -DGDAL_USE_PROJ:BOOL=ON \
         -DGDAL_USE_PERL:BOOL=ON \
-        -DGDAL_USE_POPPLER:BOOL=ON \
+        -DGDAL_USE_POPPLER:BOOL=OFF \
         -DGDAL_USE_POSTGRESQL:BOOL=ON \
         -DGDAL_USE_SPATIALITE:BOOL=ON \
         -DGDAL_USE_SQLITE3:BOOL=ON \
