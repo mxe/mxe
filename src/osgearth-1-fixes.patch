@@ -3,26 +3,93 @@ This file is part of MXE. See LICENSE.md for licensing information.
 Contains ad hoc patches for cross building.
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Tony Theodore <tonyt@logyst.com>
-Date: Sat, 2 Mar 2019 02:57:50 +1100
-Subject: [PATCH 1/1] add option to disable protobuf
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Fri, 9 Oct 2026 18:47:06 +0200
+Subject: [PATCH 1/2] fix include case
 
 
-diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 1111111..2222222 100755
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -162,8 +162,11 @@ ENDIF(MINGW)
- FIND_PACKAGE(SilverLining QUIET)
- FIND_PACKAGE(Triton QUIET)
+diff --git a/src/osgEarth/Notify.cpp b/src/osgEarth/Notify.cpp
+index 1111111..2222222 100644
+--- a/src/osgEarth/Notify.cpp
++++ b/src/osgEarth/Notify.cpp
+@@ -322,7 +322,7 @@ std::ostream& osgEarth::notify(const osg::NotifySeverity severity)
+ //.....
  
--FIND_PACKAGE(Protobuf QUIET)
--SET (PROTOBUF_USE_DLLS FALSE CACHE BOOL "Set this to true if Protobuf is compiled as dll")
-+OPTION(OSGEARTH_USE_PROTOBUF "Set to OFF to disable Protobuf" ON)
-+IF (OSGEARTH_USE_PROTOBUF)
-+    FIND_PACKAGE(Protobuf QUIET)
-+    SET (PROTOBUF_USE_DLLS FALSE CACHE BOOL "Set this to true if Protobuf is compiled as dll")
-+ENDIF (OSGEARTH_USE_PROTOBUF)
+ #ifdef WIN32
+-#include <Windows.h>
++#include <windows.h>
+ #include <dbghelp.h>
+ #pragma comment(lib, "dbghelp.lib")
+ #elif defined(__GNUC__)
+diff --git a/src/osgEarth/Threading.cpp b/src/osgEarth/Threading.cpp
+index 1111111..2222222 100644
+--- a/src/osgEarth/Threading.cpp
++++ b/src/osgEarth/Threading.cpp
+@@ -8,7 +8,7 @@
+ #include <cstring>
  
- SET (WITH_EXTERNAL_DUKTAPE FALSE CACHE BOOL "Use bundled or system wide version of Duktape")
- IF (WITH_EXTERNAL_DUKTAPE)
+ #ifdef _WIN32
+-#   include <Windows.h>
++#   include <windows.h>
+ #elif defined(__APPLE__) || defined(__LINUX__) || defined(__FreeBSD__) || defined(__FreeBSD_kernel__) || defined(__ANDROID__)
+ #   include <unistd.h>
+ #   include <sys/syscall.h>
+diff --git a/src/osgEarthDrivers/sky_simple/eb_utility.cpp b/src/osgEarthDrivers/sky_simple/eb_utility.cpp
+index 1111111..2222222 100644
+--- a/src/osgEarthDrivers/sky_simple/eb_utility.cpp
++++ b/src/osgEarthDrivers/sky_simple/eb_utility.cpp
+@@ -27,7 +27,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ #include <algorithm>
+ 
+ #ifdef _WIN32
+-#include <Windows.h>
++#include <windows.h>
+ #include <direct.h>
+ #define GetCurrentDir _getcwd
+ #define ChangeWorkingDir _chdir
+diff --git a/src/osgEarthImGui/imgui.cpp b/src/osgEarthImGui/imgui.cpp
+index 1111111..2222222 100644
+--- a/src/osgEarthImGui/imgui.cpp
++++ b/src/osgEarthImGui/imgui.cpp
+@@ -990,7 +990,7 @@ CODE
+ #define NOMINMAX
+ #endif
+ #ifndef __MINGW32__
+-#include <Windows.h>        // _wfopen, OpenClipboard
++#include <windows.h>        // _wfopen, OpenClipboard
+ #else
+ #include <windows.h>
+ #endif
+diff --git a/src/third_party/tinygltf/examples/common/imgui/imgui.cpp b/src/third_party/tinygltf/examples/common/imgui/imgui.cpp
+index 1111111..2222222 100644
+--- a/src/third_party/tinygltf/examples/common/imgui/imgui.cpp
++++ b/src/third_party/tinygltf/examples/common/imgui/imgui.cpp
+@@ -13003,7 +13003,7 @@ void ImGui::EndDragDropTarget()
+ #undef WIN32_LEAN_AND_MEAN
+ #define WIN32_LEAN_AND_MEAN
+ #ifndef __MINGW32__
+-#include <Windows.h>
++#include <windows.h>
+ #else
+ #include <windows.h>
+ #endif
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Sat, 10 Oct 2026 00:44:15 +0200
+Subject: [PATCH 2/2] fix MINGW build
+
+
+diff --git a/src/osgEarthImGui/SystemGUI b/src/osgEarthImGui/SystemGUI
+index 1111111..2222222 100644
+--- a/src/osgEarthImGui/SystemGUI
++++ b/src/osgEarthImGui/SystemGUI
+@@ -18,7 +18,7 @@
+ #include <thread>
+ #include <algorithm>
+ 
+-#ifdef _WIN32
++#if defined(_WIN32) || defined(__MINGW64__)
+ #include <windows.h>
+ #include <osgViewer/api/Win32/GraphicsWindowWin32>
+ #endif
