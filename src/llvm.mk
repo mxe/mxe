@@ -11,28 +11,28 @@ $(PKG)_DEPS     := cc curl icu4c isl libxml2 pkgconf protobuf zlib zstd
 
 define $(PKG)_BUILD
 
-	# configure package with cmake
-	cd "$(BUILD_DIR)" && "$(TARGET)-cmake" "$(SOURCE_DIR)/llvm" \
-		-DCMAKE_INSTALL_PREFIX="$(PREFIX)/$(TARGET)" \
-		-DCMAKE_PREFIX_PATH="$(PREFIX)/$(TARGET)" \
-		-DBUILD_SHARED_LIBS=$(CMAKE_SHARED_BOOL) \
-		-DLLVM_FORCE_VC_REPOSITORY=https://github.com/llvm/llvm-project.git \
-		-DLLVM_TARGETS_TO_BUILD=X86 \
-		-DLLVM_ENABLE_PROJECTS=clang \
-		-DLLVM_BUILD_TOOLS=ON \
-		-DLLVM_BUILD_TESTS=OFF \
-		-DLLVM_INCLUDE_TOOLS=ON \
-		-DLLVM_INCLUDE_TESTS=OFF \
-		-DLLVM_INCLUDE_EXAMPLES=OFF \
-		-DLLVM_INSTALL_TOOLCHAIN_ONLY=OFF \
-		-DCMAKE_BUILD_TYPE=Release
+    # configure package with cmake
+    cd "$(BUILD_DIR)" && "$(TARGET)-cmake" "$(SOURCE_DIR)/llvm" \
+        -DCMAKE_INSTALL_PREFIX="$(PREFIX)/$(TARGET)" \
+        -DCMAKE_PREFIX_PATH="$(PREFIX)/$(TARGET)" \
+        -DBUILD_SHARED_LIBS=$(CMAKE_SHARED_BOOL) \
+        -DLLVM_FORCE_VC_REPOSITORY=https://github.com/llvm/llvm-project.git \
+        -DLLVM_TARGETS_TO_BUILD=X86 \
+        -DLLVM_ENABLE_PROJECTS=clang \
+        -DLLVM_BUILD_TOOLS=ON \
+        -DLLVM_BUILD_TESTS=OFF \
+        -DLLVM_INCLUDE_TOOLS=ON \
+        -DLLVM_INCLUDE_TESTS=OFF \
+        -DLLVM_INCLUDE_EXAMPLES=OFF \
+        -DLLVM_INSTALL_TOOLCHAIN_ONLY=OFF \
+        -DCMAKE_BUILD_TYPE=Release
 
-	# build package and install
-	$(MAKE) -C "$(BUILD_DIR)" -j $(JOBS)
-	$(MAKE) -C "$(BUILD_DIR)" -j 1 install
+    # build package and install
+    $(MAKE) -C "$(BUILD_DIR)" -j $(JOBS)
+    $(MAKE) -C "$(BUILD_DIR)" -j 1 install
 
-	# compile a test program to verify the library is usable
-	"$(TARGET)-g++" -Wall -Wextra "$(TEST_FILE)" \
-		`"$(PREFIX)/$(TARGET)/bin/llvm-config.exe" --cxxflags --libs core support irreader --system-libs` \
-		-o "$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe"
+    # compile a test program to verify the library is usable
+    "$(TARGET)-g++" -Wall -Wextra "$(TEST_FILE)" \
+        `"$(PREFIX)/$(TARGET)/bin/llvm-config.exe" --cxxflags --libs core support irreader --system-libs` \
+        -o "$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe"
 endef
