@@ -7,8 +7,8 @@ $(eval $(QT6_METADATA))
 
 $(PKG)_CHECKSUM := 8dab8f3611496486a470ad5f115ceea584f36bc22a2b8b6f6ebdbafbb8160693
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
-$(PKG)_DEPS_$(BUILD) := qt6-conf qt6-qtbase
-$(PKG)_DEPS     := cc $($(PKG)_DEPS_$(BUILD)) qt6-qtdeclarative qt6-qtimageformats $(BUILD)~$(PKG)
+$(PKG)_DEPS_$(BUILD) := qt6-conf qt6-qtbase qt6-qtdeclarative
+$(PKG)_DEPS     := cc $($(PKG)_DEPS_$(BUILD)) qt6-qtdeclarative $(BUILD)~$(PKG)
 
 define $(PKG)_BUILD
     $(QT6_QT_CMAKE) -S '$(SOURCE_DIR)' -B '$(BUILD_DIR)' \
