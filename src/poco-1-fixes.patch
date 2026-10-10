@@ -1,0 +1,32 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Sat, 10 Oct 2026 17:44:33 +0200
+Subject: [PATCH 1/1] MXE: don't look for message compiler
+
+
+diff --git a/cmake/PocoMacros.cmake b/cmake/PocoMacros.cmake
+index 1111111..2222222 100644
+--- a/cmake/PocoMacros.cmake
++++ b/cmake/PocoMacros.cmake
+@@ -9,7 +9,7 @@
+ # Find the Microsoft mc.exe message compiler
+ #
+ # CMAKE_MC_COMPILER - where to find mc.exe
+-if(WIN32)
++if(WIN32 AND NOT MINGW)
+ 	# cmake has CMAKE_RC_COMPILER, but no message compiler
+ 	if("${CMAKE_GENERATOR}" MATCHES "Visual Studio" OR MINGW)
+ 		# this path is only present for 2008+, but we currently require PATH to
+@@ -47,7 +47,7 @@ if(WIN32)
+ 	endif(NOT CMAKE_MC_COMPILER)
+ 	message(STATUS "Found message compiler: ${CMAKE_MC_COMPILER}")
+ 	mark_as_advanced(CMAKE_MC_COMPILER)
+-endif(WIN32)
++endif()
+ 
+ #===============================================================================
+ #  Macros for Source file management
