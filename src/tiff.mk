@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 4996f0c4f93094719b1ca5c6279b20e588773ba8a247533e486416fb662dd
 $(PKG)_SUBDIR   := tiff-$($(PKG)_VERSION)
 $(PKG)_FILE     := tiff-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.osgeo.org/libtiff/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc jpeg libwebp xz zlib zstd
+$(PKG)_DEPS     := cc jpeg libdeflate libwebp xz zlib zstd
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://download.osgeo.org/libtiff/' | \
