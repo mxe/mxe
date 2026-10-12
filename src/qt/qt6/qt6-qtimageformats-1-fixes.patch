@@ -4,26 +4,6 @@ Contains ad hoc patches for cross building.
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
-Date: Sun, 13 Feb 2022 17:30:59 +0100
-Subject: [PATCH 1/2] try to fix linking to libtiff's transitive dependencies
-
-
-diff --git a/src/imageformats/configure.cmake b/src/imageformats/configure.cmake
-index 1111111..2222222 100644
---- a/src/imageformats/configure.cmake
-+++ b/src/imageformats/configure.cmake
-@@ -27,6 +27,8 @@ qt_find_package(TIFF PROVIDED_TARGETS TIFF::TIFF MODULE_NAME imageformats QMAKE_
-     VCPKG_ADD_TO_FEATURE tiff
-     VCPKG_DEFAULT_FEATURES OFF
- )
-+### <sigh>
-+target_link_libraries(TIFF::TIFF INTERFACE -ltiff -lwebp -lsharpyuv -lzstd -llzma -ljpeg -ldeflate -lz -lm)
- # Threads::Threads might be brought in via a top-level CMakeLists.txt find_package dependency
- # in which case if the system WebpConfig.cmake depends Threads, it shouldn't try to promote it to
- # global to avoid a 'global promotion of a target in a different subdirectory' error.
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
 Date: Thu, 6 Apr 2023 17:27:28 +0200
 Subject: [PATCH 2/2] explicit -lsharpyuv for -lwebp
 
