@@ -13,7 +13,8 @@ $(PKG)_DEPS     := cc jpeg libpng libwebp sdl3 tiff
 
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \
-        -DBUILD_SHARED_LIBS=$(CMAKE_SHARED_BOOL)
+        -DBUILD_SHARED_LIBS=$(CMAKE_SHARED_BOOL) \
+        -DSDLIMAGE_DEPS_SHARED=$(CMAKE_SHARED_BOOL)
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 endef
