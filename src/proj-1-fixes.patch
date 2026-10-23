@@ -12,7 +12,7 @@ diff --git a/src/lib_proj.cmake b/src/lib_proj.cmake
 index 1111111..2222222 100644
 --- a/src/lib_proj.cmake
 +++ b/src/lib_proj.cmake
-@@ -517,7 +517,7 @@ target_include_directories(proj INTERFACE
+@@ -531,7 +531,7 @@ target_include_directories(proj INTERFACE
    $<BUILD_INTERFACE:${PROJ_SOURCE_DIR}/include>
    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
  
@@ -32,7 +32,7 @@ diff --git a/src/lib_proj.cmake b/src/lib_proj.cmake
 index 1111111..2222222 100644
 --- a/src/lib_proj.cmake
 +++ b/src/lib_proj.cmake
-@@ -608,14 +608,9 @@ endif()
+@@ -622,14 +622,9 @@ endif()
  
  if(CURL_ENABLED)
    target_compile_definitions(proj PRIVATE -DCURL_ENABLED)
