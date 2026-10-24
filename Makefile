@@ -484,6 +484,11 @@ $(PREFIX)/installed/check-requirements: $(MAKEFILE) | $(PREFIX)/installed/.gitke
 	$(foreach REQUIREMENT,$(REQUIREMENTS),$(call CHECK_REQUIREMENT,$(REQUIREMENT)))
 	$(call CHECK_REQUIREMENT_VERSION,autoconf,2\.6[8-9]\|2\.[7-9][0-9])
 	$(call CHECK_REQUIREMENT_VERSION,automake,1\.11\.[3-9]\|1\.[1-9][2-9]\(\.[0-9]\+\)\?)
+	@# a Python module has no command to probe; mesa needs it
+	@if ! $(PYTHON3) -c 'import yaml' &>/dev/null; then \
+	    echo 'Missing requirement: PyYAML (Python 3 yaml module)'; \
+	    touch check-requirements-failed; \
+	fi
 	@if [ -e check-requirements-failed ]; then \
 	    echo; \
 	    echo 'Please have a look at "docs/index.html" to ensure'; \
