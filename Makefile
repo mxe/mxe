@@ -489,6 +489,12 @@ $(PREFIX)/installed/check-requirements: $(MAKEFILE) | $(PREFIX)/installed/.gitke
 	    echo 'Missing requirement: PyYAML (Python 3 yaml module)'; \
 	    touch check-requirements-failed; \
 	fi
+	@# mesa compares Mako's version with either of them; Python 3.12 dropped distutils
+	@if ! $(PYTHON3) -c 'import packaging' &>/dev/null && \
+	    ! $(PYTHON3) -c 'import distutils' &>/dev/null; then \
+	    echo 'Missing requirement: Python 3 packaging module'; \
+	    touch check-requirements-failed; \
+	fi
 	@if [ -e check-requirements-failed ]; then \
 	    echo; \
 	    echo 'Please have a look at "docs/index.html" to ensure'; \
