@@ -43,6 +43,9 @@ PYTHON     := $(shell PATH="$(ORIG_PATH)" which python)
 PYTHON3    := $(shell PATH="$(ORIG_PATH)" which python3)
 PY_XY_VER  := $(if $(PYTHON),$(shell $(PYTHON) -c "import sys; print('{0[0]}.{0[1]}'.format(sys.version_info))"))
 SED        := $(shell gsed --help >/dev/null 2>&1 && echo g)sed
+# p7zip provides 7za; the 7-Zip package that replaces it (e.g. on Alpine)
+# provides only 7z and 7zz
+SEVENZIP   := $(or $(firstword $(foreach c,7za 7z 7zz,$(shell $(c) --help >/dev/null 2>&1 && echo $(c)))),7za)
 SORT       := $(shell gsort --help >/dev/null 2>&1 && echo g)sort
 TOUCH      := $(shell gtouch --help >/dev/null 2>&1 && echo g)touch
 DEFAULT_UA := $(shell wget --version | $(SED) -n 's,GNU \(Wget\) \([0-9.]*\).*,\1/\2,p')
@@ -50,7 +53,7 @@ WGET_TOOL   = wget
 WGET        = $(WGET_TOOL) --user-agent='$(or $($(1)_UA),$(DEFAULT_UA))' -t 2 --timeout=6
 
 REQUIREMENTS := \
-    7za \
+    $(SEVENZIP) \
     autoconf \
     automake \
     autopoint \
@@ -307,7 +310,7 @@ UNPACK_ARCHIVE = \
     $(if $(filter %.tar.lzma,$(1)),xz -dc -F lzma '$(1)' | tar xf -, \
     $(if $(filter %.txz,     $(1)),xz -dc '$(1)' | tar xf -, \
     $(if $(filter %.tar.xz,  $(1)),xz -dc '$(1)' | tar xf -, \
-    $(if $(filter %.7z,      $(1)),7za x '$(1)', \
+    $(if $(filter %.7z,      $(1)),$(SEVENZIP) x '$(1)', \
     $(if $(filter %.zip,     $(1)),unzip -q '$(1)', \
     $(if $(filter %.deb,     $(1)),ar x '$(1)' && tar xf data.tar*, \
     $(error Unknown archive format: $(1)))))))))))))))
