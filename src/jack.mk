@@ -4,8 +4,8 @@ PKG             := jack
 $(PKG)_WEBSITE  := https://jackaudio.org/
 $(PKG)_DESCR    := JACK Audio Connection Kit
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2504203
-$(PKG)_CHECKSUM := ae50c3290f92485b378ebd249f1f9dbb4386781434d034519aa127e5a076754e
+$(PKG)_VERSION  := 0d730dd
+$(PKG)_CHECKSUM := 34af2b2cdd6666188db575ec6ed52688da735c566b4a770fa922e3845aae82ed
 $(PKG)_GH_CONF  := jackaudio/jack2/branches/develop
 $(PKG)_DEPS     := cc libgnurx libsamplerate portaudio pthreads
 
