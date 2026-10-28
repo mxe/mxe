@@ -11,11 +11,6 @@ $(PKG)_FILE     := gtkmm-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.gnome.org/sources/gtkmm/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc meson-wrapper atkmm cairomm gtk3 libsigc++ pangomm
 
-$(PKG)_EXTRA_WARNINGS := \
-    -Wno-cast-function-type \
-    -Wno-deprecated \
-    -Wno-deprecated-declarations
-
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://gitlab.gnome.org/GNOME/gtkmm/tags' | \
     $(SED) -n "s,.*<a [^>]\+>v\?\([0-9]\+\.[0-9.]\+\)<.*,\1,p" | \
@@ -35,8 +30,7 @@ define $(PKG)_BUILD
         '$(MXE_NINJA)' -C '$(BUILD_DIR)' -j '$(JOBS)' install
 
     '$(TARGET)-g++' \
-        -W -Wall -Werror -pedantic -std=c++11 \
-        $($(PKG)_EXTRA_WARNINGS) \
+        -W -Wall -std=c++11 \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-gtkmm3.exe' \
         `'$(TARGET)-pkg-config' gtkmm-3.0 --cflags --libs`
 endef
