@@ -21,7 +21,6 @@ _$(PKG)_CONFIGURE_OPTS = \
 # The following warning flags are defined in src/*.mk for modern GCCs.
 # Since legacy GCC compilers do not support them and would fail with an
 # "unrecognized command line option" error, we must explicitly clear them here.
-gtkmm3_EXTRA_WARNINGS =
 gtkglextmm_EXTRA_WARNINGS =
 
 # Shared GCC build logic. Must be included at the end of the file 
