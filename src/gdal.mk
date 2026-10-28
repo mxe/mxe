@@ -10,9 +10,9 @@ $(PKG)_SUBDIR   := gdal-$($(PKG)_VERSION)
 $(PKG)_FILE     := gdal-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.osgeo.org/gdal/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc armadillo curl expat geos giflib gta hdf4 hdf5 \
-                   jpeg json-c libgeotiff libmysqlclient libpng libxml2 \
+                   jpeg json-c libgeotiff libpng libxml2 \
                    netcdf openjpeg postgresql proj spatialite sqlite tiff zlib \
-                   poppler freetype
+                   freetype
 
 define $(PKG)_UPDATE
         $(WGET) -q -O- 'https://download.osgeo.org/gdal/CURRENT' | \
@@ -24,7 +24,7 @@ define $(PKG)_BUILD
     # Explicitly enable packages known to work to avoid CMake auto-detection
     # enabling a package that might not work
     cd '$(BUILD_DIR)' && $(TARGET)-cmake --trace-expand '$(SOURCE_DIR)' \
-        -DCMAKE_CXX_FLAGS='-Wno-deprecated-copy -Wno-class-memaccess $(if $(BUILD_STATIC),-DOPJ_STATIC -DCURL_STATICLIB,)' \
+        -DCMAKE_CXX_FLAGS='-Wno-deprecated-copy -Wno-class-memaccess -fpermissive $(if $(BUILD_STATIC),-DOPJ_STATIC -DCURL_STATICLIB,)' \
         -DCMAKE_C_FLAGS='-Wno-format' \
         -DGDAL_USE_EXTERNAL_LIBS:BOOL=OFF\
         -DGDAL_USE_ARMADILLO:BOOL=ON \
@@ -44,7 +44,7 @@ define $(PKG)_BUILD
         -DGDAL_USE_JAVA:BOOL=ON \
         -DGDAL_USE_LIBLZMA:BOOL=ON \
         -DGDAL_USE_LIBXML2:BOOL=ON \
-        -DGDAL_USE_MYSQL:BOOL=ON \
+        -DGDAL_USE_MYSQL:BOOL=OFF \
         -DGDAL_USE_NETCDF:BOOL=ON \
         -DGDAL_USE_ODBC:BOOL=ON \
         -DGDAL_USE_OPENJPEG:BOOL=ON \
@@ -53,19 +53,20 @@ define $(PKG)_BUILD
         -DGDAL_USE_PNG:BOOL=ON \
         -DGDAL_USE_PROJ:BOOL=ON \
         -DGDAL_USE_PERL:BOOL=ON \
-        -DGDAL_USE_POPPLER:BOOL=ON \
+        -DGDAL_USE_POPPLER:BOOL=OFF \
         -DGDAL_USE_POSTGRESQL:BOOL=ON \
         -DGDAL_USE_SPATIALITE:BOOL=ON \
         -DGDAL_USE_SQLITE3:BOOL=ON \
         -DGDAL_USE_TIFF:BOOL=ON \
-        -DGDAL_USE_WEBP:BOOL=ON \
+        -DGDAL_USE_WEBP:BOOL=$(CMAKE_SHARED_BOOL) \
         -DGDAL_USE_ZLIB:BOOL=ON \
         -DGDAL_USE_ZSTD:BOOL=ON \
         -DBUILD_SHARED_LIBS:BOOL=$(if $(BUILD_SHARED),ON,OFF) \
         -DHDF5_USE_STATIC_LIBRARIES:BOOL=$(if $(BUILD_SHARED),OFF,ON) \
         -DBLA_STATIC=$(if $(BUILD_SHARED),OFF,ON) \
         -DBLA_VENDOR="OpenBLAS" \
-        -DLAPACK_LIBRARIES="`'$(TARGET)-pkg-config' lapack --cflags --libs` -lgfortran -lquadmath"
+        -DLAPACK_LIBRARIES="`'$(TARGET)-pkg-config' lapack --cflags --libs` -lgfortran -lquadmath" \
+        -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 
     # Known not to work or disabled in previous versions
     # -DGDAL_USE_THREADS:BOOL=ON \

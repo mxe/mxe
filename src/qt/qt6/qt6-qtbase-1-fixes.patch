@@ -39,7 +39,7 @@ index 1111111..2222222 100644
              set(writableLib OpenSSL::Crypto)
          endif()
 -        set_property(TARGET ${writableLib} APPEND PROPERTY INTERFACE_LINK_LIBRARIES ws2_32 crypt32)
-+        set_property(TARGET ${writableLib} APPEND PROPERTY INTERFACE_LINK_LIBRARIES -lssl -lcrypto -lz -lws2_32 -lgdi32 -lcrypt32)
++        set_property(TARGET ${writableLib} APPEND PROPERTY INTERFACE_LINK_LIBRARIES -lssl -lcrypto -lbcrypt -lz -lws2_32 -lgdi32 -lcrypt32)
          unset(libType)
          unset(writableLib)
      endif()

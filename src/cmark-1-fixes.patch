@@ -9,14 +9,15 @@ Subject: [PATCH 1/1] do not build and install man pages
 
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 1111111..2222222 100755
+index 1111111..2222222 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -30,7 +30,6 @@ add_subdirectory(src)
- if(CMARK_TESTS AND CMARK_SHARED)
-   add_subdirectory(api_test)
+@@ -112,7 +112,7 @@ add_subdirectory(src)
+ # TODO(compnerd) should this be enabled for MinGW, which sets CMAKE_SYSTEM_NAME
+ # to Windows, but defines `MINGW`.
+ if(NOT CMAKE_SYSTEM_NAME STREQUAL Windows)
+-  add_subdirectory(man)
++	#  add_subdirectory(man)
  endif()
--add_subdirectory(man)
- if(CMARK_TESTS)
-   enable_testing()
-   add_subdirectory(test testdir)
+ if(BUILD_TESTING)
+   add_subdirectory(api_test)

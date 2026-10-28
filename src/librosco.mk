@@ -12,6 +12,7 @@ define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && $(TARGET)-cmake \
         -DENABLE_DOC_INSTALL=off \
         -DENABLE_TESTAPP_INSTALL=off \
+        -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
         '$(SOURCE_DIR)'
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install

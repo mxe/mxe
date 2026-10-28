@@ -3,10 +3,10 @@
 PKG             := ghostscript
 $(PKG)_WEBSITE  := https://www.ghostscript.com/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 10.05.0
+$(PKG)_VERSION  := 10.08.0
 $(PKG)_NODOTVER := $(subst .,,$($(PKG)_VERSION))
 $(PKG)_MAJORVER := $(firstword $(subst ., ,$($(PKG)_VERSION)))
-$(PKG)_CHECKSUM := aac9c4fdf61805a76f6220012735c1ae832813788314bfc04055cc0c8959b9a3
+$(PKG)_CHECKSUM := c20492bc8ebb96c87fa2e52a0926e1cda8cde95d66145e018ac713fed5da38cf
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs$($(PKG)_NODOTVER)/$($(PKG)_FILE)

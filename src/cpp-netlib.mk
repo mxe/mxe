@@ -9,12 +9,13 @@ $(PKG)_CHECKSUM := 897259d9f9087acba33911aec925804e6236a7a77f5444dedde6145049605
 $(PKG)_GH_CONF  := cpp-netlib/cpp-netlib/tags,cpp-netlib-,-final
 $(PKG)_DEPS     := cc boost openssl
 
-define $(PKG)_BUILD
+define $(PKG)_BUILD_DISABLED
    mkdir '$(1)/build'
    cd '$(1)/build' && '$(TARGET)-cmake' .. \
        -DINSTALL_CMAKE_DIR='$(PREFIX)/$(TARGET)/cmake/cppnetlib' \
        -DCPP-NETLIB_BUILD_EXAMPLES=OFF \
-       -DCPP-NETLIB_BUILD_TESTS=OFF
+       -DCPP-NETLIB_BUILD_TESTS=OFF \
+       -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 
    $(MAKE) -C '$(1)/build' -j '$(JOBS)' install
 endef

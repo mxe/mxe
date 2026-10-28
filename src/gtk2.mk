@@ -11,6 +11,10 @@ $(PKG)_FILE     := gtk+-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.gnome.org/sources/gtk+/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc atk cairo gdk-pixbuf gettext glib jasper jpeg libpng pango tiff
 
+$(PKG)_EXTRA_WARNINGS := \
+    -Wno-incompatible-pointer-types \
+    -Wno-implicit-function-declaration
+
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://gitlab.gnome.org/GNOME/gtk+/-/tags?sort=updated_desc&search=^2.' | \
     $(SED) -n "s,.*<a [^>]\+>v\?\([0-9]\+\.[0-9.]\+\)<.*,\1,p" | \
@@ -28,7 +32,8 @@ define $(PKG)_BUILD
         --disable-gtk-doc \
         --disable-man \
         --with-included-immodules \
-        --without-x
+        --without-x \
+        CFLAGS='-O2 -g $($(PKG)_EXTRA_WARNINGS)'
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(MXE_DISABLE_CRUFT) EXTRA_DIST=
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install $(MXE_DISABLE_CRUFT) EXTRA_DIST=
 
@@ -37,7 +42,7 @@ define $(PKG)_BUILD
     rm -f '$(PREFIX)/$(TARGET)/lib/gailutil.def'
 
     '$(TARGET)-g++' \
-        -W -Wall -Werror -Wno-error=deprecated-declarations -ansi \
+        -W -Wall -Werror -Wno-deprecated-declarations -ansi \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-gtk2.exe' \
         `'$(TARGET)-pkg-config' gtk+-2.0 gmodule-2.0 --cflags --libs`
 endef

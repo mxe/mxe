@@ -4,8 +4,8 @@ PKG             := libzmq
 $(PKG)_WEBSITE  := https://github.com/zeromq/libzmq
 $(PKG)_DESCR    := ZeroMQ core engine in C++, implements ZMTP/3.0
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := c89390f
-$(PKG)_CHECKSUM := 00ec4f8fca565764e5e14ae80ebe0658e762ccd9482f597bde425214a45d60a8
+$(PKG)_VERSION  := 4649337
+$(PKG)_CHECKSUM := f3b389b277294f25240a3ca27c199ffe6d57984a06f4b8a5cb298dace5da0f21
 $(PKG)_GH_CONF  := zeromq/libzmq/branches/master
 $(PKG)_DEPS     := cc libsodium
 

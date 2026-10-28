@@ -11,6 +11,16 @@ $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://ftp.gnu.org/gnu/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc gc gettext gmp libffi libgnurx libiconv libltdl libunistring readline
 
+$(PKG)_EXTRA_WARNINGS := \
+    -Wno-misleading-indentation \
+    -Wno-unused-but-set-variable \
+    -Wno-unused-value \
+    -Wno-incompatible-pointer-types \
+    -Wno-old-style-definition \
+    -Wno-implicit-function-declaration \
+    -Wno-attributes \
+    -Wno-int-conversion
+
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://git.savannah.gnu.org/gitweb/?p=guile.git;a=tags' | \
     grep '<a [^>]*class="list subject"' | \
@@ -27,9 +37,10 @@ define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && CC_FOR_BUILD=$(BUILD_CC) $(SOURCE_DIR)/configure \
         $(MXE_CONFIGURE_OPTS) \
         --without-threads \
+        --without-64-calls \
         scm_cv_struct_timespec=no \
         LIBS='-lunistring -lintl -liconv -ldl' \
-        CFLAGS='-Wno-misleading-indentation -Wno-unused-but-set-variable -Wno-unused-value $($(PKG)_EXTRA_WARNINGS)'
+        CFLAGS='-std=gnu89 $($(PKG)_EXTRA_WARNINGS)'
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(MXE_DISABLE_CRUFT) schemelib_DATA=
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install $(MXE_DISABLE_CRUFT) schemelib_DATA=
 

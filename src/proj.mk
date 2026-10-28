@@ -3,8 +3,8 @@
 PKG             := proj
 $(PKG)_WEBSITE  := https://trac.osgeo.org/proj/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 9.8.1
-$(PKG)_CHECKSUM := af5b731c145c1d13c4e3b4eeb7d167e94e845e440f71e3496b4ed8dae0291960
+$(PKG)_VERSION  := 9.9.0
+$(PKG)_CHECKSUM := 791a0610547eeabb17006cfd49cdbd2034f3240f47ed5e88a1031811f4e2bcf3
 $(PKG)_SUBDIR   := proj-$($(PKG)_VERSION)
 $(PKG)_FILE     := proj-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://download.osgeo.org/proj/$($(PKG)_FILE)
@@ -26,9 +26,6 @@ define $(PKG)_BUILD
         -DMXE_CURL_LIBS:STRING="`'$(TARGET)-pkg-config' libcurl --libs`"
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
-
-    $(if $(BUILD_SHARED),
-        mv '$(PREFIX)/$(TARGET)/lib/libproj.dll.a' '$(PREFIX)/$(TARGET)/lib/libproj.a')
 
     # Build test script
     '$(TARGET)-gcc' \

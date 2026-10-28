@@ -12,7 +12,7 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 1111111..2222222 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -443,9 +443,7 @@ ENDIF()
+@@ -522,9 +522,7 @@ ENDIF()
  INCLUDE(${CC_SOURCE_DIR}/plugins/CMakeLists.txt)
  ADD_SUBDIRECTORY(include)
  ADD_SUBDIRECTORY(libmariadb)
@@ -21,8 +21,8 @@ index 1111111..2222222 100644
 -ENDIF()
 +ADD_SUBDIRECTORY(mariadb_config)
  
- IF(IS_DIRECTORY ${CC_SOURCE_DIR}/unittest)
-   IF(WITH_UNIT_TESTS)
+ IF(WITH_TOOLS)
+   ADD_SUBDIRECTORY(tools)
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
@@ -34,7 +34,7 @@ diff --git a/libmariadb/CMakeLists.txt b/libmariadb/CMakeLists.txt
 index 1111111..2222222 100644
 --- a/libmariadb/CMakeLists.txt
 +++ b/libmariadb/CMakeLists.txt
-@@ -496,9 +496,13 @@ IF(NOT WIN32)
+@@ -474,9 +474,13 @@ IF(NOT WIN32)
    SET_TARGET_PROPERTIES(mariadbclient PROPERTIES OUTPUT_NAME "${LIBMARIADB_STATIC_NAME}")
  ENDIF()
  
@@ -48,7 +48,7 @@ index 1111111..2222222 100644
  IF(WIN32)
  INSTALL(TARGETS libmariadb
          COMPONENT SharedLibraries
-@@ -514,3 +518,4 @@ IF(MSVC)
+@@ -492,3 +496,4 @@ IF(MSVC)
             CONFIGURATIONS Debug RelWithDebInfo
             COMPONENT Development)
  ENDIF()

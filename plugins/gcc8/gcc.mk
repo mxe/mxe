@@ -26,11 +26,6 @@ $(PKG)_URL      := https://ftp.gnu.org/gnu/gcc/gcc-$($(PKG)_VERSION)/$($(PKG)_FI
 $(PKG)_URL_2    := https://www.mirrorservice.org/sites/sourceware.org/pub/gcc/releases/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_PATCHES  := $(dir $(lastword $(MAKEFILE_LIST)))/gcc8.patch
 
-# copy db-2-install-exe.patch to gcc7 plugin when gcc8 is default
-db_PATCHES := $(TOP_DIR)/src/db-1-fix-including-winioctl-h-lowcase.patch
-
-# set these in respective makefiles when gcc7 becomes default
-# remove from here and leave them blank for gcc5 plugin
-libssh_EXTRA_WARNINGS = -Wno-error=implicit-fallthrough
-gtkimageview_EXTRA_WARNINGS = -Wno-error=misleading-indentation
-guile_EXTRA_WARNINGS = -Wno-error=misleading-indentation
+# Shared GCC build logic. Must be included at the end of the file 
+# so it can access the package variables defined above.
+include $(TOP_DIR)/plugins/gcc-common/gcc-common.mk

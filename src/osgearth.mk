@@ -4,19 +4,16 @@ PKG             := osgearth
 $(PKG)_WEBSITE  := http://osgearth.org/
 $(PKG)_DESCR    := Geospatial SDK for OpenSceneGraph
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.10
-$(PKG)_CHECKSUM := 986ad26b8e340a40ac6404137aa61f80a030030fa3e8cf5fbdf183c697f2556e
+$(PKG)_VERSION  := 3.8.1
+$(PKG)_CHECKSUM := 2d195ed9ec16b38373a8d2700baec2208cc18fa9a1b2ad46cd453ae8ef5cf5ed
 $(PKG)_GH_CONF  := gwaldron/osgearth/releases/latest, osgearth-
-$(PKG)_DEPS     := curl cc gdal openscenegraph poco sqlite zlib
+$(PKG)_DEPS     := curl cc gdal openscenegraph sqlite zlib
 
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \
-        -DDYNAMIC_OSGEARTH=$(CMAKE_SHARED_BOOL) \
-        -DOSGEARTH_USE_PROTOBUF=OFF \
-        -DWITH_EXTERNAL_TINYXML=OFF \
-        -DBUILD_OSGEARTH_EXAMPLES=OFF \
-        -DBUILD_APPLICATIONS=OFF \
-        -DBUILD_TESTS=OFF
+        -DOSGEARTH_BUILD_SHARED_LIBS=$(CMAKE_SHARED_BOOL) \
+        -DOSGEARTH_BUILD_{DOCS,EXAMPLES,TESTS,TOOLS}=OFF \
+        -DCMAKE_CXX_FLAGS='-DWIN32 -DWINVER=0x0605 -D_WIN32_WINNT=0x0605 $(if $(BUILD_STATIC), -DOSG_LIBRARY_STATIC,)'
 
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install

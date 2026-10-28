@@ -28,11 +28,12 @@ define $(PKG)_BUILD
         -DUSE_CUSTOM_VECOR_MATH=OFF \
         -DUSE_DOUBLE_PRECISION=OFF \
         -DUSE_GLUT=OFF \
-        -DUSE_GRAPHICAL_BENCHMARK=OFF
+        -DUSE_GRAPHICAL_BENCHMARK=OFF \
+        -DCMAKE_POLICY_VERSION_MINIMUM=3.5
     $(MAKE) -C '$(1)' -j '$(JOBS)' install VERBOSE=1
 
     '$(TARGET)-g++' \
-        -W -Wall -Werror -ansi -pedantic \
+        -W -Wall -Werror -ansi -pedantic -Wno-error=overloaded-virtual -Wno-error=unused-but-set-variable \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
         `'$(TARGET)-pkg-config' $(PKG) --cflags --libs`
 endef

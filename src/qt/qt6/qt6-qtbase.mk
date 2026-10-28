@@ -37,32 +37,18 @@ define $(PKG)_BUILD
         -DQT_QMAKE_DEVICE_OPTIONS='CROSS_COMPILE=$(TARGET)-;PKG_CONFIG=$(TARGET)-pkg-config' \
         -DPKG_CONFIG_EXECUTABLE='$(PREFIX)/bin/$(TARGET)-pkg-config' \
         -DQT_QMAKE_TARGET_MKSPEC=win32-g++ \
-        -DQT_BUILD_EXAMPLES=OFF \
-        -DQT_BUILD_TESTS=OFF \
+        -DQT_BUILD_{EXAMPLES,TESTS}=OFF \
         -DBUILD_WITH_PCH=OFF \
-        -DFEATURE_accessibility=ON \
-        -DFEATURE_dbus=ON \
-        -DFEATURE_fontconfig=OFF \
-        -DFEATURE_system_freetype=ON \
-        -DFEATURE_glib=OFF \
-        -DFEATURE_system_harfbuzz=ON \
+        -DFEATURE_{accessibility,dbus,glib,icu,opengl_dynamic,openssl,openssl_linked,pkg_config}=ON \
+        -DFEATURE_{fontconfig,waylandscanner,use_gold_linker_alias}=OFF \
         -DFEATURE_icu=$(CMAKE_SHARED_BOOL) \
-        -DFEATURE_opengl_dynamic=ON \
-        -DFEATURE_openssl=ON \
-        -DFEATURE_openssl_linked=ON \
-        -DFEATURE_waylandscanner=OFF \
+        -DFEATURE_sql_{mysql,odbc,sqlite}=ON \
+        -DFEATURE_sql_psql=OFF \
+        -DFEATURE_system_{freetype,harfbuzz,pcre2,sqlite,zlib}=ON \
         -DOPENSSL_USE_STATIC_LIBS=TRUE \
-        -DFEATURE_system_pcre2=ON \
-        -DFEATURE_pkg_config=ON \
-        -DFEATURE_sql_mysql=ON \
         -DMySQL_INCLUDE_DIR='$(PREFIX)/$(TARGET)/include/mariadb' \
         -DMySQL_LIBRARY_DIR='$(PREFIX)/$(TARGET)/lib/mariadb' \
         -DMySQL_LIBRARY=$(if $(BUILD_STATIC),"`$(TARGET)-pkg-config --libs libmariadb`",'$(PREFIX)/$(TARGET)/lib/mariadb/libmariadb.a') \
-        -DFEATURE_sql_odbc=ON \
-        -DFEATURE_sql_psql=OFF \
-        -DFEATURE_system_sqlite=ON \
-        -DFEATURE_system_zlib=ON \
-        -DFEATURE_use_gold_linker_alias=OFF \
         $(PKG_CMAKE_OPTS)
 
     cmake --build '$(BUILD_DIR)' -j '$(JOBS)'

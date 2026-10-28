@@ -26,7 +26,8 @@ define $(PKG)_BUILD_SHARED
         -DBUILD_CUDA_LIB=OFF \
         -DBUILD_MATLAB_BINDINGS=OFF \
         -DBUILD_PYTHON_BINDINGS=OFF  \
-        -DUSE_OPENMP=ON
+        -DUSE_OPENMP=ON \
+        -DCMAKE_POLICY_VERSION_MINIMUM=3.5
     $(MAKE) -C '$(1)' -j '$(JOBS)' install VERBOSE=1
 endef
 

@@ -1,0 +1,22 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Sun, 27 Sep 2026 16:43:38 +0200
+Subject: [PATCH 1/1] add missing include
+
+
+diff --git a/src/cli/cli.h b/src/cli/cli.h
+index 1111111..2222222 100644
+--- a/src/cli/cli.h
++++ b/src/cli/cli.h
+@@ -8,6 +8,7 @@
+ #define BOTAN_CLI_H_
+ 
+ #include <botan/build.h>
++#include <cstdint>
+ #include <functional>
+ #include <ostream>
+ #include <map>

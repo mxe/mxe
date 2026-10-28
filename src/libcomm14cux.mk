@@ -10,7 +10,9 @@ $(PKG)_URL      := https://github.com/colinbourassa/libcomm14cux/archive/$($(PKG
 $(PKG)_DEPS     := cc
 
 define $(PKG)_BUILD
-    cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)'
+    cd '$(BUILD_DIR)' && $(TARGET)-cmake \
+        -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+        '$(SOURCE_DIR)'
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 endef

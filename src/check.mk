@@ -8,8 +8,9 @@ $(PKG)_CHECKSUM := a8de4e0bacfb4d76dd1c618ded263523b53b85d92a146d8835eb1a52932fa
 $(PKG)_GH_CONF  := libcheck/check/releases/latest
 $(PKG)_DEPS     := cc
 
-define $(PKG)_BUILD
+define $(PKG)_BUILD_DISABLED
     cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \
+        -DCMAKE_C_FLAGS="-Wno-implicit-function-declaration"
         -DBUILD_TESTING=OFF
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install

@@ -3,8 +3,8 @@
 PKG             := brotli
 $(PKG)_WEBSITE  := https://github.com/google/brotli
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.2.0
-$(PKG)_CHECKSUM := 816c96e8e8f193b40151dad7e8ff37b1221d019dbcb9c35cd3fadbfe6477dfec
+$(PKG)_VERSION  := 1.2.1
+$(PKG)_CHECKSUM := 98d35d11a78dc453aebb7d10c3748f3f73ff78c8267c0dc697b8631f67bf7e8f
 $(PKG)_GH_CONF  := google/brotli/releases/tag,v,,
 $(PKG)_DEPS     := cc
 

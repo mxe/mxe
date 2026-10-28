@@ -13,7 +13,8 @@ define $(PKG)_BUILD
         -DCMAKE_C_FLAGS=$(if $(BUILD_STATIC),,-DHPDF_DLL_MAKE) \
         -DLIBHPDF_SHARED=$(CMAKE_SHARED_BOOL) \
         -DLIBHPDF_STATIC=$(CMAKE_STATIC_BOOL) \
-        -DDEVPAK=ON
+        -DDEVPAK=ON \
+        -DCMAKE_POLICY_VERSION_MINIMUM=3.5
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install VERBOSE=1
 

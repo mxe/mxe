@@ -10,9 +10,11 @@ $(PKG)_GH_CONF  := tukaani-project/xz/releases,v
 $(PKG)_DEPS     := cc
 
 define $(PKG)_BUILD
-    cd '$(1)' && ./configure \
-        $(MXE_CONFIGURE_OPTS) \
-        --disable-threads \
-        --disable-nls
-    $(MAKE) -C '$(1)'/src/liblzma -j '$(JOBS)' install
+    '$(TARGET)-cmake' -S '$(SOURCE_DIR)' -B $(BUILD_DIR) \
+        -DBUILD_SHARED_LIBS=$(CMAKE_SHARED_BOOL) \
+        -DXZ_THREADS=no \
+        -DXZ_{DOC,NLS}=OFF \
+        $(PKG_CMAKE_OPTS)
+    '$(TARGET)-cmake' --build '$(BUILD_DIR)' --parallel '$(JOBS)' --verbose
+    '$(TARGET)-cmake' --install '$(BUILD_DIR)'
 endef

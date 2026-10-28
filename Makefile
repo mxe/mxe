@@ -43,6 +43,9 @@ PYTHON     := $(shell PATH="$(ORIG_PATH)" which python)
 PYTHON3    := $(shell PATH="$(ORIG_PATH)" which python3)
 PY_XY_VER  := $(if $(PYTHON),$(shell $(PYTHON) -c "import sys; print('{0[0]}.{0[1]}'.format(sys.version_info))"))
 SED        := $(shell gsed --help >/dev/null 2>&1 && echo g)sed
+# p7zip provides 7za; the 7-Zip package that replaces it (e.g. on Alpine)
+# provides only 7z and 7zz
+SEVENZIP   := $(or $(firstword $(foreach c,7za 7z 7zz,$(shell $(c) --help >/dev/null 2>&1 && echo $(c)))),7za)
 SORT       := $(shell gsort --help >/dev/null 2>&1 && echo g)sort
 TOUCH      := $(shell gtouch --help >/dev/null 2>&1 && echo g)touch
 DEFAULT_UA := $(shell wget --version | $(SED) -n 's,GNU \(Wget\) \([0-9.]*\).*,\1/\2,p')
@@ -50,7 +53,7 @@ WGET_TOOL   = wget
 WGET        = $(WGET_TOOL) --user-agent='$(or $($(1)_UA),$(DEFAULT_UA))' -t 2 --timeout=6
 
 REQUIREMENTS := \
-    7za \
+    $(SEVENZIP) \
     autoconf \
     automake \
     autopoint \
@@ -101,6 +104,9 @@ MXE_USE_CCACHE      := mxe
 MXE_CCACHE_DIR      := $(PWD)/.ccache
 MXE_CCACHE_BASE_DIR := $(PWD)
 MXE_CCACHE_CACHE_DIR := $(MXE_CCACHE_DIR)/ccache
+
+# set to major for GCC
+MXE_GCC_ID := gcc15
 
 # set to major.minor for LTS
 # MXE_QT6_ID := qt6.2
@@ -307,7 +313,7 @@ UNPACK_ARCHIVE = \
     $(if $(filter %.tar.lzma,$(1)),xz -dc -F lzma '$(1)' | tar xf -, \
     $(if $(filter %.txz,     $(1)),xz -dc '$(1)' | tar xf -, \
     $(if $(filter %.tar.xz,  $(1)),xz -dc '$(1)' | tar xf -, \
-    $(if $(filter %.7z,      $(1)),7za x '$(1)', \
+    $(if $(filter %.7z,      $(1)),$(SEVENZIP) x '$(1)', \
     $(if $(filter %.zip,     $(1)),unzip -q '$(1)', \
     $(if $(filter %.deb,     $(1)),ar x '$(1)' && tar xf data.tar*, \
     $(error Unknown archive format: $(1)))))))))))))))
@@ -420,6 +426,10 @@ else
         echo '# See plugins/README.md for further information.'; \
         echo '#override MXE_PLUGIN_DIRS += plugins/apps plugins/native'; \
         echo; \
+        echo '# The compiler is now managed via plugins (default: gcc15).'; \
+        echo '# Append a different gcc plugin to override the default (e.g. plugins/gcc11).'; \
+        echo '#override MXE_PLUGIN_DIRS += plugins/gcc11'; \
+        echo; \
         echo '# This variable controls the download mirror for SourceForge,'; \
         echo '# when it is used. Enabling the value below means auto.'; \
         echo '#SOURCEFORGE_MIRROR := downloads.sourceforge.net'; \
@@ -447,6 +457,7 @@ JOBS   ?= $(call LIST_NMIN, $(DEFAULT_MAX_JOBS) $(NPROCS))
 # Core packages.
 override MXE_PLUGIN_DIRS := \
     $(realpath $(TOP_DIR)/src) \
+    $(realpath $(TOP_DIR)/plugins/$(MXE_GCC_ID)) \
     $(realpath $(TOP_DIR)/src/qt/$(MXE_QT6_ID)) \
     $(realpath $(TOP_DIR)/src/kf/$(MXE_KF6_ID)) \
     $(MXE_PLUGIN_DIRS)
@@ -481,6 +492,17 @@ $(PREFIX)/installed/check-requirements: $(MAKEFILE) | $(PREFIX)/installed/.gitke
 	$(foreach REQUIREMENT,$(REQUIREMENTS),$(call CHECK_REQUIREMENT,$(REQUIREMENT)))
 	$(call CHECK_REQUIREMENT_VERSION,autoconf,2\.6[8-9]\|2\.[7-9][0-9])
 	$(call CHECK_REQUIREMENT_VERSION,automake,1\.11\.[3-9]\|1\.[1-9][2-9]\(\.[0-9]\+\)\?)
+	@# a Python module has no command to probe; mesa needs it
+	@if ! $(PYTHON3) -c 'import yaml' &>/dev/null; then \
+	    echo 'Missing requirement: PyYAML (Python 3 yaml module)'; \
+	    touch check-requirements-failed; \
+	fi
+	@# mesa compares Mako's version with either of them; Python 3.12 dropped distutils
+	@if ! $(PYTHON3) -c 'import packaging' &>/dev/null && \
+	    ! $(PYTHON3) -c 'import distutils' &>/dev/null; then \
+	    echo 'Missing requirement: Python 3 packaging module'; \
+	    touch check-requirements-failed; \
+	fi
 	@if [ -e check-requirements-failed ]; then \
 	    echo; \
 	    echo 'Please have a look at "docs/index.html" to ensure'; \

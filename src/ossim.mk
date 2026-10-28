@@ -4,8 +4,8 @@ PKG             := ossim
 $(PKG)_WEBSITE  := https://trac.osgeo.org/ossim
 $(PKG)_DESCR    := OSSIM
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1af3774
-$(PKG)_CHECKSUM := 159bc40a90c79065cfe3f144f5afe2fe7944721d15dc96eefc4163d4629f9230
+$(PKG)_VERSION  := d4781a8
+$(PKG)_CHECKSUM := 68cdb63090a628c37237fdeb4bca690316d316bf61a1fd1d32882426e042bed5
 # releases have unpredictable names and are based on master branch
 $(PKG)_GH_CONF  := ossimlabs/ossim/branches/master
 $(PKG)_DEPS     := cc freetype geos hdf5 jpeg libgeotiff libpng openthreads proj \
@@ -17,7 +17,10 @@ define $(PKG)_BUILD
         -DBUILD_OSSIM_FREETYPE_SUPPORT=TRUE \
         -DBUILD_OSSIM_CURL_APPS=FALSE \
         -DBUILD_OSSIM_TESTS=FALSE \
-        -DBUILD_OSSIM_APPS=FALSE
+        -DBUILD_OSSIM_APPS=FALSE \
+        -DUSE_OSSIM_JSONCPP=FALSE \
+        -DTIFF_LIBRARIES='-ltiff' \
+        -DJSONCPP_INCLUDE_DIR='$(PREFIX)/$(TARGET)/include/json'
 
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install VERBOSE=1

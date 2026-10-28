@@ -12,24 +12,7 @@ diff --git a/src/bluetooth/qbluetoothservicediscoveryagent_win.cpp b/src/bluetoo
 index 1111111..2222222 100644
 --- a/src/bluetooth/qbluetoothservicediscoveryagent_win.cpp
 +++ b/src/bluetooth/qbluetoothservicediscoveryagent_win.cpp
-@@ -50,15 +50,7 @@
- #include <winsock2.h>
- #include <qt_windows.h>
- 
--#if defined(Q_CC_MINGW)
--// Workaround for MinGW headers declaring BluetoothSdpGetElementData incorrectly.
--# define BluetoothSdpGetElementData _BluetoothSdpGetElementData_notok
--# include <bluetoothapis.h>
--# undef BluetoothSdpGetElementData
--  extern "C" DWORD WINAPI BluetoothSdpGetElementData(LPBYTE, ULONG, PSDP_ELEMENT_DATA);
--#else
--# include <bluetoothapis.h>
--#endif
-+#include <bluetoothapis.h>
- 
- #include <ws2bth.h>
- #include <iostream>
-@@ -206,12 +198,7 @@ static QList<QVariant> spdContainerToVariantList(LPBYTE containerStream, ULONG c
+@@ -206,12 +206,7 @@ static QList<QVariant> spdContainerToVariantList(LPBYTE containerStream, ULONG c
      return sequence;
  }
  
@@ -42,4 +25,4 @@ index 1111111..2222222 100644
 +static BOOL QT_WIN_CALLBACK bluetoothSdpCallback(ULONG attributeId, LPBYTE valueStream, ULONG streamSize, LPVOID param)
  {
      QBluetoothServiceInfo *result = static_cast<QBluetoothServiceInfo*>(param);
- 
+

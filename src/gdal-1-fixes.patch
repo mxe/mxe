@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: brodieG <brodieG@users.noreply.github.com>
 Date: Sat, 5 Nov 2022 23:59:32 +0000
-Subject: [PATCH 1/5] Apply vcpkg Module Find* Fixes
+Subject: [PATCH 1/9] Apply vcpkg Module Find* Fixes
 
 Taken from https://github.com/microsoft/vcpkg/pull/22392/commits
 
@@ -122,7 +122,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: brodieG <brodieG@users.noreply.github.com>
 Date: Sun, 6 Nov 2022 00:00:26 +0000
-Subject: [PATCH 2/5] Add/Fix Find* for HDF4 and PostgreSQL
+Subject: [PATCH 2/9] Add/Fix Find* for HDF4 and PostgreSQL
 
 
 diff --git a/cmake/modules/packages/FindHDF4.cmake b/cmake/modules/packages/FindHDF4.cmake
@@ -611,7 +611,7 @@ index 0000000..61725fb
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: brodieG <brodieG@users.noreply.github.com>
 Date: Sat, 12 Nov 2022 13:50:57 +0000
-Subject: [PATCH 3/5] Fix Find* for Blosc
+Subject: [PATCH 3/9] Fix Find* for Blosc
 
 
 diff --git a/cmake/modules/packages/FindBlosc.cmake b/cmake/modules/packages/FindBlosc.cmake
@@ -636,7 +636,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: brodieG <brodieG@users.noreply.github.com>
 Date: Wed, 18 Jan 2023 10:58:02 +0000
-Subject: [PATCH 4/5] remove setting of __MSVCRT_CERSION__ (from OCTAVE)
+Subject: [PATCH 4/9] remove setting of __MSVCRT_CERSION__ (from OCTAVE)
 
 Originally:
 From: Jeremy Drake <github@jdrake.com>
@@ -670,7 +670,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: brodieG <brodieG@users.noreply.github.com>
 Date: Wed, 18 Jan 2023 10:58:42 +0000
-Subject: [PATCH 5/5] extend wmain use to C apps
+Subject: [PATCH 5/9] extend wmain use to C apps
 
 The change is patterned on what is done for the CPP apps
 
@@ -941,3 +941,266 @@ index 1111111..2222222 100644
      return 0;
  }
 +MAIN_END
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Fri, 9 Oct 2026 16:02:01 +0200
+Subject: [PATCH 6/9] update FindSQLite3.cmake from gdal 3.13.3 version
+
+
+diff --git a/cmake/modules/packages/FindSQLite3.cmake b/cmake/modules/packages/FindSQLite3.cmake
+index 1111111..2222222 100644
+--- a/cmake/modules/packages/FindSQLite3.cmake
++++ b/cmake/modules/packages/FindSQLite3.cmake
+@@ -8,7 +8,7 @@ Find the SQLite libraries, v3
+ IMPORTED targets
+ ^^^^^^^^^^^^^^^^
+ This module defines the following :prop_tgt:`IMPORTED` target:
+-``SQLite::SQLite3``
++``SQLite3::SQLite3``
+ Result variables
+ ^^^^^^^^^^^^^^^^
+ This module will set the following variables if found:
+@@ -26,7 +26,7 @@ This module will set the following variables if found:
+   Copyright (c) 2018,2021 Hiroshi Miura
+   Copyright (c) 2019 Chuck Atkins
+ #]=======================================================================]
+-
++include (CMakePushCheckState)
+ # Accept upper case variant for SQLite3_INCLUDE_DIR
+ if(SQLITE3_INCLUDE_DIR)
+   if(SQLite3_INCLUDE_DIR AND NOT "${SQLite3_INCLUDE_DIR}" STREQUAL "${SQLITE3_INCLUDE_DIR}")
+@@ -47,20 +47,21 @@ endif()
+ 
+ if(SQLite3_INCLUDE_DIR AND SQLite3_LIBRARY)
+   set(SQLite3_FIND_QUIETLY TRUE)
+-endif()
++else()
++  find_package(PkgConfig QUIET)
++  if(PKG_CONFIG_FOUND)
++      pkg_check_modules(PC_SQLITE3 QUIET sqlite3)
++  endif()
+ 
+-find_package(PkgConfig QUIET)
+-if(PKG_CONFIG_FOUND)
+-    pkg_check_modules(PC_SQLITE3 QUIET sqlite3)
++  find_path(SQLite3_INCLUDE_DIR
++            NAMES  sqlite3.h
++            HINTS ${PC_SQLITE3_INCLUDE_DIRS})
++  find_library(SQLite3_LIBRARY
++               NAMES sqlite3 sqlite3_i
++               NAMES_PER_DIR
++               HINTS ${PC_SQLITE3_LIBRARY_DIRS})
+ endif()
+ 
+-find_path(SQLite3_INCLUDE_DIR
+-          NAMES  sqlite3.h
+-          HINTS ${PC_SQLITE3_INCLUDE_DIRS})
+-find_library(SQLite3_LIBRARY
+-             NAMES sqlite3 sqlite3_i
+-             HINTS ${PC_SQLITE3_LIBRARY_DIRS})
+-
+ # Extract version information from the header file
+ if(SQLite3_INCLUDE_DIR)
+     file(STRINGS ${SQLite3_INCLUDE_DIR}/sqlite3.h _ver_line
+@@ -72,36 +73,44 @@ if(SQLite3_INCLUDE_DIR)
+ endif()
+ 
+ if(SQLite3_INCLUDE_DIR AND SQLite3_LIBRARY)
++    include(CheckCSourceCompiles)
++    include(CheckCXXSourceCompiles)
+     include(CheckSymbolExists)
+     cmake_push_check_state(RESET)
+     # check column metadata
+     set(CMAKE_REQUIRED_INCLUDES ${SQLite3_INCLUDE_DIR})
+     if( ${SQLite3_LIBRARY} MATCHES "libsqlite3.a")
+-       if(PC_SQLITE3_STATIC_LDFLAGS)
+-         set(CMAKE_REQUIRED_LIBRARIES ${PC_SQLITE3_STATIC_LDFLAGS})
+-       else()
+-         # Manually try likely additional private libraries
+-         set(CMAKE_REQUIRED_LIBRARIES ${SQLite3_LIBRARY})
+-         check_symbol_exists(sqlite3_open sqlite3.h SQLite3_HAS_OPEN)
+-         if(NOT SQLite3_HAS_OPEN)
+-             unset(SQLite3_HAS_OPEN)
+-             unset(SQLite3_HAS_OPEN CACHE)
+-             set(CMAKE_REQUIRED_LIBRARIES ${SQLite3_LIBRARY} -lz)
+-             check_symbol_exists(sqlite3_open sqlite3.h SQLite3_HAS_OPEN)
+-         endif()
+-         if(NOT SQLite3_HAS_OPEN)
+-             unset(SQLite3_HAS_OPEN)
+-             unset(SQLite3_HAS_OPEN CACHE)
+-             set(CMAKE_REQUIRED_LIBRARIES ${SQLite3_LIBRARY} -lm)
+-             check_symbol_exists(sqlite3_open sqlite3.h SQLite3_HAS_OPEN)
+-         endif()
+-         if(NOT SQLite3_HAS_OPEN)
+-             unset(SQLite3_HAS_OPEN)
+-             unset(SQLite3_HAS_OPEN CACHE)
+-             set(CMAKE_REQUIRED_LIBRARIES ${SQLite3_LIBRARY} -lz -lm)
+-             check_symbol_exists(sqlite3_open sqlite3.h SQLite3_HAS_OPEN)
+-         endif()
+-       endif()
++      if(PC_SQLITE3_STATIC_LDFLAGS)
++        set(CMAKE_REQUIRED_LIBRARIES ${PC_SQLITE3_STATIC_LDFLAGS})
++      else()
++        # Manually try likely additional private libraries
++        set(CMAKE_REQUIRED_LIBRARIES ${SQLite3_LIBRARY})
++        check_symbol_exists(sqlite3_open sqlite3.h SQLite3_HAS_OPEN)
++        if(NOT SQLite3_HAS_OPEN)
++            unset(SQLite3_HAS_OPEN)
++            unset(SQLite3_HAS_OPEN CACHE)
++            set(CMAKE_REQUIRED_LIBRARIES ${SQLite3_LIBRARY} -lz)
++            check_symbol_exists(sqlite3_open sqlite3.h SQLite3_HAS_OPEN)
++        endif()
++        if(NOT SQLite3_HAS_OPEN)
++            unset(SQLite3_HAS_OPEN)
++            unset(SQLite3_HAS_OPEN CACHE)
++            set(CMAKE_REQUIRED_LIBRARIES ${SQLite3_LIBRARY} -lm)
++            check_symbol_exists(sqlite3_open sqlite3.h SQLite3_HAS_OPEN)
++        endif()
++        if(NOT SQLite3_HAS_OPEN)
++            unset(SQLite3_HAS_OPEN)
++            unset(SQLite3_HAS_OPEN CACHE)
++            set(CMAKE_REQUIRED_LIBRARIES ${SQLite3_LIBRARY} -lz -lm)
++            check_symbol_exists(sqlite3_open sqlite3.h SQLite3_HAS_OPEN)
++        endif()
++        if(NOT SQLite3_HAS_OPEN)
++            unset(SQLite3_HAS_OPEN)
++            unset(SQLite3_HAS_OPEN CACHE)
++            set(CMAKE_REQUIRED_LIBRARIES ${SQLite3_LIBRARY} -lz -lm -lpthread -ldl)
++            check_symbol_exists(sqlite3_open sqlite3.h SQLite3_HAS_OPEN)
++        endif()
++      endif()
+     else()
+         set(CMAKE_REQUIRED_LIBRARIES ${SQLite3_LIBRARY})
+     endif()
+@@ -166,19 +175,34 @@ find_package_handle_standard_args(SQLite3
+ if(SQLite3_FOUND)
+   set(SQLite3_LIBRARIES ${SQLite3_LIBRARY})
+   set(SQLite3_INCLUDE_DIRS ${SQLite3_INCLUDE_DIR})
+-  if(NOT TARGET SQLite::SQLite3)
+-    add_library(SQLite::SQLite3 UNKNOWN IMPORTED)
+-    set_target_properties(SQLite::SQLite3 PROPERTIES
++  if(NOT TARGET SQLite3::SQLite3)
++    add_library(SQLite3::SQLite3 UNKNOWN IMPORTED)
++    set_target_properties(SQLite3::SQLite3 PROPERTIES
+                           INTERFACE_INCLUDE_DIRECTORIES "${SQLite3_INCLUDE_DIRS}"
+                           IMPORTED_LINK_INTERFACE_LANGUAGES "C"
+                           IMPORTED_LOCATION "${SQLite3_LIBRARY}")
+     if(SQLite3_HAS_COLUMN_METADATA)
+-        set_property(TARGET SQLite::SQLite3 APPEND PROPERTY
++        set_property(TARGET SQLite3::SQLite3 APPEND PROPERTY
+                      INTERFACE_COMPILE_DEFINITIONS "SQLite3_HAS_COLUMN_METADATA")
+     endif()
+     if(SQLite3_HAS_RTREE)
+-        set_property(TARGET SQLite::SQLite3 APPEND PROPERTY
++        set_property(TARGET SQLite3::SQLite3 APPEND PROPERTY
+                      INTERFACE_COMPILE_DEFINITIONS "SQLite3_HAS_RTREE")
+     endif()
+   endif()
++
++  # Alias SQLite3::SQLite3 to SQLite::SQLite3 since that's what PROJ will
++  # expect (when static linking PROJ)
++  if(NOT TARGET SQLite::SQLite3)
++    get_target_property(IS_SQLITE3_IMPORTED SQLite3::SQLite3 IMPORTED)
++    if(IS_SQLITE3_IMPORTED AND CMAKE_VERSION VERSION_LESS "3.18")
++        set_target_properties(SQLite3::SQLite3 PROPERTIES IMPORTED_GLOBAL TRUE)
++        message(DEPRECATION "If your project consumes GDAL as a subdirectory \
++          and also uses either the SQLite3::SQLite3 or SQLite::SQLite3 target, \
++          make sure you have your own call to find_package.\nThese targets \
++          will no longer be available to the global CMake scope once GDAL bumps to CMake v3.18+.")
++    endif()
++    add_library(SQLite::SQLite3 ALIAS SQLite3::SQLite3)
++  endif()
++
+ endif()
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Fri, 9 Oct 2026 17:00:57 +0200
+Subject: [PATCH 7/9] add missing include
+
+
+diff --git a/ogr/ogrsf_frmts/cad/libopencad/dwg/r2000.cpp b/ogr/ogrsf_frmts/cad/libopencad/dwg/r2000.cpp
+index 1111111..2222222 100644
+--- a/ogr/ogrsf_frmts/cad/libopencad/dwg/r2000.cpp
++++ b/ogr/ogrsf_frmts/cad/libopencad/dwg/r2000.cpp
+@@ -34,6 +34,7 @@
+ #include "r2000.h"
+ 
+ #include <cassert>
++#include <cstdint>
+ #include <cstring>
+ #include <iostream>
+ #include <limits>
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Fri, 9 Oct 2026 16:27:56 +0200
+Subject: [PATCH 8/9] gcc15 does not like these compiler options
+
+
+diff --git a/gdal.cmake b/gdal.cmake
+index 1111111..2222222 100644
+--- a/gdal.cmake
++++ b/gdal.cmake
+@@ -136,10 +136,14 @@ else ()
+   detect_and_set_c_and_cxx_warning_flag(unused-parameter)
+   detect_and_set_c_warning_flag(missing-prototypes)
+   detect_and_set_c_and_cxx_warning_flag(missing-declarations)
+-  detect_and_set_c_and_cxx_warning_flag(shorten-64-to-32)
++  if (NOT (CMAKE_CXX_COMPILER_ID STREQUAL "GNU"))
++    detect_and_set_c_and_cxx_warning_flag(shorten-64-to-32)
++    detect_and_set_cxx_warning_flag(shadow-field) # CLang only for now
++    detect_and_set_c_and_cxx_warning_flag(duplicate-cond)
++    detect_and_set_c_and_cxx_warning_flag(comma)
++  endif ()
+   detect_and_set_c_and_cxx_warning_flag(logical-op)
+   detect_and_set_c_and_cxx_warning_flag(shadow)
+-  detect_and_set_cxx_warning_flag(shadow-field) # CLang only for now
+   detect_and_set_c_and_cxx_warning_flag(missing-include-dirs)
+   check_c_compiler_flag("-Wformat -Werror=format-security -Wno-format-nonliteral" HAVE_WFLAG_FORMAT_SECURITY)
+   if (HAVE_WFLAG_FORMAT_SECURITY)
+@@ -152,16 +156,16 @@ else ()
+   detect_and_set_c_and_cxx_warning_flag(no-clobbered)
+   detect_and_set_c_and_cxx_warning_flag(date-time)
+   detect_and_set_c_and_cxx_warning_flag(null-dereference)
+-  detect_and_set_c_and_cxx_warning_flag(duplicate-cond)
+   detect_and_set_cxx_warning_flag(extra-semi)
+-  detect_and_set_c_and_cxx_warning_flag(comma)
+   detect_and_set_c_and_cxx_warning_flag(float-conversion)
+-  check_c_compiler_flag("-Wdocumentation -Wno-documentation-deprecated-sync" HAVE_WFLAG_DOCUMENTATION_AND_NO_DEPRECATED)
+-  if (HAVE_WFLAG_DOCUMENTATION_AND_NO_DEPRECATED)
+-    set(GDAL_C_WARNING_FLAGS ${GDAL_C_WARNING_FLAGS} -Wdocumentation -Wno-documentation-deprecated-sync)
+-    set(GDAL_CXX_WARNING_FLAGS ${GDAL_CXX_WARNING_FLAGS} -Wdocumentation -Wno-documentation-deprecated-sync)
++  if (NOT (CMAKE_CXX_COMPILER_ID STREQUAL "GNU"))
++    check_c_compiler_flag("-Wdocumentation -Wno-documentation-deprecated-sync" HAVE_WFLAG_DOCUMENTATION_AND_NO_DEPRECATED)
++    if (HAVE_WFLAG_DOCUMENTATION_AND_NO_DEPRECATED)
++      set(GDAL_C_WARNING_FLAGS ${GDAL_C_WARNING_FLAGS} -Wdocumentation -Wno-documentation-deprecated-sync)
++      set(GDAL_CXX_WARNING_FLAGS ${GDAL_CXX_WARNING_FLAGS} -Wdocumentation -Wno-documentation-deprecated-sync)
++    endif ()
++    detect_and_set_cxx_warning_flag(unused-private-field)
+   endif ()
+-  detect_and_set_cxx_warning_flag(unused-private-field)
+   detect_and_set_cxx_warning_flag(non-virtual-dtor)
+   detect_and_set_cxx_warning_flag(overloaded-virtual)
+   detect_and_set_cxx_warning_flag(suggest-override)
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Sat, 10 Oct 2026 00:26:24 +0200
+Subject: [PATCH 9/9] fix import library symbols for DLL
+
+
+diff --git a/port/cpl_port.h b/port/cpl_port.h
+index 1111111..2222222 100644
+--- a/port/cpl_port.h
++++ b/port/cpl_port.h
+@@ -312,7 +312,7 @@ typedef uintptr_t GUIntptr_t;
+ #endif
+ 
+ #ifndef CPL_DLL
+-#if defined(_MSC_VER) && !defined(CPL_DISABLE_DLL)
++#if (defined(_MSC_VER) || defined(__MINGW64__)) && !defined(CPL_DISABLE_DLL)
+ #ifdef GDAL_COMPILATION
+ #define CPL_DLL __declspec(dllexport)
+ #else

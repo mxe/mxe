@@ -5,14 +5,14 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Sun, 31 Jan 2016 21:13:24 +1100
-Subject: [PATCH 01/10] add pthreads option
+Subject: [PATCH 1/7] add pthreads option
 
 
 diff --git a/configure.ac b/configure.ac
 index 1111111..2222222 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -64,6 +64,9 @@ AC_ARG_ENABLE(wide-curses,
+@@ -68,6 +68,9 @@ AC_ARG_ENABLE(wide-curses,
  AC_ARG_ENABLE(regex,
    [  --disable-regex])
  
@@ -22,7 +22,7 @@ index 1111111..2222222 100644
  AC_ARG_ENABLE(compile-in-filters,
    [  --enable-compile-in-filters])
  
-@@ -254,6 +257,8 @@ AM_LANGINFO_CODESET
+@@ -279,6 +282,8 @@ AM_LANGINFO_CODESET
  #                                                                 #
  # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
  
@@ -31,7 +31,7 @@ index 1111111..2222222 100644
  AC_SUBST(PTHREAD_LIB)
  
  AC_MSG_CHECKING(if posix mutexes are supported)
-@@ -293,6 +298,7 @@ else
+@@ -318,6 +323,7 @@ else
    AC_MSG_WARN([Unable to find locking mechanism, Aspell will not be thread safe.])
  fi
  
@@ -43,7 +43,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Sun, 31 Jan 2016 20:10:22 +1100
-Subject: [PATCH 02/10] use namespace mingw
+Subject: [PATCH 2/7] use namespace mingw
 
 taken from:
 https://aur.archlinux.org/cgit/aur.git/plain/0001-use-namespace.mingw.patch?h=mingw-w64-aspell
@@ -52,15 +52,7 @@ diff --git a/common/file_util.cpp b/common/file_util.cpp
 index 1111111..2222222 100644
 --- a/common/file_util.cpp
 +++ b/common/file_util.cpp
-@@ -30,6 +30,7 @@
- #  define ACCESS _access
- #  include <windows.h>
- #  include <winbase.h>
-+#  include "asc_ctype.hpp"
- 
- #else
- 
-@@ -38,6 +39,7 @@
+@@ -39,6 +39,7 @@
  
  #endif
  
@@ -72,7 +64,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Sun, 31 Jan 2016 20:14:27 +1100
-Subject: [PATCH 03/10] printf mingw
+Subject: [PATCH 3/7] printf mingw
 
 taken from:
 https://aur.archlinux.org/cgit/aur.git/plain/0002-printf.mingw.patch?h=mingw-w64-aspell
@@ -109,7 +101,7 @@ diff --git a/prog/aspell.cpp b/prog/aspell.cpp
 index 1111111..2222222 100644
 --- a/prog/aspell.cpp
 +++ b/prog/aspell.cpp
-@@ -59,6 +59,9 @@
+@@ -61,6 +61,9 @@
  #include "hash-t.hpp"
  #include "hash_fun.hpp"
  
@@ -123,7 +115,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Sun, 31 Jan 2016 20:15:48 +1100
-Subject: [PATCH 04/10] no-undefined mingw
+Subject: [PATCH 4/7] no-undefined mingw
 
 taken from:
 https://aur.archlinux.org/cgit/aur.git/plain/0003-no-undefined-on.mingw.patch?h=mingw-w64-aspell
@@ -132,7 +124,7 @@ diff --git a/Makefile.am b/Makefile.am
 index 1111111..2222222 100644
 --- a/Makefile.am
 +++ b/Makefile.am
-@@ -194,7 +194,7 @@ libaspell_la_SOURCES +=\
+@@ -217,7 +217,7 @@ libaspell_la_SOURCES +=\
  else # not COMPILE_IN_FILTERS
  
  dynamic_optfiles += ${optfiles}
@@ -145,7 +137,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Sun, 31 Jan 2016 20:16:41 +1100
-Subject: [PATCH 05/10] reloc mingw
+Subject: [PATCH 5/7] reloc mingw
 
 taken from:
 https://aur.archlinux.org/cgit/aur.git/plain/0004-reloc.mingw.patch?h=mingw-w64-aspell
@@ -163,7 +155,7 @@ index 1111111..2222222 100644
  #include "cache.hpp"
  #include "asc_ctype.hpp"
  #include "config.hpp"
-@@ -310,6 +312,14 @@ namespace acommon {
+@@ -301,6 +303,14 @@ namespace acommon {
      const Entry * res = 0;
      const Entry * cur = first_;
  
@@ -202,7 +194,7 @@ index 1111111..2222222 100644
  namespace acommon {
  
    class Dir {
-@@ -778,4 +791,60 @@ namespace acommon {
+@@ -775,4 +788,60 @@ namespace acommon {
      return data;
    }
  
@@ -281,7 +273,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
 Date: Sun, 31 Jan 2016 20:17:30 +1100
-Subject: [PATCH 06/10] w32 home
+Subject: [PATCH 6/7] w32 home
 
 taken from:
 https://aur.archlinux.org/cgit/aur.git/plain/0005-w32-home.all.patch?h=mingw-w64-aspell
@@ -290,7 +282,7 @@ diff --git a/common/config.cpp b/common/config.cpp
 index 1111111..2222222 100644
 --- a/common/config.cpp
 +++ b/common/config.cpp
-@@ -664,6 +664,21 @@ namespace acommon {
+@@ -671,6 +671,21 @@ namespace acommon {
  	  } else { // sep == '|'
  	    assert(replace[0] == '$');
  	    const char * env = getenv(replace.c_str()+1);
@@ -315,282 +307,15 @@ index 1111111..2222222 100644
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tony Theodore <tonyt@logyst.com>
-Date: Sun, 31 Jan 2016 20:18:24 +1100
-Subject: [PATCH 07/10] abort mingw
-
-taken from:
-https://aur.archlinux.org/cgit/aur.git/plain/0006-abort.mingw.patch?h=mingw-w64-aspell
-
-diff --git a/common/config.cpp b/common/config.cpp
-index 1111111..2222222 100644
---- a/common/config.cpp
-+++ b/common/config.cpp
-@@ -623,7 +623,7 @@ namespace acommon {
- 
-       } else {
-       
--	abort(); // this should not happen
-+	DebugBreak(); // this should not happen
-       
-       }
-     
-@@ -857,7 +857,7 @@ namespace acommon {
-         case ListClear:
-           return make_err(no_value_clear, entry->key);
-         default:
--          abort(); // this shouldn't happen
-+          DebugBreak(); // this shouldn't happen
-         }
-       } else {
-         entry->place_holder = -1;
-diff --git a/common/itemize.cpp b/common/itemize.cpp
-index 1111111..2222222 100644
---- a/common/itemize.cpp
-+++ b/common/itemize.cpp
-@@ -12,6 +12,7 @@
- #include "mutable_container.hpp"
- #include <stdio.h>
- #include <cstdio>
-+#include <debugapi.h>
- 
- //FIXME: it should be possible to escape ',' '+' '-' '!' so that they can
- //       appear in values
-@@ -97,7 +98,7 @@ namespace acommon {
- 	RET_ON_ERR(d.clear());
- 	break;
-       default:
--	abort();
-+	DebugBreak();
-       }
-     }
-     return no_err;
-diff --git a/common/posib_err.cpp b/common/posib_err.cpp
-index 1111111..2222222 100644
---- a/common/posib_err.cpp
-+++ b/common/posib_err.cpp
-@@ -13,7 +13,7 @@
- #include "posib_err.hpp"
- 
- #include "gettext.h"
--
-+#include <debugapi.h>
- 
- namespace acommon {
- 
-@@ -100,7 +100,7 @@ namespace acommon {
-     fputs(_("Unhandled Error: "), stderr);
-     fputs(err_->err->mesg, stderr);
-     fputs("\n", stderr);
--    abort();
-+    DebugBreak();
-   }
- #endif
- 
-diff --git a/common/string_list.hpp b/common/string_list.hpp
-index 1111111..2222222 100644
---- a/common/string_list.hpp
-+++ b/common/string_list.hpp
-@@ -12,6 +12,7 @@
- #include "posib_err.hpp"
- #include <stdio.h>
- #include <cstdio>
-+#include <debugapi.h>
- 
- namespace acommon {
- 
-@@ -90,7 +91,7 @@ namespace acommon {
-     }
- 
-     bool empty() const { return first == 0; }
--    unsigned int size() const { abort(); return 0; }
-+    unsigned int size() const { DebugBreak(); return 0; }
- 
-   };
- 
-diff --git a/lib/find_speller.cpp b/lib/find_speller.cpp
-index 1111111..2222222 100644
---- a/lib/find_speller.cpp
-+++ b/lib/find_speller.cpp
-@@ -384,7 +384,7 @@ namespace acommon {
-         b_size.req_type = '+';
-       }
-       if (!asc_isdigit(p[0]) || !asc_isdigit(p[1]) || p[2] != '\0')
--        abort(); //FIXME: create an error condition here
-+        DebugBreak(); //FIXME: create an error condition here
-       b_size.requested = atoi(p);
-       b_size.init();
- 
-diff --git a/modules/filter/tex.cpp b/modules/filter/tex.cpp
-index 1111111..2222222 100644
---- a/modules/filter/tex.cpp
-+++ b/modules/filter/tex.cpp
-@@ -24,6 +24,7 @@
- #include "string_enumeration.hpp"
- 
- #include "gettext.h"
-+#include <debugapi.h>
- 
- namespace {
- 
-diff --git a/modules/speller/default/data.cpp b/modules/speller/default/data.cpp
-index 1111111..2222222 100644
---- a/modules/speller/default/data.cpp
-+++ b/modules/speller/default/data.cpp
-@@ -17,6 +17,7 @@
- #include "vararray.hpp"
- 
- #include "gettext.h"
-+#include <debugapi.h>
- 
- namespace aspeller {
- 
-@@ -439,7 +440,7 @@ namespace aspeller {
-         w = new_default_replacement_dict();
-         break;
-       default:
--        abort();
-+        DebugBreak();
-       }
- 
-       RET_ON_ERR(w->load(true_file_name, config, new_dicts, speller));
-diff --git a/modules/speller/default/phonetic.cpp b/modules/speller/default/phonetic.cpp
-index 1111111..2222222 100644
---- a/modules/speller/default/phonetic.cpp
-+++ b/modules/speller/default/phonetic.cpp
-@@ -7,6 +7,7 @@
- #include "file_util.hpp"
- #include "file_data_util.hpp"
- #include "clone_ptr-t.hpp"
-+#include <debugapi.h>
- 
- namespace aspeller {
-   
-@@ -194,7 +195,7 @@ namespace aspeller {
-     } else if (name == lang->name()) {
-       sl = new PhonetSoundslike(lang);
-     } else {
--      abort(); // FIXME
-+      DebugBreak(); // FIXME
-     }
-     PosibErrBase pe = sl->setup(iconv);
-     if (pe.has_err()) {
-diff --git a/modules/speller/default/readonly_ws.cpp b/modules/speller/default/readonly_ws.cpp
-index 1111111..2222222 100644
---- a/modules/speller/default/readonly_ws.cpp
-+++ b/modules/speller/default/readonly_ws.cpp
-@@ -55,6 +55,7 @@ using std::pair;
- #include "iostream.hpp"
- 
- #include "gettext.h"
-+#include <debugapi.h>
- 
- typedef unsigned int   u32int;
- static const u32int u32int_max = (u32int)-1;
-@@ -102,7 +103,7 @@ static inline char * mmap_open(unsigned int,
- 
- static inline void mmap_free(char *, unsigned int) 
- {
--  abort();
-+  DebugBreak();
- }
- 
- #endif
-@@ -204,7 +205,7 @@ namespace {
-       InsensitiveHash  hash;
-       InsensitiveEqual equal;
-       bool is_nonexistent(Value v) const {return v == u32int_max;}
--      void make_nonexistent(const Value & v) const {abort();}
-+      void make_nonexistent(const Value & v) const {DebugBreak();}
-     };
-     typedef VectorHashTable<WordLookupParms> WordLookup;
- 
-diff --git a/modules/speller/default/speller_impl.cpp b/modules/speller/default/speller_impl.cpp
-index 1111111..2222222 100644
---- a/modules/speller/default/speller_impl.cpp
-+++ b/modules/speller/default/speller_impl.cpp
-@@ -380,7 +380,7 @@ namespace aspeller {
-     static PosibErr<void> save_repl(SpellerImpl * m, bool value) {
-       // FIXME
-       // m->save_on_saveall(DataSet::Id(&m->personal_repl()), value);
--      abort(); return no_err;
-+      DebugBreak(); return no_err;
-     }
-     static PosibErr<void> sug_mode(SpellerImpl * m, const char * mode) {
-       RET_ON_ERR(m->suggest_->set_mode(mode));
-@@ -683,7 +683,7 @@ namespace aspeller {
-     case Dict::multi_dict:
-       break;
-     default:
--      abort();
-+      DebugBreak();
-     }
-     save_on_saveall = false;
-   }
-@@ -709,7 +709,7 @@ namespace aspeller {
-         
-       } else {
-         
--        abort();
-+        DebugBreak();
-         
-       }
-       break;
-diff --git a/prog/aspell.cpp b/prog/aspell.cpp
-index 1111111..2222222 100644
---- a/prog/aspell.cpp
-+++ b/prog/aspell.cpp
-@@ -448,7 +448,7 @@ int main (int argc, const char *argv[])
-   else if (action_str == "merge")
-     action = do_merge;
-   else
--    abort(); // this should not happen
-+    DebugBreak(); // this should not happen
- 
-   if (action != do_other) {
-     if (args.empty()) {
-@@ -1498,7 +1498,7 @@ void dump (aspeller::Dict * lws, Convert * conv)
-     }
-     break;
-   default:
--    abort();
-+    DebugBreak();
-   }
- }
- 
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Tony Theodore <tonyt@logyst.com>
-Date: Sun, 31 Jan 2016 20:19:16 +1100
-Subject: [PATCH 08/10] fix including langinfo
-
-taken from:
-https://aur.archlinux.org/cgit/aur.git/plain/0007-fix-including-langinfo.patch?h=mingw-w64-aspell
-
-diff --git a/modules/speller/default/language.cpp b/modules/speller/default/language.cpp
-index 1111111..2222222 100644
---- a/modules/speller/default/language.cpp
-+++ b/modules/speller/default/language.cpp
-@@ -20,7 +20,7 @@
- #include "getdata.hpp"
- #include "file_util.hpp"
- 
--#ifdef ENABLE_NLS
-+#ifdef HAVE_LANGINFO_CODESET
- #  include <langinfo.h>
- #endif
- 
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Tony Theodore <tonyt@logyst.com>
 Date: Tue, 2 Feb 2016 15:46:07 +1100
-Subject: [PATCH 09/10] add dlopen option
+Subject: [PATCH 7/7] add dlopen option
 
 
 diff --git a/configure.ac b/configure.ac
 index 1111111..2222222 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -58,6 +58,9 @@ AC_ARG_ENABLE(curses,
+@@ -62,6 +62,9 @@ AC_ARG_ENABLE(curses,
  AC_ARG_ENABLE(curses-include,           
    [  --enable-curses-include=DIR])
  
@@ -600,7 +325,7 @@ index 1111111..2222222 100644
  AC_ARG_ENABLE(wide-curses,
    AS_HELP_STRING([--disable-wide-curses],[disable wide char utf8 cursor control]))
  
-@@ -95,14 +98,17 @@ AC_LANG([C++])
+@@ -108,14 +111,17 @@ AC_LANG([C++])
  AM_PROG_CC_C_O
  
  AC_DISABLE_STATIC
@@ -619,7 +344,7 @@ index 1111111..2222222 100644
  
  dnl
  
-@@ -165,9 +171,12 @@ then
+@@ -190,9 +196,12 @@ then
    AC_DEFINE(ENABLE_WIN32_RELOCATABLE, 1, [Defined if win32 relocation should be used])
  fi
  
@@ -632,39 +357,3 @@ index 1111111..2222222 100644
  
  # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
  #                                                                 #
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Kevin Atkinson <kevina@gnu.org>
-Date: Thu, 29 Dec 2016 00:50:31 -0500
-Subject: [PATCH 10/10] Compile Fixes for GCC 7.
-
-Closes #519.
-
-(cherry picked from commit 8089fa02122fed0a6394eba14bbedcb1d18e2384)
-
-diff --git a/modules/filter/tex.cpp b/modules/filter/tex.cpp
-index 1111111..2222222 100644
---- a/modules/filter/tex.cpp
-+++ b/modules/filter/tex.cpp
-@@ -175,7 +175,7 @@ namespace {
- 
-     if (c == '{') {
- 
--      if (top.in_what == Parm || top.in_what == Opt || top.do_check == '\0')
-+      if (top.in_what == Parm || top.in_what == Opt || *top.do_check == '\0')
- 	push_command(Parm);
- 
-       top.in_what = Parm;
-diff --git a/prog/check_funs.cpp b/prog/check_funs.cpp
-index 1111111..2222222 100644
---- a/prog/check_funs.cpp
-+++ b/prog/check_funs.cpp
-@@ -647,7 +647,7 @@ static void print_truncate(FILE * out, const char * word, int width) {
-     }
-   }
-   if (i == width-1) {
--    if (word == '\0')
-+    if (*word == '\0')
-       put(out,' ');
-     else if (word[len] == '\0')
-       put(out, word, len);

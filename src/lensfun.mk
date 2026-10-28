@@ -20,7 +20,8 @@ endef
 define $(PKG)_BUILD
     mkdir '$(1)/building'
     cd '$(1)/building' && '$(TARGET)-cmake' .. \
-        -DCMAKE_INSTALL_PREFIX='$(PREFIX)/$(TARGET)'
+        -DCMAKE_INSTALL_PREFIX='$(PREFIX)/$(TARGET)' \
+        -DCMAKE_POLICY_VERSION_MINIMUM=3.5
     $(MAKE) -C '$(1)/building' -j '$(JOBS)' install VERBOSE=1
 
     # Don't use `-ansi`, as lensfun uses C++-style `//` comments.

@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: brodieG <brodieG@users.noreply.github.com>
 Date: Sun, 13 Mar 2022 14:19:03 +0000
-Subject: [PATCH 1/4] Add buffer around AC version check
+Subject: [PATCH 1/5] Add buffer around AC version check
 
 Subsequent patches will modify this portion of the code, but
 without the buffer the postgresql version and the copyright dates
@@ -40,7 +40,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: brodieG <brodieG@users.noreply.github.com>
 Date: Sun, 13 Mar 2022 14:29:45 +0000
-Subject: [PATCH 2/4] Change AC version check
+Subject: [PATCH 2/5] Change AC version check
 
 See discussion in #672, originally the m4 check was removed, but
 subsequently a need for it in a different form was found so the
@@ -69,7 +69,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: brodieG <brodieG@users.noreply.github.com>
 Date: Sun, 13 Mar 2022 14:34:44 +0000
-Subject: [PATCH 3/4] use unix style names for openssl on mingw-cross-env
+Subject: [PATCH 3/5] use unix style names for openssl on mingw-cross-env
 
 
 diff --git a/configure.in b/configure.in
@@ -96,7 +96,7 @@ index 1111111..2222222 100644
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: brodieG <brodieG@users.noreply.github.com>
 Date: Sun, 13 Mar 2022 14:39:48 +0000
-Subject: [PATCH 4/4] Adapt static/shared lib builds
+Subject: [PATCH 4/5] Adapt static/shared lib builds
 
 This modifies original patches by @TimothyGu, and is required
 due to the loss of the enable_shared variable in newer versions
@@ -199,3 +199,26 @@ index 1111111..2222222 100644
  
  
  installdirs-lib:
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Tue, 27 Oct 2026 20:20:11 +0100
+Subject: [PATCH 5/5] add -lbcrypt to dependencies of -lcrypto for openssl 4.1
+
+
+diff --git a/src/interfaces/libpq/Makefile b/src/interfaces/libpq/Makefile
+index 1111111..2222222 100644
+--- a/src/interfaces/libpq/Makefile
++++ b/src/interfaces/libpq/Makefile
+@@ -78,9 +78,9 @@ endif
+ # that are built correctly for use in a shlib.
+ SHLIB_LINK_INTERNAL = -lpgcommon_shlib -lpgport_shlib
+ ifneq ($(PORTNAME), win32)
+-SHLIB_LINK += $(filter -lcrypt -ldes -lcom_err -lcrypto -lk5crypto -lkrb5 -lgssapi_krb5 -lgss -lgssapi -lssl -lsocket -lnsl -lresolv -lintl -lm, $(LIBS)) $(LDAP_LIBS_FE) $(PTHREAD_LIBS)
++SHLIB_LINK += $(filter -lcrypt -ldes -lcom_err -lcrypto -lbcrypt -lk5crypto -lkrb5 -lgssapi_krb5 -lgss -lgssapi -lssl -lsocket -lnsl -lresolv -lintl -lm, $(LIBS)) $(LDAP_LIBS_FE) $(PTHREAD_LIBS)
+ else
+-SHLIB_LINK += $(filter -lcrypt -ldes -lcom_err -lcrypto -lk5crypto -lkrb5 -lgssapi32 -lssl -lsocket -lnsl -lresolv -lintl -lm $(PTHREAD_LIBS), $(LIBS)) $(LDAP_LIBS_FE)
++SHLIB_LINK += $(filter -lcrypt -ldes -lcom_err -lcrypto -lbcrypt -lk5crypto -lkrb5 -lgssapi32 -lssl -lsocket -lnsl -lresolv -lintl -lm $(PTHREAD_LIBS), $(LIBS)) $(LDAP_LIBS_FE)
+ endif
+ ifeq ($(PORTNAME), win32)
+ SHLIB_LINK += -lshell32 -lws2_32 -lsecur32 $(filter -leay32 -lssleay32 -lcomerr32 -lkrb5_32, $(LIBS))

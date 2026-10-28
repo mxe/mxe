@@ -16,7 +16,7 @@ define $(PKG)_UPDATE
     echo $(hdf-eos5_VERSION)
 endef
 
-define $(PKG)_BUILD
+define $(PKG)_BUILD_DISABLED
     # gctp is also present in hdf-eos2 and some headers are also
     # duplicated, so install to sub-directories
     cd '$(SOURCE_DIR)' && chmod -R ugo+w .

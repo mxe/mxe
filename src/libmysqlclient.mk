@@ -16,7 +16,7 @@ define $(PKG)_UPDATE
     head -1
 endef
 
-define $(PKG)_BUILD
+define $(PKG)_BUILD_DISABLED
     # native build for tool comp_err
     # See https://bugs.mysql.com/bug.php?id=61340
     mkdir '$(1).native'
@@ -32,6 +32,7 @@ define $(PKG)_BUILD
         -DENABLE_DTRACE=OFF \
         -DWITH_ZLIB=system \
         -DCMAKE_C_FLAGS='-Wno-incompatible-pointer-types -Wno-implicit-function-declaration' \
+        -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
         '$(1)'
 
     # def file created by cmake creates link errors

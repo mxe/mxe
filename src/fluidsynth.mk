@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := b68876d24c7fb34575ffa389bcfe8e61a24f1cf1da8ec6c3b2053efde98d0
 $(PKG)_GH_CONF  := FluidSynth/fluidsynth/tags,v
 $(PKG)_DEPS     := cc dbus glib jack libsndfile mman-win32 portaudio readline
 
-define $(PKG)_BUILD
+define $(PKG)_BUILD_DISABLED
     cd '$(BUILD_DIR)' && '$(TARGET)-cmake' '$(SOURCE_DIR)' \
         -Dbuild-bins=OFF \
         -Dbuild-docs=OFF \
@@ -19,6 +19,7 @@ define $(PKG)_BUILD
         -Denable-libsndfile=ON \
         -Denable-portaudio=ON \
         -Denable-readline=ON \
+        -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
         $($(PKG)_CONFIGURE_OPTS)
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install VERBOSE=1
