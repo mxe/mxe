@@ -9,7 +9,9 @@ $(PKG)_GH_CONF  := andrewrk/rucksack/tags
 $(PKG)_DEPS     := cc freeimage liblaxjson
 
 define $(PKG)_BUILD
-    cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)'
+    cd '$(BUILD_DIR)' && $(TARGET)-cmake \
+        -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+        '$(SOURCE_DIR)'
 
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' \
         rucksack_$(if $(BUILD_STATIC),static,shared) \
