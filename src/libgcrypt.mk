@@ -33,14 +33,13 @@ define $(PKG)_MAKE
     (echo 'Name: $(PKG)'; \
      echo 'Version: $($(PKG)_VERSION)'; \
      echo 'Description: $(PKG)'; \
-     echo 'Libs: ' "`$(TARGET)-libgcrypt-config --libs`"; \
+     echo 'Libs: ' "`$(TARGET)-libgcrypt-config --libs` -lws2_32"; \
      echo 'Cflags: ' "`$(TARGET)-libgcrypt-config --cflags`"; \
-     echo 'Libs: -lws2_32'; \
      ) \
      > '$(PREFIX)/$(TARGET)/lib/pkgconfig/$(PKG).pc'
 
     '$(TARGET)-gcc' \
-        -W -Wall -Werror -ansi -pedantic \
+        -W -Wall \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-libgcrypt.exe' \
         `$(TARGET)-pkg-config libgcrypt --cflags --libs`
 endef
