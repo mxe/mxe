@@ -1,0 +1,113 @@
+commit c3b41d2142376cc1e8e4081cc456025c01fa54e2
+Author: Alois Schlögl <alois.schloegl@gmail.com>
+Date:   Fri Apr 10 23:47:54 2026 +0200
+
+    fix order of includes (especially  #include <biosig.h>)
+
+diff --git a/src/base/signal_channel.h b/src/base/signal_channel.h
+index 7fdc376..89172f9 100644
+--- a/src/base/signal_channel.h
++++ b/src/base/signal_channel.h
+@@ -6,8 +6,9 @@
+ #ifndef SIGNAL_CHANNEL_H
+ #define SIGNAL_CHANNEL_H
+ 
++#include <biosig.h>
++
+ #include "sigviewer_user_types.h"
+-#include "biosig.h"
+ #undef isfinite
+ #include <QString>
+ #include <QMutex>
+diff --git a/src/file_handling/biosig_basic_header.h b/src/file_handling/biosig_basic_header.h
+index a7eb720..8dc71b5 100644
+--- a/src/file_handling/biosig_basic_header.h
++++ b/src/file_handling/biosig_basic_header.h
+@@ -6,8 +6,9 @@
+ #ifndef BIOSIG_BASIC_HEADER_H
+ #define BIOSIG_BASIC_HEADER_H
+ 
++#include <biosig.h>
++
+ #include "basic_header.h"
+-#include "biosig.h"
+ 
+ namespace sigviewer
+ {
+diff --git a/src/file_handling/biosig_reader.h b/src/file_handling/biosig_reader.h
+index fbb0a77..859110e 100644
+--- a/src/file_handling/biosig_reader.h
++++ b/src/file_handling/biosig_reader.h
+@@ -6,6 +6,8 @@
+ #ifndef BIOSIG_READER_H_
+ #define BIOSIG_READER_H_
+ 
++#include <biosig.h>
++
+ #include "file_signal_reader.h"
+ 
+ 
+diff --git a/src/file_handling/biosig_writer.h b/src/file_handling/biosig_writer.h
+index 830a826..805d4cf 100644
+--- a/src/file_handling/biosig_writer.h
++++ b/src/file_handling/biosig_writer.h
+@@ -6,9 +6,9 @@
+ #ifndef BIOIGWRITER_H_
+ #define BIOIGWRITER_H_
+ 
+-#include "file_signal_writer.h"
++#include <biosig.h>
+ 
+-#include "biosig.h"
++#include "file_signal_writer.h"
+ 
+ 
+ namespace sigviewer
+diff --git a/src/file_handling/event_table_file_reader.h b/src/file_handling/event_table_file_reader.h
+index af8a6a2..16637d9 100644
+--- a/src/file_handling/event_table_file_reader.h
++++ b/src/file_handling/event_table_file_reader.h
+@@ -6,8 +6,9 @@
+ #ifndef EVENT_TABLE_FILE_READER
+ #define EVENT_TABLE_FILE_READER
+ 
++#include <biosig.h>
++
+ #include "base/sigviewer_user_types.h"
+-#include "biosig.h"
+ #undef isfinite
+ #include <QStringList>
+ #include <QMap>
+diff --git a/src/file_handling/evt_writer.cpp b/src/file_handling/evt_writer.cpp
+index eff561d..d6c3589 100644
+--- a/src/file_handling/evt_writer.cpp
++++ b/src/file_handling/evt_writer.cpp
+@@ -2,11 +2,11 @@
+ //
+ // License: GPL-3.0
+ 
++#include <biosig.h>
+ 
+ #include "evt_writer.h"
+ #include "file_signal_writer_factory.h"
+ 
+-#include "biosig.h"
+ 
+ namespace sigviewer
+ {
+diff --git a/src/file_handling/gdf/gdf_file_signal_writer.cpp b/src/file_handling/gdf/gdf_file_signal_writer.cpp
+index fb7ebde..f0a6bba 100644
+--- a/src/file_handling/gdf/gdf_file_signal_writer.cpp
++++ b/src/file_handling/gdf/gdf_file_signal_writer.cpp
+@@ -8,11 +8,6 @@
+ #include "../file_handler_factory_registrator.h"
+ #include "gui/progress_bar.h"
+ 
+-#include "biosig.h"
+-
+-#include <GDF/Writer.h>
+-#include <GDF/Modifier.h>
+-
+ #include <QDebug>
+ #include <QMessageBox>
+ 
