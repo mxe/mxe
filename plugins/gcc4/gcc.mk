@@ -1,10 +1,5 @@
 # This file is part of MXE. See LICENSE.md for licensing information.
 
-# The following warning flags are defined in src/*.mk for modern GCCs.
-# Since legacy GCC compilers do not support them and would fail with an
-# "unrecognized command line option" error, we must explicitly clear them here.
-gtkglextmm_EXTRA_WARNINGS =
-
 PKG             := gcc
 $(PKG)_WEBSITE  := https://gcc.gnu.org/
 $(PKG)_DESCR    := GCC

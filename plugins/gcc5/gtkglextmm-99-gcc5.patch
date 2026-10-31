@@ -1,0 +1,21 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Marco Borrini <borrinimarco74@gmail.com>
+Date: Fri, 30 Oct 2026 20:07:00 +0100
+Subject: [PATCH 1/1] gtkglextmm: append -std=c++11 to CXXFLAGS for GCC 5 compatibility
+
+diff --git a/configure b/configure
+index 508d229..ec79d85 100755
+--- a/configure
++++ b/configure
+@@ -3637,6 +3637,7 @@ else
+     CXXFLAGS=
+   fi
+ fi
++CXXFLAGS="$CXXFLAGS -std=c++11"
+ for ac_declaration in \
+    '' \
+    'extern "C" void std::exit (int) throw (); using std::exit;' \
