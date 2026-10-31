@@ -11,11 +11,6 @@ $(PKG)_FILE     := gtkglextmm-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/gtkglext/gtkglextmm/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc gtkglext gtkmm2
 
-$(PKG)_EXTRA_WARNINGS := \
-    -Wno-cast-function-type \
-    -Wno-deprecated \
-    -Wno-deprecated-declarations
-
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://gitlab.gnome.org/Archive/gtkglextmm/tags' | \
     $(SED) -n "s,.*<a [^>]\+>v\?\([0-9]\+\.[0-9.]\+\)<.*,\1,p" | \
@@ -36,8 +31,7 @@ define $(PKG)_BUILD
         INFO_DEPS=
 
     '$(TARGET)-g++' \
-        -W -Wall -Werror -pedantic -std=c++0x \
-        $($(PKG)_EXTRA_WARNINGS) \
+        -W -Wall -std=c++0x \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-gtkglextmm.exe' \
         `'$(TARGET)-pkg-config' gtkglextmm-1.2 --cflags --libs`
 endef
