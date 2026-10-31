@@ -3,7 +3,6 @@
 # The following warning flags are defined in src/*.mk for modern GCCs.
 # Since legacy GCC compilers do not support them and would fail with an
 # "unrecognized command line option" error, we must explicitly clear them here.
-libssh_EXTRA_WARNINGS =
 gtkimageview_EXTRA_WARNINGS =
 guile_EXTRA_WARNINGS =
 gtkmm2_EXTRA_WARNINGS =
