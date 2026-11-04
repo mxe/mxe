@@ -40,7 +40,7 @@ define $(PKG)_BUILD
         -DQT_BUILD_{EXAMPLES,TESTS}=OFF \
         -DBUILD_WITH_PCH=OFF \
         -DFEATURE_{accessibility,dbus,glib,icu,opengl_dynamic,openssl,openssl_linked,pkg_config}=ON \
-        -DFEATURE_{fontconfig,waylandscanner,use_gold_linker_alias}=OFF \
+        -DFEATURE_{fontconfig,gtk3,waylandscanner,use_gold_linker_alias}=OFF \
         -DFEATURE_icu=$(CMAKE_SHARED_BOOL) \
         -DFEATURE_sql_{mysql,odbc,sqlite}=ON \
         -DFEATURE_sql_psql=OFF \

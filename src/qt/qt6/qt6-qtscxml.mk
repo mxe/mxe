@@ -7,7 +7,7 @@ $(eval $(QT6_METADATA))
 
 $(PKG)_CHECKSUM := adc04875b383256bcd5a412f6f249d363495ea037913ca8c96d723442be38383
 $(PKG)_TARGETS       := $(BUILD) $(MXE_TARGETS)
-$(PKG)_DEPS_$(BUILD) := qt6-conf qt6-qtbase
+$(PKG)_DEPS_$(BUILD) := qt6-conf qt6-qtbase qt6-qtdeclarative
 $(PKG)_DEPS          := cc $($(PKG)_DEPS_$(BUILD)) $(BUILD)~$(PKG)
 
 QT6_PREFIX   = '$(PREFIX)/$(TARGET)/$(MXE_QT6_ID)'

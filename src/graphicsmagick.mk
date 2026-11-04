@@ -4,8 +4,8 @@ PKG             := graphicsmagick
 $(PKG)_WEBSITE  := http://www.graphicsmagick.org/
 $(PKG)_DESCR    := GraphicsMagick
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.3.47
-$(PKG)_CHECKSUM := 95fb682dab0206a9db168d065963f4ffdf5a60b0b2a375aca1f4492fb18d0627
+$(PKG)_VERSION  := 1.3.49
+$(PKG)_CHECKSUM := 7efa070dc31116b4315061b39f84bc7181e8b060bf61214ec9af851131af9c81
 $(PKG)_SUBDIR   := GraphicsMagick-$($(PKG)_VERSION)
 $(PKG)_FILE     := GraphicsMagick-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
@@ -18,8 +18,6 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    # Regenerating configure script as we are patching configure.ac.
-    cd '$(SOURCE_DIR)' && autoconf
     cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
          $(MXE_CONFIGURE_OPTS) \
         --without-modules \
@@ -53,3 +51,5 @@ define $(PKG)_BUILD
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-graphicsmagick.exe' \
         `'$(TARGET)-pkg-config' GraphicsMagick++ --cflags --libs`
 endef
+
+$(PKG)_BUILD_SHARED =
