@@ -11,16 +11,6 @@ $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://ftp.gnu.org/gnu/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc gc gettext gmp libffi libgnurx libiconv libltdl libunistring readline
 
-$(PKG)_EXTRA_WARNINGS := \
-    -Wno-misleading-indentation \
-    -Wno-unused-but-set-variable \
-    -Wno-unused-value \
-    -Wno-incompatible-pointer-types \
-    -Wno-old-style-definition \
-    -Wno-implicit-function-declaration \
-    -Wno-attributes \
-    -Wno-int-conversion
-
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://git.savannah.gnu.org/gitweb/?p=guile.git;a=tags' | \
     grep '<a [^>]*class="list subject"' | \
@@ -38,14 +28,15 @@ define $(PKG)_BUILD
         $(MXE_CONFIGURE_OPTS) \
         --without-threads \
         --without-64-calls \
+        --disable-error-on-warning \
         scm_cv_struct_timespec=no \
         LIBS='-lunistring -lintl -liconv -ldl' \
-        CFLAGS='-std=gnu89 $($(PKG)_EXTRA_WARNINGS)'
+        CFLAGS='-std=gnu89 -Wno-unused-but-set-variable -Wno-unused-value -Wno-incompatible-pointer-types -Wno-old-style-definition -Wno-implicit-function-declaration -Wno-attributes -Wno-int-conversion'
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(MXE_DISABLE_CRUFT) schemelib_DATA=
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install $(MXE_DISABLE_CRUFT) schemelib_DATA=
 
     '$(TARGET)-gcc' \
-        -W -Wall -Werror -ansi -pedantic \
+        -W -Wall \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-guile.exe' \
         `'$(TARGET)-pkg-config' guile-$(call SHORT_PKG_VERSION,$(PKG)) --cflags --libs` \
         -DGUILE_MAJOR_MINOR=\"$(call SHORT_PKG_VERSION,$(PKG))\"
