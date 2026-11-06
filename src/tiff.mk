@@ -22,7 +22,7 @@ endef
 define $(PKG)_BUILD
     '$(TARGET)-cmake' -S '$(SOURCE_DIR)' -B $(BUILD_DIR) \
         -DBUILD_SHARED_LIBS=$(CMAKE_SHARED_BOOL) \
-        -Djpeg-prefer-standard[=ON \
+        -Djpeg-prefer-standard=ON \
         -Dtiff-static=$(CMAKE_STATIC_BOOL) \
         -Dtiff-{tools,tests,contrib,docs}=OFF \
         -D{libdeflate,lzma,webp,zstd}=$(CMAKE_SHARED_BOOL) \
