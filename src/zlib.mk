@@ -3,8 +3,8 @@
 PKG             := zlib
 $(PKG)_WEBSITE  := https://zlib.net/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.3.2
-$(PKG)_CHECKSUM := d7a0654783a4da529d1bb793b7ad9c3318020af77667bcae35f95d0e42a792f3
+$(PKG)_VERSION  := 1.4
+$(PKG)_CHECKSUM := 4f11c512053d7bab8d9e9b89bde3575add3e4c50a383b42ef6cb837035fc5a7c
 $(PKG)_GH_CONF  := madler/zlib/releases,v,,,,.tar.xz
 $(PKG)_DEPS     := cc
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
