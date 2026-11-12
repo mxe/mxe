@@ -12,11 +12,12 @@ $(PKG)_URL      := https://download.gnome.org/sources/adwaita-icon-theme/$(call 
 $(PKG)_DEPS     := cc gettext librsvg gtk3
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://gitlab.gnome.org/GNOME/adwaita-icon-theme/tags' | \
-    $(SED) -n "s,.*<a [^>]\+>v\?\([0-9]\+\.[0-9.]\+\)<.*,\1,p" | \
+    git ls-remote --tags 'https://gitlab.gnome.org/GNOME/adwaita-icon-theme.git' | \
+    $(SED) -n 's,.*refs/tags/v\?\([0-9]\+\.[0-9.]\+\)$$,\1,p' | \
     grep '^3\.' | \
     grep -v '^3\.9[0-9]' | \
-    head -1
+    $(SORT) -V | \
+    tail -1
 endef
 
 define $(PKG)_BUILD
