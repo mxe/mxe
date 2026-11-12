@@ -11,10 +11,7 @@ $(PKG)_URL      := https://$(PKG).freedesktop.org/releases/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc expat meson-wrapper
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://cgit.freedesktop.org/dbus/dbus/refs/tags' | \
-    $(SED) -n "s,.*<a href='[^']*/tag/?h=dbus-\\([0-9][^']*\\)'.*,\\1,p" | \
-    $(SORT) -V | \
-    tail -1
+    $(call GET_LATEST_VERSION, https://dbus.freedesktop.org/releases/dbus/, dbus-, \.tar\.xz)
 endef
 
 define $(PKG)_BUILD
