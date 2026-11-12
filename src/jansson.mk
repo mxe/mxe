@@ -11,11 +11,7 @@ $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://www.digip.org/$(PKG)/releases/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc
 
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://www.digip.org/jansson/' | \
-    $(SED) -n 's,.*/jansson-\([0-9][^>]*\)\.tar\.bz2.*,\1,p' | \
-    tail -1
-endef
+$(PKG)_GH_CONF := akheron/jansson/tags,v
 
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
