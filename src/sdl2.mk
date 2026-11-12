@@ -8,8 +8,15 @@ $(PKG)_VERSION  := 2.26.2
 $(PKG)_SUBDIR   := SDL2-$($(PKG)_VERSION)
 $(PKG)_FILE     := SDL2-$($(PKG)_VERSION).tar.gz
 $(PKG)_CHECKSUM := 95d39bc3de037fbdfa722623737340648de4f180a601b0afad27645d150b99e0
-$(PKG)_GH_CONF  := libsdl-org/SDL/releases/tag,release-,,
+$(PKG)_GH_CONF  := libsdl-org/SDL/releases,release-
 $(PKG)_DEPS     := cc libiconv libsamplerate
+
+define $(PKG)_UPDATE
+    git ls-remote --tags 'https://github.com/libsdl-org/SDL.git' | \
+    $(SED) -n 's#.*refs/tags/release-\(2\.[0-9.]*\)$$#\1#p' | \
+    $(SORT) -V | \
+    tail -1
+endef
 
 define $(PKG)_BUILD
     cd '$(1)' && aclocal -I acinclude && autoconf && $(SHELL) ./configure \
