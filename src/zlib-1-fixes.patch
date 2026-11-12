@@ -12,7 +12,7 @@ diff --git a/Makefile.in b/Makefile.in
 index 1111111..2222222 100644
 --- a/Makefile.in
 +++ b/Makefile.in
-@@ -317,12 +317,12 @@ install-libs: $(LIBS)
+@@ -327,12 +327,12 @@ install-libs: $(LIBS)
  	-@if [ ! -d $(DESTDIR)$(man3dir)      ]; then mkdir -p $(DESTDIR)$(man3dir); fi
  	-@if [ ! -d $(DESTDIR)$(pkgconfigdir) ]; then mkdir -p $(DESTDIR)$(pkgconfigdir); fi
  	rm -f $(DESTDIR)$(libdir)/$(STATICLIB)
