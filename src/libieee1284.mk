@@ -11,9 +11,9 @@ $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O - https://sourceforge.net/projects/libieee1284/files/ | \
-    tr '\n' ' ' | \
-    $(SED) 's/.*Looking for the latest version//;s/\(libieee1284-[0-9.]\+\)\.[^0-9].*/\1/;s/.*-//'
+    $(WGET) -q -O- 'https://sourceforge.net/projects/libieee1284/rss?path=/libieee1284' | \
+    $(SED) -n 's,.*libieee1284/\([0-9][^/]*\)/.*,\1,p' | \
+    head -1
 endef
 
 define $(PKG)_BUILD
