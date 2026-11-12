@@ -11,6 +11,12 @@ $(PKG)_FILE     := musepack_src_r$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://files.musepack.net/source/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc
 
+define $(PKG)_UPDATE
+    $(WGET) -q -O- 'http://www.musepack.net/index.php?pg=src' | \
+    $(SED) -n 's,.*musepack_src_r\([0-9]\+\)\.tar\.gz.*,\1,p' | \
+    head -1
+endef
+
 define $(PKG)_BUILD
     LDFLAGS='$(LDFLAGS) -Wl,--allow-multiple-definition' \
     '$(TARGET)-cmake' -S '$(SOURCE_DIR)' -B '$(BUILD_DIR)' \
