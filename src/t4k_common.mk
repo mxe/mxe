@@ -10,11 +10,7 @@ $(PKG)_FILE     := $($(PKG)_SUBDIR).tar.gz
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/tuxmath/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc libpng librsvg libxml2 pthreads sdl sdl_image sdl_mixer sdl_net sdl_pango sdl_ttf
 
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://alioth.debian.org/frs/?group_id=31080' | \
-    $(SED) -n 's,.*t4k_common-\([0-9][^>]*\)\.tar.*,\1,p' | \
-    head -1
-endef
+$(PKG)_GH_CONF := tux4kids/t4kcommon/tags,upstream%2F
 
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
