@@ -14,10 +14,8 @@ $(PKG)_TARGETS       := $(BUILD) $(MXE_TARGETS)
 $(PKG)_DEPS_$(BUILD) := cmake
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://vtk.org/gitweb?p=VTK.git;a=tags' | \
-    grep 'refs/tags/v[0-9.]*"' | \
-    $(SED) 's,.*refs/tags/v\(.*\)".*,\1,g;' | \
-    grep -v rc | \
+    git ls-remote --tags 'https://gitlab.kitware.com/vtk/vtk.git' | \
+    $(SED) -n 's,.*refs/tags/v\([0-9.]*\)$$,\1,p' | \
     $(SORT) -V | \
     tail -1
 endef
