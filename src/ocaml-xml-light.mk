@@ -11,11 +11,7 @@ $(PKG)_FILE     := xml-light-$($(PKG)_VERSION).zip
 $(PKG)_URL      := http://tech.motion-twin.com/zip/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc ocaml-findlib
 
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://tech.motion-twin.com/xmllight.html' | \
-    $(SED) -n 's,.*xml-light-\(.*\)\.zip.*,\1,ip' | \
-    head -1
-endef
+$(PKG)_GH_CONF := ncannasse/xml-light/tags
 
 define $(PKG)_BUILD
     $(SED) -i "s,@target@,$(TARGET),g"            '$(1)/Makefile'
