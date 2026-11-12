@@ -11,6 +11,13 @@ $(PKG)_URL      := https://lib.openmpt.org/files/libopenmpt/src/$($(PKG)_FILE)
 $(PKG)_CHECKSUM := 3c619bb36b3d9cd10b5531ebb83cac7fe38386d0614f9bb1a9a758010bc162d1
 $(PKG)_DEPS     := cc zlib mpg123 ogg vorbis flac libsndfile portaudio
 
+define $(PKG)_UPDATE
+    $(WGET) -q -O- 'https://lib.openmpt.org/files/libopenmpt/src/' | \
+    $(SED) -n 's,.*libopenmpt-\([0-9][^>+]*\)+release\.autotools\.tar\.gz.*,\1,p' | \
+    $(SORT) -V | \
+    tail -1
+endef
+
 define $(PKG)_BUILD
     cd "$(BUILD_DIR)" && "$(SOURCE_DIR)/configure" \
         $(MXE_CONFIGURE_OPTS) \
