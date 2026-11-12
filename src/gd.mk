@@ -11,11 +11,7 @@ $(PKG)_FILE     := libgd-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://github.com/libgd/libgd/releases/download/gd-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc fontconfig freetype jpeg libpng libwebp pthreads tiff
 
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://bitbucket.org/libgd/gd-libgd/downloads/' | \
-    $(SED) -n 's,.*libgd-\([0-9.]*\)\.tar.*,\1,p' | \
-    head -1
-endef
+$(PKG)_GH_CONF := libgd/libgd/releases,gd-
 
 define $(PKG)_BUILD
     $(if $(BUILD_STATIC), $(SED) -i 's|-I@includedir@|-I@includedir@ -DNONDLL -DBGDWIN32|' '$(1)/config/gdlib-config.in')
