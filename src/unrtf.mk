@@ -12,9 +12,7 @@ $(PKG)_URL_2    := https://www.gnu.org/software/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc libiconv
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://hg.savannah.gnu.org/hgweb/unrtf/tags' | \
-    $(SED) -n "s,^release_,,p" | \
-    head -1
+    $(call GET_LATEST_VERSION, https://ftp.gnu.org/gnu/unrtf/)
 endef
 
 define $(PKG)_BUILD
