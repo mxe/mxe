@@ -5,7 +5,7 @@ $(PKG)_WEBSITE  := https://github.com/google/woff2
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.0.2
 $(PKG)_CHECKSUM := add272bb09e6384a4833ffca4896350fdb16e0ca22df68c0384773c67a175594
-$(PKG)_GH_CONF  := google/woff2/releases/tag,v,,
+$(PKG)_GH_CONF  := google/woff2/tags,v
 $(PKG)_DEPS     := cc brotli
 
 define $(PKG)_BUILD
