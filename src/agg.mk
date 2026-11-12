@@ -13,9 +13,8 @@ $(PKG)_URL_2    := https://web.archive.org/web/20170111090029/www.antigrain.com/
 $(PKG)_DEPS     := cc freetype sdl
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://antigrain.com/download/index.html' | \
-    $(SED) -n 's,.*<A href="https://antigrain.com/agg-\([0-9.]*\).tar.gz".*,\1,p' | \
-    head -1
+    echo 'NOTE: agg is abandoned upstream; automatic updates are disabled.' >&2;
+    echo $(agg_VERSION)
 endef
 
 define $(PKG)_BUILD
