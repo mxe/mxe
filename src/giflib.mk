@@ -11,9 +11,8 @@ $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/giflib/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://sourceforge.net/projects/giflib/files/' | \
-    grep '<a href.*giflib.*bz2/download' | \
-    $(SED) -n 's,.*giflib-\([0-9][^>]*\)\.tar.*,\1,p' | \
+    $(WGET) -q -O- 'https://sourceforge.net/projects/giflib/rss?path=/' | \
+    $(SED) -n 's,.*giflib-\([0-9][^>]*\)\.tar\..*,\1,p' | \
     head -1
 endef
 
