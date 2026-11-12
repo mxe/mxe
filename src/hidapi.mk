@@ -4,9 +4,9 @@ PKG             := hidapi
 $(PKG)_WEBSITE  := https://github.com/libusb/hidapi/
 $(PKG)_DESCR    := HIDAPI
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2a24bf9
-$(PKG)_CHECKSUM := fcf650c10ccd39c47cc86ffd676befc71dd74bd8367f6716418974830f218d1f
-$(PKG)_GH_CONF  := libusb/hidapi/branches/master
+$(PKG)_VERSION  := 0.15.0
+$(PKG)_CHECKSUM := 5d84dec684c27b97b921d2f3b73218cb773cf4ea915caee317ac8fc73cef8136
+$(PKG)_GH_CONF  := libusb/hidapi/tags,hidapi-
 $(PKG)_DEPS     := cc
 
 define $(PKG)_BUILD
