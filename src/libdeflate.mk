@@ -17,7 +17,7 @@ define $(PKG)_BUILD
             -DCMAKE_INSTALL_LIBDIR='$(PREFIX)/$(TARGET)/lib' \
             -DLIBDEFLATE_BUILD_GZIP=OFF \
             -DCMAKE_BUILD_TYPE="Release" \
-         '$(1)' 
+         '$(1)'
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install VERBOSE=1
 endef

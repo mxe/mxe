@@ -18,6 +18,6 @@ _$(PKG)_CONFIGURE_OPTS = \
     CFLAGS_FOR_TARGET='-Wno-error=format -Wno-error=format-extra-args -DHAVE_VSNPRINTF=1' \
     CXXFLAGS_FOR_TARGET='-Wno-error=format -Wno-error=format-extra-args -DHAVE_VSNPRINTF=1'
 
-# Shared GCC build logic. Must be included at the end of the file 
+# Shared GCC build logic. Must be included at the end of the file
 # so it can access the package variables defined above.
 include $(TOP_DIR)/plugins/gcc-common/gcc-common.mk
