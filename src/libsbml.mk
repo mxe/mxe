@@ -7,14 +7,8 @@ $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 5.20.5
 $(PKG)_CHECKSUM := 21c88c753a4a031f157a033de3810488b86f003e684c6ca7aa3d6e26e7e0acfc
 $(PKG)_FILE     := v$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://github.com/sbmlteam/$(PKG)/archive/refs/tags/$($(PKG)_FILE)
+$(PKG)_GH_CONF  := sbmlteam/libsbml/tags,v
 $(PKG)_DEPS     := cc bzip2 zlib expat
-
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://github.com/sbmlteam/libsbml/releases' | \
-    $(SED) -n 's,.*releases/tag/v\([0-9][^"]*\).*,\1,p' | \
-    head -1
-endef
 
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && '$(TARGET)-cmake' '$(SOURCE_DIR)/$(PKG)-$($(PKG)_VERSION)' \
