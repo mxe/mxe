@@ -16,9 +16,10 @@ $(PKG)_DEPS     := cc
 $(PKG)_DEPS_$(BUILD) :=
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://www.lua.org/download.html' | \
-    $(SED) -n 's,.*lua-\([0-9][^>]*\)\.tar.*,\1,p' | \
-    head -1
+    git ls-remote --tags 'https://github.com/lua/lua.git' | \
+    $(SED) -n 's,.*refs/tags/v\([0-9]\+\.[0-9]\+\.[0-9]\+\)$$,\1,p' | \
+    $(SORT) -V | \
+    tail -1
 endef
 
 define $(PKG)_BUILD_COMMON
