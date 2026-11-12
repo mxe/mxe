@@ -11,9 +11,7 @@ $(PKG)_URL      := https://bitbucket.org/multicoreware/x265_git/downloads/$($(PK
 $(PKG)_DEPS     := cc $(BUILD)~nasm
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- https://ftp.videolan.org/pub/videolan/x265/ | \
-    $(SED) -n 's,.*">x265_\([0-9][^<]*\)\.t.*,\1,p' | \
-    tail -1
+    $(call GET_LATEST_VERSION, https://download.videolan.org/pub/videolan/x265/, x265_)
 endef
 
 # note: assembly for i686 targets is not officially supported
