@@ -12,11 +12,11 @@ $(PKG)_URL      := https://download.gnome.org/sources/gtk+/$(call SHORT_PKG_VERS
 $(PKG)_DEPS     := cc meson-wrapper atk cairo gdk-pixbuf gettext glib jasper jpeg libepoxy libpng pango tiff
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://gitlab.gnome.org/GNOME/gtk+/tags' | \
-    $(SED) -n "s,.*<a [^>]\+>v\?\([0-9]\+\.[0-9.]\+\)<.*,\1,p" | \
-    grep '^3\.' | \
+    git ls-remote --tags 'https://gitlab.gnome.org/GNOME/gtk.git' | \
+    $(SED) -n 's,.*refs/tags/v\?\(3\.[0-9]*[02468]\.[0-9.]*\)$$,\1,p' | \
     grep -v '^3\.9[0-9]' | \
-    head -1
+    $(SORT) -V | \
+    tail -1
 endef
 
 define $(PKG)_BUILD
