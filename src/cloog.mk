@@ -9,14 +9,8 @@ $(PKG)_CHECKSUM := 835c49951ff57be71dcceb6234d19d2cc22a3a5df84aea0a9d9760d92166f
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/periscop/cloog/releases/download/$($(PKG)_SUBDIR)/$($(PKG)_FILE)
+$(PKG)_GH_CONF  := periscop/cloog/releases,cloog-
 $(PKG)_DEPS     := cc gmp isl
-
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://api.github.com/repos/periscop/cloog/releases' | \
-    $(SED) -n 's,.*cloog-\([0-9][^>]*\)\.tar.*,\1,p' | \
-    $(SORT) -V |
-    tail -1
-endef
 
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
