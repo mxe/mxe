@@ -12,9 +12,9 @@ $(PKG)_URL      := https://forge.ocamlcore.org/frs/download.php/979/$($(PKG)_FIL
 $(PKG)_DEPS     := cc gtk2 gtkglarea gtksourceview libglade ocaml-findlib ocaml-lablgl
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://forge.ocamlcore.org/frs/?group_id=220' | \
-    $(SED) -n 's,.*lablgtk-\(2[^>]*\)\.tar.*,\1,ip' | \
-    $(SORT) | \
+    $(call MXE_GET_GH_TAGS, garrigue/lablgtk) | \
+    grep '^2\.' | \
+    $(SORT) -V | \
     tail -1
 endef
 
