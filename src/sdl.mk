@@ -12,9 +12,8 @@ $(PKG)_URL      := https://www.libsdl.org/release/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc libiconv
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://hg.libsdl.org/SDL/tags' | \
-    $(SED) -n 's,.*release-\([0-9][^<]*\).*,\1,p' | \
-    grep '^1\.' | \
+    git ls-remote --tags 'https://github.com/libsdl-org/SDL-1.2.git' | \
+    $(SED) -n 's,.*refs/tags/release-\(1\.[0-9.]*\)$$,\1,p' | \
     $(SORT) -V | \
     tail -1
 endef
