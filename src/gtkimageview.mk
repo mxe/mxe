@@ -13,16 +13,9 @@ $(PKG)_FILE     := gtkimageview-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://distfiles.macports.org/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc gtk2
 
-define $(PKG)_UPDATE_DISABLED
-    $(WGET) -q -O- "http://trac.bjourne.webfactional.com/chrome/common/releases/?C=M;O=D" | \
-    grep -i '<a href="gtkimageview.*tar' | \
-    $(SED) -n 's,.*gtkimageview-\([0-9][^>]*\)\.tar.*,\1,p' | \
-    head -1
-endef
-
 define $(PKG)_UPDATE
-    echo 'TODO: gtkimageview is dead' >&2;
-    echo '$(gtkimageview_VERSION)'
+    echo 'NOTE: gtkimageview is abandoned upstream; automatic updates are disabled.' >&2;
+    echo $(gtkimageview_VERSION)
 endef
 
 define $(PKG)_BUILD
