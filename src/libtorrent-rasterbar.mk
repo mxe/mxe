@@ -11,9 +11,10 @@ $(PKG)_URL      := https://github.com/arvidn/libtorrent/releases/download/libtor
 $(PKG)_DEPS     := cc boost openssl
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://github.com/arvidn/libtorrent/releases' | \
-    $(SED) -n 's,.*libtorrent-rasterbar-\([0-9][^"]*\)\.tar.*,\1,p' | \
-    head -1
+    git ls-remote --tags 'https://github.com/arvidn/libtorrent.git' | \
+    $(SED) -n 's#.*refs/tags/v\(1\.[0-9.]*\)$$#\1#p' | \
+    $(SORT) -V | \
+    tail -1
 endef
 
 define $(PKG)_BUILD
