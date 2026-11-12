@@ -11,8 +11,8 @@ $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/tclap/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://sourceforge.net/projects/tclap/files/' | \
-    $(SED) -n 's,.*/projects/.*/\([0-9][^"]*\)/".*,\1,p' | \
+    $(WGET) -q -O- 'https://sourceforge.net/projects/tclap/rss?path=/' | \
+    $(SED) -n 's,.*tclap-\([0-9][^>]*\)\.tar\..*,\1,p' | \
     head -1
 endef
 
