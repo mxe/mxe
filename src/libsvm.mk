@@ -12,7 +12,7 @@ $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://www.csie.ntu.edu.tw/~cjlin/libsvm/' | \
-    $(SED) -n 's,.*>v\([0-9][^<]*\)<.*,\1,p' | \
+    $(SED) -n 's,.*Version \([0-9]\+\.[0-9.]\+\) released.*,\1,p' | \
     head -1
 endef
 
