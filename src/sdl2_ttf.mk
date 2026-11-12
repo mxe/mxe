@@ -6,8 +6,15 @@ $(PKG)_DESCR    := SDL2_ttf
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.0.18
 $(PKG)_CHECKSUM := 6b61544441b72bdfa1ced89034c6396fe80228eff201eb72c5f78e500bb80bd0
-$(PKG)_GH_CONF  := libsdl-org/SDL_ttf/releases/tag,release-,,
+$(PKG)_GH_CONF  := libsdl-org/SDL_ttf/releases,release-
 $(PKG)_DEPS     := cc freetype harfbuzz sdl2
+
+define $(PKG)_UPDATE
+    git ls-remote --tags 'https://github.com/libsdl-org/SDL_ttf.git' | \
+    $(SED) -n 's#.*refs/tags/release-\(2\.[0-9.]*\)$$#\1#p' | \
+    $(SORT) -V | \
+    tail -1
+endef
 
 define $(PKG)_BUILD
     echo 'Requires.private: harfbuzz freetype2' >> '$(1)/SDL2_ttf.pc.in'
