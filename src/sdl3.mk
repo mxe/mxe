@@ -8,8 +8,15 @@ $(PKG)_VERSION  := 3.4.0
 $(PKG)_SUBDIR   := SDL3-$($(PKG)_VERSION)
 $(PKG)_FILE     := SDL3-$($(PKG)_VERSION).tar.gz
 $(PKG)_CHECKSUM := 082cbf5f429e0d80820f68dc2b507a94d4cc1b4e70817b119bbb8ec6a69584b8
-$(PKG)_GH_CONF  := libsdl-org/SDL/releases/tag,release-,,
+$(PKG)_GH_CONF  := libsdl-org/SDL/releases,release-
 $(PKG)_DEPS     := cc libiconv libsamplerate
+
+define $(PKG)_UPDATE
+    git ls-remote --tags 'https://github.com/libsdl-org/SDL.git' | \
+    $(SED) -n 's#.*refs/tags/release-\(3\.[0-9.]*\)$$#\1#p' | \
+    $(SORT) -V | \
+    tail -1
+endef
 
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \
