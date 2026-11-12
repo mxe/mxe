@@ -9,13 +9,8 @@ $(PKG)_CHECKSUM := 4996e8a73995e8a4cd656c8591dce38181146edfc30cb47c97d1db3c56990
 $(PKG)_SUBDIR   := libxml++-$($(PKG)_VERSION)
 $(PKG)_FILE     := libxml++-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://github.com/libxmlplusplus/libxmlplusplus/releases/download/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_GH_CONF  := libxmlplusplus/libxmlplusplus/tags
 $(PKG)_DEPS     := cc meson-wrapper libxml2
-
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://github.com/libxmlplusplus/libxmlplusplus/tags' | \
-    $(SED) -n "s,.*<a [^>]\+>v\?\([0-9]\+\.[0-9.]\+\)<.*,\1,p" | \
-    head -1
-endef
 
 define $(PKG)_BUILD
     '$(MXE_MESON_WRAPPER)' $(MXE_MESON_OPTS) \
