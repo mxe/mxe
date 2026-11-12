@@ -12,20 +12,7 @@ $(PKG)_URL      := https://bitbucket.org/$(PKG)/$(PKG)/get/$($(PKG)_VERSION).tar
 $(PKG)_DEPS     := cc expat freeglut freeimage freetype fribidi glew \
                    glfw3 glm libxml2 minizip pcre xerces
 
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://bitbucket.org/cegui/cegui/downloads' | \
-    $(SED) -n 's,.*href=.*get/v\([0-9]*-[0-9]*-[0-9]*\)\.tar.*,\1,p' | \
-    $(SED) 's,-,.,g' | \
-    $(SORT) -V | \
-    tail -1
-endef
-
-# track dev branch v0-8 until next release
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://bitbucket.org/cegui/cegui/commits/branch/v0-8' | \
-    $(SED) -n 's,.*cegui/cegui/commits/\([^?]\{12\}\).*at=.*,\1,p' | \
-    head -1
-endef
+$(PKG)_GH_CONF  := cegui/cegui/tags,v,,,-
 
 # Use pkg-config to set FREEIMAGE_LIB and GLEW_STATIC to prevent "_imp__" errors
 # freeimage and xerces don't have shared builds - disable with $(CMAKE_STATIC_BOOL)
