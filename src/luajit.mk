@@ -14,6 +14,11 @@ $(PKG)_URL      := https://luajit.org/download/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc dlfcn-win32
 $(PKG)_DEPS_$(BUILD) :=
 
+define $(PKG)_UPDATE
+    echo 'NOTE: luajit uses rolling releases without release tarballs; 2.0.5 is frozen in MXE.' >&2;
+    echo $(luajit_VERSION)
+endef
+
 define $(PKG)_BUILD
     $(MAKE) -C '$(SOURCE_DIR)' -j '$(JOBS)' \
         HOST_CC='$(BUILD_CC) -m$(BITS)' \
