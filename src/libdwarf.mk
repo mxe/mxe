@@ -7,6 +7,7 @@ $(PKG)_SUBDIR   := libdwarf-$($(PKG)_VERSION)
 $(PKG)_FILE     := libdwarf-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://www.prevanders.net/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc meson-wrapper zlib zstd
+$(PKG)_GH_CONF  := davea42/libdwarf-code/tags,v
 
 define $(PKG)_BUILD
     '$(MXE_MESON_WRAPPER)' $(MXE_MESON_OPTS) \
