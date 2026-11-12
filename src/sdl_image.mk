@@ -12,9 +12,8 @@ $(PKG)_URL      := https://www.libsdl.org/projects/SDL_image/release/$($(PKG)_FI
 $(PKG)_DEPS     := cc jpeg libpng libwebp sdl tiff
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://hg.libsdl.org/SDL_image/tags' | \
-    $(SED) -n 's,.*release-\([0-9][^<]*\).*,\1,p' | \
-    grep '^1\.' | \
+    git ls-remote --tags 'https://github.com/libsdl-org/SDL_image.git' | \
+    $(SED) -n 's,.*refs/tags/release-\(1\.[0-9.]*\)$$,\1,p' | \
     $(SORT) -V | \
     tail -1
 endef
