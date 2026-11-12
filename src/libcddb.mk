@@ -12,9 +12,8 @@ $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/libcddb/libcddb/$($(PKG
 $(PKG)_DEPS     := cc libgnurx libiconv
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://downloads.sourceforge.net/project/libcddb/libcddb/' | \
-    $(SED) -n 's,.*libcddb-\([0-9][^>]*\)\.tar.*,\1,p' | \
-    sort | uniq | \
+    $(WGET) -q -O- 'https://sourceforge.net/projects/libcddb/rss?path=/libcddb' | \
+    $(SED) -n 's,.*libcddb/\([0-9][^/]*\)/.*,\1,p' | \
     head -1
 endef
 
