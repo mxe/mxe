@@ -6,17 +6,9 @@ $(PKG)_DESCR    := JSON for Modern C++
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.11.3
 $(PKG)_CHECKSUM := 0d8ef5af7f9794e3263480193c491549b2ba6cc74bb018906202ada498a79406
-$(PKG)_SUBDIR   := json-$($(PKG)_VERSION)
 $(PKG)_FILE     := v$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://github.com/nlohmann/json/archive/refs/tags/$($(PKG)_FILE)
+$(PKG)_GH_CONF  := nlohmann/json/tags,v
 $(PKG)_DEPS     := cc
-
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://github.com/nlohmann/json/tags' | \
-		grep '<a .*href="/nlohmann/json/archive/refs/tags/' | \
-		$(SED) -n 's,.*href="/nlohmann/json/archive/refs/tags/v\([0-9][^"_]*\)\.tar.*,\1,p' | \
-		head -1
-endef
 
 define $(PKG)_BUILD
     # build and install the library

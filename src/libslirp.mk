@@ -10,6 +10,13 @@ $(PKG)_CHECKSUM := 9398f0ec5a581d4e1cd6856b88ae83927e458d643788c3391a39e61b75db3
 $(PKG)_URL      := https://gitlab.freedesktop.org/slirp/$(PKG)/-/archive/v$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc glib meson-wrapper
 
+define $(PKG)_UPDATE
+    git ls-remote --tags 'https://gitlab.freedesktop.org/slirp/libslirp.git' | \
+    $(SED) -n 's,.*refs/tags/v\([0-9][^^]*\)$$,\1,p' | \
+    $(SORT) -V | \
+    tail -1
+endef
+
 define $(PKG)_BUILD
     '$(MXE_MESON_WRAPPER)' $(MXE_MESON_OPTS) \
         $(PKG_MESON_OPTS) \

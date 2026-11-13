@@ -6,18 +6,12 @@ $(PKG)_DESCR    := HTTP and WebDAV client library (libneon)
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 0.37.1
 $(PKG)_CHECKSUM := a99b7262525a454d1065cf76dd17240fd808dfc4ef15636990ff83a5d0d9e740
+$(PKG)_GH_CONF  := notroj/neon/tags
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://fossies.org/linux/www/$(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL_2    := https://mirrorservice.org/sites/distfiles.macports.org/$(PKG)/$(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_DEPS     := cc expat gettext openssl
-
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://mirrorservice.org/sites/distfiles.macports.org/$(PKG)/' | \
-    $(SED) -n 's,.*/\([0-9][^"]*\)/"\.tar.*,\1,p' | \
-    sort | uniq | \
-    head -1
-endef
 
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && \

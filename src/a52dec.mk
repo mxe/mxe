@@ -9,11 +9,12 @@ $(PKG)_CHECKSUM := a21d724ab3b3933330194353687df82c475b5dfb997513eef4c25de6c865e
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://liba52.sourceforge.io/files/$(PKG)-$($(PKG)_VERSION).tar.gz
+$(PKG)_URL_2    := https://deb.debian.org/debian/pool/main/a/a52dec/a52dec_$($(PKG)_VERSION).orig.tar.gz
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://liba52.sourceforge.io/downloads.html' | \
-    $(SED) -n 's,.*files/a52dec-\([0-9][^"]*\)\.tar.*,\1,p' | \
+    $(WGET) -q -O- 'https://deb.debian.org/debian/pool/main/a/a52dec/' | \
+    $(SED) -n 's,.*a52dec_\([0-9.]*\)\.orig\.tar.*,\1,p' | \
     head -1
 endef
 

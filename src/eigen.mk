@@ -11,8 +11,10 @@ $(PKG)_URL      := https://gitlab.com/libeigen/$(PKG)/-/archive/$($(PKG)_VERSION
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://eigen.tuxfamily.org/index.php?title=Main_Page#Download' | \
-    $(SED) -nr 's/^.*eigen-([0-9]+\.[0-9]+\.[0-9]+)\.tar\.bz2.*$$/\1/p' | $(SORT) -Vr | $(SED) 1q
+    git ls-remote --tags 'https://gitlab.com/libeigen/eigen.git' | \
+    $(SED) -n 's,.*refs/tags/\([0-9]\+\.[0-9]\+\.[0-9]\+\)$$,\1,p' | \
+    $(SORT) -V | \
+    tail -1
 endef
 
 define $(PKG)_BUILD

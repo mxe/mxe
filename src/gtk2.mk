@@ -16,9 +16,10 @@ $(PKG)_EXTRA_WARNINGS := \
     -Wno-implicit-function-declaration
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://gitlab.gnome.org/GNOME/gtk+/-/tags?sort=updated_desc&search=^2.' | \
-    $(SED) -n "s,.*<a [^>]\+>v\?\([0-9]\+\.[0-9.]\+\)<.*,\1,p" | \
-    head -1
+    git ls-remote --tags 'https://gitlab.gnome.org/GNOME/gtk.git' | \
+    $(SED) -n 's,.*refs/tags/v\?\(2\.24\.[0-9.]*\)$$,\1,p' | \
+    $(SORT) -V | \
+    tail -1
 endef
 
 define $(PKG)_BUILD

@@ -12,9 +12,8 @@ $(PKG)_URL      := https://heasarc.gsfc.nasa.gov/fitsio/CCfits/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc cfitsio
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- "https://heasarc.gsfc.nasa.gov/fitsio/ccfits/" | \
-    grep -i '<a href=".*CCfits.*tar' | \
-    $(SED) -n 's,.*CCfits-\([0-9][^>]*\)\.tar.*,\1,p' | \
+    $(WGET) -q -O- 'https://heasarc.gsfc.nasa.gov/fitsio/ccfits/' | \
+    $(SED) -n 's,.*Version \([0-9]\+\.[0-9.]\+\)<.*,\1,p' | \
     head -1
 endef
 

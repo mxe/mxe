@@ -11,11 +11,7 @@ $(PKG)_FILE     := bullet-$($(PKG)_VERSION).tgz
 $(PKG)_URL      := https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/bullet/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc
 
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://code.google.com/p/bullet/downloads/list?sort=-uploaded' | \
-    $(SED) -n 's,.*bullet-\([0-9][^<]*\)\.tgz.*,\1,p' | \
-    head -1
-endef
+$(PKG)_GH_CONF := bulletphysics/bullet3/tags
 
 define $(PKG)_BUILD
     cd '$(1)' && '$(TARGET)-cmake' . \

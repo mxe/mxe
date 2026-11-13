@@ -13,8 +13,8 @@ $(PKG)_URL      := https://github.com/ArtifexSoftware/ghostpdl-downloads/release
 $(PKG)_DEPS     := cc dbus fontconfig freetype lcms libiconv libidn libpaper libpng openjpeg tiff zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://api.github.com/repos/ArtifexSoftware/ghostpdl-downloads/releases' | \
-    $(SED) -n 's,.*"ghostscript-\([0-9\.]*\)\.tar.xz".*,\1,p' | \
+    $(WGET) -q -O- 'https://github.com/ArtifexSoftware/ghostpdl-downloads/releases' | \
+    $(SED) -n 's,.*ghostscript-\([0-9.]*\)\.tar\.xz.*,\1,p' | \
     head -1
 endef
 

@@ -11,9 +11,7 @@ $(PKG)_FILE     := metis-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://glaros.dtc.umn.edu/gkhome/fetch/sw/metis/metis-$($(PKG)_VERSION).tar.gz
 $(PKG)_DEPS     := cc
 
-define $(PKG)_UPDATE
-    $(call GET_LATEST_VERSION, http://glaros.dtc.umn.edu/gkhome/metis/metis/download, metis-)
-endef
+$(PKG)_GH_CONF := KarypisLab/METIS/tags,v
 
 define $(PKG)_BUILD
     # build and install the library

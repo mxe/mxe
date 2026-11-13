@@ -6,17 +6,8 @@ $(PKG)_DESCR    := PCL (Point Cloud Library)
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.9.1
 $(PKG)_CHECKSUM := 0add34d53cd27f8c468a59b8e931a636ad3174b60581c0387abb98a9fc9cddb6
-$(PKG)_SUBDIR   := $(PKG)-$(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://github.com/PointCloudLibrary/pcl/archive/$($(PKG)_FILE)
+$(PKG)_GH_CONF  := PointCloudLibrary/pcl/tags,pcl-
 $(PKG)_DEPS     := cc boost eigen flann vtk
-
-define $(PKG)_UPDATE
-    $(WGET) -q -O- "https://github.com/PointCloudLibrary/pcl/releases" | \
-    grep '<a href=.*tar' | \
-    $(SED) -n 's,.*pcl-\([0-9.]\+\)\.tar.*,\1,p' | \
-    head -1
-endef
 
 # There is a strange problem where including <cfloat> leads to an error
 # in some of the #include_next magic with float.h.

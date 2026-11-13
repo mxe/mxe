@@ -5,17 +5,12 @@ $(PKG)_WEBSITE  := http://faculty.cse.tamu.edu/davis/suitesparse.html
 $(PKG)_DESCR    := SuiteSparse
 $(PKG)_VERSION  := 4.5.6
 $(PKG)_CHECKSUM := de5fb496bdc029e55955e05d918a1862a177805fbbd5b957e8b5ce6632f6c77e
+$(PKG)_GH_CONF  := DrTimothyAldenDavis/SuiteSparse/tags,v
 $(PKG)_SUBDIR   := SuiteSparse
 $(PKG)_FILE     := SuiteSparse-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://faculty.cse.tamu.edu/davis/SuiteSparse/$($(PKG)_FILE)
 $(PKG)_URL_2    := https://distfiles.macports.org/SuiteSparse/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc intel-tbb metis openblas
-
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://faculty.cse.tamu.edu/davis/suitesparse.html' | \
-    $(SED) -n 's,.*SuiteSparse-\([0-9][^"]*\)\.tar.*,\1,p' | \
-    head -1
-endef
 
 $(PKG)_MAKE_OPTS = \
     UNAME=Windows \

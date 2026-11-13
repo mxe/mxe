@@ -6,8 +6,15 @@ $(PKG)_DESCR    := SDL2_mixer
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 2.8.1
 $(PKG)_CHECKSUM := 63804b4b2ba503865c0853f102231aeff489b1dfc6dea4750a69e2a8ef54b2bb
-$(PKG)_GH_CONF  := libsdl-org/SDL_mixer/releases/tag,release-,,
+$(PKG)_GH_CONF  := libsdl-org/SDL_mixer/releases,release-
 $(PKG)_DEPS     := cc libmodplug mpg123 ogg opusfile sdl2 smpeg2 vorbis
+
+define $(PKG)_UPDATE
+    git ls-remote --tags 'https://github.com/libsdl-org/SDL_mixer.git' | \
+    $(SED) -n 's#.*refs/tags/release-\(2\.[0-9.]*\)$$#\1#p' | \
+    $(SORT) -V | \
+    tail -1
+endef
 
 define $(PKG)_BUILD
     $(SED) -i 's,^\(Requires:.*\),\1 opusfile vorbisfile,' '$(1)/SDL2_mixer.pc.in'

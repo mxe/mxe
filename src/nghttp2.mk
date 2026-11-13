@@ -6,7 +6,7 @@ $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 1.71.0
 $(PKG)_CHECKSUM := 0cdd35ecec77919b4b7b245f87fe8d2216e3d62da854eb0838c594ff058042fc
 $(PKG)_FILE     := nghttp2-$($(PKG)_VERSION).tar.gz
-$(PKG)_GH_CONF  := nghttp2/nghttp2/releases/tags,v
+$(PKG)_GH_CONF  := nghttp2/nghttp2/tags,v
 $(PKG)_DEPS     := cc
 
 define $(PKG)_BUILD

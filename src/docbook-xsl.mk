@@ -10,6 +10,13 @@ $(PKG)_DEPS     :=
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 $(PKG)_DEPS_$(BUILD) :=
 
+define $(PKG)_UPDATE
+    git ls-remote --tags 'https://github.com/docbook/xslt10-stylesheets.git' | \
+    $(SED) -n 's,.*refs/tags/release/\([0-9.]*\)$$,\1,p' | \
+    $(SORT) -V | \
+    tail -1
+endef
+
 define $(PKG)_BUILD_$(BUILD)
     mkdir -p '$(PREFIX)/$(TARGET)/share/xml/docbook/xsl-stylesheets'
     cp -r '$(SOURCE_DIR)'/* '$(PREFIX)/$(TARGET)/share/xml/docbook/xsl-stylesheets/'

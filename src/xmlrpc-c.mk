@@ -5,19 +5,8 @@ $(PKG)_WEBSITE  := https://xmlrpc-c.sourceforge.io/
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := d4364f4
 $(PKG)_CHECKSUM := fbd79d86020a87ed61dfdf00f78873c0fd925f477a8705f415b9fee0d6d64b19
-$(PKG)_SUBDIR   := mirror-$(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
-$(PKG)_URL      := https://github.com/mirror/$(PKG)/tarball/$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_GH_CONF  := mirror/xmlrpc-c/branches/master
 $(PKG)_DEPS     := cc curl pthreads
-
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://github.com/mirror/xmlrpc-c/commits/master' | \
-    grep 'title="Release' | \
-    $(SED) -n 's,.*/mirror/xmlrpc-c/commit/\([^"]\{7\}\)[^"]\{33\}".*Release \([0-9]*\),\1 \2,p' | \
-    $(SORT) -V -k 2 | \
-    tail -1 | \
-    cut -d ' ' -f1
-endef
 
 $(PKG)_MAKE_OPTS = \
     BUILDTOOL_CC=$(BUILD_CC) \

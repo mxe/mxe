@@ -10,11 +10,7 @@ $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/faac/$(PKG)-src/$(PKG)-2.8.0/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc
 
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://sourceforge.net/projects/faac/files/faad2-src/' | \
-    $(SED) -n 's,.*faad2-\([0-9][^"]*\)/".*,\1,p' | \
-    head -1
-endef
+$(PKG)_GH_CONF := knik0/faad2/tags,,,_
 
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \

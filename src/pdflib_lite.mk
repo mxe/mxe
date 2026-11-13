@@ -12,9 +12,8 @@ $(PKG)_URL      := https://www.pdflib.com/binaries/PDFlib/$(subst .,,$(word 1,$(
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://www.pdflib.com/download/free-software/pdflib-lite-7/' | \
-    $(SED) -n 's,.*PDFlib-Lite-\([0-9][^>]*\)\.tar.*,\1,p' | \
-    head -1
+    echo 'NOTE: pdflib_lite open-source edition was discontinued; automatic updates are disabled.' >&2;
+    echo $(pdflib_lite_VERSION)
 endef
 
 define $(PKG)_BUILD

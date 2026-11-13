@@ -11,11 +11,10 @@ $(PKG)_URL      := https://libnice.freedesktop.org/releases/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc glib gnutls
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://cgit.freedesktop.org/libnice/libnice/refs/tags' | \
-    grep '<a href=' | \
-    $(SED) -n 's,.*<a[^>]*>\([0-9]*\.[0-9]*\.[^<]*\)<.*,\1,p' | \
-    $(SORT) -Vr | \
-    head -1
+    git ls-remote --tags 'https://gitlab.freedesktop.org/libnice/libnice.git' | \
+    $(SED) -n 's,.*refs/tags/\([0-9][^^]*\)$$,\1,p' | \
+    $(SORT) -V | \
+    tail -1
 endef
 
 define $(PKG)_BUILD
