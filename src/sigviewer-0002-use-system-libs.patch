@@ -1,0 +1,53 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 93a62ea..dd9b756 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -21,6 +21,7 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
+ find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets Xml Svg LinguistTools Test)
+ qt_standard_project_setup()
+ 
++if (FALSE)
+ # -- External pre-built dependencies -----------------------------------------
+ # Override with -DDEPS_DIR=<path> if the libraries were built elsewhere.
+ set(DEPS_DIR "${CMAKE_SOURCE_DIR}/external"
+@@ -73,6 +74,7 @@ set_target_properties(dep_libbiosig PROPERTIES
+     IMPORTED_LOCATION             "${DEPS_DIR}/lib/libbiosig.a"
+     INTERFACE_INCLUDE_DIRECTORIES "${DEPS_DIR}/include"
+ )
++endif()
+ 
+ # -- Sources -----------------------------------------------------------------
+ qt_add_library(sigviewer_objects OBJECT
+@@ -315,8 +317,10 @@ target_link_libraries(sigviewer_objects PUBLIC
+     Qt6::Widgets
+     Qt6::Xml
+     Qt6::Svg
+-    dep_libxdf
+-    dep_libbiosig
++    xdf
++    biosig
++    tinyxml
++    # dcmtk
+     # libbiosig is a static library and cannot carry its own transitive
+     # dependencies.  On macOS and Windows it uses libiconv; on Windows it also
+     # uses Winsock (ntohl/htonl/getaddrinfo).
+diff --git a/README.md b/README.md
+index 4feee64..7e4b838 100755
+--- a/README.md
++++ b/README.md
+@@ -62,13 +62,12 @@ hdiutil create -volname "SigViewer" -srcfolder build/SigViewer.app -ov -format U
+ Install a C++ toolchain, Qt 6, and CMake with your package manager. On Debian/Ubuntu:
+ 
+ ```
+-sudo apt install cmake build-essential qt6-base-dev qt6-tools-dev
++sudo apt install cmake build-essential qt6-base-dev qt6-tools-dev libbiosig-dev libxdf-dev
+ ```
+ 
+ Then build SigViewer:
+ 
+ ```
+-cmake -P external/build_deps.cmake
+ cmake -B build -DCMAKE_BUILD_TYPE=Release
+ cmake --build build -j$(nproc)
+ ```
+* Unmerged path sigviewer.pro
