@@ -1,0 +1,21 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Marco Borrini <borrinimarco74@gmail.com>
+Date: Fri, 30 Oct 2026 07:05:00 +0100
+Subject: [PATCH 1/1] brotli: require C99 standard in CMake for legacy GCC
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -9,6 +9,7 @@
+ # Use `cmake --help-policy CMP0048` for more information.
+ cmake_policy(SET CMP0048 NEW)
+ project(brotli C)
++set(CMAKE_C_STANDARD 99)
+ 
+ if (NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+   message(STATUS "Setting build type to Release as none was specified")

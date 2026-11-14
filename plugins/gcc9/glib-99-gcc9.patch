@@ -1,0 +1,33 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Marco Borrini <borrinimarco74@gmail.com>
+Date: Mon, 2 Nov 2026 11:32:00 +0100
+Subject: [PATCH 1/1] glib: fix static libintl iconv dependency in Meson on GCC 9
+
+diff --git a/meson.build b/meson.build
+index 1111111..2222222 100644
+--- a/meson.build
++++ b/meson.build
+@@ -2329,15 +2329,16 @@ if libintl.found() and libintl.type_name() != 'internal'
+   #
+   # Meson's builtin dependency lookup as of 0.60.0 doesn't check for
+   # pthread, so we do this manually here.
+-  if cc.has_function('ngettext', dependencies : libintl, prefix: libintl_prefix)
++  libintl_test_code = libintl_prefix + '\nint main(void) { return gettext("") != 0; }'
++  if cc.links(libintl_test_code, dependencies : libintl)
+     libintl_deps += [libintl]
+   else
+     libintl_iconv = cc.find_library('iconv', required : false)
+-    if libintl_iconv.found() and cc.has_function('ngettext', args : osx_ldflags, dependencies : [libintl, libintl_iconv])
++    if libintl_iconv.found() and cc.links(libintl_test_code, args : osx_ldflags, dependencies : [libintl, libintl_iconv])
+       libintl_deps += [libintl, libintl_iconv]
+     else
+       libintl_pthread = cc.find_library('pthread', required : false)
+-      if libintl_pthread.found() and cc.has_function('ngettext', dependencies : [libintl, libintl_pthread], prefix: libintl_prefix)
++      if libintl_pthread.found() and cc.links(libintl_test_code, dependencies : [libintl, libintl_pthread])
+         libintl_deps += [libintl, libintl_pthread]
+       else
+         libintl = disabler()

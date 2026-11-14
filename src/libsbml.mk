@@ -38,11 +38,11 @@ define $(PKG)_BUILD
           -DENABLE_RENDER=ON
     cd '$(BUILD_DIR)' && '$(TARGET)-cmake' --build . -j '$(JOBS)'
     cd '$(BUILD_DIR)' && '$(TARGET)-cmake' --install .
-    
+
     # Make pkg-config's -lsbml actually resolvable in the static triplet
     cd '$(PREFIX)/$(TARGET)/lib' && \
         ln -sf $(PKG)-static.a $(PKG).a
-    
+
     '$(TARGET)-g++' \
         -W -Wall -ansi -pedantic -std=c++17 \
         '$(SOURCE_DIR)$(PKG)-$($(PKG)_VERSION)/examples/c++/fbc/fbc_example1.cpp' \

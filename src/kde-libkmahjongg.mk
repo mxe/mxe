@@ -24,7 +24,7 @@ define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && $(KF6_CMAKE) -S '$(SOURCE_DIR)' -B '$(BUILD_DIR)' \
         -DBUILD_TESTING=OFF \
         -DBUILD_DOC=OFF
-    
+
     cd '$(BUILD_DIR)' && $(TARGET)-cmake --build . -j '$(JOBS)'
     cd '$(BUILD_DIR)' && $(TARGET)-cmake --install .
 endef

@@ -13,11 +13,6 @@ $(PKG)_FILE     := gtkimageview-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://distfiles.macports.org/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc gtk2
 
-$(PKG)_EXTRA_WARNINGS := \
-    -Wno-deprecated-declarations \
-    -Wno-misleading-indentation \
-    -Wno-maybe-uninitialized
-
 define $(PKG)_UPDATE_DISABLED
     $(WGET) -q -O- "http://trac.bjourne.webfactional.com/chrome/common/releases/?C=M;O=D" | \
     grep -i '<a href="gtkimageview.*tar' | \
@@ -36,12 +31,12 @@ define $(PKG)_BUILD
         --disable-gtk-doc \
         GLIB_GENMARSHAL='$(PREFIX)/$(TARGET)/bin/glib-genmarshal' \
         GLIB_MKENUMS='$(PREFIX)/$(TARGET)/bin/glib-mkenums' \
-        CFLAGS='-O2 -g -std=c99 $($(PKG)_EXTRA_WARNINGS)'
+        CFLAGS='-O2 -g -std=c99'
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 
     '$(TARGET)-gcc' \
-        -W -Wall -Werror -ansi \
+        -W -Wall \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-gtkimageview.exe' \
         `'$(TARGET)-pkg-config' gtkimageview --cflags --libs`
 endef

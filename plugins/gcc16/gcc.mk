@@ -11,11 +11,11 @@ $(PKG)_SUBDIR   := gcc-$($(PKG)_VERSION)
 $(PKG)_FILE     := gcc-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://ftp.gnu.org/gnu/gcc/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_URL_2    := https://www.mirrorservice.org/sites/sourceware.org/pub/gcc/releases/gcc-$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_PATCHES  := $(dir $(lastword $(MAKEFILE_LIST)))/gcc16.patch
+$(PKG)_PATCHES  := $(dir $(lastword $(MAKEFILE_LIST)))/gcc-1-fixes.patch
 $(PKG)_DEPS     := binutils mingw-w64 $(addprefix $(BUILD)~,gmp isl mpc mpfr zstd)
 
 _$(PKG)_CONFIGURE_OPTS = --with-zstd='$(PREFIX)/$(BUILD)' --enable-tls
 
-# Shared GCC build logic. Must be included at the end of the file 
+# Shared GCC build logic. Must be included at the end of the file
 # so it can access the package variables defined above.
 include $(TOP_DIR)/plugins/gcc-common/gcc-common.mk

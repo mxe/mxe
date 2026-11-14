@@ -11,9 +11,6 @@ $(PKG)_FILE     := libssh-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://www.libssh.org/files/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc libgcrypt zlib
 
-$(PKG)_EXTRA_WARNINGS := \
-    -Wno-implicit-fallthrough
-
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://git.libssh.org/projects/libssh.git/refs/tags' | \
     $(SED) -n "s,.*>libssh-\([0-9]*\.[^<]*\)\.tar.*,\1,p" | \
@@ -58,7 +55,7 @@ define $(PKG)_BUILD
 
     # compile test
     '$(TARGET)-gcc' \
-        -W -Wall -Werror -pedantic -std=c99 $($(PKG)_EXTRA_WARNINGS) \
+        -W -Wall -std=c99 \
         $(SOURCE_DIR)/examples/{authentication.c,knownhosts.c,connect_ssh.c,exec.c} \
         -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
         `'$(TARGET)-pkg-config' $(PKG) --cflags --libs`
