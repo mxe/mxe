@@ -5,7 +5,7 @@ Contains ad hoc patches for cross building.
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Wed, 8 May 2024 16:03:56 +0200
-Subject: [PATCH 1/5] fix unknown type name 'uint32_t'
+Subject: [PATCH 1/4] fix unknown type name 'uint32_t'
 
 
 diff --git a/src/output.c b/src/output.c
@@ -24,24 +24,43 @@ index 1111111..2222222 100644
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
-Date: Wed, 8 May 2024 16:17:54 +0200
-Subject: [PATCH 2/5] add missing source for WIN32
+Date: Sun, 15 Nov 2026 11:44:44 +0100
+Subject: [PATCH 2/4] fix case of includes
 
-and fix case of includes
 
 diff --git a/Windows/unrtf_w.c b/Windows/unrtf_w.c
 index 1111111..2222222 100644
 --- a/Windows/unrtf_w.c
 +++ b/Windows/unrtf_w.c
-@@ -75,7 +75,7 @@ unsigned int unrtf_ntohl(unsigned int in)
+@@ -36,7 +36,7 @@
+ #include <string.h>
+ #include <stdio.h>
+ #include "execdir.h"
+-#include <Windows.h>
++#include <windows.h>
+ #include "safeunistd.h"
  
- #endif
+ /*
+diff --git a/src/execdir.c b/src/execdir.c
+index 1111111..2222222 100644
+--- a/src/execdir.c
++++ b/src/execdir.c
+@@ -38,7 +38,7 @@ const char *getsimple(const char *path)
  
+ 
+ #ifdef _WIN32
 -#include <Shlwapi.h>
 +#include <shlwapi.h>
  #pragma comment(lib, "shlwapi.lib")
  
- const char *path_thisexecpath()
+ size_t wchartoutf8(const wchar_t *in, size_t wlen, char *out, size_t outlen)
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Mark Brand <mabrand@mabrand.nl>
+Date: Wed, 8 May 2024 16:17:54 +0200
+Subject: [PATCH 3/4] add missing source for WIN32
+
+
 diff --git a/src/Makefile.am b/src/Makefile.am
 index 1111111..2222222 100644
 --- a/src/Makefile.am
@@ -54,49 +73,18 @@ index 1111111..2222222 100644
 +		word.c word.h         \
 +		../Windows/unrtf_w.c
  
-diff --git a/src/execdir.c b/src/execdir.c
-index 1111111..2222222 100644
---- a/src/execdir.c
-+++ b/src/execdir.c
-@@ -20,7 +20,7 @@ const char *getsimple(const char *path)
- 
- 
- #ifdef _WIN32
--#include <Shlwapi.h>
-+#include <shlwapi.h>
- #pragma comment(lib, "shlwapi.lib")
- 
- size_t wchartoutf8(const wchar_t *in, size_t wlen, char *out, size_t outlen)
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Wed, 6 May 2026 10:27:58 +0200
-Subject: [PATCH 3/5] add missing include for stderr
-
-
-diff --git a/src/execdir.c b/src/execdir.c
-index 1111111..2222222 100644
---- a/src/execdir.c
-+++ b/src/execdir.c
-@@ -1,5 +1,6 @@
- #include "execdir.h"
- 
-+#include <stdio.h>
- #include <string.h>
- 
- static void getfather(char *path)
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
 Date: Wed, 6 May 2026 10:32:24 +0200
-Subject: [PATCH 4/5] remove :: prefix
+Subject: [PATCH 4/4] remove :: prefix
 
 
 diff --git a/src/execdir.c b/src/execdir.c
 index 1111111..2222222 100644
 --- a/src/execdir.c
 +++ b/src/execdir.c
-@@ -40,7 +40,7 @@ size_t wchartoutf8(const wchar_t *in, size_t wlen, char *out, size_t outlen)
+@@ -57,7 +57,7 @@ size_t wchartoutf8(const wchar_t *in, size_t wlen, char *out, size_t outlen)
      }
      /* WideCharToMultiByte with 0 output buffer and length to get the actual needed length */
      flags = WC_ERR_INVALID_CHARS;
@@ -105,7 +93,7 @@ index 1111111..2222222 100644
      if (bytes <= 0) {
          fwprintf(stderr, L"wchartoutf8: conversion error1 for [%s]\n", in);
          return 0;
-@@ -54,7 +54,7 @@ size_t wchartoutf8(const wchar_t *in, size_t wlen, char *out, size_t outlen)
+@@ -71,7 +71,7 @@ size_t wchartoutf8(const wchar_t *in, size_t wlen, char *out, size_t outlen)
      }
  
      /* Perform the conversion */
@@ -114,25 +102,3 @@ index 1111111..2222222 100644
      if (bytes <= 0) {
          fprintf(stderr, "wchartoutf8: WideCharToMultiByte (actual) failed\n");
          return 0;
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Wed, 6 May 2026 10:56:04 +0200
-Subject: [PATCH 5/5] skip execdir_setargv0() under windows
-
-The comments in execdir.h say this is only for unix.
-
-diff --git a/src/main.c b/src/main.c
-index 1111111..2222222 100644
---- a/src/main.c
-+++ b/src/main.c
-@@ -149,7 +149,9 @@ main(int argc, char **argv)
- 
- 	int i;
- 	nopict_mode = debug_mode = dump_mode = inline_mode = no_remap_mode = quiet = FALSE;
-+#ifndef _WIN32
- 	execdir_setargv0(argv[0]);
-+#endif
- 	/* initialize search path to compiled-in value */
- 	search_path = DEFAULT_UNRTF_SEARCH_PATH;
- 
