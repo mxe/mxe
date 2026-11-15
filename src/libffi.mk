@@ -15,7 +15,7 @@ $(PKG)_DEPS_$(BUILD) :=
 
 define $(PKG)_BUILD
     # build and install the library
-    cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS)
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
@@ -28,7 +28,7 @@ endef
 
 define $(PKG)_BUILD_$(BUILD)
     # build and install the library
-    cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS)
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install

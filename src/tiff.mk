@@ -20,7 +20,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    '$(TARGET)-cmake' -S '$(SOURCE_DIR)' -B $(BUILD_DIR) \
+    '$(TARGET)-cmake' -S '$(SOURCE_DIR)' -B '$(BUILD_DIR)' \
         -DBUILD_SHARED_LIBS=$(CMAKE_SHARED_BOOL) \
         -Djpeg-prefer-standard=ON \
         -Dtiff-static=$(CMAKE_STATIC_BOOL) \

@@ -10,7 +10,7 @@ $(PKG)_GH_CONF  := KhronosGroup/Vulkan-Loader/tags
 $(PKG)_DEPS     := cc vulkan-headers
 
 define $(PKG)_BUILD
-    '$(TARGET)-cmake' -S $(SOURCE_DIR) -B $(BUILD_DIR) \
+    '$(TARGET)-cmake' -S '$(SOURCE_DIR)' -B '$(BUILD_DIR)' \
         -DUSE_MASM=OFF \
         -DBUILD_TESTS=OFF
     $(MAKE) -C '$(BUILD_DIR)' -j $(JOBS)

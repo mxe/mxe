@@ -19,7 +19,7 @@ endef
 
 define $(PKG)_BUILD
     # build and install the library
-    cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS) \
         --enable-release
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' SUBDIRS=src

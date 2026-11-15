@@ -10,7 +10,7 @@ $(PKG)_DEPS     := cc libxml2
 
 define $(PKG)_BUILD
     cd '$(SOURCE_DIR)' && NOCONFIGURE=true $(SHELL) ./autogen.sh
-    cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS) \
         --without-cython
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'

@@ -29,7 +29,7 @@ define $(PKG)_BUILD_$(BUILD)
     rm -fv '$(PREFIX)/$(BUILD)/bin/$(BUILD_CC)' '$(PREFIX)/$(BUILD)/bin/$(BUILD_CXX)'
 
     # minimal reqs build with bundled zlib
-    cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS) \
         --with-bundled-zlib \
         --disable-man \

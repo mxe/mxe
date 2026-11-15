@@ -12,7 +12,7 @@ $(PKG)_DEPS     := cc pthreads
 define $(PKG)_BUILD
     # doesn't support out-of-source builds
     # https://github.com/michaelrsweet/mxml/issues/135
-    cd '$(SOURCE_DIR)' && $(SOURCE_DIR)/configure \
+    cd '$(SOURCE_DIR)' && '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS) \
         --disable-shared \
         --enable-static \

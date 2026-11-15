@@ -25,6 +25,6 @@ define $(PKG)_BUILD
         --without-macosx-keyring \
         --with-tls=gnutls \
         --with-libidn
-    $(MAKE) -C $(BUILD_DIR) -j '$(JOBS)'
-    $(MAKE) -C $(BUILD_DIR) -j 1 install $(MXE_DISABLE_DOCS)
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install $(MXE_DISABLE_DOCS)
 endef

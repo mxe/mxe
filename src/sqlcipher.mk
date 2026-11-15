@@ -12,7 +12,7 @@ $(PKG)_DEPS     := cc openssl readline $(BUILD)~tcl
 
 define $(PKG)_BUILD
     # build and install the library
-    cd '$(BUILD_DIR)' && autoreconf -ivf $(SOURCE_DIR) && $(SOURCE_DIR)/configure \
+    cd '$(BUILD_DIR)' && autoreconf -ivf '$(SOURCE_DIR)' && '$(SOURCE_DIR)/configure' \
         "LIBS=$$($(TARGET)-pkg-config --libs libcrypto)" \
         "CFLAGS=-DSQLITE_HAS_CODEC -DSQLITE_ENABLE_COLUMN_METADATA" \
         config_BUILD_EXEEXT='' \

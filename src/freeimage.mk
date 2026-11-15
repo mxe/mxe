@@ -10,7 +10,7 @@ $(PKG)_GH_CONF  := danoli3/FreeImage/branches/master
 $(PKG)_DEPS     := cc
 
 define $(PKG)_BUILD
-    '$(TARGET)-cmake' -S '$(SOURCE_DIR)' -B $(BUILD_DIR) \
+    '$(TARGET)-cmake' -S '$(SOURCE_DIR)' -B '$(BUILD_DIR)' \
         -DBUILD_SHARED_LIBS=$(CMAKE_SHARED_BOOL) \
         -DBUILD_TESTS=OFF \
         $(PKG_CMAKE_OPTS)

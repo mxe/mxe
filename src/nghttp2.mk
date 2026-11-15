@@ -10,7 +10,7 @@ $(PKG)_GH_CONF  := nghttp2/nghttp2/tags,v
 $(PKG)_DEPS     := cc
 
 define $(PKG)_BUILD
-    cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS) \
         --enable-lib-only \
         --without-jemalloc \

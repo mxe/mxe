@@ -10,7 +10,7 @@ $(PKG)_GH_CONF  := gabime/spdlog/releases,v
 $(PKG)_DEPS     := cc
 
 define $(PKG)_BUILD
-    '$(TARGET)-cmake' -S $(SOURCE_DIR) -B $(BUILD_DIR)
+    '$(TARGET)-cmake' -S '$(SOURCE_DIR)' -B '$(BUILD_DIR)'
     $(MAKE) -C '$(BUILD_DIR)' -j $(JOBS)
     $(MAKE) -C '$(BUILD_DIR)' install
 endef

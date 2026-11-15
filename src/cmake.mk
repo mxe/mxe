@@ -22,7 +22,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD_$(BUILD)
-    cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         --prefix='$(PREFIX)/$(TARGET)' \
         --parallel='$(JOBS)' \
         $(PKG_CONFIGURE_OPTS) \

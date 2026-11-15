@@ -23,7 +23,7 @@ define $(PKG)_BUILD
     # The setting "scm_cv_struct_timespec=no" ensures that Guile
     # won't try to use the "struct timespec" from <pthreads.h>,
     # which would fail because we tell Guile not to use Pthreads.
-    cd '$(BUILD_DIR)' && CC_FOR_BUILD=$(BUILD_CC) $(SOURCE_DIR)/configure \
+    cd '$(BUILD_DIR)' && CC_FOR_BUILD=$(BUILD_CC) '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS) \
         --without-threads \
         --without-64-calls \

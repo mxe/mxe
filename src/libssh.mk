@@ -56,7 +56,7 @@ define $(PKG)_BUILD
     # compile test
     '$(TARGET)-gcc' \
         -W -Wall -std=c99 \
-        $(SOURCE_DIR)/examples/{authentication.c,knownhosts.c,connect_ssh.c,exec.c} \
+        '$(SOURCE_DIR)/examples/'{authentication.c,knownhosts.c,connect_ssh.c,exec.c} \
         -o '$(PREFIX)/$(TARGET)/bin/test-$(PKG).exe' \
         `'$(TARGET)-pkg-config' $(PKG) --cflags --libs`
 endef
