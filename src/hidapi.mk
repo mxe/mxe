@@ -12,6 +12,6 @@ $(PKG)_DEPS     := cc
 define $(PKG)_BUILD
     '$(TARGET)-cmake' -S '$(SOURCE_DIR)' -B '$(BUILD_DIR)' \
         -DCMAKE_POLICY_VERSION_MINIMUM=3.5
-    $(MAKE) -C '$(BUILD_DIR)' -j $(JOBS)
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' install
 endef

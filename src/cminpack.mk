@@ -19,7 +19,7 @@ endef
 define $(PKG)_BUILD_STATIC_DISABLED
     cd '$(1)' && '$(TARGET)-cmake' \
         -DCMAKE_POLICY_VERSION_MINIMUM=3.5
-    $(MAKE) -C '$(1)' -j $(JOBS)
+    $(MAKE) -C '$(1)' -j '$(JOBS)'
 
     $(INSTALL) -d                         '$(PREFIX)/$(TARGET)/lib'
     $(INSTALL) -m644 '$(1)/libcminpack.a' '$(PREFIX)/$(TARGET)/lib/'
@@ -30,7 +30,7 @@ endef
 define $(PKG)_BUILD_SHARED_DISABLED
     cd '$(1)' && '$(TARGET)-cmake' -DUSE_FPIC=ON -DSHARED_LIBS=ON -DBUILD_EXAMPLES=OFF \
         -DCMAKE_POLICY_VERSION_MINIMUM=3.5
-    $(MAKE) -C '$(1)' -j $(JOBS)
+    $(MAKE) -C '$(1)' -j '$(JOBS)'
 
     $(INSTALL) -d                             '$(PREFIX)/$(TARGET)/bin'
     $(INSTALL) -m644 '$(1)/libcminpack.dll'   '$(PREFIX)/$(TARGET)/bin/'

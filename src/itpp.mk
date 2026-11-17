@@ -23,7 +23,7 @@ define $(PKG)_BUILD
         -DBLAS_LIBRARIES="`'$(TARGET)-pkg-config' --libs openblas`" \
         -DLAPACK_LIBRARIES="`'$(TARGET)-pkg-config' --libs openblas`" \
         -DCMAKE_POLICY_VERSION_MINIMUM=3.5
-    $(MAKE) -C '$(BUILD_DIR)' -j $(JOBS)
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
     # compile test

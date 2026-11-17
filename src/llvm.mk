@@ -28,7 +28,7 @@ define $(PKG)_BUILD
         -DCMAKE_BUILD_TYPE=Release
 
     # build package and install
-    $(MAKE) -C '$(BUILD_DIR)' -j $(JOBS)
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
     # compile a test program to verify the library is usable

@@ -34,11 +34,11 @@ define $(PKG)_BUILD
         -verbose
 
     # generate remaining build configuration (qmake is created by configure)
-    $(MAKE) -C '$(BUILD_DIR)' -j $(JOBS) \
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' \
         sub-src-qmake_all
 
     # build other tools
-    $(MAKE) -C '$(BUILD_DIR)/src' -j $(JOBS) \
+    $(MAKE) -C '$(BUILD_DIR)/src' -j '$(JOBS)' \
         sub-{moc,qdbuscpp2xml,qdbusxml2cpp,qlalr,rcc,uic}-all
 
     # install tools and create `qt.conf` for runtime config

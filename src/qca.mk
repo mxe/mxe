@@ -17,7 +17,7 @@ define $(PKG)_BUILD
         -DBUILD_PLUGINS="auto" \
         -DINSTAL_PKGCONFIG=ON \
         -DQCA_MAN_INSTALL_DIR="$(BUILD_DIR)/null"
-    $(MAKE) -C '$(BUILD_DIR)' -j $(JOBS)
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
     # build test as qmake project

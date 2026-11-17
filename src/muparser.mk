@@ -14,6 +14,6 @@ define $(PKG)_BUILD
         -DENABLE_SAMPLES=OFF \
         -DBUILD_SHARED_LIBS:BOOL=$(if $(BUILD_SHARED),ON,OFF)
 
-    $(MAKE) -C '$(BUILD_DIR)' -j $(JOBS)
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 endef
