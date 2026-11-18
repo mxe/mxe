@@ -11,8 +11,8 @@ $(PKG)_DEPS     := cc
 
 define $(PKG)_BUILD
     # build and install the library
-    cd $(SOURCE_DIR) && ./autogen.sh
-    cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure $(MXE_CONFIGURE_OPTS)
+    cd '$(SOURCE_DIR)' && ./autogen.sh
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' $(MXE_CONFIGURE_OPTS)
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install \
         bin_PROGRAMS= \

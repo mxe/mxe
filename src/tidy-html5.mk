@@ -13,7 +13,7 @@ define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \
         -DTIDY_COMPAT_HEADERS:BOOL=YES \
         -DBUILD_SHARED_LIB=$(CMAKE_SHARED_BOOL)
-    $(MAKE) -C '$(BUILD_DIR)' -j $(JOBS)
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
     $(if $(BUILD_STATIC),

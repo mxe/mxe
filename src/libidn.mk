@@ -13,9 +13,7 @@ $(PKG)_URL_2    := https://ftpmirror.gnu.org/libidn/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc gettext libiconv
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://git.savannah.gnu.org/gitweb/?p=libidn.git;a=tags' | \
-    $(SED) -n 's,.*<a[^>]*>\(libidn \)\?\([0-9][^<]*\)<.*,\2,p' | \
-    head -1
+    $(call GET_LATEST_VERSION, https://ftp.gnu.org/gnu/libidn/, libidn-)
 endef
 
 define $(PKG)_BUILD

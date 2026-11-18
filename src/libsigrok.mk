@@ -21,7 +21,7 @@ endef
 define $(PKG)_BUILD
     # build and install the library
     # doxygen is required to build c++ bindings
-    cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS) \
         ac_cv_prog_HAVE_DOXYGEN=$(shell which doxygen >/dev/null 2>&1 && echo yes) \
         --enable-cxx \

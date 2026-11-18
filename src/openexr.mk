@@ -11,12 +11,7 @@ $(PKG)_FILE     := openexr-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://download.savannah.nongnu.org/releases/openexr/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc ilmbase pthreads zlib
 
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://www.openexr.com/downloads.html' | \
-    grep 'openexr-' | \
-    $(SED) -n 's,.*openexr-\([0-9][^>]*\)\.tar.*,\1,p' | \
-    head -1
-endef
+$(PKG)_GH_CONF := AcademySoftwareFoundation/openexr/tags,v
 
 define $(PKG)_BUILD
     # Update auto-stuff, except autoheader, because if fails...

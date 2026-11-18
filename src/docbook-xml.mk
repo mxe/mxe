@@ -10,6 +10,11 @@ $(PKG)_DEPS     :=
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
 $(PKG)_DEPS_$(BUILD) :=
 
+define $(PKG)_UPDATE
+    echo 'NOTE: docbook-xml 4.5 is the final OASIS DTD specification; frozen.' >&2;
+    echo $(docbook-xml_VERSION)
+endef
+
 define $(PKG)_BUILD_$(BUILD)
     mkdir -p '$(PREFIX)/$(TARGET)/share/xml/docbook/schema/dtd/$($(PKG)_VERSION)'
     cp -r '$(SOURCE_DIR)'/* '$(PREFIX)/$(TARGET)/share/xml/docbook/schema/dtd/$($(PKG)_VERSION)/'

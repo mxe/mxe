@@ -18,7 +18,7 @@ endef
 
 define $(PKG)_BUILD
     cd '$(SOURCE_DIR)' && autoreconf -fi
-    cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS)
     $(MAKE) -C '$(BUILD_DIR)/libdjvu' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)/libdjvu' -j 1 install-strip \

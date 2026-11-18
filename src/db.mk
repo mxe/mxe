@@ -12,9 +12,8 @@ $(PKG)_URL      := https://download.oracle.com/berkeley-db/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://www.oracle.com/technetwork/database/database-technologies/berkeleydb/downloads/index.html' | \
-    $(SED) -n 's,.*/db-\([0-9\.]\+\)\.tar.gz.*,\1,p' | \
-    head -1
+    echo 'NOTE: db public tarball releases were discontinued by Oracle after 18.1.40; automatic updates are disabled.' >&2;
+    echo $(db_VERSION)
 endef
 
 define $(PKG)_BUILD

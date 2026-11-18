@@ -12,7 +12,7 @@ $(PKG)_DEPS     := cc curl icu4c isl libxml2 pkgconf protobuf zlib zstd
 define $(PKG)_BUILD
 
     # configure package with cmake
-    cd "$(BUILD_DIR)" && "$(TARGET)-cmake" "$(SOURCE_DIR)/llvm" \
+    cd '$(BUILD_DIR)' && "$(TARGET)-cmake" '$(SOURCE_DIR)/llvm' \
         -DCMAKE_INSTALL_PREFIX="$(PREFIX)/$(TARGET)" \
         -DCMAKE_PREFIX_PATH="$(PREFIX)/$(TARGET)" \
         -DBUILD_SHARED_LIBS=$(CMAKE_SHARED_BOOL) \
@@ -28,8 +28,8 @@ define $(PKG)_BUILD
         -DCMAKE_BUILD_TYPE=Release
 
     # build package and install
-    $(MAKE) -C "$(BUILD_DIR)" -j $(JOBS)
-    $(MAKE) -C "$(BUILD_DIR)" -j 1 install
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
     # compile a test program to verify the library is usable
     # FIXME: llvm-config.exe is a Windows exectuable which cannot run on build OS

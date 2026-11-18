@@ -11,12 +11,7 @@ $(PKG)_FILE     := Coin-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://bitbucket.org/Coin3D/coin/downloads/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc dlfcn-win32
 
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://bitbucket.org/Coin3D/coin/downloads' | \
-    $(SED) -n 's,.*Coin-\([0-9.]*\).tar.gz.*,\1,p' | \
-    $(SORT) -V | \
-    tail -1
-endef
+$(PKG)_GH_CONF := coin3d/coin/tags,v
 
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \

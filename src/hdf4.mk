@@ -12,10 +12,10 @@ $(PKG)_URL      := https://support.hdfgroup.org/ftp/HDF/releases/HDF$($(PKG)_VER
 $(PKG)_DEPS     := cc jpeg portablexdr zlib
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://www.hdfgroup.org/ftp/HDF/HDF_Current/src/' | \
-    grep '<a href.*hdf.*bz2' | \
-    $(SED) -n 's,.*hdf-\([0-9][^>]*\)\.tar.*,\1,p' | \
-    head -1
+    git ls-remote --tags 'https://github.com/HDFGroup/hdf4.git' | \
+    $(SED) -n 's,.*refs/tags/hdf\([0-9]\+\.[0-9.]\+\)$$,\1,p' | \
+    $(SORT) -V | \
+    tail -1
 endef
 
 define $(PKG)_BUILD

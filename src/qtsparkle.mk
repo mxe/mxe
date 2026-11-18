@@ -12,7 +12,7 @@ $(PKG)_DEPS     := cc qttools
 define $(PKG)_BUILD_COMMON
     cd '$(BUILD_DIR)' && $(TARGET)-cmake '$(SOURCE_DIR)' \
         -DBUILD_WITH_QT4=@qtsparkle_use_qt4@
-    $(MAKE) -C '$(BUILD_DIR)' -j $(JOBS)
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
     # create pkg-config file

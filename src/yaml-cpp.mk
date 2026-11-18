@@ -14,7 +14,7 @@ define $(PKG)_BUILD
         -DYAML_BUILD_SHARED_LIBS=$(CMAKE_SHARED_BOOL) \
         -DYAML_CPP_BUILD_TESTS=OFF \
         -DYAML_CPP_BUILD_TOOLS=OFF
-    $(MAKE) -C '$(BUILD_DIR)' -j $(JOBS) VERBOSE=1
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' VERBOSE=1
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 
     $(if $(BUILD_STATIC), \

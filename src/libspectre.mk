@@ -18,7 +18,7 @@ endef
 
 define $(PKG)_BUILD
     cd '$(SOURCE_DIR)' && autoreconf -f -i
-    cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS) \
         --disable-silent-rules \
         --enable-test

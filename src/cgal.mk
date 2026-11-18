@@ -22,6 +22,6 @@ define $(PKG)_BUILD
         -DWITH_ZLIB:BOOL=ON \
         -C'$(PWD)/src/cgal-TryRunResults.cmake'
 
-    $(MAKE) -C '$(BUILD_DIR)' -j $(JOBS)
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 endef

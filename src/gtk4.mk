@@ -11,6 +11,13 @@ $(PKG)_FILE     := gtk-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.gnome.org/sources/gtk/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_DEPS     := meson-wrapper glib gdk-pixbuf pango libiconv gettext fontconfig cairo libepoxy gst-plugins-bad graphene lzo
 
+define $(PKG)_UPDATE
+    git ls-remote --tags 'https://gitlab.gnome.org/GNOME/gtk.git' | \
+    $(SED) -n 's,.*refs/tags/\(4\.[0-9]*[02468]\.[0-9.]*\)$$,\1,p' | \
+    $(SORT) -V | \
+    tail -1
+endef
+
 define $(PKG)_BUILD
     # Meson configure, with additional options for GTK
     '$(MXE_MESON_WRAPPER)' $(MXE_MESON_OPTS) \

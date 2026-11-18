@@ -25,7 +25,7 @@ $(PKG)_DEPS_$(BUILD) := gmp isl
 $(PKG)_UPDATE   :=
 
 define $(PKG)_BUILD
-    cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS) \
         --with-gmp-prefix='$(PREFIX)/$(TARGET)' \
         --with-isl-prefix='$(PREFIX)/$(TARGET)' \

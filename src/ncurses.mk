@@ -25,7 +25,7 @@ endef
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && \
         TIC_PATH='$(PREFIX)/$(BUILD)/bin/tic' \
-        $(SOURCE_DIR)/configure \
+        '$(SOURCE_DIR)/configure' \
         --host='$(TARGET)' \
         --build="`config.guess`" \
         --prefix=$(PREFIX)/$(TARGET) \
@@ -52,7 +52,7 @@ endef
 
 define $(PKG)_BUILD_$(BUILD)
     # native build of terminfo compiler
-    cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         --prefix=$(PREFIX)/$(TARGET) \
         --with-normal \
         --without-shared \

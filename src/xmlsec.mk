@@ -10,7 +10,7 @@ $(PKG)_DEPS     := cc gnutls libgcrypt libltdl libxml2 libxslt openssl
 
 define $(PKG)_BUILD
     cd '$(SOURCE_DIR)' && autoreconf -fi
-    cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS) \
         --enable-docs=no \
         --enable-apps=no \

@@ -12,10 +12,7 @@ $(PKG)_URL      := https://xorg.freedesktop.org/releases/individual/util/util-ma
 $(PKG)_DEPS     :=
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://cgit.freedesktop.org/xorg/util/macros/refs/tags' | \
-    $(SED) -n "s,.*<a href='[^']*/tag/?h=util-macros-\\([0-9.]*\\)'.*,\\1,p" | \
-    $(SORT) -V | \
-    tail -1
+    $(call GET_LATEST_VERSION, https://xorg.freedesktop.org/releases/individual/util/, util-macros-)
 endef
 
 define $(PKG)_BUILD

@@ -13,10 +13,7 @@ $(PKG)_URL_2    := https://download.savannah.nongnu.org/releases/gsasl/$($(PKG)_
 $(PKG)_DEPS     := cc libgcrypt libiconv libidn libntlm
 
 define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://git.savannah.gnu.org/gitweb/?p=gsasl.git;a=tags' | \
-    grep '<a [^<]*class="list subject"' | \
-    $(SED) -n 's,.*<a[^>]*>\([0-9]*\.[0-9]*[02468]\.[^<]*\)<.*,\1,p' | \
-    head -1
+    $(call GET_LATEST_VERSION, https://ftp.gnu.org/gnu/gsasl/, libgsasl-)
 endef
 
 define $(PKG)_BUILD

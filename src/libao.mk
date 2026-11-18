@@ -11,7 +11,7 @@ $(PKG)_DEPS     := cc
 
 define $(PKG)_BUILD
     cd '$(SOURCE_DIR)' && ./autogen.sh
-    cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS) \
         --enable-pulse=no \
         --disable-esd \

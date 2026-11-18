@@ -6,17 +6,12 @@ $(PKG)_DESCR    := DCMTK
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.6.0
 $(PKG)_CHECKSUM := cfc509701122adfa359f1ee160e943c1548c7696b607dbb646c5a06f015ed33a
+$(PKG)_GH_CONF  := DCMTK/dcmtk/tags,DCMTK-
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://dicom.offis.de/download/$(PKG)/$(PKG)$(subst .,,$($(PKG)_VERSION))/$($(PKG)_FILE)
 $(PKG)_URL_2    := https://mirrorservice.org/sites/ftp.debian.org/debian/pool/main/d/$(PKG)/$(PKG)_$($(PKG)_VERSION).orig.tar.gz
 $(PKG)_DEPS     := cc libpng libxml2 openssl tiff zlib
-
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://dicom.offis.de/dcmtk.php.en' | \
-    $(SED) -n 's,.*/dcmtk-\([0-9][^"]*\)\.tar.*,\1,p' | \
-    head -1
-endef
 
 # openssl 1.1 breaks build and newer version switched to cmake with
 # build that requires wine - disable openssl for now

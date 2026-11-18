@@ -17,6 +17,6 @@ define $(PKG)_BUILD
         -DJSONCPP_WITH_POST_BUILD_UNITTEST=OFF \
         -DCMAKE_CXX_FLAGS="$($(PKG)_CXXFLAGS)" \
         -DJSONCPP_WITH_CMAKE_PACKAGE=ON
-    $(MAKE) -C '$(BUILD_DIR)' -j $(JOBS)
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install
 endef

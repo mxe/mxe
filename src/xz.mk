@@ -10,7 +10,7 @@ $(PKG)_GH_CONF  := tukaani-project/xz/releases,v
 $(PKG)_DEPS     := cc
 
 define $(PKG)_BUILD
-    '$(TARGET)-cmake' -S '$(SOURCE_DIR)' -B $(BUILD_DIR) \
+    '$(TARGET)-cmake' -S '$(SOURCE_DIR)' -B '$(BUILD_DIR)' \
         -DBUILD_SHARED_LIBS=$(CMAKE_SHARED_BOOL) \
         -DXZ_THREADS=no \
         -DXZ_{DOC,NLS}=OFF \

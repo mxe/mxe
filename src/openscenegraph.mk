@@ -6,17 +6,10 @@ $(PKG)_DESCR    := OpenSceneGraph
 $(PKG)_IGNORE   :=
 $(PKG)_VERSION  := 3.6.5
 $(PKG)_CHECKSUM := aea196550f02974d6d09291c5d83b51ca6a03b3767e234a8c0e21322927d1e12
-$(PKG)_GH_CONF  := openscenegraph/OpenSceneGraph/tags, OpenSceneGraph-
+$(PKG)_GH_CONF  := openscenegraph/OpenSceneGraph/tags,OpenSceneGraph-
 $(PKG)_DEPS     := cc boost curl dcmtk freetype gdal giflib gstreamer \
                    gta jasper jpeg libpng openal openexr openthreads poppler \
                    tiff zlib
-
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'http://www.openscenegraph.org/index.php/download-section/stable-releases' | \
-    $(SED) -n 's,.*OpenSceneGraph/tree/OpenSceneGraph-\([0-9]*\.[0-9]*[02468]\.[^<]*\)">.*,\1,p' | \
-    $(SORT) -V | \
-    tail -1
-endef
 
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && '$(TARGET)-cmake' '$(SOURCE_DIR)' \

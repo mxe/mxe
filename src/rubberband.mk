@@ -19,7 +19,7 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         $(MXE_CONFIGURE_OPTS)
-    $(MAKE) -j $(JOBS) -C '$(1)' -j '$(JOBS)' \
+    $(MAKE) -j '$(JOBS)' -C '$(1)' \
         AR='$(TARGET)-ar' \
         RANLIB='$(TARGET)-ranlib' \
         DYNAMIC_EXTENSION='.dll' \

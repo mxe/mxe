@@ -26,7 +26,7 @@ endef
 
 define $(PKG)_BUILD
     rm -rf '$(PREFIX)/$(TARGET)/$(MXE_QT6_ID)'
-    # review $(SOURCE_DIR)/cmake/configure-cmake-mapping.md
+    # review '$(SOURCE_DIR)/cmake/configure-cmake-mapping.md'
     PKG_CONFIG="${TARGET}-pkg-config" \
     PKG_CONFIG_SYSROOT_DIR="/" \
     PKG_CONFIG_LIBDIR="$(PREFIX)/$(TARGET)/lib/pkgconfig" \
