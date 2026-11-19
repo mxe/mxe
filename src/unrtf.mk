@@ -3,8 +3,8 @@
 PKG             := unrtf
 $(PKG)_WEBSITE  := https://www.gnu.org/software/unrtf/
 $(PKG)_DESCR    := unRTF
-$(PKG)_VERSION  := 0.21.13
-$(PKG)_CHECKSUM := ff227d1a0adb84a9e1a51b5e5c3cecbda3d67c8a31dbd7e8593a040a438fb44c
+$(PKG)_VERSION  := 0.21.14
+$(PKG)_CHECKSUM := b1f72e87f195bd50dbc974b800918df61c881706c11716b7bd0a1981e81b9587
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://ftp.gnu.org/gnu/$(PKG)/$($(PKG)_FILE)
