@@ -27,7 +27,7 @@ index 1111111..2222222 100644
  #include <libssh/libssh.h>
  #include "examples_common.h"
  
-@@ -74,7 +71,7 @@ int verify_knownhost(ssh_session session)
+@@ -86,7 +83,7 @@ int verify_knownhost(ssh_session session)
          fprintf(stderr,"Could not find known host file. If you accept the host key here,\n");
          fprintf(stderr,"the file will be automatically created.\n");
          /* fallback to SSH_SERVER_NOT_KNOWN behavior */
