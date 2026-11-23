@@ -8,7 +8,7 @@ $(eval $(QT6_METADATA))
 $(PKG)_SUBDIR   := qtcoap-$($(PKG)_VERSION)
 $(PKG)_FILE     := qtcoap-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://github.com/qt/qtcoap/archive/refs/tags/v$($(PKG)_VERSION).tar.gz
-$(PKG)_CHECKSUM := ff833d657f1e80d0c08d0ba4894397e2954d7ac296b343a8397ba2885d67b749
+$(PKG)_CHECKSUM := e947c0477220348084df3f46e5f9c5f67fafe50fc92aa4b9033e27b7c6ccb0d2
 $(PKG)_DEPS     := cc qt6-conf qt6-qtbase
 
 QT6_PREFIX   = '$(PREFIX)/$(TARGET)/$(MXE_QT6_ID)'

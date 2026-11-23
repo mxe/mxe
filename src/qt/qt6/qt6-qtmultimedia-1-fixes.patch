@@ -4,60 +4,20 @@ Contains ad hoc patches for cross building.
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Mark Brand <mabrand@mabrand.nl>
-Date: Mon, 3 Apr 2023 13:57:29 +0200
-Subject: [PATCH 1/2] Use lower-case header/library names for with mingw-w64
+Date: Mon, 23 Nov 2026 14:22:51 +0100
+Subject: [PATCH 1/1] fix case of linked lib
 
 
-diff --git a/src/plugins/multimedia/ffmpeg/qffmpegscreencapture_dxgi.cpp b/src/plugins/multimedia/ffmpeg/qffmpegscreencapture_dxgi.cpp
+diff --git a/src/plugins/multimedia/ffmpeg/CMakeLists.txt b/src/plugins/multimedia/ffmpeg/CMakeLists.txt
 index 1111111..2222222 100644
---- a/src/plugins/multimedia/ffmpeg/qffmpegscreencapture_dxgi.cpp
-+++ b/src/plugins/multimedia/ffmpeg/qffmpegscreencapture_dxgi.cpp
-@@ -15,8 +15,8 @@
- #include <QtCore/private/qsystemerror_p.h>
- #include <QtCore/private/qexpected_p.h>
- 
--#include "D3d11.h"
--#include "dxgi1_2.h"
-+#include <d3d11.h>
-+#include <dxgi1_2.h>
- 
- #include <system_error>
- 
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Sean Link <sean.link@lightdeckdx.com>
-Date: Thu, 21 Mar 2024 15:34:13 +0100
-Subject: [PATCH 2/2] fix i686-w64-mingw32 build
-
-taken from https://github.com/mxe/mxe/issues/3038#issuecomment-1998456113
-
-diff --git a/src/plugins/multimedia/ffmpeg/qwincapturablewindows.cpp b/src/plugins/multimedia/ffmpeg/qwincapturablewindows.cpp
-index 1111111..2222222 100644
---- a/src/plugins/multimedia/ffmpeg/qwincapturablewindows.cpp
-+++ b/src/plugins/multimedia/ffmpeg/qwincapturablewindows.cpp
-@@ -44,11 +44,7 @@ static QString windowTitle(HWND hwnd) {
-     return QString::fromStdWString(buffer);
- }
- 
--QList<QCapturableWindow> QWinCapturableWindows::windows() const
--{
--    QList<QCapturableWindow> result;
--
--    auto windowHandler = [](HWND hwnd, LPARAM lParam) {
-+static int __stdcall windowHandler(HWND hwnd, LPARAM lParam) {
-         if (!canCaptureWindow(hwnd))
-             return TRUE; // Ignore window and continue enumerating
- 
-@@ -59,7 +55,11 @@ QList<QCapturableWindow> QWinCapturableWindows::windows() const
-             windowTitle(hwnd)));
- 
-         return TRUE;
--    };
-+}
-+
-+QList<QCapturableWindow> QWinCapturableWindows::windows() const
-+{
-+    QList<QCapturableWindow> result;
- 
-     ::EnumWindows(windowHandler, reinterpret_cast<LPARAM>(&result));
- 
+--- a/src/plugins/multimedia/ffmpeg/CMakeLists.txt
++++ b/src/plugins/multimedia/ffmpeg/CMakeLists.txt
+@@ -177,7 +177,7 @@ qt_internal_extend_target(FFmpegMediaPluginImplPrivate CONDITION WIN32
+         qwincapturablewindows.cpp qwincapturablewindows_p.h
+     LIBRARIES
+         Qt::MultimediaPrivate
+-        Dwmapi
++        dwmapi
+         mf
+         mfplat
+         mfreadwrite
