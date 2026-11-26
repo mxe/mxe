@@ -2,19 +2,14 @@
 
 PKG             := msmtp
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.6.6
-$(PKG)_CHECKSUM := da15db1f62bd0201fce5310adb89c86188be91cd745b7cb3b62b81a501e7fb5e
+$(PKG)_VERSION  := 1.8.34
+$(PKG)_CHECKSUM := 84e8fe2a5a80a1ee7802013b3fbdb846a3f27a4163cf37a1c6d7c7f888873ead
+$(PKG)_GH_CONF  := marlam/msmtp/tags,msmtp-
+# The archive from GitHub lacks the generated configure script, so use Marlam's
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := https://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$($(PKG)_VERSION)/$($(PKG)_FILE)
-$(PKG)_OWNER    := https://github.com/andrew-strong
-$(PKG)_DEPS     := cc gnutls libgcrypt libgpg_error libgsasl libiconv libidn libntlm
-
-define $(PKG)_UPDATE
-    $(WGET) -q -O- 'https://sourceforge.net/projects/msmtp/files/msmtp/' | \
-    $(SED) -n 's,.*/\([0-9][^"]*\)/".*,\1,p' | \
-    head -1
-endef
+$(PKG)_URL      := https://marlam.de/msmtp/releases/$($(PKG)_FILE)
+$(PKG)_DEPS     := cc gnutls libgcrypt libgpg_error libgsasl libiconv libidn2 libntlm
 
 define $(PKG)_BUILD
     cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
@@ -24,7 +19,8 @@ define $(PKG)_BUILD
         --without-libsecret \
         --without-macosx-keyring \
         --with-tls=gnutls \
-        --with-libidn
+        --with-libidn2 \
+        CFLAGS='-Wno-incompatible-pointer-types'
     $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
     $(MAKE) -C '$(BUILD_DIR)' -j 1 install $(MXE_DISABLE_DOCS)
 endef
