@@ -4,20 +4,20 @@ PKG             := libgsasl
 $(PKG)_WEBSITE  := https://www.gnu.org/software/gsasl/
 $(PKG)_DESCR    := Libgsasl
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.10.0
-$(PKG)_CHECKSUM := f1b553384dedbd87478449775546a358d6f5140c15cccc8fb574136fdc77329f
-$(PKG)_SUBDIR   := libgsasl-$($(PKG)_VERSION)
-$(PKG)_FILE     := libgsasl-$($(PKG)_VERSION).tar.gz
+$(PKG)_VERSION  := 2.2.4
+$(PKG)_CHECKSUM := d32be15efd3a04cb19b232f721bdca02cc6ad7ab415df7d79fb2dd2c0da3e0be
+$(PKG)_SUBDIR   := gsasl-$($(PKG)_VERSION)
+$(PKG)_FILE     := gsasl-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://ftp.gnu.org/gnu/gsasl/$($(PKG)_FILE)
 $(PKG)_URL_2    := https://download.savannah.nongnu.org/releases/gsasl/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc libgcrypt libiconv libidn libntlm
 
 define $(PKG)_UPDATE
-    $(call GET_LATEST_VERSION, https://ftp.gnu.org/gnu/gsasl/, libgsasl-)
+    $(call GET_LATEST_VERSION, https://ftp.gnu.org/gnu/gsasl/, gsasl-)
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && touch src/libgsasl-7.def && ./configure \
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
         $(MXE_CONFIGURE_OPTS) \
         --disable-nls \
         --with-libgcrypt \
@@ -25,7 +25,7 @@ define $(PKG)_BUILD
         --with-libiconv-prefix='$(PREFIX)/$(TARGET)' \
         --with-libidn-prefix='$(PREFIX)/$(TARGET)' \
         --with-libntlm-prefix='$(PREFIX)/$(TARGET)'
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi -pedantic \
